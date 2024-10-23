@@ -19,6 +19,10 @@ package io.github.erp.internal.service.leases;
  */
 
 import io.github.erp.service.dto.TACompilationRequestDTO;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -76,4 +80,12 @@ public interface InternalTACompilationRequestService {
      * @return the list of entities.
      */
     Page<TACompilationRequestDTO> search(String query, Pageable pageable);
+
+    /**
+     * This method is used to launch actual postings of transactions into the transaction-details
+     * table, in their respective debit and credit account positions
+     *
+     * @param compilationRequest DTO containing the run parameters
+     */
+    void launchTACompilationBatch(TACompilationRequestDTO compilationRequest) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException;
 }

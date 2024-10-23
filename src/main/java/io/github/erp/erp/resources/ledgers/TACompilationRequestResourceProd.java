@@ -20,15 +20,16 @@ package io.github.erp.erp.resources.ledgers;
 
 import io.github.erp.internal.repository.InternalTACompilationRequestRepository;
 import io.github.erp.internal.service.leases.InternalTACompilationRequestService;
-import io.github.erp.internal.service.leases.ROUAmortizationTransactionDetailsService;
-import io.github.erp.repository.TACompilationRequestRepository;
 import io.github.erp.service.TACompilationRequestQueryService;
-import io.github.erp.service.TACompilationRequestService;
 import io.github.erp.service.criteria.TACompilationRequestCriteria;
 import io.github.erp.service.dto.TACompilationRequestDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -68,17 +69,14 @@ public class TACompilationRequestResourceProd {
 
     private final TACompilationRequestQueryService tACompilationRequestQueryService;
 
-    private final ROUAmortizationTransactionDetailsService rouAmortizationTransactionDetailsService;
-
     public TACompilationRequestResourceProd(
         InternalTACompilationRequestService tACompilationRequestService,
         InternalTACompilationRequestRepository tACompilationRequestRepository,
-        TACompilationRequestQueryService tACompilationRequestQueryService, ROUAmortizationTransactionDetailsService rouAmortizationTransactionDetailsService
+        TACompilationRequestQueryService tACompilationRequestQueryService
     ) {
         this.tACompilationRequestService = tACompilationRequestService;
         this.tACompilationRequestRepository = tACompilationRequestRepository;
         this.tACompilationRequestQueryService = tACompilationRequestQueryService;
-        this.rouAmortizationTransactionDetailsService = rouAmortizationTransactionDetailsService;
     }
 
     /**
@@ -91,17 +89,18 @@ public class TACompilationRequestResourceProd {
     @PostMapping("/ta-compilation-requests")
     public ResponseEntity<TACompilationRequestDTO> createTACompilationRequest(
         @Valid @RequestBody TACompilationRequestDTO tACompilationRequestDTO
-    ) throws URISyntaxException {
+    ) throws URISyntaxException, JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         log.debug("REST request to save TACompilationRequest : {}", tACompilationRequestDTO);
         if (tACompilationRequestDTO.getId() != null) {
             throw new BadRequestAlertException("A new tACompilationRequest cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
         TACompilationRequestDTO result = tACompilationRequestService.save(tACompilationRequestDTO);
 
-        rouAmortizationTransactionDetailsService.createTransactionDetails();
+        tACompilationRequestService.launchTACompilationBatch(tACompilationRequestDTO);
 
         return ResponseEntity
-            .created(new URI("/api/ta-compilation-requests/" + result.getId()))
+            .created(new URI("/api/accounts/ta-compilation-requests/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
