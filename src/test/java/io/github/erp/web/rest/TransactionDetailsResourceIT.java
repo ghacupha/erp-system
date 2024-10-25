@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.ApplicationUser;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.TransactionAccount;
 import io.github.erp.domain.TransactionDetails;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -81,6 +83,12 @@ class TransactionDetailsResourceIT {
     private static final BigDecimal DEFAULT_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_AMOUNT = new BigDecimal(1 - 1);
+
+    private static final Boolean DEFAULT_IS_DELETED = false;
+    private static final Boolean UPDATED_IS_DELETED = true;
+
+    private static final UUID DEFAULT_POSTING_ID = UUID.randomUUID();
+    private static final UUID UPDATED_POSTING_ID = UUID.randomUUID();
 
     private static final String ENTITY_API_URL = "/api/transaction-details";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -128,7 +136,9 @@ class TransactionDetailsResourceIT {
             .entryId(DEFAULT_ENTRY_ID)
             .transactionDate(DEFAULT_TRANSACTION_DATE)
             .description(DEFAULT_DESCRIPTION)
-            .amount(DEFAULT_AMOUNT);
+            .amount(DEFAULT_AMOUNT)
+            .isDeleted(DEFAULT_IS_DELETED)
+            .postingId(DEFAULT_POSTING_ID);
         // Add required entity
         TransactionAccount transactionAccount;
         if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
@@ -155,7 +165,9 @@ class TransactionDetailsResourceIT {
             .entryId(UPDATED_ENTRY_ID)
             .transactionDate(UPDATED_TRANSACTION_DATE)
             .description(UPDATED_DESCRIPTION)
-            .amount(UPDATED_AMOUNT);
+            .amount(UPDATED_AMOUNT)
+            .isDeleted(UPDATED_IS_DELETED)
+            .postingId(UPDATED_POSTING_ID);
         // Add required entity
         TransactionAccount transactionAccount;
         if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
@@ -198,6 +210,8 @@ class TransactionDetailsResourceIT {
         assertThat(testTransactionDetails.getTransactionDate()).isEqualTo(DEFAULT_TRANSACTION_DATE);
         assertThat(testTransactionDetails.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testTransactionDetails.getAmount()).isEqualByComparingTo(DEFAULT_AMOUNT);
+        assertThat(testTransactionDetails.getIsDeleted()).isEqualTo(DEFAULT_IS_DELETED);
+        assertThat(testTransactionDetails.getPostingId()).isEqualTo(DEFAULT_POSTING_ID);
 
         // Validate the TransactionDetails in Elasticsearch
         verify(mockTransactionDetailsSearchRepository, times(1)).save(testTransactionDetails);
@@ -310,7 +324,9 @@ class TransactionDetailsResourceIT {
             .andExpect(jsonPath("$.[*].entryId").value(hasItem(DEFAULT_ENTRY_ID.intValue())))
             .andExpect(jsonPath("$.[*].transactionDate").value(hasItem(DEFAULT_TRANSACTION_DATE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].amount").value(hasItem(sameNumber(DEFAULT_AMOUNT))));
+            .andExpect(jsonPath("$.[*].amount").value(hasItem(sameNumber(DEFAULT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].isDeleted").value(hasItem(DEFAULT_IS_DELETED.booleanValue())))
+            .andExpect(jsonPath("$.[*].postingId").value(hasItem(DEFAULT_POSTING_ID.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -346,7 +362,9 @@ class TransactionDetailsResourceIT {
             .andExpect(jsonPath("$.entryId").value(DEFAULT_ENTRY_ID.intValue()))
             .andExpect(jsonPath("$.transactionDate").value(DEFAULT_TRANSACTION_DATE.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.amount").value(sameNumber(DEFAULT_AMOUNT)));
+            .andExpect(jsonPath("$.amount").value(sameNumber(DEFAULT_AMOUNT)))
+            .andExpect(jsonPath("$.isDeleted").value(DEFAULT_IS_DELETED.booleanValue()))
+            .andExpect(jsonPath("$.postingId").value(DEFAULT_POSTING_ID.toString()));
     }
 
     @Test
@@ -759,6 +777,110 @@ class TransactionDetailsResourceIT {
 
     @Test
     @Transactional
+    void getAllTransactionDetailsByIsDeletedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionDetailsRepository.saveAndFlush(transactionDetails);
+
+        // Get all the transactionDetailsList where isDeleted equals to DEFAULT_IS_DELETED
+        defaultTransactionDetailsShouldBeFound("isDeleted.equals=" + DEFAULT_IS_DELETED);
+
+        // Get all the transactionDetailsList where isDeleted equals to UPDATED_IS_DELETED
+        defaultTransactionDetailsShouldNotBeFound("isDeleted.equals=" + UPDATED_IS_DELETED);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionDetailsByIsDeletedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionDetailsRepository.saveAndFlush(transactionDetails);
+
+        // Get all the transactionDetailsList where isDeleted not equals to DEFAULT_IS_DELETED
+        defaultTransactionDetailsShouldNotBeFound("isDeleted.notEquals=" + DEFAULT_IS_DELETED);
+
+        // Get all the transactionDetailsList where isDeleted not equals to UPDATED_IS_DELETED
+        defaultTransactionDetailsShouldBeFound("isDeleted.notEquals=" + UPDATED_IS_DELETED);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionDetailsByIsDeletedIsInShouldWork() throws Exception {
+        // Initialize the database
+        transactionDetailsRepository.saveAndFlush(transactionDetails);
+
+        // Get all the transactionDetailsList where isDeleted in DEFAULT_IS_DELETED or UPDATED_IS_DELETED
+        defaultTransactionDetailsShouldBeFound("isDeleted.in=" + DEFAULT_IS_DELETED + "," + UPDATED_IS_DELETED);
+
+        // Get all the transactionDetailsList where isDeleted equals to UPDATED_IS_DELETED
+        defaultTransactionDetailsShouldNotBeFound("isDeleted.in=" + UPDATED_IS_DELETED);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionDetailsByIsDeletedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        transactionDetailsRepository.saveAndFlush(transactionDetails);
+
+        // Get all the transactionDetailsList where isDeleted is not null
+        defaultTransactionDetailsShouldBeFound("isDeleted.specified=true");
+
+        // Get all the transactionDetailsList where isDeleted is null
+        defaultTransactionDetailsShouldNotBeFound("isDeleted.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionDetailsByPostingIdIsEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionDetailsRepository.saveAndFlush(transactionDetails);
+
+        // Get all the transactionDetailsList where postingId equals to DEFAULT_POSTING_ID
+        defaultTransactionDetailsShouldBeFound("postingId.equals=" + DEFAULT_POSTING_ID);
+
+        // Get all the transactionDetailsList where postingId equals to UPDATED_POSTING_ID
+        defaultTransactionDetailsShouldNotBeFound("postingId.equals=" + UPDATED_POSTING_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionDetailsByPostingIdIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionDetailsRepository.saveAndFlush(transactionDetails);
+
+        // Get all the transactionDetailsList where postingId not equals to DEFAULT_POSTING_ID
+        defaultTransactionDetailsShouldNotBeFound("postingId.notEquals=" + DEFAULT_POSTING_ID);
+
+        // Get all the transactionDetailsList where postingId not equals to UPDATED_POSTING_ID
+        defaultTransactionDetailsShouldBeFound("postingId.notEquals=" + UPDATED_POSTING_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionDetailsByPostingIdIsInShouldWork() throws Exception {
+        // Initialize the database
+        transactionDetailsRepository.saveAndFlush(transactionDetails);
+
+        // Get all the transactionDetailsList where postingId in DEFAULT_POSTING_ID or UPDATED_POSTING_ID
+        defaultTransactionDetailsShouldBeFound("postingId.in=" + DEFAULT_POSTING_ID + "," + UPDATED_POSTING_ID);
+
+        // Get all the transactionDetailsList where postingId equals to UPDATED_POSTING_ID
+        defaultTransactionDetailsShouldNotBeFound("postingId.in=" + UPDATED_POSTING_ID);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionDetailsByPostingIdIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        transactionDetailsRepository.saveAndFlush(transactionDetails);
+
+        // Get all the transactionDetailsList where postingId is not null
+        defaultTransactionDetailsShouldBeFound("postingId.specified=true");
+
+        // Get all the transactionDetailsList where postingId is null
+        defaultTransactionDetailsShouldNotBeFound("postingId.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllTransactionDetailsByDebitAccountIsEqualToSomething() throws Exception {
         // Initialize the database
         transactionDetailsRepository.saveAndFlush(transactionDetails);
@@ -835,6 +957,32 @@ class TransactionDetailsResourceIT {
         defaultTransactionDetailsShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllTransactionDetailsByPostedByIsEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionDetailsRepository.saveAndFlush(transactionDetails);
+        ApplicationUser postedBy;
+        if (TestUtil.findAll(em, ApplicationUser.class).isEmpty()) {
+            postedBy = ApplicationUserResourceIT.createEntity(em);
+            em.persist(postedBy);
+            em.flush();
+        } else {
+            postedBy = TestUtil.findAll(em, ApplicationUser.class).get(0);
+        }
+        em.persist(postedBy);
+        em.flush();
+        transactionDetails.setPostedBy(postedBy);
+        transactionDetailsRepository.saveAndFlush(transactionDetails);
+        Long postedById = postedBy.getId();
+
+        // Get all the transactionDetailsList where postedBy equals to postedById
+        defaultTransactionDetailsShouldBeFound("postedById.equals=" + postedById);
+
+        // Get all the transactionDetailsList where postedBy equals to (postedById + 1)
+        defaultTransactionDetailsShouldNotBeFound("postedById.equals=" + (postedById + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -847,7 +995,9 @@ class TransactionDetailsResourceIT {
             .andExpect(jsonPath("$.[*].entryId").value(hasItem(DEFAULT_ENTRY_ID.intValue())))
             .andExpect(jsonPath("$.[*].transactionDate").value(hasItem(DEFAULT_TRANSACTION_DATE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].amount").value(hasItem(sameNumber(DEFAULT_AMOUNT))));
+            .andExpect(jsonPath("$.[*].amount").value(hasItem(sameNumber(DEFAULT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].isDeleted").value(hasItem(DEFAULT_IS_DELETED.booleanValue())))
+            .andExpect(jsonPath("$.[*].postingId").value(hasItem(DEFAULT_POSTING_ID.toString())));
 
         // Check, that the count call also returns 1
         restTransactionDetailsMockMvc
@@ -899,7 +1049,9 @@ class TransactionDetailsResourceIT {
             .entryId(UPDATED_ENTRY_ID)
             .transactionDate(UPDATED_TRANSACTION_DATE)
             .description(UPDATED_DESCRIPTION)
-            .amount(UPDATED_AMOUNT);
+            .amount(UPDATED_AMOUNT)
+            .isDeleted(UPDATED_IS_DELETED)
+            .postingId(UPDATED_POSTING_ID);
         TransactionDetailsDTO transactionDetailsDTO = transactionDetailsMapper.toDto(updatedTransactionDetails);
 
         restTransactionDetailsMockMvc
@@ -918,6 +1070,8 @@ class TransactionDetailsResourceIT {
         assertThat(testTransactionDetails.getTransactionDate()).isEqualTo(UPDATED_TRANSACTION_DATE);
         assertThat(testTransactionDetails.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testTransactionDetails.getAmount()).isEqualTo(UPDATED_AMOUNT);
+        assertThat(testTransactionDetails.getIsDeleted()).isEqualTo(UPDATED_IS_DELETED);
+        assertThat(testTransactionDetails.getPostingId()).isEqualTo(UPDATED_POSTING_ID);
 
         // Validate the TransactionDetails in Elasticsearch
         verify(mockTransactionDetailsSearchRepository).save(testTransactionDetails);
@@ -1016,7 +1170,9 @@ class TransactionDetailsResourceIT {
         partialUpdatedTransactionDetails
             .entryId(UPDATED_ENTRY_ID)
             .transactionDate(UPDATED_TRANSACTION_DATE)
-            .description(UPDATED_DESCRIPTION);
+            .description(UPDATED_DESCRIPTION)
+            .isDeleted(UPDATED_IS_DELETED)
+            .postingId(UPDATED_POSTING_ID);
 
         restTransactionDetailsMockMvc
             .perform(
@@ -1034,6 +1190,8 @@ class TransactionDetailsResourceIT {
         assertThat(testTransactionDetails.getTransactionDate()).isEqualTo(UPDATED_TRANSACTION_DATE);
         assertThat(testTransactionDetails.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testTransactionDetails.getAmount()).isEqualByComparingTo(DEFAULT_AMOUNT);
+        assertThat(testTransactionDetails.getIsDeleted()).isEqualTo(UPDATED_IS_DELETED);
+        assertThat(testTransactionDetails.getPostingId()).isEqualTo(UPDATED_POSTING_ID);
     }
 
     @Test
@@ -1052,7 +1210,9 @@ class TransactionDetailsResourceIT {
             .entryId(UPDATED_ENTRY_ID)
             .transactionDate(UPDATED_TRANSACTION_DATE)
             .description(UPDATED_DESCRIPTION)
-            .amount(UPDATED_AMOUNT);
+            .amount(UPDATED_AMOUNT)
+            .isDeleted(UPDATED_IS_DELETED)
+            .postingId(UPDATED_POSTING_ID);
 
         restTransactionDetailsMockMvc
             .perform(
@@ -1070,6 +1230,8 @@ class TransactionDetailsResourceIT {
         assertThat(testTransactionDetails.getTransactionDate()).isEqualTo(UPDATED_TRANSACTION_DATE);
         assertThat(testTransactionDetails.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testTransactionDetails.getAmount()).isEqualByComparingTo(UPDATED_AMOUNT);
+        assertThat(testTransactionDetails.getIsDeleted()).isEqualTo(UPDATED_IS_DELETED);
+        assertThat(testTransactionDetails.getPostingId()).isEqualTo(UPDATED_POSTING_ID);
     }
 
     @Test
@@ -1189,6 +1351,8 @@ class TransactionDetailsResourceIT {
             .andExpect(jsonPath("$.[*].entryId").value(hasItem(DEFAULT_ENTRY_ID.intValue())))
             .andExpect(jsonPath("$.[*].transactionDate").value(hasItem(DEFAULT_TRANSACTION_DATE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].amount").value(hasItem(sameNumber(DEFAULT_AMOUNT))));
+            .andExpect(jsonPath("$.[*].amount").value(hasItem(sameNumber(DEFAULT_AMOUNT))))
+            .andExpect(jsonPath("$.[*].isDeleted").value(hasItem(DEFAULT_IS_DELETED.booleanValue())))
+            .andExpect(jsonPath("$.[*].postingId").value(hasItem(DEFAULT_POSTING_ID.toString())));
     }
 }

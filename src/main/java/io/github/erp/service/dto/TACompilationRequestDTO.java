@@ -44,21 +44,6 @@ public class TACompilationRequestDTO implements Serializable {
     @NotNull
     private UUID batchJobIdentifier;
 
-    @NotNull
-    private UUID initialAmountStepIdentifier;
-
-    @NotNull
-    private UUID depreciationAmountStepIdentifier;
-
-    @NotNull
-    private UUID initialLeaseAmountStepIdentifier;
-
-    @NotNull
-    private UUID interestAmountStepIdentifier;
-
-    @NotNull
-    private UUID flagAmortisedStepIdentifier;
-
     private ZonedDateTime compilationTime;
 
     private Boolean invalidated;
@@ -111,46 +96,6 @@ public class TACompilationRequestDTO implements Serializable {
 
     public void setBatchJobIdentifier(UUID batchJobIdentifier) {
         this.batchJobIdentifier = batchJobIdentifier;
-    }
-
-    public UUID getInitialAmountStepIdentifier() {
-        return initialAmountStepIdentifier;
-    }
-
-    public void setInitialAmountStepIdentifier(UUID initialAmountStepIdentifier) {
-        this.initialAmountStepIdentifier = initialAmountStepIdentifier;
-    }
-
-    public UUID getDepreciationAmountStepIdentifier() {
-        return depreciationAmountStepIdentifier;
-    }
-
-    public void setDepreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
-        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
-    }
-
-    public UUID getInitialLeaseAmountStepIdentifier() {
-        return initialLeaseAmountStepIdentifier;
-    }
-
-    public void setInitialLeaseAmountStepIdentifier(UUID initialLeaseAmountStepIdentifier) {
-        this.initialLeaseAmountStepIdentifier = initialLeaseAmountStepIdentifier;
-    }
-
-    public UUID getInterestAmountStepIdentifier() {
-        return interestAmountStepIdentifier;
-    }
-
-    public void setInterestAmountStepIdentifier(UUID interestAmountStepIdentifier) {
-        this.interestAmountStepIdentifier = interestAmountStepIdentifier;
-    }
-
-    public UUID getFlagAmortisedStepIdentifier() {
-        return flagAmortisedStepIdentifier;
-    }
-
-    public void setFlagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
-        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
     }
 
     public ZonedDateTime getCompilationTime() {
@@ -208,11 +153,6 @@ public class TACompilationRequestDTO implements Serializable {
             ", compilationProcessStatus='" + getCompilationProcessStatus() + "'" +
             ", numberOfEnumeratedItems=" + getNumberOfEnumeratedItems() +
             ", batchJobIdentifier='" + getBatchJobIdentifier() + "'" +
-            ", initialAmountStepIdentifier='" + getInitialAmountStepIdentifier() + "'" +
-            ", depreciationAmountStepIdentifier='" + getDepreciationAmountStepIdentifier() + "'" +
-            ", initialLeaseAmountStepIdentifier='" + getInitialLeaseAmountStepIdentifier() + "'" +
-            ", interestAmountStepIdentifier='" + getInterestAmountStepIdentifier() + "'" +
-            ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
             ", compilationTime='" + getCompilationTime() + "'" +
             ", invalidated='" + getInvalidated() + "'" +
             ", initiatedBy=" + getInitiatedBy() +

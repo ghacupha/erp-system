@@ -129,6 +129,12 @@ public class TransactionDetailsQueryService extends QueryService<TransactionDeta
             if (criteria.getAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getAmount(), TransactionDetails_.amount));
             }
+            if (criteria.getIsDeleted() != null) {
+                specification = specification.and(buildSpecification(criteria.getIsDeleted(), TransactionDetails_.isDeleted));
+            }
+            if (criteria.getPostingId() != null) {
+                specification = specification.and(buildSpecification(criteria.getPostingId(), TransactionDetails_.postingId));
+            }
             if (criteria.getDebitAccountId() != null) {
                 specification =
                     specification.and(
@@ -153,6 +159,15 @@ public class TransactionDetailsQueryService extends QueryService<TransactionDeta
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(TransactionDetails_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getPostedById() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getPostedById(),
+                            root -> root.join(TransactionDetails_.postedBy, JoinType.LEFT).get(ApplicationUser_.id)
                         )
                     );
             }

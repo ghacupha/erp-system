@@ -139,42 +139,6 @@ public class TACompilationRequestQueryService extends QueryService<TACompilation
                 specification =
                     specification.and(buildSpecification(criteria.getBatchJobIdentifier(), TACompilationRequest_.batchJobIdentifier));
             }
-            if (criteria.getInitialAmountStepIdentifier() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getInitialAmountStepIdentifier(), TACompilationRequest_.initialAmountStepIdentifier)
-                    );
-            }
-            if (criteria.getDepreciationAmountStepIdentifier() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getDepreciationAmountStepIdentifier(),
-                            TACompilationRequest_.depreciationAmountStepIdentifier
-                        )
-                    );
-            }
-            if (criteria.getInitialLeaseAmountStepIdentifier() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getInitialLeaseAmountStepIdentifier(),
-                            TACompilationRequest_.initialLeaseAmountStepIdentifier
-                        )
-                    );
-            }
-            if (criteria.getInterestAmountStepIdentifier() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getInterestAmountStepIdentifier(), TACompilationRequest_.interestAmountStepIdentifier)
-                    );
-            }
-            if (criteria.getFlagAmortisedStepIdentifier() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getFlagAmortisedStepIdentifier(), TACompilationRequest_.flagAmortisedStepIdentifier)
-                    );
-            }
             if (criteria.getCompilationTime() != null) {
                 specification =
                     specification.and(buildRangeSpecification(criteria.getCompilationTime(), TACompilationRequest_.compilationTime));

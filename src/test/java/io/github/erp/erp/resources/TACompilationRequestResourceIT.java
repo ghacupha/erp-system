@@ -84,21 +84,6 @@ class TACompilationRequestResourceIT {
     private static final UUID DEFAULT_BATCH_JOB_IDENTIFIER = UUID.randomUUID();
     private static final UUID UPDATED_BATCH_JOB_IDENTIFIER = UUID.randomUUID();
 
-    private static final UUID DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
-    private static final UUID UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
-
-    private static final UUID DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
-    private static final UUID UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
-
-    private static final UUID DEFAULT_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
-    private static final UUID UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
-
-    private static final UUID DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
-    private static final UUID UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
-
-    private static final UUID DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER = UUID.randomUUID();
-    private static final UUID UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER = UUID.randomUUID();
-
     private static final ZonedDateTime DEFAULT_COMPILATION_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_COMPILATION_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     private static final ZonedDateTime SMALLER_COMPILATION_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
@@ -148,11 +133,6 @@ class TACompilationRequestResourceIT {
             .compilationProcessStatus(DEFAULT_COMPILATION_PROCESS_STATUS)
             .numberOfEnumeratedItems(DEFAULT_NUMBER_OF_ENUMERATED_ITEMS)
             .batchJobIdentifier(DEFAULT_BATCH_JOB_IDENTIFIER)
-            .initialAmountStepIdentifier(DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER)
-            .depreciationAmountStepIdentifier(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
-            .initialLeaseAmountStepIdentifier(DEFAULT_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER)
-            .interestAmountStepIdentifier(DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER)
-            .flagAmortisedStepIdentifier(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER)
             .compilationTime(DEFAULT_COMPILATION_TIME)
             .invalidated(DEFAULT_INVALIDATED);
         return tACompilationRequest;
@@ -171,11 +151,6 @@ class TACompilationRequestResourceIT {
             .compilationProcessStatus(UPDATED_COMPILATION_PROCESS_STATUS)
             .numberOfEnumeratedItems(UPDATED_NUMBER_OF_ENUMERATED_ITEMS)
             .batchJobIdentifier(UPDATED_BATCH_JOB_IDENTIFIER)
-            .initialAmountStepIdentifier(UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER)
-            .depreciationAmountStepIdentifier(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
-            .initialLeaseAmountStepIdentifier(UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER)
-            .interestAmountStepIdentifier(UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER)
-            .flagAmortisedStepIdentifier(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER)
             .compilationTime(UPDATED_COMPILATION_TIME)
             .invalidated(UPDATED_INVALIDATED);
         return tACompilationRequest;
@@ -209,11 +184,6 @@ class TACompilationRequestResourceIT {
         assertThat(testTACompilationRequest.getCompilationProcessStatus()).isEqualTo(DEFAULT_COMPILATION_PROCESS_STATUS);
         assertThat(testTACompilationRequest.getNumberOfEnumeratedItems()).isEqualTo(DEFAULT_NUMBER_OF_ENUMERATED_ITEMS);
         assertThat(testTACompilationRequest.getBatchJobIdentifier()).isEqualTo(DEFAULT_BATCH_JOB_IDENTIFIER);
-        assertThat(testTACompilationRequest.getInitialAmountStepIdentifier()).isEqualTo(DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getDepreciationAmountStepIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getInitialLeaseAmountStepIdentifier()).isEqualTo(DEFAULT_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getInterestAmountStepIdentifier()).isEqualTo(DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getFlagAmortisedStepIdentifier()).isEqualTo(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER);
         assertThat(testTACompilationRequest.getCompilationTime()).isEqualTo(DEFAULT_COMPILATION_TIME);
         assertThat(testTACompilationRequest.getInvalidated()).isEqualTo(DEFAULT_INVALIDATED);
 
@@ -293,116 +263,6 @@ class TACompilationRequestResourceIT {
 
     @Test
     @Transactional
-    void checkInitialAmountStepIdentifierIsRequired() throws Exception {
-        int databaseSizeBeforeTest = tACompilationRequestRepository.findAll().size();
-        // set the field null
-        tACompilationRequest.setInitialAmountStepIdentifier(null);
-
-        // Create the TACompilationRequest, which fails.
-        TACompilationRequestDTO tACompilationRequestDTO = tACompilationRequestMapper.toDto(tACompilationRequest);
-
-        restTACompilationRequestMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(tACompilationRequestDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<TACompilationRequest> tACompilationRequestList = tACompilationRequestRepository.findAll();
-        assertThat(tACompilationRequestList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkDepreciationAmountStepIdentifierIsRequired() throws Exception {
-        int databaseSizeBeforeTest = tACompilationRequestRepository.findAll().size();
-        // set the field null
-        tACompilationRequest.setDepreciationAmountStepIdentifier(null);
-
-        // Create the TACompilationRequest, which fails.
-        TACompilationRequestDTO tACompilationRequestDTO = tACompilationRequestMapper.toDto(tACompilationRequest);
-
-        restTACompilationRequestMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(tACompilationRequestDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<TACompilationRequest> tACompilationRequestList = tACompilationRequestRepository.findAll();
-        assertThat(tACompilationRequestList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkInitialLeaseAmountStepIdentifierIsRequired() throws Exception {
-        int databaseSizeBeforeTest = tACompilationRequestRepository.findAll().size();
-        // set the field null
-        tACompilationRequest.setInitialLeaseAmountStepIdentifier(null);
-
-        // Create the TACompilationRequest, which fails.
-        TACompilationRequestDTO tACompilationRequestDTO = tACompilationRequestMapper.toDto(tACompilationRequest);
-
-        restTACompilationRequestMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(tACompilationRequestDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<TACompilationRequest> tACompilationRequestList = tACompilationRequestRepository.findAll();
-        assertThat(tACompilationRequestList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkInterestAmountStepIdentifierIsRequired() throws Exception {
-        int databaseSizeBeforeTest = tACompilationRequestRepository.findAll().size();
-        // set the field null
-        tACompilationRequest.setInterestAmountStepIdentifier(null);
-
-        // Create the TACompilationRequest, which fails.
-        TACompilationRequestDTO tACompilationRequestDTO = tACompilationRequestMapper.toDto(tACompilationRequest);
-
-        restTACompilationRequestMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(tACompilationRequestDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<TACompilationRequest> tACompilationRequestList = tACompilationRequestRepository.findAll();
-        assertThat(tACompilationRequestList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkFlagAmortisedStepIdentifierIsRequired() throws Exception {
-        int databaseSizeBeforeTest = tACompilationRequestRepository.findAll().size();
-        // set the field null
-        tACompilationRequest.setFlagAmortisedStepIdentifier(null);
-
-        // Create the TACompilationRequest, which fails.
-        TACompilationRequestDTO tACompilationRequestDTO = tACompilationRequestMapper.toDto(tACompilationRequest);
-
-        restTACompilationRequestMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(tACompilationRequestDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<TACompilationRequest> tACompilationRequestList = tACompilationRequestRepository.findAll();
-        assertThat(tACompilationRequestList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllTACompilationRequests() throws Exception {
         // Initialize the database
         tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
@@ -418,15 +278,6 @@ class TACompilationRequestResourceIT {
             .andExpect(jsonPath("$.[*].compilationProcessStatus").value(hasItem(DEFAULT_COMPILATION_PROCESS_STATUS.toString())))
             .andExpect(jsonPath("$.[*].numberOfEnumeratedItems").value(hasItem(DEFAULT_NUMBER_OF_ENUMERATED_ITEMS)))
             .andExpect(jsonPath("$.[*].batchJobIdentifier").value(hasItem(DEFAULT_BATCH_JOB_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].initialAmountStepIdentifier").value(hasItem(DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER.toString())))
-            .andExpect(
-                jsonPath("$.[*].depreciationAmountStepIdentifier").value(hasItem(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER.toString()))
-            )
-            .andExpect(
-                jsonPath("$.[*].initialLeaseAmountStepIdentifier").value(hasItem(DEFAULT_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER.toString()))
-            )
-            .andExpect(jsonPath("$.[*].interestAmountStepIdentifier").value(hasItem(DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].flagAmortisedStepIdentifier").value(hasItem(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))))
             .andExpect(jsonPath("$.[*].invalidated").value(hasItem(DEFAULT_INVALIDATED.booleanValue())));
     }
@@ -448,11 +299,6 @@ class TACompilationRequestResourceIT {
             .andExpect(jsonPath("$.compilationProcessStatus").value(DEFAULT_COMPILATION_PROCESS_STATUS.toString()))
             .andExpect(jsonPath("$.numberOfEnumeratedItems").value(DEFAULT_NUMBER_OF_ENUMERATED_ITEMS))
             .andExpect(jsonPath("$.batchJobIdentifier").value(DEFAULT_BATCH_JOB_IDENTIFIER.toString()))
-            .andExpect(jsonPath("$.initialAmountStepIdentifier").value(DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER.toString()))
-            .andExpect(jsonPath("$.depreciationAmountStepIdentifier").value(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER.toString()))
-            .andExpect(jsonPath("$.initialLeaseAmountStepIdentifier").value(DEFAULT_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER.toString()))
-            .andExpect(jsonPath("$.interestAmountStepIdentifier").value(DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER.toString()))
-            .andExpect(jsonPath("$.flagAmortisedStepIdentifier").value(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString()))
             .andExpect(jsonPath("$.compilationTime").value(sameInstant(DEFAULT_COMPILATION_TIME)))
             .andExpect(jsonPath("$.invalidated").value(DEFAULT_INVALIDATED.booleanValue()));
     }
@@ -847,294 +693,6 @@ class TACompilationRequestResourceIT {
 
     @Test
     @Transactional
-    void getAllTACompilationRequestsByInitialAmountStepIdentifierIsEqualToSomething() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where initialAmountStepIdentifier equals to DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound("initialAmountStepIdentifier.equals=" + DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER);
-
-        // Get all the tACompilationRequestList where initialAmountStepIdentifier equals to UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound("initialAmountStepIdentifier.equals=" + UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByInitialAmountStepIdentifierIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where initialAmountStepIdentifier not equals to DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound("initialAmountStepIdentifier.notEquals=" + DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER);
-
-        // Get all the tACompilationRequestList where initialAmountStepIdentifier not equals to UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound("initialAmountStepIdentifier.notEquals=" + UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByInitialAmountStepIdentifierIsInShouldWork() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where initialAmountStepIdentifier in DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER or UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound(
-            "initialAmountStepIdentifier.in=" + DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER + "," + UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER
-        );
-
-        // Get all the tACompilationRequestList where initialAmountStepIdentifier equals to UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound("initialAmountStepIdentifier.in=" + UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByInitialAmountStepIdentifierIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where initialAmountStepIdentifier is not null
-        defaultTACompilationRequestShouldBeFound("initialAmountStepIdentifier.specified=true");
-
-        // Get all the tACompilationRequestList where initialAmountStepIdentifier is null
-        defaultTACompilationRequestShouldNotBeFound("initialAmountStepIdentifier.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByDepreciationAmountStepIdentifierIsEqualToSomething() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where depreciationAmountStepIdentifier equals to DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound("depreciationAmountStepIdentifier.equals=" + DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
-
-        // Get all the tACompilationRequestList where depreciationAmountStepIdentifier equals to UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound(
-            "depreciationAmountStepIdentifier.equals=" + UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByDepreciationAmountStepIdentifierIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where depreciationAmountStepIdentifier not equals to DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound(
-            "depreciationAmountStepIdentifier.notEquals=" + DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
-        );
-
-        // Get all the tACompilationRequestList where depreciationAmountStepIdentifier not equals to UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound(
-            "depreciationAmountStepIdentifier.notEquals=" + UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByDepreciationAmountStepIdentifierIsInShouldWork() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where depreciationAmountStepIdentifier in DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER or UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound(
-            "depreciationAmountStepIdentifier.in=" +
-            DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER +
-            "," +
-            UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
-        );
-
-        // Get all the tACompilationRequestList where depreciationAmountStepIdentifier equals to UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound("depreciationAmountStepIdentifier.in=" + UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByDepreciationAmountStepIdentifierIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where depreciationAmountStepIdentifier is not null
-        defaultTACompilationRequestShouldBeFound("depreciationAmountStepIdentifier.specified=true");
-
-        // Get all the tACompilationRequestList where depreciationAmountStepIdentifier is null
-        defaultTACompilationRequestShouldNotBeFound("depreciationAmountStepIdentifier.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByInitialLeaseAmountStepIdentifierIsEqualToSomething() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where initialLeaseAmountStepIdentifier equals to DEFAULT_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound("initialLeaseAmountStepIdentifier.equals=" + DEFAULT_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER);
-
-        // Get all the tACompilationRequestList where initialLeaseAmountStepIdentifier equals to UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound(
-            "initialLeaseAmountStepIdentifier.equals=" + UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByInitialLeaseAmountStepIdentifierIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where initialLeaseAmountStepIdentifier not equals to DEFAULT_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound(
-            "initialLeaseAmountStepIdentifier.notEquals=" + DEFAULT_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER
-        );
-
-        // Get all the tACompilationRequestList where initialLeaseAmountStepIdentifier not equals to UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound(
-            "initialLeaseAmountStepIdentifier.notEquals=" + UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByInitialLeaseAmountStepIdentifierIsInShouldWork() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where initialLeaseAmountStepIdentifier in DEFAULT_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER or UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound(
-            "initialLeaseAmountStepIdentifier.in=" +
-            DEFAULT_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER +
-            "," +
-            UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER
-        );
-
-        // Get all the tACompilationRequestList where initialLeaseAmountStepIdentifier equals to UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound("initialLeaseAmountStepIdentifier.in=" + UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByInitialLeaseAmountStepIdentifierIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where initialLeaseAmountStepIdentifier is not null
-        defaultTACompilationRequestShouldBeFound("initialLeaseAmountStepIdentifier.specified=true");
-
-        // Get all the tACompilationRequestList where initialLeaseAmountStepIdentifier is null
-        defaultTACompilationRequestShouldNotBeFound("initialLeaseAmountStepIdentifier.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByInterestAmountStepIdentifierIsEqualToSomething() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where interestAmountStepIdentifier equals to DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound("interestAmountStepIdentifier.equals=" + DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER);
-
-        // Get all the tACompilationRequestList where interestAmountStepIdentifier equals to UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound("interestAmountStepIdentifier.equals=" + UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByInterestAmountStepIdentifierIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where interestAmountStepIdentifier not equals to DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound("interestAmountStepIdentifier.notEquals=" + DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER);
-
-        // Get all the tACompilationRequestList where interestAmountStepIdentifier not equals to UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound("interestAmountStepIdentifier.notEquals=" + UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByInterestAmountStepIdentifierIsInShouldWork() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where interestAmountStepIdentifier in DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER or UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound(
-            "interestAmountStepIdentifier.in=" + DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER + "," + UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER
-        );
-
-        // Get all the tACompilationRequestList where interestAmountStepIdentifier equals to UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound("interestAmountStepIdentifier.in=" + UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByInterestAmountStepIdentifierIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where interestAmountStepIdentifier is not null
-        defaultTACompilationRequestShouldBeFound("interestAmountStepIdentifier.specified=true");
-
-        // Get all the tACompilationRequestList where interestAmountStepIdentifier is null
-        defaultTACompilationRequestShouldNotBeFound("interestAmountStepIdentifier.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByFlagAmortisedStepIdentifierIsEqualToSomething() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where flagAmortisedStepIdentifier equals to DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound("flagAmortisedStepIdentifier.equals=" + DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER);
-
-        // Get all the tACompilationRequestList where flagAmortisedStepIdentifier equals to UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound("flagAmortisedStepIdentifier.equals=" + UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByFlagAmortisedStepIdentifierIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where flagAmortisedStepIdentifier not equals to DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound("flagAmortisedStepIdentifier.notEquals=" + DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER);
-
-        // Get all the tACompilationRequestList where flagAmortisedStepIdentifier not equals to UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound("flagAmortisedStepIdentifier.notEquals=" + UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByFlagAmortisedStepIdentifierIsInShouldWork() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where flagAmortisedStepIdentifier in DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER or UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldBeFound(
-            "flagAmortisedStepIdentifier.in=" + DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER + "," + UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
-        );
-
-        // Get all the tACompilationRequestList where flagAmortisedStepIdentifier equals to UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
-        defaultTACompilationRequestShouldNotBeFound("flagAmortisedStepIdentifier.in=" + UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
-    }
-
-    @Test
-    @Transactional
-    void getAllTACompilationRequestsByFlagAmortisedStepIdentifierIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
-
-        // Get all the tACompilationRequestList where flagAmortisedStepIdentifier is not null
-        defaultTACompilationRequestShouldBeFound("flagAmortisedStepIdentifier.specified=true");
-
-        // Get all the tACompilationRequestList where flagAmortisedStepIdentifier is null
-        defaultTACompilationRequestShouldNotBeFound("flagAmortisedStepIdentifier.specified=false");
-    }
-
-    @Test
-    @Transactional
     void getAllTACompilationRequestsByCompilationTimeIsEqualToSomething() throws Exception {
         // Initialize the database
         tACompilationRequestRepository.saveAndFlush(tACompilationRequest);
@@ -1329,15 +887,6 @@ class TACompilationRequestResourceIT {
             .andExpect(jsonPath("$.[*].compilationProcessStatus").value(hasItem(DEFAULT_COMPILATION_PROCESS_STATUS.toString())))
             .andExpect(jsonPath("$.[*].numberOfEnumeratedItems").value(hasItem(DEFAULT_NUMBER_OF_ENUMERATED_ITEMS)))
             .andExpect(jsonPath("$.[*].batchJobIdentifier").value(hasItem(DEFAULT_BATCH_JOB_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].initialAmountStepIdentifier").value(hasItem(DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER.toString())))
-            .andExpect(
-                jsonPath("$.[*].depreciationAmountStepIdentifier").value(hasItem(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER.toString()))
-            )
-            .andExpect(
-                jsonPath("$.[*].initialLeaseAmountStepIdentifier").value(hasItem(DEFAULT_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER.toString()))
-            )
-            .andExpect(jsonPath("$.[*].interestAmountStepIdentifier").value(hasItem(DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].flagAmortisedStepIdentifier").value(hasItem(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))))
             .andExpect(jsonPath("$.[*].invalidated").value(hasItem(DEFAULT_INVALIDATED.booleanValue())));
 
@@ -1393,11 +942,6 @@ class TACompilationRequestResourceIT {
             .compilationProcessStatus(UPDATED_COMPILATION_PROCESS_STATUS)
             .numberOfEnumeratedItems(UPDATED_NUMBER_OF_ENUMERATED_ITEMS)
             .batchJobIdentifier(UPDATED_BATCH_JOB_IDENTIFIER)
-            .initialAmountStepIdentifier(UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER)
-            .depreciationAmountStepIdentifier(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
-            .initialLeaseAmountStepIdentifier(UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER)
-            .interestAmountStepIdentifier(UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER)
-            .flagAmortisedStepIdentifier(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER)
             .compilationTime(UPDATED_COMPILATION_TIME)
             .invalidated(UPDATED_INVALIDATED);
         TACompilationRequestDTO tACompilationRequestDTO = tACompilationRequestMapper.toDto(updatedTACompilationRequest);
@@ -1419,11 +963,6 @@ class TACompilationRequestResourceIT {
         assertThat(testTACompilationRequest.getCompilationProcessStatus()).isEqualTo(UPDATED_COMPILATION_PROCESS_STATUS);
         assertThat(testTACompilationRequest.getNumberOfEnumeratedItems()).isEqualTo(UPDATED_NUMBER_OF_ENUMERATED_ITEMS);
         assertThat(testTACompilationRequest.getBatchJobIdentifier()).isEqualTo(UPDATED_BATCH_JOB_IDENTIFIER);
-        assertThat(testTACompilationRequest.getInitialAmountStepIdentifier()).isEqualTo(UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getDepreciationAmountStepIdentifier()).isEqualTo(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getInitialLeaseAmountStepIdentifier()).isEqualTo(UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getInterestAmountStepIdentifier()).isEqualTo(UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getFlagAmortisedStepIdentifier()).isEqualTo(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
         assertThat(testTACompilationRequest.getCompilationTime()).isEqualTo(UPDATED_COMPILATION_TIME);
         assertThat(testTACompilationRequest.getInvalidated()).isEqualTo(UPDATED_INVALIDATED);
 
@@ -1524,9 +1063,7 @@ class TACompilationRequestResourceIT {
         partialUpdatedTACompilationRequest
             .timeOfRequest(UPDATED_TIME_OF_REQUEST)
             .compilationProcessStatus(UPDATED_COMPILATION_PROCESS_STATUS)
-            .numberOfEnumeratedItems(UPDATED_NUMBER_OF_ENUMERATED_ITEMS)
-            .initialLeaseAmountStepIdentifier(UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER)
-            .flagAmortisedStepIdentifier(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
+            .numberOfEnumeratedItems(UPDATED_NUMBER_OF_ENUMERATED_ITEMS);
 
         restTACompilationRequestMockMvc
             .perform(
@@ -1545,11 +1082,6 @@ class TACompilationRequestResourceIT {
         assertThat(testTACompilationRequest.getCompilationProcessStatus()).isEqualTo(UPDATED_COMPILATION_PROCESS_STATUS);
         assertThat(testTACompilationRequest.getNumberOfEnumeratedItems()).isEqualTo(UPDATED_NUMBER_OF_ENUMERATED_ITEMS);
         assertThat(testTACompilationRequest.getBatchJobIdentifier()).isEqualTo(DEFAULT_BATCH_JOB_IDENTIFIER);
-        assertThat(testTACompilationRequest.getInitialAmountStepIdentifier()).isEqualTo(DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getDepreciationAmountStepIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getInitialLeaseAmountStepIdentifier()).isEqualTo(UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getInterestAmountStepIdentifier()).isEqualTo(DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getFlagAmortisedStepIdentifier()).isEqualTo(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
         assertThat(testTACompilationRequest.getCompilationTime()).isEqualTo(DEFAULT_COMPILATION_TIME);
         assertThat(testTACompilationRequest.getInvalidated()).isEqualTo(DEFAULT_INVALIDATED);
     }
@@ -1572,11 +1104,6 @@ class TACompilationRequestResourceIT {
             .compilationProcessStatus(UPDATED_COMPILATION_PROCESS_STATUS)
             .numberOfEnumeratedItems(UPDATED_NUMBER_OF_ENUMERATED_ITEMS)
             .batchJobIdentifier(UPDATED_BATCH_JOB_IDENTIFIER)
-            .initialAmountStepIdentifier(UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER)
-            .depreciationAmountStepIdentifier(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
-            .initialLeaseAmountStepIdentifier(UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER)
-            .interestAmountStepIdentifier(UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER)
-            .flagAmortisedStepIdentifier(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER)
             .compilationTime(UPDATED_COMPILATION_TIME)
             .invalidated(UPDATED_INVALIDATED);
 
@@ -1597,11 +1124,6 @@ class TACompilationRequestResourceIT {
         assertThat(testTACompilationRequest.getCompilationProcessStatus()).isEqualTo(UPDATED_COMPILATION_PROCESS_STATUS);
         assertThat(testTACompilationRequest.getNumberOfEnumeratedItems()).isEqualTo(UPDATED_NUMBER_OF_ENUMERATED_ITEMS);
         assertThat(testTACompilationRequest.getBatchJobIdentifier()).isEqualTo(UPDATED_BATCH_JOB_IDENTIFIER);
-        assertThat(testTACompilationRequest.getInitialAmountStepIdentifier()).isEqualTo(UPDATED_INITIAL_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getDepreciationAmountStepIdentifier()).isEqualTo(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getInitialLeaseAmountStepIdentifier()).isEqualTo(UPDATED_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getInterestAmountStepIdentifier()).isEqualTo(UPDATED_INTEREST_AMOUNT_STEP_IDENTIFIER);
-        assertThat(testTACompilationRequest.getFlagAmortisedStepIdentifier()).isEqualTo(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
         assertThat(testTACompilationRequest.getCompilationTime()).isEqualTo(UPDATED_COMPILATION_TIME);
         assertThat(testTACompilationRequest.getInvalidated()).isEqualTo(UPDATED_INVALIDATED);
     }
@@ -1725,15 +1247,6 @@ class TACompilationRequestResourceIT {
             .andExpect(jsonPath("$.[*].compilationProcessStatus").value(hasItem(DEFAULT_COMPILATION_PROCESS_STATUS.toString())))
             .andExpect(jsonPath("$.[*].numberOfEnumeratedItems").value(hasItem(DEFAULT_NUMBER_OF_ENUMERATED_ITEMS)))
             .andExpect(jsonPath("$.[*].batchJobIdentifier").value(hasItem(DEFAULT_BATCH_JOB_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].initialAmountStepIdentifier").value(hasItem(DEFAULT_INITIAL_AMOUNT_STEP_IDENTIFIER.toString())))
-            .andExpect(
-                jsonPath("$.[*].depreciationAmountStepIdentifier").value(hasItem(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER.toString()))
-            )
-            .andExpect(
-                jsonPath("$.[*].initialLeaseAmountStepIdentifier").value(hasItem(DEFAULT_INITIAL_LEASE_AMOUNT_STEP_IDENTIFIER.toString()))
-            )
-            .andExpect(jsonPath("$.[*].interestAmountStepIdentifier").value(hasItem(DEFAULT_INTEREST_AMOUNT_STEP_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].flagAmortisedStepIdentifier").value(hasItem(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))))
             .andExpect(jsonPath("$.[*].invalidated").value(hasItem(DEFAULT_INVALIDATED.booleanValue())));
     }

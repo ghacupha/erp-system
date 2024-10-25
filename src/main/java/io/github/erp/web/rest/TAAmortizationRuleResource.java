@@ -57,7 +57,7 @@ public class TAAmortizationRuleResource {
 
     private final Logger log = LoggerFactory.getLogger(TAAmortizationRuleResource.class);
 
-    private static final String ENTITY_NAME = "tAAmortizationRule";
+    private static final String ENTITY_NAME = "accountingTaAmortizationRule";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

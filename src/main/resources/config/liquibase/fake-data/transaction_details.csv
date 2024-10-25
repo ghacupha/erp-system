@@ -1,11 +1,11 @@
-id;entry_id;transaction_date;description;amount;debit_account_id;credit_account_id
-1;57212;2024-10-14;synergies;2775;1;1
-2;80364;2024-10-13;redundant generate;95844;2;2
-3;80188;2024-10-14;Soft Tasty index;71739;3;3
-4;22361;2024-10-14;as Avon;98212;4;4
-5;69849;2024-10-13;Fantastic;44877;5;5
-6;75485;2024-10-14;e-services quantify Mouse;77428;6;6
-7;15263;2024-10-13;deliver Industrial;53440;7;7
-8;33507;2024-10-14;didactic Dollar Fundamental;53773;8;8
-9;8217;2024-10-14;Square Licensed back-end;68523;9;9
-10;89326;2024-10-13;enable;32505;10;10
+id;entry_id;transaction_date;description;amount;is_deleted;posting_id;debit_account_id;credit_account_id
+1;57212;2024-10-14;synergies;2775;true;f9c6ac84-fc6b-42b1-9fcc-6db327a1970a;1;1
+2;98212;2024-10-13;Business-focused portals Shore;75280;false;5ac9d050-3dc2-4d86-850f-f853d44da283;2;2
+3;33677;2024-10-13;Fantastic Square;4152;true;a60c26ae-d562-4d53-8cd2-0b0ea6309791;3;3
+4;18150;2024-10-14;New Pizza contingency;95091;true;f4b015eb-48c1-4b1a-80d6-76b9ed09bb0e;4;4
+5;94715;2024-10-13;cross-platform Togo Applications;97143;false;aa62ae13-f0f1-4d04-99de-601e3d343df1;5;5
+6;40376;2024-10-14;Walk;45448;true;573781b1-dbdb-486a-84af-c7aff8074837;6;6
+7;36379;2024-10-13;withdrawal Fresh and;93201;true;d7fa4e3d-4a49-4080-b8e6-c94ced00867d;7;7
+8;91822;2024-10-14;interface Ball;37742;false;5e13b8ad-7c30-4457-9d2f-6f60614541e9;8;8
+9;23495;2024-10-14;Small navigating Arkansas;78481;true;332bd785-094f-4f8e-bdff-68b47e9902be;9;9
+10;10815;2024-10-14;Metrics alarm;67495;true;29f17025-06eb-4766-a2d2-4e0112781d29;10;10

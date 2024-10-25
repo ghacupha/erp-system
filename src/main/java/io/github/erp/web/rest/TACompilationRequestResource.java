@@ -57,7 +57,7 @@ public class TACompilationRequestResource {
 
     private final Logger log = LoggerFactory.getLogger(TACompilationRequestResource.class);
 
-    private static final String ENTITY_NAME = "tACompilationRequest";
+    private static final String ENTITY_NAME = "accountingTaCompilationRequest";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;

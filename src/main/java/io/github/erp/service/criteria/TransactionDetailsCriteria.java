@@ -30,6 +30,7 @@ import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.TransactionDetails} entity. This class is used
@@ -54,11 +55,17 @@ public class TransactionDetailsCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter amount;
 
+    private BooleanFilter isDeleted;
+
+    private UUIDFilter postingId;
+
     private LongFilter debitAccountId;
 
     private LongFilter creditAccountId;
 
     private LongFilter placeholderId;
+
+    private LongFilter postedById;
 
     private Boolean distinct;
 
@@ -70,9 +77,12 @@ public class TransactionDetailsCriteria implements Serializable, Criteria {
         this.transactionDate = other.transactionDate == null ? null : other.transactionDate.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.amount = other.amount == null ? null : other.amount.copy();
+        this.isDeleted = other.isDeleted == null ? null : other.isDeleted.copy();
+        this.postingId = other.postingId == null ? null : other.postingId.copy();
         this.debitAccountId = other.debitAccountId == null ? null : other.debitAccountId.copy();
         this.creditAccountId = other.creditAccountId == null ? null : other.creditAccountId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.postedById = other.postedById == null ? null : other.postedById.copy();
         this.distinct = other.distinct;
     }
 
@@ -156,6 +166,36 @@ public class TransactionDetailsCriteria implements Serializable, Criteria {
         this.amount = amount;
     }
 
+    public BooleanFilter getIsDeleted() {
+        return isDeleted;
+    }
+
+    public BooleanFilter isDeleted() {
+        if (isDeleted == null) {
+            isDeleted = new BooleanFilter();
+        }
+        return isDeleted;
+    }
+
+    public void setIsDeleted(BooleanFilter isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public UUIDFilter getPostingId() {
+        return postingId;
+    }
+
+    public UUIDFilter postingId() {
+        if (postingId == null) {
+            postingId = new UUIDFilter();
+        }
+        return postingId;
+    }
+
+    public void setPostingId(UUIDFilter postingId) {
+        this.postingId = postingId;
+    }
+
     public LongFilter getDebitAccountId() {
         return debitAccountId;
     }
@@ -201,6 +241,21 @@ public class TransactionDetailsCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getPostedById() {
+        return postedById;
+    }
+
+    public LongFilter postedById() {
+        if (postedById == null) {
+            postedById = new LongFilter();
+        }
+        return postedById;
+    }
+
+    public void setPostedById(LongFilter postedById) {
+        this.postedById = postedById;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -224,16 +279,32 @@ public class TransactionDetailsCriteria implements Serializable, Criteria {
             Objects.equals(transactionDate, that.transactionDate) &&
             Objects.equals(description, that.description) &&
             Objects.equals(amount, that.amount) &&
+            Objects.equals(isDeleted, that.isDeleted) &&
+            Objects.equals(postingId, that.postingId) &&
             Objects.equals(debitAccountId, that.debitAccountId) &&
             Objects.equals(creditAccountId, that.creditAccountId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(postedById, that.postedById) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, entryId, transactionDate, description, amount, debitAccountId, creditAccountId, placeholderId, distinct);
+        return Objects.hash(
+            id,
+            entryId,
+            transactionDate,
+            description,
+            amount,
+            isDeleted,
+            postingId,
+            debitAccountId,
+            creditAccountId,
+            placeholderId,
+            postedById,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -245,9 +316,12 @@ public class TransactionDetailsCriteria implements Serializable, Criteria {
             (transactionDate != null ? "transactionDate=" + transactionDate + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (amount != null ? "amount=" + amount + ", " : "") +
+            (isDeleted != null ? "isDeleted=" + isDeleted + ", " : "") +
+            (postingId != null ? "postingId=" + postingId + ", " : "") +
             (debitAccountId != null ? "debitAccountId=" + debitAccountId + ", " : "") +
             (creditAccountId != null ? "creditAccountId=" + creditAccountId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (postedById != null ? "postedById=" + postedById + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

@@ -63,26 +63,6 @@ public class TACompilationRequest implements Serializable {
     @Column(name = "batch_job_identifier", nullable = false, unique = true)
     private UUID batchJobIdentifier;
 
-    @NotNull
-    @Column(name = "initial_amount_step_identifier", nullable = false, unique = true)
-    private UUID initialAmountStepIdentifier;
-
-    @NotNull
-    @Column(name = "depreciation_amount_step_identifier", nullable = false, unique = true)
-    private UUID depreciationAmountStepIdentifier;
-
-    @NotNull
-    @Column(name = "initial_lease_amount_step_identifier", nullable = false, unique = true)
-    private UUID initialLeaseAmountStepIdentifier;
-
-    @NotNull
-    @Column(name = "interest_amount_step_identifier", nullable = false, unique = true)
-    private UUID interestAmountStepIdentifier;
-
-    @NotNull
-    @Column(name = "flag_amortised_step_identifier", nullable = false, unique = true)
-    private UUID flagAmortisedStepIdentifier;
-
     @Column(name = "compilation_time")
     private ZonedDateTime compilationTime;
 
@@ -176,71 +156,6 @@ public class TACompilationRequest implements Serializable {
         this.batchJobIdentifier = batchJobIdentifier;
     }
 
-    public UUID getInitialAmountStepIdentifier() {
-        return this.initialAmountStepIdentifier;
-    }
-
-    public TACompilationRequest initialAmountStepIdentifier(UUID initialAmountStepIdentifier) {
-        this.setInitialAmountStepIdentifier(initialAmountStepIdentifier);
-        return this;
-    }
-
-    public void setInitialAmountStepIdentifier(UUID initialAmountStepIdentifier) {
-        this.initialAmountStepIdentifier = initialAmountStepIdentifier;
-    }
-
-    public UUID getDepreciationAmountStepIdentifier() {
-        return this.depreciationAmountStepIdentifier;
-    }
-
-    public TACompilationRequest depreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
-        this.setDepreciationAmountStepIdentifier(depreciationAmountStepIdentifier);
-        return this;
-    }
-
-    public void setDepreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
-        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
-    }
-
-    public UUID getInitialLeaseAmountStepIdentifier() {
-        return this.initialLeaseAmountStepIdentifier;
-    }
-
-    public TACompilationRequest initialLeaseAmountStepIdentifier(UUID initialLeaseAmountStepIdentifier) {
-        this.setInitialLeaseAmountStepIdentifier(initialLeaseAmountStepIdentifier);
-        return this;
-    }
-
-    public void setInitialLeaseAmountStepIdentifier(UUID initialLeaseAmountStepIdentifier) {
-        this.initialLeaseAmountStepIdentifier = initialLeaseAmountStepIdentifier;
-    }
-
-    public UUID getInterestAmountStepIdentifier() {
-        return this.interestAmountStepIdentifier;
-    }
-
-    public TACompilationRequest interestAmountStepIdentifier(UUID interestAmountStepIdentifier) {
-        this.setInterestAmountStepIdentifier(interestAmountStepIdentifier);
-        return this;
-    }
-
-    public void setInterestAmountStepIdentifier(UUID interestAmountStepIdentifier) {
-        this.interestAmountStepIdentifier = interestAmountStepIdentifier;
-    }
-
-    public UUID getFlagAmortisedStepIdentifier() {
-        return this.flagAmortisedStepIdentifier;
-    }
-
-    public TACompilationRequest flagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
-        this.setFlagAmortisedStepIdentifier(flagAmortisedStepIdentifier);
-        return this;
-    }
-
-    public void setFlagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
-        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
-    }
-
     public ZonedDateTime getCompilationTime() {
         return this.compilationTime;
     }
@@ -309,11 +224,6 @@ public class TACompilationRequest implements Serializable {
             ", compilationProcessStatus='" + getCompilationProcessStatus() + "'" +
             ", numberOfEnumeratedItems=" + getNumberOfEnumeratedItems() +
             ", batchJobIdentifier='" + getBatchJobIdentifier() + "'" +
-            ", initialAmountStepIdentifier='" + getInitialAmountStepIdentifier() + "'" +
-            ", depreciationAmountStepIdentifier='" + getDepreciationAmountStepIdentifier() + "'" +
-            ", initialLeaseAmountStepIdentifier='" + getInitialLeaseAmountStepIdentifier() + "'" +
-            ", interestAmountStepIdentifier='" + getInterestAmountStepIdentifier() + "'" +
-            ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
             ", compilationTime='" + getCompilationTime() + "'" +
             ", invalidated='" + getInvalidated() + "'" +
             "}";

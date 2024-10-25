@@ -18,6 +18,14 @@
       "fieldName": "amount",
       "fieldType": "BigDecimal",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isDeleted",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "postingId",
+      "fieldType": "UUID"
     }
   ],
   "relationships": [
@@ -42,6 +50,12 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "transactionDetails"
+    },
+    {
+      "relationshipName": "postedBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
     }
   ],
   "service": "serviceImpl",
