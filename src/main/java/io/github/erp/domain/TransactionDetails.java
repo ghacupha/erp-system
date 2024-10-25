@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -61,6 +62,12 @@ public class TransactionDetails implements Serializable {
     @Column(name = "amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal amount;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
+    @Column(name = "posting_id")
+    private UUID postingId;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
@@ -80,6 +87,13 @@ public class TransactionDetails implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity", "placeholders" },
+        allowSetters = true
+    )
+    private ApplicationUser postedBy;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -148,6 +162,32 @@ public class TransactionDetails implements Serializable {
         this.amount = amount;
     }
 
+    public Boolean getIsDeleted() {
+        return this.isDeleted;
+    }
+
+    public TransactionDetails isDeleted(Boolean isDeleted) {
+        this.setIsDeleted(isDeleted);
+        return this;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public UUID getPostingId() {
+        return this.postingId;
+    }
+
+    public TransactionDetails postingId(UUID postingId) {
+        this.setPostingId(postingId);
+        return this;
+    }
+
+    public void setPostingId(UUID postingId) {
+        this.postingId = postingId;
+    }
+
     public TransactionAccount getDebitAccount() {
         return this.debitAccount;
     }
@@ -197,6 +237,19 @@ public class TransactionDetails implements Serializable {
         return this;
     }
 
+    public ApplicationUser getPostedBy() {
+        return this.postedBy;
+    }
+
+    public void setPostedBy(ApplicationUser applicationUser) {
+        this.postedBy = applicationUser;
+    }
+
+    public TransactionDetails postedBy(ApplicationUser applicationUser) {
+        this.setPostedBy(applicationUser);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -225,6 +278,8 @@ public class TransactionDetails implements Serializable {
             ", transactionDate='" + getTransactionDate() + "'" +
             ", description='" + getDescription() + "'" +
             ", amount=" + getAmount() +
+            ", isDeleted='" + getIsDeleted() + "'" +
+            ", postingId='" + getPostingId() + "'" +
             "}";
     }
 }

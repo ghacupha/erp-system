@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import javax.validation.constraints.*;
 
 /**
@@ -44,11 +45,17 @@ public class TransactionDetailsDTO implements Serializable {
     @NotNull
     private BigDecimal amount;
 
+    private Boolean isDeleted;
+
+    private UUID postingId;
+
     private TransactionAccountDTO debitAccount;
 
     private TransactionAccountDTO creditAccount;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private ApplicationUserDTO postedBy;
 
     public Long getId() {
         return id;
@@ -90,6 +97,22 @@ public class TransactionDetailsDTO implements Serializable {
         this.amount = amount;
     }
 
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public UUID getPostingId() {
+        return postingId;
+    }
+
+    public void setPostingId(UUID postingId) {
+        this.postingId = postingId;
+    }
+
     public TransactionAccountDTO getDebitAccount() {
         return debitAccount;
     }
@@ -112,6 +135,14 @@ public class TransactionDetailsDTO implements Serializable {
 
     public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
         this.placeholders = placeholders;
+    }
+
+    public ApplicationUserDTO getPostedBy() {
+        return postedBy;
+    }
+
+    public void setPostedBy(ApplicationUserDTO postedBy) {
+        this.postedBy = postedBy;
     }
 
     @Override
@@ -144,9 +175,12 @@ public class TransactionDetailsDTO implements Serializable {
             ", transactionDate='" + getTransactionDate() + "'" +
             ", description='" + getDescription() + "'" +
             ", amount=" + getAmount() +
+            ", isDeleted='" + getIsDeleted() + "'" +
+            ", postingId='" + getPostingId() + "'" +
             ", debitAccount=" + getDebitAccount() +
             ", creditAccount=" + getCreditAccount() +
             ", placeholders=" + getPlaceholders() +
+            ", postedBy=" + getPostedBy() +
             "}";
     }
 }

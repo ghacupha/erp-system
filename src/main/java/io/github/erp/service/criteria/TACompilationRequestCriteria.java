@@ -74,16 +74,6 @@ public class TACompilationRequestCriteria implements Serializable, Criteria {
 
     private UUIDFilter batchJobIdentifier;
 
-    private UUIDFilter initialAmountStepIdentifier;
-
-    private UUIDFilter depreciationAmountStepIdentifier;
-
-    private UUIDFilter initialLeaseAmountStepIdentifier;
-
-    private UUIDFilter interestAmountStepIdentifier;
-
-    private UUIDFilter flagAmortisedStepIdentifier;
-
     private ZonedDateTimeFilter compilationTime;
 
     private BooleanFilter invalidated;
@@ -101,13 +91,6 @@ public class TACompilationRequestCriteria implements Serializable, Criteria {
         this.compilationProcessStatus = other.compilationProcessStatus == null ? null : other.compilationProcessStatus.copy();
         this.numberOfEnumeratedItems = other.numberOfEnumeratedItems == null ? null : other.numberOfEnumeratedItems.copy();
         this.batchJobIdentifier = other.batchJobIdentifier == null ? null : other.batchJobIdentifier.copy();
-        this.initialAmountStepIdentifier = other.initialAmountStepIdentifier == null ? null : other.initialAmountStepIdentifier.copy();
-        this.depreciationAmountStepIdentifier =
-            other.depreciationAmountStepIdentifier == null ? null : other.depreciationAmountStepIdentifier.copy();
-        this.initialLeaseAmountStepIdentifier =
-            other.initialLeaseAmountStepIdentifier == null ? null : other.initialLeaseAmountStepIdentifier.copy();
-        this.interestAmountStepIdentifier = other.interestAmountStepIdentifier == null ? null : other.interestAmountStepIdentifier.copy();
-        this.flagAmortisedStepIdentifier = other.flagAmortisedStepIdentifier == null ? null : other.flagAmortisedStepIdentifier.copy();
         this.compilationTime = other.compilationTime == null ? null : other.compilationTime.copy();
         this.invalidated = other.invalidated == null ? null : other.invalidated.copy();
         this.initiatedById = other.initiatedById == null ? null : other.initiatedById.copy();
@@ -209,81 +192,6 @@ public class TACompilationRequestCriteria implements Serializable, Criteria {
         this.batchJobIdentifier = batchJobIdentifier;
     }
 
-    public UUIDFilter getInitialAmountStepIdentifier() {
-        return initialAmountStepIdentifier;
-    }
-
-    public UUIDFilter initialAmountStepIdentifier() {
-        if (initialAmountStepIdentifier == null) {
-            initialAmountStepIdentifier = new UUIDFilter();
-        }
-        return initialAmountStepIdentifier;
-    }
-
-    public void setInitialAmountStepIdentifier(UUIDFilter initialAmountStepIdentifier) {
-        this.initialAmountStepIdentifier = initialAmountStepIdentifier;
-    }
-
-    public UUIDFilter getDepreciationAmountStepIdentifier() {
-        return depreciationAmountStepIdentifier;
-    }
-
-    public UUIDFilter depreciationAmountStepIdentifier() {
-        if (depreciationAmountStepIdentifier == null) {
-            depreciationAmountStepIdentifier = new UUIDFilter();
-        }
-        return depreciationAmountStepIdentifier;
-    }
-
-    public void setDepreciationAmountStepIdentifier(UUIDFilter depreciationAmountStepIdentifier) {
-        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
-    }
-
-    public UUIDFilter getInitialLeaseAmountStepIdentifier() {
-        return initialLeaseAmountStepIdentifier;
-    }
-
-    public UUIDFilter initialLeaseAmountStepIdentifier() {
-        if (initialLeaseAmountStepIdentifier == null) {
-            initialLeaseAmountStepIdentifier = new UUIDFilter();
-        }
-        return initialLeaseAmountStepIdentifier;
-    }
-
-    public void setInitialLeaseAmountStepIdentifier(UUIDFilter initialLeaseAmountStepIdentifier) {
-        this.initialLeaseAmountStepIdentifier = initialLeaseAmountStepIdentifier;
-    }
-
-    public UUIDFilter getInterestAmountStepIdentifier() {
-        return interestAmountStepIdentifier;
-    }
-
-    public UUIDFilter interestAmountStepIdentifier() {
-        if (interestAmountStepIdentifier == null) {
-            interestAmountStepIdentifier = new UUIDFilter();
-        }
-        return interestAmountStepIdentifier;
-    }
-
-    public void setInterestAmountStepIdentifier(UUIDFilter interestAmountStepIdentifier) {
-        this.interestAmountStepIdentifier = interestAmountStepIdentifier;
-    }
-
-    public UUIDFilter getFlagAmortisedStepIdentifier() {
-        return flagAmortisedStepIdentifier;
-    }
-
-    public UUIDFilter flagAmortisedStepIdentifier() {
-        if (flagAmortisedStepIdentifier == null) {
-            flagAmortisedStepIdentifier = new UUIDFilter();
-        }
-        return flagAmortisedStepIdentifier;
-    }
-
-    public void setFlagAmortisedStepIdentifier(UUIDFilter flagAmortisedStepIdentifier) {
-        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
-    }
-
     public ZonedDateTimeFilter getCompilationTime() {
         return compilationTime;
     }
@@ -353,11 +261,6 @@ public class TACompilationRequestCriteria implements Serializable, Criteria {
             Objects.equals(compilationProcessStatus, that.compilationProcessStatus) &&
             Objects.equals(numberOfEnumeratedItems, that.numberOfEnumeratedItems) &&
             Objects.equals(batchJobIdentifier, that.batchJobIdentifier) &&
-            Objects.equals(initialAmountStepIdentifier, that.initialAmountStepIdentifier) &&
-            Objects.equals(depreciationAmountStepIdentifier, that.depreciationAmountStepIdentifier) &&
-            Objects.equals(initialLeaseAmountStepIdentifier, that.initialLeaseAmountStepIdentifier) &&
-            Objects.equals(interestAmountStepIdentifier, that.interestAmountStepIdentifier) &&
-            Objects.equals(flagAmortisedStepIdentifier, that.flagAmortisedStepIdentifier) &&
             Objects.equals(compilationTime, that.compilationTime) &&
             Objects.equals(invalidated, that.invalidated) &&
             Objects.equals(initiatedById, that.initiatedById) &&
@@ -374,11 +277,6 @@ public class TACompilationRequestCriteria implements Serializable, Criteria {
             compilationProcessStatus,
             numberOfEnumeratedItems,
             batchJobIdentifier,
-            initialAmountStepIdentifier,
-            depreciationAmountStepIdentifier,
-            initialLeaseAmountStepIdentifier,
-            interestAmountStepIdentifier,
-            flagAmortisedStepIdentifier,
             compilationTime,
             invalidated,
             initiatedById,
@@ -396,11 +294,6 @@ public class TACompilationRequestCriteria implements Serializable, Criteria {
             (compilationProcessStatus != null ? "compilationProcessStatus=" + compilationProcessStatus + ", " : "") +
             (numberOfEnumeratedItems != null ? "numberOfEnumeratedItems=" + numberOfEnumeratedItems + ", " : "") +
             (batchJobIdentifier != null ? "batchJobIdentifier=" + batchJobIdentifier + ", " : "") +
-            (initialAmountStepIdentifier != null ? "initialAmountStepIdentifier=" + initialAmountStepIdentifier + ", " : "") +
-            (depreciationAmountStepIdentifier != null ? "depreciationAmountStepIdentifier=" + depreciationAmountStepIdentifier + ", " : "") +
-            (initialLeaseAmountStepIdentifier != null ? "initialLeaseAmountStepIdentifier=" + initialLeaseAmountStepIdentifier + ", " : "") +
-            (interestAmountStepIdentifier != null ? "interestAmountStepIdentifier=" + interestAmountStepIdentifier + ", " : "") +
-            (flagAmortisedStepIdentifier != null ? "flagAmortisedStepIdentifier=" + flagAmortisedStepIdentifier + ", " : "") +
             (compilationTime != null ? "compilationTime=" + compilationTime + ", " : "") +
             (invalidated != null ? "invalidated=" + invalidated + ", " : "") +
             (initiatedById != null ? "initiatedById=" + initiatedById + ", " : "") +

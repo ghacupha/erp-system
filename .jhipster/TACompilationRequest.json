@@ -25,31 +25,6 @@
       "fieldValidateRules": ["required", "unique"]
     },
     {
-      "fieldName": "initialAmountStepIdentifier",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required", "unique"]
-    },
-    {
-      "fieldName": "depreciationAmountStepIdentifier",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required", "unique"]
-    },
-    {
-      "fieldName": "initialLeaseAmountStepIdentifier",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required", "unique"]
-    },
-    {
-      "fieldName": "interestAmountStepIdentifier",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required", "unique"]
-    },
-    {
-      "fieldName": "flagAmortisedStepIdentifier",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required", "unique"]
-    },
-    {
       "fieldName": "compilationTime",
       "fieldType": "ZonedDateTime"
     },
