@@ -18,6 +18,8 @@ package io.github.erp.internal.service.leases;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import java.util.UUID;
+
 public interface ROUAmortizationTransactionDetailsService {
 
     /**
@@ -25,5 +27,5 @@ public interface ROUAmortizationTransactionDetailsService {
      * for each existing lease transactions for depreciation during the whole lifetime
      * of the lease contract according to the rou-depreciation-entries table
      */
-    void createTransactionDetails();
+    void createTransactionDetails(UUID requisitionId, Long postedById);
 }

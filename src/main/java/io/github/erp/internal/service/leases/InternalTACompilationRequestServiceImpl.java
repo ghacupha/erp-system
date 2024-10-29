@@ -144,8 +144,13 @@ public class InternalTACompilationRequestServiceImpl implements InternalTACompil
     @Override
     public void launchTACompilationBatch(TACompilationRequestDTO compilationRequest) throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
 
+        long postedById = CurrentUserContext.getCurrentUser().getId();
+        String requisitionId = compilationRequest.getRequisitionId().toString();
+
         JobParameters jobParameters = new JobParametersBuilder()
             .addLong("startTime", System.currentTimeMillis())
+            .addLong("postedById", postedById)
+            .addString("requisitionId", requisitionId)
             .toJobParameters();
 
         jobLauncher.run(leaseAmortizationJob, jobParameters);
