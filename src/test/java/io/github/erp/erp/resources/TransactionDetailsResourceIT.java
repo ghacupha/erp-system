@@ -1,4 +1,4 @@
-package io.github.erp.web.rest;
+package io.github.erp.erp.resources;
 
 /*-
  * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
@@ -18,14 +18,6 @@ package io.github.erp.web.rest;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import static io.github.erp.web.rest.TestUtil.sameInstant;
-import static io.github.erp.web.rest.TestUtil.sameNumber;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.ApplicationUser;
 import io.github.erp.domain.Placeholder;
@@ -34,22 +26,9 @@ import io.github.erp.domain.TransactionDetails;
 import io.github.erp.repository.TransactionDetailsRepository;
 import io.github.erp.repository.search.TransactionDetailsSearchRepository;
 import io.github.erp.service.TransactionDetailsService;
-import io.github.erp.service.criteria.TransactionDetailsCriteria;
 import io.github.erp.service.dto.TransactionDetailsDTO;
 import io.github.erp.service.mapper.TransactionDetailsMapper;
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
+import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -64,13 +43,27 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.time.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static io.github.erp.web.rest.TestUtil.sameInstant;
+import static io.github.erp.web.rest.TestUtil.sameNumber;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 /**
- * Integration tests for the {@link TransactionDetailsResource} REST controller.
+ * Integration tests for the TransactionDetailsResourceProd REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(roles = {"BOOK_KEEPING"})
 class TransactionDetailsResourceIT {
 
     private static final Long DEFAULT_ENTRY_ID = 1L;
@@ -105,9 +98,9 @@ class TransactionDetailsResourceIT {
     private static final String DEFAULT_TRANSACTION_TYPE = "AAAAAAAAAA";
     private static final String UPDATED_TRANSACTION_TYPE = "BBBBBBBBBB";
 
-    private static final String ENTITY_API_URL = "/api/transaction-details";
+    private static final String ENTITY_API_URL = "/api/accounts/transaction-details";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/transaction-details";
+    private static final String ENTITY_SEARCH_API_URL = "/api/accounts/_search/transaction-details";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));

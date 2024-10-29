@@ -135,6 +135,16 @@ public class TransactionDetailsQueryService extends QueryService<TransactionDeta
             if (criteria.getPostingId() != null) {
                 specification = specification.and(buildSpecification(criteria.getPostingId(), TransactionDetails_.postingId));
             }
+            if (criteria.getCreatedAt() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getCreatedAt(), TransactionDetails_.createdAt));
+            }
+            if (criteria.getModifiedAt() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getModifiedAt(), TransactionDetails_.modifiedAt));
+            }
+            if (criteria.getTransactionType() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getTransactionType(), TransactionDetails_.transactionType));
+            }
             if (criteria.getDebitAccountId() != null) {
                 specification =
                     specification.and(

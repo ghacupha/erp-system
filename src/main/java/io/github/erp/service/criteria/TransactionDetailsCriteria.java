@@ -31,6 +31,7 @@ import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 import tech.jhipster.service.filter.UUIDFilter;
+import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.TransactionDetails} entity. This class is used
@@ -59,6 +60,12 @@ public class TransactionDetailsCriteria implements Serializable, Criteria {
 
     private UUIDFilter postingId;
 
+    private ZonedDateTimeFilter createdAt;
+
+    private ZonedDateTimeFilter modifiedAt;
+
+    private StringFilter transactionType;
+
     private LongFilter debitAccountId;
 
     private LongFilter creditAccountId;
@@ -79,6 +86,9 @@ public class TransactionDetailsCriteria implements Serializable, Criteria {
         this.amount = other.amount == null ? null : other.amount.copy();
         this.isDeleted = other.isDeleted == null ? null : other.isDeleted.copy();
         this.postingId = other.postingId == null ? null : other.postingId.copy();
+        this.createdAt = other.createdAt == null ? null : other.createdAt.copy();
+        this.modifiedAt = other.modifiedAt == null ? null : other.modifiedAt.copy();
+        this.transactionType = other.transactionType == null ? null : other.transactionType.copy();
         this.debitAccountId = other.debitAccountId == null ? null : other.debitAccountId.copy();
         this.creditAccountId = other.creditAccountId == null ? null : other.creditAccountId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
@@ -196,6 +206,51 @@ public class TransactionDetailsCriteria implements Serializable, Criteria {
         this.postingId = postingId;
     }
 
+    public ZonedDateTimeFilter getCreatedAt() {
+        return createdAt;
+    }
+
+    public ZonedDateTimeFilter createdAt() {
+        if (createdAt == null) {
+            createdAt = new ZonedDateTimeFilter();
+        }
+        return createdAt;
+    }
+
+    public void setCreatedAt(ZonedDateTimeFilter createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public ZonedDateTimeFilter getModifiedAt() {
+        return modifiedAt;
+    }
+
+    public ZonedDateTimeFilter modifiedAt() {
+        if (modifiedAt == null) {
+            modifiedAt = new ZonedDateTimeFilter();
+        }
+        return modifiedAt;
+    }
+
+    public void setModifiedAt(ZonedDateTimeFilter modifiedAt) {
+        this.modifiedAt = modifiedAt;
+    }
+
+    public StringFilter getTransactionType() {
+        return transactionType;
+    }
+
+    public StringFilter transactionType() {
+        if (transactionType == null) {
+            transactionType = new StringFilter();
+        }
+        return transactionType;
+    }
+
+    public void setTransactionType(StringFilter transactionType) {
+        this.transactionType = transactionType;
+    }
+
     public LongFilter getDebitAccountId() {
         return debitAccountId;
     }
@@ -281,6 +336,9 @@ public class TransactionDetailsCriteria implements Serializable, Criteria {
             Objects.equals(amount, that.amount) &&
             Objects.equals(isDeleted, that.isDeleted) &&
             Objects.equals(postingId, that.postingId) &&
+            Objects.equals(createdAt, that.createdAt) &&
+            Objects.equals(modifiedAt, that.modifiedAt) &&
+            Objects.equals(transactionType, that.transactionType) &&
             Objects.equals(debitAccountId, that.debitAccountId) &&
             Objects.equals(creditAccountId, that.creditAccountId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
@@ -299,6 +357,9 @@ public class TransactionDetailsCriteria implements Serializable, Criteria {
             amount,
             isDeleted,
             postingId,
+            createdAt,
+            modifiedAt,
+            transactionType,
             debitAccountId,
             creditAccountId,
             placeholderId,
@@ -318,6 +379,9 @@ public class TransactionDetailsCriteria implements Serializable, Criteria {
             (amount != null ? "amount=" + amount + ", " : "") +
             (isDeleted != null ? "isDeleted=" + isDeleted + ", " : "") +
             (postingId != null ? "postingId=" + postingId + ", " : "") +
+            (createdAt != null ? "createdAt=" + createdAt + ", " : "") +
+            (modifiedAt != null ? "modifiedAt=" + modifiedAt + ", " : "") +
+            (transactionType != null ? "transactionType=" + transactionType + ", " : "") +
             (debitAccountId != null ? "debitAccountId=" + debitAccountId + ", " : "") +
             (creditAccountId != null ? "creditAccountId=" + creditAccountId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
