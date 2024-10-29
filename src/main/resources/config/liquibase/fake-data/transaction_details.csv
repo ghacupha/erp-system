@@ -1,11 +1,11 @@
-id;entry_id;transaction_date;description;amount;is_deleted;posting_id;debit_account_id;credit_account_id
-1;57212;2024-10-14;synergies;2775;true;f9c6ac84-fc6b-42b1-9fcc-6db327a1970a;1;1
-2;98212;2024-10-13;Business-focused portals Shore;75280;false;5ac9d050-3dc2-4d86-850f-f853d44da283;2;2
-3;33677;2024-10-13;Fantastic Square;4152;true;a60c26ae-d562-4d53-8cd2-0b0ea6309791;3;3
-4;18150;2024-10-14;New Pizza contingency;95091;true;f4b015eb-48c1-4b1a-80d6-76b9ed09bb0e;4;4
-5;94715;2024-10-13;cross-platform Togo Applications;97143;false;aa62ae13-f0f1-4d04-99de-601e3d343df1;5;5
-6;40376;2024-10-14;Walk;45448;true;573781b1-dbdb-486a-84af-c7aff8074837;6;6
-7;36379;2024-10-13;withdrawal Fresh and;93201;true;d7fa4e3d-4a49-4080-b8e6-c94ced00867d;7;7
-8;91822;2024-10-14;interface Ball;37742;false;5e13b8ad-7c30-4457-9d2f-6f60614541e9;8;8
-9;23495;2024-10-14;Small navigating Arkansas;78481;true;332bd785-094f-4f8e-bdff-68b47e9902be;9;9
-10;10815;2024-10-14;Metrics alarm;67495;true;29f17025-06eb-4766-a2d2-4e0112781d29;10;10
+id;entry_id;transaction_date;description;amount;is_deleted;posting_id;created_at;modified_at;transaction_type;debit_account_id;credit_account_id
+1;57212;2024-10-14;synergies;2775;true;f9c6ac84-fc6b-42b1-9fcc-6db327a1970a;2024-10-13T15:17:40;2024-10-13T22:06:05;Business-focused portals Shore;1;1
+2;75280;2024-10-14;invoice;84253;false;503dc2d8-6850-4ff8-93d4-4da2835b816a;2024-10-14T03:45:26;2024-10-13T19:49:18;Licensed back-end;2;2
+3;68523;2024-10-13;function copying Licensed;70035;false;ea630979-127d-49a0-897d-c439fff4b015;2024-10-13T17:50:20;2024-10-13T20:55:09;Buckinghamshire;3;3
+4;73429;2024-10-14;generation vortals;74947;true;ed09bb0e-fdf5-4aa8-a2f7-6f5aa62ae13f;2024-10-14T13:49:21;2024-10-13T15:03:12;TCP;4;4
+5;6673;2024-10-14;Markets Unbranded overriding;19390;true;f16137fc-7857-4378-9b1d-bdb86a44afc7;2024-10-13T23:46:09;2024-10-13T16:01:30;Anguilla intangible Island;5;5
+6;72946;2024-10-13;Customer-focused;98031;true;cbebd7fa-4e3d-44a4-9080-f8e6c94ced00;2024-10-14T02:18:14;2024-10-14T04:39:23;JSON synergistic;6;6
+7;72207;2024-10-14;Shirt;34351;true;13b8ad7c-3045-471d-af6f-60614541e938;2024-10-13T19:40:09;2024-10-14T12:19:46;Solomon;7;7
+8;52587;2024-10-14;Account;20795;false;2bd78509-4ff8-4efd-bf68-b47e9902be10;2024-10-14T02:12:15;2024-10-13T16:37:38;Chicken Ramp Rubber;8;8
+9;11804;2024-10-14;Gloves;39818;true;b766a2d2-4e01-4127-81d2-94236dc292cb;2024-10-14T01:11:13;2024-10-14T06:59:55;Bedfordshire;9;9
+10;3683;2024-10-14;SCSI Dollar generate;87530;false;a9fb9b8a-d77b-41a0-89c3-5331f9e2c26f;2024-10-14T07:07:11;2024-10-14T02:28:20;HTTP monitor;10;10

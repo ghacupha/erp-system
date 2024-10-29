@@ -21,6 +21,7 @@ package io.github.erp.service.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -48,6 +49,13 @@ public class TransactionDetailsDTO implements Serializable {
     private Boolean isDeleted;
 
     private UUID postingId;
+
+    @NotNull
+    private ZonedDateTime createdAt;
+
+    private ZonedDateTime modifiedAt;
+
+    private String transactionType;
 
     private TransactionAccountDTO debitAccount;
 
@@ -111,6 +119,30 @@ public class TransactionDetailsDTO implements Serializable {
 
     public void setPostingId(UUID postingId) {
         this.postingId = postingId;
+    }
+
+    public ZonedDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public ZonedDateTime getModifiedAt() {
+        return modifiedAt;
+    }
+
+    public void setModifiedAt(ZonedDateTime modifiedAt) {
+        this.modifiedAt = modifiedAt;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
     }
 
     public TransactionAccountDTO getDebitAccount() {
@@ -177,6 +209,9 @@ public class TransactionDetailsDTO implements Serializable {
             ", amount=" + getAmount() +
             ", isDeleted='" + getIsDeleted() + "'" +
             ", postingId='" + getPostingId() + "'" +
+            ", createdAt='" + getCreatedAt() + "'" +
+            ", modifiedAt='" + getModifiedAt() + "'" +
+            ", transactionType='" + getTransactionType() + "'" +
             ", debitAccount=" + getDebitAccount() +
             ", creditAccount=" + getCreditAccount() +
             ", placeholders=" + getPlaceholders() +

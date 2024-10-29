@@ -36,7 +36,7 @@ public interface ROUAmortizationTransactionDetailsRepository
     @Query(
         nativeQuery = true,
         value = "" +
-            "INSERT INTO transaction_details (id, entry_id, transaction_date, description, amount, debit_account_id, credit_account_id, is_deleted, posted_by_id, posting_id) " +
+            "INSERT INTO transaction_details (id, entry_id, transaction_date, description, amount, debit_account_id, credit_account_id, is_deleted, posted_by_id, posting_id, transaction_type) " +
             "SELECT " +
             "    nextval('sequence_generator') AS id," +
             "    nextval('transaction_entry_id_sequence') AS entry_id," +
@@ -47,7 +47,8 @@ public interface ROUAmortizationTransactionDetailsRepository
             "    ar.credit_id AS credit_account_id, " +
             "    'false' AS is_deleted, " +
             "    :postedById AS posted_by_id, " +
-            "    :requisitionId AS posting_id " +
+            "    :requisitionId AS posting_id, " +
+            "    :transactionType AS transaction_type " +
             "FROM " +
             "    rou_depreciation_entry re " +
             "JOIN " +
@@ -57,5 +58,5 @@ public interface ROUAmortizationTransactionDetailsRepository
             "LEFT JOIN " +
             "    lease_period lp ON re.lease_period_id = lp.id"
     )
-    void insertTransactionDetails(@Param("requisitionId") UUID requisitionId, @Param("postedById") Long postedById);
+    void insertTransactionDetails(@Param("requisitionId") UUID requisitionId, @Param("postedById") Long postedById, @Param("transactionType") String transactionType);
 }

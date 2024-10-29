@@ -38,6 +38,6 @@ public class ROUAmortizationTransactionDetailsServiceImpl implements ROUAmortiza
     @Override
     public void createTransactionDetails(UUID requisitionId, Long postedById){
 
-        rouAmortizationTransactionDetailsRepository.insertTransactionDetails(requisitionId, postedById);
+        rouAmortizationTransactionDetailsRepository.insertTransactionDetails(requisitionId, postedById, "ROU Amortization");
     }
 }

@@ -1,0 +1,19 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="1730193622763-9" author="edwin.njeru">
+        <comment>Create trigger to automatically set modified_at on update in transaction_details</comment>
+
+        <!-- Function to set modified_at to the current timestamp with timezone on update -->
+        <sqlFile path="src/main/resources/config/liquibase/functions/set_modified_at.sql"/>
+    </changeSet>
+
+    <changeSet id="1730193622763-10" author="edwin.njeru">
+        <comment>Create trigger to automatically set created_at on insert in transaction_details</comment>
+
+        <!-- Function to set created_at to the current timestamp with timezone on insert -->
+        <sqlFile path="src/main/resources/config/liquibase/functions/set_created_at.sql"/>
+
+    </changeSet>
+
+</databaseChangeLog>

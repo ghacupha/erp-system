@@ -26,6 +26,19 @@
     {
       "fieldName": "postingId",
       "fieldType": "UUID"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "modifiedAt",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "transactionType",
+      "fieldType": "String"
     }
   ],
   "relationships": [

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -67,6 +68,16 @@ public class TransactionDetails implements Serializable {
 
     @Column(name = "posting_id")
     private UUID postingId;
+
+    @NotNull
+    @Column(name = "created_at", nullable = false)
+    private ZonedDateTime createdAt;
+
+    @Column(name = "modified_at")
+    private ZonedDateTime modifiedAt;
+
+    @Column(name = "transaction_type")
+    private String transactionType;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -188,6 +199,45 @@ public class TransactionDetails implements Serializable {
         this.postingId = postingId;
     }
 
+    public ZonedDateTime getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public TransactionDetails createdAt(ZonedDateTime createdAt) {
+        this.setCreatedAt(createdAt);
+        return this;
+    }
+
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public ZonedDateTime getModifiedAt() {
+        return this.modifiedAt;
+    }
+
+    public TransactionDetails modifiedAt(ZonedDateTime modifiedAt) {
+        this.setModifiedAt(modifiedAt);
+        return this;
+    }
+
+    public void setModifiedAt(ZonedDateTime modifiedAt) {
+        this.modifiedAt = modifiedAt;
+    }
+
+    public String getTransactionType() {
+        return this.transactionType;
+    }
+
+    public TransactionDetails transactionType(String transactionType) {
+        this.setTransactionType(transactionType);
+        return this;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
     public TransactionAccount getDebitAccount() {
         return this.debitAccount;
     }
@@ -280,6 +330,9 @@ public class TransactionDetails implements Serializable {
             ", amount=" + getAmount() +
             ", isDeleted='" + getIsDeleted() + "'" +
             ", postingId='" + getPostingId() + "'" +
+            ", createdAt='" + getCreatedAt() + "'" +
+            ", modifiedAt='" + getModifiedAt() + "'" +
+            ", transactionType='" + getTransactionType() + "'" +
             "}";
     }
 }
