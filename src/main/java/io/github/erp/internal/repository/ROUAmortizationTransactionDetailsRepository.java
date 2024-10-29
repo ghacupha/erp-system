@@ -23,20 +23,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Repository
 public interface ROUAmortizationTransactionDetailsRepository
     extends JpaRepository<TransactionDetails, Long>, JpaSpecificationExecutor<TransactionDetails> {
 
-    // @Transactional(propagation = Propagation.NOT_SUPPORTED)
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(
         nativeQuery = true,
         value = "" +
-            "INSERT INTO transaction_details (id, entry_id, transaction_date, description, amount, debit_account_id, credit_account_id) " +
+            "INSERT INTO transaction_details (id, entry_id, transaction_date, description, amount, debit_account_id, credit_account_id, is_deleted, posted_by_id, posting_id) " +
             "SELECT " +
             "    nextval('sequence_generator') AS id," +
             "    nextval('transaction_entry_id_sequence') AS entry_id," +
@@ -44,7 +44,10 @@ public interface ROUAmortizationTransactionDetailsRepository
             "    re.description AS description," +
             "    re.depreciation_amount AS amount," +
             "    ar.debit_id AS debit_account_id," +
-            "    ar.credit_id AS credit_account_id " +
+            "    ar.credit_id AS credit_account_id, " +
+            "    'false' AS is_deleted, " +
+            "    :postedById AS posted_by_id, " +
+            "    :requisitionId AS posting_id " +
             "FROM " +
             "    rou_depreciation_entry re " +
             "JOIN " +
@@ -54,5 +57,5 @@ public interface ROUAmortizationTransactionDetailsRepository
             "LEFT JOIN " +
             "    lease_period lp ON re.lease_period_id = lp.id"
     )
-    void insertTransactionDetails();
+    void insertTransactionDetails(@Param("requisitionId") UUID requisitionId, @Param("postedById") Long postedById);
 }

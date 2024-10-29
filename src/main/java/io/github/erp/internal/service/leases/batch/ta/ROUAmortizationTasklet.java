@@ -25,14 +25,20 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
+
+import java.util.UUID;
 
 public class ROUAmortizationTasklet implements Tasklet, InitializingBean {
 
     private final ROUAmortizationTransactionDetailsService rouAmortizationTransactionDetailsService;
 
-    public ROUAmortizationTasklet(ROUAmortizationTransactionDetailsService rouAmortizationTransactionDetailsService) {
+    private final UUID requisitionId;
+    private final Long postedById;
+
+    public ROUAmortizationTasklet(ROUAmortizationTransactionDetailsService rouAmortizationTransactionDetailsService, UUID requisitionId, Long postedById) {
         this.rouAmortizationTransactionDetailsService = rouAmortizationTransactionDetailsService;
+        this.requisitionId = requisitionId;
+        this.postedById = postedById;
     }
 
     /**
@@ -53,7 +59,7 @@ public class ROUAmortizationTasklet implements Tasklet, InitializingBean {
     @Override
     public RepeatStatus execute(@NotNull StepContribution contribution, @NotNull ChunkContext chunkContext) throws Exception {
 
-        rouAmortizationTransactionDetailsService.createTransactionDetails();
+        rouAmortizationTransactionDetailsService.createTransactionDetails(requisitionId, postedById);
 
         return RepeatStatus.FINISHED;
     }
@@ -61,6 +67,8 @@ public class ROUAmortizationTasklet implements Tasklet, InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
 
-        // TODO check repo states Assert.state(directory != null, "Directory must be set");
+        // TODO check repo states org.springframework.util.Assert.state(directory != null, "Directory must be set");
+        // TODO Check availability of rules
+        // Check availability of lease contract mappings
     }
 }

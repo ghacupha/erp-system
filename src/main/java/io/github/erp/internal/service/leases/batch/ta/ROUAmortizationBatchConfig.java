@@ -23,10 +23,14 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.UUID;
 
 @Configuration
 public class ROUAmortizationBatchConfig {
@@ -34,6 +38,14 @@ public class ROUAmortizationBatchConfig {
     public static final String ROU_AMORTIZATION_JOB_NAME = "taROUAmortizationJob";
     private static final String STEP_NAME = "taROUAmortizationCompilationStep";
     private static final String TASKLET_NAME = "taROUAmortizationCompilationTaskLet";
+
+    @SuppressWarnings("SpringElStaticFieldInjectionInspection")
+    @Value("#{jobParameters['requisitionId']}")
+    private static String requisitionId;
+
+    @SuppressWarnings("SpringElStaticFieldInjectionInspection")
+    @Value("#{jobParameters['postedById']}")
+    private static long postedById;
 
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
@@ -54,12 +66,13 @@ public class ROUAmortizationBatchConfig {
     @Bean(STEP_NAME)
     public Step leaseAmortizationStep() {
         return stepBuilderFactory.get(STEP_NAME)
-            .tasklet(rouAmortizationTasklet())
+            .tasklet(rouAmortizationTasklet(requisitionId, postedById))
             .build();
     }
 
     @Bean(TASKLET_NAME)
-    public Tasklet rouAmortizationTasklet() {
-        return new ROUAmortizationTasklet(rouAmortizationTransactionDetailsService);
+    @StepScope
+    public Tasklet rouAmortizationTasklet(@Value("#{jobParameters['requisitionId']}") String requisitionId, @Value("#{jobParameters['postedById']}") long postedById) {
+        return new ROUAmortizationTasklet(rouAmortizationTransactionDetailsService, UUID.fromString(requisitionId), postedById);
     }
 }

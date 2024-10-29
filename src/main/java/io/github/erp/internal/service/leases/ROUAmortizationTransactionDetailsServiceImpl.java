@@ -23,6 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 public class ROUAmortizationTransactionDetailsServiceImpl implements ROUAmortizationTransactionDetailsService {
@@ -34,8 +36,8 @@ public class ROUAmortizationTransactionDetailsServiceImpl implements ROUAmortiza
     }
 
     @Override
-    public void createTransactionDetails(){
+    public void createTransactionDetails(UUID requisitionId, Long postedById){
 
-        rouAmortizationTransactionDetailsRepository.insertTransactionDetails();
+        rouAmortizationTransactionDetailsRepository.insertTransactionDetails(requisitionId, postedById);
     }
 }
