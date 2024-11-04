@@ -18,12 +18,49 @@ package io.github.erp.internal.repository;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.TransactionDetails;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
 @Repository
-public interface LeaseInterestAccrualTransactionDetailsRepository {
+public interface LeaseInterestAccrualTransactionDetailsRepository
+    extends JpaRepository<TransactionDetails, Long>, JpaSpecificationExecutor<TransactionDetails> {
 
-    void insertTransactionDetails(UUID requisitionId, Long postedById, String leaseInterestAccrual);
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "INSERT INTO transaction_details (id, entry_id, transaction_date, description, amount, debit_account_id, credit_account_id, is_deleted, posted_by_id, posting_id, transaction_type)  " +
+            "SELECT  " +
+            "    nextval('sequence_generator') AS id,  " +
+            "    nextval('transaction_entry_id_sequence') AS entry_id,  " +
+            "    fm.end_date AS transaction_date,  " +
+            "    lc.short_title || ' ' || REPLACE(fm.fiscal_month_code, 'YM', '') || 'INTEREST ACCRUED' AS description,  " +
+            "    lls.interest_accrued AS amount,  " +
+            "    lia.debit_id AS debit_account_id,  " +
+            "    lia.credit_id AS credit_account_id,  " +
+            "    'false' AS is_deleted ,  " +
+            "    :postedById AS posted_by_id,  " +
+            "    :requisitionId AS posting_id,  " +
+            "    :transactionType AS transaction_type  " +
+            "FROM  " +
+            "    lease_liability_schedule_item lls  " +
+            "LEFT JOIN  " +
+            "    ifrs16lease_contract lc ON lls.lease_contract_id = lc.id  " +
+            "LEFT JOIN  " +
+            "    talease_interest_accrual_rule lia ON lls.lease_contract_id = lia.lease_contract_id   " +
+            "LEFT JOIN  " +
+            "    lease_repayment_period lp ON lls.lease_period_id = lp.id  " +
+            "LEFT JOIN  " +
+            "  fiscal_month fm ON lp.fiscal_month_id = fm.id " +
+            "WHERE  " +
+            "    lls.interest_accrued <> 0.0"
+    )
+    void insertTransactionDetails(@Param("requisitionId") UUID requisitionId, @Param("postedById") Long postedById, @Param("transactionType") String transactionType);
 }
