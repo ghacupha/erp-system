@@ -1,4 +1,3 @@
-package io.github.erp.internal.service.leases;
 
 /*-
  * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
@@ -17,27 +16,26 @@ package io.github.erp.internal.service.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package io.github.erp.internal.service.leases.trxAccounts;
 
+import io.github.erp.internal.repository.LeaseRepaymentTransactionDetailsRepository;
 import io.github.erp.internal.repository.ROUAmortizationTransactionDetailsRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Slf4j
 @Service
-public class ROUAmortizationTransactionDetailsServiceImpl implements ROUAmortizationTransactionDetailsService {
+public class LeaseRepaymentTransactionDetailsServiceImpl implements LeaseRepaymentTransactionDetailsService {
 
-    private final ROUAmortizationTransactionDetailsRepository rouAmortizationTransactionDetailsRepository;
+    private final LeaseRepaymentTransactionDetailsRepository leaseRepaymentTransactionDetailsRepository;
 
-    public ROUAmortizationTransactionDetailsServiceImpl(ROUAmortizationTransactionDetailsRepository rouAmortizationTransactionDetailsRepository){
-        this.rouAmortizationTransactionDetailsRepository = rouAmortizationTransactionDetailsRepository;
+    public LeaseRepaymentTransactionDetailsServiceImpl(LeaseRepaymentTransactionDetailsRepository leaseRepaymentTransactionDetailsRepository) {
+        this.leaseRepaymentTransactionDetailsRepository = leaseRepaymentTransactionDetailsRepository;
     }
 
     @Override
     public void createTransactionDetails(UUID requisitionId, Long postedById){
 
-        rouAmortizationTransactionDetailsRepository.insertTransactionDetails(requisitionId, postedById, "ROU Amortization");
+        leaseRepaymentTransactionDetailsRepository.insertTransactionDetails(requisitionId, postedById, "Lease Repayment");
     }
 }

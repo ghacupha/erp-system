@@ -18,7 +18,7 @@ package io.github.erp.internal.service.leases.batch.ta;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.internal.service.leases.ROUAmortizationTransactionDetailsService;
+import io.github.erp.internal.service.leases.trxAccounts.ROUAmortizationTransactionDetailsService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;

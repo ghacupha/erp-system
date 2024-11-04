@@ -44,7 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static io.github.erp.internal.service.leases.batch.ta.ROUAmortizationBatchConfig.ROU_AMORTIZATION_JOB_NAME;
+import static io.github.erp.internal.service.leases.batch.ta.ROUAmortizationBatchConfig.LEASES_COMPILATION_JOB_NAME;
 
 /**
  * Service Implementation for managing {@link TACompilationRequest}.
@@ -69,7 +69,7 @@ public class InternalTACompilationRequestServiceImpl implements InternalTACompil
         TACompilationRequestMapper tACompilationRequestMapper,
         TACompilationRequestSearchRepository tACompilationRequestSearchRepository,
         JobLauncher jobLauncher,
-        @Qualifier(ROU_AMORTIZATION_JOB_NAME) Job leaseAmortizationJob) {
+        @Qualifier(LEASES_COMPILATION_JOB_NAME) Job leaseAmortizationJob) {
         this.tACompilationRequestRepository = tACompilationRequestRepository;
         this.tACompilationRequestMapper = tACompilationRequestMapper;
         this.tACompilationRequestSearchRepository = tACompilationRequestSearchRepository;
