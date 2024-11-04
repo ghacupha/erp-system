@@ -1,4 +1,4 @@
-package io.github.erp.internal.service.leases;
+package io.github.erp.internal.repository;
 
 /*-
  * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
@@ -18,14 +18,12 @@ package io.github.erp.internal.service.leases;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import org.springframework.stereotype.Repository;
+
 import java.util.UUID;
 
-public interface ROUAmortizationTransactionDetailsService {
+@Repository
+public interface LeaseLiabilityRecognitionTransactionDetailsRepository {
 
-    /**
-     * This process checks the rules on the TA Rou amortization rules table and posts
-     * for each existing lease transactions for depreciation during the whole lifetime
-     * of the lease contract according to the rou-depreciation-entries table
-     */
-    void createTransactionDetails(UUID requisitionId, Long postedById);
+    void insertTransactionDetails(UUID requisitionId, Long postedById, String leaseLiabilityRecognition);
 }

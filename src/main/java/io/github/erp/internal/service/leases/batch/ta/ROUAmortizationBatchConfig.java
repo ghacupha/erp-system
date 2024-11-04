@@ -18,7 +18,7 @@ package io.github.erp.internal.service.leases.batch.ta;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.internal.service.leases.*;
+import io.github.erp.internal.service.leases.trxAccounts.*;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
