@@ -20,10 +20,8 @@ package io.github.erp.erp.resources.leases;
 
 import io.github.erp.domain.RouInitialDirectCost;
 import io.github.erp.internal.repository.InternalRouInitialDirectCostRepository;
-import io.github.erp.internal.service.leases.InternalRouInitialDirectCostService;
-import io.github.erp.repository.RouInitialDirectCostRepository;
+import io.github.erp.internal.service.rou.InternalRouInitialDirectCostService;
 import io.github.erp.service.RouInitialDirectCostQueryService;
-import io.github.erp.service.RouInitialDirectCostService;
 import io.github.erp.service.criteria.RouInitialDirectCostCriteria;
 import io.github.erp.service.dto.RouInitialDirectCostDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
@@ -248,5 +246,17 @@ public class RouInitialDirectCostResourceProd {
         Page<RouInitialDirectCostDTO> page = rouInitialDirectCostService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /work-in-progress-registrations/next/catalogue-number} : get the next catalogue number.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the next number code in body.
+     */
+    @GetMapping("/rou-initial-direct-costs/next/reference-number")
+    public ResponseEntity<Long> getNextReferenceNumber() {
+        log.debug("REST request to fetch the next asset number");
+
+        return ResponseEntity.ok().body(rouInitialDirectCostService.calculateNextNumber());
     }
 }

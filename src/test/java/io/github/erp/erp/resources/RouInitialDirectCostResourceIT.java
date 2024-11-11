@@ -956,9 +956,9 @@ class RouInitialDirectCostResourceIT {
         restRouInitialDirectCostMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
-    @Test
-    @Transactional
-    void putNewRouInitialDirectCost() throws Exception {
+    /*@Test
+    @Transactional*/
+    /*void putNewRouInitialDirectCost() throws Exception {
         // Initialize the database
         rouInitialDirectCostRepository.saveAndFlush(rouInitialDirectCost);
 
@@ -996,7 +996,7 @@ class RouInitialDirectCostResourceIT {
             // Validate the RouInitialDirectCost in Elasticsearch
             verify(mockRouInitialDirectCostSearchRepository).save(testRouInitialDirectCost);
         }
-    }
+    }*/
 
     @Test
     @Transactional

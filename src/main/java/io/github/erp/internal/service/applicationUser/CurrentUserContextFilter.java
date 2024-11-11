@@ -275,7 +275,7 @@ public class CurrentUserContextFilter extends GenericFilterBean  implements Filt
         throws IOException, ServletException {
         try {
 
-            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            var httpRequest = (HttpServletRequest) request;
 
             String jwtToken = resolveToken(httpRequest);
 
