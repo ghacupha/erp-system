@@ -1,18 +1,45 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
-
     <changeSet id="1730193622763-9" author="edwin.njeru">
         <comment>Create trigger to automatically set modified_at on update in transaction_details</comment>
-
+sc
         <!-- Function to set modified_at to the current timestamp with timezone on update -->
-        <sqlFile path="../resources/config/liquibase/functions/set_modified_at.sql"/>
+        <sql>
+            CREATE OR REPLACE FUNCTION update_modified_at()
+            RETURNS TRIGGER AS '
+                BEGIN
+                    NEW.modified_at = current_timestamp;
+                    RETURN NEW;
+                END;
+            ' LANGUAGE plpgsql;
+
+            CREATE TRIGGER set_modified_at
+                BEFORE UPDATE ON transaction_details
+                FOR EACH ROW
+            EXECUTE FUNCTION update_modified_at();
+        </sql>
     </changeSet>
 
     <changeSet id="1730193622763-10" author="edwin.njeru">
         <comment>Create trigger to automatically set created_at on insert in transaction_details</comment>
 
         <!-- Function to set created_at to the current timestamp with timezone on insert -->
-        <sqlFile path="../resources/config/liquibase/functions/set_created_at.sql"/>
+        <sql>
+            CREATE OR REPLACE FUNCTION set_created_at()
+            RETURNS TRIGGER AS '
+                BEGIN
+                    IF NEW.created_at IS NULL THEN
+                        NEW.created_at = current_timestamp;
+                    END IF;
+                    RETURN NEW;
+                END;
+            ' LANGUAGE plpgsql;
+
+            CREATE TRIGGER set_created_at
+                BEFORE INSERT ON transaction_details
+                FOR EACH ROW
+            EXECUTE FUNCTION set_created_at();
+        </sql>
 
     </changeSet>
 
