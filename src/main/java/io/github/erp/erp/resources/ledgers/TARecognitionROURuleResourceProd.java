@@ -20,9 +20,7 @@ package io.github.erp.erp.resources.ledgers;
 
 import io.github.erp.internal.repository.InternalTARecognitionROURuleRepository;
 import io.github.erp.internal.service.ledgers.InternalTARecognitionROURuleService;
-import io.github.erp.repository.TARecognitionROURuleRepository;
 import io.github.erp.service.TARecognitionROURuleQueryService;
-import io.github.erp.service.TARecognitionROURuleService;
 import io.github.erp.service.criteria.TARecognitionROURuleCriteria;
 import io.github.erp.service.dto.TARecognitionROURuleDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;

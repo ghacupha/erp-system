@@ -1,4 +1,4 @@
-package io.github.erp.internal.service.leases;
+package io.github.erp.internal.service.rou;
 
 /*-
  * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
@@ -84,4 +84,11 @@ public interface InternalRouInitialDirectCostService {
      * @return the list of entities.
      */
     Page<RouInitialDirectCostDTO> search(String query, Pageable pageable);
+
+    /**
+     * Calculate the next number. Typically used for cataloguing the instances of the entity
+     *
+     * @return the next catalogue number
+     */
+    public Long calculateNextNumber();
 }

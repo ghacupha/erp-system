@@ -51,4 +51,11 @@ public interface InternalRouInitialDirectCostRepository
         "select rouInitialDirectCost from RouInitialDirectCost rouInitialDirectCost left join fetch rouInitialDirectCost.placeholders where rouInitialDirectCost.id =:id"
     )
     Optional<RouInitialDirectCost> findOneWithEagerRelationships(@Param("id") Long id);
+
+    @Query(
+        nativeQuery = true,
+        value = "SELECT CAST(reference_number AS BIGINT) FROM public.rou_initial_direct_cost",
+        countQuery = "SELECT CAST(reference_number AS BIGINT) FROM public.rou_initial_direct_cost"
+    )
+    List<Long> findAllReferenceNumbers();
 }

@@ -21,7 +21,6 @@ package io.github.erp.internal.service.ledgers;
 import io.github.erp.domain.TARecognitionROURule;
 import io.github.erp.repository.TARecognitionROURuleRepository;
 import io.github.erp.repository.search.TARecognitionROURuleSearchRepository;
-import io.github.erp.service.TARecognitionROURuleService;
 import io.github.erp.service.dto.TARecognitionROURuleDTO;
 import io.github.erp.service.mapper.TARecognitionROURuleMapper;
 import org.slf4j.Logger;

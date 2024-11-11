@@ -1,4 +1,4 @@
-package io.github.erp.internal.service.leases;
+package io.github.erp.internal.service.rou;
 
 /*-
  * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
@@ -20,6 +20,7 @@ package io.github.erp.internal.service.leases;
 
 import io.github.erp.domain.RouInitialDirectCost;
 import io.github.erp.internal.repository.InternalRouInitialDirectCostRepository;
+import io.github.erp.internal.utilities.NextIntegerFiller;
 import io.github.erp.repository.search.RouInitialDirectCostSearchRepository;
 import io.github.erp.service.dto.RouInitialDirectCostDTO;
 import io.github.erp.service.mapper.RouInitialDirectCostMapper;
@@ -117,5 +118,16 @@ public class InternalRouInitialDirectCostServiceImpl implements InternalRouIniti
     public Page<RouInitialDirectCostDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of RouInitialDirectCosts for query {}", query);
         return rouInitialDirectCostSearchRepository.search(query, pageable).map(rouInitialDirectCostMapper::toDto);
+    }
+
+    /**
+     * Calculate the next number. Typically used for cataloguing the instances of the entity
+     *
+     * @return the next catalogue number
+     */
+    @Override
+    public Long calculateNextNumber() {
+        log.debug("Request to get next asset number");
+        return NextIntegerFiller.fillNext(rouInitialDirectCostRepository.findAllReferenceNumbers());
     }
 }
