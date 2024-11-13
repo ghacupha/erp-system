@@ -36,6 +36,6 @@ public class LeaseRouRecognitionTransactionDetailsServiceImpl implements LeaseRo
     @Override
     public void createTransactionDetails(UUID requisitionId, Long postedById){
 
-        leaseRouRecognitionTransactionDetailsRepository.insertTransactionDetails(requisitionId, postedById, "ROU Recognition");
+        leaseRouRecognitionTransactionDetailsRepository.insertTransactionDetails(requisitionId, postedById, "ROU Initial Direct Cost Recognition");
     }
 }
