@@ -41,11 +41,11 @@ public interface LeaseRouRecognitionTransactionDetailsRepository
             "SELECT  " +
             "    nextval('sequence_generator') AS id,  " +
             "    nextval('transaction_entry_id_sequence') AS entry_id,  " +
-            "    rid.commencement_date AS transaction_date,  " +
-            "    lc.short_title || ' LEASE RECOGNITION' AS description,  " +
-            "    rmm.initial_cost AS amount,  " +
-            "    rrr.debit_id AS debit_account_id,  " +
-            "    rrr.credit_id AS credit_account_id,  " +
+            "    rid.transaction_date AS transaction_date,  " +
+            "    'Ref#' || rid.reference_number || ' '|| lc.short_title || ' INITIAL DIRECT COST' AS description,  " +
+            "    rid.cost AS amount,  " +
+            "    rid.targetrouaccount_id AS debit_account_id,  " +
+            "    rid.transfer_account_id AS credit_account_id,  " +
             "    'false' AS is_deleted ,  " +
             "    :postedById AS posted_by_id,  " +
             "    :requisitionId AS posting_id,  " +
@@ -53,9 +53,7 @@ public interface LeaseRouRecognitionTransactionDetailsRepository
             "FROM  " +
             "    rou_initial_direct_cost rid  " +
             "LEFT JOIN  " +
-            "    ifrs16lease_contract lc ON rid.lease_contract_id = lc.id  " +
-            "LEFT JOIN  " +
-            "    tarecognitionrourule rrr ON rid.lease_contract_id = rrr.lease_contract_id"
+            "    ifrs16lease_contract lc ON rid.lease_contract_id = lc.id"
     )
     void insertTransactionDetails(@Param("requisitionId") UUID requisitionId, @Param("postedById") Long postedById, @Param("transactionType") String transactionType);
 }
