@@ -34,12 +34,6 @@
   ],
   "relationships": [
     {
-      "relationshipName": "parentAccount",
-      "otherEntityName": "transactionAccount",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "accountNumber"
-    },
-    {
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",

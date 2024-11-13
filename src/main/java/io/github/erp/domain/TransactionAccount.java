@@ -74,10 +74,6 @@ public class TransactionAccount implements Serializable {
     @Column(name = "dummy_account")
     private Boolean dummyAccount;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
-    private TransactionAccount parentAccount;
-
     @ManyToMany
     @JoinTable(
         name = "rel_transaction_account__placeholder",
@@ -192,19 +188,6 @@ public class TransactionAccount implements Serializable {
 
     public void setDummyAccount(Boolean dummyAccount) {
         this.dummyAccount = dummyAccount;
-    }
-
-    public TransactionAccount getParentAccount() {
-        return this.parentAccount;
-    }
-
-    public void setParentAccount(TransactionAccount transactionAccount) {
-        this.parentAccount = transactionAccount;
-    }
-
-    public TransactionAccount parentAccount(TransactionAccount transactionAccount) {
-        this.setParentAccount(transactionAccount);
-        return this;
     }
 
     public Set<Placeholder> getPlaceholders() {

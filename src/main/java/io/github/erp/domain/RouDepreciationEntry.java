@@ -94,12 +94,12 @@ public class RouDepreciationEntry implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private TransactionAccount debitAccount;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private TransactionAccount creditAccount;
 
     @ManyToOne(optional = false)

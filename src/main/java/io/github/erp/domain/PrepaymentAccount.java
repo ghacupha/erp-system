@@ -103,11 +103,11 @@ public class PrepaymentAccount implements Serializable {
     private Dealer dealer;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private TransactionAccount debitAccount;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private TransactionAccount transferAccount;
 
     @ManyToMany
