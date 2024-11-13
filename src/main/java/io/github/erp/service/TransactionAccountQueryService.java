@@ -131,15 +131,6 @@ public class TransactionAccountQueryService extends QueryService<TransactionAcco
             if (criteria.getDummyAccount() != null) {
                 specification = specification.and(buildSpecification(criteria.getDummyAccount(), TransactionAccount_.dummyAccount));
             }
-            if (criteria.getParentAccountId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getParentAccountId(),
-                            root -> root.join(TransactionAccount_.parentAccount, JoinType.LEFT).get(TransactionAccount_.id)
-                        )
-                    );
-            }
             if (criteria.getPlaceholderId() != null) {
                 specification =
                     specification.and(

@@ -97,12 +97,12 @@ public class RouInitialDirectCost implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private TransactionAccount targetROUAccount;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private TransactionAccount transferAccount;
 
     @ManyToMany

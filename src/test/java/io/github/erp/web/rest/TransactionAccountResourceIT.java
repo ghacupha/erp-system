@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.TransactionAccount;
-import io.github.erp.domain.TransactionAccount;
 import io.github.erp.domain.enumeration.AccountSubTypes;
 import io.github.erp.domain.enumeration.AccountTypes;
 import io.github.erp.repository.TransactionAccountRepository;
@@ -694,32 +693,6 @@ class TransactionAccountResourceIT {
 
         // Get all the transactionAccountList where dummyAccount is null
         defaultTransactionAccountShouldNotBeFound("dummyAccount.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllTransactionAccountsByParentAccountIsEqualToSomething() throws Exception {
-        // Initialize the database
-        transactionAccountRepository.saveAndFlush(transactionAccount);
-        TransactionAccount parentAccount;
-        if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
-            parentAccount = TransactionAccountResourceIT.createEntity(em);
-            em.persist(parentAccount);
-            em.flush();
-        } else {
-            parentAccount = TestUtil.findAll(em, TransactionAccount.class).get(0);
-        }
-        em.persist(parentAccount);
-        em.flush();
-        transactionAccount.setParentAccount(parentAccount);
-        transactionAccountRepository.saveAndFlush(transactionAccount);
-        Long parentAccountId = parentAccount.getId();
-
-        // Get all the transactionAccountList where parentAccount equals to parentAccountId
-        defaultTransactionAccountShouldBeFound("parentAccountId.equals=" + parentAccountId);
-
-        // Get all the transactionAccountList where parentAccount equals to (parentAccountId + 1)
-        defaultTransactionAccountShouldNotBeFound("parentAccountId.equals=" + (parentAccountId + 1));
     }
 
     @Test

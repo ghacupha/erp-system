@@ -72,12 +72,12 @@ public class TARecognitionROURule implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private TransactionAccount debit;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private TransactionAccount credit;
 
     @ManyToMany

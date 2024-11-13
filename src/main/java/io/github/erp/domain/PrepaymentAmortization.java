@@ -85,11 +85,11 @@ public class PrepaymentAmortization implements Serializable {
     private SettlementCurrency settlementCurrency;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private TransactionAccount debitAccount;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private TransactionAccount creditAccount;
 
     @ManyToMany
