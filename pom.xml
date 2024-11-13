@@ -29,7 +29,7 @@
         <ERP_SYSTEM_DEPLOYMENT_VERSION>${project.version}</ERP_SYSTEM_DEPLOYMENT_VERSION>
         <ERP_SYSTEM_DEPLOYMENT_TITLE>${ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER} (${ERP_SYSTEM_DEPLOYMENT_SERIES}) Server ver ${ERP_SYSTEM_DEPLOYMENT_VERSION}</ERP_SYSTEM_DEPLOYMENT_TITLE>
         <maven.version>3.3.9</maven.version>
-        <java.version>17</java.version>
+        <java.version>18</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
