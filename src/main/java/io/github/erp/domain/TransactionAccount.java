@@ -19,6 +19,8 @@ package io.github.erp.domain;
  */
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.github.erp.domain.enumeration.AccountSubTypes;
+import io.github.erp.domain.enumeration.AccountTypes;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -58,6 +60,19 @@ public class TransactionAccount implements Serializable {
 
     @Column(name = "notes_content_type")
     private String notesContentType;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_type", nullable = false)
+    private AccountTypes accountType;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_sub_type", nullable = false)
+    private AccountSubTypes accountSubType;
+
+    @Column(name = "dummy_account")
+    private Boolean dummyAccount;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
@@ -140,6 +155,45 @@ public class TransactionAccount implements Serializable {
         this.notesContentType = notesContentType;
     }
 
+    public AccountTypes getAccountType() {
+        return this.accountType;
+    }
+
+    public TransactionAccount accountType(AccountTypes accountType) {
+        this.setAccountType(accountType);
+        return this;
+    }
+
+    public void setAccountType(AccountTypes accountType) {
+        this.accountType = accountType;
+    }
+
+    public AccountSubTypes getAccountSubType() {
+        return this.accountSubType;
+    }
+
+    public TransactionAccount accountSubType(AccountSubTypes accountSubType) {
+        this.setAccountSubType(accountSubType);
+        return this;
+    }
+
+    public void setAccountSubType(AccountSubTypes accountSubType) {
+        this.accountSubType = accountSubType;
+    }
+
+    public Boolean getDummyAccount() {
+        return this.dummyAccount;
+    }
+
+    public TransactionAccount dummyAccount(Boolean dummyAccount) {
+        this.setDummyAccount(dummyAccount);
+        return this;
+    }
+
+    public void setDummyAccount(Boolean dummyAccount) {
+        this.dummyAccount = dummyAccount;
+    }
+
     public TransactionAccount getParentAccount() {
         return this.parentAccount;
     }
@@ -204,6 +258,9 @@ public class TransactionAccount implements Serializable {
             ", accountName='" + getAccountName() + "'" +
             ", notes='" + getNotes() + "'" +
             ", notesContentType='" + getNotesContentType() + "'" +
+            ", accountType='" + getAccountType() + "'" +
+            ", accountSubType='" + getAccountSubType() + "'" +
+            ", dummyAccount='" + getDummyAccount() + "'" +
             "}";
     }
 }

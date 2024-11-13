@@ -14,6 +14,22 @@
       "fieldName": "notes",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "accountType",
+      "fieldType": "AccountTypes",
+      "fieldValues": "ASSET,LIABILITY,EQUITY",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accountSubType",
+      "fieldType": "AccountSubTypes",
+      "fieldValues": "SETTLEMENT_ASSET,ACCOUNT_RECEIVABLE,OTHER_SHORT_LIVED_ASSET,LONG_LIVED_ASSET,ACCOUNT_PAYABLE,OTHER_SHORT_LIVED_LIABILITY,LONG_LIVED_LIABILITY,INCOME,EXPENSE,OTHER_COMPREHENSIVE_INCOME",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dummyAccount",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [

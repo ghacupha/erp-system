@@ -1,11 +1,11 @@
-id;account_number;account_name;notes;notes_content_type
-1;Dale dot-com protocol;Checking Account;../fake-data/blob/hipster.png;image/png
-2;Lithuania;Investment Account;../fake-data/blob/hipster.png;image/png
-3;Enhanced alliance;Auto Loan Account;../fake-data/blob/hipster.png;image/png
-4;bypassing Gorgeous;Personal Loan Account;../fake-data/blob/hipster.png;image/png
-5;Wisconsin Specialist Account;Home Loan Account;../fake-data/blob/hipster.png;image/png
-6;Indian;Auto Loan Account;../fake-data/blob/hipster.png;image/png
-7;Nevada Shirt;Savings Account;../fake-data/blob/hipster.png;image/png
-8;ubiquitous;Personal Loan Account;../fake-data/blob/hipster.png;image/png
-9;Namibia;Credit Card Account;../fake-data/blob/hipster.png;image/png
-10;Sudanese e-business drive;Checking Account;../fake-data/blob/hipster.png;image/png
+id;account_number;account_name;notes;notes_content_type;account_type;account_sub_type;dummy_account
+1;Dale dot-com protocol;Checking Account;../fake-data/blob/hipster.png;image/png;ASSET;OTHER_SHORT_LIVED_LIABILITY;true
+2;action-items Vision-oriented;Checking Account;../fake-data/blob/hipster.png;image/png;LIABILITY;INCOME;false
+3;Ergonomic Synergized generating;Checking Account;../fake-data/blob/hipster.png;image/png;EQUITY;OTHER_SHORT_LIVED_ASSET;true
+4;relationships magenta;Savings Account;../fake-data/blob/hipster.png;image/png;EQUITY;ACCOUNT_PAYABLE;true
+5;Digitized purple;Money Market Account;../fake-data/blob/hipster.png;image/png;EQUITY;OTHER_SHORT_LIVED_ASSET;true
+6;Namibia;Credit Card Account;../fake-data/blob/hipster.png;image/png;EQUITY;LONG_LIVED_LIABILITY;true
+7;e-business;Money Market Account;../fake-data/blob/hipster.png;image/png;EQUITY;OTHER_COMPREHENSIVE_INCOME;false
+8;Electronics;Auto Loan Account;../fake-data/blob/hipster.png;image/png;EQUITY;SETTLEMENT_ASSET;true
+9;firewall;Auto Loan Account;../fake-data/blob/hipster.png;image/png;LIABILITY;LONG_LIVED_ASSET;false
+10;Franc Chips Licensed;Auto Loan Account;../fake-data/blob/hipster.png;image/png;ASSET;SETTLEMENT_ASSET;true
