@@ -18,6 +18,8 @@ package io.github.erp.service.dto;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.enumeration.AccountSubTypes;
+import io.github.erp.domain.enumeration.AccountTypes;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -42,6 +44,15 @@ public class TransactionAccountDTO implements Serializable {
     private byte[] notes;
 
     private String notesContentType;
+
+    @NotNull
+    private AccountTypes accountType;
+
+    @NotNull
+    private AccountSubTypes accountSubType;
+
+    private Boolean dummyAccount;
+
     private TransactionAccountDTO parentAccount;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
@@ -84,6 +95,30 @@ public class TransactionAccountDTO implements Serializable {
 
     public void setNotesContentType(String notesContentType) {
         this.notesContentType = notesContentType;
+    }
+
+    public AccountTypes getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountTypes accountType) {
+        this.accountType = accountType;
+    }
+
+    public AccountSubTypes getAccountSubType() {
+        return accountSubType;
+    }
+
+    public void setAccountSubType(AccountSubTypes accountSubType) {
+        this.accountSubType = accountSubType;
+    }
+
+    public Boolean getDummyAccount() {
+        return dummyAccount;
+    }
+
+    public void setDummyAccount(Boolean dummyAccount) {
+        this.dummyAccount = dummyAccount;
     }
 
     public TransactionAccountDTO getParentAccount() {
@@ -131,6 +166,9 @@ public class TransactionAccountDTO implements Serializable {
             ", accountNumber='" + getAccountNumber() + "'" +
             ", accountName='" + getAccountName() + "'" +
             ", notes='" + getNotes() + "'" +
+            ", accountType='" + getAccountType() + "'" +
+            ", accountSubType='" + getAccountSubType() + "'" +
+            ", dummyAccount='" + getDummyAccount() + "'" +
             ", parentAccount=" + getParentAccount() +
             ", placeholders=" + getPlaceholders() +
             "}";

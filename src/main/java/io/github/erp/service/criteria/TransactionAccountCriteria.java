@@ -18,6 +18,8 @@ package io.github.erp.service.criteria;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.enumeration.AccountSubTypes;
+import io.github.erp.domain.enumeration.AccountTypes;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -40,6 +42,40 @@ import tech.jhipster.service.filter.StringFilter;
  */
 public class TransactionAccountCriteria implements Serializable, Criteria {
 
+    /**
+     * Class for filtering AccountTypes
+     */
+    public static class AccountTypesFilter extends Filter<AccountTypes> {
+
+        public AccountTypesFilter() {}
+
+        public AccountTypesFilter(AccountTypesFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public AccountTypesFilter copy() {
+            return new AccountTypesFilter(this);
+        }
+    }
+
+    /**
+     * Class for filtering AccountSubTypes
+     */
+    public static class AccountSubTypesFilter extends Filter<AccountSubTypes> {
+
+        public AccountSubTypesFilter() {}
+
+        public AccountSubTypesFilter(AccountSubTypesFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public AccountSubTypesFilter copy() {
+            return new AccountSubTypesFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -47,6 +83,12 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
     private StringFilter accountNumber;
 
     private StringFilter accountName;
+
+    private AccountTypesFilter accountType;
+
+    private AccountSubTypesFilter accountSubType;
+
+    private BooleanFilter dummyAccount;
 
     private LongFilter parentAccountId;
 
@@ -60,6 +102,9 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.accountNumber = other.accountNumber == null ? null : other.accountNumber.copy();
         this.accountName = other.accountName == null ? null : other.accountName.copy();
+        this.accountType = other.accountType == null ? null : other.accountType.copy();
+        this.accountSubType = other.accountSubType == null ? null : other.accountSubType.copy();
+        this.dummyAccount = other.dummyAccount == null ? null : other.dummyAccount.copy();
         this.parentAccountId = other.parentAccountId == null ? null : other.parentAccountId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
@@ -115,6 +160,51 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
         this.accountName = accountName;
     }
 
+    public AccountTypesFilter getAccountType() {
+        return accountType;
+    }
+
+    public AccountTypesFilter accountType() {
+        if (accountType == null) {
+            accountType = new AccountTypesFilter();
+        }
+        return accountType;
+    }
+
+    public void setAccountType(AccountTypesFilter accountType) {
+        this.accountType = accountType;
+    }
+
+    public AccountSubTypesFilter getAccountSubType() {
+        return accountSubType;
+    }
+
+    public AccountSubTypesFilter accountSubType() {
+        if (accountSubType == null) {
+            accountSubType = new AccountSubTypesFilter();
+        }
+        return accountSubType;
+    }
+
+    public void setAccountSubType(AccountSubTypesFilter accountSubType) {
+        this.accountSubType = accountSubType;
+    }
+
+    public BooleanFilter getDummyAccount() {
+        return dummyAccount;
+    }
+
+    public BooleanFilter dummyAccount() {
+        if (dummyAccount == null) {
+            dummyAccount = new BooleanFilter();
+        }
+        return dummyAccount;
+    }
+
+    public void setDummyAccount(BooleanFilter dummyAccount) {
+        this.dummyAccount = dummyAccount;
+    }
+
     public LongFilter getParentAccountId() {
         return parentAccountId;
     }
@@ -166,6 +256,9 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(accountNumber, that.accountNumber) &&
             Objects.equals(accountName, that.accountName) &&
+            Objects.equals(accountType, that.accountType) &&
+            Objects.equals(accountSubType, that.accountSubType) &&
+            Objects.equals(dummyAccount, that.dummyAccount) &&
             Objects.equals(parentAccountId, that.parentAccountId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
@@ -174,7 +267,17 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, accountNumber, accountName, parentAccountId, placeholderId, distinct);
+        return Objects.hash(
+            id,
+            accountNumber,
+            accountName,
+            accountType,
+            accountSubType,
+            dummyAccount,
+            parentAccountId,
+            placeholderId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -184,6 +287,9 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (accountNumber != null ? "accountNumber=" + accountNumber + ", " : "") +
             (accountName != null ? "accountName=" + accountName + ", " : "") +
+            (accountType != null ? "accountType=" + accountType + ", " : "") +
+            (accountSubType != null ? "accountSubType=" + accountSubType + ", " : "") +
+            (dummyAccount != null ? "dummyAccount=" + dummyAccount + ", " : "") +
             (parentAccountId != null ? "parentAccountId=" + parentAccountId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

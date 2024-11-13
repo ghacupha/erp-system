@@ -17,28 +17,18 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.TransactionAccount;
+import io.github.erp.domain.enumeration.AccountSubTypes;
+import io.github.erp.domain.enumeration.AccountTypes;
 import io.github.erp.erp.resources.ledgers.TransactionAccountResourceProd;
 import io.github.erp.repository.TransactionAccountRepository;
 import io.github.erp.repository.search.TransactionAccountSearchRepository;
 import io.github.erp.service.TransactionAccountService;
 import io.github.erp.service.dto.TransactionAccountDTO;
 import io.github.erp.service.mapper.TransactionAccountMapper;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
-
 import io.github.erp.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,6 +44,19 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
+
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link TransactionAccountResourceProd} REST controller.
@@ -74,6 +77,15 @@ public class TransactionAccountResourceIT {
     private static final byte[] UPDATED_NOTES = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_NOTES_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_NOTES_CONTENT_TYPE = "image/png";
+
+    private static final AccountTypes DEFAULT_ACCOUNT_TYPE = AccountTypes.ASSET;
+    private static final AccountTypes UPDATED_ACCOUNT_TYPE = AccountTypes.LIABILITY;
+
+    private static final AccountSubTypes DEFAULT_ACCOUNT_SUB_TYPE = AccountSubTypes.SETTLEMENT_ASSET;
+    private static final AccountSubTypes UPDATED_ACCOUNT_SUB_TYPE = AccountSubTypes.ACCOUNT_RECEIVABLE;
+
+    private static final Boolean DEFAULT_DUMMY_ACCOUNT = false;
+    private static final Boolean UPDATED_DUMMY_ACCOUNT = true;
 
     private static final String ENTITY_API_URL = "/api/accounts/transaction-accounts";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -121,7 +133,10 @@ public class TransactionAccountResourceIT {
             .accountNumber(DEFAULT_ACCOUNT_NUMBER)
             .accountName(DEFAULT_ACCOUNT_NAME)
             .notes(DEFAULT_NOTES)
-            .notesContentType(DEFAULT_NOTES_CONTENT_TYPE);
+            .notesContentType(DEFAULT_NOTES_CONTENT_TYPE)
+            .accountType(DEFAULT_ACCOUNT_TYPE)
+            .accountSubType(DEFAULT_ACCOUNT_SUB_TYPE)
+            .dummyAccount(DEFAULT_DUMMY_ACCOUNT);
         return transactionAccount;
     }
 
@@ -136,7 +151,10 @@ public class TransactionAccountResourceIT {
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .accountName(UPDATED_ACCOUNT_NAME)
             .notes(UPDATED_NOTES)
-            .notesContentType(UPDATED_NOTES_CONTENT_TYPE);
+            .notesContentType(UPDATED_NOTES_CONTENT_TYPE)
+            .accountType(UPDATED_ACCOUNT_TYPE)
+            .accountSubType(UPDATED_ACCOUNT_SUB_TYPE)
+            .dummyAccount(UPDATED_DUMMY_ACCOUNT);
         return transactionAccount;
     }
 
@@ -167,6 +185,9 @@ public class TransactionAccountResourceIT {
         assertThat(testTransactionAccount.getAccountName()).isEqualTo(DEFAULT_ACCOUNT_NAME);
         assertThat(testTransactionAccount.getNotes()).isEqualTo(DEFAULT_NOTES);
         assertThat(testTransactionAccount.getNotesContentType()).isEqualTo(DEFAULT_NOTES_CONTENT_TYPE);
+        assertThat(testTransactionAccount.getAccountType()).isEqualTo(DEFAULT_ACCOUNT_TYPE);
+        assertThat(testTransactionAccount.getAccountSubType()).isEqualTo(DEFAULT_ACCOUNT_SUB_TYPE);
+        assertThat(testTransactionAccount.getDummyAccount()).isEqualTo(DEFAULT_DUMMY_ACCOUNT);
 
         // Validate the TransactionAccount in Elasticsearch
         verify(mockTransactionAccountSearchRepository, times(1)).save(testTransactionAccount);
@@ -244,6 +265,50 @@ public class TransactionAccountResourceIT {
 
     @Test
     @Transactional
+    void checkAccountTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = transactionAccountRepository.findAll().size();
+        // set the field null
+        transactionAccount.setAccountType(null);
+
+        // Create the TransactionAccount, which fails.
+        TransactionAccountDTO transactionAccountDTO = transactionAccountMapper.toDto(transactionAccount);
+
+        restTransactionAccountMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<TransactionAccount> transactionAccountList = transactionAccountRepository.findAll();
+        assertThat(transactionAccountList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkAccountSubTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = transactionAccountRepository.findAll().size();
+        // set the field null
+        transactionAccount.setAccountSubType(null);
+
+        // Create the TransactionAccount, which fails.
+        TransactionAccountDTO transactionAccountDTO = transactionAccountMapper.toDto(transactionAccount);
+
+        restTransactionAccountMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(transactionAccountDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<TransactionAccount> transactionAccountList = transactionAccountRepository.findAll();
+        assertThat(transactionAccountList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllTransactionAccounts() throws Exception {
         // Initialize the database
         transactionAccountRepository.saveAndFlush(transactionAccount);
@@ -257,7 +322,10 @@ public class TransactionAccountResourceIT {
             .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].accountName").value(hasItem(DEFAULT_ACCOUNT_NAME)))
             .andExpect(jsonPath("$.[*].notesContentType").value(hasItem(DEFAULT_NOTES_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))));
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))))
+            .andExpect(jsonPath("$.[*].accountType").value(hasItem(DEFAULT_ACCOUNT_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].accountSubType").value(hasItem(DEFAULT_ACCOUNT_SUB_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].dummyAccount").value(hasItem(DEFAULT_DUMMY_ACCOUNT.booleanValue())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -293,7 +361,10 @@ public class TransactionAccountResourceIT {
             .andExpect(jsonPath("$.accountNumber").value(DEFAULT_ACCOUNT_NUMBER))
             .andExpect(jsonPath("$.accountName").value(DEFAULT_ACCOUNT_NAME))
             .andExpect(jsonPath("$.notesContentType").value(DEFAULT_NOTES_CONTENT_TYPE))
-            .andExpect(jsonPath("$.notes").value(Base64Utils.encodeToString(DEFAULT_NOTES)));
+            .andExpect(jsonPath("$.notes").value(Base64Utils.encodeToString(DEFAULT_NOTES)))
+            .andExpect(jsonPath("$.accountType").value(DEFAULT_ACCOUNT_TYPE.toString()))
+            .andExpect(jsonPath("$.accountSubType").value(DEFAULT_ACCOUNT_SUB_TYPE.toString()))
+            .andExpect(jsonPath("$.dummyAccount").value(DEFAULT_DUMMY_ACCOUNT.booleanValue()));
     }
 
     @Test
@@ -472,6 +543,162 @@ public class TransactionAccountResourceIT {
 
     @Test
     @Transactional
+    void getAllTransactionAccountsByAccountTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+
+        // Get all the transactionAccountList where accountType equals to DEFAULT_ACCOUNT_TYPE
+        defaultTransactionAccountShouldBeFound("accountType.equals=" + DEFAULT_ACCOUNT_TYPE);
+
+        // Get all the transactionAccountList where accountType equals to UPDATED_ACCOUNT_TYPE
+        defaultTransactionAccountShouldNotBeFound("accountType.equals=" + UPDATED_ACCOUNT_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByAccountTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+
+        // Get all the transactionAccountList where accountType not equals to DEFAULT_ACCOUNT_TYPE
+        defaultTransactionAccountShouldNotBeFound("accountType.notEquals=" + DEFAULT_ACCOUNT_TYPE);
+
+        // Get all the transactionAccountList where accountType not equals to UPDATED_ACCOUNT_TYPE
+        defaultTransactionAccountShouldBeFound("accountType.notEquals=" + UPDATED_ACCOUNT_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByAccountTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+
+        // Get all the transactionAccountList where accountType in DEFAULT_ACCOUNT_TYPE or UPDATED_ACCOUNT_TYPE
+        defaultTransactionAccountShouldBeFound("accountType.in=" + DEFAULT_ACCOUNT_TYPE + "," + UPDATED_ACCOUNT_TYPE);
+
+        // Get all the transactionAccountList where accountType equals to UPDATED_ACCOUNT_TYPE
+        defaultTransactionAccountShouldNotBeFound("accountType.in=" + UPDATED_ACCOUNT_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByAccountTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+
+        // Get all the transactionAccountList where accountType is not null
+        defaultTransactionAccountShouldBeFound("accountType.specified=true");
+
+        // Get all the transactionAccountList where accountType is null
+        defaultTransactionAccountShouldNotBeFound("accountType.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByAccountSubTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+
+        // Get all the transactionAccountList where accountSubType equals to DEFAULT_ACCOUNT_SUB_TYPE
+        defaultTransactionAccountShouldBeFound("accountSubType.equals=" + DEFAULT_ACCOUNT_SUB_TYPE);
+
+        // Get all the transactionAccountList where accountSubType equals to UPDATED_ACCOUNT_SUB_TYPE
+        defaultTransactionAccountShouldNotBeFound("accountSubType.equals=" + UPDATED_ACCOUNT_SUB_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByAccountSubTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+
+        // Get all the transactionAccountList where accountSubType not equals to DEFAULT_ACCOUNT_SUB_TYPE
+        defaultTransactionAccountShouldNotBeFound("accountSubType.notEquals=" + DEFAULT_ACCOUNT_SUB_TYPE);
+
+        // Get all the transactionAccountList where accountSubType not equals to UPDATED_ACCOUNT_SUB_TYPE
+        defaultTransactionAccountShouldBeFound("accountSubType.notEquals=" + UPDATED_ACCOUNT_SUB_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByAccountSubTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+
+        // Get all the transactionAccountList where accountSubType in DEFAULT_ACCOUNT_SUB_TYPE or UPDATED_ACCOUNT_SUB_TYPE
+        defaultTransactionAccountShouldBeFound("accountSubType.in=" + DEFAULT_ACCOUNT_SUB_TYPE + "," + UPDATED_ACCOUNT_SUB_TYPE);
+
+        // Get all the transactionAccountList where accountSubType equals to UPDATED_ACCOUNT_SUB_TYPE
+        defaultTransactionAccountShouldNotBeFound("accountSubType.in=" + UPDATED_ACCOUNT_SUB_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByAccountSubTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+
+        // Get all the transactionAccountList where accountSubType is not null
+        defaultTransactionAccountShouldBeFound("accountSubType.specified=true");
+
+        // Get all the transactionAccountList where accountSubType is null
+        defaultTransactionAccountShouldNotBeFound("accountSubType.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByDummyAccountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+
+        // Get all the transactionAccountList where dummyAccount equals to DEFAULT_DUMMY_ACCOUNT
+        defaultTransactionAccountShouldBeFound("dummyAccount.equals=" + DEFAULT_DUMMY_ACCOUNT);
+
+        // Get all the transactionAccountList where dummyAccount equals to UPDATED_DUMMY_ACCOUNT
+        defaultTransactionAccountShouldNotBeFound("dummyAccount.equals=" + UPDATED_DUMMY_ACCOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByDummyAccountIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+
+        // Get all the transactionAccountList where dummyAccount not equals to DEFAULT_DUMMY_ACCOUNT
+        defaultTransactionAccountShouldNotBeFound("dummyAccount.notEquals=" + DEFAULT_DUMMY_ACCOUNT);
+
+        // Get all the transactionAccountList where dummyAccount not equals to UPDATED_DUMMY_ACCOUNT
+        defaultTransactionAccountShouldBeFound("dummyAccount.notEquals=" + UPDATED_DUMMY_ACCOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByDummyAccountIsInShouldWork() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+
+        // Get all the transactionAccountList where dummyAccount in DEFAULT_DUMMY_ACCOUNT or UPDATED_DUMMY_ACCOUNT
+        defaultTransactionAccountShouldBeFound("dummyAccount.in=" + DEFAULT_DUMMY_ACCOUNT + "," + UPDATED_DUMMY_ACCOUNT);
+
+        // Get all the transactionAccountList where dummyAccount equals to UPDATED_DUMMY_ACCOUNT
+        defaultTransactionAccountShouldNotBeFound("dummyAccount.in=" + UPDATED_DUMMY_ACCOUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByDummyAccountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+
+        // Get all the transactionAccountList where dummyAccount is not null
+        defaultTransactionAccountShouldBeFound("dummyAccount.specified=true");
+
+        // Get all the transactionAccountList where dummyAccount is null
+        defaultTransactionAccountShouldNotBeFound("dummyAccount.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllTransactionAccountsByParentAccountIsEqualToSomething() throws Exception {
         // Initialize the database
         transactionAccountRepository.saveAndFlush(transactionAccount);
@@ -534,7 +761,10 @@ public class TransactionAccountResourceIT {
             .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].accountName").value(hasItem(DEFAULT_ACCOUNT_NAME)))
             .andExpect(jsonPath("$.[*].notesContentType").value(hasItem(DEFAULT_NOTES_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))));
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))))
+            .andExpect(jsonPath("$.[*].accountType").value(hasItem(DEFAULT_ACCOUNT_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].accountSubType").value(hasItem(DEFAULT_ACCOUNT_SUB_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].dummyAccount").value(hasItem(DEFAULT_DUMMY_ACCOUNT.booleanValue())));
 
         // Check, that the count call also returns 1
         restTransactionAccountMockMvc
@@ -586,7 +816,10 @@ public class TransactionAccountResourceIT {
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .accountName(UPDATED_ACCOUNT_NAME)
             .notes(UPDATED_NOTES)
-            .notesContentType(UPDATED_NOTES_CONTENT_TYPE);
+            .notesContentType(UPDATED_NOTES_CONTENT_TYPE)
+            .accountType(UPDATED_ACCOUNT_TYPE)
+            .accountSubType(UPDATED_ACCOUNT_SUB_TYPE)
+            .dummyAccount(UPDATED_DUMMY_ACCOUNT);
         TransactionAccountDTO transactionAccountDTO = transactionAccountMapper.toDto(updatedTransactionAccount);
 
         restTransactionAccountMockMvc
@@ -605,6 +838,9 @@ public class TransactionAccountResourceIT {
         assertThat(testTransactionAccount.getAccountName()).isEqualTo(UPDATED_ACCOUNT_NAME);
         assertThat(testTransactionAccount.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testTransactionAccount.getNotesContentType()).isEqualTo(UPDATED_NOTES_CONTENT_TYPE);
+        assertThat(testTransactionAccount.getAccountType()).isEqualTo(UPDATED_ACCOUNT_TYPE);
+        assertThat(testTransactionAccount.getAccountSubType()).isEqualTo(UPDATED_ACCOUNT_SUB_TYPE);
+        assertThat(testTransactionAccount.getDummyAccount()).isEqualTo(UPDATED_DUMMY_ACCOUNT);
 
         // Validate the TransactionAccount in Elasticsearch
         verify(mockTransactionAccountSearchRepository).save(testTransactionAccount);
@@ -700,7 +936,11 @@ public class TransactionAccountResourceIT {
         TransactionAccount partialUpdatedTransactionAccount = new TransactionAccount();
         partialUpdatedTransactionAccount.setId(transactionAccount.getId());
 
-        partialUpdatedTransactionAccount.notes(UPDATED_NOTES).notesContentType(UPDATED_NOTES_CONTENT_TYPE);
+        partialUpdatedTransactionAccount
+            .notes(UPDATED_NOTES)
+            .notesContentType(UPDATED_NOTES_CONTENT_TYPE)
+            .accountSubType(UPDATED_ACCOUNT_SUB_TYPE)
+            .dummyAccount(UPDATED_DUMMY_ACCOUNT);
 
         restTransactionAccountMockMvc
             .perform(
@@ -718,6 +958,9 @@ public class TransactionAccountResourceIT {
         assertThat(testTransactionAccount.getAccountName()).isEqualTo(DEFAULT_ACCOUNT_NAME);
         assertThat(testTransactionAccount.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testTransactionAccount.getNotesContentType()).isEqualTo(UPDATED_NOTES_CONTENT_TYPE);
+        assertThat(testTransactionAccount.getAccountType()).isEqualTo(DEFAULT_ACCOUNT_TYPE);
+        assertThat(testTransactionAccount.getAccountSubType()).isEqualTo(UPDATED_ACCOUNT_SUB_TYPE);
+        assertThat(testTransactionAccount.getDummyAccount()).isEqualTo(UPDATED_DUMMY_ACCOUNT);
     }
 
     @Test
@@ -736,7 +979,10 @@ public class TransactionAccountResourceIT {
             .accountNumber(UPDATED_ACCOUNT_NUMBER)
             .accountName(UPDATED_ACCOUNT_NAME)
             .notes(UPDATED_NOTES)
-            .notesContentType(UPDATED_NOTES_CONTENT_TYPE);
+            .notesContentType(UPDATED_NOTES_CONTENT_TYPE)
+            .accountType(UPDATED_ACCOUNT_TYPE)
+            .accountSubType(UPDATED_ACCOUNT_SUB_TYPE)
+            .dummyAccount(UPDATED_DUMMY_ACCOUNT);
 
         restTransactionAccountMockMvc
             .perform(
@@ -754,6 +1000,9 @@ public class TransactionAccountResourceIT {
         assertThat(testTransactionAccount.getAccountName()).isEqualTo(UPDATED_ACCOUNT_NAME);
         assertThat(testTransactionAccount.getNotes()).isEqualTo(UPDATED_NOTES);
         assertThat(testTransactionAccount.getNotesContentType()).isEqualTo(UPDATED_NOTES_CONTENT_TYPE);
+        assertThat(testTransactionAccount.getAccountType()).isEqualTo(UPDATED_ACCOUNT_TYPE);
+        assertThat(testTransactionAccount.getAccountSubType()).isEqualTo(UPDATED_ACCOUNT_SUB_TYPE);
+        assertThat(testTransactionAccount.getDummyAccount()).isEqualTo(UPDATED_DUMMY_ACCOUNT);
     }
 
     @Test
@@ -873,6 +1122,9 @@ public class TransactionAccountResourceIT {
             .andExpect(jsonPath("$.[*].accountNumber").value(hasItem(DEFAULT_ACCOUNT_NUMBER)))
             .andExpect(jsonPath("$.[*].accountName").value(hasItem(DEFAULT_ACCOUNT_NAME)))
             .andExpect(jsonPath("$.[*].notesContentType").value(hasItem(DEFAULT_NOTES_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))));
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(Base64Utils.encodeToString(DEFAULT_NOTES))))
+            .andExpect(jsonPath("$.[*].accountType").value(hasItem(DEFAULT_ACCOUNT_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].accountSubType").value(hasItem(DEFAULT_ACCOUNT_SUB_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].dummyAccount").value(hasItem(DEFAULT_DUMMY_ACCOUNT.booleanValue())));
     }
 }
