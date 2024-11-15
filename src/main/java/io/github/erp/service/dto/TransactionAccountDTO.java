@@ -59,6 +59,10 @@ public class TransactionAccountDTO implements Serializable {
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
+    private ServiceOutletDTO serviceOutlet;
+
+    private SettlementCurrencyDTO settlementCurrency;
+
     public Long getId() {
         return id;
     }
@@ -147,6 +151,22 @@ public class TransactionAccountDTO implements Serializable {
         this.placeholders = placeholders;
     }
 
+    public ServiceOutletDTO getServiceOutlet() {
+        return serviceOutlet;
+    }
+
+    public void setServiceOutlet(ServiceOutletDTO serviceOutlet) {
+        this.serviceOutlet = serviceOutlet;
+    }
+
+    public SettlementCurrencyDTO getSettlementCurrency() {
+        return settlementCurrency;
+    }
+
+    public void setSettlementCurrency(SettlementCurrencyDTO settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -182,6 +202,8 @@ public class TransactionAccountDTO implements Serializable {
             ", accountLedger=" + getAccountLedger() +
             ", accountCategory=" + getAccountCategory() +
             ", placeholders=" + getPlaceholders() +
+            ", serviceOutlet=" + getServiceOutlet() +
+            ", settlementCurrency=" + getSettlementCurrency() +
             "}";
     }
 }

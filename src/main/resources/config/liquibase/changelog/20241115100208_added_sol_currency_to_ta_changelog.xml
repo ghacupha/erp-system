@@ -1,0 +1,23 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1731665032656-12">
+        <addColumn tableName="transaction_account">
+            <column name="service_outlet_id" type="int8">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1731665032656-13">
+        <addColumn tableName="transaction_account">
+            <column name="settlement_currency_id" type="int8">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1731665032656-16">
+        <addForeignKeyConstraint baseColumnNames="settlement_currency_id" baseTableName="transaction_account" constraintName="FK43vnux9qetar48a8wuj8jduke" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement_currency" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1731665032656-17">
+        <addForeignKeyConstraint baseColumnNames="service_outlet_id" baseTableName="transaction_account" constraintName="FK8b54tcvl8sbyt3dga4jow4trj" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="service_outlet" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

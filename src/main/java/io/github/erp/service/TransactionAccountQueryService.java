@@ -158,6 +158,24 @@ public class TransactionAccountQueryService extends QueryService<TransactionAcco
                         )
                     );
             }
+            if (criteria.getServiceOutletId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getServiceOutletId(),
+                            root -> root.join(TransactionAccount_.serviceOutlet, JoinType.LEFT).get(ServiceOutlet_.id)
+                        )
+                    );
+            }
+            if (criteria.getSettlementCurrencyId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSettlementCurrencyId(),
+                            root -> root.join(TransactionAccount_.settlementCurrency, JoinType.LEFT).get(SettlementCurrency_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

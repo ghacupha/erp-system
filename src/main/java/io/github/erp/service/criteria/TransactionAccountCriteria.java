@@ -96,6 +96,10 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
 
     private LongFilter placeholderId;
 
+    private LongFilter serviceOutletId;
+
+    private LongFilter settlementCurrencyId;
+
     private Boolean distinct;
 
     public TransactionAccountCriteria() {}
@@ -110,6 +114,8 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
         this.accountLedgerId = other.accountLedgerId == null ? null : other.accountLedgerId.copy();
         this.accountCategoryId = other.accountCategoryId == null ? null : other.accountCategoryId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
+        this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.distinct = other.distinct;
     }
 
@@ -253,6 +259,36 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getServiceOutletId() {
+        return serviceOutletId;
+    }
+
+    public LongFilter serviceOutletId() {
+        if (serviceOutletId == null) {
+            serviceOutletId = new LongFilter();
+        }
+        return serviceOutletId;
+    }
+
+    public void setServiceOutletId(LongFilter serviceOutletId) {
+        this.serviceOutletId = serviceOutletId;
+    }
+
+    public LongFilter getSettlementCurrencyId() {
+        return settlementCurrencyId;
+    }
+
+    public LongFilter settlementCurrencyId() {
+        if (settlementCurrencyId == null) {
+            settlementCurrencyId = new LongFilter();
+        }
+        return settlementCurrencyId;
+    }
+
+    public void setSettlementCurrencyId(LongFilter settlementCurrencyId) {
+        this.settlementCurrencyId = settlementCurrencyId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -280,6 +316,8 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
             Objects.equals(accountLedgerId, that.accountLedgerId) &&
             Objects.equals(accountCategoryId, that.accountCategoryId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(serviceOutletId, that.serviceOutletId) &&
+            Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -296,6 +334,8 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
             accountLedgerId,
             accountCategoryId,
             placeholderId,
+            serviceOutletId,
+            settlementCurrencyId,
             distinct
         );
     }
@@ -313,6 +353,8 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
             (accountLedgerId != null ? "accountLedgerId=" + accountLedgerId + ", " : "") +
             (accountCategoryId != null ? "accountCategoryId=" + accountCategoryId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
+            (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

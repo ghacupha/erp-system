@@ -26,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
+import io.github.erp.domain.ServiceOutlet;
+import io.github.erp.domain.SettlementCurrency;
 import io.github.erp.domain.TransactionAccount;
 import io.github.erp.domain.TransactionAccountCategory;
 import io.github.erp.domain.TransactionAccountLedger;
@@ -157,6 +159,26 @@ class TransactionAccountResourceIT {
             transactionAccountCategory = TestUtil.findAll(em, TransactionAccountCategory.class).get(0);
         }
         transactionAccount.setAccountCategory(transactionAccountCategory);
+        // Add required entity
+        ServiceOutlet serviceOutlet;
+        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
+            serviceOutlet = ServiceOutletResourceIT.createEntity(em);
+            em.persist(serviceOutlet);
+            em.flush();
+        } else {
+            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
+        }
+        transactionAccount.setServiceOutlet(serviceOutlet);
+        // Add required entity
+        SettlementCurrency settlementCurrency;
+        if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
+            settlementCurrency = SettlementCurrencyResourceIT.createEntity(em);
+            em.persist(settlementCurrency);
+            em.flush();
+        } else {
+            settlementCurrency = TestUtil.findAll(em, SettlementCurrency.class).get(0);
+        }
+        transactionAccount.setSettlementCurrency(settlementCurrency);
         return transactionAccount;
     }
 
@@ -195,6 +217,26 @@ class TransactionAccountResourceIT {
             transactionAccountCategory = TestUtil.findAll(em, TransactionAccountCategory.class).get(0);
         }
         transactionAccount.setAccountCategory(transactionAccountCategory);
+        // Add required entity
+        ServiceOutlet serviceOutlet;
+        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
+            serviceOutlet = ServiceOutletResourceIT.createUpdatedEntity(em);
+            em.persist(serviceOutlet);
+            em.flush();
+        } else {
+            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
+        }
+        transactionAccount.setServiceOutlet(serviceOutlet);
+        // Add required entity
+        SettlementCurrency settlementCurrency;
+        if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
+            settlementCurrency = SettlementCurrencyResourceIT.createUpdatedEntity(em);
+            em.persist(settlementCurrency);
+            em.flush();
+        } else {
+            settlementCurrency = TestUtil.findAll(em, SettlementCurrency.class).get(0);
+        }
+        transactionAccount.setSettlementCurrency(settlementCurrency);
         return transactionAccount;
     }
 
@@ -813,6 +855,58 @@ class TransactionAccountResourceIT {
 
         // Get all the transactionAccountList where placeholder equals to (placeholderId + 1)
         defaultTransactionAccountShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByServiceOutletIsEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+        ServiceOutlet serviceOutlet;
+        if (TestUtil.findAll(em, ServiceOutlet.class).isEmpty()) {
+            serviceOutlet = ServiceOutletResourceIT.createEntity(em);
+            em.persist(serviceOutlet);
+            em.flush();
+        } else {
+            serviceOutlet = TestUtil.findAll(em, ServiceOutlet.class).get(0);
+        }
+        em.persist(serviceOutlet);
+        em.flush();
+        transactionAccount.setServiceOutlet(serviceOutlet);
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+        Long serviceOutletId = serviceOutlet.getId();
+
+        // Get all the transactionAccountList where serviceOutlet equals to serviceOutletId
+        defaultTransactionAccountShouldBeFound("serviceOutletId.equals=" + serviceOutletId);
+
+        // Get all the transactionAccountList where serviceOutlet equals to (serviceOutletId + 1)
+        defaultTransactionAccountShouldNotBeFound("serviceOutletId.equals=" + (serviceOutletId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsBySettlementCurrencyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+        SettlementCurrency settlementCurrency;
+        if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
+            settlementCurrency = SettlementCurrencyResourceIT.createEntity(em);
+            em.persist(settlementCurrency);
+            em.flush();
+        } else {
+            settlementCurrency = TestUtil.findAll(em, SettlementCurrency.class).get(0);
+        }
+        em.persist(settlementCurrency);
+        em.flush();
+        transactionAccount.setSettlementCurrency(settlementCurrency);
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+        Long settlementCurrencyId = settlementCurrency.getId();
+
+        // Get all the transactionAccountList where settlementCurrency equals to settlementCurrencyId
+        defaultTransactionAccountShouldBeFound("settlementCurrencyId.equals=" + settlementCurrencyId);
+
+        // Get all the transactionAccountList where settlementCurrency equals to (settlementCurrencyId + 1)
+        defaultTransactionAccountShouldNotBeFound("settlementCurrencyId.equals=" + (settlementCurrencyId + 1));
     }
 
     /**
