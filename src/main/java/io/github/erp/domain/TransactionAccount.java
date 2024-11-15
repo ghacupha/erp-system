@@ -107,6 +107,10 @@ public class TransactionAccount implements Serializable {
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private SettlementCurrency settlementCurrency;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    private ReportingEntity institution;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -285,6 +289,19 @@ public class TransactionAccount implements Serializable {
 
     public TransactionAccount settlementCurrency(SettlementCurrency settlementCurrency) {
         this.setSettlementCurrency(settlementCurrency);
+        return this;
+    }
+
+    public ReportingEntity getInstitution() {
+        return this.institution;
+    }
+
+    public void setInstitution(ReportingEntity reportingEntity) {
+        this.institution = reportingEntity;
+    }
+
+    public TransactionAccount institution(ReportingEntity reportingEntity) {
+        this.setInstitution(reportingEntity);
         return this;
     }
 

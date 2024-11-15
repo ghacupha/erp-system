@@ -63,6 +63,8 @@ public class TransactionAccountDTO implements Serializable {
 
     private SettlementCurrencyDTO settlementCurrency;
 
+    private ReportingEntityDTO institution;
+
     public Long getId() {
         return id;
     }
@@ -167,6 +169,14 @@ public class TransactionAccountDTO implements Serializable {
         this.settlementCurrency = settlementCurrency;
     }
 
+    public ReportingEntityDTO getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(ReportingEntityDTO institution) {
+        this.institution = institution;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -204,6 +214,7 @@ public class TransactionAccountDTO implements Serializable {
             ", placeholders=" + getPlaceholders() +
             ", serviceOutlet=" + getServiceOutlet() +
             ", settlementCurrency=" + getSettlementCurrency() +
+            ", institution=" + getInstitution() +
             "}";
     }
 }

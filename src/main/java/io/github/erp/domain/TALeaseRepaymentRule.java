@@ -73,7 +73,7 @@ public class TALeaseRepaymentRule implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount debit;
@@ -81,7 +81,7 @@ public class TALeaseRepaymentRule implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount credit;

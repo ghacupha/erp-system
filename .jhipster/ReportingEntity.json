@@ -1,0 +1,18 @@
+{
+  "fields": [
+    {
+      "fieldName": "entityName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "ReportingEntity",
+  "changelogDate": "20241115103432",
+  "incrementalChangelog": false
+}
