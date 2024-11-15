@@ -44,7 +44,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '17.x'
+          java-version: '18.x'
 
       - name: Install node.js packages
         run: npm install
