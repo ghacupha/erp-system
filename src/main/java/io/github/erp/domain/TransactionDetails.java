@@ -81,12 +81,12 @@ public class TransactionDetails implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "accountLedger", "accountCategory", "placeholders" }, allowSetters = true)
     private TransactionAccount debitAccount;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "accountLedger", "accountCategory", "placeholders" }, allowSetters = true)
     private TransactionAccount creditAccount;
 
     @ManyToMany

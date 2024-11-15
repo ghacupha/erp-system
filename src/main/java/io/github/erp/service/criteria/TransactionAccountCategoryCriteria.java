@@ -68,6 +68,8 @@ public class TransactionAccountCategoryCriteria implements Serializable, Criteri
 
     private LongFilter placeholderId;
 
+    private LongFilter accountLedgerId;
+
     private Boolean distinct;
 
     public TransactionAccountCategoryCriteria() {}
@@ -78,6 +80,7 @@ public class TransactionAccountCategoryCriteria implements Serializable, Criteri
         this.transactionAccountPostingType =
             other.transactionAccountPostingType == null ? null : other.transactionAccountPostingType.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.accountLedgerId = other.accountLedgerId == null ? null : other.accountLedgerId.copy();
         this.distinct = other.distinct;
     }
 
@@ -146,6 +149,21 @@ public class TransactionAccountCategoryCriteria implements Serializable, Criteri
         this.placeholderId = placeholderId;
     }
 
+    public LongFilter getAccountLedgerId() {
+        return accountLedgerId;
+    }
+
+    public LongFilter accountLedgerId() {
+        if (accountLedgerId == null) {
+            accountLedgerId = new LongFilter();
+        }
+        return accountLedgerId;
+    }
+
+    public void setAccountLedgerId(LongFilter accountLedgerId) {
+        this.accountLedgerId = accountLedgerId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -168,13 +186,14 @@ public class TransactionAccountCategoryCriteria implements Serializable, Criteri
             Objects.equals(name, that.name) &&
             Objects.equals(transactionAccountPostingType, that.transactionAccountPostingType) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(accountLedgerId, that.accountLedgerId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, transactionAccountPostingType, placeholderId, distinct);
+        return Objects.hash(id, name, transactionAccountPostingType, placeholderId, accountLedgerId, distinct);
     }
 
     // prettier-ignore
@@ -185,6 +204,7 @@ public class TransactionAccountCategoryCriteria implements Serializable, Criteri
             (name != null ? "name=" + name + ", " : "") +
             (transactionAccountPostingType != null ? "transactionAccountPostingType=" + transactionAccountPostingType + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (accountLedgerId != null ? "accountLedgerId=" + accountLedgerId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

@@ -137,6 +137,15 @@ public class TransactionAccountCategoryQueryService extends QueryService<Transac
                         )
                     );
             }
+            if (criteria.getAccountLedgerId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getAccountLedgerId(),
+                            root -> root.join(TransactionAccountCategory_.accountLedger, JoinType.LEFT).get(TransactionAccountLedger_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

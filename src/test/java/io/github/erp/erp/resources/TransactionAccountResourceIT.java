@@ -21,6 +21,8 @@ package io.github.erp.erp.resources;
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.TransactionAccount;
+import io.github.erp.domain.TransactionAccountCategory;
+import io.github.erp.domain.TransactionAccountLedger;
 import io.github.erp.domain.enumeration.AccountSubTypes;
 import io.github.erp.domain.enumeration.AccountTypes;
 import io.github.erp.erp.resources.ledgers.TransactionAccountResourceProd;
@@ -137,6 +139,26 @@ public class TransactionAccountResourceIT {
             .accountType(DEFAULT_ACCOUNT_TYPE)
             .accountSubType(DEFAULT_ACCOUNT_SUB_TYPE)
             .dummyAccount(DEFAULT_DUMMY_ACCOUNT);
+        // Add required entity
+        TransactionAccountLedger transactionAccountLedger;
+        if (TestUtil.findAll(em, TransactionAccountLedger.class).isEmpty()) {
+            transactionAccountLedger = TransactionAccountLedgerResourceIT.createEntity(em);
+            em.persist(transactionAccountLedger);
+            em.flush();
+        } else {
+            transactionAccountLedger = TestUtil.findAll(em, TransactionAccountLedger.class).get(0);
+        }
+        transactionAccount.setAccountLedger(transactionAccountLedger);
+        // Add required entity
+        TransactionAccountCategory transactionAccountCategory;
+        if (TestUtil.findAll(em, TransactionAccountCategory.class).isEmpty()) {
+            transactionAccountCategory = TransactionAccountCategoryResourceIT.createEntity(em);
+            em.persist(transactionAccountCategory);
+            em.flush();
+        } else {
+            transactionAccountCategory = TestUtil.findAll(em, TransactionAccountCategory.class).get(0);
+        }
+        transactionAccount.setAccountCategory(transactionAccountCategory);
         return transactionAccount;
     }
 
@@ -155,6 +177,26 @@ public class TransactionAccountResourceIT {
             .accountType(UPDATED_ACCOUNT_TYPE)
             .accountSubType(UPDATED_ACCOUNT_SUB_TYPE)
             .dummyAccount(UPDATED_DUMMY_ACCOUNT);
+        // Add required entity
+        TransactionAccountLedger transactionAccountLedger;
+        if (TestUtil.findAll(em, TransactionAccountLedger.class).isEmpty()) {
+            transactionAccountLedger = TransactionAccountLedgerResourceIT.createUpdatedEntity(em);
+            em.persist(transactionAccountLedger);
+            em.flush();
+        } else {
+            transactionAccountLedger = TestUtil.findAll(em, TransactionAccountLedger.class).get(0);
+        }
+        transactionAccount.setAccountLedger(transactionAccountLedger);
+        // Add required entity
+        TransactionAccountCategory transactionAccountCategory;
+        if (TestUtil.findAll(em, TransactionAccountCategory.class).isEmpty()) {
+            transactionAccountCategory = TransactionAccountCategoryResourceIT.createUpdatedEntity(em);
+            em.persist(transactionAccountCategory);
+            em.flush();
+        } else {
+            transactionAccountCategory = TestUtil.findAll(em, TransactionAccountCategory.class).get(0);
+        }
+        transactionAccount.setAccountCategory(transactionAccountCategory);
         return transactionAccount;
     }
 
@@ -695,6 +737,58 @@ public class TransactionAccountResourceIT {
 
         // Get all the transactionAccountList where dummyAccount is null
         defaultTransactionAccountShouldNotBeFound("dummyAccount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByAccountLedgerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+        TransactionAccountLedger accountLedger;
+        if (TestUtil.findAll(em, TransactionAccountLedger.class).isEmpty()) {
+            accountLedger = TransactionAccountLedgerResourceIT.createEntity(em);
+            em.persist(accountLedger);
+            em.flush();
+        } else {
+            accountLedger = TestUtil.findAll(em, TransactionAccountLedger.class).get(0);
+        }
+        em.persist(accountLedger);
+        em.flush();
+        transactionAccount.setAccountLedger(accountLedger);
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+        Long accountLedgerId = accountLedger.getId();
+
+        // Get all the transactionAccountList where accountLedger equals to accountLedgerId
+        defaultTransactionAccountShouldBeFound("accountLedgerId.equals=" + accountLedgerId);
+
+        // Get all the transactionAccountList where accountLedger equals to (accountLedgerId + 1)
+        defaultTransactionAccountShouldNotBeFound("accountLedgerId.equals=" + (accountLedgerId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByAccountCategoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+        TransactionAccountCategory accountCategory;
+        if (TestUtil.findAll(em, TransactionAccountCategory.class).isEmpty()) {
+            accountCategory = TransactionAccountCategoryResourceIT.createEntity(em);
+            em.persist(accountCategory);
+            em.flush();
+        } else {
+            accountCategory = TestUtil.findAll(em, TransactionAccountCategory.class).get(0);
+        }
+        em.persist(accountCategory);
+        em.flush();
+        transactionAccount.setAccountCategory(accountCategory);
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+        Long accountCategoryId = accountCategory.getId();
+
+        // Get all the transactionAccountList where accountCategory equals to accountCategoryId
+        defaultTransactionAccountShouldBeFound("accountCategoryId.equals=" + accountCategoryId);
+
+        // Get all the transactionAccountList where accountCategory equals to (accountCategoryId + 1)
+        defaultTransactionAccountShouldNotBeFound("accountCategoryId.equals=" + (accountCategoryId + 1));
     }
 
     @Test

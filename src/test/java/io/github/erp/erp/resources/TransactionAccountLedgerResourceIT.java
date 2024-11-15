@@ -21,6 +21,7 @@ package io.github.erp.erp.resources;
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.TransactionAccountLedger;
+import io.github.erp.erp.resources.ledgers.TransactionAccountLedgerResourceProd;
 import io.github.erp.repository.TransactionAccountLedgerRepository;
 import io.github.erp.repository.search.TransactionAccountLedgerSearchRepository;
 import io.github.erp.service.TransactionAccountLedgerService;
@@ -55,7 +56,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link io.github.erp.erp.resources.ledgers.TransactionAccountLedgerResourceProd} REST controller.
+ * Integration tests for the {@link TransactionAccountLedgerResourceProd} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)

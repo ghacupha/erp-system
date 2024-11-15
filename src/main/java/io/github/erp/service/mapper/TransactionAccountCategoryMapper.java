@@ -25,9 +25,10 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link TransactionAccountCategory} and its DTO {@link TransactionAccountCategoryDTO}.
  */
-@Mapper(componentModel = "spring", uses = { PlaceholderMapper.class })
+@Mapper(componentModel = "spring", uses = { PlaceholderMapper.class, TransactionAccountLedgerMapper.class })
 public interface TransactionAccountCategoryMapper extends EntityMapper<TransactionAccountCategoryDTO, TransactionAccountCategory> {
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "accountLedger", source = "accountLedger", qualifiedByName = "ledgerName")
     TransactionAccountCategoryDTO toDto(TransactionAccountCategory s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
