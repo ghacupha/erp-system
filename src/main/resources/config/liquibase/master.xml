@@ -311,6 +311,7 @@
     <include file="config/liquibase/changelog/20241104162219_added_entity_RouInitialDirectCost.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241113125548_added_entity_TransactionAccountLedger.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241115103432_added_entity_ReportingEntity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241115120936_added_entity_TransactionAccountReportItem.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
