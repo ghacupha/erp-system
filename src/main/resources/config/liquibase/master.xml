@@ -581,6 +581,7 @@
     <include file="config/liquibase/changelog/20241113124046_drop_parent_account_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241113125548_added_entity_constraints_TransactionAccountLedger.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241114112018_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241115100208_added_sol_currency_to_ta_changelog.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

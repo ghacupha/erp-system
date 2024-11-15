@@ -27,12 +27,20 @@ import org.mapstruct.*;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { TransactionAccountLedgerMapper.class, TransactionAccountCategoryMapper.class, PlaceholderMapper.class }
+    uses = {
+        TransactionAccountLedgerMapper.class,
+        TransactionAccountCategoryMapper.class,
+        PlaceholderMapper.class,
+        ServiceOutletMapper.class,
+        SettlementCurrencyMapper.class,
+    }
 )
 public interface TransactionAccountMapper extends EntityMapper<TransactionAccountDTO, TransactionAccount> {
     @Mapping(target = "accountLedger", source = "accountLedger", qualifiedByName = "ledgerName")
     @Mapping(target = "accountCategory", source = "accountCategory", qualifiedByName = "name")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "serviceOutlet", source = "serviceOutlet", qualifiedByName = "outletCode")
+    @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
     TransactionAccountDTO toDto(TransactionAccount s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

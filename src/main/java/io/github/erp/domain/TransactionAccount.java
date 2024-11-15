@@ -94,6 +94,19 @@ public class TransactionAccount implements Serializable {
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(
+        value = { "placeholders", "bankCode", "outletType", "outletStatus", "countyName", "subCountyName" },
+        allowSetters = true
+    )
+    private ServiceOutlet serviceOutlet;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    private SettlementCurrency settlementCurrency;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -246,6 +259,32 @@ public class TransactionAccount implements Serializable {
 
     public TransactionAccount removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public ServiceOutlet getServiceOutlet() {
+        return this.serviceOutlet;
+    }
+
+    public void setServiceOutlet(ServiceOutlet serviceOutlet) {
+        this.serviceOutlet = serviceOutlet;
+    }
+
+    public TransactionAccount serviceOutlet(ServiceOutlet serviceOutlet) {
+        this.setServiceOutlet(serviceOutlet);
+        return this;
+    }
+
+    public SettlementCurrency getSettlementCurrency() {
+        return this.settlementCurrency;
+    }
+
+    public void setSettlementCurrency(SettlementCurrency settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
+    }
+
+    public TransactionAccount settlementCurrency(SettlementCurrency settlementCurrency) {
+        this.setSettlementCurrency(settlementCurrency);
         return this;
     }
 
