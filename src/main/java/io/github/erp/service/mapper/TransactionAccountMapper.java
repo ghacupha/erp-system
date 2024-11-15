@@ -33,6 +33,7 @@ import org.mapstruct.*;
         PlaceholderMapper.class,
         ServiceOutletMapper.class,
         SettlementCurrencyMapper.class,
+        ReportingEntityMapper.class,
     }
 )
 public interface TransactionAccountMapper extends EntityMapper<TransactionAccountDTO, TransactionAccount> {
@@ -41,6 +42,7 @@ public interface TransactionAccountMapper extends EntityMapper<TransactionAccoun
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
     @Mapping(target = "serviceOutlet", source = "serviceOutlet", qualifiedByName = "outletCode")
     @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
+    @Mapping(target = "institution", source = "institution", qualifiedByName = "entityName")
     TransactionAccountDTO toDto(TransactionAccount s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

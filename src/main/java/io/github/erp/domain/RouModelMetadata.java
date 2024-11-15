@@ -117,7 +117,7 @@ public class RouModelMetadata implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount assetAccount;
@@ -125,7 +125,7 @@ public class RouModelMetadata implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount depreciationAccount;
@@ -133,7 +133,7 @@ public class RouModelMetadata implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount accruedDepreciationAccount;

@@ -98,7 +98,7 @@ public class RouInitialDirectCost implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount targetROUAccount;
@@ -106,7 +106,7 @@ public class RouInitialDirectCost implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount transferAccount;

@@ -104,14 +104,14 @@ public class PrepaymentAccount implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount debitAccount;
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount transferAccount;

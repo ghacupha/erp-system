@@ -173,42 +173,42 @@ public class LeaseModelMetadata implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount leaseLiabilityAccount;
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount interestPayableAccount;
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount interestExpenseAccount;
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount rouAssetAccount;
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount rouDepreciationAccount;
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency" },
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
         allowSetters = true
     )
     private TransactionAccount accruedDepreciationAccount;

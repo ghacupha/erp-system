@@ -68,6 +68,13 @@
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "iso4217CurrencyCode"
+    },
+    {
+      "relationshipName": "institution",
+      "otherEntityName": "reportingEntity",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "entityName"
     }
   ],
   "service": "serviceImpl",
