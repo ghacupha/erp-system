@@ -74,6 +74,16 @@ public class TransactionAccount implements Serializable {
     @Column(name = "dummy_account")
     private Boolean dummyAccount;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    private TransactionAccountLedger accountLedger;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "placeholders", "accountLedger" }, allowSetters = true)
+    private TransactionAccountCategory accountCategory;
+
     @ManyToMany
     @JoinTable(
         name = "rel_transaction_account__placeholder",
@@ -188,6 +198,32 @@ public class TransactionAccount implements Serializable {
 
     public void setDummyAccount(Boolean dummyAccount) {
         this.dummyAccount = dummyAccount;
+    }
+
+    public TransactionAccountLedger getAccountLedger() {
+        return this.accountLedger;
+    }
+
+    public void setAccountLedger(TransactionAccountLedger transactionAccountLedger) {
+        this.accountLedger = transactionAccountLedger;
+    }
+
+    public TransactionAccount accountLedger(TransactionAccountLedger transactionAccountLedger) {
+        this.setAccountLedger(transactionAccountLedger);
+        return this;
+    }
+
+    public TransactionAccountCategory getAccountCategory() {
+        return this.accountCategory;
+    }
+
+    public void setAccountCategory(TransactionAccountCategory transactionAccountCategory) {
+        this.accountCategory = transactionAccountCategory;
+    }
+
+    public TransactionAccount accountCategory(TransactionAccountCategory transactionAccountCategory) {
+        this.setAccountCategory(transactionAccountCategory);
+        return this;
     }
 
     public Set<Placeholder> getPlaceholders() {

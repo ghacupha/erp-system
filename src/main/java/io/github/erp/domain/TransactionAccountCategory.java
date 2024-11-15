@@ -64,6 +64,11 @@ public class TransactionAccountCategory implements Serializable {
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    private TransactionAccountLedger accountLedger;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -125,6 +130,19 @@ public class TransactionAccountCategory implements Serializable {
 
     public TransactionAccountCategory removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public TransactionAccountLedger getAccountLedger() {
+        return this.accountLedger;
+    }
+
+    public void setAccountLedger(TransactionAccountLedger transactionAccountLedger) {
+        this.accountLedger = transactionAccountLedger;
+    }
+
+    public TransactionAccountCategory accountLedger(TransactionAccountLedger transactionAccountLedger) {
+        this.setAccountLedger(transactionAccountLedger);
         return this;
     }
 

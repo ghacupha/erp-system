@@ -172,27 +172,27 @@ public class LeaseModelMetadata implements Serializable {
     private SecurityClearance securityClearance;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "accountLedger", "accountCategory", "placeholders" }, allowSetters = true)
     private TransactionAccount leaseLiabilityAccount;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "accountLedger", "accountCategory", "placeholders" }, allowSetters = true)
     private TransactionAccount interestPayableAccount;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "accountLedger", "accountCategory", "placeholders" }, allowSetters = true)
     private TransactionAccount interestExpenseAccount;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "accountLedger", "accountCategory", "placeholders" }, allowSetters = true)
     private TransactionAccount rouAssetAccount;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "accountLedger", "accountCategory", "placeholders" }, allowSetters = true)
     private TransactionAccount rouDepreciationAccount;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "accountLedger", "accountCategory", "placeholders" }, allowSetters = true)
     private TransactionAccount accruedDepreciationAccount;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

@@ -32,4 +32,10 @@ public interface TransactionAccountLedgerMapper extends EntityMapper<Transaction
 
     @Mapping(target = "removePlaceholder", ignore = true)
     TransactionAccountLedger toEntity(TransactionAccountLedgerDTO transactionAccountLedgerDTO);
+
+    @Named("ledgerName")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "ledgerName", source = "ledgerName")
+    TransactionAccountLedgerDTO toDtoLedgerName(TransactionAccountLedger transactionAccountLedger);
 }

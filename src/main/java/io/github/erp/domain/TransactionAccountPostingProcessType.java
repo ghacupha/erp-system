@@ -50,12 +50,12 @@ public class TransactionAccountPostingProcessType implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "placeholders", "accountLedger" }, allowSetters = true)
     private TransactionAccountCategory debitAccountType;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "placeholders", "accountLedger" }, allowSetters = true)
     private TransactionAccountCategory creditAccountType;
 
     @ManyToMany

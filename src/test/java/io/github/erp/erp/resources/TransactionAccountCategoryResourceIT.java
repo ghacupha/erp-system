@@ -21,7 +21,9 @@ package io.github.erp.erp.resources;
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.TransactionAccountCategory;
+import io.github.erp.domain.TransactionAccountLedger;
 import io.github.erp.domain.enumeration.transactionAccountPostingTypes;
+import io.github.erp.erp.resources.ledgers.TransactionAccountCategoryResourceProd;
 import io.github.erp.repository.TransactionAccountCategoryRepository;
 import io.github.erp.repository.search.TransactionAccountCategorySearchRepository;
 import io.github.erp.service.TransactionAccountCategoryService;
@@ -56,7 +58,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the InternalTransactionAccountCategoryResource REST controller.
+ * Integration tests for the {@link TransactionAccountCategoryResourceProd} REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -115,6 +117,16 @@ class TransactionAccountCategoryResourceIT {
         TransactionAccountCategory transactionAccountCategory = new TransactionAccountCategory()
             .name(DEFAULT_NAME)
             .transactionAccountPostingType(DEFAULT_TRANSACTION_ACCOUNT_POSTING_TYPE);
+        // Add required entity
+        TransactionAccountLedger transactionAccountLedger;
+        if (TestUtil.findAll(em, TransactionAccountLedger.class).isEmpty()) {
+            transactionAccountLedger = TransactionAccountLedgerResourceIT.createEntity(em);
+            em.persist(transactionAccountLedger);
+            em.flush();
+        } else {
+            transactionAccountLedger = TestUtil.findAll(em, TransactionAccountLedger.class).get(0);
+        }
+        transactionAccountCategory.setAccountLedger(transactionAccountLedger);
         return transactionAccountCategory;
     }
 
@@ -128,6 +140,16 @@ class TransactionAccountCategoryResourceIT {
         TransactionAccountCategory transactionAccountCategory = new TransactionAccountCategory()
             .name(UPDATED_NAME)
             .transactionAccountPostingType(UPDATED_TRANSACTION_ACCOUNT_POSTING_TYPE);
+        // Add required entity
+        TransactionAccountLedger transactionAccountLedger;
+        if (TestUtil.findAll(em, TransactionAccountLedger.class).isEmpty()) {
+            transactionAccountLedger = TransactionAccountLedgerResourceIT.createUpdatedEntity(em);
+            em.persist(transactionAccountLedger);
+            em.flush();
+        } else {
+            transactionAccountLedger = TestUtil.findAll(em, TransactionAccountLedger.class).get(0);
+        }
+        transactionAccountCategory.setAccountLedger(transactionAccountLedger);
         return transactionAccountCategory;
     }
 
@@ -463,6 +485,32 @@ class TransactionAccountCategoryResourceIT {
 
         // Get all the transactionAccountCategoryList where placeholder equals to (placeholderId + 1)
         defaultTransactionAccountCategoryShouldNotBeFound("placeholderId.equals=" + (placeholderId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountCategoriesByAccountLedgerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionAccountCategoryRepository.saveAndFlush(transactionAccountCategory);
+        TransactionAccountLedger accountLedger;
+        if (TestUtil.findAll(em, TransactionAccountLedger.class).isEmpty()) {
+            accountLedger = TransactionAccountLedgerResourceIT.createEntity(em);
+            em.persist(accountLedger);
+            em.flush();
+        } else {
+            accountLedger = TestUtil.findAll(em, TransactionAccountLedger.class).get(0);
+        }
+        em.persist(accountLedger);
+        em.flush();
+        transactionAccountCategory.setAccountLedger(accountLedger);
+        transactionAccountCategoryRepository.saveAndFlush(transactionAccountCategory);
+        Long accountLedgerId = accountLedger.getId();
+
+        // Get all the transactionAccountCategoryList where accountLedger equals to accountLedgerId
+        defaultTransactionAccountCategoryShouldBeFound("accountLedgerId.equals=" + accountLedgerId);
+
+        // Get all the transactionAccountCategoryList where accountLedger equals to (accountLedgerId + 1)
+        defaultTransactionAccountCategoryShouldNotBeFound("accountLedgerId.equals=" + (accountLedgerId + 1));
     }
 
     /**

@@ -34,6 +34,20 @@
   ],
   "relationships": [
     {
+      "relationshipName": "accountLedger",
+      "otherEntityName": "transactionAccountLedger",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "ledgerName"
+    },
+    {
+      "relationshipName": "accountCategory",
+      "otherEntityName": "transactionAccountCategory",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name"
+    },
+    {
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",

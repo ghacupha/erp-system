@@ -20,6 +20,13 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "transactionAccountCategory"
+    },
+    {
+      "relationshipName": "accountLedger",
+      "otherEntityName": "transactionAccountLedger",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "ledgerName"
     }
   ],
   "service": "serviceImpl",

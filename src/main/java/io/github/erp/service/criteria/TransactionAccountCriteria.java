@@ -90,6 +90,10 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
 
     private BooleanFilter dummyAccount;
 
+    private LongFilter accountLedgerId;
+
+    private LongFilter accountCategoryId;
+
     private LongFilter placeholderId;
 
     private Boolean distinct;
@@ -103,6 +107,8 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
         this.accountType = other.accountType == null ? null : other.accountType.copy();
         this.accountSubType = other.accountSubType == null ? null : other.accountSubType.copy();
         this.dummyAccount = other.dummyAccount == null ? null : other.dummyAccount.copy();
+        this.accountLedgerId = other.accountLedgerId == null ? null : other.accountLedgerId.copy();
+        this.accountCategoryId = other.accountCategoryId == null ? null : other.accountCategoryId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.distinct = other.distinct;
     }
@@ -202,6 +208,36 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
         this.dummyAccount = dummyAccount;
     }
 
+    public LongFilter getAccountLedgerId() {
+        return accountLedgerId;
+    }
+
+    public LongFilter accountLedgerId() {
+        if (accountLedgerId == null) {
+            accountLedgerId = new LongFilter();
+        }
+        return accountLedgerId;
+    }
+
+    public void setAccountLedgerId(LongFilter accountLedgerId) {
+        this.accountLedgerId = accountLedgerId;
+    }
+
+    public LongFilter getAccountCategoryId() {
+        return accountCategoryId;
+    }
+
+    public LongFilter accountCategoryId() {
+        if (accountCategoryId == null) {
+            accountCategoryId = new LongFilter();
+        }
+        return accountCategoryId;
+    }
+
+    public void setAccountCategoryId(LongFilter accountCategoryId) {
+        this.accountCategoryId = accountCategoryId;
+    }
+
     public LongFilter getPlaceholderId() {
         return placeholderId;
     }
@@ -241,6 +277,8 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
             Objects.equals(accountType, that.accountType) &&
             Objects.equals(accountSubType, that.accountSubType) &&
             Objects.equals(dummyAccount, that.dummyAccount) &&
+            Objects.equals(accountLedgerId, that.accountLedgerId) &&
+            Objects.equals(accountCategoryId, that.accountCategoryId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(distinct, that.distinct)
         );
@@ -248,7 +286,18 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, accountNumber, accountName, accountType, accountSubType, dummyAccount, placeholderId, distinct);
+        return Objects.hash(
+            id,
+            accountNumber,
+            accountName,
+            accountType,
+            accountSubType,
+            dummyAccount,
+            accountLedgerId,
+            accountCategoryId,
+            placeholderId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -261,6 +310,8 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
             (accountType != null ? "accountType=" + accountType + ", " : "") +
             (accountSubType != null ? "accountSubType=" + accountSubType + ", " : "") +
             (dummyAccount != null ? "dummyAccount=" + dummyAccount + ", " : "") +
+            (accountLedgerId != null ? "accountLedgerId=" + accountLedgerId + ", " : "") +
+            (accountCategoryId != null ? "accountCategoryId=" + accountCategoryId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";

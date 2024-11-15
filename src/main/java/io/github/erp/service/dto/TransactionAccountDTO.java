@@ -53,6 +53,10 @@ public class TransactionAccountDTO implements Serializable {
 
     private Boolean dummyAccount;
 
+    private TransactionAccountLedgerDTO accountLedger;
+
+    private TransactionAccountCategoryDTO accountCategory;
+
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     public Long getId() {
@@ -119,6 +123,22 @@ public class TransactionAccountDTO implements Serializable {
         this.dummyAccount = dummyAccount;
     }
 
+    public TransactionAccountLedgerDTO getAccountLedger() {
+        return accountLedger;
+    }
+
+    public void setAccountLedger(TransactionAccountLedgerDTO accountLedger) {
+        this.accountLedger = accountLedger;
+    }
+
+    public TransactionAccountCategoryDTO getAccountCategory() {
+        return accountCategory;
+    }
+
+    public void setAccountCategory(TransactionAccountCategoryDTO accountCategory) {
+        this.accountCategory = accountCategory;
+    }
+
     public Set<PlaceholderDTO> getPlaceholders() {
         return placeholders;
     }
@@ -159,6 +179,8 @@ public class TransactionAccountDTO implements Serializable {
             ", accountType='" + getAccountType() + "'" +
             ", accountSubType='" + getAccountSubType() + "'" +
             ", dummyAccount='" + getDummyAccount() + "'" +
+            ", accountLedger=" + getAccountLedger() +
+            ", accountCategory=" + getAccountCategory() +
             ", placeholders=" + getPlaceholders() +
             "}";
     }

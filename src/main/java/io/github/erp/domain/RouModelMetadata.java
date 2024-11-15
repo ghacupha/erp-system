@@ -116,17 +116,17 @@ public class RouModelMetadata implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "accountLedger", "accountCategory", "placeholders" }, allowSetters = true)
     private TransactionAccount assetAccount;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "accountLedger", "accountCategory", "placeholders" }, allowSetters = true)
     private TransactionAccount depreciationAccount;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "accountLedger", "accountCategory", "placeholders" }, allowSetters = true)
     private TransactionAccount accruedDepreciationAccount;
 
     @ManyToOne
