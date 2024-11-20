@@ -109,7 +109,7 @@ public interface InternalAssetRegistrationService {
      *
      * @return List of ids
      */
-    List<Long> findAdjustedAssetIds();
+    List<Long> findAdjacentAssetIds();
 
     /**
      * List of asset ids of assets related to asset-general-adjustment

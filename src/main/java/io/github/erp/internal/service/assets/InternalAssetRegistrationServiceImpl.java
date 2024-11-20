@@ -148,9 +148,9 @@ public class InternalAssetRegistrationServiceImpl implements InternalAssetRegist
      * @return List of ids
      */
     @Override
-    public List<Long> findAdjustedAssetIds() {
+    public List<Long> findAdjacentAssetIds() {
 
-        return assetRegistrationRepository.findAdjustedAssetIds();
+        return assetRegistrationRepository.findAdjacentAssetIds();
     }
 
     /**
