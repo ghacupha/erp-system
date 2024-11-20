@@ -1,4 +1,4 @@
-package io.github.erp.internal.service.assets;
+package io.github.erp.internal.service.cache;
 
 /*-
  * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
@@ -17,8 +17,8 @@ package io.github.erp.internal.service.assets;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.assets.InternalAssetRegistrationService;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +28,8 @@ import java.util.List;
  * This is our hail-mary on the asset-registration challenge that is really affecting our
  * asset relationships. We just hope this improves on our current situtation
  */
-@Service
-public class ScheduledAssetRegistrationCacheRefreshServiceImpl implements ScheduledAssetRegistrationCacheRefreshService {
+@Service("scheduledAssetRegistrationCacheRefreshService")
+public class ScheduledAssetRegistrationCacheRefreshServiceImpl implements ScheduledCacheRefreshService {
 
     private final InternalAssetRegistrationService assetRegistrationService;
 
@@ -45,7 +45,7 @@ public class ScheduledAssetRegistrationCacheRefreshServiceImpl implements Schedu
         }
     }
 
-    // @Scheduled(cron = "0 0 19 * * *") // Run every day at 19:00 (7:00 PM)
+    @Scheduled(cron = "0 0 19 * * *") // Run every day at 19:00 (7:00 PM)
     public void refreshCacheAt1900Hours() {
         // Fetch all IDs or a subset of IDs
         List<Long> ids = assetRegistrationService.findAllIds();
