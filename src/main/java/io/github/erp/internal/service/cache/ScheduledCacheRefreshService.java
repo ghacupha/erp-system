@@ -1,4 +1,4 @@
-package io.github.erp.internal.service.assets;
+package io.github.erp.internal.service.cache;
 
 /*-
  * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
@@ -19,7 +19,7 @@ package io.github.erp.internal.service.assets;
  */
 import java.util.List;
 
-public interface ScheduledAssetRegistrationCacheRefreshService {
+public interface ScheduledCacheRefreshService {
 
     void refreshDefinedCacheItems(List<Long> ids);
 }
