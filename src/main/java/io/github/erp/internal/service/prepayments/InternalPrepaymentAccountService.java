@@ -17,6 +17,7 @@ package io.github.erp.internal.service.prepayments;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.service.criteria.PrepaymentAccountCriteria;
 import io.github.erp.service.dto.PrepaymentAccountDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -89,4 +90,6 @@ public interface InternalPrepaymentAccountService {
      * @return the list of entities.
      */
     Page<PrepaymentAccountDTO> search(String query, Pageable pageable);
+
+    Page<PrepaymentAccountDTO> findByCriteria(PrepaymentAccountCriteria criteria, Pageable pageable);
 }
