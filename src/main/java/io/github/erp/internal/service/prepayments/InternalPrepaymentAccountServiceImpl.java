@@ -19,19 +19,24 @@ package io.github.erp.internal.service.prepayments;
  */
 import io.github.erp.domain.PrepaymentAccount;
 import io.github.erp.internal.repository.InternalPrepaymentAccountRepository;
+import io.github.erp.internal.service.cache.ScheduledCacheRefreshService;
 import io.github.erp.internal.utilities.NextIntegerFiller;
 import io.github.erp.repository.SettlementRepository;
 import io.github.erp.repository.search.PrepaymentAccountSearchRepository;
+import io.github.erp.service.PrepaymentAccountQueryService;
+import io.github.erp.service.criteria.PrepaymentAccountCriteria;
 import io.github.erp.service.dto.PrepaymentAccountDTO;
 import io.github.erp.service.mapper.PrepaymentAccountMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -49,16 +54,23 @@ public class InternalPrepaymentAccountServiceImpl implements InternalPrepaymentA
 
     private final SettlementRepository settlementRepository;
 
+    private final PrepaymentAccountQueryService prepaymentAccountQueryService;
+
+    private final ScheduledCacheRefreshService scheduledTransactionAccountCacheRefreshService;
+
     private final PrepaymentAccountSearchRepository prepaymentAccountSearchRepository;
 
     public InternalPrepaymentAccountServiceImpl(
         InternalPrepaymentAccountRepository prepaymentAccountRepository,
         PrepaymentAccountMapper prepaymentAccountMapper,
-        SettlementRepository settlementRepository, PrepaymentAccountSearchRepository prepaymentAccountSearchRepository
-    ) {
+        SettlementRepository settlementRepository, PrepaymentAccountQueryService prepaymentAccountQueryService,
+        @Qualifier("scheduledTransactionAccountCacheRefreshService") ScheduledCacheRefreshService scheduledTransactionAccountCacheRefreshService,
+        PrepaymentAccountSearchRepository prepaymentAccountSearchRepository) {
         this.prepaymentAccountRepository = prepaymentAccountRepository;
         this.prepaymentAccountMapper = prepaymentAccountMapper;
         this.settlementRepository = settlementRepository;
+        this.prepaymentAccountQueryService = prepaymentAccountQueryService;
+        this.scheduledTransactionAccountCacheRefreshService = scheduledTransactionAccountCacheRefreshService;
         this.prepaymentAccountSearchRepository = prepaymentAccountSearchRepository;
     }
 
@@ -143,5 +155,17 @@ public class InternalPrepaymentAccountServiceImpl implements InternalPrepaymentA
     public Page<PrepaymentAccountDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of PrepaymentAccounts for query {}", query);
         return prepaymentAccountSearchRepository.search(query, pageable).map(prepaymentAccountMapper::toDto);
+    }
+
+    @Override
+    public Page<PrepaymentAccountDTO> findByCriteria(PrepaymentAccountCriteria criteria, Pageable pageable) {
+
+        // Fetch adjacent account IDs with pagination
+        List<Long> adjacentAccountIds = prepaymentAccountRepository.findAdjacentIds();
+
+        // refresh cache
+        scheduledTransactionAccountCacheRefreshService.refreshDefinedCacheItems(adjacentAccountIds);
+
+        return prepaymentAccountQueryService.findByCriteria(criteria, pageable);
     }
 }
