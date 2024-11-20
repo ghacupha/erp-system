@@ -22,6 +22,7 @@ import io.github.erp.domain.AssetWriteOffInternal;
 import io.github.erp.erp.assets.nbv.buffer.BufferedSinkProcessor;
 import io.github.erp.internal.repository.InternalAssetWriteOffRepository;
 import io.github.erp.internal.service.applicationUser.CurrentUserContext;
+import io.github.erp.internal.service.cache.ScheduledCacheRefreshService;
 import io.github.erp.repository.search.AssetWriteOffSearchRepository;
 import io.github.erp.service.AssetWriteOffQueryService;
 import io.github.erp.service.criteria.AssetWriteOffCriteria;
@@ -34,6 +35,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -56,7 +58,7 @@ public class InternalAssetWriteOffServiceImpl implements InternalAssetWriteOffSe
 
     private final AssetWriteOffQueryService assetWriteOffQueryService;
 
-    private final ScheduledAssetRegistrationCacheRefreshService scheduledAssetRegistrationCacheRefreshService;
+    private final ScheduledCacheRefreshService scheduledAssetRegistrationCacheRefreshService;
 
     private final InternalAssetRegistrationService assetRegistrationService;
 
@@ -66,7 +68,8 @@ public class InternalAssetWriteOffServiceImpl implements InternalAssetWriteOffSe
         InternalAssetWriteOffRepository assetWriteOffRepository,
         AssetWriteOffMapper assetWriteOffMapper,
         AssetWriteOffSearchRepository assetWriteOffSearchRepository,
-        AssetWriteOffQueryService assetWriteOffQueryService, ScheduledAssetRegistrationCacheRefreshService scheduledAssetRegistrationCacheRefreshService, InternalAssetRegistrationService assetRegistrationService, BufferedSinkProcessor<AssetWriteOff> bufferedSinkProcessor) {
+        AssetWriteOffQueryService assetWriteOffQueryService,
+        @Qualifier("scheduledAssetRegistrationCacheRefreshService") ScheduledCacheRefreshService scheduledAssetRegistrationCacheRefreshService, InternalAssetRegistrationService assetRegistrationService, BufferedSinkProcessor<AssetWriteOff> bufferedSinkProcessor) {
         this.assetWriteOffRepository = assetWriteOffRepository;
         this.assetWriteOffMapper = assetWriteOffMapper;
         this.assetWriteOffSearchRepository = assetWriteOffSearchRepository;

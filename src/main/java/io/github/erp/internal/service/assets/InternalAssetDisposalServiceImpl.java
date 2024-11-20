@@ -22,6 +22,7 @@ import io.github.erp.domain.AssetDisposal;
 import io.github.erp.erp.assets.nbv.buffer.BufferedSinkProcessor;
 import io.github.erp.internal.repository.InternalAssetDisposalRepository;
 import io.github.erp.internal.service.applicationUser.CurrentUserContext;
+import io.github.erp.internal.service.cache.ScheduledCacheRefreshService;
 import io.github.erp.repository.search.AssetDisposalSearchRepository;
 import io.github.erp.service.AssetDisposalQueryService;
 import io.github.erp.service.criteria.AssetDisposalCriteria;
@@ -29,6 +30,7 @@ import io.github.erp.service.dto.AssetDisposalDTO;
 import io.github.erp.service.mapper.AssetDisposalMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -55,7 +57,7 @@ public class InternalAssetDisposalServiceImpl implements InternalAssetDisposalSe
 
     private final AssetDisposalQueryService assetDisposalQueryService;
 
-    private final ScheduledAssetRegistrationCacheRefreshService scheduledAssetRegistrationCacheRefreshService;
+    private final ScheduledCacheRefreshService scheduledAssetRegistrationCacheRefreshService;
 
     private final InternalAssetRegistrationService assetRegistrationService;
 
@@ -65,7 +67,8 @@ public class InternalAssetDisposalServiceImpl implements InternalAssetDisposalSe
         InternalAssetDisposalRepository assetDisposalRepository,
         AssetDisposalMapper assetDisposalMapper,
         AssetDisposalSearchRepository assetDisposalSearchRepository,
-        AssetDisposalQueryService assetDisposalQueryService, ScheduledAssetRegistrationCacheRefreshService scheduledAssetRegistrationCacheRefreshService, InternalAssetRegistrationService assetRegistrationService, BufferedSinkProcessor<AssetDisposal> bufferedSinkProcessor) {
+        AssetDisposalQueryService assetDisposalQueryService,
+        @Qualifier("scheduledAssetRegistrationCacheRefreshService") ScheduledCacheRefreshService scheduledAssetRegistrationCacheRefreshService, InternalAssetRegistrationService assetRegistrationService, BufferedSinkProcessor<AssetDisposal> bufferedSinkProcessor) {
         this.assetDisposalRepository = assetDisposalRepository;
         this.assetDisposalMapper = assetDisposalMapper;
         this.assetDisposalSearchRepository = assetDisposalSearchRepository;

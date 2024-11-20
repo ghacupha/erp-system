@@ -20,26 +20,23 @@ package io.github.erp.internal.service.assets;
 import io.github.erp.domain.AssetGeneralAdjustment;
 import io.github.erp.internal.repository.InternalAssetGeneralAdjustmentRepository;
 import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
+import io.github.erp.internal.service.cache.ScheduledCacheRefreshService;
 import io.github.erp.repository.search.AssetGeneralAdjustmentSearchRepository;
 import io.github.erp.service.AssetGeneralAdjustmentQueryService;
 import io.github.erp.service.criteria.AssetGeneralAdjustmentCriteria;
 import io.github.erp.service.dto.AssetGeneralAdjustmentDTO;
-import io.github.erp.service.dto.AssetRegistrationDTO;
 import io.github.erp.service.mapper.ApplicationUserMapper;
 import io.github.erp.service.mapper.AssetGeneralAdjustmentMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing AssetGeneralAdjustment
@@ -60,7 +57,7 @@ public class InternalAssetGeneralAdjustmentServiceImpl implements InternalAssetG
 
     private final AssetGeneralAdjustmentQueryService assetGeneralAdjustmentQueryService;
 
-    private final ScheduledAssetRegistrationCacheRefreshService scheduledAssetRegistrationCacheRefreshService;
+    private final ScheduledCacheRefreshService scheduledAssetRegistrationCacheRefreshService;
 
     private final InternalAssetRegistrationService assetRegistrationService;
 
@@ -70,7 +67,9 @@ public class InternalAssetGeneralAdjustmentServiceImpl implements InternalAssetG
         InternalAssetGeneralAdjustmentRepository assetGeneralAdjustmentRepository,
         AssetGeneralAdjustmentMapper assetGeneralAdjustmentMapper,
         AssetGeneralAdjustmentSearchRepository assetGeneralAdjustmentSearchRepository,
-        InternalApplicationUserDetailService internalApplicationUserDetailService, AssetGeneralAdjustmentQueryService assetGeneralAdjustmentQueryService, ScheduledAssetRegistrationCacheRefreshService scheduledAssetRegistrationCacheRefreshService, InternalAssetRegistrationService assetRegistrationService, ApplicationUserMapper applicationUserMapper) {
+        InternalApplicationUserDetailService internalApplicationUserDetailService, AssetGeneralAdjustmentQueryService assetGeneralAdjustmentQueryService,
+        ScheduledCacheRefreshService scheduledAssetRegistrationCacheRefreshService,
+        InternalAssetRegistrationService assetRegistrationService, ApplicationUserMapper applicationUserMapper) {
         this.assetGeneralAdjustmentRepository = assetGeneralAdjustmentRepository;
         this.assetGeneralAdjustmentMapper = assetGeneralAdjustmentMapper;
         this.assetGeneralAdjustmentSearchRepository = assetGeneralAdjustmentSearchRepository;
@@ -180,7 +179,7 @@ public class InternalAssetGeneralAdjustmentServiceImpl implements InternalAssetG
     @Override
     public Page<AssetGeneralAdjustmentDTO> findByCriteria(AssetGeneralAdjustmentCriteria criteria, Pageable pageable) {
 
-      scheduledAssetRegistrationCacheRefreshService.refreshDefinedCacheItems(assetRegistrationService.findAdjustedAssetIds());
+      scheduledAssetRegistrationCacheRefreshService.refreshDefinedCacheItems(assetRegistrationService.findAdjacentAssetIds());
 
       return assetGeneralAdjustmentQueryService.findByCriteria(criteria, pageable);
     }
