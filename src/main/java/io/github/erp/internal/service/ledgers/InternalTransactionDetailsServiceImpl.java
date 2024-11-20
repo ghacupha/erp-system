@@ -19,18 +19,24 @@ package io.github.erp.internal.service.ledgers;
  */
 
 import io.github.erp.domain.TransactionDetails;
+import io.github.erp.internal.repository.InternalTransactionDetailsRepository;
+import io.github.erp.internal.service.cache.ScheduledCacheRefreshService;
 import io.github.erp.repository.TransactionDetailsRepository;
 import io.github.erp.repository.search.TransactionDetailsSearchRepository;
+import io.github.erp.service.TransactionDetailsQueryService;
 import io.github.erp.service.TransactionDetailsService;
+import io.github.erp.service.criteria.TransactionDetailsCriteria;
 import io.github.erp.service.dto.TransactionDetailsDTO;
 import io.github.erp.service.mapper.TransactionDetailsMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -42,20 +48,28 @@ public class InternalTransactionDetailsServiceImpl implements InternalTransactio
 
     private final Logger log = LoggerFactory.getLogger(InternalTransactionDetailsServiceImpl.class);
 
-    private final TransactionDetailsRepository transactionDetailsRepository;
+    private final InternalTransactionDetailsRepository transactionDetailsRepository;
 
     private final TransactionDetailsMapper transactionDetailsMapper;
 
     private final TransactionDetailsSearchRepository transactionDetailsSearchRepository;
 
+    private final TransactionDetailsQueryService transactionDetailsQueryService;
+
+    private final ScheduledCacheRefreshService scheduledTransactionAccountCacheRefreshService;
+
     public InternalTransactionDetailsServiceImpl(
-        TransactionDetailsRepository transactionDetailsRepository,
+        InternalTransactionDetailsRepository transactionDetailsRepository,
         TransactionDetailsMapper transactionDetailsMapper,
-        TransactionDetailsSearchRepository transactionDetailsSearchRepository
+        TransactionDetailsSearchRepository transactionDetailsSearchRepository,
+        TransactionDetailsQueryService transactionDetailsQueryService,
+        @Qualifier("scheduledTransactionAccountCacheRefreshService") ScheduledCacheRefreshService scheduledTransactionAccountCacheRefreshService
     ) {
         this.transactionDetailsRepository = transactionDetailsRepository;
         this.transactionDetailsMapper = transactionDetailsMapper;
         this.transactionDetailsSearchRepository = transactionDetailsSearchRepository;
+        this.transactionDetailsQueryService = transactionDetailsQueryService;
+        this.scheduledTransactionAccountCacheRefreshService = scheduledTransactionAccountCacheRefreshService;
     }
 
     @Override
@@ -118,5 +132,19 @@ public class InternalTransactionDetailsServiceImpl implements InternalTransactio
     public Page<TransactionDetailsDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of TransactionDetails for query {}", query);
         return transactionDetailsSearchRepository.search(query, pageable).map(transactionDetailsMapper::toDto);
+    }
+
+    /**
+     * Return a {@link List} of {@link TransactionDetailsDTO} which matches the criteria from the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the matching entities.
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public Page<TransactionDetailsDTO> findByCriteria(TransactionDetailsCriteria criteria, Pageable pageable) {
+
+        scheduledTransactionAccountCacheRefreshService.refreshDefinedCacheItems(transactionDetailsRepository.findAdjacentIds());
+
+        return transactionDetailsQueryService.findByCriteria(criteria, pageable);
     }
 }

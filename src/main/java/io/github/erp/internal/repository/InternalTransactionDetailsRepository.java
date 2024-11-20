@@ -19,6 +19,7 @@ package io.github.erp.internal.repository;
  */
 
 import io.github.erp.domain.TransactionDetails;
+import io.github.erp.internal.service.ledgers.TransactionAccountAdjacent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,7 +36,7 @@ import java.util.Optional;
  */
 @Repository
 public interface InternalTransactionDetailsRepository
-    extends JpaRepository<TransactionDetails, Long>, JpaSpecificationExecutor<TransactionDetails> {
+    extends JpaRepository<TransactionDetails, Long>, JpaSpecificationExecutor<TransactionDetails>, TransactionAccountAdjacent {
     @Query(
         value = "select distinct transactionDetails from TransactionDetails transactionDetails left join fetch transactionDetails.placeholders",
         countQuery = "select count(distinct transactionDetails) from TransactionDetails transactionDetails"
@@ -49,4 +50,36 @@ public interface InternalTransactionDetailsRepository
         "select transactionDetails from TransactionDetails transactionDetails left join fetch transactionDetails.placeholders where transactionDetails.id =:id"
     )
     Optional<TransactionDetails> findOneWithEagerRelationships(@Param("id") Long id);
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT  " +
+            "  CAST(reg.id  AS BIGINT)  " +
+            "  FROM public.transaction_account reg  " +
+            " LEFT JOIN transaction_details aga on reg.id = aga.debit_account_id  " +
+            " WHERE aga.debit_account_id IS NOT NULL " +
+            "UNION " +
+            " SELECT  " +
+            "  CAST(reg.id  AS BIGINT)  " +
+            "  FROM public.transaction_account reg  " +
+            " LEFT JOIN transaction_details aga on reg.id = aga.credit_account_id  " +
+            " WHERE aga.credit_account_id IS NOT NULL",
+
+        countQuery = "" +
+            "SELECT  " +
+            "  CAST(reg.id  AS BIGINT)  " +
+            "  FROM public.transaction_account reg  " +
+            " LEFT JOIN transaction_details aga on reg.id = aga.debit_account_id  " +
+            " WHERE aga.debit_account_id IS NOT NULL " +
+            "UNION " +
+            " SELECT  " +
+            "  CAST(reg.id  AS BIGINT)  " +
+            "  FROM public.transaction_account reg  " +
+            " LEFT JOIN transaction_details aga on reg.id = aga.credit_account_id  " +
+            " WHERE aga.credit_account_id IS NOT NULL"
+
+    )
+    @Override
+    List<Long> findAdjacentIds();
 }

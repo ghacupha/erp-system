@@ -21,5 +21,9 @@ import java.util.List;
 
 public interface ScheduledCacheRefreshService {
 
+    /**
+     * Refreshing the cache for items selected in the parameter
+     * @param ids List of items to refresh in the cache
+     */
     void refreshDefinedCacheItems(List<Long> ids);
 }

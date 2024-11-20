@@ -18,10 +18,13 @@ package io.github.erp.internal.service.ledgers;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.service.criteria.TransactionDetailsCriteria;
 import io.github.erp.service.dto.TransactionDetailsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -84,4 +87,11 @@ public interface InternalTransactionDetailsService {
      * @return the list of entities.
      */
     Page<TransactionDetailsDTO> search(String query, Pageable pageable);
+
+    /**
+     * Return a {@link List} of {@link TransactionDetailsDTO} which matches the criteria from the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the matching entities.
+     */
+    Page<TransactionDetailsDTO> findByCriteria(TransactionDetailsCriteria criteria, Pageable pageable);
 }
