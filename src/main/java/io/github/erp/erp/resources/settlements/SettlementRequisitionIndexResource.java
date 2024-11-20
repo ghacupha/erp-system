@@ -17,7 +17,7 @@ package io.github.erp.erp.resources.settlements;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.index.reindexer.SettlementRequisitionReIndexingService;
+import io.github.erp.erp.startUp.index.reindexer.SettlementRequisitionReIndexingService;
 import io.github.erp.erp.resources.SettlementIndexResource;
 import io.github.erp.security.SecurityUtils;
 import io.github.erp.service.SettlementRequisitionQueryService;

@@ -18,6 +18,8 @@ package io.github.erp.internal.service.cache;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.erp.startUp.cache.AbstractStartupCacheUpdateService;
+import io.github.erp.internal.ErpCacheProperties;
 import io.github.erp.internal.service.ledgers.InternalTransactionAccountService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -28,11 +30,12 @@ import java.util.List;
 
 @Transactional
 @Service("scheduledTransactionAccountCacheRefreshService")
-public class ScheduledTransactionAccountCacheRefreshServiceImpl  implements ScheduledCacheRefreshService {
+public class ScheduledTransactionAccountCacheRefreshServiceImpl extends AbstractStartupCacheUpdateService implements ScheduledCacheRefreshService {
 
     private final InternalTransactionAccountService internalDomainService;
 
-    public ScheduledTransactionAccountCacheRefreshServiceImpl(InternalTransactionAccountService internalDomainService) {
+    public ScheduledTransactionAccountCacheRefreshServiceImpl(ErpCacheProperties cacheProperties, InternalTransactionAccountService internalDomainService) {
+        super(cacheProperties);
         this.internalDomainService = internalDomainService;
     }
 
