@@ -124,8 +124,8 @@ public interface InternalAssetRegistrationRepository
 
     @Query(
         nativeQuery = true,
-        value = "SELECT CAST(asset_number AS BIGINT) FROM public.asset_registration",
-        countQuery = "SELECT asset_number FROM public.asset_registration"
+        value = "SELECT CAST(id AS BIGINT) FROM public.asset_registration",
+        countQuery = "SELECT id FROM public.asset_registration"
     )
     List<Long> findAllIds();
 
@@ -144,7 +144,7 @@ public interface InternalAssetRegistrationRepository
             "  LEFT JOIN asset_general_adjustment aga on reg.id = aga.asset_registration_id " +
             "  WHERE aga.asset_registration_id IS NOT NULL"
     )
-    List<Long> findAdjustedAssetIds();
+    List<Long> findAdjacentAssetIds();
 
     @Query(
         nativeQuery = true,

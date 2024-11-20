@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -75,10 +76,11 @@ public class TransactionAccountReportItemResourceProd {
     @GetMapping("/transaction-account-report-items")
     public ResponseEntity<List<TransactionAccountReportItemDTO>> getAllTransactionAccountReportItems(
         TransactionAccountReportItemCriteria criteria,
+        @RequestParam(value = "reportDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate reportDate,
         Pageable pageable
     ) {
         log.debug("REST request to get TransactionAccountReportItems by criteria: {}", criteria);
-        Page<TransactionAccountReportItemDTO> page = transactionAccountReportItemService.findAll(LocalDate.of(2024,7,31), pageable);
+        Page<TransactionAccountReportItemDTO> page = transactionAccountReportItemService.findAll(reportDate, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

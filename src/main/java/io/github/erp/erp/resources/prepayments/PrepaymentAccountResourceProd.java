@@ -189,7 +189,7 @@ public class PrepaymentAccountResourceProd {
     @GetMapping("/prepayment-accounts")
     public ResponseEntity<List<PrepaymentAccountDTO>> getAllPrepaymentAccounts(PrepaymentAccountCriteria criteria, Pageable pageable) {
         log.debug("REST request to get PrepaymentAccounts by criteria: {}", criteria);
-        Page<PrepaymentAccountDTO> page = prepaymentAccountQueryService.findByCriteria(criteria, pageable);
+        Page<PrepaymentAccountDTO> page = prepaymentAccountService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
