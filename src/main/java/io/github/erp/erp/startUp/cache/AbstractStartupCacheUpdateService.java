@@ -38,15 +38,16 @@ public abstract class AbstractStartupCacheUpdateService implements ApplicationLi
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
 
+        if (teardownRebuildCache && rebuildCache) {
+            clearCache();
+
+            refreshCache();
+        }
+
         if (rebuildCache) {
             refreshCache();
-
-            if (teardownRebuildCache) {
-                clearCache();
-
-                refreshCache();
-            }
         }
+
     }
 
     public abstract void refreshCache();
