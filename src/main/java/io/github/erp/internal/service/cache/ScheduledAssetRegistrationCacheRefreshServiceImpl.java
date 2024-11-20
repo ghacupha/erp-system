@@ -17,6 +17,8 @@ package io.github.erp.internal.service.cache;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.erp.startUp.cache.AbstractStartupCacheUpdateService;
+import io.github.erp.internal.ErpCacheProperties;
 import io.github.erp.internal.service.assets.InternalAssetRegistrationService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,11 +31,12 @@ import java.util.List;
  * asset relationships. We just hope this improves on our current situtation
  */
 @Service("scheduledAssetRegistrationCacheRefreshService")
-public class ScheduledAssetRegistrationCacheRefreshServiceImpl implements ScheduledCacheRefreshService {
+public class ScheduledAssetRegistrationCacheRefreshServiceImpl extends AbstractStartupCacheUpdateService implements ScheduledCacheRefreshService {
 
     private final InternalAssetRegistrationService assetRegistrationService;
 
-    public ScheduledAssetRegistrationCacheRefreshServiceImpl(InternalAssetRegistrationService assetRegistrationService) {
+    public ScheduledAssetRegistrationCacheRefreshServiceImpl(ErpCacheProperties cacheProperties, InternalAssetRegistrationService assetRegistrationService) {
+        super(cacheProperties);
         this.assetRegistrationService = assetRegistrationService;
     }
 

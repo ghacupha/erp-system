@@ -17,7 +17,7 @@ package io.github.erp.erp.resources.gdi;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.erp.index.engine_v1.AsynchronousIndexingService;
+import io.github.erp.erp.startUp.index.engine_v1.AsynchronousIndexingService;
 import io.github.erp.security.SecurityUtils;
 import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
