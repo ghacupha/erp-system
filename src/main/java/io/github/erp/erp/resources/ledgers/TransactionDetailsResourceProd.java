@@ -178,7 +178,8 @@ public class TransactionDetailsResourceProd {
     @GetMapping("/transaction-details")
     public ResponseEntity<List<TransactionDetailsDTO>> getAllTransactionDetails(TransactionDetailsCriteria criteria, Pageable pageable) {
         log.debug("REST request to get TransactionDetails by criteria: {}", criteria);
-        Page<TransactionDetailsDTO> page = transactionDetailsQueryService.findByCriteria(criteria, pageable);
+
+        Page<TransactionDetailsDTO> page = transactionDetailsService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
