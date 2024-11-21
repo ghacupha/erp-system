@@ -18,6 +18,8 @@ package io.github.erp.erp.resources.prepayments;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.hazelcast.map.IMap;
+import io.github.erp.internal.repository.InternalPrepaymentAmortizationRepository;
+import io.github.erp.internal.service.prepayments.InternalPrepaymentAmortizationService;
 import io.github.erp.repository.PrepaymentAmortizationRepository;
 import io.github.erp.service.PrepaymentAmortizationQueryService;
 import io.github.erp.service.PrepaymentAmortizationService;
@@ -59,15 +61,16 @@ public class PrepaymentAmortizationResourceProd {
 
     public final IMap<String, String> prepaymentsReportCache;
 
-    private final PrepaymentAmortizationService prepaymentAmortizationService;
+    private final InternalPrepaymentAmortizationService prepaymentAmortizationService;
 
-    private final PrepaymentAmortizationRepository prepaymentAmortizationRepository;
+    private final InternalPrepaymentAmortizationRepository prepaymentAmortizationRepository;
 
     private final PrepaymentAmortizationQueryService prepaymentAmortizationQueryService;
 
     public PrepaymentAmortizationResourceProd(
-        IMap<String, String> prepaymentsReportCache, PrepaymentAmortizationService prepaymentAmortizationService,
-        PrepaymentAmortizationRepository prepaymentAmortizationRepository,
+        IMap<String, String> prepaymentsReportCache,
+        InternalPrepaymentAmortizationService prepaymentAmortizationService,
+        InternalPrepaymentAmortizationRepository prepaymentAmortizationRepository,
         PrepaymentAmortizationQueryService prepaymentAmortizationQueryService
     ) {
         this.prepaymentsReportCache = prepaymentsReportCache;
@@ -192,7 +195,7 @@ public class PrepaymentAmortizationResourceProd {
         Pageable pageable
     ) {
         log.debug("REST request to get PrepaymentAmortizations by criteria: {}", criteria);
-        Page<PrepaymentAmortizationDTO> page = prepaymentAmortizationQueryService.findByCriteria(criteria, pageable);
+        Page<PrepaymentAmortizationDTO> page = prepaymentAmortizationService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
