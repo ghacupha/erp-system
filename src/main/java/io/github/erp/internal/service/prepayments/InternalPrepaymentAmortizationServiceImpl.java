@@ -58,12 +58,15 @@ public class InternalPrepaymentAmortizationServiceImpl implements InternalPrepay
     public InternalPrepaymentAmortizationServiceImpl(
         InternalPrepaymentAmortizationRepository prepaymentAmortizationRepository,
         PrepaymentAmortizationMapper prepaymentAmortizationMapper,
-        PrepaymentAmortizationSearchRepository prepaymentAmortizationSearchRepository, PrepaymentAmortizationQueryService prepaymentAmortizationQueryService
+        PrepaymentAmortizationSearchRepository prepaymentAmortizationSearchRepository,
+        PrepaymentAmortizationQueryService prepaymentAmortizationQueryService,
+        ScheduledCacheRefreshService scheduledTransactionAccountCacheRefreshService
     ) {
         this.prepaymentAmortizationRepository = prepaymentAmortizationRepository;
         this.prepaymentAmortizationMapper = prepaymentAmortizationMapper;
         this.prepaymentAmortizationSearchRepository = prepaymentAmortizationSearchRepository;
         this.prepaymentAmortizationQueryService = prepaymentAmortizationQueryService;
+        this.scheduledTransactionAccountCacheRefreshService = scheduledTransactionAccountCacheRefreshService;
     }
 
     @Override
