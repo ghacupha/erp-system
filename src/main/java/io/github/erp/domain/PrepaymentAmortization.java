@@ -36,7 +36,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "prepayment_amortization")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "prepaymentamortization")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "prepaymentamortization-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class PrepaymentAmortization implements Serializable {
 
     private static final long serialVersionUID = 1L;
