@@ -30,6 +30,8 @@ import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A PrepaymentAccount.
@@ -46,28 +48,35 @@ public class PrepaymentAccount implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "catalogue_number", nullable = false, unique = true)
+    @Field(type = FieldType.Keyword)
     private String catalogueNumber;
 
     @NotNull
     @Column(name = "particulars", nullable = false)
+    @Field(type = FieldType.Text)
     private String particulars;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "notes")
+    @Field(type = FieldType.Text, index = false)
     private String notes;
 
     @Column(name = "prepayment_amount", precision = 21, scale = 2)
+    @Field(type = FieldType.Double)
     private BigDecimal prepaymentAmount;
 
     @Column(name = "prepayment_guid")
+    @Field(type = FieldType.Text, index = false)
     private UUID prepaymentGuid;
 
     @Column(name = "recognition_date")
+    @Field(type = FieldType.Date)
     private LocalDate recognitionDate;
 
     @ManyToOne
