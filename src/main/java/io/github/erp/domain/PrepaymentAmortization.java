@@ -29,6 +29,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A PrepaymentAmortization.
@@ -45,21 +47,27 @@ public class PrepaymentAmortization implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @Column(name = "description")
+    @Field(type = FieldType.Text)
     private String description;
 
     @Column(name = "prepayment_period")
+    @Field(type = FieldType.Date)
     private LocalDate prepaymentPeriod;
 
     @Column(name = "prepayment_amount", precision = 21, scale = 2)
+    @Field(type = FieldType.Text)
     private BigDecimal prepaymentAmount;
 
     @Column(name = "inactive")
+    @Field(type = FieldType.Boolean)
     private Boolean inactive;
 
     @Column(name = "amortization_identifier")
+    @Field(type = FieldType.Text)
     private UUID amortizationIdentifier;
 
     @ManyToOne

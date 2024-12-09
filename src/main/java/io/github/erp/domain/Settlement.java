@@ -29,6 +29,8 @@ import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A Settlement.
@@ -36,7 +38,7 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "settlement")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "settlement")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "settlement-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class Settlement implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,39 +47,50 @@ public class Settlement implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @Column(name = "payment_number")
+    @Field(type = FieldType.Text)
     private String paymentNumber;
 
     @Column(name = "payment_date")
+    @Field(type = FieldType.Date)
     private LocalDate paymentDate;
 
     @Column(name = "payment_amount", precision = 21, scale = 2)
+    @Field(type = FieldType.Double)
     private BigDecimal paymentAmount;
 
     @Column(name = "description")
+    @Field(type = FieldType.Text)
     private String description;
 
     @Column(name = "notes")
+    @Field(type = FieldType.Text, index = false)
     private String notes;
 
     @Lob
     @Column(name = "calculation_file")
+    @Field(type = FieldType.Byte, index = false)
     private byte[] calculationFile;
 
     @Column(name = "calculation_file_content_type")
+    @Field(type = FieldType.Text, index = false)
     private String calculationFileContentType;
 
     @Column(name = "file_upload_token")
+    @Field(type = FieldType.Text, index = false)
     private String fileUploadToken;
 
     @Column(name = "compilation_token")
+    @Field(type = FieldType.Text, index = false)
     private String compilationToken;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "remarks")
+    @Field(type = FieldType.Text)
     private String remarks;
 
     @ManyToMany

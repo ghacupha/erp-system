@@ -28,6 +28,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A TransactionAccount.
@@ -35,7 +37,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "transaction_account")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "transactionaccount")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "transactionaccount-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class TransactionAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,34 +46,42 @@ public class TransactionAccount implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "account_number", nullable = false, unique = true)
+    @Field(type = FieldType.Keyword)
     private String accountNumber;
 
     @NotNull
     @Column(name = "account_name", nullable = false)
+    @Field(type = FieldType.Keyword)
     private String accountName;
 
     @Lob
     @Column(name = "notes")
+    @Field(type = FieldType.Byte, index = false)
     private byte[] notes;
 
     @Column(name = "notes_content_type")
+    @Field(type = FieldType.Text, index = false)
     private String notesContentType;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "account_type", nullable = false)
+    @Field(type = FieldType.Text, index = false)
     private AccountTypes accountType;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "account_sub_type", nullable = false)
+    @Field(type = FieldType.Text, index = false)
     private AccountSubTypes accountSubType;
 
     @Column(name = "dummy_account")
+    @Field(type = FieldType.Boolean, index = false)
     private Boolean dummyAccount;
 
     @ManyToOne(optional = false)

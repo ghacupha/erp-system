@@ -34,6 +34,10 @@ git checkout HEAD~1 src/main/java/io/github/erp/domain/DepreciationPeriod.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/DepreciationJob.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/AssetRegistration.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/Placeholder.java
+git checkout HEAD~1 src/main/java/io/github/erp/domain/PrepaymentAmortization.java
+git checkout HEAD~1 src/main/java/io/github/erp/domain/PrepaymentAccount.java
+git checkout HEAD~1 src/main/java/io/github/erp/domain/Settlement.java
+git checkout HEAD~1 src/main/java/io/github/erp/domain/TransactionAccount.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/Dealer.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/WorkProjectRegister.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/WorkInProgressRegistration.java
