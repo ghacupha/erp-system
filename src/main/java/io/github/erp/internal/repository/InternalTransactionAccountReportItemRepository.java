@@ -39,6 +39,41 @@ import java.util.List;
 public interface InternalTransactionAccountReportItemRepository
     extends JpaRepository<TransactionAccountReportItem, Long>, JpaSpecificationExecutor<TransactionAccountReportItem> {
 
+//    @Query(
+//        nativeQuery = true,
+//        value = "" +
+//            "WITH fiscal_year_period AS (" +
+//            "    SELECT start_date, end_date" +
+//            "    FROM fiscal_year" +
+//            "    WHERE :reportDate BETWEEN start_date AND end_date" +
+//            ")" +
+//            "SELECT " +
+//            "    ta.id, " +
+//            "    ta.account_name, " +
+//            "    ta.account_number, " +
+//            "    SUM(" +
+//            "        CASE " +
+//            "            WHEN td.debit_account_id = ta.id THEN -td.amount " +
+//            "            WHEN td.credit_account_id = ta.id THEN td.amount " +
+//            "            ELSE 0 " +
+//            "        END" +
+//            "    ) AS account_balance " +
+//            "FROM " +
+//            "    transaction_account ta " +
+//            "LEFT JOIN " +
+//            "    transaction_details td " +
+//            "    ON ta.id = td.debit_account_id OR ta.id = td.credit_account_id " +
+//            "JOIN " +
+//            "    fiscal_year_period fyp " +
+//            "    ON (ta.account_type != 'EQUITY' OR (ta.account_type = 'EQUITY' AND td.transaction_date BETWEEN fyp.start_date AND fyp.end_date))" +
+//            "WHERE " +
+//            "    td.transaction_date <= :reportDate" +
+//            "GROUP BY " +
+//            "    ta.id, " +
+//            "    ta.account_name, " +
+//            "    ta.account_number"
+//    )
+//    Page<TransactionAccountReportItem> calculateReportItems(@Param("reportDate") LocalDate reportDate, Pageable pageable);
 
     @Query(
         nativeQuery = true,
@@ -47,43 +82,28 @@ public interface InternalTransactionAccountReportItemRepository
             "    ta.id, " +
             "    ta.account_name, " +
             "    ta.account_number, " +
-            "    SUM(CASE " +
+            "    SUM(" +
+            "        CASE " +
             "            WHEN td.debit_account_id = ta.id THEN -td.amount " +
             "            WHEN td.credit_account_id = ta.id THEN td.amount " +
             "            ELSE 0 " +
-            "        END) AS account_balance " +
+            "        END" +
+            "    ) AS account_balance " +
             "FROM " +
             "    transaction_account ta " +
             "LEFT JOIN " +
-            "    transaction_details td ON ta.id = td.debit_account_id OR ta.id = td.credit_account_id " +
+            "    transaction_details td " +
+            "    ON ta.id = td.debit_account_id OR ta.id = td.credit_account_id " +
+            "JOIN " +
+            "    fiscal_year fy " +
+            "    ON (ta.account_type != 'EQUITY' OR (ta.account_type = 'EQUITY' AND td.transaction_date BETWEEN fy.start_date AND fy.end_date)) " +
             "WHERE " +
-            "   td.transaction_date <= :reportDate " +
-            // TODO "   -- AND ta.dummy_account = 'false' " +
+            "    td.transaction_date <= :reportDate " +
+            "    AND :reportDate BETWEEN fy.start_date AND fy.end_date " +
             "GROUP BY " +
             "    ta.id, " +
             "    ta.account_name, " +
-            "    ta.account_number ",
-        countQuery = "" +
-            "SELECT " +
-            "    ta.id, " +
-            "    ta.account_name, " +
-            "    ta.account_number, " +
-            "    SUM(CASE " +
-            "            WHEN td.debit_account_id = ta.id THEN -td.amount " +
-            "            WHEN td.credit_account_id = ta.id THEN td.amount " +
-            "            ELSE 0 " +
-            "        END) AS account_balance " +
-            "FROM " +
-            "    transaction_account ta " +
-            "LEFT JOIN " +
-            "    transaction_details td ON ta.id = td.debit_account_id OR ta.id = td.credit_account_id " +
-            "WHERE " +
-            "   td.transaction_date <= :reportDate " +
-            // TODO "   -- AND ta.dummy_account = 'false' " +
-            "GROUP BY " +
-            "    ta.id, " +
-            "    ta.account_name, " +
-            "    ta.account_number "
+            "    ta.account_number"
     )
     Page<TransactionAccountReportItem> calculateReportItems(@Param("reportDate") LocalDate reportDate, Pageable pageable);
 }
