@@ -6,7 +6,26 @@
       "fieldValidateRules": ["required", "unique"]
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipName": "reportingCurrency",
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "iso4217CurrencyCode",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "reportingEntity"
+    },
+    {
+      "relationshipName": "retainedEarningsAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "accountName",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "reportingEntity"
+    }
+  ],
   "service": "serviceImpl",
   "dto": "mapstruct",
   "jpaMetamodelFiltering": true,

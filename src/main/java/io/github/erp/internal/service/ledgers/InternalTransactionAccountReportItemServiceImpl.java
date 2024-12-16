@@ -101,7 +101,11 @@ public class InternalTransactionAccountReportItemServiceImpl implements Internal
     @Transactional(readOnly = true)
     public Page<TransactionAccountReportItemDTO> findAll(LocalDate reportDate, Pageable pageable) {
         log.debug("Request to get all TransactionAccountReportItems");
-        return transactionAccountReportItemRepository.calculateReportItems(reportDate, pageable).map(transactionAccountReportItemMapper::toDto);
+
+        // TODO fetch reportingEntityId from ApplicationUser context
+        long reportingEntityId = 911651;
+
+        return transactionAccountReportItemRepository.calculateReportItems(reportDate, reportingEntityId, pageable).map(transactionAccountReportItemMapper::toDto);
     }
 
     @Override

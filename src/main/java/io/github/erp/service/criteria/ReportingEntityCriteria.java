@@ -46,6 +46,10 @@ public class ReportingEntityCriteria implements Serializable, Criteria {
 
     private StringFilter entityName;
 
+    private LongFilter reportingCurrencyId;
+
+    private LongFilter retainedEarningsAccountId;
+
     private Boolean distinct;
 
     public ReportingEntityCriteria() {}
@@ -53,6 +57,8 @@ public class ReportingEntityCriteria implements Serializable, Criteria {
     public ReportingEntityCriteria(ReportingEntityCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.entityName = other.entityName == null ? null : other.entityName.copy();
+        this.reportingCurrencyId = other.reportingCurrencyId == null ? null : other.reportingCurrencyId.copy();
+        this.retainedEarningsAccountId = other.retainedEarningsAccountId == null ? null : other.retainedEarningsAccountId.copy();
         this.distinct = other.distinct;
     }
 
@@ -91,6 +97,36 @@ public class ReportingEntityCriteria implements Serializable, Criteria {
         this.entityName = entityName;
     }
 
+    public LongFilter getReportingCurrencyId() {
+        return reportingCurrencyId;
+    }
+
+    public LongFilter reportingCurrencyId() {
+        if (reportingCurrencyId == null) {
+            reportingCurrencyId = new LongFilter();
+        }
+        return reportingCurrencyId;
+    }
+
+    public void setReportingCurrencyId(LongFilter reportingCurrencyId) {
+        this.reportingCurrencyId = reportingCurrencyId;
+    }
+
+    public LongFilter getRetainedEarningsAccountId() {
+        return retainedEarningsAccountId;
+    }
+
+    public LongFilter retainedEarningsAccountId() {
+        if (retainedEarningsAccountId == null) {
+            retainedEarningsAccountId = new LongFilter();
+        }
+        return retainedEarningsAccountId;
+    }
+
+    public void setRetainedEarningsAccountId(LongFilter retainedEarningsAccountId) {
+        this.retainedEarningsAccountId = retainedEarningsAccountId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -108,12 +144,18 @@ public class ReportingEntityCriteria implements Serializable, Criteria {
             return false;
         }
         final ReportingEntityCriteria that = (ReportingEntityCriteria) o;
-        return Objects.equals(id, that.id) && Objects.equals(entityName, that.entityName) && Objects.equals(distinct, that.distinct);
+        return (
+            Objects.equals(id, that.id) &&
+            Objects.equals(entityName, that.entityName) &&
+            Objects.equals(reportingCurrencyId, that.reportingCurrencyId) &&
+            Objects.equals(retainedEarningsAccountId, that.retainedEarningsAccountId) &&
+            Objects.equals(distinct, that.distinct)
+        );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, entityName, distinct);
+        return Objects.hash(id, entityName, reportingCurrencyId, retainedEarningsAccountId, distinct);
     }
 
     // prettier-ignore
@@ -122,6 +164,8 @@ public class ReportingEntityCriteria implements Serializable, Criteria {
         return "ReportingEntityCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (entityName != null ? "entityName=" + entityName + ", " : "") +
+            (reportingCurrencyId != null ? "reportingCurrencyId=" + reportingCurrencyId + ", " : "") +
+            (retainedEarningsAccountId != null ? "retainedEarningsAccountId=" + retainedEarningsAccountId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

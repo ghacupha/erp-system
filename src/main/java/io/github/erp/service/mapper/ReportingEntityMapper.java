@@ -25,8 +25,12 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ReportingEntity} and its DTO {@link ReportingEntityDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = { SettlementCurrencyMapper.class, TransactionAccountMapper.class })
 public interface ReportingEntityMapper extends EntityMapper<ReportingEntityDTO, ReportingEntity> {
+    @Mapping(target = "reportingCurrency", source = "reportingCurrency", qualifiedByName = "iso4217CurrencyCode")
+    @Mapping(target = "retainedEarningsAccount", source = "retainedEarningsAccount", qualifiedByName = "accountName")
+    ReportingEntityDTO toDto(ReportingEntity s);
+
     @Named("entityName")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")

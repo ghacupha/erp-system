@@ -18,6 +18,7 @@ package io.github.erp.domain;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -45,6 +46,19 @@ public class ReportingEntity implements Serializable {
     @Column(name = "entity_name", nullable = false, unique = true)
     private String entityName;
 
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    @OneToOne
+    @JoinColumn(unique = true)
+    private SettlementCurrency reportingCurrency;
+
+    @JsonIgnoreProperties(
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
+        allowSetters = true
+    )
+    @OneToOne
+    @JoinColumn(unique = true)
+    private TransactionAccount retainedEarningsAccount;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -71,6 +85,32 @@ public class ReportingEntity implements Serializable {
 
     public void setEntityName(String entityName) {
         this.entityName = entityName;
+    }
+
+    public SettlementCurrency getReportingCurrency() {
+        return this.reportingCurrency;
+    }
+
+    public void setReportingCurrency(SettlementCurrency settlementCurrency) {
+        this.reportingCurrency = settlementCurrency;
+    }
+
+    public ReportingEntity reportingCurrency(SettlementCurrency settlementCurrency) {
+        this.setReportingCurrency(settlementCurrency);
+        return this;
+    }
+
+    public TransactionAccount getRetainedEarningsAccount() {
+        return this.retainedEarningsAccount;
+    }
+
+    public void setRetainedEarningsAccount(TransactionAccount transactionAccount) {
+        this.retainedEarningsAccount = transactionAccount;
+    }
+
+    public ReportingEntity retainedEarningsAccount(TransactionAccount transactionAccount) {
+        this.setRetainedEarningsAccount(transactionAccount);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
