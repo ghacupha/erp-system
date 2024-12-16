@@ -32,6 +32,10 @@ public class ReportingEntityDTO implements Serializable {
     @NotNull
     private String entityName;
 
+    private SettlementCurrencyDTO reportingCurrency;
+
+    private TransactionAccountDTO retainedEarningsAccount;
+
     public Long getId() {
         return id;
     }
@@ -46,6 +50,22 @@ public class ReportingEntityDTO implements Serializable {
 
     public void setEntityName(String entityName) {
         this.entityName = entityName;
+    }
+
+    public SettlementCurrencyDTO getReportingCurrency() {
+        return reportingCurrency;
+    }
+
+    public void setReportingCurrency(SettlementCurrencyDTO reportingCurrency) {
+        this.reportingCurrency = reportingCurrency;
+    }
+
+    public TransactionAccountDTO getRetainedEarningsAccount() {
+        return retainedEarningsAccount;
+    }
+
+    public void setRetainedEarningsAccount(TransactionAccountDTO retainedEarningsAccount) {
+        this.retainedEarningsAccount = retainedEarningsAccount;
     }
 
     @Override
@@ -75,6 +95,8 @@ public class ReportingEntityDTO implements Serializable {
         return "ReportingEntityDTO{" +
             "id=" + getId() +
             ", entityName='" + getEntityName() + "'" +
+            ", reportingCurrency=" + getReportingCurrency() +
+            ", retainedEarningsAccount=" + getRetainedEarningsAccount() +
             "}";
     }
 }

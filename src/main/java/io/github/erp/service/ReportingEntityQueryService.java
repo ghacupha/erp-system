@@ -119,6 +119,24 @@ public class ReportingEntityQueryService extends QueryService<ReportingEntity> {
             if (criteria.getEntityName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getEntityName(), ReportingEntity_.entityName));
             }
+            if (criteria.getReportingCurrencyId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getReportingCurrencyId(),
+                            root -> root.join(ReportingEntity_.reportingCurrency, JoinType.LEFT).get(SettlementCurrency_.id)
+                        )
+                    );
+            }
+            if (criteria.getRetainedEarningsAccountId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getRetainedEarningsAccountId(),
+                            root -> root.join(ReportingEntity_.retainedEarningsAccount, JoinType.LEFT).get(TransactionAccount_.id)
+                        )
+                    );
+            }
         }
         return specification;
     }

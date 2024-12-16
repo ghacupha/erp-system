@@ -26,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.ReportingEntity;
+import io.github.erp.domain.SettlementCurrency;
+import io.github.erp.domain.TransactionAccount;
 import io.github.erp.repository.ReportingEntityRepository;
 import io.github.erp.repository.search.ReportingEntitySearchRepository;
 import io.github.erp.service.criteria.ReportingEntityCriteria;
@@ -308,6 +310,58 @@ class ReportingEntityResourceIT {
 
         // Get all the reportingEntityList where entityName does not contain UPDATED_ENTITY_NAME
         defaultReportingEntityShouldBeFound("entityName.doesNotContain=" + UPDATED_ENTITY_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllReportingEntitiesByReportingCurrencyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        reportingEntityRepository.saveAndFlush(reportingEntity);
+        SettlementCurrency reportingCurrency;
+        if (TestUtil.findAll(em, SettlementCurrency.class).isEmpty()) {
+            reportingCurrency = SettlementCurrencyResourceIT.createEntity(em);
+            em.persist(reportingCurrency);
+            em.flush();
+        } else {
+            reportingCurrency = TestUtil.findAll(em, SettlementCurrency.class).get(0);
+        }
+        em.persist(reportingCurrency);
+        em.flush();
+        reportingEntity.setReportingCurrency(reportingCurrency);
+        reportingEntityRepository.saveAndFlush(reportingEntity);
+        Long reportingCurrencyId = reportingCurrency.getId();
+
+        // Get all the reportingEntityList where reportingCurrency equals to reportingCurrencyId
+        defaultReportingEntityShouldBeFound("reportingCurrencyId.equals=" + reportingCurrencyId);
+
+        // Get all the reportingEntityList where reportingCurrency equals to (reportingCurrencyId + 1)
+        defaultReportingEntityShouldNotBeFound("reportingCurrencyId.equals=" + (reportingCurrencyId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllReportingEntitiesByRetainedEarningsAccountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        reportingEntityRepository.saveAndFlush(reportingEntity);
+        TransactionAccount retainedEarningsAccount;
+        if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
+            retainedEarningsAccount = TransactionAccountResourceIT.createEntity(em);
+            em.persist(retainedEarningsAccount);
+            em.flush();
+        } else {
+            retainedEarningsAccount = TestUtil.findAll(em, TransactionAccount.class).get(0);
+        }
+        em.persist(retainedEarningsAccount);
+        em.flush();
+        reportingEntity.setRetainedEarningsAccount(retainedEarningsAccount);
+        reportingEntityRepository.saveAndFlush(reportingEntity);
+        Long retainedEarningsAccountId = retainedEarningsAccount.getId();
+
+        // Get all the reportingEntityList where retainedEarningsAccount equals to retainedEarningsAccountId
+        defaultReportingEntityShouldBeFound("retainedEarningsAccountId.equals=" + retainedEarningsAccountId);
+
+        // Get all the reportingEntityList where retainedEarningsAccount equals to (retainedEarningsAccountId + 1)
+        defaultReportingEntityShouldNotBeFound("retainedEarningsAccountId.equals=" + (retainedEarningsAccountId + 1));
     }
 
     /**
