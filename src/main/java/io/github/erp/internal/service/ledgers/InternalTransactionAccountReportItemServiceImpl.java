@@ -20,6 +20,7 @@ package io.github.erp.internal.service.ledgers;
 
 import io.github.erp.domain.TransactionAccountReportItem;
 import io.github.erp.internal.repository.InternalTransactionAccountReportItemRepository;
+import io.github.erp.internal.service.UnpagedPageRequest;
 import io.github.erp.repository.TransactionAccountReportItemRepository;
 import io.github.erp.repository.search.TransactionAccountReportItemSearchRepository;
 import io.github.erp.service.dto.TransactionAccountReportItemDTO;
@@ -28,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -105,7 +107,9 @@ public class InternalTransactionAccountReportItemServiceImpl implements Internal
         // TODO fetch reportingEntityId from ApplicationUser context
         long reportingEntityId = 911651;
 
-        return transactionAccountReportItemRepository.calculateReportItems(reportDate, reportingEntityId, pageable).map(transactionAccountReportItemMapper::toDto);
+        Pageable unpagedPageable = UnpagedPageRequest.of(pageable.getPageNumber(), 5);
+
+        return transactionAccountReportItemRepository.calculateReportItems(reportDate, reportingEntityId, unpagedPageable).map(transactionAccountReportItemMapper::toDto);
     }
 
     @Override

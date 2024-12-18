@@ -137,6 +137,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/granular-data/**").hasAnyAuthority(
                 AuthoritiesConstants.GRANULAR_REPORTS_USER,
                 AuthoritiesConstants.LEASE_MANAGER,
+                AuthoritiesConstants.ADMIN,
                 AuthoritiesConstants.PREPAYMENTS_MODULE_USER,
                 AuthoritiesConstants.FIXED_ASSETS_USER)
             .antMatchers("/api/**").authenticated()

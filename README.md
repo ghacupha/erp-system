@@ -817,3 +817,81 @@ The idea is that the request object carries the context information, and that's 
 like business-documents where we needed to track who is creating, and accessing and modifying documents, we desperately needed an automatic way to tracking who is doing what with our precious documents. So that how the application-user context was created.
 It retrieves the user information from the JWT signature of the request, and then retrieves the appropriate user and records the information. And therefore doing the same with other sensitive entities we have been able to improve the coverage of our monitors by that much.
 
+#### Update 2024-12-18 1643hours (Several levels deep into Jehoiada Series)
+
+Took a lot of time on this and even attempted to come up with accounting systems in [other](https://github.com/ghacupha/book-keeper) projects. This time though
+we thought not to do anything but think about it first. The notion was clear that the transaction-account was supposed itself
+to be merely but a label. Anything more than that would be a disaster.
+Having agreed (with myself, I generally hate simplicity) to make the account merely a label, I went even
+further and simplified the concept of double entry by doing it like this: 
+We create a table with 3 important columns
+ - debit account
+ - credit account
+ - amount
+
+It's as simple as that. We have had many experiments and all of them failed with amazing consistency. It's either we could not post
+transactions as the transaction query became too hard, or the transaction query became easy and then we just couldn't
+run a report.
+In this case we decide it was necessary to have some sort of comprehension around what is happening as a result of IFRS16 multiple modules
+and transactions because otherwise we reconcile nothing. This means pooling information from the lease-liability-schedule
+as well as the depreciation-schedule (for ROU), and the initial recognition routines. We define several tables with rules for posting. For instance
+there would be a table about initial recognition rules, that dictate that the transaction for initial recognition debits this rou account and credits
+that lease liability account. Another table might dictate that an rou amortization transaction debits this instance of a transaction-account (for instance
+say rou depreciation account), and credits that rou account. And so on and so forth. We have tables for lease liability, interest expense rules,
+posting of lease payment to principal and even lease payment to interest and bunch of others. The modules are so many and diverse, so that for as little
+as 50 lease contracts and depending on the length of the period, a single compilation of that 50-contract register could render a 1000+ transactions.
+This right here by the way is the thing about leases in IFRS16. Accounting complexity. The posting of transaction consist of entries of volumes which are just crazy.
+If you have more than a hundred contracts don't even think of attempting to use Excel unless you have hired like several accountants and all of them with god-tier
+excel skills. If you only have a few of those lying around you have no choice but to automate. Then valuation is another beast I have
+not even attempted to think about and that too could have book-keeping consequences. Just imagine two-years in, an auditor discovers
+a flaw in your present-value computation. Which accounting entries would you apply to make the correction?
+
+So the true test of the ability of this model was of course the ability to generate a working trial balance. Which should now be easy because every transaction
+faces database rules enforcing that every amount posted needs to have a debit and credit amount, right? Wrong.
+If you dump the transaction-details table and take a summary of all credits subtracting all debits and group by account the total will always be zero. Because items in
+credit balance have positive amounts while accounts in debit balance will have negative amounts.
+That's how the double-entry rule is enforced. It's not in the logic or the application layer or client, but in the database itself. Didn't even bother to label with the infamous
+dr and cr tags.
+
+In fact this is the foundation for the reporting on accounts (here at erp-systems): we select the transaction account (number and name), then for the amount (and we are thinking about the account balance here)
+we take a sum of all transaction-account credits, and a subtraction of all transaction-account debits for each account.
+This then tells you that for accounts in which we post credits, i.e. liability, equity, gain in OCI, you get a positive amount; and for accounts
+where we normally post debits i.e. assets, expenses, loss in OCI we get negative amounts. If you take a sum of all amounts, you will get a total of zero.
+The challenge then is with equity account, i.e. expenses and income, in which in accounting practice we
+are to reflect only the transactions that have taken place in the present accounting period excluding previous periods that
+have been or should have been included with the retained earnings account. Here we separate ourselves from any garb of assuming simplicity.
+Because we require a  reliable and global retained-earnings-account configuration into which we add all the credits from previous periods
+and subtract all the debits from the previous periods. This is happening within the time in which the query runs, which thankfully is stupid fast, because nothing
+is taking place within the application server itself but within the 100+ loc sql query. I suppose the resulting query could have been simpler
+if we delegated some bits in the application server and may be give the system just a little bit of control. I know this will have the unintended 
+consequences such as expensive time-taking queries, but it would unshackle the system from the punitive maintenance cost of the query we have had to create
+to produce this report. This would then transfer consequences to the Java API, and that's not an easy road to travel is someone else other
+than you (me in this case) will ever need to maintain the code. So what we essentially have are stories about how the pattern
+works but the implementation is not something I can show you from the code; only the grand theme of the transaction-details design pattern. Perhaps this is 
+why not no one actually discusses their pattern since the pattern is smeared all over the code and implementation and obviously there's got be
+tight controls over implementation of the front-end
+
+Next round of complexity will include: 
+  - introducing the concept of accounting-period, 
+  - functional-currency, conversion and presentation, 
+  - tracking of FX gains and losses automatically
+  - dummy accounts
+
+The last one is an important part as it will enable someone to post unbalanced transactions. We are not
+talking about the amounts per se, we are taking about transactions that could involve a posting of a 
+single debit against 2+ credit accounts or the vice versa, or even post transactions where the debit is a different currency
+from the credit or vice versa. The idea is that the unbalanced transaction presents as a balanced transaction in the transaction-details
+table because for each entry the system creates an opposite transaction-entry in a dummy account.
+
+This done we can dare say we have reinvented the wheel on the accounting module for purposes of an erp-system, with which we can track
+financial consequences of fixed assets, and assets depreciation, capitalization, prepayments and leases. Am
+saying "re-invented" because am certain many proprietary software companies have already accomplished this but no one dares
+even try a white paper to explain how to handle accounting transactions. Am not talking about pseudocode here, but the design patterns
+for simple double-entry accounting simply don't exist even in the open source space. The ones that do, like GNUCash have never
+thought to do a write-up of the accounting design pattern in the context of persistent data. If they do, am certain it would be such an
+enthralling read; because the efficiency of their model is simply out of this world. I would certainly do away with this "transaction-details" model
+(ok that's the name of the design pattern for now), and use the GNUCash accounting design pattern itself. Try looking, and I did, and you will find only
+academic illustrations of the accounting process such as the one I have done [myself](https://github.com/ghacupha/book-keeper) with very 
+little regard for concerns like persistence.
+Why someone would create an accounting tool without instructions on how to save data beyond some school illustration is beyond me,
+because book keeping is about keeping records. 
