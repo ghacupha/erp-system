@@ -39,114 +39,96 @@ import java.util.List;
 public interface InternalTransactionAccountReportItemRepository
     extends JpaRepository<TransactionAccountReportItem, Long>, JpaSpecificationExecutor<TransactionAccountReportItem> {
 
-//    @Query(
-//        nativeQuery = true,
-//        value = "" +
-//            "WITH fiscal_year_period AS (" +
-//            "    SELECT start_date, end_date" +
-//            "    FROM fiscal_year" +
-//            "    WHERE :reportDate BETWEEN start_date AND end_date" +
-//            ")" +
-//            "SELECT " +
-//            "    ta.id, " +
-//            "    ta.account_name, " +
-//            "    ta.account_number, " +
-//            "    SUM(" +
-//            "        CASE " +
-//            "            WHEN td.debit_account_id = ta.id THEN -td.amount " +
-//            "            WHEN td.credit_account_id = ta.id THEN td.amount " +
-//            "            ELSE 0 " +
-//            "        END" +
-//            "    ) AS account_balance " +
-//            "FROM " +
-//            "    transaction_account ta " +
-//            "LEFT JOIN " +
-//            "    transaction_details td " +
-//            "    ON ta.id = td.debit_account_id OR ta.id = td.credit_account_id " +
-//            "JOIN " +
-//            "    fiscal_year_period fyp " +
-//            "    ON (ta.account_type != 'EQUITY' OR (ta.account_type = 'EQUITY' AND td.transaction_date BETWEEN fyp.start_date AND fyp.end_date))" +
-//            "WHERE " +
-//            "    td.transaction_date <= :reportDate" +
-//            "GROUP BY " +
-//            "    ta.id, " +
-//            "    ta.account_name, " +
-//            "    ta.account_number"
-//    )
-//    Page<TransactionAccountReportItem> calculateReportItems(@Param("reportDate") LocalDate reportDate, Pageable pageable);
-
-//    @Query(
-//        nativeQuery = true,
-//        value = "" +
-//            "SELECT " +
-//            "    ta.id, " +
-//            "    ta.account_name, " +
-//            "    ta.account_number, " +
-//            "    SUM(" +
-//            "        CASE " +
-//            "            WHEN td.debit_account_id = ta.id THEN -td.amount " +
-//            "            WHEN td.credit_account_id = ta.id THEN td.amount " +
-//            "            ELSE 0 " +
-//            "        END" +
-//            "    ) AS account_balance " +
-//            "FROM " +
-//            "    transaction_account ta " +
-//            "LEFT JOIN " +
-//            "    transaction_details td " +
-//            "    ON ta.id = td.debit_account_id OR ta.id = td.credit_account_id " +
-//            "JOIN " +
-//            "    fiscal_year fy " +
-//            "    ON (ta.account_type != 'EQUITY' OR (ta.account_type = 'EQUITY' AND td.transaction_date BETWEEN fy.start_date AND fy.end_date)) " +
-//            "WHERE " +
-//            "    td.transaction_date <= :reportDate " +
-//            "    AND :reportDate BETWEEN fy.start_date AND fy.end_date " +
-//            "GROUP BY " +
-//            "    ta.id, " +
-//            "    ta.account_name, " +
-//            "    ta.account_number"
-//    )
-//    Page<TransactionAccountReportItem> calculateReportItems(@Param("reportDate") LocalDate reportDate, Pageable pageable);
-
     @Query(
         nativeQuery = true,
+        countQuery = "" +
+            "SELECT COUNT(*) FROM (" +
+            "    SELECT ta.id " +
+            "    FROM transaction_account ta " +
+            "    LEFT JOIN transaction_details td " +
+            "        ON ta.id = td.debit_account_id OR ta.id = td.credit_account_id " +
+            "    JOIN reporting_entity re " +
+            "        ON re.id = :reportingEntityId " +
+            "    WHERE td.transaction_date <= :reportDate " +
+            "    GROUP BY ta.id " +
+            ") AS subquery",
         value = "" +
             "WITH fiscal_year_period AS (" +
             "    SELECT start_date, end_date" +
             "    FROM fiscal_year" +
             "    WHERE :reportDate BETWEEN start_date AND end_date" +
             ")" +
-            "SELECT " +
-            "    ta.id, " +
-            "    ta.account_name, " +
-            "    ta.account_number, " +
-            "    SUM(" +
-            "        CASE " +
-            "            WHEN ta.id = re.retained_earnings_account_id THEN td.amount " +
-            "            WHEN td.debit_account_id = ta.id THEN -td.amount " +
-            "            WHEN td.credit_account_id = ta.id THEN td.amount " +
-            "            ELSE 0 " +
-            "        END" +
-            "    ) AS account_balance " +
-            "FROM " +
-            "    transaction_account ta " +
-            "LEFT JOIN " +
-            "    transaction_details td " +
-            "    ON ta.id = td.debit_account_id OR ta.id = td.credit_account_id " +
-            "JOIN " +
-            "    reporting_entity re " +
-            "    ON re.id = :reportingEntityId " +
-            "JOIN " +
-            "    fiscal_year_period fyp " +
-            "    ON (ta.account_type != 'EQUITY' OR (ta.account_type = 'EQUITY' AND td.transaction_date BETWEEN fyp.start_date AND fyp.end_date)) " +
-            "WHERE " +
-            "    td.transaction_date <= :reportDate " +
-            "    AND (ta.id != re.retained_earnings_account_id OR (ta.id = re.retained_earnings_account_id AND td.transaction_date < fyp.start_date)) " +
-            "GROUP BY " +
-            "    ta.id, " +
-            "    ta.account_name, " +
-            "    ta.account_number"
+            "SELECT * FROM (" +
+            "    SELECT " +
+            "        ta.id, " +
+            "        ta.account_name, " +
+            "        ta.account_number, " +
+            "        SUM(" +
+            "            CASE " +
+            "                WHEN ta.account_type = 'EQUITY' AND td.transaction_date BETWEEN fyp.start_date AND :reportDate THEN " +
+            "                    CASE " +
+            "                        WHEN td.debit_account_id = ta.id THEN -td.amount " +
+            "                        WHEN td.credit_account_id = ta.id THEN td.amount " +
+            "                        ELSE 0 " +
+            "                    END " +
+            "                WHEN ta.account_type != 'EQUITY' THEN " +
+            "                    CASE " +
+            "                        WHEN td.debit_account_id = ta.id THEN -td.amount " +
+            "                        WHEN td.credit_account_id = ta.id THEN td.amount " +
+            "                        ELSE 0 " +
+            "                    END " +
+            "                ELSE 0 " +
+            "            END" +
+            "        ) AS account_balance " +
+            "    FROM " +
+            "        transaction_account ta " +
+            "    LEFT JOIN " +
+            "        transaction_details td " +
+            "        ON ta.id = td.debit_account_id OR ta.id = td.credit_account_id " +
+            "    JOIN " +
+            "        reporting_entity re " +
+            "        ON re.id = :reportingEntityId " +
+            "    JOIN " +
+            "        fiscal_year_period fyp " +
+            "        ON (ta.account_type != 'EQUITY' OR (ta.account_type = 'EQUITY' AND td.transaction_date BETWEEN fyp.start_date AND fyp.end_date)) " +
+            "    WHERE " +
+            "        td.transaction_date <= :reportDate " +
+            "    GROUP BY " +
+            "        ta.id, " +
+            "        ta.account_name, " +
+            "        ta.account_number " +
+            "    UNION ALL " +
+            "    SELECT " +
+            "        ta.id, " +
+            "        ta.account_name, " +
+            "        ta.account_number, " +
+            "        SUM(" +
+            "            CASE " +
+            "                WHEN td.debit_account_id IN (SELECT id FROM transaction_account WHERE account_type = 'EQUITY') AND td.transaction_date < fyp.start_date THEN -td.amount " +
+            "                WHEN td.credit_account_id IN (SELECT id FROM transaction_account WHERE account_type = 'EQUITY') AND td.transaction_date < fyp.start_date THEN td.amount " +
+            "                ELSE 0 " +
+            "            END" +
+            "        ) AS account_balance " +
+            "    FROM " +
+            "        transaction_details td " +
+            "    JOIN " +
+            "        reporting_entity re " +
+            "        ON re.id = :reportingEntityId " +
+            "    JOIN " +
+            "        transaction_account ta " +
+            "        ON ta.id = re.retained_earnings_account_id " +
+            "    JOIN " +
+            "        fiscal_year_period fyp " +
+            "        ON td.transaction_date < fyp.start_date " +
+            "    WHERE " +
+            "        td.transaction_date < fyp.start_date " +
+            "        AND (td.debit_account_id IN (SELECT id FROM transaction_account WHERE account_type = 'EQUITY') OR td.credit_account_id IN (SELECT id FROM transaction_account WHERE account_type = 'EQUITY')) " +
+            "    GROUP BY " +
+            "        ta.id, " +
+            "        ta.account_name, " +
+            "        ta.account_number" +
+            ") AS combined " +
+            "ORDER BY combined.id"
     )
     Page<TransactionAccountReportItem> calculateReportItems(@Param("reportDate") LocalDate reportDate, @Param("reportingEntityId") Long reportingEntityId, Pageable pageable);
-
-
 }
