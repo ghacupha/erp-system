@@ -1,7 +1,7 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,7 @@ package io.github.erp.web.rest;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import static io.github.erp.web.rest.TestUtil.sameInstant;
 import static io.github.erp.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.AssetCategory;
 import io.github.erp.domain.IFRS16LeaseContract;
+import io.github.erp.domain.LeasePeriod;
 import io.github.erp.domain.RouDepreciationEntry;
 import io.github.erp.domain.RouModelMetadata;
 import io.github.erp.domain.TransactionAccount;
@@ -37,6 +39,10 @@ import io.github.erp.service.criteria.RouDepreciationEntryCriteria;
 import io.github.erp.service.dto.RouDepreciationEntryDTO;
 import io.github.erp.service.mapper.RouDepreciationEntryMapper;
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -87,6 +93,31 @@ class RouDepreciationEntryResourceIT {
     private static final Integer UPDATED_SEQUENCE_NUMBER = 2;
     private static final Integer SMALLER_SEQUENCE_NUMBER = 1 - 1;
 
+    private static final Boolean DEFAULT_ACTIVATED = false;
+    private static final Boolean UPDATED_ACTIVATED = true;
+
+    private static final Boolean DEFAULT_IS_DELETED = false;
+    private static final Boolean UPDATED_IS_DELETED = true;
+
+    private static final UUID DEFAULT_BATCH_JOB_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_BATCH_JOB_IDENTIFIER = UUID.randomUUID();
+
+    private static final UUID DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
+
+    private static final UUID DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER = UUID.randomUUID();
+
+    private static final UUID DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER = UUID.randomUUID();
+    private static final UUID UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER = UUID.randomUUID();
+
+    private static final ZonedDateTime DEFAULT_COMPILATION_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_COMPILATION_TIME = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime SMALLER_COMPILATION_TIME = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
+
+    private static final Boolean DEFAULT_INVALIDATED = false;
+    private static final Boolean UPDATED_INVALIDATED = true;
+
     private static final String ENTITY_API_URL = "/api/rou-depreciation-entries";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/rou-depreciation-entries";
@@ -129,7 +160,15 @@ class RouDepreciationEntryResourceIT {
             .outstandingAmount(DEFAULT_OUTSTANDING_AMOUNT)
             .rouAssetIdentifier(DEFAULT_ROU_ASSET_IDENTIFIER)
             .rouDepreciationIdentifier(DEFAULT_ROU_DEPRECIATION_IDENTIFIER)
-            .sequenceNumber(DEFAULT_SEQUENCE_NUMBER);
+            .sequenceNumber(DEFAULT_SEQUENCE_NUMBER)
+            .activated(DEFAULT_ACTIVATED)
+            .isDeleted(DEFAULT_IS_DELETED)
+            .batchJobIdentifier(DEFAULT_BATCH_JOB_IDENTIFIER)
+            .depreciationAmountStepIdentifier(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
+            .outstandingAmountStepIdentifier(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER)
+            .flagAmortisedStepIdentifier(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER)
+            .compilationTime(DEFAULT_COMPILATION_TIME)
+            .invalidated(DEFAULT_INVALIDATED);
         // Add required entity
         TransactionAccount transactionAccount;
         if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
@@ -172,6 +211,16 @@ class RouDepreciationEntryResourceIT {
             rouModelMetadata = TestUtil.findAll(em, RouModelMetadata.class).get(0);
         }
         rouDepreciationEntry.setRouMetadata(rouModelMetadata);
+        // Add required entity
+        LeasePeriod leasePeriod;
+        if (TestUtil.findAll(em, LeasePeriod.class).isEmpty()) {
+            leasePeriod = LeasePeriodResourceIT.createEntity(em);
+            em.persist(leasePeriod);
+            em.flush();
+        } else {
+            leasePeriod = TestUtil.findAll(em, LeasePeriod.class).get(0);
+        }
+        rouDepreciationEntry.setLeasePeriod(leasePeriod);
         return rouDepreciationEntry;
     }
 
@@ -188,7 +237,15 @@ class RouDepreciationEntryResourceIT {
             .outstandingAmount(UPDATED_OUTSTANDING_AMOUNT)
             .rouAssetIdentifier(UPDATED_ROU_ASSET_IDENTIFIER)
             .rouDepreciationIdentifier(UPDATED_ROU_DEPRECIATION_IDENTIFIER)
-            .sequenceNumber(UPDATED_SEQUENCE_NUMBER);
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
+            .activated(UPDATED_ACTIVATED)
+            .isDeleted(UPDATED_IS_DELETED)
+            .batchJobIdentifier(UPDATED_BATCH_JOB_IDENTIFIER)
+            .depreciationAmountStepIdentifier(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
+            .outstandingAmountStepIdentifier(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER)
+            .flagAmortisedStepIdentifier(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER)
+            .compilationTime(UPDATED_COMPILATION_TIME)
+            .invalidated(UPDATED_INVALIDATED);
         // Add required entity
         TransactionAccount transactionAccount;
         if (TestUtil.findAll(em, TransactionAccount.class).isEmpty()) {
@@ -231,6 +288,16 @@ class RouDepreciationEntryResourceIT {
             rouModelMetadata = TestUtil.findAll(em, RouModelMetadata.class).get(0);
         }
         rouDepreciationEntry.setRouMetadata(rouModelMetadata);
+        // Add required entity
+        LeasePeriod leasePeriod;
+        if (TestUtil.findAll(em, LeasePeriod.class).isEmpty()) {
+            leasePeriod = LeasePeriodResourceIT.createUpdatedEntity(em);
+            em.persist(leasePeriod);
+            em.flush();
+        } else {
+            leasePeriod = TestUtil.findAll(em, LeasePeriod.class).get(0);
+        }
+        rouDepreciationEntry.setLeasePeriod(leasePeriod);
         return rouDepreciationEntry;
     }
 
@@ -263,6 +330,14 @@ class RouDepreciationEntryResourceIT {
         assertThat(testRouDepreciationEntry.getRouAssetIdentifier()).isEqualTo(DEFAULT_ROU_ASSET_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getRouDepreciationIdentifier()).isEqualTo(DEFAULT_ROU_DEPRECIATION_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getSequenceNumber()).isEqualTo(DEFAULT_SEQUENCE_NUMBER);
+        assertThat(testRouDepreciationEntry.getActivated()).isEqualTo(DEFAULT_ACTIVATED);
+        assertThat(testRouDepreciationEntry.getIsDeleted()).isEqualTo(DEFAULT_IS_DELETED);
+        assertThat(testRouDepreciationEntry.getBatchJobIdentifier()).isEqualTo(DEFAULT_BATCH_JOB_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getDepreciationAmountStepIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getOutstandingAmountStepIdentifier()).isEqualTo(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getFlagAmortisedStepIdentifier()).isEqualTo(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getCompilationTime()).isEqualTo(DEFAULT_COMPILATION_TIME);
+        assertThat(testRouDepreciationEntry.getInvalidated()).isEqualTo(DEFAULT_INVALIDATED);
 
         // Validate the RouDepreciationEntry in Elasticsearch
         verify(mockRouDepreciationEntrySearchRepository, times(1)).save(testRouDepreciationEntry);
@@ -377,7 +452,19 @@ class RouDepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
             .andExpect(jsonPath("$.[*].rouAssetIdentifier").value(hasItem(DEFAULT_ROU_ASSET_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].rouDepreciationIdentifier").value(hasItem(DEFAULT_ROU_DEPRECIATION_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)));
+            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
+            .andExpect(jsonPath("$.[*].activated").value(hasItem(DEFAULT_ACTIVATED.booleanValue())))
+            .andExpect(jsonPath("$.[*].isDeleted").value(hasItem(DEFAULT_IS_DELETED.booleanValue())))
+            .andExpect(jsonPath("$.[*].batchJobIdentifier").value(hasItem(DEFAULT_BATCH_JOB_IDENTIFIER.toString())))
+            .andExpect(
+                jsonPath("$.[*].depreciationAmountStepIdentifier").value(hasItem(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER.toString()))
+            )
+            .andExpect(
+                jsonPath("$.[*].outstandingAmountStepIdentifier").value(hasItem(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER.toString()))
+            )
+            .andExpect(jsonPath("$.[*].flagAmortisedStepIdentifier").value(hasItem(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))))
+            .andExpect(jsonPath("$.[*].invalidated").value(hasItem(DEFAULT_INVALIDATED.booleanValue())));
     }
 
     @Test
@@ -397,7 +484,15 @@ class RouDepreciationEntryResourceIT {
             .andExpect(jsonPath("$.outstandingAmount").value(sameNumber(DEFAULT_OUTSTANDING_AMOUNT)))
             .andExpect(jsonPath("$.rouAssetIdentifier").value(DEFAULT_ROU_ASSET_IDENTIFIER.toString()))
             .andExpect(jsonPath("$.rouDepreciationIdentifier").value(DEFAULT_ROU_DEPRECIATION_IDENTIFIER.toString()))
-            .andExpect(jsonPath("$.sequenceNumber").value(DEFAULT_SEQUENCE_NUMBER));
+            .andExpect(jsonPath("$.sequenceNumber").value(DEFAULT_SEQUENCE_NUMBER))
+            .andExpect(jsonPath("$.activated").value(DEFAULT_ACTIVATED.booleanValue()))
+            .andExpect(jsonPath("$.isDeleted").value(DEFAULT_IS_DELETED.booleanValue()))
+            .andExpect(jsonPath("$.batchJobIdentifier").value(DEFAULT_BATCH_JOB_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.depreciationAmountStepIdentifier").value(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.outstandingAmountStepIdentifier").value(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.flagAmortisedStepIdentifier").value(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.compilationTime").value(sameInstant(DEFAULT_COMPILATION_TIME)))
+            .andExpect(jsonPath("$.invalidated").value(DEFAULT_INVALIDATED.booleanValue()));
     }
 
     @Test
@@ -920,6 +1015,496 @@ class RouDepreciationEntryResourceIT {
 
     @Test
     @Transactional
+    void getAllRouDepreciationEntriesByActivatedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where activated equals to DEFAULT_ACTIVATED
+        defaultRouDepreciationEntryShouldBeFound("activated.equals=" + DEFAULT_ACTIVATED);
+
+        // Get all the rouDepreciationEntryList where activated equals to UPDATED_ACTIVATED
+        defaultRouDepreciationEntryShouldNotBeFound("activated.equals=" + UPDATED_ACTIVATED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByActivatedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where activated not equals to DEFAULT_ACTIVATED
+        defaultRouDepreciationEntryShouldNotBeFound("activated.notEquals=" + DEFAULT_ACTIVATED);
+
+        // Get all the rouDepreciationEntryList where activated not equals to UPDATED_ACTIVATED
+        defaultRouDepreciationEntryShouldBeFound("activated.notEquals=" + UPDATED_ACTIVATED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByActivatedIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where activated in DEFAULT_ACTIVATED or UPDATED_ACTIVATED
+        defaultRouDepreciationEntryShouldBeFound("activated.in=" + DEFAULT_ACTIVATED + "," + UPDATED_ACTIVATED);
+
+        // Get all the rouDepreciationEntryList where activated equals to UPDATED_ACTIVATED
+        defaultRouDepreciationEntryShouldNotBeFound("activated.in=" + UPDATED_ACTIVATED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByActivatedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where activated is not null
+        defaultRouDepreciationEntryShouldBeFound("activated.specified=true");
+
+        // Get all the rouDepreciationEntryList where activated is null
+        defaultRouDepreciationEntryShouldNotBeFound("activated.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByIsDeletedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where isDeleted equals to DEFAULT_IS_DELETED
+        defaultRouDepreciationEntryShouldBeFound("isDeleted.equals=" + DEFAULT_IS_DELETED);
+
+        // Get all the rouDepreciationEntryList where isDeleted equals to UPDATED_IS_DELETED
+        defaultRouDepreciationEntryShouldNotBeFound("isDeleted.equals=" + UPDATED_IS_DELETED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByIsDeletedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where isDeleted not equals to DEFAULT_IS_DELETED
+        defaultRouDepreciationEntryShouldNotBeFound("isDeleted.notEquals=" + DEFAULT_IS_DELETED);
+
+        // Get all the rouDepreciationEntryList where isDeleted not equals to UPDATED_IS_DELETED
+        defaultRouDepreciationEntryShouldBeFound("isDeleted.notEquals=" + UPDATED_IS_DELETED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByIsDeletedIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where isDeleted in DEFAULT_IS_DELETED or UPDATED_IS_DELETED
+        defaultRouDepreciationEntryShouldBeFound("isDeleted.in=" + DEFAULT_IS_DELETED + "," + UPDATED_IS_DELETED);
+
+        // Get all the rouDepreciationEntryList where isDeleted equals to UPDATED_IS_DELETED
+        defaultRouDepreciationEntryShouldNotBeFound("isDeleted.in=" + UPDATED_IS_DELETED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByIsDeletedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where isDeleted is not null
+        defaultRouDepreciationEntryShouldBeFound("isDeleted.specified=true");
+
+        // Get all the rouDepreciationEntryList where isDeleted is null
+        defaultRouDepreciationEntryShouldNotBeFound("isDeleted.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByBatchJobIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where batchJobIdentifier equals to DEFAULT_BATCH_JOB_IDENTIFIER
+        defaultRouDepreciationEntryShouldBeFound("batchJobIdentifier.equals=" + DEFAULT_BATCH_JOB_IDENTIFIER);
+
+        // Get all the rouDepreciationEntryList where batchJobIdentifier equals to UPDATED_BATCH_JOB_IDENTIFIER
+        defaultRouDepreciationEntryShouldNotBeFound("batchJobIdentifier.equals=" + UPDATED_BATCH_JOB_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByBatchJobIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where batchJobIdentifier not equals to DEFAULT_BATCH_JOB_IDENTIFIER
+        defaultRouDepreciationEntryShouldNotBeFound("batchJobIdentifier.notEquals=" + DEFAULT_BATCH_JOB_IDENTIFIER);
+
+        // Get all the rouDepreciationEntryList where batchJobIdentifier not equals to UPDATED_BATCH_JOB_IDENTIFIER
+        defaultRouDepreciationEntryShouldBeFound("batchJobIdentifier.notEquals=" + UPDATED_BATCH_JOB_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByBatchJobIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where batchJobIdentifier in DEFAULT_BATCH_JOB_IDENTIFIER or UPDATED_BATCH_JOB_IDENTIFIER
+        defaultRouDepreciationEntryShouldBeFound(
+            "batchJobIdentifier.in=" + DEFAULT_BATCH_JOB_IDENTIFIER + "," + UPDATED_BATCH_JOB_IDENTIFIER
+        );
+
+        // Get all the rouDepreciationEntryList where batchJobIdentifier equals to UPDATED_BATCH_JOB_IDENTIFIER
+        defaultRouDepreciationEntryShouldNotBeFound("batchJobIdentifier.in=" + UPDATED_BATCH_JOB_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByBatchJobIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where batchJobIdentifier is not null
+        defaultRouDepreciationEntryShouldBeFound("batchJobIdentifier.specified=true");
+
+        // Get all the rouDepreciationEntryList where batchJobIdentifier is null
+        defaultRouDepreciationEntryShouldNotBeFound("batchJobIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByDepreciationAmountStepIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where depreciationAmountStepIdentifier equals to DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldBeFound("depreciationAmountStepIdentifier.equals=" + DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+
+        // Get all the rouDepreciationEntryList where depreciationAmountStepIdentifier equals to UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldNotBeFound(
+            "depreciationAmountStepIdentifier.equals=" + UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByDepreciationAmountStepIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where depreciationAmountStepIdentifier not equals to DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldNotBeFound(
+            "depreciationAmountStepIdentifier.notEquals=" + DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        );
+
+        // Get all the rouDepreciationEntryList where depreciationAmountStepIdentifier not equals to UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldBeFound(
+            "depreciationAmountStepIdentifier.notEquals=" + UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByDepreciationAmountStepIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where depreciationAmountStepIdentifier in DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER or UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldBeFound(
+            "depreciationAmountStepIdentifier.in=" +
+            DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER +
+            "," +
+            UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        );
+
+        // Get all the rouDepreciationEntryList where depreciationAmountStepIdentifier equals to UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldNotBeFound("depreciationAmountStepIdentifier.in=" + UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByDepreciationAmountStepIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where depreciationAmountStepIdentifier is not null
+        defaultRouDepreciationEntryShouldBeFound("depreciationAmountStepIdentifier.specified=true");
+
+        // Get all the rouDepreciationEntryList where depreciationAmountStepIdentifier is null
+        defaultRouDepreciationEntryShouldNotBeFound("depreciationAmountStepIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByOutstandingAmountStepIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where outstandingAmountStepIdentifier equals to DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldBeFound("outstandingAmountStepIdentifier.equals=" + DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+
+        // Get all the rouDepreciationEntryList where outstandingAmountStepIdentifier equals to UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldNotBeFound("outstandingAmountStepIdentifier.equals=" + UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByOutstandingAmountStepIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where outstandingAmountStepIdentifier not equals to DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldNotBeFound(
+            "outstandingAmountStepIdentifier.notEquals=" + DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        );
+
+        // Get all the rouDepreciationEntryList where outstandingAmountStepIdentifier not equals to UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldBeFound("outstandingAmountStepIdentifier.notEquals=" + UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByOutstandingAmountStepIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where outstandingAmountStepIdentifier in DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER or UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldBeFound(
+            "outstandingAmountStepIdentifier.in=" +
+            DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER +
+            "," +
+            UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        );
+
+        // Get all the rouDepreciationEntryList where outstandingAmountStepIdentifier equals to UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldNotBeFound("outstandingAmountStepIdentifier.in=" + UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByOutstandingAmountStepIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where outstandingAmountStepIdentifier is not null
+        defaultRouDepreciationEntryShouldBeFound("outstandingAmountStepIdentifier.specified=true");
+
+        // Get all the rouDepreciationEntryList where outstandingAmountStepIdentifier is null
+        defaultRouDepreciationEntryShouldNotBeFound("outstandingAmountStepIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByFlagAmortisedStepIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where flagAmortisedStepIdentifier equals to DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldBeFound("flagAmortisedStepIdentifier.equals=" + DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER);
+
+        // Get all the rouDepreciationEntryList where flagAmortisedStepIdentifier equals to UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldNotBeFound("flagAmortisedStepIdentifier.equals=" + UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByFlagAmortisedStepIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where flagAmortisedStepIdentifier not equals to DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldNotBeFound("flagAmortisedStepIdentifier.notEquals=" + DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER);
+
+        // Get all the rouDepreciationEntryList where flagAmortisedStepIdentifier not equals to UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldBeFound("flagAmortisedStepIdentifier.notEquals=" + UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByFlagAmortisedStepIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where flagAmortisedStepIdentifier in DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER or UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldBeFound(
+            "flagAmortisedStepIdentifier.in=" + DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER + "," + UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
+        );
+
+        // Get all the rouDepreciationEntryList where flagAmortisedStepIdentifier equals to UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER
+        defaultRouDepreciationEntryShouldNotBeFound("flagAmortisedStepIdentifier.in=" + UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByFlagAmortisedStepIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where flagAmortisedStepIdentifier is not null
+        defaultRouDepreciationEntryShouldBeFound("flagAmortisedStepIdentifier.specified=true");
+
+        // Get all the rouDepreciationEntryList where flagAmortisedStepIdentifier is null
+        defaultRouDepreciationEntryShouldNotBeFound("flagAmortisedStepIdentifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByCompilationTimeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where compilationTime equals to DEFAULT_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldBeFound("compilationTime.equals=" + DEFAULT_COMPILATION_TIME);
+
+        // Get all the rouDepreciationEntryList where compilationTime equals to UPDATED_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldNotBeFound("compilationTime.equals=" + UPDATED_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByCompilationTimeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where compilationTime not equals to DEFAULT_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldNotBeFound("compilationTime.notEquals=" + DEFAULT_COMPILATION_TIME);
+
+        // Get all the rouDepreciationEntryList where compilationTime not equals to UPDATED_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldBeFound("compilationTime.notEquals=" + UPDATED_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByCompilationTimeIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where compilationTime in DEFAULT_COMPILATION_TIME or UPDATED_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldBeFound("compilationTime.in=" + DEFAULT_COMPILATION_TIME + "," + UPDATED_COMPILATION_TIME);
+
+        // Get all the rouDepreciationEntryList where compilationTime equals to UPDATED_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldNotBeFound("compilationTime.in=" + UPDATED_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByCompilationTimeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where compilationTime is not null
+        defaultRouDepreciationEntryShouldBeFound("compilationTime.specified=true");
+
+        // Get all the rouDepreciationEntryList where compilationTime is null
+        defaultRouDepreciationEntryShouldNotBeFound("compilationTime.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByCompilationTimeIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where compilationTime is greater than or equal to DEFAULT_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldBeFound("compilationTime.greaterThanOrEqual=" + DEFAULT_COMPILATION_TIME);
+
+        // Get all the rouDepreciationEntryList where compilationTime is greater than or equal to UPDATED_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldNotBeFound("compilationTime.greaterThanOrEqual=" + UPDATED_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByCompilationTimeIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where compilationTime is less than or equal to DEFAULT_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldBeFound("compilationTime.lessThanOrEqual=" + DEFAULT_COMPILATION_TIME);
+
+        // Get all the rouDepreciationEntryList where compilationTime is less than or equal to SMALLER_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldNotBeFound("compilationTime.lessThanOrEqual=" + SMALLER_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByCompilationTimeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where compilationTime is less than DEFAULT_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldNotBeFound("compilationTime.lessThan=" + DEFAULT_COMPILATION_TIME);
+
+        // Get all the rouDepreciationEntryList where compilationTime is less than UPDATED_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldBeFound("compilationTime.lessThan=" + UPDATED_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByCompilationTimeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where compilationTime is greater than DEFAULT_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldNotBeFound("compilationTime.greaterThan=" + DEFAULT_COMPILATION_TIME);
+
+        // Get all the rouDepreciationEntryList where compilationTime is greater than SMALLER_COMPILATION_TIME
+        defaultRouDepreciationEntryShouldBeFound("compilationTime.greaterThan=" + SMALLER_COMPILATION_TIME);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByInvalidatedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where invalidated equals to DEFAULT_INVALIDATED
+        defaultRouDepreciationEntryShouldBeFound("invalidated.equals=" + DEFAULT_INVALIDATED);
+
+        // Get all the rouDepreciationEntryList where invalidated equals to UPDATED_INVALIDATED
+        defaultRouDepreciationEntryShouldNotBeFound("invalidated.equals=" + UPDATED_INVALIDATED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByInvalidatedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where invalidated not equals to DEFAULT_INVALIDATED
+        defaultRouDepreciationEntryShouldNotBeFound("invalidated.notEquals=" + DEFAULT_INVALIDATED);
+
+        // Get all the rouDepreciationEntryList where invalidated not equals to UPDATED_INVALIDATED
+        defaultRouDepreciationEntryShouldBeFound("invalidated.notEquals=" + UPDATED_INVALIDATED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByInvalidatedIsInShouldWork() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where invalidated in DEFAULT_INVALIDATED or UPDATED_INVALIDATED
+        defaultRouDepreciationEntryShouldBeFound("invalidated.in=" + DEFAULT_INVALIDATED + "," + UPDATED_INVALIDATED);
+
+        // Get all the rouDepreciationEntryList where invalidated equals to UPDATED_INVALIDATED
+        defaultRouDepreciationEntryShouldNotBeFound("invalidated.in=" + UPDATED_INVALIDATED);
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByInvalidatedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+
+        // Get all the rouDepreciationEntryList where invalidated is not null
+        defaultRouDepreciationEntryShouldBeFound("invalidated.specified=true");
+
+        // Get all the rouDepreciationEntryList where invalidated is null
+        defaultRouDepreciationEntryShouldNotBeFound("invalidated.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllRouDepreciationEntriesByDebitAccountIsEqualToSomething() throws Exception {
         // Initialize the database
         rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
@@ -1048,6 +1633,32 @@ class RouDepreciationEntryResourceIT {
         defaultRouDepreciationEntryShouldNotBeFound("rouMetadataId.equals=" + (rouMetadataId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllRouDepreciationEntriesByLeasePeriodIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+        LeasePeriod leasePeriod;
+        if (TestUtil.findAll(em, LeasePeriod.class).isEmpty()) {
+            leasePeriod = LeasePeriodResourceIT.createEntity(em);
+            em.persist(leasePeriod);
+            em.flush();
+        } else {
+            leasePeriod = TestUtil.findAll(em, LeasePeriod.class).get(0);
+        }
+        em.persist(leasePeriod);
+        em.flush();
+        rouDepreciationEntry.setLeasePeriod(leasePeriod);
+        rouDepreciationEntryRepository.saveAndFlush(rouDepreciationEntry);
+        Long leasePeriodId = leasePeriod.getId();
+
+        // Get all the rouDepreciationEntryList where leasePeriod equals to leasePeriodId
+        defaultRouDepreciationEntryShouldBeFound("leasePeriodId.equals=" + leasePeriodId);
+
+        // Get all the rouDepreciationEntryList where leasePeriod equals to (leasePeriodId + 1)
+        defaultRouDepreciationEntryShouldNotBeFound("leasePeriodId.equals=" + (leasePeriodId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1062,7 +1673,19 @@ class RouDepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
             .andExpect(jsonPath("$.[*].rouAssetIdentifier").value(hasItem(DEFAULT_ROU_ASSET_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].rouDepreciationIdentifier").value(hasItem(DEFAULT_ROU_DEPRECIATION_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)));
+            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
+            .andExpect(jsonPath("$.[*].activated").value(hasItem(DEFAULT_ACTIVATED.booleanValue())))
+            .andExpect(jsonPath("$.[*].isDeleted").value(hasItem(DEFAULT_IS_DELETED.booleanValue())))
+            .andExpect(jsonPath("$.[*].batchJobIdentifier").value(hasItem(DEFAULT_BATCH_JOB_IDENTIFIER.toString())))
+            .andExpect(
+                jsonPath("$.[*].depreciationAmountStepIdentifier").value(hasItem(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER.toString()))
+            )
+            .andExpect(
+                jsonPath("$.[*].outstandingAmountStepIdentifier").value(hasItem(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER.toString()))
+            )
+            .andExpect(jsonPath("$.[*].flagAmortisedStepIdentifier").value(hasItem(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))))
+            .andExpect(jsonPath("$.[*].invalidated").value(hasItem(DEFAULT_INVALIDATED.booleanValue())));
 
         // Check, that the count call also returns 1
         restRouDepreciationEntryMockMvc
@@ -1116,7 +1739,15 @@ class RouDepreciationEntryResourceIT {
             .outstandingAmount(UPDATED_OUTSTANDING_AMOUNT)
             .rouAssetIdentifier(UPDATED_ROU_ASSET_IDENTIFIER)
             .rouDepreciationIdentifier(UPDATED_ROU_DEPRECIATION_IDENTIFIER)
-            .sequenceNumber(UPDATED_SEQUENCE_NUMBER);
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
+            .activated(UPDATED_ACTIVATED)
+            .isDeleted(UPDATED_IS_DELETED)
+            .batchJobIdentifier(UPDATED_BATCH_JOB_IDENTIFIER)
+            .depreciationAmountStepIdentifier(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
+            .outstandingAmountStepIdentifier(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER)
+            .flagAmortisedStepIdentifier(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER)
+            .compilationTime(UPDATED_COMPILATION_TIME)
+            .invalidated(UPDATED_INVALIDATED);
         RouDepreciationEntryDTO rouDepreciationEntryDTO = rouDepreciationEntryMapper.toDto(updatedRouDepreciationEntry);
 
         restRouDepreciationEntryMockMvc
@@ -1137,6 +1768,14 @@ class RouDepreciationEntryResourceIT {
         assertThat(testRouDepreciationEntry.getRouAssetIdentifier()).isEqualTo(UPDATED_ROU_ASSET_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getRouDepreciationIdentifier()).isEqualTo(UPDATED_ROU_DEPRECIATION_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
+        assertThat(testRouDepreciationEntry.getActivated()).isEqualTo(UPDATED_ACTIVATED);
+        assertThat(testRouDepreciationEntry.getIsDeleted()).isEqualTo(UPDATED_IS_DELETED);
+        assertThat(testRouDepreciationEntry.getBatchJobIdentifier()).isEqualTo(UPDATED_BATCH_JOB_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getDepreciationAmountStepIdentifier()).isEqualTo(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getOutstandingAmountStepIdentifier()).isEqualTo(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getFlagAmortisedStepIdentifier()).isEqualTo(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getCompilationTime()).isEqualTo(UPDATED_COMPILATION_TIME);
+        assertThat(testRouDepreciationEntry.getInvalidated()).isEqualTo(UPDATED_INVALIDATED);
 
         // Validate the RouDepreciationEntry in Elasticsearch
         verify(mockRouDepreciationEntrySearchRepository).save(testRouDepreciationEntry);
@@ -1232,7 +1871,14 @@ class RouDepreciationEntryResourceIT {
         RouDepreciationEntry partialUpdatedRouDepreciationEntry = new RouDepreciationEntry();
         partialUpdatedRouDepreciationEntry.setId(rouDepreciationEntry.getId());
 
-        partialUpdatedRouDepreciationEntry.rouAssetIdentifier(UPDATED_ROU_ASSET_IDENTIFIER).sequenceNumber(UPDATED_SEQUENCE_NUMBER);
+        partialUpdatedRouDepreciationEntry
+            .rouAssetIdentifier(UPDATED_ROU_ASSET_IDENTIFIER)
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
+            .activated(UPDATED_ACTIVATED)
+            .isDeleted(UPDATED_IS_DELETED)
+            .batchJobIdentifier(UPDATED_BATCH_JOB_IDENTIFIER)
+            .outstandingAmountStepIdentifier(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER)
+            .compilationTime(UPDATED_COMPILATION_TIME);
 
         restRouDepreciationEntryMockMvc
             .perform(
@@ -1252,6 +1898,14 @@ class RouDepreciationEntryResourceIT {
         assertThat(testRouDepreciationEntry.getRouAssetIdentifier()).isEqualTo(UPDATED_ROU_ASSET_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getRouDepreciationIdentifier()).isEqualTo(DEFAULT_ROU_DEPRECIATION_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
+        assertThat(testRouDepreciationEntry.getActivated()).isEqualTo(UPDATED_ACTIVATED);
+        assertThat(testRouDepreciationEntry.getIsDeleted()).isEqualTo(UPDATED_IS_DELETED);
+        assertThat(testRouDepreciationEntry.getBatchJobIdentifier()).isEqualTo(UPDATED_BATCH_JOB_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getDepreciationAmountStepIdentifier()).isEqualTo(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getOutstandingAmountStepIdentifier()).isEqualTo(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getFlagAmortisedStepIdentifier()).isEqualTo(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getCompilationTime()).isEqualTo(UPDATED_COMPILATION_TIME);
+        assertThat(testRouDepreciationEntry.getInvalidated()).isEqualTo(DEFAULT_INVALIDATED);
     }
 
     @Test
@@ -1272,7 +1926,15 @@ class RouDepreciationEntryResourceIT {
             .outstandingAmount(UPDATED_OUTSTANDING_AMOUNT)
             .rouAssetIdentifier(UPDATED_ROU_ASSET_IDENTIFIER)
             .rouDepreciationIdentifier(UPDATED_ROU_DEPRECIATION_IDENTIFIER)
-            .sequenceNumber(UPDATED_SEQUENCE_NUMBER);
+            .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
+            .activated(UPDATED_ACTIVATED)
+            .isDeleted(UPDATED_IS_DELETED)
+            .batchJobIdentifier(UPDATED_BATCH_JOB_IDENTIFIER)
+            .depreciationAmountStepIdentifier(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER)
+            .outstandingAmountStepIdentifier(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER)
+            .flagAmortisedStepIdentifier(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER)
+            .compilationTime(UPDATED_COMPILATION_TIME)
+            .invalidated(UPDATED_INVALIDATED);
 
         restRouDepreciationEntryMockMvc
             .perform(
@@ -1292,6 +1954,14 @@ class RouDepreciationEntryResourceIT {
         assertThat(testRouDepreciationEntry.getRouAssetIdentifier()).isEqualTo(UPDATED_ROU_ASSET_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getRouDepreciationIdentifier()).isEqualTo(UPDATED_ROU_DEPRECIATION_IDENTIFIER);
         assertThat(testRouDepreciationEntry.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
+        assertThat(testRouDepreciationEntry.getActivated()).isEqualTo(UPDATED_ACTIVATED);
+        assertThat(testRouDepreciationEntry.getIsDeleted()).isEqualTo(UPDATED_IS_DELETED);
+        assertThat(testRouDepreciationEntry.getBatchJobIdentifier()).isEqualTo(UPDATED_BATCH_JOB_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getDepreciationAmountStepIdentifier()).isEqualTo(UPDATED_DEPRECIATION_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getOutstandingAmountStepIdentifier()).isEqualTo(UPDATED_OUTSTANDING_AMOUNT_STEP_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getFlagAmortisedStepIdentifier()).isEqualTo(UPDATED_FLAG_AMORTISED_STEP_IDENTIFIER);
+        assertThat(testRouDepreciationEntry.getCompilationTime()).isEqualTo(UPDATED_COMPILATION_TIME);
+        assertThat(testRouDepreciationEntry.getInvalidated()).isEqualTo(UPDATED_INVALIDATED);
     }
 
     @Test
@@ -1413,6 +2083,18 @@ class RouDepreciationEntryResourceIT {
             .andExpect(jsonPath("$.[*].outstandingAmount").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_AMOUNT))))
             .andExpect(jsonPath("$.[*].rouAssetIdentifier").value(hasItem(DEFAULT_ROU_ASSET_IDENTIFIER.toString())))
             .andExpect(jsonPath("$.[*].rouDepreciationIdentifier").value(hasItem(DEFAULT_ROU_DEPRECIATION_IDENTIFIER.toString())))
-            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)));
+            .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
+            .andExpect(jsonPath("$.[*].activated").value(hasItem(DEFAULT_ACTIVATED.booleanValue())))
+            .andExpect(jsonPath("$.[*].isDeleted").value(hasItem(DEFAULT_IS_DELETED.booleanValue())))
+            .andExpect(jsonPath("$.[*].batchJobIdentifier").value(hasItem(DEFAULT_BATCH_JOB_IDENTIFIER.toString())))
+            .andExpect(
+                jsonPath("$.[*].depreciationAmountStepIdentifier").value(hasItem(DEFAULT_DEPRECIATION_AMOUNT_STEP_IDENTIFIER.toString()))
+            )
+            .andExpect(
+                jsonPath("$.[*].outstandingAmountStepIdentifier").value(hasItem(DEFAULT_OUTSTANDING_AMOUNT_STEP_IDENTIFIER.toString()))
+            )
+            .andExpect(jsonPath("$.[*].flagAmortisedStepIdentifier").value(hasItem(DEFAULT_FLAG_AMORTISED_STEP_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].compilationTime").value(hasItem(sameInstant(DEFAULT_COMPILATION_TIME))))
+            .andExpect(jsonPath("$.[*].invalidated").value(hasItem(DEFAULT_INVALIDATED.booleanValue())));
     }
 }

@@ -13,11 +13,23 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "totalLeaseAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "accruedDepreciationAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "currentPeriodDepreciationAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
       "fieldName": "netBookValue",
       "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "fiscalMonthEndDate",
+      "fieldName": "fiscalPeriodEndDate",
       "fieldType": "LocalDate"
     }
   ],

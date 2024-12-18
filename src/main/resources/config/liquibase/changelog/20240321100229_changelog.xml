@@ -1,12 +1,5 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
-    <changeSet author="edwin.njeru (generated)" id="1711015486824-5">
-        <addColumn tableName="asset_disposal">
-            <column name="asset_disposed_id" type="int8">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-    </changeSet>
     <changeSet author="edwin.njeru (generated)" id="1711015486824-7">
         <addUniqueConstraint columnNames="asset_written_off_id" constraintName="UK_2ei09lwga2up8y8tmnu4gb8jn" tableName="asset_write_off"/>
     </changeSet>
@@ -15,11 +8,5 @@
     </changeSet>
     <changeSet author="edwin.njeru (generated)" id="1711015486824-9">
         <addForeignKeyConstraint baseColumnNames="asset_disposed_id" baseTableName="asset_disposal" constraintName="FK50jwhqbihjcibvmxm4rcub4u5" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="asset_registration" validate="true"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1711015486824-10">
-        <addForeignKeyConstraint baseColumnNames="lease_contract_document_id" baseTableName="ifrs16lease_contract" constraintName="FK5yvrkf1pls8axxspgciks4tu0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="business_document" validate="true"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1711015486824-11">
-        <addForeignKeyConstraint baseColumnNames="lease_contract_calculations_id" baseTableName="ifrs16lease_contract" constraintName="FKhkm061g98hbwsmbh8cpddj2wl" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="business_document" validate="true"/>
     </changeSet>
 </databaseChangeLog>

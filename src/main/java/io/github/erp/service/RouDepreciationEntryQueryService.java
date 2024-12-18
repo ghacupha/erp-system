@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -141,6 +141,47 @@ public class RouDepreciationEntryQueryService extends QueryService<RouDepreciati
                 specification =
                     specification.and(buildRangeSpecification(criteria.getSequenceNumber(), RouDepreciationEntry_.sequenceNumber));
             }
+            if (criteria.getActivated() != null) {
+                specification = specification.and(buildSpecification(criteria.getActivated(), RouDepreciationEntry_.activated));
+            }
+            if (criteria.getIsDeleted() != null) {
+                specification = specification.and(buildSpecification(criteria.getIsDeleted(), RouDepreciationEntry_.isDeleted));
+            }
+            if (criteria.getBatchJobIdentifier() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getBatchJobIdentifier(), RouDepreciationEntry_.batchJobIdentifier));
+            }
+            if (criteria.getDepreciationAmountStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDepreciationAmountStepIdentifier(),
+                            RouDepreciationEntry_.depreciationAmountStepIdentifier
+                        )
+                    );
+            }
+            if (criteria.getOutstandingAmountStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getOutstandingAmountStepIdentifier(),
+                            RouDepreciationEntry_.outstandingAmountStepIdentifier
+                        )
+                    );
+            }
+            if (criteria.getFlagAmortisedStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getFlagAmortisedStepIdentifier(), RouDepreciationEntry_.flagAmortisedStepIdentifier)
+                    );
+            }
+            if (criteria.getCompilationTime() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getCompilationTime(), RouDepreciationEntry_.compilationTime));
+            }
+            if (criteria.getInvalidated() != null) {
+                specification = specification.and(buildSpecification(criteria.getInvalidated(), RouDepreciationEntry_.invalidated));
+            }
             if (criteria.getDebitAccountId() != null) {
                 specification =
                     specification.and(
@@ -183,6 +224,15 @@ public class RouDepreciationEntryQueryService extends QueryService<RouDepreciati
                         buildSpecification(
                             criteria.getRouMetadataId(),
                             root -> root.join(RouDepreciationEntry_.rouMetadata, JoinType.LEFT).get(RouModelMetadata_.id)
+                        )
+                    );
+            }
+            if (criteria.getLeasePeriodId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeasePeriodId(),
+                            root -> root.join(RouDepreciationEntry_.leasePeriod, JoinType.LEFT).get(LeasePeriod_.id)
                         )
                     );
             }

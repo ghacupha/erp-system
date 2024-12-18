@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,13 +17,14 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A Placeholder.
@@ -40,19 +41,24 @@ public class Placeholder implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "description", nullable = false, unique = true)
+    @Field(type = FieldType.Text)
     private String description;
 
     @Column(name = "token", unique = true)
+    @Field(type = FieldType.Text)
     private String token;
 
     @Column(name = "file_upload_token")
+    @Field(type = FieldType.Text)
     private String fileUploadToken;
 
     @Column(name = "compilation_token")
+    @Field(type = FieldType.Text)
     private String compilationToken;
 
     @ManyToOne

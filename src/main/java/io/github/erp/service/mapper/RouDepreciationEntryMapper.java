@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,13 @@ import org.mapstruct.*;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { TransactionAccountMapper.class, AssetCategoryMapper.class, IFRS16LeaseContractMapper.class, RouModelMetadataMapper.class }
+    uses = {
+        TransactionAccountMapper.class,
+        AssetCategoryMapper.class,
+        IFRS16LeaseContractMapper.class,
+        RouModelMetadataMapper.class,
+        LeasePeriodMapper.class,
+    }
 )
 public interface RouDepreciationEntryMapper extends EntityMapper<RouDepreciationEntryDTO, RouDepreciationEntry> {
     @Mapping(target = "debitAccount", source = "debitAccount", qualifiedByName = "accountName")
@@ -35,5 +41,6 @@ public interface RouDepreciationEntryMapper extends EntityMapper<RouDepreciation
     @Mapping(target = "assetCategory", source = "assetCategory", qualifiedByName = "assetCategoryName")
     @Mapping(target = "leaseContract", source = "leaseContract", qualifiedByName = "bookingId")
     @Mapping(target = "rouMetadata", source = "rouMetadata", qualifiedByName = "modelTitle")
+    @Mapping(target = "leasePeriod", source = "leasePeriod", qualifiedByName = "periodCode")
     RouDepreciationEntryDTO toDto(RouDepreciationEntry s);
 }

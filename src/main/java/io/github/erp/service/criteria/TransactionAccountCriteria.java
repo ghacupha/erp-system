@@ -1,7 +1,7 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,8 @@ package io.github.erp.service.criteria;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.enumeration.AccountSubTypes;
+import io.github.erp.domain.enumeration.AccountTypes;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -40,6 +42,40 @@ import tech.jhipster.service.filter.StringFilter;
  */
 public class TransactionAccountCriteria implements Serializable, Criteria {
 
+    /**
+     * Class for filtering AccountTypes
+     */
+    public static class AccountTypesFilter extends Filter<AccountTypes> {
+
+        public AccountTypesFilter() {}
+
+        public AccountTypesFilter(AccountTypesFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public AccountTypesFilter copy() {
+            return new AccountTypesFilter(this);
+        }
+    }
+
+    /**
+     * Class for filtering AccountSubTypes
+     */
+    public static class AccountSubTypesFilter extends Filter<AccountSubTypes> {
+
+        public AccountSubTypesFilter() {}
+
+        public AccountSubTypesFilter(AccountSubTypesFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public AccountSubTypesFilter copy() {
+            return new AccountSubTypesFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -48,9 +84,23 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
 
     private StringFilter accountName;
 
-    private LongFilter parentAccountId;
+    private AccountTypesFilter accountType;
+
+    private AccountSubTypesFilter accountSubType;
+
+    private BooleanFilter dummyAccount;
+
+    private LongFilter accountLedgerId;
+
+    private LongFilter accountCategoryId;
 
     private LongFilter placeholderId;
+
+    private LongFilter serviceOutletId;
+
+    private LongFilter settlementCurrencyId;
+
+    private LongFilter institutionId;
 
     private Boolean distinct;
 
@@ -60,8 +110,15 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.accountNumber = other.accountNumber == null ? null : other.accountNumber.copy();
         this.accountName = other.accountName == null ? null : other.accountName.copy();
-        this.parentAccountId = other.parentAccountId == null ? null : other.parentAccountId.copy();
+        this.accountType = other.accountType == null ? null : other.accountType.copy();
+        this.accountSubType = other.accountSubType == null ? null : other.accountSubType.copy();
+        this.dummyAccount = other.dummyAccount == null ? null : other.dummyAccount.copy();
+        this.accountLedgerId = other.accountLedgerId == null ? null : other.accountLedgerId.copy();
+        this.accountCategoryId = other.accountCategoryId == null ? null : other.accountCategoryId.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
+        this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
+        this.institutionId = other.institutionId == null ? null : other.institutionId.copy();
         this.distinct = other.distinct;
     }
 
@@ -115,19 +172,79 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
         this.accountName = accountName;
     }
 
-    public LongFilter getParentAccountId() {
-        return parentAccountId;
+    public AccountTypesFilter getAccountType() {
+        return accountType;
     }
 
-    public LongFilter parentAccountId() {
-        if (parentAccountId == null) {
-            parentAccountId = new LongFilter();
+    public AccountTypesFilter accountType() {
+        if (accountType == null) {
+            accountType = new AccountTypesFilter();
         }
-        return parentAccountId;
+        return accountType;
     }
 
-    public void setParentAccountId(LongFilter parentAccountId) {
-        this.parentAccountId = parentAccountId;
+    public void setAccountType(AccountTypesFilter accountType) {
+        this.accountType = accountType;
+    }
+
+    public AccountSubTypesFilter getAccountSubType() {
+        return accountSubType;
+    }
+
+    public AccountSubTypesFilter accountSubType() {
+        if (accountSubType == null) {
+            accountSubType = new AccountSubTypesFilter();
+        }
+        return accountSubType;
+    }
+
+    public void setAccountSubType(AccountSubTypesFilter accountSubType) {
+        this.accountSubType = accountSubType;
+    }
+
+    public BooleanFilter getDummyAccount() {
+        return dummyAccount;
+    }
+
+    public BooleanFilter dummyAccount() {
+        if (dummyAccount == null) {
+            dummyAccount = new BooleanFilter();
+        }
+        return dummyAccount;
+    }
+
+    public void setDummyAccount(BooleanFilter dummyAccount) {
+        this.dummyAccount = dummyAccount;
+    }
+
+    public LongFilter getAccountLedgerId() {
+        return accountLedgerId;
+    }
+
+    public LongFilter accountLedgerId() {
+        if (accountLedgerId == null) {
+            accountLedgerId = new LongFilter();
+        }
+        return accountLedgerId;
+    }
+
+    public void setAccountLedgerId(LongFilter accountLedgerId) {
+        this.accountLedgerId = accountLedgerId;
+    }
+
+    public LongFilter getAccountCategoryId() {
+        return accountCategoryId;
+    }
+
+    public LongFilter accountCategoryId() {
+        if (accountCategoryId == null) {
+            accountCategoryId = new LongFilter();
+        }
+        return accountCategoryId;
+    }
+
+    public void setAccountCategoryId(LongFilter accountCategoryId) {
+        this.accountCategoryId = accountCategoryId;
     }
 
     public LongFilter getPlaceholderId() {
@@ -143,6 +260,51 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
 
     public void setPlaceholderId(LongFilter placeholderId) {
         this.placeholderId = placeholderId;
+    }
+
+    public LongFilter getServiceOutletId() {
+        return serviceOutletId;
+    }
+
+    public LongFilter serviceOutletId() {
+        if (serviceOutletId == null) {
+            serviceOutletId = new LongFilter();
+        }
+        return serviceOutletId;
+    }
+
+    public void setServiceOutletId(LongFilter serviceOutletId) {
+        this.serviceOutletId = serviceOutletId;
+    }
+
+    public LongFilter getSettlementCurrencyId() {
+        return settlementCurrencyId;
+    }
+
+    public LongFilter settlementCurrencyId() {
+        if (settlementCurrencyId == null) {
+            settlementCurrencyId = new LongFilter();
+        }
+        return settlementCurrencyId;
+    }
+
+    public void setSettlementCurrencyId(LongFilter settlementCurrencyId) {
+        this.settlementCurrencyId = settlementCurrencyId;
+    }
+
+    public LongFilter getInstitutionId() {
+        return institutionId;
+    }
+
+    public LongFilter institutionId() {
+        if (institutionId == null) {
+            institutionId = new LongFilter();
+        }
+        return institutionId;
+    }
+
+    public void setInstitutionId(LongFilter institutionId) {
+        this.institutionId = institutionId;
     }
 
     public Boolean getDistinct() {
@@ -166,15 +328,36 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(accountNumber, that.accountNumber) &&
             Objects.equals(accountName, that.accountName) &&
-            Objects.equals(parentAccountId, that.parentAccountId) &&
+            Objects.equals(accountType, that.accountType) &&
+            Objects.equals(accountSubType, that.accountSubType) &&
+            Objects.equals(dummyAccount, that.dummyAccount) &&
+            Objects.equals(accountLedgerId, that.accountLedgerId) &&
+            Objects.equals(accountCategoryId, that.accountCategoryId) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(serviceOutletId, that.serviceOutletId) &&
+            Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
+            Objects.equals(institutionId, that.institutionId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, accountNumber, accountName, parentAccountId, placeholderId, distinct);
+        return Objects.hash(
+            id,
+            accountNumber,
+            accountName,
+            accountType,
+            accountSubType,
+            dummyAccount,
+            accountLedgerId,
+            accountCategoryId,
+            placeholderId,
+            serviceOutletId,
+            settlementCurrencyId,
+            institutionId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -184,8 +367,15 @@ public class TransactionAccountCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (accountNumber != null ? "accountNumber=" + accountNumber + ", " : "") +
             (accountName != null ? "accountName=" + accountName + ", " : "") +
-            (parentAccountId != null ? "parentAccountId=" + parentAccountId + ", " : "") +
+            (accountType != null ? "accountType=" + accountType + ", " : "") +
+            (accountSubType != null ? "accountSubType=" + accountSubType + ", " : "") +
+            (dummyAccount != null ? "dummyAccount=" + dummyAccount + ", " : "") +
+            (accountLedgerId != null ? "accountLedgerId=" + accountLedgerId + ", " : "") +
+            (accountCategoryId != null ? "accountCategoryId=" + accountCategoryId + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
+            (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
+            (institutionId != null ? "institutionId=" + institutionId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

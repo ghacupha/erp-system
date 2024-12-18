@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -67,14 +68,44 @@ public class RouDepreciationEntry implements Serializable {
     @Column(name = "sequence_number")
     private Integer sequenceNumber;
 
+    @Column(name = "activated")
+    private Boolean activated;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
+    @Column(name = "batch_job_identifier")
+    private UUID batchJobIdentifier;
+
+    @Column(name = "depreciation_amount_step_identifier")
+    private UUID depreciationAmountStepIdentifier;
+
+    @Column(name = "outstanding_amount_step_identifier")
+    private UUID outstandingAmountStepIdentifier;
+
+    @Column(name = "flag_amortised_step_identifier")
+    private UUID flagAmortisedStepIdentifier;
+
+    @Column(name = "compilation_time")
+    private ZonedDateTime compilationTime;
+
+    @Column(name = "invalidated")
+    private Boolean invalidated;
+
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
+        allowSetters = true
+    )
     private TransactionAccount debitAccount;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
+        allowSetters = true
+    )
     private TransactionAccount creditAccount;
 
     @ManyToOne(optional = false)
@@ -92,6 +123,7 @@ public class RouDepreciationEntry implements Serializable {
             "lastReportingPeriod",
             "leaseContractDocument",
             "leaseContractCalculations",
+            "leasePayments",
         },
         allowSetters = true
     )
@@ -111,6 +143,11 @@ public class RouDepreciationEntry implements Serializable {
         allowSetters = true
     )
     private RouModelMetadata rouMetadata;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
+    private LeasePeriod leasePeriod;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -205,6 +242,110 @@ public class RouDepreciationEntry implements Serializable {
         this.sequenceNumber = sequenceNumber;
     }
 
+    public Boolean getActivated() {
+        return this.activated;
+    }
+
+    public RouDepreciationEntry activated(Boolean activated) {
+        this.setActivated(activated);
+        return this;
+    }
+
+    public void setActivated(Boolean activated) {
+        this.activated = activated;
+    }
+
+    public Boolean getIsDeleted() {
+        return this.isDeleted;
+    }
+
+    public RouDepreciationEntry isDeleted(Boolean isDeleted) {
+        this.setIsDeleted(isDeleted);
+        return this;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public UUID getBatchJobIdentifier() {
+        return this.batchJobIdentifier;
+    }
+
+    public RouDepreciationEntry batchJobIdentifier(UUID batchJobIdentifier) {
+        this.setBatchJobIdentifier(batchJobIdentifier);
+        return this;
+    }
+
+    public void setBatchJobIdentifier(UUID batchJobIdentifier) {
+        this.batchJobIdentifier = batchJobIdentifier;
+    }
+
+    public UUID getDepreciationAmountStepIdentifier() {
+        return this.depreciationAmountStepIdentifier;
+    }
+
+    public RouDepreciationEntry depreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
+        this.setDepreciationAmountStepIdentifier(depreciationAmountStepIdentifier);
+        return this;
+    }
+
+    public void setDepreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
+        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
+    }
+
+    public UUID getOutstandingAmountStepIdentifier() {
+        return this.outstandingAmountStepIdentifier;
+    }
+
+    public RouDepreciationEntry outstandingAmountStepIdentifier(UUID outstandingAmountStepIdentifier) {
+        this.setOutstandingAmountStepIdentifier(outstandingAmountStepIdentifier);
+        return this;
+    }
+
+    public void setOutstandingAmountStepIdentifier(UUID outstandingAmountStepIdentifier) {
+        this.outstandingAmountStepIdentifier = outstandingAmountStepIdentifier;
+    }
+
+    public UUID getFlagAmortisedStepIdentifier() {
+        return this.flagAmortisedStepIdentifier;
+    }
+
+    public RouDepreciationEntry flagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
+        this.setFlagAmortisedStepIdentifier(flagAmortisedStepIdentifier);
+        return this;
+    }
+
+    public void setFlagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
+        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
+    }
+
+    public ZonedDateTime getCompilationTime() {
+        return this.compilationTime;
+    }
+
+    public RouDepreciationEntry compilationTime(ZonedDateTime compilationTime) {
+        this.setCompilationTime(compilationTime);
+        return this;
+    }
+
+    public void setCompilationTime(ZonedDateTime compilationTime) {
+        this.compilationTime = compilationTime;
+    }
+
+    public Boolean getInvalidated() {
+        return this.invalidated;
+    }
+
+    public RouDepreciationEntry invalidated(Boolean invalidated) {
+        this.setInvalidated(invalidated);
+        return this;
+    }
+
+    public void setInvalidated(Boolean invalidated) {
+        this.invalidated = invalidated;
+    }
+
     public TransactionAccount getDebitAccount() {
         return this.debitAccount;
     }
@@ -270,6 +411,19 @@ public class RouDepreciationEntry implements Serializable {
         return this;
     }
 
+    public LeasePeriod getLeasePeriod() {
+        return this.leasePeriod;
+    }
+
+    public void setLeasePeriod(LeasePeriod leasePeriod) {
+        this.leasePeriod = leasePeriod;
+    }
+
+    public RouDepreciationEntry leasePeriod(LeasePeriod leasePeriod) {
+        this.setLeasePeriod(leasePeriod);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -300,6 +454,14 @@ public class RouDepreciationEntry implements Serializable {
             ", rouAssetIdentifier='" + getRouAssetIdentifier() + "'" +
             ", rouDepreciationIdentifier='" + getRouDepreciationIdentifier() + "'" +
             ", sequenceNumber=" + getSequenceNumber() +
+            ", activated='" + getActivated() + "'" +
+            ", isDeleted='" + getIsDeleted() + "'" +
+            ", batchJobIdentifier='" + getBatchJobIdentifier() + "'" +
+            ", depreciationAmountStepIdentifier='" + getDepreciationAmountStepIdentifier() + "'" +
+            ", outstandingAmountStepIdentifier='" + getOutstandingAmountStepIdentifier() + "'" +
+            ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
+            ", compilationTime='" + getCompilationTime() + "'" +
+            ", invalidated='" + getInvalidated() + "'" +
             "}";
     }
 }

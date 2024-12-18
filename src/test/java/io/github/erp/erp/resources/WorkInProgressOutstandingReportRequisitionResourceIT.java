@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.erp.resources;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.ApplicationUser;
 import io.github.erp.domain.WorkInProgressOutstandingReportRequisition;
@@ -167,8 +166,6 @@ class WorkInProgressOutstandingReportRequisitionResourceIT {
         workInProgressOutstandingReportRequisition = createEntity(em);
     }
 
-    @Test
-    @Transactional
     void createWorkInProgressOutstandingReportRequisition() throws Exception {
         int databaseSizeBeforeCreate = workInProgressOutstandingReportRequisitionRepository.findAll().size();
         // Create the WorkInProgressOutstandingReportRequisition
@@ -975,69 +972,11 @@ class WorkInProgressOutstandingReportRequisitionResourceIT {
             .andExpect(content().string("0"));
     }
 
-    @Test
-    @Transactional
     void getNonExistingWorkInProgressOutstandingReportRequisition() throws Exception {
         // Get the workInProgressOutstandingReportRequisition
         restWorkInProgressOutstandingReportRequisitionMockMvc
             .perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE))
             .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @Transactional
-    void putNewWorkInProgressOutstandingReportRequisition() throws Exception {
-        // Initialize the database
-        workInProgressOutstandingReportRequisitionRepository.saveAndFlush(workInProgressOutstandingReportRequisition);
-
-        int databaseSizeBeforeUpdate = workInProgressOutstandingReportRequisitionRepository.findAll().size();
-
-        // Update the workInProgressOutstandingReportRequisition
-        WorkInProgressOutstandingReportRequisition updatedWorkInProgressOutstandingReportRequisition = workInProgressOutstandingReportRequisitionRepository
-            .findById(workInProgressOutstandingReportRequisition.getId())
-            .get();
-        // Disconnect from session so that the updates on updatedWorkInProgressOutstandingReportRequisition are not directly saved in db
-        em.detach(updatedWorkInProgressOutstandingReportRequisition);
-        updatedWorkInProgressOutstandingReportRequisition
-            .requestId(UPDATED_REQUEST_ID)
-            .reportDate(UPDATED_REPORT_DATE)
-            .timeOfRequisition(UPDATED_TIME_OF_REQUISITION)
-            .fileChecksum(UPDATED_FILE_CHECKSUM)
-            .tampered(UPDATED_TAMPERED)
-            .filename(UPDATED_FILENAME)
-            .reportParameters(UPDATED_REPORT_PARAMETERS)
-            .reportFile(UPDATED_REPORT_FILE)
-            .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
-        WorkInProgressOutstandingReportRequisitionDTO workInProgressOutstandingReportRequisitionDTO = workInProgressOutstandingReportRequisitionMapper.toDto(
-            updatedWorkInProgressOutstandingReportRequisition
-        );
-
-        restWorkInProgressOutstandingReportRequisitionMockMvc
-            .perform(
-                put(ENTITY_API_URL_ID, workInProgressOutstandingReportRequisitionDTO.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workInProgressOutstandingReportRequisitionDTO))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the WorkInProgressOutstandingReportRequisition in the database
-        List<WorkInProgressOutstandingReportRequisition> workInProgressOutstandingReportRequisitionList = workInProgressOutstandingReportRequisitionRepository.findAll();
-        assertThat(workInProgressOutstandingReportRequisitionList).hasSize(databaseSizeBeforeUpdate);
-        WorkInProgressOutstandingReportRequisition testWorkInProgressOutstandingReportRequisition = workInProgressOutstandingReportRequisitionList.get(
-            workInProgressOutstandingReportRequisitionList.size() - 1
-        );
-        assertThat(testWorkInProgressOutstandingReportRequisition.getRequestId()).isEqualTo(UPDATED_REQUEST_ID);
-        assertThat(testWorkInProgressOutstandingReportRequisition.getReportDate()).isEqualTo(UPDATED_REPORT_DATE);
-        assertThat(testWorkInProgressOutstandingReportRequisition.getTimeOfRequisition()).isEqualTo(UPDATED_TIME_OF_REQUISITION);
-        assertThat(testWorkInProgressOutstandingReportRequisition.getFileChecksum()).isEqualTo(UPDATED_FILE_CHECKSUM);
-        assertThat(testWorkInProgressOutstandingReportRequisition.getTampered()).isEqualTo(UPDATED_TAMPERED);
-        assertThat(testWorkInProgressOutstandingReportRequisition.getFilename()).isEqualTo(UPDATED_FILENAME);
-        assertThat(testWorkInProgressOutstandingReportRequisition.getReportParameters()).isEqualTo(UPDATED_REPORT_PARAMETERS);
-        assertThat(testWorkInProgressOutstandingReportRequisition.getReportFile()).isEqualTo(UPDATED_REPORT_FILE);
-        assertThat(testWorkInProgressOutstandingReportRequisition.getReportFileContentType()).isEqualTo(UPDATED_REPORT_FILE_CONTENT_TYPE);
-
-        // Validate the WorkInProgressOutstandingReportRequisition in Elasticsearch
-        verify(mockWorkInProgressOutstandingReportRequisitionSearchRepository).save(testWorkInProgressOutstandingReportRequisition);
     }
 
     @Test

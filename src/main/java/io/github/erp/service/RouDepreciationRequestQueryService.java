@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -134,6 +134,41 @@ public class RouDepreciationRequestQueryService extends QueryService<RouDeprecia
                     specification.and(
                         buildRangeSpecification(criteria.getNumberOfEnumeratedItems(), RouDepreciationRequest_.numberOfEnumeratedItems)
                     );
+            }
+            if (criteria.getBatchJobIdentifier() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getBatchJobIdentifier(), RouDepreciationRequest_.batchJobIdentifier));
+            }
+            if (criteria.getDepreciationAmountStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getDepreciationAmountStepIdentifier(),
+                            RouDepreciationRequest_.depreciationAmountStepIdentifier
+                        )
+                    );
+            }
+            if (criteria.getOutstandingAmountStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getOutstandingAmountStepIdentifier(),
+                            RouDepreciationRequest_.outstandingAmountStepIdentifier
+                        )
+                    );
+            }
+            if (criteria.getFlagAmortisedStepIdentifier() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getFlagAmortisedStepIdentifier(), RouDepreciationRequest_.flagAmortisedStepIdentifier)
+                    );
+            }
+            if (criteria.getCompilationTime() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getCompilationTime(), RouDepreciationRequest_.compilationTime));
+            }
+            if (criteria.getInvalidated() != null) {
+                specification = specification.and(buildSpecification(criteria.getInvalidated(), RouDepreciationRequest_.invalidated));
             }
             if (criteria.getInitiatedById() != null) {
                 specification =

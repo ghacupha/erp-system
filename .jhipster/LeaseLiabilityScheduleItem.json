@@ -5,18 +5,6 @@
       "fieldType": "Integer"
     },
     {
-      "fieldName": "periodIncluded",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "periodStartDate",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "periodEndDate",
-      "fieldType": "LocalDate"
-    },
-    {
       "fieldName": "openingBalance",
       "fieldType": "BigDecimal"
     },
@@ -41,11 +29,11 @@
       "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "interestExpenseAccrued",
+      "fieldName": "interestAccrued",
       "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "interestPayableBalance",
+      "fieldName": "interestPayableClosing",
       "fieldType": "BigDecimal"
     }
   ],
@@ -59,25 +47,39 @@
       "otherEntityRelationshipName": "leaseLiabilityScheduleItem"
     },
     {
-      "relationshipName": "leaseContract",
-      "otherEntityName": "leaseContract",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "bookingId"
-    },
-    {
-      "relationshipName": "leaseModelMetadata",
-      "otherEntityName": "leaseModelMetadata",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "modelTitle"
-    },
-    {
       "relationshipName": "universallyUniqueMapping",
       "otherEntityName": "universallyUniqueMapping",
       "relationshipType": "many-to-many",
       "otherEntityField": "universalKey",
       "ownerSide": true,
       "otherEntityRelationshipName": "leaseLiabilityScheduleItem"
+    },
+    {
+      "relationshipName": "leaseAmortizationSchedule",
+      "otherEntityName": "leaseAmortizationSchedule",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "iFRS16LeaseContract",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "bookingId"
+    },
+    {
+      "relationshipName": "leaseLiability",
+      "otherEntityName": "leaseLiability",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "leasePeriod",
+      "otherEntityName": "leaseRepaymentPeriod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "periodCode"
     }
   ],
   "service": "serviceImpl",

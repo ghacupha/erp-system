@@ -12,6 +12,10 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "instalmentDate",
+      "fieldType": "LocalDate"
+    },
+    {
       "fieldName": "instalmentAmount",
       "fieldType": "BigDecimal"
     },

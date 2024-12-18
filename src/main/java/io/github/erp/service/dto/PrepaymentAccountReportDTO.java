@@ -1,7 +1,7 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,9 @@ public class PrepaymentAccountReportDTO implements Serializable {
 
     private Long id;
 
-    private String prepaymentAccount;
+    private String accountName;
+
+    private String accountNumber;
 
     private BigDecimal prepaymentAmount;
 
@@ -49,12 +51,20 @@ public class PrepaymentAccountReportDTO implements Serializable {
         this.id = id;
     }
 
-    public String getPrepaymentAccount() {
-        return prepaymentAccount;
+    public String getAccountName() {
+        return accountName;
     }
 
-    public void setPrepaymentAccount(String prepaymentAccount) {
-        this.prepaymentAccount = prepaymentAccount;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public BigDecimal getPrepaymentAmount() {
@@ -123,7 +133,8 @@ public class PrepaymentAccountReportDTO implements Serializable {
     public String toString() {
         return "PrepaymentAccountReportDTO{" +
             "id=" + getId() +
-            ", prepaymentAccount='" + getPrepaymentAccount() + "'" +
+            ", accountName='" + getAccountName() + "'" +
+            ", accountNumber='" + getAccountNumber() + "'" +
             ", prepaymentAmount=" + getPrepaymentAmount() +
             ", amortisedAmount=" + getAmortisedAmount() +
             ", outstandingAmount=" + getOutstandingAmount() +

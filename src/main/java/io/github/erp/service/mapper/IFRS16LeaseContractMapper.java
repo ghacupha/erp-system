@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -38,15 +38,15 @@ public interface IFRS16LeaseContractMapper extends EntityMapper<IFRS16LeaseContr
     @Mapping(target = "leaseContractCalculations", source = "leaseContractCalculations", qualifiedByName = "documentTitle")
     IFRS16LeaseContractDTO toDto(IFRS16LeaseContract s);
 
-    @Named("shortTitle")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "shortTitle", source = "shortTitle")
-    IFRS16LeaseContractDTO toDtoShortTitle(IFRS16LeaseContract iFRS16LeaseContract);
-
     @Named("bookingId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "bookingId", source = "bookingId")
     IFRS16LeaseContractDTO toDtoBookingId(IFRS16LeaseContract iFRS16LeaseContract);
+
+    @Named("shortTitle")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "shortTitle", source = "shortTitle")
+    IFRS16LeaseContractDTO toDtoShortTitle(IFRS16LeaseContract iFRS16LeaseContract);
 }

@@ -1,7 +1,7 @@
 package io.github.erp.internal.service.prepayments;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -90,20 +91,27 @@ public class PrepaymentCompilationServiceImpl implements PrepaymentCompilationSe
     @Override
     public void compile(PrepaymentCompilationRequestDTO compilationRequest) {
 
+        // TODO Implement this is batches
+
         long numberOfProcessedItems = prepaymentMarshallingRepository.findAllWithEagerRelationships().stream()
+            .filter(marshal -> !marshal.getInactive())
+            .filter(marshal -> !marshal.getProcessed())
+            .count();
+
+        List<PrepaymentAmortization> savedAmortizationList = prepaymentMarshallingRepository.findAllWithEagerRelationships().stream()
             .filter(marshal -> !marshal.getInactive())
             .filter(marshal -> !marshal.getProcessed())
             .peek(prepaymentMarshalling -> prepaymentMarshalling.setProcessed(true))
             .peek(prepaymentMarshalling -> prepaymentMarshalling.setCompilationToken(compilationRequest.getCompilationToken()))
             .flatMap(marshal -> mapIntermediateMarshallingItem(marshal, prepaymentCompilationRequestMapper.toEntity(compilationRequest)))
-            .map(prepaymentAmortizationRepository::save) // we also need to ensure the data is in the search index
-            .map(prepaymentAmortizationSearchRepository::save)
-            .count();
+            .map(prepaymentAmortizationRepository::save)
+            .toList();
 
         compilationRequest.setItemsProcessed(Math.toIntExact(numberOfProcessedItems));
-
-
         prepaymentCompilationCompleteSequence.compilationComplete(compilationRequest);
+
+        // Optional indexing
+        // savedAmortizationList.forEach(prepaymentAmortizationSearchRepository::save);
     }
 
     private Stream<PrepaymentAmortization> mapIntermediateMarshallingItem(PrepaymentMarshalling marshalItem, PrepaymentCompilationRequest prepaymentCompilationRequest) {

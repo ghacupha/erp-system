@@ -1,7 +1,7 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,6 +20,7 @@ package io.github.erp.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.validation.constraints.*;
@@ -48,6 +49,22 @@ public class RouDepreciationEntryDTO implements Serializable {
 
     private Integer sequenceNumber;
 
+    private Boolean activated;
+
+    private Boolean isDeleted;
+
+    private UUID batchJobIdentifier;
+
+    private UUID depreciationAmountStepIdentifier;
+
+    private UUID outstandingAmountStepIdentifier;
+
+    private UUID flagAmortisedStepIdentifier;
+
+    private ZonedDateTime compilationTime;
+
+    private Boolean invalidated;
+
     private TransactionAccountDTO debitAccount;
 
     private TransactionAccountDTO creditAccount;
@@ -57,6 +74,8 @@ public class RouDepreciationEntryDTO implements Serializable {
     private IFRS16LeaseContractDTO leaseContract;
 
     private RouModelMetadataDTO rouMetadata;
+
+    private LeasePeriodDTO leasePeriod;
 
     public Long getId() {
         return id;
@@ -114,6 +133,70 @@ public class RouDepreciationEntryDTO implements Serializable {
         this.sequenceNumber = sequenceNumber;
     }
 
+    public Boolean getActivated() {
+        return activated;
+    }
+
+    public void setActivated(Boolean activated) {
+        this.activated = activated;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public UUID getBatchJobIdentifier() {
+        return batchJobIdentifier;
+    }
+
+    public void setBatchJobIdentifier(UUID batchJobIdentifier) {
+        this.batchJobIdentifier = batchJobIdentifier;
+    }
+
+    public UUID getDepreciationAmountStepIdentifier() {
+        return depreciationAmountStepIdentifier;
+    }
+
+    public void setDepreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
+        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
+    }
+
+    public UUID getOutstandingAmountStepIdentifier() {
+        return outstandingAmountStepIdentifier;
+    }
+
+    public void setOutstandingAmountStepIdentifier(UUID outstandingAmountStepIdentifier) {
+        this.outstandingAmountStepIdentifier = outstandingAmountStepIdentifier;
+    }
+
+    public UUID getFlagAmortisedStepIdentifier() {
+        return flagAmortisedStepIdentifier;
+    }
+
+    public void setFlagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
+        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
+    }
+
+    public ZonedDateTime getCompilationTime() {
+        return compilationTime;
+    }
+
+    public void setCompilationTime(ZonedDateTime compilationTime) {
+        this.compilationTime = compilationTime;
+    }
+
+    public Boolean getInvalidated() {
+        return invalidated;
+    }
+
+    public void setInvalidated(Boolean invalidated) {
+        this.invalidated = invalidated;
+    }
+
     public TransactionAccountDTO getDebitAccount() {
         return debitAccount;
     }
@@ -154,6 +237,14 @@ public class RouDepreciationEntryDTO implements Serializable {
         this.rouMetadata = rouMetadata;
     }
 
+    public LeasePeriodDTO getLeasePeriod() {
+        return leasePeriod;
+    }
+
+    public void setLeasePeriod(LeasePeriodDTO leasePeriod) {
+        this.leasePeriod = leasePeriod;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -186,11 +277,20 @@ public class RouDepreciationEntryDTO implements Serializable {
             ", rouAssetIdentifier='" + getRouAssetIdentifier() + "'" +
             ", rouDepreciationIdentifier='" + getRouDepreciationIdentifier() + "'" +
             ", sequenceNumber=" + getSequenceNumber() +
+            ", activated='" + getActivated() + "'" +
+            ", isDeleted='" + getIsDeleted() + "'" +
+            ", batchJobIdentifier='" + getBatchJobIdentifier() + "'" +
+            ", depreciationAmountStepIdentifier='" + getDepreciationAmountStepIdentifier() + "'" +
+            ", outstandingAmountStepIdentifier='" + getOutstandingAmountStepIdentifier() + "'" +
+            ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
+            ", compilationTime='" + getCompilationTime() + "'" +
+            ", invalidated='" + getInvalidated() + "'" +
             ", debitAccount=" + getDebitAccount() +
             ", creditAccount=" + getCreditAccount() +
             ", assetCategory=" + getAssetCategory() +
             ", leaseContract=" + getLeaseContract() +
             ", rouMetadata=" + getRouMetadata() +
+            ", leasePeriod=" + getLeasePeriod() +
             "}";
     }
 }

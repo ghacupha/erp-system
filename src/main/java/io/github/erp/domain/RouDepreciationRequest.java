@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -58,6 +58,24 @@ public class RouDepreciationRequest implements Serializable {
 
     @Column(name = "number_of_enumerated_items")
     private Integer numberOfEnumeratedItems;
+
+    @Column(name = "batch_job_identifier")
+    private UUID batchJobIdentifier;
+
+    @Column(name = "depreciation_amount_step_identifier")
+    private UUID depreciationAmountStepIdentifier;
+
+    @Column(name = "outstanding_amount_step_identifier")
+    private UUID outstandingAmountStepIdentifier;
+
+    @Column(name = "flag_amortised_step_identifier")
+    private UUID flagAmortisedStepIdentifier;
+
+    @Column(name = "compilation_time")
+    private ZonedDateTime compilationTime;
+
+    @Column(name = "invalidated")
+    private Boolean invalidated;
 
     @ManyToOne
     @JsonIgnoreProperties(
@@ -133,6 +151,84 @@ public class RouDepreciationRequest implements Serializable {
         this.numberOfEnumeratedItems = numberOfEnumeratedItems;
     }
 
+    public UUID getBatchJobIdentifier() {
+        return this.batchJobIdentifier;
+    }
+
+    public RouDepreciationRequest batchJobIdentifier(UUID batchJobIdentifier) {
+        this.setBatchJobIdentifier(batchJobIdentifier);
+        return this;
+    }
+
+    public void setBatchJobIdentifier(UUID batchJobIdentifier) {
+        this.batchJobIdentifier = batchJobIdentifier;
+    }
+
+    public UUID getDepreciationAmountStepIdentifier() {
+        return this.depreciationAmountStepIdentifier;
+    }
+
+    public RouDepreciationRequest depreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
+        this.setDepreciationAmountStepIdentifier(depreciationAmountStepIdentifier);
+        return this;
+    }
+
+    public void setDepreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
+        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
+    }
+
+    public UUID getOutstandingAmountStepIdentifier() {
+        return this.outstandingAmountStepIdentifier;
+    }
+
+    public RouDepreciationRequest outstandingAmountStepIdentifier(UUID outstandingAmountStepIdentifier) {
+        this.setOutstandingAmountStepIdentifier(outstandingAmountStepIdentifier);
+        return this;
+    }
+
+    public void setOutstandingAmountStepIdentifier(UUID outstandingAmountStepIdentifier) {
+        this.outstandingAmountStepIdentifier = outstandingAmountStepIdentifier;
+    }
+
+    public UUID getFlagAmortisedStepIdentifier() {
+        return this.flagAmortisedStepIdentifier;
+    }
+
+    public RouDepreciationRequest flagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
+        this.setFlagAmortisedStepIdentifier(flagAmortisedStepIdentifier);
+        return this;
+    }
+
+    public void setFlagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
+        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
+    }
+
+    public ZonedDateTime getCompilationTime() {
+        return this.compilationTime;
+    }
+
+    public RouDepreciationRequest compilationTime(ZonedDateTime compilationTime) {
+        this.setCompilationTime(compilationTime);
+        return this;
+    }
+
+    public void setCompilationTime(ZonedDateTime compilationTime) {
+        this.compilationTime = compilationTime;
+    }
+
+    public Boolean getInvalidated() {
+        return this.invalidated;
+    }
+
+    public RouDepreciationRequest invalidated(Boolean invalidated) {
+        this.setInvalidated(invalidated);
+        return this;
+    }
+
+    public void setInvalidated(Boolean invalidated) {
+        this.invalidated = invalidated;
+    }
+
     public ApplicationUser getInitiatedBy() {
         return this.initiatedBy;
     }
@@ -174,6 +270,12 @@ public class RouDepreciationRequest implements Serializable {
             ", timeOfRequest='" + getTimeOfRequest() + "'" +
             ", depreciationProcessStatus='" + getDepreciationProcessStatus() + "'" +
             ", numberOfEnumeratedItems=" + getNumberOfEnumeratedItems() +
+            ", batchJobIdentifier='" + getBatchJobIdentifier() + "'" +
+            ", depreciationAmountStepIdentifier='" + getDepreciationAmountStepIdentifier() + "'" +
+            ", outstandingAmountStepIdentifier='" + getOutstandingAmountStepIdentifier() + "'" +
+            ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
+            ", compilationTime='" + getCompilationTime() + "'" +
+            ", invalidated='" + getInvalidated() + "'" +
             "}";
     }
 }

@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources.wip;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.erp.resources.wip;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.wip.InternalWorkInProgressTransferService;
 import io.github.erp.repository.WorkInProgressTransferRepository;
 import io.github.erp.service.WorkInProgressTransferQueryService;
 import io.github.erp.service.WorkInProgressTransferService;
@@ -56,14 +57,14 @@ public class WorkInProgressTransferResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final WorkInProgressTransferService workInProgressTransferService;
+    private final InternalWorkInProgressTransferService workInProgressTransferService;
 
     private final WorkInProgressTransferRepository workInProgressTransferRepository;
 
     private final WorkInProgressTransferQueryService workInProgressTransferQueryService;
 
     public WorkInProgressTransferResourceProd(
-        WorkInProgressTransferService workInProgressTransferService,
+        InternalWorkInProgressTransferService workInProgressTransferService,
         WorkInProgressTransferRepository workInProgressTransferRepository,
         WorkInProgressTransferQueryService workInProgressTransferQueryService
     ) {
@@ -121,7 +122,7 @@ public class WorkInProgressTransferResourceProd {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        WorkInProgressTransferDTO result = workInProgressTransferService.save(workInProgressTransferDTO);
+        WorkInProgressTransferDTO result = workInProgressTransferService.update(workInProgressTransferDTO);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, workInProgressTransferDTO.getId().toString()))

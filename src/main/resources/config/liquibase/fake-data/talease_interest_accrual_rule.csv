@@ -1,0 +1,11 @@
+id;name;identifier;lease_contract_id;debit_id;credit_id
+1;infrastructure;bde2b1b8-dcd3-4a5b-bc63-724dd81497b8;1;1;1
+2;Supervisor;939b36e6-5926-433b-ad38-c15ff4317fa3;2;2;2
+3;Internal parse;376b65f1-083e-4da6-bbe7-549df5bd36a6;3;3;3
+4;application sky Representative;91ccd21e-0081-46eb-be36-479f1398ba3f;4;4;4
+5;calculating;6b2ef020-e4b2-4c10-9b79-1778ea23a11f;5;5;5
+6;actuating;91df501b-b28b-4607-b2f0-89bfe1069335;6;6;6
+7;web-readiness;d1827f88-2e5c-4665-a7bc-a3a3f0bcd605;7;7;7
+8;Vanuatu;3343e2c5-e239-493a-bec5-86d4ff20259a;8;8;8
+9;navigate Investor;7a251962-6836-46af-84d7-326148b1e07f;9;9;9
+10;French;37b00d33-7cfc-4d58-8bab-806d0a195535;10;10;10

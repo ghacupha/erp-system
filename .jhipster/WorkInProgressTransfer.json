@@ -61,7 +61,13 @@
       "otherEntityField": "outletCode"
     },
     {
-      "relationshipName": "settlement",
+      "relationshipName": "transferSettlement",
+      "otherEntityName": "settlement",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "paymentNumber"
+    },
+    {
+      "relationshipName": "originalSettlement",
       "otherEntityName": "settlement",
       "relationshipType": "many-to-one",
       "otherEntityField": "paymentNumber"

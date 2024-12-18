@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,6 +19,8 @@ package io.github.erp.domain;
  */
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.github.erp.domain.enumeration.AccountSubTypes;
+import io.github.erp.domain.enumeration.AccountTypes;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +28,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A TransactionAccount.
@@ -33,7 +37,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "transaction_account")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "transactionaccount")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "transactionaccount-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class TransactionAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,26 +46,53 @@ public class TransactionAccount implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "account_number", nullable = false, unique = true)
+    @Field(type = FieldType.Keyword)
     private String accountNumber;
 
     @NotNull
     @Column(name = "account_name", nullable = false)
+    @Field(type = FieldType.Keyword)
     private String accountName;
 
     @Lob
     @Column(name = "notes")
+    @Field(type = FieldType.Byte, index = false)
     private byte[] notes;
 
     @Column(name = "notes_content_type")
+    @Field(type = FieldType.Text, index = false)
     private String notesContentType;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
-    private TransactionAccount parentAccount;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_type", nullable = false)
+    @Field(type = FieldType.Text, index = false)
+    private AccountTypes accountType;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_sub_type", nullable = false)
+    @Field(type = FieldType.Text, index = false)
+    private AccountSubTypes accountSubType;
+
+    @Column(name = "dummy_account")
+    @Field(type = FieldType.Boolean, index = false)
+    private Boolean dummyAccount;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    private TransactionAccountLedger accountLedger;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "placeholders", "accountLedger" }, allowSetters = true)
+    private TransactionAccountCategory accountCategory;
 
     @ManyToMany
     @JoinTable(
@@ -72,6 +103,23 @@ public class TransactionAccount implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(
+        value = { "placeholders", "bankCode", "outletType", "outletStatus", "countyName", "subCountyName" },
+        allowSetters = true
+    )
+    private ServiceOutlet serviceOutlet;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
+    private SettlementCurrency settlementCurrency;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    private ReportingEntity institution;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -140,16 +188,68 @@ public class TransactionAccount implements Serializable {
         this.notesContentType = notesContentType;
     }
 
-    public TransactionAccount getParentAccount() {
-        return this.parentAccount;
+    public AccountTypes getAccountType() {
+        return this.accountType;
     }
 
-    public void setParentAccount(TransactionAccount transactionAccount) {
-        this.parentAccount = transactionAccount;
+    public TransactionAccount accountType(AccountTypes accountType) {
+        this.setAccountType(accountType);
+        return this;
     }
 
-    public TransactionAccount parentAccount(TransactionAccount transactionAccount) {
-        this.setParentAccount(transactionAccount);
+    public void setAccountType(AccountTypes accountType) {
+        this.accountType = accountType;
+    }
+
+    public AccountSubTypes getAccountSubType() {
+        return this.accountSubType;
+    }
+
+    public TransactionAccount accountSubType(AccountSubTypes accountSubType) {
+        this.setAccountSubType(accountSubType);
+        return this;
+    }
+
+    public void setAccountSubType(AccountSubTypes accountSubType) {
+        this.accountSubType = accountSubType;
+    }
+
+    public Boolean getDummyAccount() {
+        return this.dummyAccount;
+    }
+
+    public TransactionAccount dummyAccount(Boolean dummyAccount) {
+        this.setDummyAccount(dummyAccount);
+        return this;
+    }
+
+    public void setDummyAccount(Boolean dummyAccount) {
+        this.dummyAccount = dummyAccount;
+    }
+
+    public TransactionAccountLedger getAccountLedger() {
+        return this.accountLedger;
+    }
+
+    public void setAccountLedger(TransactionAccountLedger transactionAccountLedger) {
+        this.accountLedger = transactionAccountLedger;
+    }
+
+    public TransactionAccount accountLedger(TransactionAccountLedger transactionAccountLedger) {
+        this.setAccountLedger(transactionAccountLedger);
+        return this;
+    }
+
+    public TransactionAccountCategory getAccountCategory() {
+        return this.accountCategory;
+    }
+
+    public void setAccountCategory(TransactionAccountCategory transactionAccountCategory) {
+        this.accountCategory = transactionAccountCategory;
+    }
+
+    public TransactionAccount accountCategory(TransactionAccountCategory transactionAccountCategory) {
+        this.setAccountCategory(transactionAccountCategory);
         return this;
     }
 
@@ -173,6 +273,45 @@ public class TransactionAccount implements Serializable {
 
     public TransactionAccount removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public ServiceOutlet getServiceOutlet() {
+        return this.serviceOutlet;
+    }
+
+    public void setServiceOutlet(ServiceOutlet serviceOutlet) {
+        this.serviceOutlet = serviceOutlet;
+    }
+
+    public TransactionAccount serviceOutlet(ServiceOutlet serviceOutlet) {
+        this.setServiceOutlet(serviceOutlet);
+        return this;
+    }
+
+    public SettlementCurrency getSettlementCurrency() {
+        return this.settlementCurrency;
+    }
+
+    public void setSettlementCurrency(SettlementCurrency settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
+    }
+
+    public TransactionAccount settlementCurrency(SettlementCurrency settlementCurrency) {
+        this.setSettlementCurrency(settlementCurrency);
+        return this;
+    }
+
+    public ReportingEntity getInstitution() {
+        return this.institution;
+    }
+
+    public void setInstitution(ReportingEntity reportingEntity) {
+        this.institution = reportingEntity;
+    }
+
+    public TransactionAccount institution(ReportingEntity reportingEntity) {
+        this.setInstitution(reportingEntity);
         return this;
     }
 
@@ -204,6 +343,9 @@ public class TransactionAccount implements Serializable {
             ", accountName='" + getAccountName() + "'" +
             ", notes='" + getNotes() + "'" +
             ", notesContentType='" + getNotesContentType() + "'" +
+            ", accountType='" + getAccountType() + "'" +
+            ", accountSubType='" + getAccountSubType() + "'" +
+            ", dummyAccount='" + getDummyAccount() + "'" +
             "}";
     }
 }

@@ -38,17 +38,17 @@
   ],
   "relationships": [
     {
-      "relationshipName": "fiscalMonth",
-      "otherEntityName": "fiscalMonth",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "fiscalMonthCode"
-    },
-    {
       "relationshipName": "requestedBy",
       "otherEntityName": "applicationUser",
       "relationshipType": "many-to-one",
       "otherEntityField": "applicationIdentity"
+    },
+    {
+      "relationshipName": "leasePeriod",
+      "otherEntityName": "leasePeriod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "periodCode"
     }
   ],
   "service": "serviceImpl",

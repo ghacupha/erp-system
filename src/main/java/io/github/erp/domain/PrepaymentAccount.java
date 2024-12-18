@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,6 +30,8 @@ import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A PrepaymentAccount.
@@ -37,7 +39,7 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "prepayment_account")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "prepaymentaccount")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "prepaymentaccount-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class PrepaymentAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,28 +48,35 @@ public class PrepaymentAccount implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "catalogue_number", nullable = false, unique = true)
+    @Field(type = FieldType.Keyword)
     private String catalogueNumber;
 
     @NotNull
     @Column(name = "particulars", nullable = false)
+    @Field(type = FieldType.Text)
     private String particulars;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "notes")
+    @Field(type = FieldType.Text, index = false)
     private String notes;
 
     @Column(name = "prepayment_amount", precision = 21, scale = 2)
+    @Field(type = FieldType.Double)
     private BigDecimal prepaymentAmount;
 
     @Column(name = "prepayment_guid")
+    @Field(type = FieldType.Text, index = false)
     private UUID prepaymentGuid;
 
     @Column(name = "recognition_date")
+    @Field(type = FieldType.Date)
     private LocalDate recognitionDate;
 
     @ManyToOne
@@ -103,11 +112,17 @@ public class PrepaymentAccount implements Serializable {
     private Dealer dealer;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
+        allowSetters = true
+    )
     private TransactionAccount debitAccount;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
+        allowSetters = true
+    )
     private TransactionAccount transferAccount;
 
     @ManyToMany

@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -138,12 +138,12 @@ public class RouAssetNBVReportQueryService extends QueryService<RouAssetNBVRepor
                 specification =
                     specification.and(buildStringSpecification(criteria.getReportParameters(), RouAssetNBVReport_.reportParameters));
             }
-            if (criteria.getFiscalReportingMonthId() != null) {
+            if (criteria.getLeasePeriodId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getFiscalReportingMonthId(),
-                            root -> root.join(RouAssetNBVReport_.fiscalReportingMonth, JoinType.LEFT).get(FiscalMonth_.id)
+                            criteria.getLeasePeriodId(),
+                            root -> root.join(RouAssetNBVReport_.leasePeriod, JoinType.LEFT).get(LeasePeriod_.id)
                         )
                     );
             }

@@ -1,7 +1,7 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,6 +30,7 @@ import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 import tech.jhipster.service.filter.UUIDFilter;
+import tech.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
  * Criteria class for the {@link io.github.erp.domain.RouDepreciationEntry} entity. This class is used
@@ -58,6 +59,22 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
 
     private IntegerFilter sequenceNumber;
 
+    private BooleanFilter activated;
+
+    private BooleanFilter isDeleted;
+
+    private UUIDFilter batchJobIdentifier;
+
+    private UUIDFilter depreciationAmountStepIdentifier;
+
+    private UUIDFilter outstandingAmountStepIdentifier;
+
+    private UUIDFilter flagAmortisedStepIdentifier;
+
+    private ZonedDateTimeFilter compilationTime;
+
+    private BooleanFilter invalidated;
+
     private LongFilter debitAccountId;
 
     private LongFilter creditAccountId;
@@ -67,6 +84,8 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
     private LongFilter leaseContractId;
 
     private LongFilter rouMetadataId;
+
+    private LongFilter leasePeriodId;
 
     private Boolean distinct;
 
@@ -80,11 +99,22 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
         this.rouAssetIdentifier = other.rouAssetIdentifier == null ? null : other.rouAssetIdentifier.copy();
         this.rouDepreciationIdentifier = other.rouDepreciationIdentifier == null ? null : other.rouDepreciationIdentifier.copy();
         this.sequenceNumber = other.sequenceNumber == null ? null : other.sequenceNumber.copy();
+        this.activated = other.activated == null ? null : other.activated.copy();
+        this.isDeleted = other.isDeleted == null ? null : other.isDeleted.copy();
+        this.batchJobIdentifier = other.batchJobIdentifier == null ? null : other.batchJobIdentifier.copy();
+        this.depreciationAmountStepIdentifier =
+            other.depreciationAmountStepIdentifier == null ? null : other.depreciationAmountStepIdentifier.copy();
+        this.outstandingAmountStepIdentifier =
+            other.outstandingAmountStepIdentifier == null ? null : other.outstandingAmountStepIdentifier.copy();
+        this.flagAmortisedStepIdentifier = other.flagAmortisedStepIdentifier == null ? null : other.flagAmortisedStepIdentifier.copy();
+        this.compilationTime = other.compilationTime == null ? null : other.compilationTime.copy();
+        this.invalidated = other.invalidated == null ? null : other.invalidated.copy();
         this.debitAccountId = other.debitAccountId == null ? null : other.debitAccountId.copy();
         this.creditAccountId = other.creditAccountId == null ? null : other.creditAccountId.copy();
         this.assetCategoryId = other.assetCategoryId == null ? null : other.assetCategoryId.copy();
         this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
         this.rouMetadataId = other.rouMetadataId == null ? null : other.rouMetadataId.copy();
+        this.leasePeriodId = other.leasePeriodId == null ? null : other.leasePeriodId.copy();
         this.distinct = other.distinct;
     }
 
@@ -198,6 +228,126 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
         this.sequenceNumber = sequenceNumber;
     }
 
+    public BooleanFilter getActivated() {
+        return activated;
+    }
+
+    public BooleanFilter activated() {
+        if (activated == null) {
+            activated = new BooleanFilter();
+        }
+        return activated;
+    }
+
+    public void setActivated(BooleanFilter activated) {
+        this.activated = activated;
+    }
+
+    public BooleanFilter getIsDeleted() {
+        return isDeleted;
+    }
+
+    public BooleanFilter isDeleted() {
+        if (isDeleted == null) {
+            isDeleted = new BooleanFilter();
+        }
+        return isDeleted;
+    }
+
+    public void setIsDeleted(BooleanFilter isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public UUIDFilter getBatchJobIdentifier() {
+        return batchJobIdentifier;
+    }
+
+    public UUIDFilter batchJobIdentifier() {
+        if (batchJobIdentifier == null) {
+            batchJobIdentifier = new UUIDFilter();
+        }
+        return batchJobIdentifier;
+    }
+
+    public void setBatchJobIdentifier(UUIDFilter batchJobIdentifier) {
+        this.batchJobIdentifier = batchJobIdentifier;
+    }
+
+    public UUIDFilter getDepreciationAmountStepIdentifier() {
+        return depreciationAmountStepIdentifier;
+    }
+
+    public UUIDFilter depreciationAmountStepIdentifier() {
+        if (depreciationAmountStepIdentifier == null) {
+            depreciationAmountStepIdentifier = new UUIDFilter();
+        }
+        return depreciationAmountStepIdentifier;
+    }
+
+    public void setDepreciationAmountStepIdentifier(UUIDFilter depreciationAmountStepIdentifier) {
+        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
+    }
+
+    public UUIDFilter getOutstandingAmountStepIdentifier() {
+        return outstandingAmountStepIdentifier;
+    }
+
+    public UUIDFilter outstandingAmountStepIdentifier() {
+        if (outstandingAmountStepIdentifier == null) {
+            outstandingAmountStepIdentifier = new UUIDFilter();
+        }
+        return outstandingAmountStepIdentifier;
+    }
+
+    public void setOutstandingAmountStepIdentifier(UUIDFilter outstandingAmountStepIdentifier) {
+        this.outstandingAmountStepIdentifier = outstandingAmountStepIdentifier;
+    }
+
+    public UUIDFilter getFlagAmortisedStepIdentifier() {
+        return flagAmortisedStepIdentifier;
+    }
+
+    public UUIDFilter flagAmortisedStepIdentifier() {
+        if (flagAmortisedStepIdentifier == null) {
+            flagAmortisedStepIdentifier = new UUIDFilter();
+        }
+        return flagAmortisedStepIdentifier;
+    }
+
+    public void setFlagAmortisedStepIdentifier(UUIDFilter flagAmortisedStepIdentifier) {
+        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
+    }
+
+    public ZonedDateTimeFilter getCompilationTime() {
+        return compilationTime;
+    }
+
+    public ZonedDateTimeFilter compilationTime() {
+        if (compilationTime == null) {
+            compilationTime = new ZonedDateTimeFilter();
+        }
+        return compilationTime;
+    }
+
+    public void setCompilationTime(ZonedDateTimeFilter compilationTime) {
+        this.compilationTime = compilationTime;
+    }
+
+    public BooleanFilter getInvalidated() {
+        return invalidated;
+    }
+
+    public BooleanFilter invalidated() {
+        if (invalidated == null) {
+            invalidated = new BooleanFilter();
+        }
+        return invalidated;
+    }
+
+    public void setInvalidated(BooleanFilter invalidated) {
+        this.invalidated = invalidated;
+    }
+
     public LongFilter getDebitAccountId() {
         return debitAccountId;
     }
@@ -273,6 +423,21 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
         this.rouMetadataId = rouMetadataId;
     }
 
+    public LongFilter getLeasePeriodId() {
+        return leasePeriodId;
+    }
+
+    public LongFilter leasePeriodId() {
+        if (leasePeriodId == null) {
+            leasePeriodId = new LongFilter();
+        }
+        return leasePeriodId;
+    }
+
+    public void setLeasePeriodId(LongFilter leasePeriodId) {
+        this.leasePeriodId = leasePeriodId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -298,11 +463,20 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             Objects.equals(rouAssetIdentifier, that.rouAssetIdentifier) &&
             Objects.equals(rouDepreciationIdentifier, that.rouDepreciationIdentifier) &&
             Objects.equals(sequenceNumber, that.sequenceNumber) &&
+            Objects.equals(activated, that.activated) &&
+            Objects.equals(isDeleted, that.isDeleted) &&
+            Objects.equals(batchJobIdentifier, that.batchJobIdentifier) &&
+            Objects.equals(depreciationAmountStepIdentifier, that.depreciationAmountStepIdentifier) &&
+            Objects.equals(outstandingAmountStepIdentifier, that.outstandingAmountStepIdentifier) &&
+            Objects.equals(flagAmortisedStepIdentifier, that.flagAmortisedStepIdentifier) &&
+            Objects.equals(compilationTime, that.compilationTime) &&
+            Objects.equals(invalidated, that.invalidated) &&
             Objects.equals(debitAccountId, that.debitAccountId) &&
             Objects.equals(creditAccountId, that.creditAccountId) &&
             Objects.equals(assetCategoryId, that.assetCategoryId) &&
             Objects.equals(leaseContractId, that.leaseContractId) &&
             Objects.equals(rouMetadataId, that.rouMetadataId) &&
+            Objects.equals(leasePeriodId, that.leasePeriodId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -317,11 +491,20 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             rouAssetIdentifier,
             rouDepreciationIdentifier,
             sequenceNumber,
+            activated,
+            isDeleted,
+            batchJobIdentifier,
+            depreciationAmountStepIdentifier,
+            outstandingAmountStepIdentifier,
+            flagAmortisedStepIdentifier,
+            compilationTime,
+            invalidated,
             debitAccountId,
             creditAccountId,
             assetCategoryId,
             leaseContractId,
             rouMetadataId,
+            leasePeriodId,
             distinct
         );
     }
@@ -337,11 +520,20 @@ public class RouDepreciationEntryCriteria implements Serializable, Criteria {
             (rouAssetIdentifier != null ? "rouAssetIdentifier=" + rouAssetIdentifier + ", " : "") +
             (rouDepreciationIdentifier != null ? "rouDepreciationIdentifier=" + rouDepreciationIdentifier + ", " : "") +
             (sequenceNumber != null ? "sequenceNumber=" + sequenceNumber + ", " : "") +
+            (activated != null ? "activated=" + activated + ", " : "") +
+            (isDeleted != null ? "isDeleted=" + isDeleted + ", " : "") +
+            (batchJobIdentifier != null ? "batchJobIdentifier=" + batchJobIdentifier + ", " : "") +
+            (depreciationAmountStepIdentifier != null ? "depreciationAmountStepIdentifier=" + depreciationAmountStepIdentifier + ", " : "") +
+            (outstandingAmountStepIdentifier != null ? "outstandingAmountStepIdentifier=" + outstandingAmountStepIdentifier + ", " : "") +
+            (flagAmortisedStepIdentifier != null ? "flagAmortisedStepIdentifier=" + flagAmortisedStepIdentifier + ", " : "") +
+            (compilationTime != null ? "compilationTime=" + compilationTime + ", " : "") +
+            (invalidated != null ? "invalidated=" + invalidated + ", " : "") +
             (debitAccountId != null ? "debitAccountId=" + debitAccountId + ", " : "") +
             (creditAccountId != null ? "creditAccountId=" + creditAccountId + ", " : "") +
             (assetCategoryId != null ? "assetCategoryId=" + assetCategoryId + ", " : "") +
             (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
             (rouMetadataId != null ? "rouMetadataId=" + rouMetadataId + ", " : "") +
+            (leasePeriodId != null ? "leasePeriodId=" + leasePeriodId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

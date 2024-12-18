@@ -1,7 +1,7 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,6 +27,7 @@ import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
+import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
@@ -48,6 +49,8 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
     private StringFilter sequenceNumber;
 
     private StringFilter particulars;
+
+    private LocalDateFilter instalmentDate;
 
     private BigDecimalFilter instalmentAmount;
 
@@ -91,6 +94,7 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
         this.id = other.id == null ? null : other.id.copy();
         this.sequenceNumber = other.sequenceNumber == null ? null : other.sequenceNumber.copy();
         this.particulars = other.particulars == null ? null : other.particulars.copy();
+        this.instalmentDate = other.instalmentDate == null ? null : other.instalmentDate.copy();
         this.instalmentAmount = other.instalmentAmount == null ? null : other.instalmentAmount.copy();
         this.levelOfCompletion = other.levelOfCompletion == null ? null : other.levelOfCompletion.copy();
         this.completed = other.completed == null ? null : other.completed.copy();
@@ -159,6 +163,21 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
 
     public void setParticulars(StringFilter particulars) {
         this.particulars = particulars;
+    }
+
+    public LocalDateFilter getInstalmentDate() {
+        return instalmentDate;
+    }
+
+    public LocalDateFilter instalmentDate() {
+        if (instalmentDate == null) {
+            instalmentDate = new LocalDateFilter();
+        }
+        return instalmentDate;
+    }
+
+    public void setInstalmentDate(LocalDateFilter instalmentDate) {
+        this.instalmentDate = instalmentDate;
     }
 
     public BigDecimalFilter getInstalmentAmount() {
@@ -437,6 +456,7 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             Objects.equals(id, that.id) &&
             Objects.equals(sequenceNumber, that.sequenceNumber) &&
             Objects.equals(particulars, that.particulars) &&
+            Objects.equals(instalmentDate, that.instalmentDate) &&
             Objects.equals(instalmentAmount, that.instalmentAmount) &&
             Objects.equals(levelOfCompletion, that.levelOfCompletion) &&
             Objects.equals(completed, that.completed) &&
@@ -464,6 +484,7 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             id,
             sequenceNumber,
             particulars,
+            instalmentDate,
             instalmentAmount,
             levelOfCompletion,
             completed,
@@ -492,6 +513,7 @@ public class WorkInProgressRegistrationCriteria implements Serializable, Criteri
             (id != null ? "id=" + id + ", " : "") +
             (sequenceNumber != null ? "sequenceNumber=" + sequenceNumber + ", " : "") +
             (particulars != null ? "particulars=" + particulars + ", " : "") +
+            (instalmentDate != null ? "instalmentDate=" + instalmentDate + ", " : "") +
             (instalmentAmount != null ? "instalmentAmount=" + instalmentAmount + ", " : "") +
             (levelOfCompletion != null ? "levelOfCompletion=" + levelOfCompletion + ", " : "") +
             (completed != null ? "completed=" + completed + ", " : "") +

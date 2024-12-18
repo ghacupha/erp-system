@@ -1,11 +1,11 @@
-id;account_number;account_name;notes;notes_content_type
-1;Dale dot-com protocol;Checking Account;../fake-data/blob/hipster.png;image/png
-2;Lithuania;Investment Account;../fake-data/blob/hipster.png;image/png
-3;Enhanced alliance;Auto Loan Account;../fake-data/blob/hipster.png;image/png
-4;bypassing Gorgeous;Personal Loan Account;../fake-data/blob/hipster.png;image/png
-5;Wisconsin Specialist Account;Home Loan Account;../fake-data/blob/hipster.png;image/png
-6;Indian;Auto Loan Account;../fake-data/blob/hipster.png;image/png
-7;Nevada Shirt;Savings Account;../fake-data/blob/hipster.png;image/png
-8;ubiquitous;Personal Loan Account;../fake-data/blob/hipster.png;image/png
-9;Namibia;Credit Card Account;../fake-data/blob/hipster.png;image/png
-10;Sudanese e-business drive;Checking Account;../fake-data/blob/hipster.png;image/png
+id;account_number;account_name;notes;notes_content_type;account_type;account_sub_type;dummy_account;account_ledger_id;account_category_id;service_outlet_id;settlement_currency_id;institution_id
+1;Dale dot-com protocol;Checking Account;../fake-data/blob/hipster.png;image/png;ASSET;OTHER_SHORT_LIVED_LIABILITY;true;1;1;1;1;1
+2;action-items Vision-oriented;Checking Account;../fake-data/blob/hipster.png;image/png;LIABILITY;INCOME;false;2;2;2;2;2
+3;Ergonomic Synergized generating;Checking Account;../fake-data/blob/hipster.png;image/png;EQUITY;OTHER_SHORT_LIVED_ASSET;true;3;3;3;3;3
+4;relationships magenta;Savings Account;../fake-data/blob/hipster.png;image/png;EQUITY;ACCOUNT_PAYABLE;true;4;4;4;4;4
+5;Digitized purple;Money Market Account;../fake-data/blob/hipster.png;image/png;EQUITY;OTHER_SHORT_LIVED_ASSET;true;5;5;5;5;5
+6;Namibia;Credit Card Account;../fake-data/blob/hipster.png;image/png;EQUITY;LONG_LIVED_LIABILITY;true;6;6;6;6;6
+7;e-business;Money Market Account;../fake-data/blob/hipster.png;image/png;EQUITY;OTHER_COMPREHENSIVE_INCOME;false;7;7;7;7;7
+8;Electronics;Auto Loan Account;../fake-data/blob/hipster.png;image/png;EQUITY;SETTLEMENT_ASSET;true;8;8;8;8;8
+9;firewall;Auto Loan Account;../fake-data/blob/hipster.png;image/png;LIABILITY;LONG_LIVED_ASSET;false;9;9;9;9;9
+10;Franc Chips Licensed;Auto Loan Account;../fake-data/blob/hipster.png;image/png;ASSET;SETTLEMENT_ASSET;true;10;10;10;10;10

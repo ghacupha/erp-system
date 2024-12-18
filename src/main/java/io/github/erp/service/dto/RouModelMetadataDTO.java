@@ -1,7 +1,7 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@ package io.github.erp.service.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -42,7 +43,6 @@ public class RouModelMetadataDTO implements Serializable {
 
     private String description;
 
-    @NotNull
     private Integer leaseTermPeriods;
 
     @NotNull
@@ -59,6 +59,16 @@ public class RouModelMetadataDTO implements Serializable {
     private Boolean hasBeenFullyAmortised;
 
     private Boolean hasBeenDecommissioned;
+
+    private UUID batchJobIdentifier;
+
+    private UUID depreciationAmountStepIdentifier;
+
+    private UUID outstandingAmountStepIdentifier;
+
+    private UUID flagAmortisedStepIdentifier;
+
+    private ZonedDateTime compilationTime;
 
     private IFRS16LeaseContractDTO ifrs16LeaseContract;
 
@@ -160,6 +170,46 @@ public class RouModelMetadataDTO implements Serializable {
         this.hasBeenDecommissioned = hasBeenDecommissioned;
     }
 
+    public UUID getBatchJobIdentifier() {
+        return batchJobIdentifier;
+    }
+
+    public void setBatchJobIdentifier(UUID batchJobIdentifier) {
+        this.batchJobIdentifier = batchJobIdentifier;
+    }
+
+    public UUID getDepreciationAmountStepIdentifier() {
+        return depreciationAmountStepIdentifier;
+    }
+
+    public void setDepreciationAmountStepIdentifier(UUID depreciationAmountStepIdentifier) {
+        this.depreciationAmountStepIdentifier = depreciationAmountStepIdentifier;
+    }
+
+    public UUID getOutstandingAmountStepIdentifier() {
+        return outstandingAmountStepIdentifier;
+    }
+
+    public void setOutstandingAmountStepIdentifier(UUID outstandingAmountStepIdentifier) {
+        this.outstandingAmountStepIdentifier = outstandingAmountStepIdentifier;
+    }
+
+    public UUID getFlagAmortisedStepIdentifier() {
+        return flagAmortisedStepIdentifier;
+    }
+
+    public void setFlagAmortisedStepIdentifier(UUID flagAmortisedStepIdentifier) {
+        this.flagAmortisedStepIdentifier = flagAmortisedStepIdentifier;
+    }
+
+    public ZonedDateTime getCompilationTime() {
+        return compilationTime;
+    }
+
+    public void setCompilationTime(ZonedDateTime compilationTime) {
+        this.compilationTime = compilationTime;
+    }
+
     public IFRS16LeaseContractDTO getIfrs16LeaseContract() {
         return ifrs16LeaseContract;
     }
@@ -244,6 +294,11 @@ public class RouModelMetadataDTO implements Serializable {
             ", expirationDate='" + getExpirationDate() + "'" +
             ", hasBeenFullyAmortised='" + getHasBeenFullyAmortised() + "'" +
             ", hasBeenDecommissioned='" + getHasBeenDecommissioned() + "'" +
+            ", batchJobIdentifier='" + getBatchJobIdentifier() + "'" +
+            ", depreciationAmountStepIdentifier='" + getDepreciationAmountStepIdentifier() + "'" +
+            ", outstandingAmountStepIdentifier='" + getOutstandingAmountStepIdentifier() + "'" +
+            ", flagAmortisedStepIdentifier='" + getFlagAmortisedStepIdentifier() + "'" +
+            ", compilationTime='" + getCompilationTime() + "'" +
             ", ifrs16LeaseContract=" + getIfrs16LeaseContract() +
             ", assetAccount=" + getAssetAccount() +
             ", depreciationAccount=" + getDepreciationAccount() +

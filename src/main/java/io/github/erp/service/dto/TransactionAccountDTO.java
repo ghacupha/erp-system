@@ -1,7 +1,7 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,8 @@ package io.github.erp.service.dto;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.enumeration.AccountSubTypes;
+import io.github.erp.domain.enumeration.AccountTypes;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -42,9 +44,26 @@ public class TransactionAccountDTO implements Serializable {
     private byte[] notes;
 
     private String notesContentType;
-    private TransactionAccountDTO parentAccount;
+
+    @NotNull
+    private AccountTypes accountType;
+
+    @NotNull
+    private AccountSubTypes accountSubType;
+
+    private Boolean dummyAccount;
+
+    private TransactionAccountLedgerDTO accountLedger;
+
+    private TransactionAccountCategoryDTO accountCategory;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
+
+    private ServiceOutletDTO serviceOutlet;
+
+    private SettlementCurrencyDTO settlementCurrency;
+
+    private ReportingEntityDTO institution;
 
     public Long getId() {
         return id;
@@ -86,12 +105,44 @@ public class TransactionAccountDTO implements Serializable {
         this.notesContentType = notesContentType;
     }
 
-    public TransactionAccountDTO getParentAccount() {
-        return parentAccount;
+    public AccountTypes getAccountType() {
+        return accountType;
     }
 
-    public void setParentAccount(TransactionAccountDTO parentAccount) {
-        this.parentAccount = parentAccount;
+    public void setAccountType(AccountTypes accountType) {
+        this.accountType = accountType;
+    }
+
+    public AccountSubTypes getAccountSubType() {
+        return accountSubType;
+    }
+
+    public void setAccountSubType(AccountSubTypes accountSubType) {
+        this.accountSubType = accountSubType;
+    }
+
+    public Boolean getDummyAccount() {
+        return dummyAccount;
+    }
+
+    public void setDummyAccount(Boolean dummyAccount) {
+        this.dummyAccount = dummyAccount;
+    }
+
+    public TransactionAccountLedgerDTO getAccountLedger() {
+        return accountLedger;
+    }
+
+    public void setAccountLedger(TransactionAccountLedgerDTO accountLedger) {
+        this.accountLedger = accountLedger;
+    }
+
+    public TransactionAccountCategoryDTO getAccountCategory() {
+        return accountCategory;
+    }
+
+    public void setAccountCategory(TransactionAccountCategoryDTO accountCategory) {
+        this.accountCategory = accountCategory;
     }
 
     public Set<PlaceholderDTO> getPlaceholders() {
@@ -100,6 +151,30 @@ public class TransactionAccountDTO implements Serializable {
 
     public void setPlaceholders(Set<PlaceholderDTO> placeholders) {
         this.placeholders = placeholders;
+    }
+
+    public ServiceOutletDTO getServiceOutlet() {
+        return serviceOutlet;
+    }
+
+    public void setServiceOutlet(ServiceOutletDTO serviceOutlet) {
+        this.serviceOutlet = serviceOutlet;
+    }
+
+    public SettlementCurrencyDTO getSettlementCurrency() {
+        return settlementCurrency;
+    }
+
+    public void setSettlementCurrency(SettlementCurrencyDTO settlementCurrency) {
+        this.settlementCurrency = settlementCurrency;
+    }
+
+    public ReportingEntityDTO getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(ReportingEntityDTO institution) {
+        this.institution = institution;
     }
 
     @Override
@@ -131,8 +206,15 @@ public class TransactionAccountDTO implements Serializable {
             ", accountNumber='" + getAccountNumber() + "'" +
             ", accountName='" + getAccountName() + "'" +
             ", notes='" + getNotes() + "'" +
-            ", parentAccount=" + getParentAccount() +
+            ", accountType='" + getAccountType() + "'" +
+            ", accountSubType='" + getAccountSubType() + "'" +
+            ", dummyAccount='" + getDummyAccount() + "'" +
+            ", accountLedger=" + getAccountLedger() +
+            ", accountCategory=" + getAccountCategory() +
             ", placeholders=" + getPlaceholders() +
+            ", serviceOutlet=" + getServiceOutlet() +
+            ", settlementCurrency=" + getSettlementCurrency() +
+            ", institution=" + getInstitution() +
             "}";
     }
 }

@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -73,17 +73,17 @@ public class RouDepreciationPostingReport implements Serializable {
     @Column(name = "report_file_content_type")
     private String reportFileContentType;
 
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings", "fiscalQuarter" }, allowSetters = true)
-    private FiscalMonth fiscalMonth;
-
     @ManyToOne
     @JsonIgnoreProperties(
         value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity", "placeholders" },
         allowSetters = true
     )
     private ApplicationUser requestedBy;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
+    private LeasePeriod leasePeriod;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -217,19 +217,6 @@ public class RouDepreciationPostingReport implements Serializable {
         this.reportFileContentType = reportFileContentType;
     }
 
-    public FiscalMonth getFiscalMonth() {
-        return this.fiscalMonth;
-    }
-
-    public void setFiscalMonth(FiscalMonth fiscalMonth) {
-        this.fiscalMonth = fiscalMonth;
-    }
-
-    public RouDepreciationPostingReport fiscalMonth(FiscalMonth fiscalMonth) {
-        this.setFiscalMonth(fiscalMonth);
-        return this;
-    }
-
     public ApplicationUser getRequestedBy() {
         return this.requestedBy;
     }
@@ -240,6 +227,19 @@ public class RouDepreciationPostingReport implements Serializable {
 
     public RouDepreciationPostingReport requestedBy(ApplicationUser applicationUser) {
         this.setRequestedBy(applicationUser);
+        return this;
+    }
+
+    public LeasePeriod getLeasePeriod() {
+        return this.leasePeriod;
+    }
+
+    public void setLeasePeriod(LeasePeriod leasePeriod) {
+        this.leasePeriod = leasePeriod;
+    }
+
+    public RouDepreciationPostingReport leasePeriod(LeasePeriod leasePeriod) {
+        this.setLeasePeriod(leasePeriod);
         return this;
     }
 

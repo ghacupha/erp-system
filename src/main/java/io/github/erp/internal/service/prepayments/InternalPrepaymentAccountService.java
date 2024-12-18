@@ -1,7 +1,7 @@
 package io.github.erp.internal.service.prepayments;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.internal.service.prepayments;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.service.criteria.PrepaymentAccountCriteria;
 import io.github.erp.service.dto.PrepaymentAccountDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -89,4 +90,6 @@ public interface InternalPrepaymentAccountService {
      * @return the list of entities.
      */
     Page<PrepaymentAccountDTO> search(String query, Pageable pageable);
+
+    Page<PrepaymentAccountDTO> findByCriteria(PrepaymentAccountCriteria criteria, Pageable pageable);
 }

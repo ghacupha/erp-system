@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -41,8 +41,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -57,7 +55,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link LeaseLiabilityScheduleItemResourceProd} REST controller.
+ * Integration tests for the LeaseLiabilityScheduleItemResource REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -68,17 +66,6 @@ class LeaseLiabilityScheduleItemResourceIT {
     private static final Integer DEFAULT_SEQUENCE_NUMBER = 1;
     private static final Integer UPDATED_SEQUENCE_NUMBER = 2;
     private static final Integer SMALLER_SEQUENCE_NUMBER = 1 - 1;
-
-    private static final Boolean DEFAULT_PERIOD_INCLUDED = false;
-    private static final Boolean UPDATED_PERIOD_INCLUDED = true;
-
-    private static final LocalDate DEFAULT_PERIOD_START_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_PERIOD_START_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_PERIOD_START_DATE = LocalDate.ofEpochDay(-1L);
-
-    private static final LocalDate DEFAULT_PERIOD_END_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_PERIOD_END_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_PERIOD_END_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final BigDecimal DEFAULT_OPENING_BALANCE = new BigDecimal(1);
     private static final BigDecimal UPDATED_OPENING_BALANCE = new BigDecimal(2);
@@ -104,13 +91,13 @@ class LeaseLiabilityScheduleItemResourceIT {
     private static final BigDecimal UPDATED_INTEREST_PAYABLE_OPENING = new BigDecimal(2);
     private static final BigDecimal SMALLER_INTEREST_PAYABLE_OPENING = new BigDecimal(1 - 1);
 
-    private static final BigDecimal DEFAULT_INTEREST_EXPENSE_ACCRUED = new BigDecimal(1);
-    private static final BigDecimal UPDATED_INTEREST_EXPENSE_ACCRUED = new BigDecimal(2);
-    private static final BigDecimal SMALLER_INTEREST_EXPENSE_ACCRUED = new BigDecimal(1 - 1);
+    private static final BigDecimal DEFAULT_INTEREST_ACCRUED = new BigDecimal(1);
+    private static final BigDecimal UPDATED_INTEREST_ACCRUED = new BigDecimal(2);
+    private static final BigDecimal SMALLER_INTEREST_ACCRUED = new BigDecimal(1 - 1);
 
-    private static final BigDecimal DEFAULT_INTEREST_PAYABLE_BALANCE = new BigDecimal(1);
-    private static final BigDecimal UPDATED_INTEREST_PAYABLE_BALANCE = new BigDecimal(2);
-    private static final BigDecimal SMALLER_INTEREST_PAYABLE_BALANCE = new BigDecimal(1 - 1);
+    private static final BigDecimal DEFAULT_INTEREST_PAYABLE_CLOSING = new BigDecimal(1);
+    private static final BigDecimal UPDATED_INTEREST_PAYABLE_CLOSING = new BigDecimal(2);
+    private static final BigDecimal SMALLER_INTEREST_PAYABLE_CLOSING = new BigDecimal(1 - 1);
 
     private static final String ENTITY_API_URL = "/api/leases/lease-liability-schedule-items";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -156,27 +143,44 @@ class LeaseLiabilityScheduleItemResourceIT {
     public static LeaseLiabilityScheduleItem createEntity(EntityManager em) {
         LeaseLiabilityScheduleItem leaseLiabilityScheduleItem = new LeaseLiabilityScheduleItem()
             .sequenceNumber(DEFAULT_SEQUENCE_NUMBER)
-            .periodIncluded(DEFAULT_PERIOD_INCLUDED)
-            .periodStartDate(DEFAULT_PERIOD_START_DATE)
-            .periodEndDate(DEFAULT_PERIOD_END_DATE)
             .openingBalance(DEFAULT_OPENING_BALANCE)
             .cashPayment(DEFAULT_CASH_PAYMENT)
             .principalPayment(DEFAULT_PRINCIPAL_PAYMENT)
             .interestPayment(DEFAULT_INTEREST_PAYMENT)
             .outstandingBalance(DEFAULT_OUTSTANDING_BALANCE)
             .interestPayableOpening(DEFAULT_INTEREST_PAYABLE_OPENING)
-            .interestExpenseAccrued(DEFAULT_INTEREST_EXPENSE_ACCRUED)
-            .interestPayableBalance(DEFAULT_INTEREST_PAYABLE_BALANCE);
+            .interestAccrued(DEFAULT_INTEREST_ACCRUED)
+            .interestPayableClosing(DEFAULT_INTEREST_PAYABLE_CLOSING);
         // Add required entity
-        LeaseContract leaseContract;
-        if (TestUtil.findAll(em, LeaseContract.class).isEmpty()) {
-            leaseContract = LeaseContractResourceIT.createEntity(em);
-            em.persist(leaseContract);
+        IFRS16LeaseContract iFRS16LeaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
+            em.persist(iFRS16LeaseContract);
             em.flush();
         } else {
-            leaseContract = TestUtil.findAll(em, LeaseContract.class).get(0);
+            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
         }
-        leaseLiabilityScheduleItem.setLeaseContract(leaseContract);
+        leaseLiabilityScheduleItem.setLeaseContract(iFRS16LeaseContract);
+        // Add required entity
+        LeaseLiability leaseLiability;
+        if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
+            leaseLiability = LeaseLiabilityResourceIT.createEntity(em);
+            em.persist(leaseLiability);
+            em.flush();
+        } else {
+            leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
+        }
+        leaseLiabilityScheduleItem.setLeaseLiability(leaseLiability);
+        // Add required entity
+        LeaseRepaymentPeriod leaseRepaymentPeriod;
+        if (TestUtil.findAll(em, LeaseRepaymentPeriod.class).isEmpty()) {
+            leaseRepaymentPeriod = LeaseRepaymentPeriodResourceIT.createEntity(em);
+            em.persist(leaseRepaymentPeriod);
+            em.flush();
+        } else {
+            leaseRepaymentPeriod = TestUtil.findAll(em, LeaseRepaymentPeriod.class).get(0);
+        }
+        leaseLiabilityScheduleItem.setLeasePeriod(leaseRepaymentPeriod);
         return leaseLiabilityScheduleItem;
     }
 
@@ -189,27 +193,44 @@ class LeaseLiabilityScheduleItemResourceIT {
     public static LeaseLiabilityScheduleItem createUpdatedEntity(EntityManager em) {
         LeaseLiabilityScheduleItem leaseLiabilityScheduleItem = new LeaseLiabilityScheduleItem()
             .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
-            .periodIncluded(UPDATED_PERIOD_INCLUDED)
-            .periodStartDate(UPDATED_PERIOD_START_DATE)
-            .periodEndDate(UPDATED_PERIOD_END_DATE)
             .openingBalance(UPDATED_OPENING_BALANCE)
             .cashPayment(UPDATED_CASH_PAYMENT)
             .principalPayment(UPDATED_PRINCIPAL_PAYMENT)
             .interestPayment(UPDATED_INTEREST_PAYMENT)
             .outstandingBalance(UPDATED_OUTSTANDING_BALANCE)
             .interestPayableOpening(UPDATED_INTEREST_PAYABLE_OPENING)
-            .interestExpenseAccrued(UPDATED_INTEREST_EXPENSE_ACCRUED)
-            .interestPayableBalance(UPDATED_INTEREST_PAYABLE_BALANCE);
+            .interestAccrued(UPDATED_INTEREST_ACCRUED)
+            .interestPayableClosing(UPDATED_INTEREST_PAYABLE_CLOSING);
         // Add required entity
-        LeaseContract leaseContract;
-        if (TestUtil.findAll(em, LeaseContract.class).isEmpty()) {
-            leaseContract = LeaseContractResourceIT.createUpdatedEntity(em);
-            em.persist(leaseContract);
+        IFRS16LeaseContract iFRS16LeaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            iFRS16LeaseContract = IFRS16LeaseContractResourceIT.createUpdatedEntity(em);
+            em.persist(iFRS16LeaseContract);
             em.flush();
         } else {
-            leaseContract = TestUtil.findAll(em, LeaseContract.class).get(0);
+            iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
         }
-        leaseLiabilityScheduleItem.setLeaseContract(leaseContract);
+        leaseLiabilityScheduleItem.setLeaseContract(iFRS16LeaseContract);
+        // Add required entity
+        LeaseLiability leaseLiability;
+        if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
+            leaseLiability = LeaseLiabilityResourceIT.createUpdatedEntity(em);
+            em.persist(leaseLiability);
+            em.flush();
+        } else {
+            leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
+        }
+        leaseLiabilityScheduleItem.setLeaseLiability(leaseLiability);
+        // Add required entity
+        LeaseRepaymentPeriod leaseRepaymentPeriod;
+        if (TestUtil.findAll(em, LeaseRepaymentPeriod.class).isEmpty()) {
+            leaseRepaymentPeriod = LeaseRepaymentPeriodResourceIT.createUpdatedEntity(em);
+            em.persist(leaseRepaymentPeriod);
+            em.flush();
+        } else {
+            leaseRepaymentPeriod = TestUtil.findAll(em, LeaseRepaymentPeriod.class).get(0);
+        }
+        leaseLiabilityScheduleItem.setLeasePeriod(leaseRepaymentPeriod);
         return leaseLiabilityScheduleItem;
     }
 
@@ -239,17 +260,14 @@ class LeaseLiabilityScheduleItemResourceIT {
             leaseLiabilityScheduleItemList.size() - 1
         );
         assertThat(testLeaseLiabilityScheduleItem.getSequenceNumber()).isEqualTo(DEFAULT_SEQUENCE_NUMBER);
-        assertThat(testLeaseLiabilityScheduleItem.getPeriodIncluded()).isEqualTo(DEFAULT_PERIOD_INCLUDED);
-        assertThat(testLeaseLiabilityScheduleItem.getPeriodStartDate()).isEqualTo(DEFAULT_PERIOD_START_DATE);
-        assertThat(testLeaseLiabilityScheduleItem.getPeriodEndDate()).isEqualTo(DEFAULT_PERIOD_END_DATE);
         assertThat(testLeaseLiabilityScheduleItem.getOpeningBalance()).isEqualByComparingTo(DEFAULT_OPENING_BALANCE);
         assertThat(testLeaseLiabilityScheduleItem.getCashPayment()).isEqualByComparingTo(DEFAULT_CASH_PAYMENT);
         assertThat(testLeaseLiabilityScheduleItem.getPrincipalPayment()).isEqualByComparingTo(DEFAULT_PRINCIPAL_PAYMENT);
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayment()).isEqualByComparingTo(DEFAULT_INTEREST_PAYMENT);
         assertThat(testLeaseLiabilityScheduleItem.getOutstandingBalance()).isEqualByComparingTo(DEFAULT_OUTSTANDING_BALANCE);
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayableOpening()).isEqualByComparingTo(DEFAULT_INTEREST_PAYABLE_OPENING);
-        assertThat(testLeaseLiabilityScheduleItem.getInterestExpenseAccrued()).isEqualByComparingTo(DEFAULT_INTEREST_EXPENSE_ACCRUED);
-        assertThat(testLeaseLiabilityScheduleItem.getInterestPayableBalance()).isEqualByComparingTo(DEFAULT_INTEREST_PAYABLE_BALANCE);
+        assertThat(testLeaseLiabilityScheduleItem.getInterestAccrued()).isEqualByComparingTo(DEFAULT_INTEREST_ACCRUED);
+        assertThat(testLeaseLiabilityScheduleItem.getInterestPayableClosing()).isEqualByComparingTo(DEFAULT_INTEREST_PAYABLE_CLOSING);
 
         // Validate the LeaseLiabilityScheduleItem in Elasticsearch
         verify(mockLeaseLiabilityScheduleItemSearchRepository, times(1)).save(testLeaseLiabilityScheduleItem);
@@ -294,17 +312,14 @@ class LeaseLiabilityScheduleItemResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leaseLiabilityScheduleItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
-            .andExpect(jsonPath("$.[*].periodIncluded").value(hasItem(DEFAULT_PERIOD_INCLUDED.booleanValue())))
-            .andExpect(jsonPath("$.[*].periodStartDate").value(hasItem(DEFAULT_PERIOD_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].periodEndDate").value(hasItem(DEFAULT_PERIOD_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].openingBalance").value(hasItem(sameNumber(DEFAULT_OPENING_BALANCE))))
             .andExpect(jsonPath("$.[*].cashPayment").value(hasItem(sameNumber(DEFAULT_CASH_PAYMENT))))
             .andExpect(jsonPath("$.[*].principalPayment").value(hasItem(sameNumber(DEFAULT_PRINCIPAL_PAYMENT))))
             .andExpect(jsonPath("$.[*].interestPayment").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYMENT))))
             .andExpect(jsonPath("$.[*].outstandingBalance").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_BALANCE))))
             .andExpect(jsonPath("$.[*].interestPayableOpening").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_OPENING))))
-            .andExpect(jsonPath("$.[*].interestExpenseAccrued").value(hasItem(sameNumber(DEFAULT_INTEREST_EXPENSE_ACCRUED))))
-            .andExpect(jsonPath("$.[*].interestPayableBalance").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_BALANCE))));
+            .andExpect(jsonPath("$.[*].interestAccrued").value(hasItem(sameNumber(DEFAULT_INTEREST_ACCRUED))))
+            .andExpect(jsonPath("$.[*].interestPayableClosing").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_CLOSING))));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -338,17 +353,14 @@ class LeaseLiabilityScheduleItemResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(leaseLiabilityScheduleItem.getId().intValue()))
             .andExpect(jsonPath("$.sequenceNumber").value(DEFAULT_SEQUENCE_NUMBER))
-            .andExpect(jsonPath("$.periodIncluded").value(DEFAULT_PERIOD_INCLUDED.booleanValue()))
-            .andExpect(jsonPath("$.periodStartDate").value(DEFAULT_PERIOD_START_DATE.toString()))
-            .andExpect(jsonPath("$.periodEndDate").value(DEFAULT_PERIOD_END_DATE.toString()))
             .andExpect(jsonPath("$.openingBalance").value(sameNumber(DEFAULT_OPENING_BALANCE)))
             .andExpect(jsonPath("$.cashPayment").value(sameNumber(DEFAULT_CASH_PAYMENT)))
             .andExpect(jsonPath("$.principalPayment").value(sameNumber(DEFAULT_PRINCIPAL_PAYMENT)))
             .andExpect(jsonPath("$.interestPayment").value(sameNumber(DEFAULT_INTEREST_PAYMENT)))
             .andExpect(jsonPath("$.outstandingBalance").value(sameNumber(DEFAULT_OUTSTANDING_BALANCE)))
             .andExpect(jsonPath("$.interestPayableOpening").value(sameNumber(DEFAULT_INTEREST_PAYABLE_OPENING)))
-            .andExpect(jsonPath("$.interestExpenseAccrued").value(sameNumber(DEFAULT_INTEREST_EXPENSE_ACCRUED)))
-            .andExpect(jsonPath("$.interestPayableBalance").value(sameNumber(DEFAULT_INTEREST_PAYABLE_BALANCE)));
+            .andExpect(jsonPath("$.interestAccrued").value(sameNumber(DEFAULT_INTEREST_ACCRUED)))
+            .andExpect(jsonPath("$.interestPayableClosing").value(sameNumber(DEFAULT_INTEREST_PAYABLE_CLOSING)));
     }
 
     @Test
@@ -471,266 +483,6 @@ class LeaseLiabilityScheduleItemResourceIT {
 
         // Get all the leaseLiabilityScheduleItemList where sequenceNumber is greater than SMALLER_SEQUENCE_NUMBER
         defaultLeaseLiabilityScheduleItemShouldBeFound("sequenceNumber.greaterThan=" + SMALLER_SEQUENCE_NUMBER);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodIncludedIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodIncluded equals to DEFAULT_PERIOD_INCLUDED
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodIncluded.equals=" + DEFAULT_PERIOD_INCLUDED);
-
-        // Get all the leaseLiabilityScheduleItemList where periodIncluded equals to UPDATED_PERIOD_INCLUDED
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodIncluded.equals=" + UPDATED_PERIOD_INCLUDED);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodIncludedIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodIncluded not equals to DEFAULT_PERIOD_INCLUDED
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodIncluded.notEquals=" + DEFAULT_PERIOD_INCLUDED);
-
-        // Get all the leaseLiabilityScheduleItemList where periodIncluded not equals to UPDATED_PERIOD_INCLUDED
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodIncluded.notEquals=" + UPDATED_PERIOD_INCLUDED);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodIncludedIsInShouldWork() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodIncluded in DEFAULT_PERIOD_INCLUDED or UPDATED_PERIOD_INCLUDED
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodIncluded.in=" + DEFAULT_PERIOD_INCLUDED + "," + UPDATED_PERIOD_INCLUDED);
-
-        // Get all the leaseLiabilityScheduleItemList where periodIncluded equals to UPDATED_PERIOD_INCLUDED
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodIncluded.in=" + UPDATED_PERIOD_INCLUDED);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodIncludedIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodIncluded is not null
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodIncluded.specified=true");
-
-        // Get all the leaseLiabilityScheduleItemList where periodIncluded is null
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodIncluded.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodStartDateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate equals to DEFAULT_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodStartDate.equals=" + DEFAULT_PERIOD_START_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate equals to UPDATED_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodStartDate.equals=" + UPDATED_PERIOD_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodStartDateIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate not equals to DEFAULT_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodStartDate.notEquals=" + DEFAULT_PERIOD_START_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate not equals to UPDATED_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodStartDate.notEquals=" + UPDATED_PERIOD_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodStartDateIsInShouldWork() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate in DEFAULT_PERIOD_START_DATE or UPDATED_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodStartDate.in=" + DEFAULT_PERIOD_START_DATE + "," + UPDATED_PERIOD_START_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate equals to UPDATED_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodStartDate.in=" + UPDATED_PERIOD_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodStartDateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate is not null
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodStartDate.specified=true");
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate is null
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodStartDate.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodStartDateIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate is greater than or equal to DEFAULT_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodStartDate.greaterThanOrEqual=" + DEFAULT_PERIOD_START_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate is greater than or equal to UPDATED_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodStartDate.greaterThanOrEqual=" + UPDATED_PERIOD_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodStartDateIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate is less than or equal to DEFAULT_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodStartDate.lessThanOrEqual=" + DEFAULT_PERIOD_START_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate is less than or equal to SMALLER_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodStartDate.lessThanOrEqual=" + SMALLER_PERIOD_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodStartDateIsLessThanSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate is less than DEFAULT_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodStartDate.lessThan=" + DEFAULT_PERIOD_START_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate is less than UPDATED_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodStartDate.lessThan=" + UPDATED_PERIOD_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodStartDateIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate is greater than DEFAULT_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodStartDate.greaterThan=" + DEFAULT_PERIOD_START_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodStartDate is greater than SMALLER_PERIOD_START_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodStartDate.greaterThan=" + SMALLER_PERIOD_START_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodEndDateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate equals to DEFAULT_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodEndDate.equals=" + DEFAULT_PERIOD_END_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate equals to UPDATED_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodEndDate.equals=" + UPDATED_PERIOD_END_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodEndDateIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate not equals to DEFAULT_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodEndDate.notEquals=" + DEFAULT_PERIOD_END_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate not equals to UPDATED_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodEndDate.notEquals=" + UPDATED_PERIOD_END_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodEndDateIsInShouldWork() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate in DEFAULT_PERIOD_END_DATE or UPDATED_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodEndDate.in=" + DEFAULT_PERIOD_END_DATE + "," + UPDATED_PERIOD_END_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate equals to UPDATED_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodEndDate.in=" + UPDATED_PERIOD_END_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodEndDateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate is not null
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodEndDate.specified=true");
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate is null
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodEndDate.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodEndDateIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate is greater than or equal to DEFAULT_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodEndDate.greaterThanOrEqual=" + DEFAULT_PERIOD_END_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate is greater than or equal to UPDATED_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodEndDate.greaterThanOrEqual=" + UPDATED_PERIOD_END_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodEndDateIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate is less than or equal to DEFAULT_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodEndDate.lessThanOrEqual=" + DEFAULT_PERIOD_END_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate is less than or equal to SMALLER_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodEndDate.lessThanOrEqual=" + SMALLER_PERIOD_END_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodEndDateIsLessThanSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate is less than DEFAULT_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodEndDate.lessThan=" + DEFAULT_PERIOD_END_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate is less than UPDATED_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodEndDate.lessThan=" + UPDATED_PERIOD_END_DATE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByPeriodEndDateIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate is greater than DEFAULT_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("periodEndDate.greaterThan=" + DEFAULT_PERIOD_END_DATE);
-
-        // Get all the leaseLiabilityScheduleItemList where periodEndDate is greater than SMALLER_PERIOD_END_DATE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("periodEndDate.greaterThan=" + SMALLER_PERIOD_END_DATE);
     }
 
     @Test
@@ -1365,214 +1117,212 @@ class LeaseLiabilityScheduleItemResourceIT {
 
     @Test
     @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestExpenseAccruedIsEqualToSomething() throws Exception {
+    void getAllLeaseLiabilityScheduleItemsByInterestAccruedIsEqualToSomething() throws Exception {
         // Initialize the database
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued equals to DEFAULT_INTEREST_EXPENSE_ACCRUED
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestExpenseAccrued.equals=" + DEFAULT_INTEREST_EXPENSE_ACCRUED);
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued equals to DEFAULT_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestAccrued.equals=" + DEFAULT_INTEREST_ACCRUED);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued equals to UPDATED_INTEREST_EXPENSE_ACCRUED
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestExpenseAccrued.equals=" + UPDATED_INTEREST_EXPENSE_ACCRUED);
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued equals to UPDATED_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestAccrued.equals=" + UPDATED_INTEREST_ACCRUED);
     }
 
     @Test
     @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestExpenseAccruedIsNotEqualToSomething() throws Exception {
+    void getAllLeaseLiabilityScheduleItemsByInterestAccruedIsNotEqualToSomething() throws Exception {
         // Initialize the database
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued not equals to DEFAULT_INTEREST_EXPENSE_ACCRUED
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestExpenseAccrued.notEquals=" + DEFAULT_INTEREST_EXPENSE_ACCRUED);
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued not equals to DEFAULT_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestAccrued.notEquals=" + DEFAULT_INTEREST_ACCRUED);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued not equals to UPDATED_INTEREST_EXPENSE_ACCRUED
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestExpenseAccrued.notEquals=" + UPDATED_INTEREST_EXPENSE_ACCRUED);
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued not equals to UPDATED_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestAccrued.notEquals=" + UPDATED_INTEREST_ACCRUED);
     }
 
     @Test
     @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestExpenseAccruedIsInShouldWork() throws Exception {
+    void getAllLeaseLiabilityScheduleItemsByInterestAccruedIsInShouldWork() throws Exception {
         // Initialize the database
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued in DEFAULT_INTEREST_EXPENSE_ACCRUED or UPDATED_INTEREST_EXPENSE_ACCRUED
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued in DEFAULT_INTEREST_ACCRUED or UPDATED_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestAccrued.in=" + DEFAULT_INTEREST_ACCRUED + "," + UPDATED_INTEREST_ACCRUED);
+
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued equals to UPDATED_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestAccrued.in=" + UPDATED_INTEREST_ACCRUED);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByInterestAccruedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued is not null
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestAccrued.specified=true");
+
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued is null
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestAccrued.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByInterestAccruedIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued is greater than or equal to DEFAULT_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestAccrued.greaterThanOrEqual=" + DEFAULT_INTEREST_ACCRUED);
+
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued is greater than or equal to UPDATED_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestAccrued.greaterThanOrEqual=" + UPDATED_INTEREST_ACCRUED);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByInterestAccruedIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued is less than or equal to DEFAULT_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestAccrued.lessThanOrEqual=" + DEFAULT_INTEREST_ACCRUED);
+
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued is less than or equal to SMALLER_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestAccrued.lessThanOrEqual=" + SMALLER_INTEREST_ACCRUED);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByInterestAccruedIsLessThanSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued is less than DEFAULT_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestAccrued.lessThan=" + DEFAULT_INTEREST_ACCRUED);
+
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued is less than UPDATED_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestAccrued.lessThan=" + UPDATED_INTEREST_ACCRUED);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByInterestAccruedIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued is greater than DEFAULT_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestAccrued.greaterThan=" + DEFAULT_INTEREST_ACCRUED);
+
+        // Get all the leaseLiabilityScheduleItemList where interestAccrued is greater than SMALLER_INTEREST_ACCRUED
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestAccrued.greaterThan=" + SMALLER_INTEREST_ACCRUED);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByInterestPayableClosingIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing equals to DEFAULT_INTEREST_PAYABLE_CLOSING
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableClosing.equals=" + DEFAULT_INTEREST_PAYABLE_CLOSING);
+
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing equals to UPDATED_INTEREST_PAYABLE_CLOSING
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableClosing.equals=" + UPDATED_INTEREST_PAYABLE_CLOSING);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByInterestPayableClosingIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing not equals to DEFAULT_INTEREST_PAYABLE_CLOSING
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableClosing.notEquals=" + DEFAULT_INTEREST_PAYABLE_CLOSING);
+
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing not equals to UPDATED_INTEREST_PAYABLE_CLOSING
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableClosing.notEquals=" + UPDATED_INTEREST_PAYABLE_CLOSING);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByInterestPayableClosingIsInShouldWork() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing in DEFAULT_INTEREST_PAYABLE_CLOSING or UPDATED_INTEREST_PAYABLE_CLOSING
         defaultLeaseLiabilityScheduleItemShouldBeFound(
-            "interestExpenseAccrued.in=" + DEFAULT_INTEREST_EXPENSE_ACCRUED + "," + UPDATED_INTEREST_EXPENSE_ACCRUED
+            "interestPayableClosing.in=" + DEFAULT_INTEREST_PAYABLE_CLOSING + "," + UPDATED_INTEREST_PAYABLE_CLOSING
         );
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued equals to UPDATED_INTEREST_EXPENSE_ACCRUED
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestExpenseAccrued.in=" + UPDATED_INTEREST_EXPENSE_ACCRUED);
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing equals to UPDATED_INTEREST_PAYABLE_CLOSING
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableClosing.in=" + UPDATED_INTEREST_PAYABLE_CLOSING);
     }
 
     @Test
     @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestExpenseAccruedIsNullOrNotNull() throws Exception {
+    void getAllLeaseLiabilityScheduleItemsByInterestPayableClosingIsNullOrNotNull() throws Exception {
         // Initialize the database
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued is not null
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestExpenseAccrued.specified=true");
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing is not null
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableClosing.specified=true");
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued is null
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestExpenseAccrued.specified=false");
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing is null
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableClosing.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestExpenseAccruedIsGreaterThanOrEqualToSomething() throws Exception {
+    void getAllLeaseLiabilityScheduleItemsByInterestPayableClosingIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued is greater than or equal to DEFAULT_INTEREST_EXPENSE_ACCRUED
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestExpenseAccrued.greaterThanOrEqual=" + DEFAULT_INTEREST_EXPENSE_ACCRUED);
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing is greater than or equal to DEFAULT_INTEREST_PAYABLE_CLOSING
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableClosing.greaterThanOrEqual=" + DEFAULT_INTEREST_PAYABLE_CLOSING);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued is greater than or equal to UPDATED_INTEREST_EXPENSE_ACCRUED
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestExpenseAccrued.greaterThanOrEqual=" + UPDATED_INTEREST_EXPENSE_ACCRUED);
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing is greater than or equal to UPDATED_INTEREST_PAYABLE_CLOSING
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableClosing.greaterThanOrEqual=" + UPDATED_INTEREST_PAYABLE_CLOSING);
     }
 
     @Test
     @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestExpenseAccruedIsLessThanOrEqualToSomething() throws Exception {
+    void getAllLeaseLiabilityScheduleItemsByInterestPayableClosingIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued is less than or equal to DEFAULT_INTEREST_EXPENSE_ACCRUED
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestExpenseAccrued.lessThanOrEqual=" + DEFAULT_INTEREST_EXPENSE_ACCRUED);
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing is less than or equal to DEFAULT_INTEREST_PAYABLE_CLOSING
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableClosing.lessThanOrEqual=" + DEFAULT_INTEREST_PAYABLE_CLOSING);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued is less than or equal to SMALLER_INTEREST_EXPENSE_ACCRUED
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestExpenseAccrued.lessThanOrEqual=" + SMALLER_INTEREST_EXPENSE_ACCRUED);
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing is less than or equal to SMALLER_INTEREST_PAYABLE_CLOSING
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableClosing.lessThanOrEqual=" + SMALLER_INTEREST_PAYABLE_CLOSING);
     }
 
     @Test
     @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestExpenseAccruedIsLessThanSomething() throws Exception {
+    void getAllLeaseLiabilityScheduleItemsByInterestPayableClosingIsLessThanSomething() throws Exception {
         // Initialize the database
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued is less than DEFAULT_INTEREST_EXPENSE_ACCRUED
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestExpenseAccrued.lessThan=" + DEFAULT_INTEREST_EXPENSE_ACCRUED);
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing is less than DEFAULT_INTEREST_PAYABLE_CLOSING
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableClosing.lessThan=" + DEFAULT_INTEREST_PAYABLE_CLOSING);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued is less than UPDATED_INTEREST_EXPENSE_ACCRUED
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestExpenseAccrued.lessThan=" + UPDATED_INTEREST_EXPENSE_ACCRUED);
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing is less than UPDATED_INTEREST_PAYABLE_CLOSING
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableClosing.lessThan=" + UPDATED_INTEREST_PAYABLE_CLOSING);
     }
 
     @Test
     @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestExpenseAccruedIsGreaterThanSomething() throws Exception {
+    void getAllLeaseLiabilityScheduleItemsByInterestPayableClosingIsGreaterThanSomething() throws Exception {
         // Initialize the database
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued is greater than DEFAULT_INTEREST_EXPENSE_ACCRUED
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestExpenseAccrued.greaterThan=" + DEFAULT_INTEREST_EXPENSE_ACCRUED);
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing is greater than DEFAULT_INTEREST_PAYABLE_CLOSING
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableClosing.greaterThan=" + DEFAULT_INTEREST_PAYABLE_CLOSING);
 
-        // Get all the leaseLiabilityScheduleItemList where interestExpenseAccrued is greater than SMALLER_INTEREST_EXPENSE_ACCRUED
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestExpenseAccrued.greaterThan=" + SMALLER_INTEREST_EXPENSE_ACCRUED);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestPayableBalanceIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance equals to DEFAULT_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableBalance.equals=" + DEFAULT_INTEREST_PAYABLE_BALANCE);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance equals to UPDATED_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableBalance.equals=" + UPDATED_INTEREST_PAYABLE_BALANCE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestPayableBalanceIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance not equals to DEFAULT_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableBalance.notEquals=" + DEFAULT_INTEREST_PAYABLE_BALANCE);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance not equals to UPDATED_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableBalance.notEquals=" + UPDATED_INTEREST_PAYABLE_BALANCE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestPayableBalanceIsInShouldWork() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance in DEFAULT_INTEREST_PAYABLE_BALANCE or UPDATED_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldBeFound(
-            "interestPayableBalance.in=" + DEFAULT_INTEREST_PAYABLE_BALANCE + "," + UPDATED_INTEREST_PAYABLE_BALANCE
-        );
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance equals to UPDATED_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableBalance.in=" + UPDATED_INTEREST_PAYABLE_BALANCE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestPayableBalanceIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance is not null
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableBalance.specified=true");
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance is null
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableBalance.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestPayableBalanceIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance is greater than or equal to DEFAULT_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableBalance.greaterThanOrEqual=" + DEFAULT_INTEREST_PAYABLE_BALANCE);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance is greater than or equal to UPDATED_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableBalance.greaterThanOrEqual=" + UPDATED_INTEREST_PAYABLE_BALANCE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestPayableBalanceIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance is less than or equal to DEFAULT_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableBalance.lessThanOrEqual=" + DEFAULT_INTEREST_PAYABLE_BALANCE);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance is less than or equal to SMALLER_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableBalance.lessThanOrEqual=" + SMALLER_INTEREST_PAYABLE_BALANCE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestPayableBalanceIsLessThanSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance is less than DEFAULT_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableBalance.lessThan=" + DEFAULT_INTEREST_PAYABLE_BALANCE);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance is less than UPDATED_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableBalance.lessThan=" + UPDATED_INTEREST_PAYABLE_BALANCE);
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByInterestPayableBalanceIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance is greater than DEFAULT_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("interestPayableBalance.greaterThan=" + DEFAULT_INTEREST_PAYABLE_BALANCE);
-
-        // Get all the leaseLiabilityScheduleItemList where interestPayableBalance is greater than SMALLER_INTEREST_PAYABLE_BALANCE
-        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableBalance.greaterThan=" + SMALLER_INTEREST_PAYABLE_BALANCE);
+        // Get all the leaseLiabilityScheduleItemList where interestPayableClosing is greater than SMALLER_INTEREST_PAYABLE_CLOSING
+        defaultLeaseLiabilityScheduleItemShouldBeFound("interestPayableClosing.greaterThan=" + SMALLER_INTEREST_PAYABLE_CLOSING);
     }
 
     @Test
@@ -1603,58 +1353,6 @@ class LeaseLiabilityScheduleItemResourceIT {
 
     @Test
     @Transactional
-    void getAllLeaseLiabilityScheduleItemsByLeaseContractIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-        LeaseContract leaseContract;
-        if (TestUtil.findAll(em, LeaseContract.class).isEmpty()) {
-            leaseContract = LeaseContractResourceIT.createEntity(em);
-            em.persist(leaseContract);
-            em.flush();
-        } else {
-            leaseContract = TestUtil.findAll(em, LeaseContract.class).get(0);
-        }
-        em.persist(leaseContract);
-        em.flush();
-        leaseLiabilityScheduleItem.setLeaseContract(leaseContract);
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-        Long leaseContractId = leaseContract.getId();
-
-        // Get all the leaseLiabilityScheduleItemList where leaseContract equals to leaseContractId
-        defaultLeaseLiabilityScheduleItemShouldBeFound("leaseContractId.equals=" + leaseContractId);
-
-        // Get all the leaseLiabilityScheduleItemList where leaseContract equals to (leaseContractId + 1)
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseContractId.equals=" + (leaseContractId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllLeaseLiabilityScheduleItemsByLeaseModelMetadataIsEqualToSomething() throws Exception {
-        // Initialize the database
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-        LeaseModelMetadata leaseModelMetadata;
-        if (TestUtil.findAll(em, LeaseModelMetadata.class).isEmpty()) {
-            leaseModelMetadata = LeaseModelMetadataResourceIT.createEntity(em);
-            em.persist(leaseModelMetadata);
-            em.flush();
-        } else {
-            leaseModelMetadata = TestUtil.findAll(em, LeaseModelMetadata.class).get(0);
-        }
-        em.persist(leaseModelMetadata);
-        em.flush();
-        leaseLiabilityScheduleItem.setLeaseModelMetadata(leaseModelMetadata);
-        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
-        Long leaseModelMetadataId = leaseModelMetadata.getId();
-
-        // Get all the leaseLiabilityScheduleItemList where leaseModelMetadata equals to leaseModelMetadataId
-        defaultLeaseLiabilityScheduleItemShouldBeFound("leaseModelMetadataId.equals=" + leaseModelMetadataId);
-
-        // Get all the leaseLiabilityScheduleItemList where leaseModelMetadata equals to (leaseModelMetadataId + 1)
-        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseModelMetadataId.equals=" + (leaseModelMetadataId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllLeaseLiabilityScheduleItemsByUniversallyUniqueMappingIsEqualToSomething() throws Exception {
         // Initialize the database
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
@@ -1679,6 +1377,110 @@ class LeaseLiabilityScheduleItemResourceIT {
         defaultLeaseLiabilityScheduleItemShouldNotBeFound("universallyUniqueMappingId.equals=" + (universallyUniqueMappingId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByLeaseAmortizationScheduleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        LeaseAmortizationSchedule leaseAmortizationSchedule;
+        if (TestUtil.findAll(em, LeaseAmortizationSchedule.class).isEmpty()) {
+            leaseAmortizationSchedule = LeaseAmortizationScheduleResourceIT.createEntity(em);
+            em.persist(leaseAmortizationSchedule);
+            em.flush();
+        } else {
+            leaseAmortizationSchedule = TestUtil.findAll(em, LeaseAmortizationSchedule.class).get(0);
+        }
+        em.persist(leaseAmortizationSchedule);
+        em.flush();
+        leaseLiabilityScheduleItem.setLeaseAmortizationSchedule(leaseAmortizationSchedule);
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        Long leaseAmortizationScheduleId = leaseAmortizationSchedule.getId();
+
+        // Get all the leaseLiabilityScheduleItemList where leaseAmortizationSchedule equals to leaseAmortizationScheduleId
+        defaultLeaseLiabilityScheduleItemShouldBeFound("leaseAmortizationScheduleId.equals=" + leaseAmortizationScheduleId);
+
+        // Get all the leaseLiabilityScheduleItemList where leaseAmortizationSchedule equals to (leaseAmortizationScheduleId + 1)
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseAmortizationScheduleId.equals=" + (leaseAmortizationScheduleId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByLeaseContractIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        IFRS16LeaseContract leaseContract;
+        if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
+            leaseContract = IFRS16LeaseContractResourceIT.createEntity(em);
+            em.persist(leaseContract);
+            em.flush();
+        } else {
+            leaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
+        }
+        em.persist(leaseContract);
+        em.flush();
+        leaseLiabilityScheduleItem.setLeaseContract(leaseContract);
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        Long leaseContractId = leaseContract.getId();
+
+        // Get all the leaseLiabilityScheduleItemList where leaseContract equals to leaseContractId
+        defaultLeaseLiabilityScheduleItemShouldBeFound("leaseContractId.equals=" + leaseContractId);
+
+        // Get all the leaseLiabilityScheduleItemList where leaseContract equals to (leaseContractId + 1)
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseContractId.equals=" + (leaseContractId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByLeaseLiabilityIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        LeaseLiability leaseLiability;
+        if (TestUtil.findAll(em, LeaseLiability.class).isEmpty()) {
+            leaseLiability = LeaseLiabilityResourceIT.createEntity(em);
+            em.persist(leaseLiability);
+            em.flush();
+        } else {
+            leaseLiability = TestUtil.findAll(em, LeaseLiability.class).get(0);
+        }
+        em.persist(leaseLiability);
+        em.flush();
+        leaseLiabilityScheduleItem.setLeaseLiability(leaseLiability);
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        Long leaseLiabilityId = leaseLiability.getId();
+
+        // Get all the leaseLiabilityScheduleItemList where leaseLiability equals to leaseLiabilityId
+        defaultLeaseLiabilityScheduleItemShouldBeFound("leaseLiabilityId.equals=" + leaseLiabilityId);
+
+        // Get all the leaseLiabilityScheduleItemList where leaseLiability equals to (leaseLiabilityId + 1)
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseLiabilityId.equals=" + (leaseLiabilityId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByLeasePeriodIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        LeaseRepaymentPeriod leasePeriod;
+        if (TestUtil.findAll(em, LeaseRepaymentPeriod.class).isEmpty()) {
+            leasePeriod = LeaseRepaymentPeriodResourceIT.createEntity(em);
+            em.persist(leasePeriod);
+            em.flush();
+        } else {
+            leasePeriod = TestUtil.findAll(em, LeaseRepaymentPeriod.class).get(0);
+        }
+        em.persist(leasePeriod);
+        em.flush();
+        leaseLiabilityScheduleItem.setLeasePeriod(leasePeriod);
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        Long leasePeriodId = leasePeriod.getId();
+
+        // Get all the leaseLiabilityScheduleItemList where leasePeriod equals to leasePeriodId
+        defaultLeaseLiabilityScheduleItemShouldBeFound("leasePeriodId.equals=" + leasePeriodId);
+
+        // Get all the leaseLiabilityScheduleItemList where leasePeriod equals to (leasePeriodId + 1)
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leasePeriodId.equals=" + (leasePeriodId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1689,17 +1491,14 @@ class LeaseLiabilityScheduleItemResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leaseLiabilityScheduleItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
-            .andExpect(jsonPath("$.[*].periodIncluded").value(hasItem(DEFAULT_PERIOD_INCLUDED.booleanValue())))
-            .andExpect(jsonPath("$.[*].periodStartDate").value(hasItem(DEFAULT_PERIOD_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].periodEndDate").value(hasItem(DEFAULT_PERIOD_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].openingBalance").value(hasItem(sameNumber(DEFAULT_OPENING_BALANCE))))
             .andExpect(jsonPath("$.[*].cashPayment").value(hasItem(sameNumber(DEFAULT_CASH_PAYMENT))))
             .andExpect(jsonPath("$.[*].principalPayment").value(hasItem(sameNumber(DEFAULT_PRINCIPAL_PAYMENT))))
             .andExpect(jsonPath("$.[*].interestPayment").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYMENT))))
             .andExpect(jsonPath("$.[*].outstandingBalance").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_BALANCE))))
             .andExpect(jsonPath("$.[*].interestPayableOpening").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_OPENING))))
-            .andExpect(jsonPath("$.[*].interestExpenseAccrued").value(hasItem(sameNumber(DEFAULT_INTEREST_EXPENSE_ACCRUED))))
-            .andExpect(jsonPath("$.[*].interestPayableBalance").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_BALANCE))));
+            .andExpect(jsonPath("$.[*].interestAccrued").value(hasItem(sameNumber(DEFAULT_INTEREST_ACCRUED))))
+            .andExpect(jsonPath("$.[*].interestPayableClosing").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_CLOSING))));
 
         // Check, that the count call also returns 1
         restLeaseLiabilityScheduleItemMockMvc
@@ -1751,17 +1550,14 @@ class LeaseLiabilityScheduleItemResourceIT {
         em.detach(updatedLeaseLiabilityScheduleItem);
         updatedLeaseLiabilityScheduleItem
             .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
-            .periodIncluded(UPDATED_PERIOD_INCLUDED)
-            .periodStartDate(UPDATED_PERIOD_START_DATE)
-            .periodEndDate(UPDATED_PERIOD_END_DATE)
             .openingBalance(UPDATED_OPENING_BALANCE)
             .cashPayment(UPDATED_CASH_PAYMENT)
             .principalPayment(UPDATED_PRINCIPAL_PAYMENT)
             .interestPayment(UPDATED_INTEREST_PAYMENT)
             .outstandingBalance(UPDATED_OUTSTANDING_BALANCE)
             .interestPayableOpening(UPDATED_INTEREST_PAYABLE_OPENING)
-            .interestExpenseAccrued(UPDATED_INTEREST_EXPENSE_ACCRUED)
-            .interestPayableBalance(UPDATED_INTEREST_PAYABLE_BALANCE);
+            .interestAccrued(UPDATED_INTEREST_ACCRUED)
+            .interestPayableClosing(UPDATED_INTEREST_PAYABLE_CLOSING);
         LeaseLiabilityScheduleItemDTO leaseLiabilityScheduleItemDTO = leaseLiabilityScheduleItemMapper.toDto(
             updatedLeaseLiabilityScheduleItem
         );
@@ -1781,17 +1577,14 @@ class LeaseLiabilityScheduleItemResourceIT {
             leaseLiabilityScheduleItemList.size() - 1
         );
         assertThat(testLeaseLiabilityScheduleItem.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
-        assertThat(testLeaseLiabilityScheduleItem.getPeriodIncluded()).isEqualTo(UPDATED_PERIOD_INCLUDED);
-        assertThat(testLeaseLiabilityScheduleItem.getPeriodStartDate()).isEqualTo(UPDATED_PERIOD_START_DATE);
-        assertThat(testLeaseLiabilityScheduleItem.getPeriodEndDate()).isEqualTo(UPDATED_PERIOD_END_DATE);
         assertThat(testLeaseLiabilityScheduleItem.getOpeningBalance()).isEqualTo(UPDATED_OPENING_BALANCE);
         assertThat(testLeaseLiabilityScheduleItem.getCashPayment()).isEqualTo(UPDATED_CASH_PAYMENT);
         assertThat(testLeaseLiabilityScheduleItem.getPrincipalPayment()).isEqualTo(UPDATED_PRINCIPAL_PAYMENT);
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayment()).isEqualTo(UPDATED_INTEREST_PAYMENT);
         assertThat(testLeaseLiabilityScheduleItem.getOutstandingBalance()).isEqualTo(UPDATED_OUTSTANDING_BALANCE);
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayableOpening()).isEqualTo(UPDATED_INTEREST_PAYABLE_OPENING);
-        assertThat(testLeaseLiabilityScheduleItem.getInterestExpenseAccrued()).isEqualTo(UPDATED_INTEREST_EXPENSE_ACCRUED);
-        assertThat(testLeaseLiabilityScheduleItem.getInterestPayableBalance()).isEqualTo(UPDATED_INTEREST_PAYABLE_BALANCE);
+        assertThat(testLeaseLiabilityScheduleItem.getInterestAccrued()).isEqualTo(UPDATED_INTEREST_ACCRUED);
+        assertThat(testLeaseLiabilityScheduleItem.getInterestPayableClosing()).isEqualTo(UPDATED_INTEREST_PAYABLE_CLOSING);
 
         // Validate the LeaseLiabilityScheduleItem in Elasticsearch
         verify(mockLeaseLiabilityScheduleItemSearchRepository).save(testLeaseLiabilityScheduleItem);
@@ -1888,11 +1681,10 @@ class LeaseLiabilityScheduleItemResourceIT {
         partialUpdatedLeaseLiabilityScheduleItem.setId(leaseLiabilityScheduleItem.getId());
 
         partialUpdatedLeaseLiabilityScheduleItem
-            .periodIncluded(UPDATED_PERIOD_INCLUDED)
-            .periodEndDate(UPDATED_PERIOD_END_DATE)
             .openingBalance(UPDATED_OPENING_BALANCE)
-            .cashPayment(UPDATED_CASH_PAYMENT)
-            .interestPayableBalance(UPDATED_INTEREST_PAYABLE_BALANCE);
+            .principalPayment(UPDATED_PRINCIPAL_PAYMENT)
+            .interestPayment(UPDATED_INTEREST_PAYMENT)
+            .outstandingBalance(UPDATED_OUTSTANDING_BALANCE);
 
         restLeaseLiabilityScheduleItemMockMvc
             .perform(
@@ -1909,17 +1701,14 @@ class LeaseLiabilityScheduleItemResourceIT {
             leaseLiabilityScheduleItemList.size() - 1
         );
         assertThat(testLeaseLiabilityScheduleItem.getSequenceNumber()).isEqualTo(DEFAULT_SEQUENCE_NUMBER);
-        assertThat(testLeaseLiabilityScheduleItem.getPeriodIncluded()).isEqualTo(UPDATED_PERIOD_INCLUDED);
-        assertThat(testLeaseLiabilityScheduleItem.getPeriodStartDate()).isEqualTo(DEFAULT_PERIOD_START_DATE);
-        assertThat(testLeaseLiabilityScheduleItem.getPeriodEndDate()).isEqualTo(UPDATED_PERIOD_END_DATE);
         assertThat(testLeaseLiabilityScheduleItem.getOpeningBalance()).isEqualByComparingTo(UPDATED_OPENING_BALANCE);
-        assertThat(testLeaseLiabilityScheduleItem.getCashPayment()).isEqualByComparingTo(UPDATED_CASH_PAYMENT);
-        assertThat(testLeaseLiabilityScheduleItem.getPrincipalPayment()).isEqualByComparingTo(DEFAULT_PRINCIPAL_PAYMENT);
-        assertThat(testLeaseLiabilityScheduleItem.getInterestPayment()).isEqualByComparingTo(DEFAULT_INTEREST_PAYMENT);
-        assertThat(testLeaseLiabilityScheduleItem.getOutstandingBalance()).isEqualByComparingTo(DEFAULT_OUTSTANDING_BALANCE);
+        assertThat(testLeaseLiabilityScheduleItem.getCashPayment()).isEqualByComparingTo(DEFAULT_CASH_PAYMENT);
+        assertThat(testLeaseLiabilityScheduleItem.getPrincipalPayment()).isEqualByComparingTo(UPDATED_PRINCIPAL_PAYMENT);
+        assertThat(testLeaseLiabilityScheduleItem.getInterestPayment()).isEqualByComparingTo(UPDATED_INTEREST_PAYMENT);
+        assertThat(testLeaseLiabilityScheduleItem.getOutstandingBalance()).isEqualByComparingTo(UPDATED_OUTSTANDING_BALANCE);
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayableOpening()).isEqualByComparingTo(DEFAULT_INTEREST_PAYABLE_OPENING);
-        assertThat(testLeaseLiabilityScheduleItem.getInterestExpenseAccrued()).isEqualByComparingTo(DEFAULT_INTEREST_EXPENSE_ACCRUED);
-        assertThat(testLeaseLiabilityScheduleItem.getInterestPayableBalance()).isEqualByComparingTo(UPDATED_INTEREST_PAYABLE_BALANCE);
+        assertThat(testLeaseLiabilityScheduleItem.getInterestAccrued()).isEqualByComparingTo(DEFAULT_INTEREST_ACCRUED);
+        assertThat(testLeaseLiabilityScheduleItem.getInterestPayableClosing()).isEqualByComparingTo(DEFAULT_INTEREST_PAYABLE_CLOSING);
     }
 
     @Test
@@ -1936,17 +1725,14 @@ class LeaseLiabilityScheduleItemResourceIT {
 
         partialUpdatedLeaseLiabilityScheduleItem
             .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
-            .periodIncluded(UPDATED_PERIOD_INCLUDED)
-            .periodStartDate(UPDATED_PERIOD_START_DATE)
-            .periodEndDate(UPDATED_PERIOD_END_DATE)
             .openingBalance(UPDATED_OPENING_BALANCE)
             .cashPayment(UPDATED_CASH_PAYMENT)
             .principalPayment(UPDATED_PRINCIPAL_PAYMENT)
             .interestPayment(UPDATED_INTEREST_PAYMENT)
             .outstandingBalance(UPDATED_OUTSTANDING_BALANCE)
             .interestPayableOpening(UPDATED_INTEREST_PAYABLE_OPENING)
-            .interestExpenseAccrued(UPDATED_INTEREST_EXPENSE_ACCRUED)
-            .interestPayableBalance(UPDATED_INTEREST_PAYABLE_BALANCE);
+            .interestAccrued(UPDATED_INTEREST_ACCRUED)
+            .interestPayableClosing(UPDATED_INTEREST_PAYABLE_CLOSING);
 
         restLeaseLiabilityScheduleItemMockMvc
             .perform(
@@ -1963,17 +1749,14 @@ class LeaseLiabilityScheduleItemResourceIT {
             leaseLiabilityScheduleItemList.size() - 1
         );
         assertThat(testLeaseLiabilityScheduleItem.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
-        assertThat(testLeaseLiabilityScheduleItem.getPeriodIncluded()).isEqualTo(UPDATED_PERIOD_INCLUDED);
-        assertThat(testLeaseLiabilityScheduleItem.getPeriodStartDate()).isEqualTo(UPDATED_PERIOD_START_DATE);
-        assertThat(testLeaseLiabilityScheduleItem.getPeriodEndDate()).isEqualTo(UPDATED_PERIOD_END_DATE);
         assertThat(testLeaseLiabilityScheduleItem.getOpeningBalance()).isEqualByComparingTo(UPDATED_OPENING_BALANCE);
         assertThat(testLeaseLiabilityScheduleItem.getCashPayment()).isEqualByComparingTo(UPDATED_CASH_PAYMENT);
         assertThat(testLeaseLiabilityScheduleItem.getPrincipalPayment()).isEqualByComparingTo(UPDATED_PRINCIPAL_PAYMENT);
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayment()).isEqualByComparingTo(UPDATED_INTEREST_PAYMENT);
         assertThat(testLeaseLiabilityScheduleItem.getOutstandingBalance()).isEqualByComparingTo(UPDATED_OUTSTANDING_BALANCE);
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayableOpening()).isEqualByComparingTo(UPDATED_INTEREST_PAYABLE_OPENING);
-        assertThat(testLeaseLiabilityScheduleItem.getInterestExpenseAccrued()).isEqualByComparingTo(UPDATED_INTEREST_EXPENSE_ACCRUED);
-        assertThat(testLeaseLiabilityScheduleItem.getInterestPayableBalance()).isEqualByComparingTo(UPDATED_INTEREST_PAYABLE_BALANCE);
+        assertThat(testLeaseLiabilityScheduleItem.getInterestAccrued()).isEqualByComparingTo(UPDATED_INTEREST_ACCRUED);
+        assertThat(testLeaseLiabilityScheduleItem.getInterestPayableClosing()).isEqualByComparingTo(UPDATED_INTEREST_PAYABLE_CLOSING);
     }
 
     @Test
@@ -2091,16 +1874,13 @@ class LeaseLiabilityScheduleItemResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leaseLiabilityScheduleItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
-            .andExpect(jsonPath("$.[*].periodIncluded").value(hasItem(DEFAULT_PERIOD_INCLUDED.booleanValue())))
-            .andExpect(jsonPath("$.[*].periodStartDate").value(hasItem(DEFAULT_PERIOD_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].periodEndDate").value(hasItem(DEFAULT_PERIOD_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].openingBalance").value(hasItem(sameNumber(DEFAULT_OPENING_BALANCE))))
             .andExpect(jsonPath("$.[*].cashPayment").value(hasItem(sameNumber(DEFAULT_CASH_PAYMENT))))
             .andExpect(jsonPath("$.[*].principalPayment").value(hasItem(sameNumber(DEFAULT_PRINCIPAL_PAYMENT))))
             .andExpect(jsonPath("$.[*].interestPayment").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYMENT))))
             .andExpect(jsonPath("$.[*].outstandingBalance").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_BALANCE))))
             .andExpect(jsonPath("$.[*].interestPayableOpening").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_OPENING))))
-            .andExpect(jsonPath("$.[*].interestExpenseAccrued").value(hasItem(sameNumber(DEFAULT_INTEREST_EXPENSE_ACCRUED))))
-            .andExpect(jsonPath("$.[*].interestPayableBalance").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_BALANCE))));
+            .andExpect(jsonPath("$.[*].interestAccrued").value(hasItem(sameNumber(DEFAULT_INTEREST_ACCRUED))))
+            .andExpect(jsonPath("$.[*].interestPayableClosing").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_CLOSING))));
     }
 }

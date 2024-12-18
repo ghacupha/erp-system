@@ -1,7 +1,7 @@
 package io.github.erp.internal.repository;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -40,14 +40,16 @@ public interface InternalAmortizationPostingReportRepository
         " pa.catalogue_number as catalogueNumber," +
         " da.account_number as debitAccount," +
         " ca.account_number as creditAccount," +
-        " description as description, " +
+        " string_agg(pa.catalogue_number || ' ' || p.description, ', ') as description, " +
         " p.prepayment_amount as amortizationAmount  " +
         "FROM public.prepayment_amortization p  " +
         "LEFT JOIN prepayment_account pa on prepayment_account_id = pa.id " +
         "LEFT JOIN transaction_account da on p.debit_account_id = da.id  " +
         "LEFT JOIN transaction_account ca on p.credit_account_id = ca.id " +
         "LEFT JOIN amortization_period fm on p.amortization_period_id = fm.id " +
-        "WHERE :reportDate BETWEEN fm.start_date AND fm.end_date", nativeQuery = true)
+        "WHERE :reportDate BETWEEN fm.start_date AND fm.end_date " +
+        "GROUP BY p.id, pa.catalogue_number, da.account_number, ca.account_number",
+        nativeQuery = true)
     Page<AmortizationPostingReportInternal> findByReportDate(@Param("reportDate") LocalDate reportDate, Pageable pageable);
 
     @Query(value = "SELECT " +
@@ -55,13 +57,15 @@ public interface InternalAmortizationPostingReportRepository
         " pa.catalogue_number as catalogueNumber," +
         " da.account_number as debitAccount," +
         " ca.account_number as creditAccount," +
-        " description as description, " +
+        " string_agg(pa.catalogue_number || ' ' || p.description, ', ') as description, " +
         " p.prepayment_amount as amortizationAmount  " +
         "FROM public.prepayment_amortization p  " +
         "LEFT JOIN prepayment_account pa on prepayment_account_id = pa.id " +
         "LEFT JOIN transaction_account da on p.debit_account_id = da.id  " +
         "LEFT JOIN transaction_account ca on p.credit_account_id = ca.id " +
         "LEFT JOIN amortization_period fm on p.amortization_period_id = fm.id " +
-        "WHERE :reportDate BETWEEN CAST(fm.start_date AS date) AND CAST(fm.end_date AS date)", nativeQuery = true)
+        "WHERE :reportDate BETWEEN CAST(fm.start_date AS date) AND CAST(fm.end_date AS date) " +
+        "GROUP BY p.id, pa.catalogue_number, da.account_number, ca.account_number",
+        nativeQuery = true)
     Optional<List<AmortizationPostingReportInternal>> findByAllReportDate(@Param("reportDate") LocalDate reportDate);
 }

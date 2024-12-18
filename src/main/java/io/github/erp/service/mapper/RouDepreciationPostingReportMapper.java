@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,9 +25,9 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link RouDepreciationPostingReport} and its DTO {@link RouDepreciationPostingReportDTO}.
  */
-@Mapper(componentModel = "spring", uses = { FiscalMonthMapper.class, ApplicationUserMapper.class })
+@Mapper(componentModel = "spring", uses = { ApplicationUserMapper.class, LeasePeriodMapper.class })
 public interface RouDepreciationPostingReportMapper extends EntityMapper<RouDepreciationPostingReportDTO, RouDepreciationPostingReport> {
-    @Mapping(target = "fiscalMonth", source = "fiscalMonth", qualifiedByName = "fiscalMonthCode")
     @Mapping(target = "requestedBy", source = "requestedBy", qualifiedByName = "applicationIdentity")
+    @Mapping(target = "leasePeriod", source = "leasePeriod", qualifiedByName = "periodCode")
     RouDepreciationPostingReportDTO toDto(RouDepreciationPostingReport s);
 }

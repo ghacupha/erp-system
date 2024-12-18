@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -182,12 +182,21 @@ public class WorkInProgressTransferQueryService extends QueryService<WorkInProgr
                         )
                     );
             }
-            if (criteria.getSettlementId() != null) {
+            if (criteria.getTransferSettlementId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getSettlementId(),
-                            root -> root.join(WorkInProgressTransfer_.settlement, JoinType.LEFT).get(Settlement_.id)
+                            criteria.getTransferSettlementId(),
+                            root -> root.join(WorkInProgressTransfer_.transferSettlement, JoinType.LEFT).get(Settlement_.id)
+                        )
+                    );
+            }
+            if (criteria.getOriginalSettlementId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getOriginalSettlementId(),
+                            root -> root.join(WorkInProgressTransfer_.originalSettlement, JoinType.LEFT).get(Settlement_.id)
                         )
                     );
             }

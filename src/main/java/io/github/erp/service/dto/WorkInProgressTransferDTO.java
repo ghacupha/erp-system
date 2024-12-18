@@ -1,7 +1,7 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -57,7 +57,9 @@ public class WorkInProgressTransferDTO implements Serializable {
 
     private ServiceOutletDTO serviceOutlet;
 
-    private SettlementDTO settlement;
+    private SettlementDTO transferSettlement;
+
+    private SettlementDTO originalSettlement;
 
     private WorkProjectRegisterDTO workProjectRegister;
 
@@ -149,12 +151,20 @@ public class WorkInProgressTransferDTO implements Serializable {
         this.serviceOutlet = serviceOutlet;
     }
 
-    public SettlementDTO getSettlement() {
-        return settlement;
+    public SettlementDTO getTransferSettlement() {
+        return transferSettlement;
     }
 
-    public void setSettlement(SettlementDTO settlement) {
-        this.settlement = settlement;
+    public void setTransferSettlement(SettlementDTO transferSettlement) {
+        this.transferSettlement = transferSettlement;
+    }
+
+    public SettlementDTO getOriginalSettlement() {
+        return originalSettlement;
+    }
+
+    public void setOriginalSettlement(SettlementDTO originalSettlement) {
+        this.originalSettlement = originalSettlement;
     }
 
     public WorkProjectRegisterDTO getWorkProjectRegister() {
@@ -201,7 +211,8 @@ public class WorkInProgressTransferDTO implements Serializable {
             ", assetCategory=" + getAssetCategory() +
             ", workInProgressRegistration=" + getWorkInProgressRegistration() +
             ", serviceOutlet=" + getServiceOutlet() +
-            ", settlement=" + getSettlement() +
+            ", transferSettlement=" + getTransferSettlement() +
+            ", originalSettlement=" + getOriginalSettlement() +
             ", workProjectRegister=" + getWorkProjectRegister() +
             "}";
     }

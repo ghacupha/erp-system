@@ -1,7 +1,7 @@
 package io.github.erp.erp.assets.depreciation;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -54,7 +54,6 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     private static final Logger log = LoggerFactory.getLogger(DepreciationJobSequenceServiceImpl.class);
     public static final int PREFERRED_BATCH_SIZE = 650;
 
-    // private final AssetRegistrationService assetRegistrationService;
     private final DepreciationBatchProducer depreciationBatchProducer;
     private final DepreciationJobService depreciationJobService;
     private final DepreciationBatchSequenceService depreciationBatchSequenceService;
@@ -65,14 +64,12 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
     private final DepreciationEntrySinkProcessor depreciationEntrySinkProcessor;
 
     public DepreciationJobSequenceServiceImpl(
-        // AssetRegistrationService assetRegistrationService,
         DepreciationBatchProducer depreciationBatchProducer,
         DepreciationJobService depreciationJobService,
         DepreciationBatchSequenceService depreciationBatchSequenceService,
         DepreciationPeriodService depreciationPeriodService,
         InternalAssetRegistrationService internalAssetRegistrationService,
         DepreciationEntrySinkProcessor depreciationEntrySinkProcessor) {
-        // this.assetRegistrationService = assetRegistrationService;
         this.depreciationBatchProducer = depreciationBatchProducer;
         this.depreciationJobService = depreciationJobService;
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
@@ -172,6 +169,7 @@ public class DepreciationJobSequenceServiceImpl implements DepreciationJobSequen
      * @return List of AssetRegistrationDTO containing the fetched assets.
      */
     private List<AssetRegistrationDTO> fetchAssets(DepreciationJobDTO depreciationJob) {
+        // TODO ensure assets with same cap date as the depreciation-period#endDate
         List<AssetRegistrationDTO> assets = internalAssetRegistrationService.findByCapitalizationDateBefore(depreciationJob.getDepreciationPeriod().getEndDate());
         log.info("System has retrieved {} assets for depreciation.", assets.size());
         return assets;

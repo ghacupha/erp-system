@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -43,7 +43,8 @@ public interface WorkInProgressTransferMapper extends EntityMapper<WorkInProgres
     @Mapping(target = "assetCategory", source = "assetCategory", qualifiedByName = "assetCategoryName")
     @Mapping(target = "workInProgressRegistration", source = "workInProgressRegistration", qualifiedByName = "sequenceNumber")
     @Mapping(target = "serviceOutlet", source = "serviceOutlet", qualifiedByName = "outletCode")
-    @Mapping(target = "settlement", source = "settlement", qualifiedByName = "paymentNumber")
+    @Mapping(target = "transferSettlement", source = "transferSettlement", qualifiedByName = "paymentNumber")
+    @Mapping(target = "originalSettlement", source = "originalSettlement", qualifiedByName = "paymentNumber")
     @Mapping(target = "workProjectRegister", source = "workProjectRegister", qualifiedByName = "projectTitle")
     WorkInProgressTransferDTO toDto(WorkInProgressTransfer s);
 

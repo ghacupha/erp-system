@@ -38,16 +38,17 @@
   ],
   "relationships": [
     {
+      "relationshipName": "leasePeriod",
+      "otherEntityName": "leasePeriod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "periodCode"
+    },
+    {
       "relationshipName": "requestedBy",
       "otherEntityName": "applicationUser",
       "relationshipType": "many-to-one",
       "otherEntityField": "applicationIdentity"
-    },
-    {
-      "relationshipName": "reportingMonth",
-      "otherEntityName": "fiscalMonth",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "fiscalMonthCode"
     }
   ],
   "service": "serviceImpl",

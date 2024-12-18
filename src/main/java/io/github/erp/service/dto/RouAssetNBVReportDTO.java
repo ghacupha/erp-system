@@ -1,7 +1,7 @@
 package io.github.erp.service.dto;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -51,7 +51,7 @@ public class RouAssetNBVReportDTO implements Serializable {
     private byte[] reportFile;
 
     private String reportFileContentType;
-    private FiscalMonthDTO fiscalReportingMonth;
+    private LeasePeriodDTO leasePeriod;
 
     private ApplicationUserDTO requestedBy;
 
@@ -135,12 +135,12 @@ public class RouAssetNBVReportDTO implements Serializable {
         this.reportFileContentType = reportFileContentType;
     }
 
-    public FiscalMonthDTO getFiscalReportingMonth() {
-        return fiscalReportingMonth;
+    public LeasePeriodDTO getLeasePeriod() {
+        return leasePeriod;
     }
 
-    public void setFiscalReportingMonth(FiscalMonthDTO fiscalReportingMonth) {
-        this.fiscalReportingMonth = fiscalReportingMonth;
+    public void setLeasePeriod(LeasePeriodDTO leasePeriod) {
+        this.leasePeriod = leasePeriod;
     }
 
     public ApplicationUserDTO getRequestedBy() {
@@ -185,7 +185,7 @@ public class RouAssetNBVReportDTO implements Serializable {
             ", filename='" + getFilename() + "'" +
             ", reportParameters='" + getReportParameters() + "'" +
             ", reportFile='" + getReportFile() + "'" +
-            ", fiscalReportingMonth=" + getFiscalReportingMonth() +
+            ", leasePeriod=" + getLeasePeriod() +
             ", requestedBy=" + getRequestedBy() +
             "}";
     }

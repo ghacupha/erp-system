@@ -1,7 +1,7 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -906,28 +906,54 @@ class WorkInProgressTransferResourceIT {
 
     @Test
     @Transactional
-    void getAllWorkInProgressTransfersBySettlementIsEqualToSomething() throws Exception {
+    void getAllWorkInProgressTransfersByTransferSettlementIsEqualToSomething() throws Exception {
         // Initialize the database
         workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
-        Settlement settlement;
+        Settlement transferSettlement;
         if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
-            settlement = SettlementResourceIT.createEntity(em);
-            em.persist(settlement);
+            transferSettlement = SettlementResourceIT.createEntity(em);
+            em.persist(transferSettlement);
             em.flush();
         } else {
-            settlement = TestUtil.findAll(em, Settlement.class).get(0);
+            transferSettlement = TestUtil.findAll(em, Settlement.class).get(0);
         }
-        em.persist(settlement);
+        em.persist(transferSettlement);
         em.flush();
-        workInProgressTransfer.setSettlement(settlement);
+        workInProgressTransfer.setTransferSettlement(transferSettlement);
         workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
-        Long settlementId = settlement.getId();
+        Long transferSettlementId = transferSettlement.getId();
 
-        // Get all the workInProgressTransferList where settlement equals to settlementId
-        defaultWorkInProgressTransferShouldBeFound("settlementId.equals=" + settlementId);
+        // Get all the workInProgressTransferList where transferSettlement equals to transferSettlementId
+        defaultWorkInProgressTransferShouldBeFound("transferSettlementId.equals=" + transferSettlementId);
 
-        // Get all the workInProgressTransferList where settlement equals to (settlementId + 1)
-        defaultWorkInProgressTransferShouldNotBeFound("settlementId.equals=" + (settlementId + 1));
+        // Get all the workInProgressTransferList where transferSettlement equals to (transferSettlementId + 1)
+        defaultWorkInProgressTransferShouldNotBeFound("transferSettlementId.equals=" + (transferSettlementId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressTransfersByOriginalSettlementIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        Settlement originalSettlement;
+        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
+            originalSettlement = SettlementResourceIT.createEntity(em);
+            em.persist(originalSettlement);
+            em.flush();
+        } else {
+            originalSettlement = TestUtil.findAll(em, Settlement.class).get(0);
+        }
+        em.persist(originalSettlement);
+        em.flush();
+        workInProgressTransfer.setOriginalSettlement(originalSettlement);
+        workInProgressTransferRepository.saveAndFlush(workInProgressTransfer);
+        Long originalSettlementId = originalSettlement.getId();
+
+        // Get all the workInProgressTransferList where originalSettlement equals to originalSettlementId
+        defaultWorkInProgressTransferShouldBeFound("originalSettlementId.equals=" + originalSettlementId);
+
+        // Get all the workInProgressTransferList where originalSettlement equals to (originalSettlementId + 1)
+        defaultWorkInProgressTransferShouldNotBeFound("originalSettlementId.equals=" + (originalSettlementId + 1));
     }
 
     @Test

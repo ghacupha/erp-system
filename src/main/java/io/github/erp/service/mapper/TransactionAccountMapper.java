@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,24 +25,38 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link TransactionAccount} and its DTO {@link TransactionAccountDTO}.
  */
-@Mapper(componentModel = "spring", uses = { PlaceholderMapper.class })
+@Mapper(
+    componentModel = "spring",
+    uses = {
+        TransactionAccountLedgerMapper.class,
+        TransactionAccountCategoryMapper.class,
+        PlaceholderMapper.class,
+        ServiceOutletMapper.class,
+        SettlementCurrencyMapper.class,
+        ReportingEntityMapper.class,
+    }
+)
 public interface TransactionAccountMapper extends EntityMapper<TransactionAccountDTO, TransactionAccount> {
-    @Mapping(target = "parentAccount", source = "parentAccount", qualifiedByName = "accountNumber")
+    @Mapping(target = "accountLedger", source = "accountLedger", qualifiedByName = "ledgerName")
+    @Mapping(target = "accountCategory", source = "accountCategory", qualifiedByName = "name")
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
+    @Mapping(target = "serviceOutlet", source = "serviceOutlet", qualifiedByName = "outletCode")
+    @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
+    @Mapping(target = "institution", source = "institution", qualifiedByName = "entityName")
     TransactionAccountDTO toDto(TransactionAccount s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
     TransactionAccount toEntity(TransactionAccountDTO transactionAccountDTO);
-
-    @Named("accountNumber")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "accountNumber", source = "accountNumber")
-    TransactionAccountDTO toDtoAccountNumber(TransactionAccount transactionAccount);
 
     @Named("accountName")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "accountName", source = "accountName")
     TransactionAccountDTO toDtoAccountName(TransactionAccount transactionAccount);
+
+    @Named("accountNumber")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "accountNumber", source = "accountNumber")
+    TransactionAccountDTO toDtoAccountNumber(TransactionAccount transactionAccount);
 }

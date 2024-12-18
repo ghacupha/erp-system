@@ -1,7 +1,7 @@
 package io.github.erp.internal.service.prepayments;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,6 +30,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -99,6 +100,18 @@ public class InternalAmortizationPeriodServiceImpl implements InternalAmortizati
     public Optional<AmortizationPeriodDTO> findOne(Long id) {
         log.debug("Request to get AmortizationPeriod : {}", id);
         return amortizationPeriodRepository.findById(id).map(amortizationPeriodMapper::toDto);
+    }
+
+    /**
+     * Get the amortizationPeriod to which the queryDate belongs.
+     *
+     * @param queryDate the date enclosed by the amortization-period in string.
+     * @return the entity.
+     */
+    @Override
+    public Optional<AmortizationPeriodDTO> findOneByDate(String queryDate) {
+        log.debug("Request to get AmortizationPeriod to which the date: {} belongs", queryDate);
+        return amortizationPeriodRepository.findByDateGiven(LocalDate.parse(queryDate)).map(amortizationPeriodMapper::toDto);
     }
 
     @Override

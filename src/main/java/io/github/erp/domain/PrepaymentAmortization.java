@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,6 +29,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A PrepaymentAmortization.
@@ -36,7 +38,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "prepayment_amortization")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "prepaymentamortization")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "prepaymentamortization-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class PrepaymentAmortization implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,21 +47,27 @@ public class PrepaymentAmortization implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @Column(name = "description")
+    @Field(type = FieldType.Text)
     private String description;
 
     @Column(name = "prepayment_period")
+    @Field(type = FieldType.Date)
     private LocalDate prepaymentPeriod;
 
     @Column(name = "prepayment_amount", precision = 21, scale = 2)
+    @Field(type = FieldType.Text)
     private BigDecimal prepaymentAmount;
 
     @Column(name = "inactive")
+    @Field(type = FieldType.Boolean)
     private Boolean inactive;
 
     @Column(name = "amortization_identifier")
+    @Field(type = FieldType.Text)
     private UUID amortizationIdentifier;
 
     @ManyToOne
@@ -85,11 +93,17 @@ public class PrepaymentAmortization implements Serializable {
     private SettlementCurrency settlementCurrency;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
+        allowSetters = true
+    )
     private TransactionAccount debitAccount;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "parentAccount", "placeholders" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "accountLedger", "accountCategory", "placeholders", "serviceOutlet", "settlementCurrency", "institution" },
+        allowSetters = true
+    )
     private TransactionAccount creditAccount;
 
     @ManyToMany
