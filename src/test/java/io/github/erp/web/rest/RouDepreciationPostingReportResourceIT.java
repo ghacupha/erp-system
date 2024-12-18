@@ -1,7 +1,7 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.ApplicationUser;
-import io.github.erp.domain.FiscalMonth;
+import io.github.erp.domain.LeasePeriod;
 import io.github.erp.domain.RouDepreciationPostingReport;
 import io.github.erp.repository.RouDepreciationPostingReportRepository;
 import io.github.erp.repository.search.RouDepreciationPostingReportSearchRepository;
@@ -142,15 +142,15 @@ class RouDepreciationPostingReportResourceIT {
             .reportFile(DEFAULT_REPORT_FILE)
             .reportFileContentType(DEFAULT_REPORT_FILE_CONTENT_TYPE);
         // Add required entity
-        FiscalMonth fiscalMonth;
-        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
-            fiscalMonth = FiscalMonthResourceIT.createEntity(em);
-            em.persist(fiscalMonth);
+        LeasePeriod leasePeriod;
+        if (TestUtil.findAll(em, LeasePeriod.class).isEmpty()) {
+            leasePeriod = LeasePeriodResourceIT.createEntity(em);
+            em.persist(leasePeriod);
             em.flush();
         } else {
-            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+            leasePeriod = TestUtil.findAll(em, LeasePeriod.class).get(0);
         }
-        rouDepreciationPostingReport.setFiscalMonth(fiscalMonth);
+        rouDepreciationPostingReport.setLeasePeriod(leasePeriod);
         return rouDepreciationPostingReport;
     }
 
@@ -172,15 +172,15 @@ class RouDepreciationPostingReportResourceIT {
             .reportFile(UPDATED_REPORT_FILE)
             .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
         // Add required entity
-        FiscalMonth fiscalMonth;
-        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
-            fiscalMonth = FiscalMonthResourceIT.createUpdatedEntity(em);
-            em.persist(fiscalMonth);
+        LeasePeriod leasePeriod;
+        if (TestUtil.findAll(em, LeasePeriod.class).isEmpty()) {
+            leasePeriod = LeasePeriodResourceIT.createUpdatedEntity(em);
+            em.persist(leasePeriod);
             em.flush();
         } else {
-            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+            leasePeriod = TestUtil.findAll(em, LeasePeriod.class).get(0);
         }
-        rouDepreciationPostingReport.setFiscalMonth(fiscalMonth);
+        rouDepreciationPostingReport.setLeasePeriod(leasePeriod);
         return rouDepreciationPostingReport;
     }
 
@@ -815,32 +815,6 @@ class RouDepreciationPostingReportResourceIT {
 
     @Test
     @Transactional
-    void getAllRouDepreciationPostingReportsByFiscalMonthIsEqualToSomething() throws Exception {
-        // Initialize the database
-        rouDepreciationPostingReportRepository.saveAndFlush(rouDepreciationPostingReport);
-        FiscalMonth fiscalMonth;
-        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
-            fiscalMonth = FiscalMonthResourceIT.createEntity(em);
-            em.persist(fiscalMonth);
-            em.flush();
-        } else {
-            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
-        }
-        em.persist(fiscalMonth);
-        em.flush();
-        rouDepreciationPostingReport.setFiscalMonth(fiscalMonth);
-        rouDepreciationPostingReportRepository.saveAndFlush(rouDepreciationPostingReport);
-        Long fiscalMonthId = fiscalMonth.getId();
-
-        // Get all the rouDepreciationPostingReportList where fiscalMonth equals to fiscalMonthId
-        defaultRouDepreciationPostingReportShouldBeFound("fiscalMonthId.equals=" + fiscalMonthId);
-
-        // Get all the rouDepreciationPostingReportList where fiscalMonth equals to (fiscalMonthId + 1)
-        defaultRouDepreciationPostingReportShouldNotBeFound("fiscalMonthId.equals=" + (fiscalMonthId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllRouDepreciationPostingReportsByRequestedByIsEqualToSomething() throws Exception {
         // Initialize the database
         rouDepreciationPostingReportRepository.saveAndFlush(rouDepreciationPostingReport);
@@ -863,6 +837,32 @@ class RouDepreciationPostingReportResourceIT {
 
         // Get all the rouDepreciationPostingReportList where requestedBy equals to (requestedById + 1)
         defaultRouDepreciationPostingReportShouldNotBeFound("requestedById.equals=" + (requestedById + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllRouDepreciationPostingReportsByLeasePeriodIsEqualToSomething() throws Exception {
+        // Initialize the database
+        rouDepreciationPostingReportRepository.saveAndFlush(rouDepreciationPostingReport);
+        LeasePeriod leasePeriod;
+        if (TestUtil.findAll(em, LeasePeriod.class).isEmpty()) {
+            leasePeriod = LeasePeriodResourceIT.createEntity(em);
+            em.persist(leasePeriod);
+            em.flush();
+        } else {
+            leasePeriod = TestUtil.findAll(em, LeasePeriod.class).get(0);
+        }
+        em.persist(leasePeriod);
+        em.flush();
+        rouDepreciationPostingReport.setLeasePeriod(leasePeriod);
+        rouDepreciationPostingReportRepository.saveAndFlush(rouDepreciationPostingReport);
+        Long leasePeriodId = leasePeriod.getId();
+
+        // Get all the rouDepreciationPostingReportList where leasePeriod equals to leasePeriodId
+        defaultRouDepreciationPostingReportShouldBeFound("leasePeriodId.equals=" + leasePeriodId);
+
+        // Get all the rouDepreciationPostingReportList where leasePeriod equals to (leasePeriodId + 1)
+        defaultRouDepreciationPostingReportShouldNotBeFound("leasePeriodId.equals=" + (leasePeriodId + 1));
     }
 
     /**

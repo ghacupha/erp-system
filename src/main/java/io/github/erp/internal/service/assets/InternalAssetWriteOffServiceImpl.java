@@ -1,7 +1,7 @@
 package io.github.erp.internal.service.assets;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,10 @@ import io.github.erp.domain.AssetWriteOffInternal;
 import io.github.erp.erp.assets.nbv.buffer.BufferedSinkProcessor;
 import io.github.erp.internal.repository.InternalAssetWriteOffRepository;
 import io.github.erp.internal.service.applicationUser.CurrentUserContext;
+import io.github.erp.internal.service.cache.ScheduledCacheRefreshService;
 import io.github.erp.repository.search.AssetWriteOffSearchRepository;
+import io.github.erp.service.AssetWriteOffQueryService;
+import io.github.erp.service.criteria.AssetWriteOffCriteria;
 import io.github.erp.service.dto.AssetWriteOffDTO;
 import io.github.erp.service.dto.DepreciationPeriodDTO;
 import io.github.erp.service.mapper.AssetWriteOffMapper;
@@ -32,6 +35,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -52,16 +56,26 @@ public class InternalAssetWriteOffServiceImpl implements InternalAssetWriteOffSe
 
     private final AssetWriteOffSearchRepository assetWriteOffSearchRepository;
 
+    private final AssetWriteOffQueryService assetWriteOffQueryService;
+
+    private final ScheduledCacheRefreshService scheduledAssetRegistrationCacheRefreshService;
+
+    private final InternalAssetRegistrationService assetRegistrationService;
+
     private final BufferedSinkProcessor<AssetWriteOff> bufferedSinkProcessor;
 
     public InternalAssetWriteOffServiceImpl(
         InternalAssetWriteOffRepository assetWriteOffRepository,
         AssetWriteOffMapper assetWriteOffMapper,
         AssetWriteOffSearchRepository assetWriteOffSearchRepository,
-        BufferedSinkProcessor<AssetWriteOff> bufferedSinkProcessor) {
+        AssetWriteOffQueryService assetWriteOffQueryService,
+        @Qualifier("scheduledAssetRegistrationCacheRefreshService") ScheduledCacheRefreshService scheduledAssetRegistrationCacheRefreshService, InternalAssetRegistrationService assetRegistrationService, BufferedSinkProcessor<AssetWriteOff> bufferedSinkProcessor) {
         this.assetWriteOffRepository = assetWriteOffRepository;
         this.assetWriteOffMapper = assetWriteOffMapper;
         this.assetWriteOffSearchRepository = assetWriteOffSearchRepository;
+        this.assetWriteOffQueryService = assetWriteOffQueryService;
+        this.scheduledAssetRegistrationCacheRefreshService = scheduledAssetRegistrationCacheRefreshService;
+        this.assetRegistrationService = assetRegistrationService;
         this.bufferedSinkProcessor = bufferedSinkProcessor;
     }
 
@@ -145,5 +159,21 @@ public class InternalAssetWriteOffServiceImpl implements InternalAssetWriteOffSe
     public Page<AssetWriteOffDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of AssetWriteOffs for query {}", query);
         return assetWriteOffSearchRepository.search(query, pageable).map(assetWriteOffMapper::toDto);
+    }
+
+    /**
+     * Return a {@link Page} of {@link AssetWriteOffDTO} which matches the criteria from the database.
+     *
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param pageable The page, which should be returned.
+     * @return the matching entities.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AssetWriteOffDTO> findByCriteria(AssetWriteOffCriteria criteria, Pageable pageable) {
+
+        scheduledAssetRegistrationCacheRefreshService.refreshDefinedCacheItems(assetRegistrationService.findWrittenOffAssetIds());
+
+        return assetWriteOffQueryService.findByCriteria(criteria, pageable);
     }
 }

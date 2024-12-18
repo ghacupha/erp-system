@@ -1,0 +1,16 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1721738157060-7">
+        <addColumn tableName="lease_liability_schedule_item">
+            <column name="lease_period_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1721738157060-9">
+        <addUniqueConstraint columnNames="lease_period_id" constraintName="UK_2805gl7tijpbhp2j8ph6v72qu" tableName="lease_liability_schedule_item"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1721738157060-13">
+        <addForeignKeyConstraint baseColumnNames="lease_period_id" baseTableName="lease_liability_schedule_item" constraintName="FKcj2u9xby29cvrdgmkf8q14fkf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_repayment_period" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

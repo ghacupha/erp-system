@@ -1,7 +1,7 @@
 package io.github.erp.internal.service.assets;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -124,7 +124,7 @@ public class InternalAssetRegistrationServiceImpl implements InternalAssetRegist
     @Transactional(readOnly = true)
     public List<AssetRegistrationDTO> findByCapitalizationDateBefore(LocalDate capitalizationDate) {
 
-        return internalAssetRegistrationRepository.findAllByCapitalizationDateBefore(capitalizationDate)
+        return internalAssetRegistrationRepository.findAllByCapitalizationDateLessThanEqual(capitalizationDate)
             .stream().map(assetRegistrationMapper::toDto).collect(Collectors.toList());
     }
 
@@ -133,5 +133,45 @@ public class InternalAssetRegistrationServiceImpl implements InternalAssetRegist
     public Long calculateNextAssetNumber() {
         log.debug("Request to get next asset number");
         return NextIntegerFiller.fillNext(assetRegistrationRepository.findAllIds());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Long> findAllIds() {
+
+        return assetRegistrationRepository.findAllIds();
+    }
+
+    /**
+     * List of asset ids of assets related to asset-general-adjustment
+     *
+     * @return List of ids
+     */
+    @Override
+    public List<Long> findAdjacentAssetIds() {
+
+        return assetRegistrationRepository.findAdjacentAssetIds();
+    }
+
+    /**
+     * List of asset ids of assets related to asset-general-adjustment
+     *
+     * @return List of ids
+     */
+    @Override
+    public List<Long> findDisposedAssetIds() {
+
+        return assetRegistrationRepository.findDisposedAssetIds();
+    }
+
+    /**
+     * List of asset ids of assets related to asset-write-off
+     *
+     * @return List of ids
+     */
+    @Override
+    public List<Long> findWrittenOffAssetIds() {
+
+        return assetRegistrationRepository.findWrittenOffAssetIds();
     }
 }

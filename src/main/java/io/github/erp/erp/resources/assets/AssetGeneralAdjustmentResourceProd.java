@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources.assets;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -188,7 +188,8 @@ public class AssetGeneralAdjustmentResourceProd {
         Pageable pageable
     ) {
         log.debug("REST request to get AssetGeneralAdjustments by criteria: {}", criteria);
-        Page<AssetGeneralAdjustmentDTO> page = assetGeneralAdjustmentQueryService.findByCriteria(criteria, pageable);
+        Page<AssetGeneralAdjustmentDTO> page = assetGeneralAdjustmentService.findByCriteria(criteria, pageable);
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

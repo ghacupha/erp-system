@@ -1,7 +1,7 @@
 package io.github.erp.internal.repository;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -101,7 +101,7 @@ public interface InternalAssetRegistrationRepository
      * @param capitalizationDate
      * @return
      */
-    List<AssetRegistration> findAllByCapitalizationDateBefore(LocalDate capitalizationDate);
+    List<AssetRegistration> findAllByCapitalizationDateLessThanEqual(LocalDate capitalizationDate);
 
     @Query(nativeQuery = true,
         value = "select " +
@@ -124,8 +124,59 @@ public interface InternalAssetRegistrationRepository
 
     @Query(
         nativeQuery = true,
-        value = "SELECT CAST(asset_number AS BIGINT) FROM public.asset_registration",
-        countQuery = "SELECT asset_number FROM public.asset_registration"
+        value = "SELECT CAST(id AS BIGINT) FROM public.asset_registration",
+        countQuery = "SELECT id FROM public.asset_registration"
     )
     List<Long> findAllIds();
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT " +
+            "   CAST(reg.id  AS BIGINT) " +
+            "  FROM public.asset_registration reg " +
+            "  LEFT JOIN asset_general_adjustment aga on reg.id = aga.asset_registration_id " +
+            "  WHERE aga.asset_registration_id IS NOT NULL",
+        countQuery = "" +
+            "SELECT " +
+            "   CAST(reg.id  AS BIGINT) " +
+            "  FROM public.asset_registration reg " +
+            "  LEFT JOIN asset_general_adjustment aga on reg.id = aga.asset_registration_id " +
+            "  WHERE aga.asset_registration_id IS NOT NULL"
+    )
+    List<Long> findAdjacentAssetIds();
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT " +
+            "   CAST(reg.id  AS BIGINT) " +
+            "  FROM public.asset_registration reg " +
+            "  LEFT JOIN asset_disposal dis on reg.id = dis.asset_disposed_id " +
+            "  WHERE dis.asset_disposed_id IS NOT NULL",
+        countQuery = "" +
+            "SELECT " +
+            "   CAST(reg.id  AS BIGINT) " +
+            "  FROM public.asset_registration reg " +
+            "  LEFT JOIN asset_disposal dis on reg.id = dis.asset_disposed_id " +
+            "  WHERE dis.asset_disposed_id IS NOT NULL"
+    )
+    List<Long> findDisposedAssetIds();
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT " +
+            "   CAST(reg.id  AS BIGINT) " +
+            " FROM public.asset_registration reg " +
+            " LEFT JOIN asset_write_off wr on reg.id = wr.asset_written_off_id " +
+            " WHERE wr.asset_written_off_id IS NOT NULL",
+        countQuery = "" +
+            "SELECT " +
+            "   CAST(reg.id  AS BIGINT) " +
+            " FROM public.asset_registration reg " +
+            " LEFT JOIN asset_write_off wr on reg.id = wr.asset_written_off_id " +
+            " WHERE wr.asset_written_off_id IS NOT NULL"
+    )
+    List<Long> findWrittenOffAssetIds();
 }

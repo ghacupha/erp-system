@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -116,11 +116,13 @@ public class PrepaymentAccountReportQueryService extends QueryService<Prepayment
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), PrepaymentAccountReport_.id));
             }
-            if (criteria.getPrepaymentAccount() != null) {
+            if (criteria.getAccountName() != null) {
                 specification =
-                    specification.and(
-                        buildStringSpecification(criteria.getPrepaymentAccount(), PrepaymentAccountReport_.prepaymentAccount)
-                    );
+                    specification.and(buildStringSpecification(criteria.getAccountName(), PrepaymentAccountReport_.accountName));
+            }
+            if (criteria.getAccountNumber() != null) {
+                specification =
+                    specification.and(buildStringSpecification(criteria.getAccountNumber(), PrepaymentAccountReport_.accountNumber));
             }
             if (criteria.getPrepaymentAmount() != null) {
                 specification =

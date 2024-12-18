@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -27,6 +26,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A WorkProjectRegister.
@@ -43,34 +44,43 @@ public class WorkProjectRegister implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "catalogue_number", nullable = false, unique = true)
+    @Field(type = FieldType.Text)
     private String catalogueNumber;
 
     @NotNull
     @Column(name = "project_title", nullable = false, unique = true)
+    @Field(type = FieldType.Text)
     private String projectTitle;
 
     @Column(name = "description")
+    @Field(type = FieldType.Text)
     private String description;
 
     @Lob
     @Column(name = "details")
+    @Field(type = FieldType.Binary)
     private byte[] details;
 
     @Column(name = "details_content_type")
+    @Field(type = FieldType.Text)
     private String detailsContentType;
 
     @Column(name = "total_project_cost", precision = 21, scale = 2)
+    @Field(type = FieldType.Double)
     private BigDecimal totalProjectCost;
 
     @Lob
     @Column(name = "additional_notes")
+    @Field(type = FieldType.Byte)
     private byte[] additionalNotes;
 
     @Column(name = "additional_notes_content_type")
+    @Field(type = FieldType.Text)
     private String additionalNotesContentType;
 
     @ManyToMany

@@ -1,7 +1,7 @@
 package io.github.erp.internal.service.assets;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@ package io.github.erp.internal.service.assets;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.service.criteria.AssetGeneralAdjustmentCriteria;
 import io.github.erp.service.dto.AssetGeneralAdjustmentDTO;
 import io.github.erp.service.dto.AssetRevaluationDTO;
 import org.springframework.data.domain.Page;
@@ -86,4 +87,14 @@ public interface InternalAssetGeneralAdjustmentService {
      * @return the entities
      */
     Optional<List<AssetGeneralAdjustmentDTO>> findAdjustmentItems(Long adjustedAssetId, LocalDate depreciationPeriodStartDate);
+
+    /**
+     * Return a {@link Page} of {@link AssetGeneralAdjustmentDTO} which matches the criteria from the database.
+     * This implementation includes an extra step in which the system refreshes the AssetRegistration cache for related assets
+     *
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param pageable The page, which should be returned.
+     * @return the matching entities.
+     */
+    Page<AssetGeneralAdjustmentDTO> findByCriteria(AssetGeneralAdjustmentCriteria criteria, Pageable pageable);
 }

@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -75,8 +75,8 @@ public class RouAssetNBVReport implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "fiscalYear", "placeholders", "universallyUniqueMappings", "fiscalQuarter" }, allowSetters = true)
-    private FiscalMonth fiscalReportingMonth;
+    @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
+    private LeasePeriod leasePeriod;
 
     @ManyToOne
     @JsonIgnoreProperties(
@@ -217,16 +217,16 @@ public class RouAssetNBVReport implements Serializable {
         this.reportFileContentType = reportFileContentType;
     }
 
-    public FiscalMonth getFiscalReportingMonth() {
-        return this.fiscalReportingMonth;
+    public LeasePeriod getLeasePeriod() {
+        return this.leasePeriod;
     }
 
-    public void setFiscalReportingMonth(FiscalMonth fiscalMonth) {
-        this.fiscalReportingMonth = fiscalMonth;
+    public void setLeasePeriod(LeasePeriod leasePeriod) {
+        this.leasePeriod = leasePeriod;
     }
 
-    public RouAssetNBVReport fiscalReportingMonth(FiscalMonth fiscalMonth) {
-        this.setFiscalReportingMonth(fiscalMonth);
+    public RouAssetNBVReport leasePeriod(LeasePeriod leasePeriod) {
+        this.setLeasePeriod(leasePeriod);
         return this;
     }
 

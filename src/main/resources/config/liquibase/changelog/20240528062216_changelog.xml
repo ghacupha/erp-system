@@ -1,0 +1,41 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1716877433976-10">
+        <addColumn tableName="rou_account_balance_report">
+            <column name="lease_period_id" type="int8">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716877433976-11">
+        <addColumn tableName="rou_assetnbvreport">
+            <column name="lease_period_id" type="int8">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716877433976-15">
+        <addForeignKeyConstraint baseColumnNames="lease_period_id" baseTableName="rou_assetnbvreport" constraintName="FK3k00r0vkekoil2qkws7yhw0jw" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_period" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716877433976-19">
+        <addForeignKeyConstraint baseColumnNames="lease_period_id" baseTableName="rou_account_balance_report" constraintName="FKiyqkv8nwc1pi5jqw44tou8x5l" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_period" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716877433976-20">
+        <dropForeignKeyConstraint baseTableName="rou_account_balance_report" constraintName="fk_rou_account_balance_report__reporting_month_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716877433976-21">
+        <dropForeignKeyConstraint baseTableName="rou_assetnbvreport" constraintName="fk_rou_assetnbvreport__fiscal_reporting_month_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716877433976-33">
+        <dropColumn columnName="fiscal_reporting_month_id" tableName="rou_assetnbvreport"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716877433976-34">
+        <dropColumn columnName="reporting_month_id" tableName="rou_account_balance_report"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716877433976-1">
+        <dropForeignKeyConstraint baseTableName="rou_deprec_pst_rpt" constraintName="FKe95ki925qpy6tdc3bg5xvk5gh"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1716877433976-2">
+        <addForeignKeyConstraint baseColumnNames="lease_period_id" baseTableName="rou_deprec_pst_rpt" constraintName="FKe95ki925qpy6tdc3bg5xvk5gh" referencedColumnNames="id" referencedTableName="lease_period"/>
+    </changeSet>
+</databaseChangeLog>

@@ -16,8 +16,7 @@
     },
     {
       "fieldName": "leaseTermPeriods",
-      "fieldType": "Integer",
-      "fieldValidateRules": ["required"]
+      "fieldType": "Integer"
     },
     {
       "fieldName": "leaseAmount",
@@ -45,6 +44,26 @@
     {
       "fieldName": "hasBeenDecommissioned",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "batchJobIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "depreciationAmountStepIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "outstandingAmountStepIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "flagAmortisedStepIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "compilationTime",
+      "fieldType": "ZonedDateTime"
     }
   ],
   "relationships": [

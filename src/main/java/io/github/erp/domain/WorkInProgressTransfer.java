@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.WorkInProgressTransferType;
 import java.io.Serializable;
@@ -29,6 +28,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A WorkInProgressTransfer.
@@ -36,7 +37,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "work_in_progress_transfer")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "workinprogresstransfer")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "workinprogresstransfer-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class WorkInProgressTransfer implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,20 +46,25 @@ public class WorkInProgressTransfer implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @Column(name = "description")
+    @Field(type = FieldType.Text)
     private String description;
 
     @Column(name = "target_asset_number")
+    @Field(type = FieldType.Keyword)
     private String targetAssetNumber;
 
     @NotNull
     @Column(name = "transfer_amount", precision = 21, scale = 2, nullable = false)
+    @Field(type = FieldType.Double)
     private BigDecimal transferAmount;
 
     @NotNull
     @Column(name = "transfer_date", nullable = false)
+    @Field(type = FieldType.Date)
     private LocalDate transferDate;
 
     @NotNull
@@ -145,7 +151,24 @@ public class WorkInProgressTransfer implements Serializable {
         },
         allowSetters = true
     )
-    private Settlement settlement;
+    private Settlement transferSettlement;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "placeholders",
+            "settlementCurrency",
+            "paymentLabels",
+            "paymentCategory",
+            "groupSettlement",
+            "biller",
+            "paymentInvoices",
+            "signatories",
+            "businessDocuments",
+        },
+        allowSetters = true
+    )
+    private Settlement originalSettlement;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "dealers", "settlementCurrency", "placeholders", "businessDocuments" }, allowSetters = true)
@@ -316,16 +339,29 @@ public class WorkInProgressTransfer implements Serializable {
         return this;
     }
 
-    public Settlement getSettlement() {
-        return this.settlement;
+    public Settlement getTransferSettlement() {
+        return this.transferSettlement;
     }
 
-    public void setSettlement(Settlement settlement) {
-        this.settlement = settlement;
+    public void setTransferSettlement(Settlement settlement) {
+        this.transferSettlement = settlement;
     }
 
-    public WorkInProgressTransfer settlement(Settlement settlement) {
-        this.setSettlement(settlement);
+    public WorkInProgressTransfer transferSettlement(Settlement settlement) {
+        this.setTransferSettlement(settlement);
+        return this;
+    }
+
+    public Settlement getOriginalSettlement() {
+        return this.originalSettlement;
+    }
+
+    public void setOriginalSettlement(Settlement settlement) {
+        this.originalSettlement = settlement;
+    }
+
+    public WorkInProgressTransfer originalSettlement(Settlement settlement) {
+        this.setOriginalSettlement(settlement);
         return this;
     }
 

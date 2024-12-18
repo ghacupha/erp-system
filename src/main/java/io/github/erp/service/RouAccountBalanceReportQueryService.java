@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -141,21 +141,21 @@ public class RouAccountBalanceReportQueryService extends QueryService<RouAccount
                 specification =
                     specification.and(buildStringSpecification(criteria.getReportParameters(), RouAccountBalanceReport_.reportParameters));
             }
+            if (criteria.getLeasePeriodId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeasePeriodId(),
+                            root -> root.join(RouAccountBalanceReport_.leasePeriod, JoinType.LEFT).get(LeasePeriod_.id)
+                        )
+                    );
+            }
             if (criteria.getRequestedById() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
                             criteria.getRequestedById(),
                             root -> root.join(RouAccountBalanceReport_.requestedBy, JoinType.LEFT).get(ApplicationUser_.id)
-                        )
-                    );
-            }
-            if (criteria.getReportingMonthId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getReportingMonthId(),
-                            root -> root.join(RouAccountBalanceReport_.reportingMonth, JoinType.LEFT).get(FiscalMonth_.id)
                         )
                     );
             }

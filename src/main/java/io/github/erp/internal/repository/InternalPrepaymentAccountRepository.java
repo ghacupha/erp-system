@@ -1,7 +1,7 @@
 package io.github.erp.internal.repository;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,6 +20,8 @@ package io.github.erp.internal.repository;
 import io.github.erp.domain.PrepaymentAccount;
 import java.util.List;
 import java.util.Optional;
+
+import io.github.erp.internal.service.ledgers.TransactionAccountAdjacent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -30,7 +32,7 @@ import org.springframework.stereotype.Repository;
  * Spring Data SQL repository for the PrepaymentAccount entity.
  */
 @Repository
-public interface InternalPrepaymentAccountRepository extends JpaRepository<PrepaymentAccount, Long>, JpaSpecificationExecutor<PrepaymentAccount> {
+public interface InternalPrepaymentAccountRepository extends JpaRepository<PrepaymentAccount, Long>, JpaSpecificationExecutor<PrepaymentAccount>, TransactionAccountAdjacent {
     @Query(
         value = "select distinct prepaymentAccount from PrepaymentAccount prepaymentAccount left join fetch prepaymentAccount.placeholders left join fetch prepaymentAccount.generalParameters left join fetch prepaymentAccount.prepaymentParameters left join fetch prepaymentAccount.businessDocuments",
         countQuery = "select count(distinct prepaymentAccount) from PrepaymentAccount prepaymentAccount"
@@ -53,4 +55,36 @@ public interface InternalPrepaymentAccountRepository extends JpaRepository<Prepa
         countQuery = "SELECT catalogue_number FROM public.prepayment_account"
     )
     List<Long> findAllIds();
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT  " +
+            "  CAST(reg.id  AS BIGINT)  " +
+            "  FROM public.transaction_account reg  " +
+            " LEFT JOIN prepayment_account aga on reg.id = aga.debit_account_id  " +
+            " WHERE aga.debit_account_id IS NOT NULL " +
+            "UNION " +
+            " SELECT  " +
+            "  CAST(reg.id  AS BIGINT)  " +
+            "  FROM public.transaction_account reg  " +
+            " LEFT JOIN prepayment_account aga on reg.id = aga.transfer_account_id  " +
+            " WHERE aga.transfer_account_id IS NOT NULL",
+
+        countQuery = "" +
+            "SELECT  " +
+            "  CAST(reg.id  AS BIGINT)  " +
+            "  FROM public.transaction_account reg  " +
+            " LEFT JOIN prepayment_account aga on reg.id = aga.debit_account_id  " +
+            " WHERE aga.debit_account_id IS NOT NULL " +
+            "UNION " +
+            " SELECT  " +
+            "  CAST(reg.id  AS BIGINT)  " +
+            "  FROM public.transaction_account reg  " +
+            " LEFT JOIN prepayment_account aga on reg.id = aga.transfer_account_id  " +
+            " WHERE aga.transfer_account_id IS NOT NULL"
+
+    )
+    List<Long> findAdjacentIds();
+
 }

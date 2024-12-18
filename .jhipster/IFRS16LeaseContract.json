@@ -74,6 +74,12 @@
       "otherEntityName": "businessDocument",
       "relationshipType": "many-to-one",
       "otherEntityField": "documentTitle"
+    },
+    {
+      "relationshipName": "leasePayment",
+      "otherEntityName": "leasePayment",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "leaseContract"
     }
   ],
   "service": "serviceImpl",

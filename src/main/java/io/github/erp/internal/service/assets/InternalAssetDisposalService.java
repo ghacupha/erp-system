@@ -1,7 +1,7 @@
 package io.github.erp.internal.service.assets;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,9 +17,11 @@ package io.github.erp.internal.service.assets;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.service.criteria.AssetDisposalCriteria;
 import io.github.erp.service.dto.AssetDisposalDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -93,4 +95,13 @@ public interface InternalAssetDisposalService {
      * @return the list of entities.
      */
     Page<AssetDisposalDTO> search(String query, Pageable pageable);
+
+    /**
+     * Return a {@link Page} of {@link AssetDisposalDTO} which matches the criteria from the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param page The page, which should be returned.
+     * @return the matching entities.
+     */
+    @Transactional(readOnly = true)
+    public Page<AssetDisposalDTO> findByCriteria(AssetDisposalCriteria criteria, Pageable page);
 }

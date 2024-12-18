@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity InternalMemo.
+    -->
+    <changeSet id="20240530092852-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="action_required_id"
+                                 baseTableName="internal_memo"
+                                 constraintName="fk_internal_memo__action_required_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="memo_action"/>
+
+        <addForeignKeyConstraint baseColumnNames="addressed_to_id"
+                                 baseTableName="internal_memo"
+                                 constraintName="fk_internal_memo__addressed_to_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="from_id"
+                                 baseTableName="internal_memo"
+                                 constraintName="fk_internal_memo__from_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="internal_memo_id"
+                                 baseTableName="rel_internal_memo__prepared_by"
+                                 constraintName="fk_rel_internal_memo__prepared_by__internal_memo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="internal_memo"/>
+
+        <addForeignKeyConstraint baseColumnNames="prepared_by_id"
+                                 baseTableName="rel_internal_memo__prepared_by"
+                                 constraintName="fk_rel_internal_memo__prepared_by__prepared_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="internal_memo_id"
+                                 baseTableName="rel_internal_memo__reviewed_by"
+                                 constraintName="fk_rel_internal_memo__reviewed_by__internal_memo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="internal_memo"/>
+
+        <addForeignKeyConstraint baseColumnNames="reviewed_by_id"
+                                 baseTableName="rel_internal_memo__reviewed_by"
+                                 constraintName="fk_rel_internal_memo__reviewed_by__reviewed_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="internal_memo_id"
+                                 baseTableName="rel_internal_memo__approved_by"
+                                 constraintName="fk_rel_internal_memo__approved_by__internal_memo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="internal_memo"/>
+
+        <addForeignKeyConstraint baseColumnNames="approved_by_id"
+                                 baseTableName="rel_internal_memo__approved_by"
+                                 constraintName="fk_rel_internal_memo__approved_by__approved_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="internal_memo_id"
+                                 baseTableName="rel_internal_memo__memo_document"
+                                 constraintName="fk_rel_internal_memo__memo_document__internal_memo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="internal_memo"/>
+
+        <addForeignKeyConstraint baseColumnNames="memo_document_id"
+                                 baseTableName="rel_internal_memo__memo_document"
+                                 constraintName="fk_rel_internal_memo__memo_document__memo_document_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="business_document"/>
+
+        <addForeignKeyConstraint baseColumnNames="internal_memo_id"
+                                 baseTableName="rel_internal_memo__placeholder"
+                                 constraintName="fk_rel_internal_memo__placeholder__internal_memo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="internal_memo"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_internal_memo__placeholder"
+                                 constraintName="fk_rel_internal_memo__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>

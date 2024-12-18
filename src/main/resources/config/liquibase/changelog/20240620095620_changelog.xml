@@ -1,0 +1,61 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-8">
+        <addColumn tableName="lease_amortization_calculation">
+            <column name="lease_contract_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-9">
+        <addColumn tableName="lease_amortization_schedule">
+            <column name="lease_contract_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-10">
+        <addColumn tableName="lease_liability">
+            <column name="lease_contract_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-11">
+        <addColumn tableName="lease_liability_schedule_item">
+            <column name="lease_liability_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-15">
+        <addUniqueConstraint columnNames="lease_contract_id" constraintName="UK_6xw26bvsan0j5btcfkij1ilel" tableName="lease_liability"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-16">
+        <addUniqueConstraint columnNames="lease_contract_id" constraintName="UK_ku26m0jh5gcgu3sde52hv815p" tableName="lease_amortization_schedule"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-17">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id" baseTableName="lease_amortization_calculation" constraintName="FK14jvpe5dkq5xn0wrp7bcl8dhv" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ifrs16lease_contract" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-20">
+        <addForeignKeyConstraint baseColumnNames="lease_liability_id" baseTableName="lease_liability_schedule_item" constraintName="FKel1bullyffxfpj8nn3pum3ee0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_liability" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-21">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id" baseTableName="lease_amortization_schedule" constraintName="FKet0qewto3ppvuvs3l0m445v02" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ifrs16lease_contract" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-23">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id" baseTableName="lease_liability" constraintName="FKg918ftb6dkicciipbtl2mople" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ifrs16lease_contract" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-24">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id" baseTableName="lease_liability_schedule_item" constraintName="FKm5jmb9n62aqxnw42bs6suhkn7" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ifrs16lease_contract" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-25">
+        <dropForeignKeyConstraint baseTableName="lease_liability_schedule_item" constraintName="fk_lease_liability_schedule_item__lease_contract_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-26">
+        <dropForeignKeyConstraint baseTableName="lease_liability_schedule_item" constraintName="fk_lease_liability_schedule_item__lease_model_metadata_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718877500308-38">
+        <dropColumn columnName="lease_model_metadata_id" tableName="lease_liability_schedule_item"/>
+    </changeSet>
+</databaseChangeLog>

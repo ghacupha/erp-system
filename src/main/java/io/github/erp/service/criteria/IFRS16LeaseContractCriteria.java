@@ -1,7 +1,7 @@
 package io.github.erp.service.criteria;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -72,6 +72,8 @@ public class IFRS16LeaseContractCriteria implements Serializable, Criteria {
 
     private LongFilter leaseContractCalculationsId;
 
+    private LongFilter leasePaymentId;
+
     private Boolean distinct;
 
     public IFRS16LeaseContractCriteria() {}
@@ -92,6 +94,7 @@ public class IFRS16LeaseContractCriteria implements Serializable, Criteria {
         this.lastReportingPeriodId = other.lastReportingPeriodId == null ? null : other.lastReportingPeriodId.copy();
         this.leaseContractDocumentId = other.leaseContractDocumentId == null ? null : other.leaseContractDocumentId.copy();
         this.leaseContractCalculationsId = other.leaseContractCalculationsId == null ? null : other.leaseContractCalculationsId.copy();
+        this.leasePaymentId = other.leasePaymentId == null ? null : other.leasePaymentId.copy();
         this.distinct = other.distinct;
     }
 
@@ -310,6 +313,21 @@ public class IFRS16LeaseContractCriteria implements Serializable, Criteria {
         this.leaseContractCalculationsId = leaseContractCalculationsId;
     }
 
+    public LongFilter getLeasePaymentId() {
+        return leasePaymentId;
+    }
+
+    public LongFilter leasePaymentId() {
+        if (leasePaymentId == null) {
+            leasePaymentId = new LongFilter();
+        }
+        return leasePaymentId;
+    }
+
+    public void setLeasePaymentId(LongFilter leasePaymentId) {
+        this.leasePaymentId = leasePaymentId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -342,6 +360,7 @@ public class IFRS16LeaseContractCriteria implements Serializable, Criteria {
             Objects.equals(lastReportingPeriodId, that.lastReportingPeriodId) &&
             Objects.equals(leaseContractDocumentId, that.leaseContractDocumentId) &&
             Objects.equals(leaseContractCalculationsId, that.leaseContractCalculationsId) &&
+            Objects.equals(leasePaymentId, that.leasePaymentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -363,6 +382,7 @@ public class IFRS16LeaseContractCriteria implements Serializable, Criteria {
             lastReportingPeriodId,
             leaseContractDocumentId,
             leaseContractCalculationsId,
+            leasePaymentId,
             distinct
         );
     }
@@ -385,6 +405,7 @@ public class IFRS16LeaseContractCriteria implements Serializable, Criteria {
             (lastReportingPeriodId != null ? "lastReportingPeriodId=" + lastReportingPeriodId + ", " : "") +
             (leaseContractDocumentId != null ? "leaseContractDocumentId=" + leaseContractDocumentId + ", " : "") +
             (leaseContractCalculationsId != null ? "leaseContractCalculationsId=" + leaseContractCalculationsId + ", " : "") +
+            (leasePaymentId != null ? "leasePaymentId=" + leasePaymentId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

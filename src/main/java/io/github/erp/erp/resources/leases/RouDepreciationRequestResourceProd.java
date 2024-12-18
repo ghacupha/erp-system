@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources.leases;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,9 +17,10 @@ package io.github.erp.erp.resources.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.repository.RouDepreciationRequestRepository;
+import io.github.erp.internal.repository.InternalRouDepreciationRequestRepository;
+import io.github.erp.internal.service.rou.InternalRouDepreciationRequestService;
+import io.github.erp.internal.service.rou.RouDepreciationValidationService;
 import io.github.erp.service.RouDepreciationRequestQueryService;
-import io.github.erp.service.RouDepreciationRequestService;
 import io.github.erp.service.criteria.RouDepreciationRequestCriteria;
 import io.github.erp.service.dto.RouDepreciationRequestDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
@@ -58,20 +59,23 @@ public class RouDepreciationRequestResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final RouDepreciationRequestService rouDepreciationRequestService;
+    private final InternalRouDepreciationRequestService rouDepreciationRequestService;
 
-    private final RouDepreciationRequestRepository rouDepreciationRequestRepository;
+    private final InternalRouDepreciationRequestRepository rouDepreciationRequestRepository;
 
     private final RouDepreciationRequestQueryService rouDepreciationRequestQueryService;
 
+    private final RouDepreciationValidationService rouDepreciationValidationService;
+
     public RouDepreciationRequestResourceProd(
-        RouDepreciationRequestService rouDepreciationRequestService,
-        RouDepreciationRequestRepository rouDepreciationRequestRepository,
-        RouDepreciationRequestQueryService rouDepreciationRequestQueryService
-    ) {
+        InternalRouDepreciationRequestService rouDepreciationRequestService,
+        InternalRouDepreciationRequestRepository rouDepreciationRequestRepository,
+        RouDepreciationRequestQueryService rouDepreciationRequestQueryService,
+        RouDepreciationValidationService rouDepreciationValidationService) {
         this.rouDepreciationRequestService = rouDepreciationRequestService;
         this.rouDepreciationRequestRepository = rouDepreciationRequestRepository;
         this.rouDepreciationRequestQueryService = rouDepreciationRequestQueryService;
+        this.rouDepreciationValidationService = rouDepreciationValidationService;
     }
 
     /**
@@ -124,6 +128,77 @@ public class RouDepreciationRequestResourceProd {
         }
 
         RouDepreciationRequestDTO result = rouDepreciationRequestService.save(rouDepreciationRequestDTO);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, rouDepreciationRequestDTO.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * {@code PUT  /rou-depreciation-requests/invalidate/:id} : invalidates an existing rouDepreciationRequest.
+     *
+     * @param id the id of the rouDepreciationRequestDTO to save.
+     * @param rouDepreciationRequestDTO the rouDepreciationRequestDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated rouDepreciationRequestDTO,
+     * or with status {@code 400 (Bad Request)} if the rouDepreciationRequestDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the rouDepreciationRequestDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/rou-depreciation-requests/invalidate/{id}")
+    public ResponseEntity<RouDepreciationRequestDTO> invalidateRouDepreciationRequest(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody RouDepreciationRequestDTO rouDepreciationRequestDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to update RouDepreciationRequest : {}, {}", id, rouDepreciationRequestDTO);
+        if (rouDepreciationRequestDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, rouDepreciationRequestDTO.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!rouDepreciationRequestRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        RouDepreciationRequestDTO result = rouDepreciationValidationService.invalidate(rouDepreciationRequestDTO);
+
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, rouDepreciationRequestDTO.getId().toString()))
+            .body(result);
+    }
+
+
+    /**
+     * {@code PUT  /rou-depreciation-requests/revalidate/:id} : reversal of an invalidated rouDepreciationRequest.
+     *
+     * @param id the id of the rouDepreciationRequestDTO to save.
+     * @param rouDepreciationRequestDTO the rouDepreciationRequestDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated rouDepreciationRequestDTO,
+     * or with status {@code 400 (Bad Request)} if the rouDepreciationRequestDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the rouDepreciationRequestDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/rou-depreciation-requests/revalidate/{id}")
+    public ResponseEntity<RouDepreciationRequestDTO> revalidateRouDepreciationRequest(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody RouDepreciationRequestDTO rouDepreciationRequestDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to update RouDepreciationRequest : {}, {}", id, rouDepreciationRequestDTO);
+        if (rouDepreciationRequestDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, rouDepreciationRequestDTO.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!rouDepreciationRequestRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        RouDepreciationRequestDTO result = rouDepreciationValidationService.revalidate(rouDepreciationRequestDTO);
+
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, rouDepreciationRequestDTO.getId().toString()))

@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,6 @@ package io.github.erp.erp.resources;
  */
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.*;
-import io.github.erp.erp.resources.wip.WorkInProgressRegistrationResourceProd;
 import io.github.erp.repository.WorkInProgressRegistrationRepository;
 import io.github.erp.repository.search.WorkInProgressRegistrationSearchRepository;
 import io.github.erp.service.WorkInProgressRegistrationService;
@@ -43,6 +42,8 @@ import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -57,7 +58,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@link WorkInProgressRegistrationResourceProd} REST controller.
+ * Integration tests for the WorkInProgressRegistrationResourceProd REST controller.
  */
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
@@ -70,6 +71,10 @@ public class WorkInProgressRegistrationResourceIT {
 
     private static final String DEFAULT_PARTICULARS = "AAAAAAAAAA";
     private static final String UPDATED_PARTICULARS = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_INSTALMENT_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_INSTALMENT_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_INSTALMENT_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final BigDecimal DEFAULT_INSTALMENT_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_INSTALMENT_AMOUNT = new BigDecimal(2);
@@ -87,9 +92,9 @@ public class WorkInProgressRegistrationResourceIT {
     private static final Boolean DEFAULT_COMPLETED = false;
     private static final Boolean UPDATED_COMPLETED = true;
 
-    private static final String ENTITY_API_URL = "/api/fixed-asset/work-in-progress-registrations";
+    private static final String ENTITY_API_URL = "/api/work-in-progress-registrations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-    private static final String ENTITY_SEARCH_API_URL = "/api/fixed-asset/_search/work-in-progress-registrations";
+    private static final String ENTITY_SEARCH_API_URL = "/api/_search/work-in-progress-registrations";
 
     private static Random random = new Random();
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
@@ -132,6 +137,7 @@ public class WorkInProgressRegistrationResourceIT {
         WorkInProgressRegistration workInProgressRegistration = new WorkInProgressRegistration()
             .sequenceNumber(DEFAULT_SEQUENCE_NUMBER)
             .particulars(DEFAULT_PARTICULARS)
+            .instalmentDate(DEFAULT_INSTALMENT_DATE)
             .instalmentAmount(DEFAULT_INSTALMENT_AMOUNT)
             .comments(DEFAULT_COMMENTS)
             .commentsContentType(DEFAULT_COMMENTS_CONTENT_TYPE)
@@ -150,6 +156,7 @@ public class WorkInProgressRegistrationResourceIT {
         WorkInProgressRegistration workInProgressRegistration = new WorkInProgressRegistration()
             .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
             .particulars(UPDATED_PARTICULARS)
+            .instalmentDate(UPDATED_INSTALMENT_DATE)
             .instalmentAmount(UPDATED_INSTALMENT_AMOUNT)
             .comments(UPDATED_COMMENTS)
             .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
@@ -185,6 +192,7 @@ public class WorkInProgressRegistrationResourceIT {
         );
         assertThat(testWorkInProgressRegistration.getSequenceNumber()).isEqualTo(DEFAULT_SEQUENCE_NUMBER);
         assertThat(testWorkInProgressRegistration.getParticulars()).isEqualTo(DEFAULT_PARTICULARS);
+        assertThat(testWorkInProgressRegistration.getInstalmentDate()).isEqualTo(DEFAULT_INSTALMENT_DATE);
         assertThat(testWorkInProgressRegistration.getInstalmentAmount()).isEqualByComparingTo(DEFAULT_INSTALMENT_AMOUNT);
         assertThat(testWorkInProgressRegistration.getComments()).isEqualTo(DEFAULT_COMMENTS);
         assertThat(testWorkInProgressRegistration.getCommentsContentType()).isEqualTo(DEFAULT_COMMENTS_CONTENT_TYPE);
@@ -257,6 +265,7 @@ public class WorkInProgressRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(workInProgressRegistration.getId().intValue())))
             .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
+            .andExpect(jsonPath("$.[*].instalmentDate").value(hasItem(DEFAULT_INSTALMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].instalmentAmount").value(hasItem(sameNumber(DEFAULT_INSTALMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].commentsContentType").value(hasItem(DEFAULT_COMMENTS_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))))
@@ -296,6 +305,7 @@ public class WorkInProgressRegistrationResourceIT {
             .andExpect(jsonPath("$.id").value(workInProgressRegistration.getId().intValue()))
             .andExpect(jsonPath("$.sequenceNumber").value(DEFAULT_SEQUENCE_NUMBER))
             .andExpect(jsonPath("$.particulars").value(DEFAULT_PARTICULARS))
+            .andExpect(jsonPath("$.instalmentDate").value(DEFAULT_INSTALMENT_DATE.toString()))
             .andExpect(jsonPath("$.instalmentAmount").value(sameNumber(DEFAULT_INSTALMENT_AMOUNT)))
             .andExpect(jsonPath("$.commentsContentType").value(DEFAULT_COMMENTS_CONTENT_TYPE))
             .andExpect(jsonPath("$.comments").value(Base64Utils.encodeToString(DEFAULT_COMMENTS)))
@@ -475,6 +485,110 @@ public class WorkInProgressRegistrationResourceIT {
 
         // Get all the workInProgressRegistrationList where particulars does not contain UPDATED_PARTICULARS
         defaultWorkInProgressRegistrationShouldBeFound("particulars.doesNotContain=" + UPDATED_PARTICULARS);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByInstalmentDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where instalmentDate equals to DEFAULT_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldBeFound("instalmentDate.equals=" + DEFAULT_INSTALMENT_DATE);
+
+        // Get all the workInProgressRegistrationList where instalmentDate equals to UPDATED_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldNotBeFound("instalmentDate.equals=" + UPDATED_INSTALMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByInstalmentDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where instalmentDate not equals to DEFAULT_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldNotBeFound("instalmentDate.notEquals=" + DEFAULT_INSTALMENT_DATE);
+
+        // Get all the workInProgressRegistrationList where instalmentDate not equals to UPDATED_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldBeFound("instalmentDate.notEquals=" + UPDATED_INSTALMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByInstalmentDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where instalmentDate in DEFAULT_INSTALMENT_DATE or UPDATED_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldBeFound("instalmentDate.in=" + DEFAULT_INSTALMENT_DATE + "," + UPDATED_INSTALMENT_DATE);
+
+        // Get all the workInProgressRegistrationList where instalmentDate equals to UPDATED_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldNotBeFound("instalmentDate.in=" + UPDATED_INSTALMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByInstalmentDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where instalmentDate is not null
+        defaultWorkInProgressRegistrationShouldBeFound("instalmentDate.specified=true");
+
+        // Get all the workInProgressRegistrationList where instalmentDate is null
+        defaultWorkInProgressRegistrationShouldNotBeFound("instalmentDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByInstalmentDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where instalmentDate is greater than or equal to DEFAULT_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldBeFound("instalmentDate.greaterThanOrEqual=" + DEFAULT_INSTALMENT_DATE);
+
+        // Get all the workInProgressRegistrationList where instalmentDate is greater than or equal to UPDATED_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldNotBeFound("instalmentDate.greaterThanOrEqual=" + UPDATED_INSTALMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByInstalmentDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where instalmentDate is less than or equal to DEFAULT_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldBeFound("instalmentDate.lessThanOrEqual=" + DEFAULT_INSTALMENT_DATE);
+
+        // Get all the workInProgressRegistrationList where instalmentDate is less than or equal to SMALLER_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldNotBeFound("instalmentDate.lessThanOrEqual=" + SMALLER_INSTALMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByInstalmentDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where instalmentDate is less than DEFAULT_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldNotBeFound("instalmentDate.lessThan=" + DEFAULT_INSTALMENT_DATE);
+
+        // Get all the workInProgressRegistrationList where instalmentDate is less than UPDATED_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldBeFound("instalmentDate.lessThan=" + UPDATED_INSTALMENT_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkInProgressRegistrationsByInstalmentDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        workInProgressRegistrationRepository.saveAndFlush(workInProgressRegistration);
+
+        // Get all the workInProgressRegistrationList where instalmentDate is greater than DEFAULT_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldNotBeFound("instalmentDate.greaterThan=" + DEFAULT_INSTALMENT_DATE);
+
+        // Get all the workInProgressRegistrationList where instalmentDate is greater than SMALLER_INSTALMENT_DATE
+        defaultWorkInProgressRegistrationShouldBeFound("instalmentDate.greaterThan=" + SMALLER_INSTALMENT_DATE);
     }
 
     @Test
@@ -1116,6 +1230,7 @@ public class WorkInProgressRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(workInProgressRegistration.getId().intValue())))
             .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
+            .andExpect(jsonPath("$.[*].instalmentDate").value(hasItem(DEFAULT_INSTALMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].instalmentAmount").value(hasItem(sameNumber(DEFAULT_INSTALMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].commentsContentType").value(hasItem(DEFAULT_COMMENTS_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))))
@@ -1173,6 +1288,7 @@ public class WorkInProgressRegistrationResourceIT {
         updatedWorkInProgressRegistration
             .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
             .particulars(UPDATED_PARTICULARS)
+            .instalmentDate(UPDATED_INSTALMENT_DATE)
             .instalmentAmount(UPDATED_INSTALMENT_AMOUNT)
             .comments(UPDATED_COMMENTS)
             .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
@@ -1198,6 +1314,7 @@ public class WorkInProgressRegistrationResourceIT {
         );
         assertThat(testWorkInProgressRegistration.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
         assertThat(testWorkInProgressRegistration.getParticulars()).isEqualTo(UPDATED_PARTICULARS);
+        assertThat(testWorkInProgressRegistration.getInstalmentDate()).isEqualTo(UPDATED_INSTALMENT_DATE);
         assertThat(testWorkInProgressRegistration.getInstalmentAmount()).isEqualTo(UPDATED_INSTALMENT_AMOUNT);
         assertThat(testWorkInProgressRegistration.getComments()).isEqualTo(UPDATED_COMMENTS);
         assertThat(testWorkInProgressRegistration.getCommentsContentType()).isEqualTo(UPDATED_COMMENTS_CONTENT_TYPE);
@@ -1301,7 +1418,9 @@ public class WorkInProgressRegistrationResourceIT {
         partialUpdatedWorkInProgressRegistration
             .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
             .particulars(UPDATED_PARTICULARS)
-            .levelOfCompletion(UPDATED_LEVEL_OF_COMPLETION);
+            .comments(UPDATED_COMMENTS)
+            .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
+            .completed(UPDATED_COMPLETED);
 
         restWorkInProgressRegistrationMockMvc
             .perform(
@@ -1319,11 +1438,12 @@ public class WorkInProgressRegistrationResourceIT {
         );
         assertThat(testWorkInProgressRegistration.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
         assertThat(testWorkInProgressRegistration.getParticulars()).isEqualTo(UPDATED_PARTICULARS);
+        assertThat(testWorkInProgressRegistration.getInstalmentDate()).isEqualTo(DEFAULT_INSTALMENT_DATE);
         assertThat(testWorkInProgressRegistration.getInstalmentAmount()).isEqualByComparingTo(DEFAULT_INSTALMENT_AMOUNT);
-        assertThat(testWorkInProgressRegistration.getComments()).isEqualTo(DEFAULT_COMMENTS);
-        assertThat(testWorkInProgressRegistration.getCommentsContentType()).isEqualTo(DEFAULT_COMMENTS_CONTENT_TYPE);
-        assertThat(testWorkInProgressRegistration.getLevelOfCompletion()).isEqualTo(UPDATED_LEVEL_OF_COMPLETION);
-        assertThat(testWorkInProgressRegistration.getCompleted()).isEqualTo(DEFAULT_COMPLETED);
+        assertThat(testWorkInProgressRegistration.getComments()).isEqualTo(UPDATED_COMMENTS);
+        assertThat(testWorkInProgressRegistration.getCommentsContentType()).isEqualTo(UPDATED_COMMENTS_CONTENT_TYPE);
+        assertThat(testWorkInProgressRegistration.getLevelOfCompletion()).isEqualTo(DEFAULT_LEVEL_OF_COMPLETION);
+        assertThat(testWorkInProgressRegistration.getCompleted()).isEqualTo(UPDATED_COMPLETED);
     }
 
     @Test
@@ -1341,6 +1461,7 @@ public class WorkInProgressRegistrationResourceIT {
         partialUpdatedWorkInProgressRegistration
             .sequenceNumber(UPDATED_SEQUENCE_NUMBER)
             .particulars(UPDATED_PARTICULARS)
+            .instalmentDate(UPDATED_INSTALMENT_DATE)
             .instalmentAmount(UPDATED_INSTALMENT_AMOUNT)
             .comments(UPDATED_COMMENTS)
             .commentsContentType(UPDATED_COMMENTS_CONTENT_TYPE)
@@ -1363,6 +1484,7 @@ public class WorkInProgressRegistrationResourceIT {
         );
         assertThat(testWorkInProgressRegistration.getSequenceNumber()).isEqualTo(UPDATED_SEQUENCE_NUMBER);
         assertThat(testWorkInProgressRegistration.getParticulars()).isEqualTo(UPDATED_PARTICULARS);
+        assertThat(testWorkInProgressRegistration.getInstalmentDate()).isEqualTo(UPDATED_INSTALMENT_DATE);
         assertThat(testWorkInProgressRegistration.getInstalmentAmount()).isEqualByComparingTo(UPDATED_INSTALMENT_AMOUNT);
         assertThat(testWorkInProgressRegistration.getComments()).isEqualTo(UPDATED_COMMENTS);
         assertThat(testWorkInProgressRegistration.getCommentsContentType()).isEqualTo(UPDATED_COMMENTS_CONTENT_TYPE);
@@ -1486,6 +1608,7 @@ public class WorkInProgressRegistrationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(workInProgressRegistration.getId().intValue())))
             .andExpect(jsonPath("$.[*].sequenceNumber").value(hasItem(DEFAULT_SEQUENCE_NUMBER)))
             .andExpect(jsonPath("$.[*].particulars").value(hasItem(DEFAULT_PARTICULARS)))
+            .andExpect(jsonPath("$.[*].instalmentDate").value(hasItem(DEFAULT_INSTALMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].instalmentAmount").value(hasItem(sameNumber(DEFAULT_INSTALMENT_AMOUNT))))
             .andExpect(jsonPath("$.[*].commentsContentType").value(hasItem(DEFAULT_COMMENTS_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(Base64Utils.encodeToString(DEFAULT_COMMENTS))))

@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,16 +17,18 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A WorkInProgressRegistration.
@@ -34,7 +36,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "work_in_progress_registration")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "workinprogressregistration")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "workinprogressregistration-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class WorkInProgressRegistration implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,29 +45,42 @@ public class WorkInProgressRegistration implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "sequence_number", nullable = false, unique = true)
+    @Field(type = FieldType.Text)
     private String sequenceNumber;
 
     @Column(name = "particulars")
+    @Field(type = FieldType.Text)
     private String particulars;
 
+    @NotNull
+    @Field(type = FieldType.Date)
+    @Column(name = "instalment_date", nullable = false)
+    private LocalDate instalmentDate;
+
     @Column(name = "instalment_amount", precision = 21, scale = 2)
+    @Field(type = FieldType.Double)
     private BigDecimal instalmentAmount;
 
     @Lob
     @Column(name = "comments")
+    @Field(type = FieldType.Binary)
     private byte[] comments;
 
     @Column(name = "comments_content_type")
+    @Field(type = FieldType.Text)
     private String commentsContentType;
 
     @Column(name = "level_of_completion")
+    @Field(type = FieldType.Double)
     private Double levelOfCompletion;
 
     @Column(name = "completed")
+    @Field(type = FieldType.Boolean)
     private Boolean completed;
 
     @ManyToMany
@@ -280,6 +295,19 @@ public class WorkInProgressRegistration implements Serializable {
 
     public void setParticulars(String particulars) {
         this.particulars = particulars;
+    }
+
+    public LocalDate getInstalmentDate() {
+        return this.instalmentDate;
+    }
+
+    public WorkInProgressRegistration instalmentDate(LocalDate instalmentDate) {
+        this.setInstalmentDate(instalmentDate);
+        return this;
+    }
+
+    public void setInstalmentDate(LocalDate instalmentDate) {
+        this.instalmentDate = instalmentDate;
     }
 
     public BigDecimal getInstalmentAmount() {
@@ -595,6 +623,7 @@ public class WorkInProgressRegistration implements Serializable {
             "id=" + getId() +
             ", sequenceNumber='" + getSequenceNumber() + "'" +
             ", particulars='" + getParticulars() + "'" +
+            ", instalmentDate='" + getInstalmentDate() + "'" +
             ", instalmentAmount=" + getInstalmentAmount() +
             ", comments='" + getComments() + "'" +
             ", commentsContentType='" + getCommentsContentType() + "'" +

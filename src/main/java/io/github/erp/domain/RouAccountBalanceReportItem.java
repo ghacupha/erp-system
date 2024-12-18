@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -51,11 +51,20 @@ public class RouAccountBalanceReportItem implements Serializable {
     @Column(name = "depreciation_account_number")
     private String depreciationAccountNumber;
 
+    @Column(name = "total_lease_amount", precision = 21, scale = 2)
+    private BigDecimal totalLeaseAmount;
+
+    @Column(name = "accrued_depreciation_amount", precision = 21, scale = 2)
+    private BigDecimal accruedDepreciationAmount;
+
+    @Column(name = "current_period_depreciation_amount", precision = 21, scale = 2)
+    private BigDecimal currentPeriodDepreciationAmount;
+
     @Column(name = "net_book_value", precision = 21, scale = 2)
     private BigDecimal netBookValue;
 
-    @Column(name = "fiscal_month_end_date")
-    private LocalDate fiscalMonthEndDate;
+    @Column(name = "fiscal_period_end_date")
+    private LocalDate fiscalPeriodEndDate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -111,6 +120,45 @@ public class RouAccountBalanceReportItem implements Serializable {
         this.depreciationAccountNumber = depreciationAccountNumber;
     }
 
+    public BigDecimal getTotalLeaseAmount() {
+        return this.totalLeaseAmount;
+    }
+
+    public RouAccountBalanceReportItem totalLeaseAmount(BigDecimal totalLeaseAmount) {
+        this.setTotalLeaseAmount(totalLeaseAmount);
+        return this;
+    }
+
+    public void setTotalLeaseAmount(BigDecimal totalLeaseAmount) {
+        this.totalLeaseAmount = totalLeaseAmount;
+    }
+
+    public BigDecimal getAccruedDepreciationAmount() {
+        return this.accruedDepreciationAmount;
+    }
+
+    public RouAccountBalanceReportItem accruedDepreciationAmount(BigDecimal accruedDepreciationAmount) {
+        this.setAccruedDepreciationAmount(accruedDepreciationAmount);
+        return this;
+    }
+
+    public void setAccruedDepreciationAmount(BigDecimal accruedDepreciationAmount) {
+        this.accruedDepreciationAmount = accruedDepreciationAmount;
+    }
+
+    public BigDecimal getCurrentPeriodDepreciationAmount() {
+        return this.currentPeriodDepreciationAmount;
+    }
+
+    public RouAccountBalanceReportItem currentPeriodDepreciationAmount(BigDecimal currentPeriodDepreciationAmount) {
+        this.setCurrentPeriodDepreciationAmount(currentPeriodDepreciationAmount);
+        return this;
+    }
+
+    public void setCurrentPeriodDepreciationAmount(BigDecimal currentPeriodDepreciationAmount) {
+        this.currentPeriodDepreciationAmount = currentPeriodDepreciationAmount;
+    }
+
     public BigDecimal getNetBookValue() {
         return this.netBookValue;
     }
@@ -124,17 +172,17 @@ public class RouAccountBalanceReportItem implements Serializable {
         this.netBookValue = netBookValue;
     }
 
-    public LocalDate getFiscalMonthEndDate() {
-        return this.fiscalMonthEndDate;
+    public LocalDate getFiscalPeriodEndDate() {
+        return this.fiscalPeriodEndDate;
     }
 
-    public RouAccountBalanceReportItem fiscalMonthEndDate(LocalDate fiscalMonthEndDate) {
-        this.setFiscalMonthEndDate(fiscalMonthEndDate);
+    public RouAccountBalanceReportItem fiscalPeriodEndDate(LocalDate fiscalPeriodEndDate) {
+        this.setFiscalPeriodEndDate(fiscalPeriodEndDate);
         return this;
     }
 
-    public void setFiscalMonthEndDate(LocalDate fiscalMonthEndDate) {
-        this.fiscalMonthEndDate = fiscalMonthEndDate;
+    public void setFiscalPeriodEndDate(LocalDate fiscalPeriodEndDate) {
+        this.fiscalPeriodEndDate = fiscalPeriodEndDate;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -164,8 +212,11 @@ public class RouAccountBalanceReportItem implements Serializable {
             ", assetAccountName='" + getAssetAccountName() + "'" +
             ", assetAccountNumber='" + getAssetAccountNumber() + "'" +
             ", depreciationAccountNumber='" + getDepreciationAccountNumber() + "'" +
+            ", totalLeaseAmount=" + getTotalLeaseAmount() +
+            ", accruedDepreciationAmount=" + getAccruedDepreciationAmount() +
+            ", currentPeriodDepreciationAmount=" + getCurrentPeriodDepreciationAmount() +
             ", netBookValue=" + getNetBookValue() +
-            ", fiscalMonthEndDate='" + getFiscalMonthEndDate() + "'" +
+            ", fiscalPeriodEndDate='" + getFiscalPeriodEndDate() + "'" +
             "}";
     }
 }

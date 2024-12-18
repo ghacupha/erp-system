@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity RouInitialDirectCost.
+    -->
+    <changeSet id="20241104162219-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id"
+                                 baseTableName="rou_initial_direct_cost"
+                                 constraintName="fk_rou_initial_direct_cost__lease_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ifrs16lease_contract"/>
+
+        <addForeignKeyConstraint baseColumnNames="settlement_details_id"
+                                 baseTableName="rou_initial_direct_cost"
+                                 constraintName="fk_rou_initial_direct_cost__settlement_details_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="settlement"/>
+
+        <addForeignKeyConstraint baseColumnNames="targetrouaccount_id"
+                                 baseTableName="rou_initial_direct_cost"
+                                 constraintName="fk_rou_initial_direct_cost__targetrouaccount_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="transfer_account_id"
+                                 baseTableName="rou_initial_direct_cost"
+                                 constraintName="fk_rou_initial_direct_cost__transfer_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="rou_initial_direct_cost_id"
+                                 baseTableName="rel_rou_initial_direct_cost__placeholder"
+                                 constraintName="fk_rel_rou_initial_direct_cost___rou_initial_direct_cost_de_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="rou_initial_direct_cost"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_rou_initial_direct_cost__placeholder"
+                                 constraintName="fk_rel_rou_initial_direct_cost__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>

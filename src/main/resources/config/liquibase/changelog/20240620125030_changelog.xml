@@ -1,0 +1,274 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-8">
+        <createTable tableName="lease_amortization_calculation">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="lease_amortization_calculationPK"/>
+            </column>
+            <column name="interest_rate" type="FLOAT4"/>
+            <column name="lease_amount" type="numeric(21, 2)"/>
+            <column name="number_of_periods" type="INTEGER"/>
+            <column name="periodicity" type="VARCHAR(255)"/>
+            <column name="lease_contract_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-9">
+        <createTable tableName="lease_amortization_schedule">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="lease_amortization_schedulePK"/>
+            </column>
+            <column name="identifier" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lease_contract_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lease_liability_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-10">
+        <createTable tableName="lease_liability">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="lease_liabilityPK"/>
+            </column>
+            <column name="end_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="interest_rate" type="FLOAT4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lease_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="liability_amount" type="numeric(21, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lease_amortization_calculation_id" type="BIGINT"/>
+            <column name="lease_contract_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-11">
+        <createTable tableName="lease_liability_compilation">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="lease_liability_compilationPK"/>
+            </column>
+            <column name="request_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_of_request" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="requested_by_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-12">
+        <createTable tableName="lease_payment">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="lease_paymentPK"/>
+            </column>
+            <column name="payment_amount" type="numeric(21, 2)"/>
+            <column name="payment_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="lease_liability_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-13">
+        <addColumn tableName="lease_liability_schedule_item">
+            <column name="interest_accrued" type="numeric(21, 2)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-14">
+        <addColumn tableName="lease_liability_schedule_item">
+            <column name="interest_payable_closing" type="numeric(21, 2)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-15">
+        <addColumn tableName="lease_liability_schedule_item">
+            <column name="lease_amortization_schedule_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-16">
+        <addColumn tableName="lease_liability_schedule_item">
+            <column name="lease_liability_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-17">
+        <addColumn tableName="lease_liability_schedule_item">
+            <column name="lease_period_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-18">
+        <addUniqueConstraint columnNames="charge_type_category" constraintName="UC_CRB_PRODUCT_SERVICE_FEE_TYPECHARGE_TYPE_CATEGORY_COL" tableName="crb_product_service_fee_type"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-19">
+        <addUniqueConstraint columnNames="identifier" constraintName="UC_LEASE_AMORTIZATION_SCHEDULEIDENTIFIER_COL" tableName="lease_amortization_schedule"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-20">
+        <addUniqueConstraint columnNames="lease_amortization_calculation_id" constraintName="UC_LEASE_LIABILITYLEASE_AMORTIZATION_CALCULATION_ID_COL" tableName="lease_liability"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-21">
+        <addUniqueConstraint columnNames="lease_id" constraintName="UC_LEASE_LIABILITYLEASE_ID_COL" tableName="lease_liability"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-22">
+        <addUniqueConstraint columnNames="request_id" constraintName="UC_LEASE_LIABILITY_COMPILATIONREQUEST_ID_COL" tableName="lease_liability_compilation"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-23">
+        <addUniqueConstraint columnNames="asset_written_off_id" constraintName="UK_2ei09lwga2up8y8tmnu4gb8jn" tableName="asset_write_off"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-24">
+        <addUniqueConstraint columnNames="lease_contract_id" constraintName="UK_58u6nwoq2bl4ncn33ftrfy7l2" tableName="lease_amortization_calculation"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-25">
+        <addUniqueConstraint columnNames="lease_contract_id" constraintName="UK_6xw26bvsan0j5btcfkij1ilel" tableName="lease_liability"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-26">
+        <addUniqueConstraint columnNames="lease_contract_id" constraintName="UK_ku26m0jh5gcgu3sde52hv815p" tableName="lease_amortization_schedule"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-27">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id" baseTableName="lease_amortization_calculation" constraintName="FK14jvpe5dkq5xn0wrp7bcl8dhv" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ifrs16lease_contract" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-28">
+        <addForeignKeyConstraint baseColumnNames="amortization_period_id" baseTableName="prepayment_amortization" constraintName="FK378twemm2mnl1e2mtfssljr7x" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="amortization_period" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-29">
+        <addForeignKeyConstraint baseColumnNames="lease_period_id" baseTableName="lease_liability_schedule_item" constraintName="FK3bl3dv4bithwvwltpg5vrbtrl" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_period" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-30">
+        <addForeignKeyConstraint baseColumnNames="lease_amortization_schedule_id" baseTableName="lease_liability_schedule_item" constraintName="FK58pk297qla3cs7s2n6oyk5lms" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_amortization_schedule" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-31">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_document_id" baseTableName="ifrs16lease_contract" constraintName="FK5yvrkf1pls8axxspgciks4tu0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="business_document" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-32">
+        <addForeignKeyConstraint baseColumnNames="transfer_settlement_id" baseTableName="work_in_progress_transfer" constraintName="FKbnmcaxnqc4few4wejwk2hb701" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-33">
+        <addForeignKeyConstraint baseColumnNames="lease_liability_id" baseTableName="lease_liability_schedule_item" constraintName="FKel1bullyffxfpj8nn3pum3ee0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_liability" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-34">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id" baseTableName="lease_amortization_schedule" constraintName="FKet0qewto3ppvuvs3l0m445v02" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ifrs16lease_contract" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-35">
+        <addForeignKeyConstraint baseColumnNames="original_settlement_id" baseTableName="work_in_progress_transfer" constraintName="FKfyqmwp5qn6ypsmbchw81wji58" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-36">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id" baseTableName="lease_liability" constraintName="FKg918ftb6dkicciipbtl2mople" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ifrs16lease_contract" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-37">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_calculations_id" baseTableName="ifrs16lease_contract" constraintName="FKhkm061g98hbwsmbh8cpddj2wl" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="business_document" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-38">
+        <addForeignKeyConstraint baseColumnNames="lease_liability_id" baseTableName="lease_amortization_schedule" constraintName="FKl4m5tdhucbwrr50b558cu2aw6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_liability" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-39">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id" baseTableName="lease_liability_schedule_item" constraintName="FKm5jmb9n62aqxnw42bs6suhkn7" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ifrs16lease_contract" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-40">
+        <addForeignKeyConstraint baseColumnNames="lease_amortization_calculation_id" baseTableName="lease_liability" constraintName="FKow6tr3poi4l3p0nurehpf9urv" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_amortization_calculation" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-41">
+        <addForeignKeyConstraint baseColumnNames="requested_by_id" baseTableName="lease_liability_compilation" constraintName="FKprfnx5sochnt86uverendd9j8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-42">
+        <addForeignKeyConstraint baseColumnNames="lease_liability_id" baseTableName="lease_payment" constraintName="FKt881gcjwlxfbdup0ho93tm7v5" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_liability" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-43">
+        <dropForeignKeyConstraint baseTableName="lease_liability_schedule_item" constraintName="fk_lease_liability_schedule_item__lease_contract_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-44">
+        <dropForeignKeyConstraint baseTableName="lease_liability_schedule_item" constraintName="fk_lease_liability_schedule_item__lease_model_metadata_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-45">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution_context" constraintName="job_exec_ctx_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-46">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution_params" constraintName="job_exec_params_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-47">
+        <dropForeignKeyConstraint baseTableName="batch_step_execution" constraintName="job_execution_step_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-48">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution" constraintName="job_instance_execution_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-49">
+        <dropForeignKeyConstraint baseTableName="batch_step_execution_context" constraintName="step_exec_ctx_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-50">
+        <dropTable tableName="batch_job_execution"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-51">
+        <dropTable tableName="batch_job_execution_context"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-52">
+        <dropTable tableName="batch_job_execution_params"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-53">
+        <dropTable tableName="batch_job_instance"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-54">
+        <dropTable tableName="batch_step_execution"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-55">
+        <dropTable tableName="batch_step_execution_context"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-56">
+        <dropColumn columnName="interest_expense_accrued" tableName="lease_liability_schedule_item"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-57">
+        <dropColumn columnName="interest_payable_balance" tableName="lease_liability_schedule_item"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-58">
+        <dropColumn columnName="lease_model_metadata_id" tableName="lease_liability_schedule_item"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-59">
+        <dropColumn columnName="period_end_date" tableName="lease_liability_schedule_item"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-60">
+        <dropColumn columnName="period_included" tableName="lease_liability_schedule_item"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-61">
+        <dropColumn columnName="period_start_date" tableName="lease_liability_schedule_item"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-62">
+        <dropSequence sequenceName="batch_job_execution_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-63">
+        <dropSequence sequenceName="batch_job_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-64">
+        <dropSequence sequenceName="batch_step_execution_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-1">
+        <alterSequence sequenceName="sequence_generator"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-2">
+        <addNotNullConstraint columnDataType="bigint" columnName="acquiring_transaction_id" tableName="asset_registration" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-3">
+        <addNotNullConstraint columnDataType="bigint" columnName="amortization_period_id" tableName="prepayment_amortization" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-4">
+        <addNotNullConstraint columnDataType="bigint" columnName="biller_id" tableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-5">
+        <addNotNullConstraint columnDataType="bigint" columnName="lease_period_id" tableName="rou_account_balance_report" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-6">
+        <addNotNullConstraint columnDataType="bigint" columnName="lease_period_id" tableName="rou_assetnbvreport" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718887935568-7">
+        <addNotNullConstraint columnDataType="bigint" columnName="payment_category_id" tableName="settlement" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -7,7 +7,7 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-system</artifactId>
-    <version>1.8.0</version>
+    <version>1.8.2</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
     <description>${ERP_SYSTEM_DEPLOYMENT_TITLE}</description>
@@ -25,11 +25,11 @@
     <properties>
         <!-- Build properties -->
         <ERP_SYSTEM_DEPLOYMENT_SERIES>Jehoiada Series</ERP_SYSTEM_DEPLOYMENT_SERIES>
-        <ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>Mark X No 8 </ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>
+        <ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>Mark X No 10 </ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>
         <ERP_SYSTEM_DEPLOYMENT_VERSION>${project.version}</ERP_SYSTEM_DEPLOYMENT_VERSION>
         <ERP_SYSTEM_DEPLOYMENT_TITLE>${ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER} (${ERP_SYSTEM_DEPLOYMENT_SERIES}) Server ver ${ERP_SYSTEM_DEPLOYMENT_VERSION}</ERP_SYSTEM_DEPLOYMENT_TITLE>
         <maven.version>3.3.9</maven.version>
-        <java.version>11</java.version>
+        <java.version>18</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
@@ -70,7 +70,7 @@
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version>4.8.0</liquibase.version>
-        <liquibase-hibernate5.version>4.5.0</liquibase-hibernate5.version>
+        <liquibase-hibernate5.version>4.8.0</liquibase-hibernate5.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <jaxb-runtime.version>2.3.3</jaxb-runtime.version>
         <archunit-junit5.version>0.21.0</archunit-junit5.version>
@@ -78,7 +78,7 @@
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-site-plugin.version>3.9.1</maven-site-plugin.version>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
@@ -93,16 +93,16 @@
         <git-commit-id-plugin.version>5.0.0</git-commit-id-plugin.version>
         <modernizer-maven-plugin.version>2.3.0</modernizer-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
-        <jib-maven-plugin.version>3.1.4</jib-maven-plugin.version>
-        <jib-maven-plugin.image>eclipse-temurin:11-jre-focal</jib-maven-plugin.image>
+        <jib-maven-plugin.version>3.4.3</jib-maven-plugin.version>
+        <jib-maven-plugin.image>eclipse-temurin:18-jre-focal</jib-maven-plugin.image>
         <jib-maven-plugin.architecture>amd64</jib-maven-plugin.architecture>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.0.2155</sonar-maven-plugin.version>
         <sonar.organization>erp-system-contributors</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <guava.version>30.1.1-jre</guava.version>
-        <lombok.version>1.18.30</lombok.version>
+        <guava.version>33.3.1-jre</guava.version>
+        <lombok.version>1.18.34</lombok.version>
         <poiji.version>3.0.0</poiji.version>
         <jetbrains-annotations.version>23.0.0</jetbrains-annotations.version>
         <jasperreports.version>6.19.1</jasperreports.version>
@@ -137,7 +137,13 @@
             <artifactId>rxjava</artifactId>
             <version>2.2.21</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
         <dependency>
@@ -201,22 +207,22 @@
             <version>6.3.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-core -->
-        <dependency>
+        <!--<dependency>
             <groupId>net.sourceforge.dynamicreports</groupId>
             <artifactId>dynamicreports-core</artifactId>
             <version>${dynamicreports.version}</version>
-        </dependency>
+        </dependency>-->
         <!-- https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-adhoc -->
-        <dependency>
+        <!--<dependency>
             <groupId>net.sourceforge.dynamicreports</groupId>
             <artifactId>dynamicreports-adhoc</artifactId>
             <version>${dynamicreports.version}</version>
-        </dependency>
-        <dependency>
+        </dependency>-->
+        <!--<dependency>
             <groupId>net.sourceforge.dynamicreports</groupId>
             <artifactId>dynamicreports-googlecharts</artifactId>
             <version>${dynamicreports.version}</version>
-        </dependency>
+        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
         <dependency>
@@ -590,14 +596,17 @@
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib-maven-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
+                <version>${properties-maven-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.gaul</groupId>
                 <artifactId>modernizer-maven-plugin</artifactId>
+                <version>${modernizer-maven-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>com.mycila</groupId>
@@ -615,7 +624,6 @@
                         <exclude>**/LICENSE</exclude>
                         <exclude>src/test/resources/**</exclude>
                         <exclude>src/main/resources/**</exclude>
-                        <!--// TODO review license for production-->
                     </excludes>
                     <header>com/mycila/maven/plugin/license/templates/GPL-3.txt</header>
                     <properties>
@@ -975,10 +983,10 @@
                                 <message>You are running an older version of Maven. JHipster requires at least Maven ${maven.version}</message>
                                 <version>[${maven.version},)</version>
                             </requireMavenVersion>
-                            <requireJavaVersion>
-                                <message>You are running an incompatible version of Java. JHipster supports JDK 11 to 17.</message>
-                                <version>[11,12),[12,13),[13,14),[14,15),[15,16),[16,17),[17,18)</version>
-                            </requireJavaVersion>
+                            <!--<requireJavaVersion>
+                                <message>You are running an incompatible version of Java. JHipster supports JDK 17 to 22.</message>
+                                <version>[17,18),[21,22),[22,23)</version>
+                            </requireJavaVersion>-->
                         </rules>
                     </configuration>
                 </plugin>

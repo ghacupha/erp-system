@@ -12,11 +12,35 @@
     {
       "fieldName": "depreciationProcessStatus",
       "fieldType": "depreciationProcessStatusTypes",
-      "fieldValues": "STARTED,RUNNING,ERRORED,COMPLETE"
+      "fieldValues": "STARTED,RUNNING,ERRORED,COMPLETE,INVALIDATED"
     },
     {
       "fieldName": "numberOfEnumeratedItems",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "batchJobIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "depreciationAmountStepIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "outstandingAmountStepIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "flagAmortisedStepIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "compilationTime",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "invalidated",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [

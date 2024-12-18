@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -122,12 +122,30 @@ public class TransactionAccountQueryService extends QueryService<TransactionAcco
             if (criteria.getAccountName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getAccountName(), TransactionAccount_.accountName));
             }
-            if (criteria.getParentAccountId() != null) {
+            if (criteria.getAccountType() != null) {
+                specification = specification.and(buildSpecification(criteria.getAccountType(), TransactionAccount_.accountType));
+            }
+            if (criteria.getAccountSubType() != null) {
+                specification = specification.and(buildSpecification(criteria.getAccountSubType(), TransactionAccount_.accountSubType));
+            }
+            if (criteria.getDummyAccount() != null) {
+                specification = specification.and(buildSpecification(criteria.getDummyAccount(), TransactionAccount_.dummyAccount));
+            }
+            if (criteria.getAccountLedgerId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getParentAccountId(),
-                            root -> root.join(TransactionAccount_.parentAccount, JoinType.LEFT).get(TransactionAccount_.id)
+                            criteria.getAccountLedgerId(),
+                            root -> root.join(TransactionAccount_.accountLedger, JoinType.LEFT).get(TransactionAccountLedger_.id)
+                        )
+                    );
+            }
+            if (criteria.getAccountCategoryId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getAccountCategoryId(),
+                            root -> root.join(TransactionAccount_.accountCategory, JoinType.LEFT).get(TransactionAccountCategory_.id)
                         )
                     );
             }
@@ -137,6 +155,33 @@ public class TransactionAccountQueryService extends QueryService<TransactionAcco
                         buildSpecification(
                             criteria.getPlaceholderId(),
                             root -> root.join(TransactionAccount_.placeholders, JoinType.LEFT).get(Placeholder_.id)
+                        )
+                    );
+            }
+            if (criteria.getServiceOutletId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getServiceOutletId(),
+                            root -> root.join(TransactionAccount_.serviceOutlet, JoinType.LEFT).get(ServiceOutlet_.id)
+                        )
+                    );
+            }
+            if (criteria.getSettlementCurrencyId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSettlementCurrencyId(),
+                            root -> root.join(TransactionAccount_.settlementCurrency, JoinType.LEFT).get(SettlementCurrency_.id)
+                        )
+                    );
+            }
+            if (criteria.getInstitutionId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getInstitutionId(),
+                            root -> root.join(TransactionAccount_.institution, JoinType.LEFT).get(ReportingEntity_.id)
                         )
                     );
             }

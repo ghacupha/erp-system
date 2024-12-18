@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources.assets;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -239,7 +239,7 @@ public class AssetRegistrationResourceProd {
     }
 
     /**
-     * {@code GET  /prepayment-accounts/next/catalogue-number} : get the next catalogue number.
+     * {@code GET  /asset-registrations/next/asset-number} : get the next catalogue number.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the next number code in body.
      */

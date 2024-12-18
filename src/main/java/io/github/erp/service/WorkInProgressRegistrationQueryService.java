@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -123,6 +123,10 @@ public class WorkInProgressRegistrationQueryService extends QueryService<WorkInP
             if (criteria.getParticulars() != null) {
                 specification =
                     specification.and(buildStringSpecification(criteria.getParticulars(), WorkInProgressRegistration_.particulars));
+            }
+            if (criteria.getInstalmentDate() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getInstalmentDate(), WorkInProgressRegistration_.instalmentDate));
             }
             if (criteria.getInstalmentAmount() != null) {
                 specification =

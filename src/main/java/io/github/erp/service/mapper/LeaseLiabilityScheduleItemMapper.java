@@ -1,7 +1,7 @@
 package io.github.erp.service.mapper;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,13 +27,22 @@ import org.mapstruct.*;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { PlaceholderMapper.class, LeaseContractMapper.class, LeaseModelMetadataMapper.class, UniversallyUniqueMappingMapper.class }
+    uses = {
+        PlaceholderMapper.class,
+        UniversallyUniqueMappingMapper.class,
+        LeaseAmortizationScheduleMapper.class,
+        IFRS16LeaseContractMapper.class,
+        LeaseLiabilityMapper.class,
+        LeaseRepaymentPeriodMapper.class,
+    }
 )
 public interface LeaseLiabilityScheduleItemMapper extends EntityMapper<LeaseLiabilityScheduleItemDTO, LeaseLiabilityScheduleItem> {
     @Mapping(target = "placeholders", source = "placeholders", qualifiedByName = "descriptionSet")
-    @Mapping(target = "leaseContract", source = "leaseContract", qualifiedByName = "bookingId")
-    @Mapping(target = "leaseModelMetadata", source = "leaseModelMetadata", qualifiedByName = "modelTitle")
     @Mapping(target = "universallyUniqueMappings", source = "universallyUniqueMappings", qualifiedByName = "universalKeySet")
+    @Mapping(target = "leaseAmortizationSchedule", source = "leaseAmortizationSchedule", qualifiedByName = "id")
+    @Mapping(target = "leaseContract", source = "leaseContract", qualifiedByName = "bookingId")
+    @Mapping(target = "leaseLiability", source = "leaseLiability", qualifiedByName = "id")
+    @Mapping(target = "leasePeriod", source = "leasePeriod", qualifiedByName = "periodCode")
     LeaseLiabilityScheduleItemDTO toDto(LeaseLiabilityScheduleItem s);
 
     @Mapping(target = "removePlaceholder", ignore = true)

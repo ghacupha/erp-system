@@ -1,7 +1,7 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,6 +29,7 @@ import io.github.erp.domain.BusinessDocument;
 import io.github.erp.domain.Dealer;
 import io.github.erp.domain.FiscalMonth;
 import io.github.erp.domain.IFRS16LeaseContract;
+import io.github.erp.domain.LeasePayment;
 import io.github.erp.domain.ServiceOutlet;
 import io.github.erp.repository.IFRS16LeaseContractRepository;
 import io.github.erp.repository.search.IFRS16LeaseContractSearchRepository;
@@ -1153,6 +1154,32 @@ class IFRS16LeaseContractResourceIT {
 
         // Get all the iFRS16LeaseContractList where leaseContractCalculations equals to (leaseContractCalculationsId + 1)
         defaultIFRS16LeaseContractShouldNotBeFound("leaseContractCalculationsId.equals=" + (leaseContractCalculationsId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllIFRS16LeaseContractsByLeasePaymentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        iFRS16LeaseContractRepository.saveAndFlush(iFRS16LeaseContract);
+        LeasePayment leasePayment;
+        if (TestUtil.findAll(em, LeasePayment.class).isEmpty()) {
+            leasePayment = LeasePaymentResourceIT.createEntity(em);
+            em.persist(leasePayment);
+            em.flush();
+        } else {
+            leasePayment = TestUtil.findAll(em, LeasePayment.class).get(0);
+        }
+        em.persist(leasePayment);
+        em.flush();
+        iFRS16LeaseContract.addLeasePayment(leasePayment);
+        iFRS16LeaseContractRepository.saveAndFlush(iFRS16LeaseContract);
+        Long leasePaymentId = leasePayment.getId();
+
+        // Get all the iFRS16LeaseContractList where leasePayment equals to leasePaymentId
+        defaultIFRS16LeaseContractShouldBeFound("leasePaymentId.equals=" + leasePaymentId);
+
+        // Get all the iFRS16LeaseContractList where leasePayment equals to (leasePaymentId + 1)
+        defaultIFRS16LeaseContractShouldNotBeFound("leasePaymentId.equals=" + (leasePaymentId + 1));
     }
 
     /**

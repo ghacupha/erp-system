@@ -14,14 +14,38 @@
       "fieldName": "notes",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "accountType",
+      "fieldType": "AccountTypes",
+      "fieldValues": "ASSET,LIABILITY,EQUITY",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accountSubType",
+      "fieldType": "AccountSubTypes",
+      "fieldValues": "SETTLEMENT_ASSET,ACCOUNT_RECEIVABLE,OTHER_SHORT_LIVED_ASSET,LONG_LIVED_ASSET,ACCOUNT_PAYABLE,OTHER_SHORT_LIVED_LIABILITY,LONG_LIVED_LIABILITY,INCOME,EXPENSE,OTHER_COMPREHENSIVE_INCOME",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dummyAccount",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [
     {
-      "relationshipName": "parentAccount",
-      "otherEntityName": "transactionAccount",
+      "relationshipName": "accountLedger",
+      "otherEntityName": "transactionAccountLedger",
       "relationshipType": "many-to-one",
-      "otherEntityField": "accountNumber"
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "ledgerName"
+    },
+    {
+      "relationshipName": "accountCategory",
+      "otherEntityName": "transactionAccountCategory",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name"
     },
     {
       "relationshipName": "placeholder",
@@ -30,6 +54,27 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "transactionAccount"
+    },
+    {
+      "relationshipName": "serviceOutlet",
+      "otherEntityName": "serviceOutlet",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "outletCode"
+    },
+    {
+      "relationshipName": "settlementCurrency",
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "iso4217CurrencyCode"
+    },
+    {
+      "relationshipName": "institution",
+      "otherEntityName": "reportingEntity",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "entityName"
     }
   ],
   "service": "serviceImpl",

@@ -1,7 +1,7 @@
 package io.github.erp.web.rest;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.ApplicationUser;
-import io.github.erp.domain.FiscalMonth;
+import io.github.erp.domain.LeasePeriod;
 import io.github.erp.domain.RouAssetNBVReport;
 import io.github.erp.repository.RouAssetNBVReportRepository;
 import io.github.erp.repository.search.RouAssetNBVReportSearchRepository;
@@ -142,15 +142,15 @@ class RouAssetNBVReportResourceIT {
             .reportFile(DEFAULT_REPORT_FILE)
             .reportFileContentType(DEFAULT_REPORT_FILE_CONTENT_TYPE);
         // Add required entity
-        FiscalMonth fiscalMonth;
-        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
-            fiscalMonth = FiscalMonthResourceIT.createEntity(em);
-            em.persist(fiscalMonth);
+        LeasePeriod leasePeriod;
+        if (TestUtil.findAll(em, LeasePeriod.class).isEmpty()) {
+            leasePeriod = LeasePeriodResourceIT.createEntity(em);
+            em.persist(leasePeriod);
             em.flush();
         } else {
-            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+            leasePeriod = TestUtil.findAll(em, LeasePeriod.class).get(0);
         }
-        rouAssetNBVReport.setFiscalReportingMonth(fiscalMonth);
+        rouAssetNBVReport.setLeasePeriod(leasePeriod);
         return rouAssetNBVReport;
     }
 
@@ -172,15 +172,15 @@ class RouAssetNBVReportResourceIT {
             .reportFile(UPDATED_REPORT_FILE)
             .reportFileContentType(UPDATED_REPORT_FILE_CONTENT_TYPE);
         // Add required entity
-        FiscalMonth fiscalMonth;
-        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
-            fiscalMonth = FiscalMonthResourceIT.createUpdatedEntity(em);
-            em.persist(fiscalMonth);
+        LeasePeriod leasePeriod;
+        if (TestUtil.findAll(em, LeasePeriod.class).isEmpty()) {
+            leasePeriod = LeasePeriodResourceIT.createUpdatedEntity(em);
+            em.persist(leasePeriod);
             em.flush();
         } else {
-            fiscalMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+            leasePeriod = TestUtil.findAll(em, LeasePeriod.class).get(0);
         }
-        rouAssetNBVReport.setFiscalReportingMonth(fiscalMonth);
+        rouAssetNBVReport.setLeasePeriod(leasePeriod);
         return rouAssetNBVReport;
     }
 
@@ -803,28 +803,28 @@ class RouAssetNBVReportResourceIT {
 
     @Test
     @Transactional
-    void getAllRouAssetNBVReportsByFiscalReportingMonthIsEqualToSomething() throws Exception {
+    void getAllRouAssetNBVReportsByLeasePeriodIsEqualToSomething() throws Exception {
         // Initialize the database
         rouAssetNBVReportRepository.saveAndFlush(rouAssetNBVReport);
-        FiscalMonth fiscalReportingMonth;
-        if (TestUtil.findAll(em, FiscalMonth.class).isEmpty()) {
-            fiscalReportingMonth = FiscalMonthResourceIT.createEntity(em);
-            em.persist(fiscalReportingMonth);
+        LeasePeriod leasePeriod;
+        if (TestUtil.findAll(em, LeasePeriod.class).isEmpty()) {
+            leasePeriod = LeasePeriodResourceIT.createEntity(em);
+            em.persist(leasePeriod);
             em.flush();
         } else {
-            fiscalReportingMonth = TestUtil.findAll(em, FiscalMonth.class).get(0);
+            leasePeriod = TestUtil.findAll(em, LeasePeriod.class).get(0);
         }
-        em.persist(fiscalReportingMonth);
+        em.persist(leasePeriod);
         em.flush();
-        rouAssetNBVReport.setFiscalReportingMonth(fiscalReportingMonth);
+        rouAssetNBVReport.setLeasePeriod(leasePeriod);
         rouAssetNBVReportRepository.saveAndFlush(rouAssetNBVReport);
-        Long fiscalReportingMonthId = fiscalReportingMonth.getId();
+        Long leasePeriodId = leasePeriod.getId();
 
-        // Get all the rouAssetNBVReportList where fiscalReportingMonth equals to fiscalReportingMonthId
-        defaultRouAssetNBVReportShouldBeFound("fiscalReportingMonthId.equals=" + fiscalReportingMonthId);
+        // Get all the rouAssetNBVReportList where leasePeriod equals to leasePeriodId
+        defaultRouAssetNBVReportShouldBeFound("leasePeriodId.equals=" + leasePeriodId);
 
-        // Get all the rouAssetNBVReportList where fiscalReportingMonth equals to (fiscalReportingMonthId + 1)
-        defaultRouAssetNBVReportShouldNotBeFound("fiscalReportingMonthId.equals=" + (fiscalReportingMonthId + 1));
+        // Get all the rouAssetNBVReportList where leasePeriod equals to (leasePeriodId + 1)
+        defaultRouAssetNBVReportShouldNotBeFound("leasePeriodId.equals=" + (leasePeriodId + 1));
     }
 
     @Test

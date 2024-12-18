@@ -28,6 +28,38 @@
     {
       "fieldName": "sequenceNumber",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "activated",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "isDeleted",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "batchJobIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "depreciationAmountStepIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "outstandingAmountStepIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "flagAmortisedStepIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "compilationTime",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "invalidated",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [
@@ -65,6 +97,13 @@
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "modelTitle"
+    },
+    {
+      "relationshipName": "leasePeriod",
+      "otherEntityName": "leasePeriod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "periodCode"
     }
   ],
   "service": "serviceImpl",

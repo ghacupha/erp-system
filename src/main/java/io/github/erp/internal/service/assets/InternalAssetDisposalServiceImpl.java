@@ -1,7 +1,7 @@
 package io.github.erp.internal.service.assets;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,11 +22,15 @@ import io.github.erp.domain.AssetDisposal;
 import io.github.erp.erp.assets.nbv.buffer.BufferedSinkProcessor;
 import io.github.erp.internal.repository.InternalAssetDisposalRepository;
 import io.github.erp.internal.service.applicationUser.CurrentUserContext;
+import io.github.erp.internal.service.cache.ScheduledCacheRefreshService;
 import io.github.erp.repository.search.AssetDisposalSearchRepository;
+import io.github.erp.service.AssetDisposalQueryService;
+import io.github.erp.service.criteria.AssetDisposalCriteria;
 import io.github.erp.service.dto.AssetDisposalDTO;
 import io.github.erp.service.mapper.AssetDisposalMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -51,16 +55,26 @@ public class InternalAssetDisposalServiceImpl implements InternalAssetDisposalSe
 
     private final AssetDisposalSearchRepository assetDisposalSearchRepository;
 
+    private final AssetDisposalQueryService assetDisposalQueryService;
+
+    private final ScheduledCacheRefreshService scheduledAssetRegistrationCacheRefreshService;
+
+    private final InternalAssetRegistrationService assetRegistrationService;
+
     private final BufferedSinkProcessor<AssetDisposal> bufferedSinkProcessor;
 
     public InternalAssetDisposalServiceImpl(
         InternalAssetDisposalRepository assetDisposalRepository,
         AssetDisposalMapper assetDisposalMapper,
         AssetDisposalSearchRepository assetDisposalSearchRepository,
-        BufferedSinkProcessor<AssetDisposal> bufferedSinkProcessor) {
+        AssetDisposalQueryService assetDisposalQueryService,
+        @Qualifier("scheduledAssetRegistrationCacheRefreshService") ScheduledCacheRefreshService scheduledAssetRegistrationCacheRefreshService, InternalAssetRegistrationService assetRegistrationService, BufferedSinkProcessor<AssetDisposal> bufferedSinkProcessor) {
         this.assetDisposalRepository = assetDisposalRepository;
         this.assetDisposalMapper = assetDisposalMapper;
         this.assetDisposalSearchRepository = assetDisposalSearchRepository;
+        this.assetDisposalQueryService = assetDisposalQueryService;
+        this.scheduledAssetRegistrationCacheRefreshService = scheduledAssetRegistrationCacheRefreshService;
+        this.assetRegistrationService = assetRegistrationService;
         this.bufferedSinkProcessor = bufferedSinkProcessor;
     }
 
@@ -148,5 +162,20 @@ public class InternalAssetDisposalServiceImpl implements InternalAssetDisposalSe
     public Page<AssetDisposalDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of AssetDisposals for query {}", query);
         return assetDisposalSearchRepository.search(query, pageable).map(assetDisposalMapper::toDto);
+    }
+
+    /**
+     * Return a {@link Page} of {@link AssetDisposalDTO} which matches the criteria from the database.
+     *
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param page     The page, which should be returned.
+     * @return the matching entities.
+     */
+    @Override
+    public Page<AssetDisposalDTO> findByCriteria(AssetDisposalCriteria criteria, Pageable page) {
+
+        scheduledAssetRegistrationCacheRefreshService.refreshDefinedCacheItems(assetRegistrationService.findDisposedAssetIds());
+
+        return assetDisposalQueryService.findByCriteria(criteria, page);
     }
 }

@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources.prepayments;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -189,7 +189,7 @@ public class PrepaymentAccountResourceProd {
     @GetMapping("/prepayment-accounts")
     public ResponseEntity<List<PrepaymentAccountDTO>> getAllPrepaymentAccounts(PrepaymentAccountCriteria criteria, Pageable pageable) {
         log.debug("REST request to get PrepaymentAccounts by criteria: {}", criteria);
-        Page<PrepaymentAccountDTO> page = prepaymentAccountQueryService.findByCriteria(criteria, pageable);
+        Page<PrepaymentAccountDTO> page = prepaymentAccountService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

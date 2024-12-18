@@ -1,7 +1,7 @@
 package io.github.erp.service;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -137,14 +137,38 @@ public class RouAccountBalanceReportItemQueryService extends QueryService<RouAcc
                         )
                     );
             }
+            if (criteria.getTotalLeaseAmount() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(criteria.getTotalLeaseAmount(), RouAccountBalanceReportItem_.totalLeaseAmount)
+                    );
+            }
+            if (criteria.getAccruedDepreciationAmount() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(
+                            criteria.getAccruedDepreciationAmount(),
+                            RouAccountBalanceReportItem_.accruedDepreciationAmount
+                        )
+                    );
+            }
+            if (criteria.getCurrentPeriodDepreciationAmount() != null) {
+                specification =
+                    specification.and(
+                        buildRangeSpecification(
+                            criteria.getCurrentPeriodDepreciationAmount(),
+                            RouAccountBalanceReportItem_.currentPeriodDepreciationAmount
+                        )
+                    );
+            }
             if (criteria.getNetBookValue() != null) {
                 specification =
                     specification.and(buildRangeSpecification(criteria.getNetBookValue(), RouAccountBalanceReportItem_.netBookValue));
             }
-            if (criteria.getFiscalMonthEndDate() != null) {
+            if (criteria.getFiscalPeriodEndDate() != null) {
                 specification =
                     specification.and(
-                        buildRangeSpecification(criteria.getFiscalMonthEndDate(), RouAccountBalanceReportItem_.fiscalMonthEndDate)
+                        buildRangeSpecification(criteria.getFiscalPeriodEndDate(), RouAccountBalanceReportItem_.fiscalPeriodEndDate)
                     );
             }
         }

@@ -1,7 +1,7 @@
 package io.github.erp.erp.assets.depreciation;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ public interface DepreciationJobSequenceService<Job> {
      * from the database, checks for any opt-out conditions, and initiates the depreciation sequence by enqueuing depreciation batch
      * messages for processing.
      *
-     * @param Job The DTO containing the details of the depreciation job to be processed.
+     * @param job The DTO containing the details of the depreciation job to be processed.
      */
     void  triggerDepreciation(Job job);
 }

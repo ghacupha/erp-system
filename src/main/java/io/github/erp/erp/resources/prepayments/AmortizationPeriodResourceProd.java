@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources.prepayments;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -202,6 +202,19 @@ public class AmortizationPeriodResourceProd {
     public ResponseEntity<AmortizationPeriodDTO> getAmortizationPeriod(@PathVariable Long id) {
         log.debug("REST request to get AmortizationPeriod : {}", id);
         Optional<AmortizationPeriodDTO> amortizationPeriodDTO = amortizationPeriodService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(amortizationPeriodDTO);
+    }
+
+    /**
+     * {@code GET  /amortization-periods/by-date/:id} : get the "id" amortizationPeriod.
+     *
+     * @param queryDate the date of the amortizationPeriodDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the amortizationPeriodDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/amortization-periods/by-date/{queryDate}")
+    public ResponseEntity<AmortizationPeriodDTO> getAmortizationPeriod(@PathVariable String queryDate) {
+        log.debug("REST request to get AmortizationPeriod for the date given : {}", queryDate);
+        Optional<AmortizationPeriodDTO> amortizationPeriodDTO = amortizationPeriodService.findOneByDate(queryDate);
         return ResponseUtil.wrapOrNotFound(amortizationPeriodDTO);
     }
 

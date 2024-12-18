@@ -1,7 +1,7 @@
 package io.github.erp.internal.repository;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,6 +24,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.nio.channels.FileChannel;
+import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -55,4 +57,14 @@ public interface InternalAmortizationPeriodRepository
             ");"
     )
     Optional<AmortizationPeriod> getNextAmortizationPeriod(@Param("currentPeriodId") long currentPeriodId, @Param("n_value") long nthValue);
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT * " +
+            "FROM amortization_period " +
+            "WHERE :queryDate BETWEEN start_date AND end_date " +
+            "LIMIT 1;"
+    )
+    Optional<AmortizationPeriod> findByDateGiven(@Param("queryDate")LocalDate queryDate);
 }

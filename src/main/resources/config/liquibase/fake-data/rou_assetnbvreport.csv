@@ -1,4 +1,4 @@
-id;request_id;time_of_request;report_is_compiled;file_checksum;tampered;filename;report_parameters;report_file;report_file_content_type;fiscal_reporting_month_id
+id;request_id;time_of_request;report_is_compiled;file_checksum;tampered;filename;report_parameters;report_file;report_file_content_type;lease_period_id
 1;e2c60d19-6120-45e3-ab68-622a437434ab;2024-03-12T20:44:50;false;Security haptic copying;false;d3513969-ba2b-4d53-aab9-c19fb3fa7e2c;SQL support Fantastic;../fake-data/blob/hipster.png;image/png;1
 2;94710375-86aa-4fc1-9e77-678ca7aa6761;2024-03-12T08:58:58;false;Canyon;false;767e6994-6cb1-4624-a51c-493bbbce54ef;Romania HTTP;../fake-data/blob/hipster.png;image/png;2
 3;75e6bbcd-fe3e-4031-97b4-eff591f0a3fe;2024-03-12T16:10:20;true;orange USB solid;true;7c1e8547-c264-4e57-aea9-a4aa1094081f;Human Group payment;../fake-data/blob/hipster.png;image/png;3

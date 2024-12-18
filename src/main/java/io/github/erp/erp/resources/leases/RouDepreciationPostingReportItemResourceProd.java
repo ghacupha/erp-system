@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources.leases;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,10 @@ package io.github.erp.erp.resources.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.model.RouDepreciationEntryReportItemInternal;
+import io.github.erp.internal.service.rou.InternalRouDepreciationEntryReportItemService;
+import io.github.erp.internal.service.rou.InternalRouDepreciationPostingReportItemService;
 import io.github.erp.repository.RouDepreciationPostingReportItemRepository;
 import io.github.erp.service.RouDepreciationPostingReportItemQueryService;
 import io.github.erp.service.RouDepreciationPostingReportItemService;
@@ -45,19 +49,15 @@ public class RouDepreciationPostingReportItemResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(RouDepreciationPostingReportItemResourceProd.class);
 
-    private final RouDepreciationPostingReportItemService rouDepreciationPostingReportItemService;
-
-    private final RouDepreciationPostingReportItemRepository rouDepreciationPostingReportItemRepository;
+    private final InternalRouDepreciationPostingReportItemService rouDepreciationPostingReportItemService;
 
     private final RouDepreciationPostingReportItemQueryService rouDepreciationPostingReportItemQueryService;
 
     public RouDepreciationPostingReportItemResourceProd(
-        RouDepreciationPostingReportItemService rouDepreciationPostingReportItemService,
-        RouDepreciationPostingReportItemRepository rouDepreciationPostingReportItemRepository,
+        InternalRouDepreciationPostingReportItemService rouDepreciationPostingReportItemService,
         RouDepreciationPostingReportItemQueryService rouDepreciationPostingReportItemQueryService
     ) {
         this.rouDepreciationPostingReportItemService = rouDepreciationPostingReportItemService;
-        this.rouDepreciationPostingReportItemRepository = rouDepreciationPostingReportItemRepository;
         this.rouDepreciationPostingReportItemQueryService = rouDepreciationPostingReportItemQueryService;
     }
 
@@ -80,6 +80,21 @@ public class RouDepreciationPostingReportItemResourceProd {
     }
 
     /**
+     * {@code GET  /rou-depreciation-posting-report-items/by-query} : get all the rouDepreciationPostingReportItems.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of rouDepreciationPostingReportItems in body.
+     */
+    @GetMapping("/rou-depreciation-posting-report-items/reports/{leasePeriodId}")
+    public ResponseEntity<List<RouDepreciationPostingReportItemDTO>> getAllRouDepreciationPostingReportItems(Pageable pageable, @PathVariable Long leasePeriodId) {
+        log.debug("REST request to get RouDepreciationPostingReportItems, for leasePeriodId {}", leasePeriodId);
+        Page<RouDepreciationPostingReportItemDTO> page = rouDepreciationPostingReportItemService.findAllByLeasePeriodId(pageable, leasePeriodId);
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
      * {@code GET  /rou-depreciation-posting-report-items/count} : count all the rouDepreciationPostingReportItems.
      *
      * @param criteria the criteria which the requested entities should match.
@@ -97,12 +112,10 @@ public class RouDepreciationPostingReportItemResourceProd {
      * @param id the id of the rouDepreciationPostingReportItemDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the rouDepreciationPostingReportItemDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/rou-depreciation-posting-report-items/{id}")
-    public ResponseEntity<RouDepreciationPostingReportItemDTO> getRouDepreciationPostingReportItem(@PathVariable Long id) {
-        log.debug("REST request to get RouDepreciationPostingReportItem : {}", id);
-        Optional<RouDepreciationPostingReportItemDTO> rouDepreciationPostingReportItemDTO = rouDepreciationPostingReportItemService.findOne(
-            id
-        );
+    @GetMapping("/rou-depreciation-posting-report-items/{leasePeriodId}/{id}")
+    public ResponseEntity<RouDepreciationPostingReportItemDTO> getRouDepreciationPostingReportItem(@PathVariable Long id, @PathVariable Long leasePeriodId) {
+        log.debug("REST request to get RouDepreciationPostingReportItem : {} for lease-period id {}", id, leasePeriodId);
+        Optional<RouDepreciationPostingReportItemDTO> rouDepreciationPostingReportItemDTO = rouDepreciationPostingReportItemService.findOne(id, leasePeriodId);
         return ResponseUtil.wrapOrNotFound(rouDepreciationPostingReportItemDTO);
     }
 

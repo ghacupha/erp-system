@@ -1,7 +1,11 @@
 {
   "fields": [
     {
-      "fieldName": "prepaymentAccount",
+      "fieldName": "accountName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "accountNumber",
       "fieldType": "String"
     },
     {

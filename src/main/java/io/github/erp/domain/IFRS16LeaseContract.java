@@ -1,7 +1,7 @@
 package io.github.erp.domain;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,15 +17,18 @@ package io.github.erp.domain;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A IFRS16LeaseContract.
@@ -33,7 +36,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "ifrs16lease_contract")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "ifrs16leasecontract")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "ifrs16leasecontract-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class IFRS16LeaseContract implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,31 +45,39 @@ public class IFRS16LeaseContract implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
+    @Field(type = FieldType.Long)
     private Long id;
 
     @NotNull
     @Column(name = "booking_id", nullable = false, unique = true)
+    @Field(type = FieldType.Keyword)
     private String bookingId;
 
     @NotNull
     @Column(name = "lease_title", nullable = false)
+    @Field(type = FieldType.Keyword)
     private String leaseTitle;
 
     @Column(name = "short_title", unique = true)
+    @Field(type = FieldType.Keyword)
     private String shortTitle;
 
     @Column(name = "description")
+    @Field(type = FieldType.Text)
     private String description;
 
     @NotNull
     @Column(name = "inception_date", nullable = false)
+    @Field(type = FieldType.Date)
     private LocalDate inceptionDate;
 
     @NotNull
     @Column(name = "commencement_date", nullable = false)
+    @Field(type = FieldType.Date)
     private LocalDate commencementDate;
 
     @Column(name = "serial_number")
+    @Field(type = FieldType.Binary)
     private UUID serialNumber;
 
     @ManyToOne(optional = false)
@@ -121,6 +132,11 @@ public class IFRS16LeaseContract implements Serializable {
         allowSetters = true
     )
     private BusinessDocument leaseContractCalculations;
+
+    @OneToMany(mappedBy = "leaseContract")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "leaseContract" }, allowSetters = true)
+    private Set<LeasePayment> leasePayments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -303,6 +319,37 @@ public class IFRS16LeaseContract implements Serializable {
 
     public IFRS16LeaseContract leaseContractCalculations(BusinessDocument businessDocument) {
         this.setLeaseContractCalculations(businessDocument);
+        return this;
+    }
+
+    public Set<LeasePayment> getLeasePayments() {
+        return this.leasePayments;
+    }
+
+    public void setLeasePayments(Set<LeasePayment> leasePayments) {
+        if (this.leasePayments != null) {
+            this.leasePayments.forEach(i -> i.setLeaseContract(null));
+        }
+        if (leasePayments != null) {
+            leasePayments.forEach(i -> i.setLeaseContract(this));
+        }
+        this.leasePayments = leasePayments;
+    }
+
+    public IFRS16LeaseContract leasePayments(Set<LeasePayment> leasePayments) {
+        this.setLeasePayments(leasePayments);
+        return this;
+    }
+
+    public IFRS16LeaseContract addLeasePayment(LeasePayment leasePayment) {
+        this.leasePayments.add(leasePayment);
+        leasePayment.setLeaseContract(this);
+        return this;
+    }
+
+    public IFRS16LeaseContract removeLeasePayment(LeasePayment leasePayment) {
+        this.leasePayments.remove(leasePayment);
+        leasePayment.setLeaseContract(null);
         return this;
     }
 

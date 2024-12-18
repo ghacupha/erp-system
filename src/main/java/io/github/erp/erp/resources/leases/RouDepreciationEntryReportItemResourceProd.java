@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources.leases;
 
 /*-
- * Erp System - Mark X No 8 (Jehoiada Series) Server ver 1.8.0
+ * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,9 @@ package io.github.erp.erp.resources.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.repository.InternalRouDepreciationEntryReportItemRepository;
+import io.github.erp.internal.service.rou.InternalRouDepreciationEntryReportItemQueryService;
+import io.github.erp.internal.service.rou.InternalRouDepreciationEntryReportItemService;
 import io.github.erp.repository.RouDepreciationEntryReportItemRepository;
 import io.github.erp.service.RouDepreciationEntryReportItemQueryService;
 import io.github.erp.service.RouDepreciationEntryReportItemService;
@@ -45,16 +48,16 @@ public class RouDepreciationEntryReportItemResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(RouDepreciationEntryReportItemResourceProd.class);
 
-    private final RouDepreciationEntryReportItemService rouDepreciationEntryReportItemService;
+    private final InternalRouDepreciationEntryReportItemService rouDepreciationEntryReportItemService;
 
-    private final RouDepreciationEntryReportItemRepository rouDepreciationEntryReportItemRepository;
+    private final InternalRouDepreciationEntryReportItemRepository rouDepreciationEntryReportItemRepository;
 
-    private final RouDepreciationEntryReportItemQueryService rouDepreciationEntryReportItemQueryService;
+    private final InternalRouDepreciationEntryReportItemQueryService rouDepreciationEntryReportItemQueryService;
 
     public RouDepreciationEntryReportItemResourceProd(
-        RouDepreciationEntryReportItemService rouDepreciationEntryReportItemService,
-        RouDepreciationEntryReportItemRepository rouDepreciationEntryReportItemRepository,
-        RouDepreciationEntryReportItemQueryService rouDepreciationEntryReportItemQueryService
+        InternalRouDepreciationEntryReportItemService rouDepreciationEntryReportItemService,
+        InternalRouDepreciationEntryReportItemRepository rouDepreciationEntryReportItemRepository,
+        InternalRouDepreciationEntryReportItemQueryService rouDepreciationEntryReportItemQueryService
     ) {
         this.rouDepreciationEntryReportItemService = rouDepreciationEntryReportItemService;
         this.rouDepreciationEntryReportItemRepository = rouDepreciationEntryReportItemRepository;
@@ -75,6 +78,20 @@ public class RouDepreciationEntryReportItemResourceProd {
     ) {
         log.debug("REST request to get RouDepreciationEntryReportItems by criteria: {}", criteria);
         Page<RouDepreciationEntryReportItemDTO> page = rouDepreciationEntryReportItemQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /rou-depreciation-entry-report-items/by-query} : get all the rouDepreciationEntryReportItems.
+     *
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of rouDepreciationEntryReportItems in body.
+     */
+    @GetMapping("/rou-depreciation-entry-report-items/by-query")
+    public ResponseEntity<List<RouDepreciationEntryReportItemDTO>> getAllReportItemsByQuery(Pageable pageable) {
+        log.debug("REST request to get RouDepreciationEntryReportItems by query");
+        Page<RouDepreciationEntryReportItemDTO> page = rouDepreciationEntryReportItemService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
