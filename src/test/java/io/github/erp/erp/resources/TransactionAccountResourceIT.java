@@ -176,6 +176,16 @@ public class TransactionAccountResourceIT {
             settlementCurrency = TestUtil.findAll(em, SettlementCurrency.class).get(0);
         }
         transactionAccount.setSettlementCurrency(settlementCurrency);
+        // Add required entity
+        ReportingEntity reportingEntity;
+        if (TestUtil.findAll(em, ReportingEntity.class).isEmpty()) {
+            reportingEntity = ReportingEntityResourceIT.createEntity(em);
+            em.persist(reportingEntity);
+            em.flush();
+        } else {
+            reportingEntity = TestUtil.findAll(em, ReportingEntity.class).get(0);
+        }
+        transactionAccount.setInstitution(reportingEntity);
         return transactionAccount;
     }
 
@@ -234,6 +244,16 @@ public class TransactionAccountResourceIT {
             settlementCurrency = TestUtil.findAll(em, SettlementCurrency.class).get(0);
         }
         transactionAccount.setSettlementCurrency(settlementCurrency);
+        // Add required entity
+        ReportingEntity reportingEntity;
+        if (TestUtil.findAll(em, ReportingEntity.class).isEmpty()) {
+            reportingEntity = ReportingEntityResourceIT.createUpdatedEntity(em);
+            em.persist(reportingEntity);
+            em.flush();
+        } else {
+            reportingEntity = TestUtil.findAll(em, ReportingEntity.class).get(0);
+        }
+        transactionAccount.setInstitution(reportingEntity);
         return transactionAccount;
     }
 
@@ -904,6 +924,32 @@ public class TransactionAccountResourceIT {
 
         // Get all the transactionAccountList where settlementCurrency equals to (settlementCurrencyId + 1)
         defaultTransactionAccountShouldNotBeFound("settlementCurrencyId.equals=" + (settlementCurrencyId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionAccountsByInstitutionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+        ReportingEntity institution;
+        if (TestUtil.findAll(em, ReportingEntity.class).isEmpty()) {
+            institution = ReportingEntityResourceIT.createEntity(em);
+            em.persist(institution);
+            em.flush();
+        } else {
+            institution = TestUtil.findAll(em, ReportingEntity.class).get(0);
+        }
+        em.persist(institution);
+        em.flush();
+        transactionAccount.setInstitution(institution);
+        transactionAccountRepository.saveAndFlush(transactionAccount);
+        Long institutionId = institution.getId();
+
+        // Get all the transactionAccountList where institution equals to institutionId
+        defaultTransactionAccountShouldBeFound("institutionId.equals=" + institutionId);
+
+        // Get all the transactionAccountList where institution equals to (institutionId + 1)
+        defaultTransactionAccountShouldNotBeFound("institutionId.equals=" + (institutionId + 1));
     }
 
     /**
