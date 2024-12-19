@@ -101,6 +101,7 @@
         <sonar-maven-plugin.version>3.9.0.2155</sonar-maven-plugin.version>
         <sonar.organization>erp-system-contributors</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <tomcat-embed-websocket.version>9.0.98</tomcat-embed-websocket.version>
         <guava.version>33.3.1-jre</guava.version>
         <lombok.version>1.18.34</lombok.version>
         <poiji.version>3.0.0</poiji.version>
@@ -206,23 +207,13 @@
             <artifactId>font-awesome</artifactId>
             <version>6.3.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-core -->
-        <!--<dependency>
-            <groupId>net.sourceforge.dynamicreports</groupId>
-            <artifactId>dynamicreports-core</artifactId>
-            <version>${dynamicreports.version}</version>
-        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/net.sourceforge.dynamicreports/dynamicreports-adhoc -->
-        <!--<dependency>
-            <groupId>net.sourceforge.dynamicreports</groupId>
-            <artifactId>dynamicreports-adhoc</artifactId>
-            <version>${dynamicreports.version}</version>
-        </dependency>-->
-        <!--<dependency>
-            <groupId>net.sourceforge.dynamicreports</groupId>
-            <artifactId>dynamicreports-googlecharts</artifactId>
-            <version>${dynamicreports.version}</version>
-        </dependency>-->
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-websocket</artifactId>
+            <version>${tomcat-embed-websocket.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
         <dependency>
