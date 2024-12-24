@@ -132,13 +132,13 @@ public class InternalAssetRegistrationServiceImpl implements InternalAssetRegist
     @Transactional(readOnly = true)
     public Long calculateNextAssetNumber() {
         log.debug("Request to get next asset number");
-        return NextIntegerFiller.fillNext(assetRegistrationRepository.findAllIds());
+        return NextIntegerFiller.fillNext(assetRegistrationRepository.findAllAssetNumbers());
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Long> findAllIds() {
-
+        log.debug("Request to get list of ids");
         return assetRegistrationRepository.findAllIds();
     }
 
