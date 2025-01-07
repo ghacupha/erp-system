@@ -17,6 +17,7 @@ package io.github.erp.erp.resources.settlements;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.payments.InternalSettlementService;
 import io.github.erp.repository.SettlementRepository;
 import io.github.erp.service.SettlementQueryService;
 import io.github.erp.service.SettlementService;
@@ -58,7 +59,7 @@ public class SettlementResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final SettlementService settlementService;
+    private final InternalSettlementService settlementService;
 
     private final SettlementRepository settlementRepository;
 
@@ -67,7 +68,7 @@ public class SettlementResourceProd {
     // private final SettlementReIndexerService reIndexerService;
 
     public SettlementResourceProd(
-        SettlementService settlementService,
+        InternalSettlementService settlementService,
         SettlementRepository settlementRepository,
         SettlementQueryService settlementQueryService) {
         this.settlementService = settlementService;
