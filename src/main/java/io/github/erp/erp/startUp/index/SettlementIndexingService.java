@@ -22,6 +22,7 @@ import io.github.erp.domain.Settlement;
 import io.github.erp.erp.startUp.index.engine_v1.IndexingServiceChainSingleton;
 import io.github.erp.erp.startUp.index.engine_v2.AbstractStartUpBatchedIndexService;
 import io.github.erp.internal.IndexProperties;
+import io.github.erp.internal.service.payments.InternalSettlementService;
 import io.github.erp.repository.search.SettlementSearchRepository;
 import io.github.erp.service.SettlementService;
 import io.github.erp.service.mapper.SettlementMapper;
@@ -41,11 +42,11 @@ import java.util.concurrent.locks.ReentrantLock;
 public class SettlementIndexingService extends AbstractStartUpBatchedIndexService<Settlement> {
     private static final String TAG = "SettlementIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
-    private final SettlementService service;
+    private final InternalSettlementService service;
     private final SettlementMapper mapper;
     private final SettlementSearchRepository searchRepository;
 
-    public SettlementIndexingService(IndexProperties indexProperties, SettlementService service, SettlementMapper mapper, SettlementSearchRepository searchRepository) {
+    public SettlementIndexingService(IndexProperties indexProperties, InternalSettlementService service, SettlementMapper mapper, SettlementSearchRepository searchRepository) {
         super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
