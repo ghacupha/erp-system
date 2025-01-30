@@ -17,6 +17,7 @@ package io.github.erp.internal.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import io.github.erp.domain.WorkInProgressOutstandingReportREPO;
 import io.github.erp.domain.WorkInProgressOverview;
 import io.github.erp.domain.WorkInProgressOverviewDTO;
@@ -34,16 +35,21 @@ public interface InternalWorkInProgressOverviewRepository extends
     JpaRepository<WorkInProgressOverview, Long>
 {
 
-    @Query(value = "SELECT " +
-        "COALESCE(COUNT(DISTINCT w.sequence_number), 0) AS numberOfItems, " +
-        "COALESCE(SUM(wir.instalment_amount), 0.0) AS instalmentAmount, " +
-        "COALESCE(SUM(ta.transfer_amount), 0.0) AS totalTransferAmount, " +
-        "(COALESCE(SUM(wir.instalment_amount), 0.0) - COALESCE(SUM(ta.transfer_amount), 0.0)) AS outstandingAmount " +
+    @Query(value = "" +
+        "SELECT " +
+        " COALESCE(COUNT(DISTINCT w.sequence_number), 0) AS numberOfItems,  " +
+        " COALESCE(SUM(w.instalment_amount), 0.0) AS instalmentAmount,  " +
+        " COALESCE(SUM(ta.transfer_amount), 0.0) AS totalTransferAmount,  " +
+        " (COALESCE(SUM(w.instalment_amount), 0.0) - COALESCE(SUM(ta.transfer_amount), 0.0)) AS outstandingAmount  " +
         "FROM work_in_progress_registration w " +
-        "LEFT JOIN Settlement s ON w.settlement_transaction_id = s.id " +
-        "LEFT JOIN (SELECT work_in_progress_registration_id, SUM(transfer_amount) AS transfer_amount FROM work_in_progress_transfer GROUP BY work_in_progress_registration_id) ta ON ta.work_in_progress_registration_id = w.id " +
-        "LEFT JOIN work_in_progress_registration wir ON wir.id = w.id " +
-        "WHERE s.payment_date <= :reportDate", nativeQuery = true)
+        " LEFT JOIN (" +
+        "    SELECT tra.work_in_progress_registration_id, " +
+        "       SUM(tra.transfer_amount) AS transfer_amount " +
+        "    FROM work_in_progress_transfer tra " +
+        "    WHERE tra.transfer_date <= :reportDate " +
+        "    GROUP BY work_in_progress_registration_id) ta " +
+        "  ON ta.work_in_progress_registration_id = w.id  " +
+        "WHERE w.instalment_date <= :reportDate", nativeQuery = true)
     Optional<WorkInProgressOverviewTuple> findByReportDate(@Param("reportDate") LocalDate reportDate);
 
 }

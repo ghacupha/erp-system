@@ -41,17 +41,17 @@ public interface InternalWIPOutstandingReportRepository extends
         "w.particulars, " +
         "d.dealerName as dealerName," +
         "s.paymentNumber AS instalmentTransactionNumber," +
-        "s.paymentDate AS instalmentTransactionDate, " +
+        "w.instalmentDate AS instalmentTransactionDate, " +
         "c.iso4217CurrencyCode, " +
         "w.instalmentAmount, " +
         "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
-        "w.instalmentAmount - (CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal)) ) " +
+        "w.instalmentAmount - (CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal)) AS outstandingAmount ) " +
         "FROM WorkInProgressRegistration w " +
            "JOIN Dealer d ON d.id = w.dealer.id " +
            "JOIN SettlementCurrency c ON c.id = w.settlementCurrency.id " +
            "JOIN Settlement s ON s.id = w.settlementTransaction.id " +
            "LEFT JOIN WorkInProgressTransfer ta ON ta.workInProgressRegistration.id = w.id " +
-        "WHERE s.paymentDate <= :reportDate " +
+        "WHERE w.instalmentDate <= :reportDate " +
             "AND (ta.transferDate IS NULL OR ta.transferDate <= :reportDate) " +
         "GROUP BY w.id, w.sequenceNumber, w.particulars, d.dealerName, s.paymentNumber, s.paymentDate, c.iso4217CurrencyCode, w.instalmentAmount")
     Page<WorkInProgressOutstandingReportREPO> findByReportDate(@Param("reportDate") LocalDate reportDate, Pageable pageable);
@@ -62,17 +62,17 @@ public interface InternalWIPOutstandingReportRepository extends
         "w.particulars, " +
         "d.dealerName, " +
         "s.paymentNumber AS instalmentTransactionNumber," +
-        "s.paymentDate AS instalmentTransactionDate, " +
+        "w.instalmentDate AS instalmentTransactionDate, " +
         "c.iso4217CurrencyCode, " +
         "w.instalmentAmount, " +
         "CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal) AS totalTransferAmount, " +
-        "w.instalmentAmount - (CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal)) ) " +
+        "w.instalmentAmount - (CAST(COALESCE(SUM(ta.transferAmount), 0.0) AS java.math.BigDecimal)) AS outstandingAmount ) " +
         "FROM WorkInProgressRegistration w " +
            "JOIN Dealer d ON d.id = w.dealer.id " +
            "JOIN SettlementCurrency c ON c.id = w.settlementCurrency.id " +
            "JOIN Settlement s ON s.id = w.settlementTransaction.id " +
            "LEFT JOIN WorkInProgressTransfer ta ON ta.workInProgressRegistration.id = w.id " +
-        "WHERE s.paymentDate <= :reportDate " +
+        "WHERE w.instalmentDate <= :reportDate " +
             "AND (ta.transferDate IS NULL OR ta.transferDate <= :reportDate) " +
             "AND w.id = :id " +
         "GROUP BY w.id, w.sequenceNumber, w.particulars, d.dealerName, s.paymentNumber, s.paymentDate, c.iso4217CurrencyCode, w.instalmentAmount")
