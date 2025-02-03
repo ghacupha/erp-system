@@ -312,6 +312,10 @@
     <include file="config/liquibase/changelog/20241113125548_added_entity_TransactionAccountLedger.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241115103432_added_entity_ReportingEntity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241115120936_added_entity_TransactionAccountReportItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250203102026_added_entity_WIPListItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250203103056_added_entity_WIPListReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250203103818_added_entity_WIPTransferListItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250203110822_added_entity_WIPTransferListReport.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210323113701_added_entity_constraints_FixedAssetAcquisition.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210323123701_added_entity_constraints_FixedAssetNetBookValue.xml" relativeToChangelogFile="false"/>
@@ -586,6 +590,9 @@
     <include file="config/liquibase/changelog/20241115100208_added_sol_currency_to_ta_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241115111306_add_institution_to_ta_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241216105704_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241115103432_added_entity_constraints_ReportingEntity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250203103056_added_entity_constraints_WIPListReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250203110822_added_entity_constraints_WIPTransferListReport.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

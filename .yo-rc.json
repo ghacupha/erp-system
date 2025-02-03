@@ -316,7 +316,10 @@
       "RouInitialDirectCost",
       "TransactionAccountLedger",
       "ReportingEntity",
-      "TransactionAccountReportItem"
+      "TransactionAccountReportItem",
+      "WIPListItem",
+      "WIPTransferListItem",
+      "WIPListReport"
     ],
     "entitySuffix": "",
     "incrementalChangelog": false,
@@ -324,7 +327,7 @@
     "jhipsterVersion": "7.3.1",
     "jwtSecretKey": "ZWMyYzI1MmU3Mzg1ZTU4ZjFmOTIzYjEzOWZkZWU1MWZhNGY4ZTA3ZTEwYmYxMzczOGE3NDZiZjNkMDE3NjNiYTBmMTE0ODBiYTcyZDI0ZTcyNmU5OTA2NGY4NDUwZGEyMWQwYThmMTgxNWJiMjQ2OGQ0NmIxMTQwNTE0MGFkNzA=",
     "languages": ["en", "fr", "it", "de"],
-    "lastLiquibaseTimestamp": 1731672576000,
+    "lastLiquibaseTimestamp": 1738578026000,
     "messageBroker": "kafka",
     "nativeLanguage": "en",
     "otherModules": [],
