@@ -29,6 +29,8 @@ import io.github.erp.aop.reporting.prepaymentByAccount.PrepaymentByAccountReport
 import io.github.erp.aop.reporting.prepaymentByAccount.PrepaymentByAccountReportRequisitionInterceptor;
 import io.github.erp.aop.reporting.prepaymentReport.PrepaymentReportRequisitionAttachmentInterceptor;
 import io.github.erp.aop.reporting.prepaymentReport.PrepaymentReportRequisitionInterceptor;
+import io.github.erp.aop.reporting.wip.WIPListReportAttachmentInterceptor;
+import io.github.erp.aop.reporting.wip.WIPListReportRequisitionInterceptor;
 import io.github.erp.aop.reporting.wip.WorkInProgressOutstandingReportAttachmentInterceptor;
 import io.github.erp.aop.reporting.wip.WorkInProgressOutstandingReportRequisitionInterceptor;
 import io.github.erp.internal.report.service.DepreciationEntryExportReportService;
@@ -251,5 +253,24 @@ public class ReportingAspectConfiguration {
     public WorkInProgressOutstandingReportAttachmentInterceptor workInProgressOutstandingReportAttachmentInterceptor() {
 
         return new WorkInProgressOutstandingReportAttachmentInterceptor(workInProgressOutstandingReportRequisitionReportAttachmentService);
+    }
+
+    @Autowired
+    private ReportAttachmentService<WIPListReportDTO> wipListReportDTOAttachmentService;
+
+    @Bean
+    public WIPListReportAttachmentInterceptor wipListReportRequisitionReportAttachmentInterceptor() {
+
+        return new WIPListReportAttachmentInterceptor(wipListReportDTOAttachmentService);
+    }
+
+    @Autowired
+    private ExportReportService<WIPListReportDTO> wipListReportRequisitionExportReportService;
+
+
+    @Bean
+    public WIPListReportRequisitionInterceptor wipListReportRequisitionInterceptor() {
+
+        return new WIPListReportRequisitionInterceptor(wipListReportRequisitionExportReportService);
     }
 }
