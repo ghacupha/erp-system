@@ -126,7 +126,7 @@ public class InternalWIPListItemServiceImpl implements InternalWIPListItemServic
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<List<WIPListItemDTO>> findAllReportItemsByReportDate(Pageable pageable) {
+    public Page<WIPListItemDTO> findAllReportItemsByReportDate(Pageable pageable) {
         log.debug("Request to get all WIPListItems");
         return wIPListItemRepository.findAllReportItems(pageable).map(wipListItemREPOMapper::toValue2);
     }

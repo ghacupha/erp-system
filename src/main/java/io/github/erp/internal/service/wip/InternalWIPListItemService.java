@@ -78,5 +78,5 @@ public interface InternalWIPListItemService {
      */
     Page<WIPListItemDTO> search(String query, Pageable pageable);
 
-    Optional<List<WIPListItemDTO>> findAllReportItemsByReportDate(Pageable pageable);
+    Page<WIPListItemDTO> findAllReportItemsByReportDate(Pageable pageable);
 }

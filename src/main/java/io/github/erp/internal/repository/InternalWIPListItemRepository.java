@@ -20,7 +20,9 @@ package io.github.erp.internal.repository;
 
 import io.github.erp.domain.WIPListItem;
 import io.github.erp.domain.WIPListItemREPO;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -36,18 +38,17 @@ import java.util.Optional;
 @Repository
 public interface InternalWIPListItemRepository extends JpaRepository<WIPListItem, Long>, JpaSpecificationExecutor<WIPListItem> {
 
-
     @Query(
         nativeQuery = true,
         value = "" +
             "SELECT " +
-            "    r.id, " +
-            "    sequence_number, " +
-            "    particulars, " +
-            "    instalment_date, " +
-            "    instalment_amount, " +
-            "    crn.iso_4217_currency_code, " +
-            "    sol.outlet_code, " +
+            "    r.id AS id, " +
+            "    sequence_number AS sequenceNumber, " +
+            "    particulars AS particulars, " +
+            "    instalment_date AS instalmentDate, " +
+            "    instalment_amount AS instalmentAmount, " +
+            "    crn.iso_4217_currency_code AS settlementCurrency, " +
+            "    sol.outlet_code AS outletCode, " +
             "    sett.payment_number AS settlementTransaction, " +
             "    sett.payment_date AS settlementTransactionDate," +
             "    d.dealer_name AS dealerName, " +
@@ -79,5 +80,49 @@ public interface InternalWIPListItemRepository extends JpaRepository<WIPListItem
             "    LEFT JOIN dealer d ON d.id = r.dealer_id " +
             "    LEFT JOIN work_project_register w ON w.id = r.work_project_register_id "
     )
-    Optional<List<WIPListItemREPO>> findAllReportItems(Pageable pageable);
+    Page<WIPListItemREPO> findAllSpecifiedReportItems(Specification<WIPListItem> specification, Pageable pageable);
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT " +
+            "    r.id AS id, " +
+            "    sequence_number AS sequenceNumber, " +
+            "    particulars AS particulars, " +
+            "    instalment_date AS instalmentDate, " +
+            "    instalment_amount AS instalmentAmount, " +
+            "    crn.iso_4217_currency_code AS settlementCurrency, " +
+            "    sol.outlet_code AS outletCode, " +
+            "    sett.payment_number AS settlementTransaction, " +
+            "    sett.payment_date AS settlementTransactionDate," +
+            "    d.dealer_name AS dealerName, " +
+            "    w.project_title AS workProject " +
+            "FROM public.work_in_progress_registration r " +
+            "    LEFT JOIN settlement_currency crn on crn.id = r.settlement_currency_id " +
+            "    LEFT JOIN service_outlet sol ON sol.id = r.outlet_code_id " +
+            "    LEFT JOIN settlement sett ON sett.id = r.settlement_transaction_id " +
+            "    LEFT JOIN dealer d ON d.id = r.dealer_id " +
+            "    LEFT JOIN work_project_register w ON w.id = r.work_project_register_id ",
+
+        countQuery = "" +
+            "SELECT " +
+            "    r.id, " +
+            "    sequence_number, " +
+            "    particulars, " +
+            "    instalment_date, " +
+            "    instalment_amount, " +
+            "    crn.iso_4217_currency_code, " +
+            "    sol.outlet_code, " +
+            "    sett.payment_number AS settlementTransaction, " +
+            "    sett.payment_date AS settlementTransactionDate," +
+            "    d.dealer_name AS dealerName, " +
+            "    w.project_title AS workProject " +
+            "FROM public.work_in_progress_registration r " +
+            "    LEFT JOIN settlement_currency crn on crn.id = r.settlement_currency_id " +
+            "    LEFT JOIN service_outlet sol ON sol.id = r.outlet_code_id " +
+            "    LEFT JOIN settlement sett ON sett.id = r.settlement_transaction_id " +
+            "    LEFT JOIN dealer d ON d.id = r.dealer_id " +
+            "    LEFT JOIN work_project_register w ON w.id = r.work_project_register_id "
+    )
+    Page<WIPListItemREPO> findAllReportItems(Pageable pageable);
 }

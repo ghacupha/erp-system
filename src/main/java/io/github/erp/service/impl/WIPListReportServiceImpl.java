@@ -21,12 +21,15 @@ package io.github.erp.service.impl;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.domain.WIPListReport;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.WIPListReportRepository;
 import io.github.erp.repository.search.WIPListReportSearchRepository;
 import io.github.erp.service.WIPListReportService;
 import io.github.erp.service.dto.WIPListReportDTO;
 import io.github.erp.service.mapper.WIPListReportMapper;
 import java.util.Optional;
+
+import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -49,19 +52,25 @@ public class WIPListReportServiceImpl implements WIPListReportService {
 
     private final WIPListReportSearchRepository wIPListReportSearchRepository;
 
+    private final InternalApplicationUserDetailService internalApplicationUserDetailService;
+
     public WIPListReportServiceImpl(
         WIPListReportRepository wIPListReportRepository,
         WIPListReportMapper wIPListReportMapper,
-        WIPListReportSearchRepository wIPListReportSearchRepository
+        WIPListReportSearchRepository wIPListReportSearchRepository, InternalApplicationUserDetailService internalApplicationUserDetailService
     ) {
         this.wIPListReportRepository = wIPListReportRepository;
         this.wIPListReportMapper = wIPListReportMapper;
         this.wIPListReportSearchRepository = wIPListReportSearchRepository;
+        this.internalApplicationUserDetailService = internalApplicationUserDetailService;
     }
 
     @Override
     public WIPListReportDTO save(WIPListReportDTO wIPListReportDTO) {
         log.debug("Request to save WIPListReport : {}", wIPListReportDTO);
+
+        internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(wIPListReportDTO::setRequestedBy);
+
         WIPListReport wIPListReport = wIPListReportMapper.toEntity(wIPListReportDTO);
         wIPListReport = wIPListReportRepository.save(wIPListReport);
         WIPListReportDTO result = wIPListReportMapper.toDto(wIPListReport);

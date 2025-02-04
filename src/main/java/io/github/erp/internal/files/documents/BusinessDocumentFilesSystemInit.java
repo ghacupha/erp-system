@@ -18,7 +18,7 @@ package io.github.erp.internal.files.documents;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.internal.files.FileStorageService;
-import io.github.erp.internal.files.ReportsFilesSystemInit;
+import io.github.erp.erp.startUp.files.ReportsFilesSystemInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
