@@ -1,38 +1,29 @@
 package io.github.erp.domain;
 
-import lombok.Builder;
-import lombok.Data;
-
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Data
-@Builder
-public class WIPListItemREPO implements Serializable {
+public interface WIPListItemREPO  {
 
+    Long getId();
 
-    private static final long serialVersionUID = 1L;
+    String getSequenceNumber();
 
-    private Long id;
+    String getParticulars();
 
-    private String sequenceNumber;
+    LocalDate getInstalmentDate();
 
-    private String particulars;
+    BigDecimal getInstalmentAmount();
 
-    private LocalDate instalmentDate;
+    String getSettlementCurrency();
 
-    private BigDecimal instalmentAmount;
+    String getOutletCode();
 
-    private String settlementCurrency;
+    String getSettlementTransaction();
 
-    private String outletCode;
+    LocalDate getSettlementTransactionDate();
 
-    private String settlementTransaction;
+    String getDealerName();
 
-    private LocalDate settlementTransactionDate;
-
-    private String dealerName;
-
-    private String workProject;
+    String getWorkProject();
 }

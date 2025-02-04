@@ -5,24 +5,71 @@ import io.github.erp.internal.framework.Mapping;
 import io.github.erp.service.dto.WIPListItemDTO;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @Component("wipListItemRepoMapper")
 public class WIPListItemRepoMapper implements Mapping<WIPListItemREPO, WIPListItemDTO> {
 
     @Override
     public WIPListItemREPO toValue1(WIPListItemDTO vs) {
 
-        return WIPListItemREPO.builder()
-            .id(vs.getId())
-            .sequenceNumber(vs.getSequenceNumber())
-            .particulars(vs.getParticulars())
-            .instalmentDate(vs.getInstalmentDate())
-            .instalmentAmount(vs.getInstalmentAmount())
-            .settlementCurrency(vs.getSettlementCurrency())
-            .settlementTransaction(vs.getSettlementTransaction())
-            .settlementTransactionDate(vs.getSettlementTransactionDate())
-            .dealerName(vs.getDealerName())
-            .workProject(vs.getWorkProject())
-            .build();
+        return new WIPListItemREPO() {
+            @Override
+            public Long getId() {
+                return vs.getId();
+            }
+
+            @Override
+            public String getSequenceNumber() {
+                return vs.getSequenceNumber();
+            }
+
+            @Override
+            public String getParticulars() {
+                return vs.getParticulars();
+            }
+
+            @Override
+            public LocalDate getInstalmentDate() {
+                return vs.getInstalmentDate();
+            }
+
+            @Override
+            public BigDecimal getInstalmentAmount() {
+                return vs.getInstalmentAmount();
+            }
+
+            @Override
+            public String getSettlementCurrency() {
+                return vs.getSettlementCurrency();
+            }
+
+            @Override
+            public String getOutletCode() {
+                return vs.getOutletCode();
+            }
+
+            @Override
+            public String getSettlementTransaction() {
+                return vs.getSettlementTransaction();
+            }
+
+            @Override
+            public LocalDate getSettlementTransactionDate() {
+                return vs.getSettlementTransactionDate();
+            }
+
+            @Override
+            public String getDealerName() {
+                return vs.getDealerName();
+            }
+
+            @Override
+            public String getWorkProject() {
+                return vs.getWorkProject();
+            }
+        };
     }
 
     @Override
