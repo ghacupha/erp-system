@@ -70,6 +70,8 @@ public class WIPListReportRequisitionExportReportService
 
     private Optional<List<WIPListItemDTO>> getEntries(WIPListReportDTO reportRequisition) {
 
-        return wipListItemService.findAllReportItemsByReportDate(Pageable.ofSize(Integer.MAX_VALUE));
+        return Optional.of(
+            wipListItemService.findAllReportItemsByReportDate(Pageable.ofSize(Integer.MAX_VALUE))
+                .getContent());
     }
 }

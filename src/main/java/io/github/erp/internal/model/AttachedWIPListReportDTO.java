@@ -40,6 +40,7 @@ public class AttachedWIPListReportDTO implements AttachedUnTamperedReport<WIPLis
     private byte[] reportFile;
 
     private String reportFileContentType;
+
     private ApplicationUserDTO requestedBy;
 
     @Override
@@ -56,7 +57,7 @@ public class AttachedWIPListReportDTO implements AttachedUnTamperedReport<WIPLis
 
     @Override
     public UUID getReportId() {
-        return this.requestId;
+        return this.filename;
     }
 
     @Override

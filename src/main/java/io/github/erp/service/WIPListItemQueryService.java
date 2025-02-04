@@ -20,6 +20,8 @@ package io.github.erp.service;
 
 import io.github.erp.domain.*; // for static metamodels
 import io.github.erp.domain.WIPListItem;
+import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.repository.InternalWIPListItemRepository;
 import io.github.erp.repository.WIPListItemRepository;
 import io.github.erp.repository.search.WIPListItemSearchRepository;
 import io.github.erp.service.criteria.WIPListItemCriteria;
@@ -48,19 +50,22 @@ public class WIPListItemQueryService extends QueryService<WIPListItem> {
 
     private final Logger log = LoggerFactory.getLogger(WIPListItemQueryService.class);
 
-    private final WIPListItemRepository wIPListItemRepository;
+    private final InternalWIPListItemRepository wIPListItemRepository;
 
     private final WIPListItemMapper wIPListItemMapper;
+
+    private final Mapping<WIPListItemREPO, WIPListItemDTO> wipListItemMapper;
 
     private final WIPListItemSearchRepository wIPListItemSearchRepository;
 
     public WIPListItemQueryService(
-        WIPListItemRepository wIPListItemRepository,
-        WIPListItemMapper wIPListItemMapper,
+        InternalWIPListItemRepository wIPListItemRepository,
+        WIPListItemMapper wIPListItemMapper, Mapping<WIPListItemREPO, WIPListItemDTO> wipListItemMapper,
         WIPListItemSearchRepository wIPListItemSearchRepository
     ) {
         this.wIPListItemRepository = wIPListItemRepository;
         this.wIPListItemMapper = wIPListItemMapper;
+        this.wipListItemMapper = wipListItemMapper;
         this.wIPListItemSearchRepository = wIPListItemSearchRepository;
     }
 
@@ -86,7 +91,7 @@ public class WIPListItemQueryService extends QueryService<WIPListItem> {
     public Page<WIPListItemDTO> findByCriteria(WIPListItemCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<WIPListItem> specification = createSpecification(criteria);
-        return wIPListItemRepository.findAll(specification, page).map(wIPListItemMapper::toDto);
+        return wIPListItemRepository.findAllSpecifiedReportItems(specification, page).map(wipListItemMapper::toValue2);
     }
 
     /**

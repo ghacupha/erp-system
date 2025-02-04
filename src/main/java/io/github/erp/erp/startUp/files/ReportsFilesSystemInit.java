@@ -1,4 +1,4 @@
-package io.github.erp.internal.files;
+package io.github.erp.erp.startUp.files;
 
 /*-
  * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
@@ -17,9 +17,13 @@ package io.github.erp.internal.files;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.files.FileStorageService;
+import io.github.erp.internal.service.wip.InternalWIPListReportService;
+import io.github.erp.internal.service.wip.InternalWIPTransferListReportService;
 import io.github.erp.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -39,36 +43,41 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ReportsFilesSystemInit implements ApplicationListener<ApplicationReadyEvent> {
 
-    private static final Logger log = LoggerFactory.getLogger(ReportsFilesSystemInit.class);
+    private static Logger log = LoggerFactory.getLogger(ReportsFilesSystemInit.class);
 
-    private final FileStorageService storageService;
-    private final ReportRequisitionService reportRequisitionService;
-    private final PdfReportRequisitionService pdfReportRequisitionService;
-    private final XlsxReportRequisitionService xlsxReportRequisitionService;
-    private final ExcelReportExportService excelReportExportService;
-    private final ReportStatusService reportStatusService;
-    private final AutonomousReportService autonomousReportService;
-    private final DepreciationReportService depreciationReportService;
-    private final AssetAdditionsReportService assetAdditionsReportService;
+    @Autowired
+    @Qualifier("reportsFSStorageService")
+    private FileStorageService storageService;
 
-    public ReportsFilesSystemInit(
-        @Qualifier("reportsFSStorageService") FileStorageService storageService,
-        PdfReportRequisitionService pdfReportRequisitionService,
-        ReportRequisitionService reportRequisitionService,
-        XlsxReportRequisitionService xlsxReportRequisitionService,
-        ExcelReportExportService excelReportExportService,
-        ReportStatusService reportStatusService,
-        AutonomousReportService autonomousReportService, DepreciationReportService depreciationReportService, AssetAdditionsReportService assetAdditionsReportService) {
-        this.storageService = storageService;
-        this.pdfReportRequisitionService = pdfReportRequisitionService;
-        this.reportRequisitionService = reportRequisitionService;
-        this.xlsxReportRequisitionService = xlsxReportRequisitionService;
-        this.excelReportExportService = excelReportExportService;
-        this.reportStatusService = reportStatusService;
-        this.autonomousReportService = autonomousReportService;
-        this.depreciationReportService = depreciationReportService;
-        this.assetAdditionsReportService = assetAdditionsReportService;
-    }
+    @Autowired
+    private ReportRequisitionService reportRequisitionService;
+
+    @Autowired
+    private PdfReportRequisitionService pdfReportRequisitionService;
+
+    @Autowired
+    private XlsxReportRequisitionService xlsxReportRequisitionService;
+
+    @Autowired
+    private ExcelReportExportService excelReportExportService;
+
+    @Autowired
+    private ReportStatusService reportStatusService;
+
+    @Autowired
+    private AutonomousReportService autonomousReportService;
+
+    @Autowired
+    private DepreciationReportService depreciationReportService;
+
+    @Autowired
+    private AssetAdditionsReportService assetAdditionsReportService;
+
+    @Autowired
+    private InternalWIPListReportService wipListReportService;
+
+    @Autowired
+    private InternalWIPTransferListReportService wipTransferListReportService;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -99,6 +108,12 @@ public class ReportsFilesSystemInit implements ApplicationListener<ApplicationRe
 
         assetAdditionsReportService.findAll(Pageable.unpaged())
             .forEach(report -> assetAdditionsReportService.delete(report.getId()));
+
+        wipListReportService.findAll(Pageable.unpaged())
+            .forEach(report -> wipListReportService.delete(report.getId()));
+
+        wipTransferListReportService.findAll(Pageable.unpaged())
+            .forEach(report -> wipTransferListReportService.delete(report.getId()));
 
         log.info("All report metadata has been deleted, removing old files from the reports directory. Standby...");
 

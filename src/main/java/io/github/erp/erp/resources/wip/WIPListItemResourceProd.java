@@ -74,7 +74,10 @@ public class WIPListItemResourceProd {
     @GetMapping("/wip-list-items")
     public ResponseEntity<List<WIPListItemDTO>> getAllWIPListItems(WIPListItemCriteria criteria, Pageable pageable) {
         log.debug("REST request to get WIPListItems by criteria: {}", criteria);
+
         Page<WIPListItemDTO> page = wIPListItemQueryService.findByCriteria(criteria, pageable);
+
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
