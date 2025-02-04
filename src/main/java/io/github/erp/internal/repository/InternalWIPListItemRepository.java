@@ -20,7 +20,6 @@ package io.github.erp.internal.repository;
 
 import io.github.erp.domain.WIPListItem;
 import io.github.erp.domain.WIPListItemREPO;
-import io.reactivex.Flowable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
