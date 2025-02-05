@@ -66,16 +66,12 @@ public class WIPListReportResource {
 
     private final WIPListReportRepository wIPListReportRepository;
 
-    private final WIPListReportQueryService wIPListReportQueryService;
-
     public WIPListReportResource(
         WIPListReportService wIPListReportService,
-        WIPListReportRepository wIPListReportRepository,
-        WIPListReportQueryService wIPListReportQueryService
+        WIPListReportRepository wIPListReportRepository1
     ) {
         this.wIPListReportService = wIPListReportService;
-        this.wIPListReportRepository = wIPListReportRepository;
-        this.wIPListReportQueryService = wIPListReportQueryService;
+        this.wIPListReportRepository = wIPListReportRepository1;
     }
 
     /**
@@ -179,7 +175,7 @@ public class WIPListReportResource {
     @GetMapping("/wip-list-reports")
     public ResponseEntity<List<WIPListReportDTO>> getAllWIPListReports(WIPListReportCriteria criteria, Pageable pageable) {
         log.debug("REST request to get WIPListReports by criteria: {}", criteria);
-        Page<WIPListReportDTO> page = wIPListReportQueryService.findByCriteria(criteria, pageable);
+        Page<WIPListReportDTO> page = wIPListReportService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -193,7 +189,7 @@ public class WIPListReportResource {
     @GetMapping("/wip-list-reports/count")
     public ResponseEntity<Long> countWIPListReports(WIPListReportCriteria criteria) {
         log.debug("REST request to count WIPListReports by criteria: {}", criteria);
-        return ResponseEntity.ok().body(wIPListReportQueryService.countByCriteria(criteria));
+        return ResponseEntity.ok().body(wIPListReportService.countByCriteria(criteria));
     }
 
     /**

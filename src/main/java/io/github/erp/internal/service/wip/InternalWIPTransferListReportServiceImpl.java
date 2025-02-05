@@ -19,6 +19,7 @@ package io.github.erp.internal.service.wip;
  */
 
 import io.github.erp.domain.WIPTransferListReport;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.WIPTransferListReportRepository;
 import io.github.erp.repository.search.WIPTransferListReportSearchRepository;
 import io.github.erp.service.WIPTransferListReportService;
@@ -48,19 +49,26 @@ public class InternalWIPTransferListReportServiceImpl implements InternalWIPTran
 
     private final WIPTransferListReportSearchRepository wIPTransferListReportSearchRepository;
 
+    private final InternalApplicationUserDetailService internalApplicationUserDetailService;
+
     public InternalWIPTransferListReportServiceImpl(
         WIPTransferListReportRepository wIPTransferListReportRepository,
         WIPTransferListReportMapper wIPTransferListReportMapper,
-        WIPTransferListReportSearchRepository wIPTransferListReportSearchRepository
+        WIPTransferListReportSearchRepository wIPTransferListReportSearchRepository,
+        InternalApplicationUserDetailService internalApplicationUserDetailService
     ) {
         this.wIPTransferListReportRepository = wIPTransferListReportRepository;
         this.wIPTransferListReportMapper = wIPTransferListReportMapper;
         this.wIPTransferListReportSearchRepository = wIPTransferListReportSearchRepository;
+        this.internalApplicationUserDetailService = internalApplicationUserDetailService;
     }
 
     @Override
     public WIPTransferListReportDTO save(WIPTransferListReportDTO wIPTransferListReportDTO) {
         log.debug("Request to save WIPTransferListReport : {}", wIPTransferListReportDTO);
+
+        internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(wIPTransferListReportDTO::setRequestedBy);
+
         WIPTransferListReport wIPTransferListReport = wIPTransferListReportMapper.toEntity(wIPTransferListReportDTO);
         wIPTransferListReport = wIPTransferListReportRepository.save(wIPTransferListReport);
         WIPTransferListReportDTO result = wIPTransferListReportMapper.toDto(wIPTransferListReport);

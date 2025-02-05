@@ -20,30 +20,30 @@ package io.github.erp.internal.report.attachment;
 
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.framework.Mapping;
-import io.github.erp.internal.model.AttachedWIPListReportDTO;
-import io.github.erp.service.dto.WIPListReportDTO;
+import io.github.erp.internal.model.AttachedWIPTransferListReportDTO;
+import io.github.erp.service.dto.WIPTransferListReportDTO;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("wipListReportRequisitionReportAttachmentService")
-public class WIPListReportRequisitionReportAttachmentService
-    extends AbstractUnTamperedReportAttachmentService<WIPListReportDTO>
-    implements ReportAttachmentService<WIPListReportDTO>{
+@Service("wipTransferListReportAttachmentService")
+public class WIPTransferListReportAttachmentService
+    extends AbstractUnTamperedReportAttachmentService<WIPTransferListReportDTO>
+    implements ReportAttachmentService<WIPTransferListReportDTO> {
 
-    private final Mapping<WIPListReportDTO, AttachedWIPListReportDTO> mapping;
+    private final Mapping<WIPTransferListReportDTO, AttachedWIPTransferListReportDTO> mapping;
 
-    public WIPListReportRequisitionReportAttachmentService (
+    public WIPTransferListReportAttachmentService (
         @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
-        Mapping<WIPListReportDTO, AttachedWIPListReportDTO> mapping) {
+        Mapping<WIPTransferListReportDTO, AttachedWIPTransferListReportDTO> mapping) {
         super(fileStorageService);
         this.mapping = mapping;
     }
 
     @SneakyThrows
     @Override
-    public WIPListReportDTO attachReport(WIPListReportDTO one) {
+    public WIPTransferListReportDTO attachReport(WIPTransferListReportDTO one) {
         one.setReportFileContentType("text/csv");
-        return mapping.toValue1((AttachedWIPListReportDTO) super.attachReport(mapping.toValue2(one), ".csv"));
+        return mapping.toValue1((AttachedWIPTransferListReportDTO) super.attachReport(mapping.toValue2(one), ".csv"));
     }
 }

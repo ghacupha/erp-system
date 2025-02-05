@@ -18,9 +18,13 @@ package io.github.erp.internal.service.wip;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.service.criteria.WIPTransferListItemCriteria;
 import io.github.erp.service.dto.WIPTransferListItemDTO;
+import io.github.erp.service.dto.WIPTransferListReportDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Optional;
 
@@ -76,4 +80,24 @@ public interface InternalWIPTransferListItemService {
      * @return the list of entities.
      */
     Page<WIPTransferListItemDTO> search(String query, Pageable pageable);
+
+    /**
+     * Get all the wIPTransferListItems.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<WIPTransferListItemDTO> findAllReportItems(Pageable pageable);
+
+    /**
+     * Return a {@link Page} of {@link WIPTransferListItemDTO} which matches the criteria from the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param page The page, which should be returned.
+     * @return the matching entities.
+     */
+    Page<WIPTransferListItemDTO> findAllSpecifiedReportItems(WIPTransferListItemCriteria criteria, Pageable page);
+
+    long countByCriteria(WIPTransferListItemCriteria criteria);
+
+    Page<WIPTransferListItemDTO> findByCriteria(WIPTransferListItemCriteria criteria, Pageable pageable);
 }

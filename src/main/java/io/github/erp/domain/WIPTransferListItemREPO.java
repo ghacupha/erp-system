@@ -21,27 +21,34 @@ package io.github.erp.domain;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public interface WIPListItemREPO  {
+/**
+ * Data object used as projection on the internal repositories
+ */
+public interface WIPTransferListItemREPO {
 
     Long getId();
 
-    String getSequenceNumber();
+    Long getWipSequence();
 
-    String getParticulars();
+    String getWipParticulars();
 
-    LocalDate getInstalmentDate();
+    String getTransferType();
 
-    BigDecimal getInstalmentAmount();
+    String getTransferSettlement();
 
-    String getSettlementCurrency();
+    LocalDate getTransferSettlementDate();
 
-    String getOutletCode();
+    BigDecimal getTransferAmount();
 
-    String getSettlementTransaction();
+    LocalDate getWipTransferDate();
 
-    LocalDate getSettlementTransactionDate();
+    String getOriginalSettlement();
 
-    String getDealerName();
+    LocalDate getOriginalSettlementDate();
+
+    String getAssetCategory();
+
+    String getServiceOutlet();
 
     String getWorkProject();
 }

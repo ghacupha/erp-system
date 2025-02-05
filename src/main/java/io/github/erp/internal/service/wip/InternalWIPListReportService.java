@@ -18,10 +18,15 @@ package io.github.erp.internal.service.wip;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.WIPListReport;
+import io.github.erp.service.criteria.WIPListReportCriteria;
 import io.github.erp.service.dto.WIPListReportDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -76,4 +81,30 @@ public interface InternalWIPListReportService {
      * @return the list of entities.
      */
     Page<WIPListReportDTO> search(String query, Pageable pageable);
+
+
+    /**
+     * Return a {@link List} of {@link WIPListReportDTO} which matches the criteria from the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the matching entities.
+     */
+    @Transactional(readOnly = true)
+    List<WIPListReportDTO> findByCriteria(WIPListReportCriteria criteria);
+
+    /**
+     * Return a {@link Page} of {@link WIPListReportDTO} which matches the criteria from the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param page The page, which should be returned.
+     * @return the matching entities.
+     */
+    @Transactional(readOnly = true)
+    Page<WIPListReportDTO> findByCriteria(WIPListReportCriteria criteria, Pageable page);
+
+    /**
+     * Return the number of matching entities in the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    long countByCriteria(WIPListReportCriteria criteria);
 }

@@ -48,4 +48,8 @@ git checkout HEAD~1 src/main/java/io/github/erp/domain/LeaseAmortizationSchedule
 git checkout HEAD~1 src/main/java/io/github/erp/domain/LeaseLiabilityScheduleItem.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/IFRS16LeaseContract.java
 git checkout HEAD~1 src/main/java/io/github/erp/domain/TAAmortizationRule.java
+git checkout HEAD~1 src/main/java/io/github/erp/service/WIPTransferListItemQueryService.java
+git checkout HEAD~1 src/main/java/io/github/erp/web/rest/WIPTransferListItemResource.java
+git checkout HEAD~1 src/main/java/io/github/erp/web/rest/WIPListItemResource.java
+git checkout HEAD~1 src/main/java/io/github/erp/service/WIPListReportService.java
 git checkout HEAD~1 src/main/resources/config/liquibase/changelog/

@@ -19,22 +19,22 @@ package io.github.erp.internal.model.mapping;
  */
 
 import io.github.erp.internal.framework.Mapping;
-import io.github.erp.internal.model.AttachedWIPListReportDTO;
-import io.github.erp.service.dto.WIPListReportDTO;
+import io.github.erp.internal.model.AttachedWIPTransferListReportDTO;
+import io.github.erp.service.dto.WIPTransferListReportDTO;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AttachedWIPListReportMapping implements Mapping<WIPListReportDTO, AttachedWIPListReportDTO> {
+public class AttachedWIPTransferListReportMapper implements Mapping<WIPTransferListReportDTO, AttachedWIPTransferListReportDTO> {
 
     @Override
-    public WIPListReportDTO toValue1(AttachedWIPListReportDTO vs) {
+    public WIPTransferListReportDTO toValue1(AttachedWIPTransferListReportDTO vs) {
 
-        WIPListReportDTO dto = new WIPListReportDTO();
+        WIPTransferListReportDTO dto = new WIPTransferListReportDTO();
         dto.setId(vs.getId());
         dto.setTimeOfRequest(vs.getTimeOfRequest());
         dto.setRequestId(vs.getRequestId());
         dto.setFileChecksum(vs.getFileChecksum());
-        dto.setTampered(vs.getTampered());
+        dto.setTempered(vs.getTempered());
         dto.setFilename(vs.getFilename());
         dto.setReportParameters(vs.getReportParameters());
         dto.setReportFile(vs.getReportFile());
@@ -45,13 +45,14 @@ public class AttachedWIPListReportMapping implements Mapping<WIPListReportDTO, A
     }
 
     @Override
-    public AttachedWIPListReportDTO toValue2(WIPListReportDTO vs) {
-        return AttachedWIPListReportDTO.builder()
+    public AttachedWIPTransferListReportDTO toValue2(WIPTransferListReportDTO vs) {
+
+        return AttachedWIPTransferListReportDTO.builder()
             .id(vs.getId())
             .timeOfRequest(vs.getTimeOfRequest())
             .requestId(vs.getRequestId())
             .fileChecksum(vs.getFileChecksum())
-            .tampered(vs.getTampered())
+            .tempered(vs.getTempered())
             .filename(vs.getFilename())
             .reportParameters(vs.getReportParameters())
             .reportFile(vs.getReportFile())

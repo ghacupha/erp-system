@@ -18,6 +18,7 @@ package io.github.erp.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.service.criteria.WIPListReportCriteria;
 import io.github.erp.service.dto.WIPListReportDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -75,4 +76,8 @@ public interface WIPListReportService {
      * @return the list of entities.
      */
     Page<WIPListReportDTO> search(String query, Pageable pageable);
+
+    Page<WIPListReportDTO> findByCriteria(WIPListReportCriteria criteria, Pageable page);
+
+    long countByCriteria(WIPListReportCriteria criteria);
 }

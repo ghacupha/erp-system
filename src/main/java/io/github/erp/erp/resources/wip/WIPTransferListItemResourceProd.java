@@ -18,13 +18,14 @@ package io.github.erp.erp.resources.wip;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.WIPTransferListItem;
+import io.github.erp.internal.service.wip.InternalWIPTransferListItemService;
 import io.github.erp.repository.WIPTransferListItemRepository;
-import io.github.erp.service.WIPTransferListItemQueryService;
-import io.github.erp.service.WIPTransferListItemService;
 import io.github.erp.service.criteria.WIPTransferListItemCriteria;
 import io.github.erp.service.dto.WIPTransferListItemDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -38,7 +39,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * REST controller for managing {@link io.github.erp.domain.WIPTransferListItem}.
+ * REST controller for managing {@link WIPTransferListItem}.
  */
 @RestController
 @RequestMapping("/api/fixed-asset")
@@ -46,20 +47,12 @@ public class WIPTransferListItemResourceProd {
 
     private final Logger log = LoggerFactory.getLogger(WIPTransferListItemResourceProd.class);
 
-    private final WIPTransferListItemService wIPTransferListItemService;
-
-    private final WIPTransferListItemRepository wIPTransferListItemRepository;
-
-    private final WIPTransferListItemQueryService wIPTransferListItemQueryService;
+    private final InternalWIPTransferListItemService wIPTransferListItemService;
 
     public WIPTransferListItemResourceProd(
-        WIPTransferListItemService wIPTransferListItemService,
-        WIPTransferListItemRepository wIPTransferListItemRepository,
-        WIPTransferListItemQueryService wIPTransferListItemQueryService
+        @Qualifier("internalWIPTransferListItemServiceImpl") InternalWIPTransferListItemService wIPTransferListItemService
     ) {
         this.wIPTransferListItemService = wIPTransferListItemService;
-        this.wIPTransferListItemRepository = wIPTransferListItemRepository;
-        this.wIPTransferListItemQueryService = wIPTransferListItemQueryService;
     }
 
     /**
@@ -75,7 +68,7 @@ public class WIPTransferListItemResourceProd {
         Pageable pageable
     ) {
         log.debug("REST request to get WIPTransferListItems by criteria: {}", criteria);
-        Page<WIPTransferListItemDTO> page = wIPTransferListItemQueryService.findByCriteria(criteria, pageable);
+        Page<WIPTransferListItemDTO> page = wIPTransferListItemService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -89,7 +82,7 @@ public class WIPTransferListItemResourceProd {
     @GetMapping("/wip-transfer-list-items/count")
     public ResponseEntity<Long> countWIPTransferListItems(WIPTransferListItemCriteria criteria) {
         log.debug("REST request to count WIPTransferListItems by criteria: {}", criteria);
-        return ResponseEntity.ok().body(wIPTransferListItemQueryService.countByCriteria(criteria));
+        return ResponseEntity.ok().body(wIPTransferListItemService.countByCriteria(criteria));
     }
 
     /**

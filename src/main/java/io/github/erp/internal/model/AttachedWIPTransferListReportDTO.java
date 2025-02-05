@@ -18,10 +18,9 @@ package io.github.erp.internal.model;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.internal.report.attachment.AttachedReport;
 import io.github.erp.internal.report.attachment.AttachedUnTamperedReport;
 import io.github.erp.service.dto.ApplicationUserDTO;
-import io.github.erp.service.dto.WIPListReportDTO;
+import io.github.erp.service.dto.WIPTransferListReportDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,7 +35,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttachedWIPListReportDTO implements AttachedUnTamperedReport<WIPListReportDTO>, HasChecksum {
+public class AttachedWIPTransferListReportDTO implements AttachedUnTamperedReport<WIPTransferListReportDTO>, HasChecksum {
 
     private Long id;
 
@@ -48,8 +47,9 @@ public class AttachedWIPListReportDTO implements AttachedUnTamperedReport<WIPLis
 
     private String fileChecksum;
 
-    private Boolean tampered;
+    private Boolean tempered;
 
+    @NotNull
     private UUID filename;
 
     private String reportParameters;
@@ -62,40 +62,36 @@ public class AttachedWIPListReportDTO implements AttachedUnTamperedReport<WIPLis
     private ApplicationUserDTO requestedBy;
 
     @Override
-    public AttachedUnTamperedReport<WIPListReportDTO> setReportAttachment(byte[] reportResource) {
-        this.reportFile = reportResource;
+    public AttachedUnTamperedReport<WIPTransferListReportDTO> setReportAttachment(byte[] reportResource) {
+        reportFile = reportResource;
 
         return this;
     }
 
     @Override
     public String getReportName() {
-        return filename.toString();
+        return requestId.toString();
     }
 
     @Override
     public UUID getReportId() {
-        return this.filename;
+        return filename;
+    }
+
+    @Override
+    public void setReportTampered(boolean reportIsTampered) {
+
+        this.tempered = reportIsTampered;
+    }
+
+    @Override
+    public boolean getReportTampered() {
+        return this.tempered;
     }
 
     @Override
     public void setChecksum(String fileChecksum) {
 
         this.fileChecksum = fileChecksum;
-    }
-
-    @Override
-    public String getFileChecksum() {
-        return this.fileChecksum;
-    }
-
-    @Override
-    public void setReportTampered(boolean reportIsTampered) {
-        this.tampered = reportIsTampered;
-    }
-
-    @Override
-    public boolean getReportTampered() {
-        return this.tampered;
     }
 }
