@@ -58,8 +58,7 @@ public class WIPTransferListReport implements Serializable {
     @Column(name = "tempered")
     private Boolean tempered;
 
-    @NotNull
-    @Column(name = "filename", nullable = false)
+    @Column(name = "filename")
     private UUID filename;
 
     @Column(name = "report_parameters")

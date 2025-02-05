@@ -266,28 +266,6 @@ class WIPTransferListReportResourceIT {
 
     @Test
     @Transactional
-    void checkFilenameIsRequired() throws Exception {
-        int databaseSizeBeforeTest = wIPTransferListReportRepository.findAll().size();
-        // set the field null
-        wIPTransferListReport.setFilename(null);
-
-        // Create the WIPTransferListReport, which fails.
-        WIPTransferListReportDTO wIPTransferListReportDTO = wIPTransferListReportMapper.toDto(wIPTransferListReport);
-
-        restWIPTransferListReportMockMvc
-            .perform(
-                post(ENTITY_API_URL)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(wIPTransferListReportDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<WIPTransferListReport> wIPTransferListReportList = wIPTransferListReportRepository.findAll();
-        assertThat(wIPTransferListReportList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllWIPTransferListReports() throws Exception {
         // Initialize the database
         wIPTransferListReportRepository.saveAndFlush(wIPTransferListReport);

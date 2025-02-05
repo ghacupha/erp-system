@@ -20,19 +20,24 @@ package io.github.erp.internal.service.wip;
 
 import io.github.erp.domain.WIPListItem;
 import io.github.erp.domain.WIPListItemREPO;
+import io.github.erp.domain.WIPListItem_;
 import io.github.erp.internal.framework.Mapping;
 import io.github.erp.internal.repository.InternalWIPListItemRepository;
 import io.github.erp.repository.WIPListItemRepository;
 import io.github.erp.repository.search.WIPListItemSearchRepository;
+import io.github.erp.service.WIPListItemQueryService;
 import io.github.erp.service.WIPListItemService;
+import io.github.erp.service.criteria.WIPListItemCriteria;
 import io.github.erp.service.dto.WIPListItemDTO;
 import io.github.erp.service.mapper.WIPListItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tech.jhipster.service.QueryService;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,9 +45,11 @@ import java.util.Optional;
 /**
  * Service Implementation for managing {@link WIPListItem}.
  */
-@Service
+@Service("internalWIPListItemService")
 @Transactional
-public class InternalWIPListItemServiceImpl implements InternalWIPListItemService {
+public class InternalWIPListItemServiceImpl
+        extends WIPListItemQueryService
+        implements InternalWIPListItemService {
 
     private final Logger log = LoggerFactory.getLogger(InternalWIPListItemServiceImpl.class);
 
@@ -55,11 +62,13 @@ public class InternalWIPListItemServiceImpl implements InternalWIPListItemServic
     private final Mapping<WIPListItemREPO, WIPListItemDTO> wipListItemREPOMapper;
 
     public InternalWIPListItemServiceImpl(
+        WIPListItemRepository domainWIPListItemRepository,
         InternalWIPListItemRepository wIPListItemRepository,
         WIPListItemMapper wIPListItemMapper,
         WIPListItemSearchRepository wIPListItemSearchRepository,
         Mapping<WIPListItemREPO, WIPListItemDTO> wipListItemREPOMapper
     ) {
+        super(domainWIPListItemRepository, wIPListItemMapper, wIPListItemSearchRepository);
         this.wIPListItemRepository = wIPListItemRepository;
         this.wIPListItemMapper = wIPListItemMapper;
         this.wIPListItemSearchRepository = wIPListItemSearchRepository;
@@ -129,5 +138,41 @@ public class InternalWIPListItemServiceImpl implements InternalWIPListItemServic
     public Page<WIPListItemDTO> findAllReportItemsByReportDate(Pageable pageable) {
         log.debug("Request to get all WIPListItems");
         return wIPListItemRepository.findAllReportItems(pageable).map(wipListItemREPOMapper::toValue2);
+    }
+
+    /**
+     * Return a {@link Page} of {@link WIPListItemDTO} which matches the criteria from the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param page The page, which should be returned.
+     * @return the matching entities.
+     */
+    @Transactional(readOnly = true)
+    public Page<WIPListItemDTO> findByCriteria(WIPListItemCriteria criteria, Pageable page) {
+        log.debug("find by criteria : {}, page: {}", criteria, page);
+        final Specification<WIPListItem> specification = super.createSpecification(criteria);
+        return wIPListItemRepository.findAll(specification, page).map(wIPListItemMapper::toDto);
+    }
+
+    /**
+     * Return a {@link Page} of {@link WIPListItemDTO} which matches the criteria from the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param page The page, which should be returned.
+     * @return the matching entities.
+     */
+    @Override
+    public Page<WIPListItemDTO> findAll(WIPListItemCriteria criteria, Pageable page) {
+        return findByCriteria(criteria, page);
+    }
+
+    /**
+     * Return the number of matching entities in the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    public long countByCriteria(WIPListItemCriteria criteria) {
+        log.debug("count by criteria : {}", criteria);
+        final Specification<WIPListItem> specification = createSpecification(criteria);
+        return wIPListItemRepository.count(specification);
     }
 }

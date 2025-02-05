@@ -21,28 +21,31 @@ package io.github.erp.service.impl;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.domain.WIPListReport;
-import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.WIPListReportRepository;
 import io.github.erp.repository.search.WIPListReportSearchRepository;
+import io.github.erp.service.WIPListReportQueryService;
 import io.github.erp.service.WIPListReportService;
+import io.github.erp.service.criteria.WIPListReportCriteria;
 import io.github.erp.service.dto.WIPListReportDTO;
 import io.github.erp.service.mapper.WIPListReportMapper;
-import java.util.Optional;
 
-import org.jetbrains.annotations.ApiStatus;
+import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service Implementation for managing {@link WIPListReport}.
  */
-@Service
+@Service("domainWIPListReportService")
 @Transactional
-public class WIPListReportServiceImpl implements WIPListReportService {
+public class WIPListReportServiceImpl
+    extends WIPListReportQueryService implements WIPListReportService {
 
     private final Logger log = LoggerFactory.getLogger(WIPListReportServiceImpl.class);
 
@@ -52,25 +55,20 @@ public class WIPListReportServiceImpl implements WIPListReportService {
 
     private final WIPListReportSearchRepository wIPListReportSearchRepository;
 
-    private final InternalApplicationUserDetailService internalApplicationUserDetailService;
-
     public WIPListReportServiceImpl(
         WIPListReportRepository wIPListReportRepository,
         WIPListReportMapper wIPListReportMapper,
-        WIPListReportSearchRepository wIPListReportSearchRepository, InternalApplicationUserDetailService internalApplicationUserDetailService
+        WIPListReportSearchRepository wIPListReportSearchRepository
     ) {
+        super(wIPListReportRepository, wIPListReportMapper, wIPListReportSearchRepository);
         this.wIPListReportRepository = wIPListReportRepository;
         this.wIPListReportMapper = wIPListReportMapper;
         this.wIPListReportSearchRepository = wIPListReportSearchRepository;
-        this.internalApplicationUserDetailService = internalApplicationUserDetailService;
     }
 
     @Override
     public WIPListReportDTO save(WIPListReportDTO wIPListReportDTO) {
         log.debug("Request to save WIPListReport : {}", wIPListReportDTO);
-
-        internalApplicationUserDetailService.getCurrentApplicationUser().ifPresent(wIPListReportDTO::setRequestedBy);
-
         WIPListReport wIPListReport = wIPListReportMapper.toEntity(wIPListReportDTO);
         wIPListReport = wIPListReportRepository.save(wIPListReport);
         WIPListReportDTO result = wIPListReportMapper.toDto(wIPListReport);
@@ -124,5 +122,42 @@ public class WIPListReportServiceImpl implements WIPListReportService {
     public Page<WIPListReportDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of WIPListReports for query {}", query);
         return wIPListReportSearchRepository.search(query, pageable).map(wIPListReportMapper::toDto);
+    }
+
+    /**
+     * Return a {@link List} of {@link WIPListReportDTO} which matches the criteria from the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the matching entities.
+     */
+    @Transactional(readOnly = true)
+    public List<WIPListReportDTO> findByCriteria(WIPListReportCriteria criteria) {
+        log.debug("find by criteria : {}", criteria);
+        final Specification<WIPListReport> specification = createSpecification(criteria);
+        return wIPListReportMapper.toDto(wIPListReportRepository.findAll(specification));
+    }
+
+    /**
+     * Return a {@link Page} of {@link WIPListReportDTO} which matches the criteria from the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param page The page, which should be returned.
+     * @return the matching entities.
+     */
+    @Transactional(readOnly = true)
+    public Page<WIPListReportDTO> findByCriteria(WIPListReportCriteria criteria, Pageable page) {
+        log.debug("find by criteria : {}, page: {}", criteria, page);
+        final Specification<WIPListReport> specification = createSpecification(criteria);
+        return wIPListReportRepository.findAll(specification, page).map(wIPListReportMapper::toDto);
+    }
+
+    /**
+     * Return the number of matching entities in the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    public long countByCriteria(WIPListReportCriteria criteria) {
+        log.debug("count by criteria : {}", criteria);
+        final Specification<WIPListReport> specification = createSpecification(criteria);
+        return wIPListReportRepository.count(specification);
     }
 }

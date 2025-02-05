@@ -319,7 +319,8 @@
       "TransactionAccountReportItem",
       "WIPListItem",
       "WIPTransferListItem",
-      "WIPListReport"
+      "WIPListReport",
+      "WIPTransferListReport"
     ],
     "entitySuffix": "",
     "incrementalChangelog": false,

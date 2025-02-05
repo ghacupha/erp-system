@@ -18,40 +18,37 @@ package io.github.erp.aop.reporting.wip;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.aop.reporting.amortizationPosting.AmortizationPostingReportRequisitionInterceptor;
 import io.github.erp.internal.report.service.ExportReportService;
-import io.github.erp.service.dto.WIPListReportDTO;
+import io.github.erp.service.dto.WIPTransferListReportDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.Objects;
 
+@Slf4j
 @Aspect
-public class WIPListReportRequisitionInterceptor {
+public class WIPTransferListReportRequisitionInterceptor {
 
-    private static final Logger log = LoggerFactory.getLogger(AmortizationPostingReportRequisitionInterceptor.class);
+    private final ExportReportService<WIPTransferListReportDTO> exportReportService;
 
-    private final ExportReportService<WIPListReportDTO> exportReportService;
-
-    public WIPListReportRequisitionInterceptor(ExportReportService<WIPListReportDTO> exportReportService) {
+    public WIPTransferListReportRequisitionInterceptor(ExportReportService<WIPTransferListReportDTO> exportReportService) {
         this.exportReportService = exportReportService;
     }
 
     @AfterReturning(
         pointcut="reportRequisitionPointcut()",
         returning="response")
-    public void getCreatedReportInfo(JoinPoint joinPoint, @NotNull ResponseEntity<WIPListReportDTO> response) {
+    public void getCreatedReportInfo(JoinPoint joinPoint, @NotNull ResponseEntity<WIPTransferListReportDTO> response) {
 
         log.info("Report requisition response intercept completed successfully");
 
-        WIPListReportDTO reportDTO = Objects.requireNonNull(response.getBody());
+        WIPTransferListReportDTO reportDTO = Objects.requireNonNull(response.getBody());
         String reportId = reportDTO.getRequestId().toString();
         long entityId = reportDTO.getId();
 
@@ -61,14 +58,13 @@ public class WIPListReportRequisitionInterceptor {
     }
 
     @Async
-    void createReport(WIPListReportDTO reportDTO) {
+    void createReport(WIPTransferListReportDTO reportDTO) {
 
         exportReportService.exportReport(reportDTO);
     }
 
-    @Pointcut("execution(* io.github.erp.erp.resources.wip.WIPListReportResourceProd.createWIPListReport(..))")
+    @Pointcut("execution(* io.github.erp.erp.resources.wip.WIPTransferListReportResourceProd.createWIPTransferListReport(..))")
     public void reportRequisitionPointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
 }
-

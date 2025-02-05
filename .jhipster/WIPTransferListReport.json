@@ -20,8 +20,7 @@
     },
     {
       "fieldName": "filename",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required"]
+      "fieldType": "UUID"
     },
     {
       "fieldName": "reportParameters",

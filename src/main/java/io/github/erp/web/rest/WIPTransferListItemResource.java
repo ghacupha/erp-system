@@ -20,6 +20,7 @@ package io.github.erp.web.rest;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
+import io.github.erp.internal.service.wip.InternalWIPTransferListItemService;
 import io.github.erp.repository.WIPTransferListItemRepository;
 import io.github.erp.service.WIPTransferListItemQueryService;
 import io.github.erp.service.WIPTransferListItemService;
@@ -55,20 +56,17 @@ public class WIPTransferListItemResource {
 
     private final Logger log = LoggerFactory.getLogger(WIPTransferListItemResource.class);
 
-    private final WIPTransferListItemService wIPTransferListItemService;
+    private final InternalWIPTransferListItemService wIPTransferListItemService;
 
     private final WIPTransferListItemRepository wIPTransferListItemRepository;
 
-    private final WIPTransferListItemQueryService wIPTransferListItemQueryService;
 
     public WIPTransferListItemResource(
-        WIPTransferListItemService wIPTransferListItemService,
-        WIPTransferListItemRepository wIPTransferListItemRepository,
-        WIPTransferListItemQueryService wIPTransferListItemQueryService
+        InternalWIPTransferListItemService wIPTransferListItemService,
+        WIPTransferListItemRepository wIPTransferListItemRepository
     ) {
         this.wIPTransferListItemService = wIPTransferListItemService;
         this.wIPTransferListItemRepository = wIPTransferListItemRepository;
-        this.wIPTransferListItemQueryService = wIPTransferListItemQueryService;
     }
 
     /**
@@ -84,7 +82,7 @@ public class WIPTransferListItemResource {
         Pageable pageable
     ) {
         log.debug("REST request to get WIPTransferListItems by criteria: {}", criteria);
-        Page<WIPTransferListItemDTO> page = wIPTransferListItemQueryService.findByCriteria(criteria, pageable);
+        Page<WIPTransferListItemDTO> page = wIPTransferListItemService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -98,7 +96,7 @@ public class WIPTransferListItemResource {
     @GetMapping("/wip-transfer-list-items/count")
     public ResponseEntity<Long> countWIPTransferListItems(WIPTransferListItemCriteria criteria) {
         log.debug("REST request to count WIPTransferListItems by criteria: {}", criteria);
-        return ResponseEntity.ok().body(wIPTransferListItemQueryService.countByCriteria(criteria));
+        return ResponseEntity.ok().body(wIPTransferListItemService.countByCriteria(criteria));
     }
 
     /**

@@ -42,7 +42,6 @@ public class WIPTransferListReportDTO implements Serializable {
 
     private Boolean tempered;
 
-    @NotNull
     private UUID filename;
 
     private String reportParameters;

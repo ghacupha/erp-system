@@ -19,15 +19,20 @@ package io.github.erp.internal.service.wip;
  */
 
 import io.github.erp.domain.WIPTransferListItem;
+import io.github.erp.domain.WIPTransferListItemREPO;
+import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.repository.InternalWIPTransferListItemRepository;
 import io.github.erp.repository.WIPTransferListItemRepository;
 import io.github.erp.repository.search.WIPTransferListItemSearchRepository;
-import io.github.erp.service.WIPTransferListItemService;
+import io.github.erp.service.WIPTransferListItemQueryService;
+import io.github.erp.service.criteria.WIPTransferListItemCriteria;
 import io.github.erp.service.dto.WIPTransferListItemDTO;
 import io.github.erp.service.mapper.WIPTransferListItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,25 +41,32 @@ import java.util.Optional;
 /**
  * Service Implementation for managing {@link WIPTransferListItem}.
  */
-@Service
+@Service("internalWIPTransferListItemServiceImpl")
 @Transactional
-public class InternalWIPTransferListItemServiceImpl implements InternalWIPTransferListItemService {
+public class InternalWIPTransferListItemServiceImpl
+    extends WIPTransferListItemQueryService
+    implements InternalWIPTransferListItemService {
 
     private final Logger log = LoggerFactory.getLogger(InternalWIPTransferListItemServiceImpl.class);
 
-    private final WIPTransferListItemRepository wIPTransferListItemRepository;
+    private final InternalWIPTransferListItemRepository wIPTransferListItemRepository;
 
     private final WIPTransferListItemMapper wIPTransferListItemMapper;
+
+    private final Mapping<WIPTransferListItemREPO, WIPTransferListItemDTO> wipTransferListItemMapper;
 
     private final WIPTransferListItemSearchRepository wIPTransferListItemSearchRepository;
 
     public InternalWIPTransferListItemServiceImpl(
         WIPTransferListItemRepository wIPTransferListItemRepository,
-        WIPTransferListItemMapper wIPTransferListItemMapper,
+        InternalWIPTransferListItemRepository internalWIPTransferListItemRepository,
+        WIPTransferListItemMapper wIPTransferListItemMapper, Mapping<WIPTransferListItemREPO, WIPTransferListItemDTO> wipTransferListItemMapper,
         WIPTransferListItemSearchRepository wIPTransferListItemSearchRepository
     ) {
-        this.wIPTransferListItemRepository = wIPTransferListItemRepository;
+        super(wIPTransferListItemRepository, wIPTransferListItemMapper, wIPTransferListItemSearchRepository);
+        this.wIPTransferListItemRepository = internalWIPTransferListItemRepository;
         this.wIPTransferListItemMapper = wIPTransferListItemMapper;
+        this.wipTransferListItemMapper = wipTransferListItemMapper;
         this.wIPTransferListItemSearchRepository = wIPTransferListItemSearchRepository;
     }
 
@@ -114,5 +126,47 @@ public class InternalWIPTransferListItemServiceImpl implements InternalWIPTransf
     public Page<WIPTransferListItemDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of WIPTransferListItems for query {}", query);
         return wIPTransferListItemSearchRepository.search(query, pageable).map(wIPTransferListItemMapper::toDto);
+    }
+
+    @Override
+    public Page<WIPTransferListItemDTO> findAllReportItems(Pageable pageable) {
+        log.debug("Request to get all WIPTransferListItems");
+        return wIPTransferListItemRepository.findAllReportItems(pageable).map(wipTransferListItemMapper::toValue2);
+    }
+
+    /**
+     * Return a {@link Page} of {@link WIPTransferListItemDTO} which matches the criteria from the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param page The page, which should be returned.
+     * @return the matching entities.
+     */
+    @Override
+    public Page<WIPTransferListItemDTO> findAllSpecifiedReportItems(WIPTransferListItemCriteria criteria, Pageable page) {
+
+        log.debug("find by criteria : {}, page: {}", criteria, page);
+        final Specification<WIPTransferListItem> specification = createSpecification(criteria);
+        return wIPTransferListItemRepository.findAllSpecifiedReportItems(specification, page).map(wipTransferListItemMapper::toValue2);
+    }
+
+    /**
+     * Return the number of matching entities in the database.
+     *
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    public long countByCriteria(WIPTransferListItemCriteria criteria) {
+        return super.countByCriteria(criteria);
+    }
+
+    /**
+     * Return a {@link Page} of {@link WIPTransferListItemDTO} which matches the criteria from the database.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @param page The page, which should be returned.
+     * @return the matching entities.
+     */
+    @Transactional(readOnly = true)
+    public Page<WIPTransferListItemDTO> findByCriteria(WIPTransferListItemCriteria criteria, Pageable page) {
+        return super.findByCriteria(criteria, page);
     }
 }

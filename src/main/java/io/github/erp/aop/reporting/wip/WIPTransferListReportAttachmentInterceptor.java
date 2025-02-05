@@ -19,9 +19,9 @@ package io.github.erp.aop.reporting.wip;
  */
 
 import io.github.erp.internal.report.attachment.ReportAttachmentService;
-import io.github.erp.internal.report.service.ExportReportService;
 import io.github.erp.service.dto.WIPListReportDTO;
-import io.github.erp.service.dto.WorkInProgressOutstandingReportRequisitionDTO;
+import io.github.erp.service.dto.WIPTransferListItemDTO;
+import io.github.erp.service.dto.WIPTransferListReportDTO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -37,12 +37,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Aspect
-public class WIPListReportAttachmentInterceptor {
+public class WIPTransferListReportAttachmentInterceptor {
 
-    private ReportAttachmentService<WIPListReportDTO> wipListReportDTOAttachmentService;
+    private ReportAttachmentService<WIPTransferListReportDTO> attachmentService;
 
-    public WIPListReportAttachmentInterceptor(ReportAttachmentService<WIPListReportDTO> wipListReportDTOAttachmentService) {
-        this.wipListReportDTOAttachmentService = wipListReportDTOAttachmentService;
+    public WIPTransferListReportAttachmentInterceptor(ReportAttachmentService<WIPTransferListReportDTO> attachmentService) {
+        this.attachmentService = attachmentService;
     }
 
     /**
@@ -53,18 +53,18 @@ public class WIPListReportAttachmentInterceptor {
      * @throws Throwable throws {@link IllegalArgumentException}.
      */
     @Around(value = "reportResponsePointcut()")
-    public ResponseEntity<WIPListReportDTO> attachReportToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
+    public ResponseEntity<WIPTransferListReportDTO> attachReportToResponse(ProceedingJoinPoint joinPoint) throws Throwable {
         Logger log = logger(joinPoint);
         if (log.isDebugEnabled()) {
             log.debug("Enter: {}() with argument[s] = {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
         }
         try {
-            ResponseEntity<WIPListReportDTO> result = (ResponseEntity<WIPListReportDTO>)joinPoint.proceed();
+            ResponseEntity<WIPTransferListReportDTO> result = (ResponseEntity<WIPTransferListReportDTO>)joinPoint.proceed();
 
-            ResponseEntity<WIPListReportDTO> advisedReport =
+            ResponseEntity<WIPTransferListReportDTO> advisedReport =
                 ResponseUtil.wrapOrNotFound(
                     Optional.of(
-                        wipListReportDTOAttachmentService.attachReport(Objects.requireNonNull(result.getBody())))
+                        attachmentService.attachReport(Objects.requireNonNull(result.getBody())))
                 );
 
             if (log.isDebugEnabled()) {
@@ -90,9 +90,8 @@ public class WIPListReportAttachmentInterceptor {
     /**
      * Pointcut for report-requisition file attachment
      */
-    @Pointcut("execution(* io.github.erp.erp.resources.wip.WIPListReportResourceProd.getWIPListReport(..)))")
+    @Pointcut("execution(* io.github.erp.erp.resources.wip.WIPTransferListReportResourceProd.getWIPTransferListReport(..)))")
     public void reportResponsePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
 }
-

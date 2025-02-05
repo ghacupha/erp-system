@@ -27,6 +27,7 @@ import io.github.erp.service.criteria.WIPListItemCriteria;
 import io.github.erp.service.dto.WIPListItemDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -52,16 +53,15 @@ public class WIPListItemResourceProd {
 
     private final InternalWIPListItemRepository wIPListItemRepository;
 
-    private final WIPListItemQueryService wIPListItemQueryService;
+    // private final WIPListItemQueryService wIPListItemQueryService;
 
     public WIPListItemResourceProd(
-        InternalWIPListItemService wIPListItemService,
-        InternalWIPListItemRepository wIPListItemRepository,
-        WIPListItemQueryService wIPListItemQueryService
+        @Qualifier("internalWIPListItemService") InternalWIPListItemService wIPListItemService,
+        InternalWIPListItemRepository wIPListItemRepository
     ) {
         this.wIPListItemService = wIPListItemService;
         this.wIPListItemRepository = wIPListItemRepository;
-        this.wIPListItemQueryService = wIPListItemQueryService;
+//        this.wIPListItemQueryService = wIPListItemQueryService;
     }
 
     /**
@@ -75,8 +75,7 @@ public class WIPListItemResourceProd {
     public ResponseEntity<List<WIPListItemDTO>> getAllWIPListItems(WIPListItemCriteria criteria, Pageable pageable) {
         log.debug("REST request to get WIPListItems by criteria: {}", criteria);
 
-        Page<WIPListItemDTO> page = wIPListItemQueryService.findByCriteria(criteria, pageable);
-
+        Page<WIPListItemDTO> page = wIPListItemService.findAll(criteria, pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -91,7 +90,7 @@ public class WIPListItemResourceProd {
     @GetMapping("/wip-list-items/count")
     public ResponseEntity<Long> countWIPListItems(WIPListItemCriteria criteria) {
         log.debug("REST request to count WIPListItems by criteria: {}", criteria);
-        return ResponseEntity.ok().body(wIPListItemQueryService.countByCriteria(criteria));
+        return ResponseEntity.ok().body(wIPListItemService.countByCriteria(criteria));
     }
 
     /**

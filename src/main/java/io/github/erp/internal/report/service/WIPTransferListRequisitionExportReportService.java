@@ -21,10 +21,10 @@ package io.github.erp.internal.report.service;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.internal.report.CSVListExportService;
 import io.github.erp.internal.report.ReportsProperties;
-import io.github.erp.internal.service.wip.InternalWIPListItemService;
-import io.github.erp.service.WIPListReportService;
-import io.github.erp.service.dto.WIPListItemDTO;
-import io.github.erp.service.dto.WIPListReportDTO;
+import io.github.erp.internal.service.wip.InternalWIPTransferListItemService;
+import io.github.erp.internal.service.wip.InternalWIPTransferListReportService;
+import io.github.erp.service.dto.WIPTransferListItemDTO;
+import io.github.erp.service.dto.WIPTransferListReportDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
@@ -39,28 +39,29 @@ import java.util.UUID;
 
 @Slf4j
 @Transactional
-@Service("wipListReportRequisitionExportReportService")
-public class WIPListReportRequisitionExportReportService
-    extends CSVListExportService<WIPListItemDTO>
-    implements ExportReportService<WIPListReportDTO>{
+@Service("wipTransferListRequisitionExportReportService")
+public class WIPTransferListRequisitionExportReportService
+    extends CSVListExportService<WIPTransferListItemDTO>
+    implements ExportReportService<WIPTransferListReportDTO>{
 
-    private final WIPListReportService wipListReportService;
-    private final InternalWIPListItemService wipListItemService;
+    private final InternalWIPTransferListReportService reportService;
+    private final InternalWIPTransferListItemService itemService;
 
-    public WIPListReportRequisitionExportReportService(
+    public WIPTransferListRequisitionExportReportService(
         ReportsProperties reportsProperties,
         @Qualifier("reportsFSStorageService") FileStorageService fileStorageService,
-        WIPListReportService wipListReportService, InternalWIPListItemService wipListItemService){
+        InternalWIPTransferListReportService wipTransferListReportService,
+        InternalWIPTransferListItemService wipTransferListItemService){
         super(reportsProperties, fileStorageService);
-        this.wipListReportService = wipListReportService;
-        this.wipListItemService = wipListItemService;
+        this.reportService = wipTransferListReportService;
+        this.itemService = wipTransferListItemService;
     }
 
 
     @Override
-    public void exportReport(WIPListReportDTO reportRequisition) {
+    public void exportReport(WIPTransferListReportDTO reportRequisition) {
 
-        Optional<List<WIPListItemDTO>> reportListItems = getEntries(reportRequisition);
+        Optional<List<WIPTransferListItemDTO>> reportListItems = getEntries(reportRequisition);
 
         reportListItems.ifPresent(reportList -> {
 
@@ -73,7 +74,7 @@ public class WIPListReportRequisitionExportReportService
                 reportRequisition.setFilename(fileName);
                 reportRequisition.setReportParameters(getReportParameters(reportRequisition));
 
-                wipListReportService.save(reportRequisition);
+                reportService.save(reportRequisition);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -81,15 +82,16 @@ public class WIPListReportRequisitionExportReportService
         });
     }
 
-    private String getReportParameters(WIPListReportDTO reportRequisition) {
+    private String getReportParameters(WIPTransferListReportDTO reportRequisition) {
 
         return "Time of Request: ".concat(reportRequisition.getTimeOfRequest().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     }
 
-    private Optional<List<WIPListItemDTO>> getEntries(WIPListReportDTO reportRequisition) {
+    private Optional<List<WIPTransferListItemDTO>> getEntries(WIPTransferListReportDTO reportRequisition) {
 
         return Optional.of(
-            wipListItemService.findAllReportItemsByReportDate(Pageable.ofSize(Integer.MAX_VALUE))
+            itemService.findAllReportItems(Pageable.ofSize(Integer.MAX_VALUE))
                 .getContent());
     }
 }
+

@@ -18,9 +18,17 @@ package io.github.erp.internal.repository;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.WIPListItem;
+import io.github.erp.domain.WIPListItemREPO;
 import io.github.erp.domain.WIPTransferListItem;
+import io.github.erp.domain.WIPTransferListItemREPO;
+import io.reactivex.Flowable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -29,4 +37,107 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface InternalWIPTransferListItemRepository
-    extends JpaRepository<WIPTransferListItem, Long>, JpaSpecificationExecutor<WIPTransferListItem> {}
+    extends JpaRepository<WIPTransferListItem, Long>, JpaSpecificationExecutor<WIPTransferListItem> {
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT  " +
+            "    trf.id as id,  " +
+            "    r.sequence_number as sequenceNumbers, " +
+            "    r.particulars as wipParticulars,  " +
+            "    transfer_type, " +
+            "    trfSet.payment_number as transferSettlement,  " +
+            "    trfSet.payment_date as transferSettlementDate, " +
+            "    transfer_amount,  " +
+            "    transfer_date as wipTransferDate,  " +
+            "    orgSet.payment_number as originalSettlement,  " +
+            "    orgSet.payment_date as originalSettlementDate,  " +
+            "    cat.asset_category_name as assetCategory,   " +
+            "    sol.outlet_code as serviceOutlet,  " +
+            "    prj.project_title as workProject  " +
+            "FROM public.work_in_progress_transfer trf " +
+            "  LEFT JOIN work_in_progress_registration r ON r.id = trf.work_in_progress_registration_id " +
+            "  LEFT JOIN settlement trfSet ON trfSet.id = transfer_settlement_id  " +
+            "  LEFT JOIN settlement orgSet ON orgSet.id = original_settlement_id  " +
+            "  LEFT JOIN asset_category cat ON cat.id = asset_category_id  " +
+            "  LEFT JOIN service_outlet sol ON sol.id = service_outlet_id  " +
+            "  LEFT JOIN work_project_register prj ON prj.id = r.work_project_register_id",
+
+        countQuery = "" +
+            "SELECT  " +
+            "    trf.id as id,  " +
+            "    r.sequence_number as sequenceNumbers, " +
+            "    r.particulars as wipParticulars,  " +
+            "    transfer_type, " +
+            "    trfSet.payment_number as transferSettlement,  " +
+            "    trfSet.payment_date as transferSettlementDate, " +
+            "    transfer_amount,  " +
+            "    transfer_date as wipTransferDate,  " +
+            "    orgSet.payment_number as originalSettlement,  " +
+            "    orgSet.payment_date as originalSettlementDate,  " +
+            "    cat.asset_category_name as assetCategory,   " +
+            "    sol.outlet_code as serviceOutlet,  " +
+            "    prj.project_title as workProject  " +
+            "FROM public.work_in_progress_transfer trf " +
+            "  LEFT JOIN work_in_progress_registration r ON r.id = trf.work_in_progress_registration_id " +
+            "  LEFT JOIN settlement trfSet ON trfSet.id = transfer_settlement_id  " +
+            "  LEFT JOIN settlement orgSet ON orgSet.id = original_settlement_id  " +
+            "  LEFT JOIN asset_category cat ON cat.id = asset_category_id  " +
+            "  LEFT JOIN service_outlet sol ON sol.id = service_outlet_id  " +
+            "  LEFT JOIN work_project_register prj ON prj.id = r.work_project_register_id"
+
+    )
+    Page<WIPTransferListItemREPO> findAllSpecifiedReportItems(Specification<WIPTransferListItem> specification, Pageable pageable);
+
+    @Query(
+        nativeQuery = true,
+        value = "" +
+            "SELECT  " +
+            "    trf.id as id,  " +
+            "    r.sequence_number as sequenceNumbers, " +
+            "    r.particulars as wipParticulars,  " +
+            "    transfer_type, " +
+            "    trfSet.payment_number as transferSettlement,  " +
+            "    trfSet.payment_date as transferSettlementDate, " +
+            "    transfer_amount,  " +
+            "    transfer_date as wipTransferDate,  " +
+            "    orgSet.payment_number as originalSettlement,  " +
+            "    orgSet.payment_date as originalSettlementDate,  " +
+            "    cat.asset_category_name as assetCategory,   " +
+            "    sol.outlet_code as serviceOutlet,  " +
+            "    prj.project_title as workProject  " +
+            "FROM public.work_in_progress_transfer trf " +
+            "  LEFT JOIN work_in_progress_registration r ON r.id = trf.work_in_progress_registration_id " +
+            "  LEFT JOIN settlement trfSet ON trfSet.id = transfer_settlement_id  " +
+            "  LEFT JOIN settlement orgSet ON orgSet.id = original_settlement_id  " +
+            "  LEFT JOIN asset_category cat ON cat.id = asset_category_id  " +
+            "  LEFT JOIN service_outlet sol ON sol.id = service_outlet_id  " +
+            "  LEFT JOIN work_project_register prj ON prj.id = r.work_project_register_id",
+
+        countQuery = "" +
+            "SELECT  " +
+            "    trf.id as id,  " +
+            "    r.sequence_number as sequenceNumbers, " +
+            "    r.particulars as wipParticulars,  " +
+            "    transfer_type, " +
+            "    trfSet.payment_number as transferSettlement,  " +
+            "    trfSet.payment_date as transferSettlementDate, " +
+            "    transfer_amount,  " +
+            "    transfer_date as wipTransferDate,  " +
+            "    orgSet.payment_number as originalSettlement,  " +
+            "    orgSet.payment_date as originalSettlementDate,  " +
+            "    cat.asset_category_name as assetCategory,   " +
+            "    sol.outlet_code as serviceOutlet,  " +
+            "    prj.project_title as workProject  " +
+            "FROM public.work_in_progress_transfer trf " +
+            "  LEFT JOIN work_in_progress_registration r ON r.id = trf.work_in_progress_registration_id " +
+            "  LEFT JOIN settlement trfSet ON trfSet.id = transfer_settlement_id  " +
+            "  LEFT JOIN settlement orgSet ON orgSet.id = original_settlement_id  " +
+            "  LEFT JOIN asset_category cat ON cat.id = asset_category_id  " +
+            "  LEFT JOIN service_outlet sol ON sol.id = service_outlet_id  " +
+            "  LEFT JOIN work_project_register prj ON prj.id = r.work_project_register_id"
+
+    )
+    Page<WIPTransferListItemREPO> findAllReportItems(Pageable pageable);
+}

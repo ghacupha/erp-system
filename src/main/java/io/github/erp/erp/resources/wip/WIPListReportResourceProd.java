@@ -18,9 +18,8 @@ package io.github.erp.erp.resources.wip;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.internal.service.wip.InternalWIPListReportService;
 import io.github.erp.repository.WIPListReportRepository;
-import io.github.erp.service.WIPListReportQueryService;
-import io.github.erp.service.WIPListReportService;
 import io.github.erp.service.criteria.WIPListReportCriteria;
 import io.github.erp.service.dto.WIPListReportDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
@@ -59,20 +58,16 @@ public class WIPListReportResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final WIPListReportService wIPListReportService;
+    private final InternalWIPListReportService wIPListReportService;
 
     private final WIPListReportRepository wIPListReportRepository;
 
-    private final WIPListReportQueryService wIPListReportQueryService;
-
     public WIPListReportResourceProd(
-        WIPListReportService wIPListReportService,
-        WIPListReportRepository wIPListReportRepository,
-        WIPListReportQueryService wIPListReportQueryService
+        InternalWIPListReportService wIPListReportService,
+        WIPListReportRepository wIPListReportRepository
     ) {
         this.wIPListReportService = wIPListReportService;
         this.wIPListReportRepository = wIPListReportRepository;
-        this.wIPListReportQueryService = wIPListReportQueryService;
     }
 
     /**
@@ -176,7 +171,7 @@ public class WIPListReportResourceProd {
     @GetMapping("/wip-list-reports")
     public ResponseEntity<List<WIPListReportDTO>> getAllWIPListReports(WIPListReportCriteria criteria, Pageable pageable) {
         log.debug("REST request to get WIPListReports by criteria: {}", criteria);
-        Page<WIPListReportDTO> page = wIPListReportQueryService.findByCriteria(criteria, pageable);
+        Page<WIPListReportDTO> page = wIPListReportService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -190,7 +185,7 @@ public class WIPListReportResourceProd {
     @GetMapping("/wip-list-reports/count")
     public ResponseEntity<Long> countWIPListReports(WIPListReportCriteria criteria) {
         log.debug("REST request to count WIPListReports by criteria: {}", criteria);
-        return ResponseEntity.ok().body(wIPListReportQueryService.countByCriteria(criteria));
+        return ResponseEntity.ok().body(wIPListReportService.countByCriteria(criteria));
     }
 
     /**
