@@ -44,12 +44,12 @@ public interface InternalWIPTransferListItemRepository
         value = "" +
             "SELECT  " +
             "    trf.id as id,  " +
-            "    r.sequence_number as sequenceNumbers, " +
+            "    r.sequence_number as wipSequence, " +
             "    r.particulars as wipParticulars,  " +
-            "    transfer_type, " +
+            "    transfer_type as transferType, " +
             "    trfSet.payment_number as transferSettlement,  " +
             "    trfSet.payment_date as transferSettlementDate, " +
-            "    transfer_amount,  " +
+            "    transfer_amount as transferAmount,  " +
             "    transfer_date as wipTransferDate,  " +
             "    orgSet.payment_number as originalSettlement,  " +
             "    orgSet.payment_date as originalSettlementDate,  " +
@@ -67,12 +67,12 @@ public interface InternalWIPTransferListItemRepository
         countQuery = "" +
             "SELECT  " +
             "    trf.id as id,  " +
-            "    r.sequence_number as sequenceNumbers, " +
+            "    r.sequence_number as wipSequence, " +
             "    r.particulars as wipParticulars,  " +
-            "    transfer_type, " +
+            "    transfer_type as transferType, " +
             "    trfSet.payment_number as transferSettlement,  " +
             "    trfSet.payment_date as transferSettlementDate, " +
-            "    transfer_amount,  " +
+            "    transfer_amount as transferAmount,  " +
             "    transfer_date as wipTransferDate,  " +
             "    orgSet.payment_number as originalSettlement,  " +
             "    orgSet.payment_date as originalSettlementDate,  " +
@@ -86,7 +86,6 @@ public interface InternalWIPTransferListItemRepository
             "  LEFT JOIN asset_category cat ON cat.id = asset_category_id  " +
             "  LEFT JOIN service_outlet sol ON sol.id = service_outlet_id  " +
             "  LEFT JOIN work_project_register prj ON prj.id = r.work_project_register_id"
-
     )
     Page<WIPTransferListItemREPO> findAllSpecifiedReportItems(Specification<WIPTransferListItem> specification, Pageable pageable);
 
@@ -95,12 +94,12 @@ public interface InternalWIPTransferListItemRepository
         value = "" +
             "SELECT  " +
             "    trf.id as id,  " +
-            "    r.sequence_number as sequenceNumbers, " +
+            "    r.sequence_number as wipSequence, " +
             "    r.particulars as wipParticulars,  " +
-            "    transfer_type, " +
+            "    transfer_type as transferType, " +
             "    trfSet.payment_number as transferSettlement,  " +
             "    trfSet.payment_date as transferSettlementDate, " +
-            "    transfer_amount,  " +
+            "    transfer_amount as transferAmount,  " +
             "    transfer_date as wipTransferDate,  " +
             "    orgSet.payment_number as originalSettlement,  " +
             "    orgSet.payment_date as originalSettlementDate,  " +
@@ -118,12 +117,12 @@ public interface InternalWIPTransferListItemRepository
         countQuery = "" +
             "SELECT  " +
             "    trf.id as id,  " +
-            "    r.sequence_number as sequenceNumbers, " +
+            "    r.sequence_number as wipSequence, " +
             "    r.particulars as wipParticulars,  " +
-            "    transfer_type, " +
+            "    transfer_type as transferType, " +
             "    trfSet.payment_number as transferSettlement,  " +
             "    trfSet.payment_date as transferSettlementDate, " +
-            "    transfer_amount,  " +
+            "    transfer_amount as transferAmount,  " +
             "    transfer_date as wipTransferDate,  " +
             "    orgSet.payment_number as originalSettlement,  " +
             "    orgSet.payment_date as originalSettlementDate,  " +
@@ -137,7 +136,6 @@ public interface InternalWIPTransferListItemRepository
             "  LEFT JOIN asset_category cat ON cat.id = asset_category_id  " +
             "  LEFT JOIN service_outlet sol ON sol.id = service_outlet_id  " +
             "  LEFT JOIN work_project_register prj ON prj.id = r.work_project_register_id"
-
     )
     Page<WIPTransferListItemREPO> findAllReportItems(Pageable pageable);
 }
