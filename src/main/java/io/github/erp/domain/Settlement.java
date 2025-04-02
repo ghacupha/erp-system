@@ -18,6 +18,7 @@ package io.github.erp.domain;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -539,7 +540,6 @@ public class Settlement implements Serializable {
             ", paymentAmount=" + getPaymentAmount() +
             ", description='" + getDescription() + "'" +
             ", notes='" + getNotes() + "'" +
-            ", calculationFile='" + getCalculationFile() + "'" +
             ", calculationFileContentType='" + getCalculationFileContentType() + "'" +
             ", fileUploadToken='" + getFileUploadToken() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +

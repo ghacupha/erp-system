@@ -61,7 +61,7 @@ public class TransactionAccount implements Serializable {
 
     @Lob
     @Column(name = "notes")
-    @Field(type = FieldType.Byte, index = false)
+    @Field(type = FieldType.Binary, index = false)
     private byte[] notes;
 
     @Column(name = "notes_content_type")

@@ -70,7 +70,7 @@ public class AssetRegistration implements Serializable {
 
     @Lob
     @Column(name = "comments")
-    @Field(type = FieldType.Byte, index = false)
+    @Field(type = FieldType.Binary, index = false)
     private byte[] comments;
 
     @Column(name = "comments_content_type")

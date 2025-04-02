@@ -106,6 +106,7 @@
  */
 package io.github.erp.erp.startUp.index.engine_v2;
 
+import io.github.erp.domain.Settlement;
 import io.github.erp.erp.startUp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.internal.IndexProperties;
 import io.reactivex.Observable;
@@ -115,6 +116,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * Runs index sequence applying batch process execution method
@@ -131,8 +133,19 @@ public abstract class AbstractStartUpBatchedIndexService<T> extends AbstractStar
 
     protected abstract void processBatchIndex(List<T> batch);
 
+    /**
+     * This method prepares the entity for indexing and may be overriden if needed
+     * for instance to nullify parts of the entity that do not need to be indexed
+     *
+     * @param entity
+     * @return
+     */
+    protected T prepareForIndexing(T entity) {
+        return entity;
+    };
+
     public int processInBatchesOf(int preferredBatchSize) {
-        List<T> allItems = getItemsForIndexing();
+        List<T> allItems = getItemsForIndexing().stream().map(this::prepareForIndexing).toList();
         AtomicInteger count = new AtomicInteger(0);
         AtomicInteger processedItems = new AtomicInteger(0);
 
