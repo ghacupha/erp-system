@@ -24,7 +24,6 @@ import io.github.erp.erp.startUp.index.engine_v2.AbstractStartUpBatchedIndexServ
 import io.github.erp.internal.IndexProperties;
 import io.github.erp.internal.service.payments.InternalSettlementService;
 import io.github.erp.repository.search.SettlementSearchRepository;
-import io.github.erp.service.SettlementService;
 import io.github.erp.service.mapper.SettlementMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +87,7 @@ public class SettlementIndexingService extends AbstractStartUpBatchedIndexServic
 
         log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
 
-        return processInBatchesOf(300);
+        return processInBatchesOf(400);
     }
 
     @Override
@@ -114,5 +113,17 @@ public class SettlementIndexingService extends AbstractStartUpBatchedIndexServic
     protected void processBatchIndex(List<Settlement> batch) {
 
         this.searchRepository.saveAll(batch);
+    }
+
+    /**
+     * To remove the calculationFile which we have been unable to remove from the index
+     *
+     * @param entity
+     * @return
+     */
+    protected Settlement prepareForIndexing(Settlement entity) {
+        entity.setCalculationFile(null);
+        entity.setCalculationFileContentType(null);
+        return entity;
     }
 }

@@ -117,4 +117,18 @@ public class AssetRegistryIndexingService extends AbstractStartUpBatchedIndexSer
 
         this.searchRepository.saveAll(batch);
     }
+
+    /**
+     * We are going to remove comments for this one
+     *
+     * @param entity
+     * @return
+     */
+    @Override
+    protected AssetRegistration prepareForIndexing(AssetRegistration entity) {
+        entity.setComments(null);
+        entity.setCommentsContentType(null);
+
+        return entity;
+    }
 }

@@ -76,7 +76,7 @@ public class WorkProjectRegister implements Serializable {
 
     @Lob
     @Column(name = "additional_notes")
-    @Field(type = FieldType.Byte)
+    @Field(type = FieldType.Binary, index = false)
     private byte[] additionalNotes;
 
     @Column(name = "additional_notes_content_type")
