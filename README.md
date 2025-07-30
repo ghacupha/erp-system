@@ -893,5 +893,10 @@ enthralling read; because the efficiency of their model is simply out of this wo
 (ok that's the name of the design pattern for now), and use the GNUCash accounting design pattern itself. Try looking, and I did, and you will find only
 academic illustrations of the accounting process such as the one I have done [myself](https://github.com/ghacupha/book-keeper) with very 
 little regard for concerns like persistence.
-Why someone would create an accounting tool without instructions on how to save data beyond some school illustration is beyond me,
-because book keeping is about keeping records. 
+Why someone would create an accounting tool without instructions on how to save data beyond some school illustration is shows that we need as much contributors writing the documentation
+as much as those who are coding the code, and that's not easy to orchestrate; it's a real struggle within the open source community, and it's unfortunate 
+because book-keeping is about keeping records. 
+
+## Code Structure and Usage Notes
+
+We have created a general guideline for code structure and usage on this [link](https://chatgpt.com/s/cd_6889e186ef688191a2f5e28e6d11614a)
