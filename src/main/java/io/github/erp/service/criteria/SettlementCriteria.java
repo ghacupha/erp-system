@@ -68,7 +68,7 @@ public class SettlementCriteria implements Serializable, Criteria {
 
     private LongFilter paymentCategoryId;
 
-    private LongFilter groupSettlementId;
+    private LongFilter settlementGroupId;
 
     private LongFilter billerId;
 
@@ -95,7 +95,7 @@ public class SettlementCriteria implements Serializable, Criteria {
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.paymentLabelId = other.paymentLabelId == null ? null : other.paymentLabelId.copy();
         this.paymentCategoryId = other.paymentCategoryId == null ? null : other.paymentCategoryId.copy();
-        this.groupSettlementId = other.groupSettlementId == null ? null : other.groupSettlementId.copy();
+        this.settlementGroupId = other.settlementGroupId == null ? null : other.settlementGroupId.copy();
         this.billerId = other.billerId == null ? null : other.billerId.copy();
         this.paymentInvoiceId = other.paymentInvoiceId == null ? null : other.paymentInvoiceId.copy();
         this.signatoriesId = other.signatoriesId == null ? null : other.signatoriesId.copy();
@@ -288,19 +288,19 @@ public class SettlementCriteria implements Serializable, Criteria {
         this.paymentCategoryId = paymentCategoryId;
     }
 
-    public LongFilter getGroupSettlementId() {
-        return groupSettlementId;
+    public LongFilter getSettlementGroupId() {
+        return settlementGroupId;
     }
 
-    public LongFilter groupSettlementId() {
-        if (groupSettlementId == null) {
-            groupSettlementId = new LongFilter();
+    public LongFilter settlementGroupId() {
+        if (settlementGroupId == null) {
+            settlementGroupId = new LongFilter();
         }
-        return groupSettlementId;
+        return settlementGroupId;
     }
 
-    public void setGroupSettlementId(LongFilter groupSettlementId) {
-        this.groupSettlementId = groupSettlementId;
+    public void setSettlementGroupId(LongFilter settlementGroupId) {
+        this.settlementGroupId = settlementGroupId;
     }
 
     public LongFilter getBillerId() {
@@ -393,7 +393,7 @@ public class SettlementCriteria implements Serializable, Criteria {
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(paymentLabelId, that.paymentLabelId) &&
             Objects.equals(paymentCategoryId, that.paymentCategoryId) &&
-            Objects.equals(groupSettlementId, that.groupSettlementId) &&
+            Objects.equals(settlementGroupId, that.settlementGroupId) &&
             Objects.equals(billerId, that.billerId) &&
             Objects.equals(paymentInvoiceId, that.paymentInvoiceId) &&
             Objects.equals(signatoriesId, that.signatoriesId) &&
@@ -417,7 +417,7 @@ public class SettlementCriteria implements Serializable, Criteria {
             settlementCurrencyId,
             paymentLabelId,
             paymentCategoryId,
-            groupSettlementId,
+            settlementGroupId,
             billerId,
             paymentInvoiceId,
             signatoriesId,
@@ -442,7 +442,7 @@ public class SettlementCriteria implements Serializable, Criteria {
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (paymentLabelId != null ? "paymentLabelId=" + paymentLabelId + ", " : "") +
             (paymentCategoryId != null ? "paymentCategoryId=" + paymentCategoryId + ", " : "") +
-            (groupSettlementId != null ? "groupSettlementId=" + groupSettlementId + ", " : "") +
+            (settlementGroupId != null ? "settlementGroupId=" + settlementGroupId + ", " : "") +
             (billerId != null ? "billerId=" + billerId + ", " : "") +
             (paymentInvoiceId != null ? "paymentInvoiceId=" + paymentInvoiceId + ", " : "") +
             (signatoriesId != null ? "signatoriesId=" + signatoriesId + ", " : "") +

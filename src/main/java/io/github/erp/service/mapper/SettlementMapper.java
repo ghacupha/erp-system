@@ -33,6 +33,7 @@ import org.mapstruct.*;
         SettlementCurrencyMapper.class,
         PaymentLabelMapper.class,
         PaymentCategoryMapper.class,
+        SettlementGroupMapper.class,
         DealerMapper.class,
         PaymentInvoiceMapper.class,
         BusinessDocumentMapper.class,
@@ -43,7 +44,7 @@ public interface SettlementMapper extends EntityMapper<SettlementDTO, Settlement
     @Mapping(target = "settlementCurrency", source = "settlementCurrency", qualifiedByName = "iso4217CurrencyCode")
     @Mapping(target = "paymentLabels", source = "paymentLabels", qualifiedByName = "descriptionSet")
     @Mapping(target = "paymentCategory", source = "paymentCategory", qualifiedByName = "categoryName")
-    @Mapping(target = "groupSettlement", source = "groupSettlement", qualifiedByName = "id")
+    @Mapping(target = "settlementGroup", source = "settlementGroup", qualifiedByName = "groupName")
     @Mapping(target = "biller", source = "biller", qualifiedByName = "dealerName")
     @Mapping(target = "paymentInvoices", source = "paymentInvoices", qualifiedByName = "invoiceNumberSet")
     @Mapping(target = "signatories", source = "signatories", qualifiedByName = "dealerNameSet")

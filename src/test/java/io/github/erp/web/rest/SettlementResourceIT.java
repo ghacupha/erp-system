@@ -33,8 +33,8 @@ import io.github.erp.domain.PaymentInvoice;
 import io.github.erp.domain.PaymentLabel;
 import io.github.erp.domain.Placeholder;
 import io.github.erp.domain.Settlement;
-import io.github.erp.domain.Settlement;
 import io.github.erp.domain.SettlementCurrency;
+import io.github.erp.domain.SettlementGroup;
 import io.github.erp.repository.SettlementRepository;
 import io.github.erp.repository.search.SettlementSearchRepository;
 import io.github.erp.service.SettlementService;
@@ -1086,28 +1086,28 @@ class SettlementResourceIT {
 
     @Test
     @Transactional
-    void getAllSettlementsByGroupSettlementIsEqualToSomething() throws Exception {
+    void getAllSettlementsBySettlementGroupIsEqualToSomething() throws Exception {
         // Initialize the database
         settlementRepository.saveAndFlush(settlement);
-        Settlement groupSettlement;
-        if (TestUtil.findAll(em, Settlement.class).isEmpty()) {
-            groupSettlement = SettlementResourceIT.createEntity(em);
-            em.persist(groupSettlement);
+        SettlementGroup settlementGroup;
+        if (TestUtil.findAll(em, SettlementGroup.class).isEmpty()) {
+            settlementGroup = SettlementGroupResourceIT.createEntity(em);
+            em.persist(settlementGroup);
             em.flush();
         } else {
-            groupSettlement = TestUtil.findAll(em, Settlement.class).get(0);
+            settlementGroup = TestUtil.findAll(em, SettlementGroup.class).get(0);
         }
-        em.persist(groupSettlement);
+        em.persist(settlementGroup);
         em.flush();
-        settlement.setGroupSettlement(groupSettlement);
+        settlement.setSettlementGroup(settlementGroup);
         settlementRepository.saveAndFlush(settlement);
-        Long groupSettlementId = groupSettlement.getId();
+        Long settlementGroupId = settlementGroup.getId();
 
-        // Get all the settlementList where groupSettlement equals to groupSettlementId
-        defaultSettlementShouldBeFound("groupSettlementId.equals=" + groupSettlementId);
+        // Get all the settlementList where settlementGroup equals to settlementGroupId
+        defaultSettlementShouldBeFound("settlementGroupId.equals=" + settlementGroupId);
 
-        // Get all the settlementList where groupSettlement equals to (groupSettlementId + 1)
-        defaultSettlementShouldNotBeFound("groupSettlementId.equals=" + (groupSettlementId + 1));
+        // Get all the settlementList where settlementGroup equals to (settlementGroupId + 1)
+        defaultSettlementShouldNotBeFound("settlementGroupId.equals=" + (settlementGroupId + 1));
     }
 
     @Test
