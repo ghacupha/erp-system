@@ -15,14 +15,17 @@
             INSERT INTO settlement_group (id, group_name, description, remarks)
             SELECT DISTINCT 
                 s.id,
-                CONCAT('Group-', s.payment_number),
-                CONCAT('Settlement group for ', s.description),
+                CONCAT('Group-', COALESCE(s.payment_number, s.id)),
+                CONCAT('Settlement group for ', COALESCE(s.description, 'Settlement')),
                 'Migrated from existing settlement group relationship'
             FROM settlement s
             WHERE s.id IN (
                 SELECT DISTINCT group_settlement_id 
                 FROM settlement 
                 WHERE group_settlement_id IS NOT NULL
+            )
+            AND NOT EXISTS (
+                SELECT 1 FROM settlement_group sg WHERE sg.id = s.id
             );
         </sql>
     </changeSet>

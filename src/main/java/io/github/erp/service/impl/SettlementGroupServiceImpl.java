@@ -85,6 +85,10 @@ public class SettlementGroupServiceImpl implements SettlementGroupService {
     public Optional<SettlementGroupDTO> partialUpdate(SettlementGroupDTO settlementGroupDTO) {
         log.debug("Request to partially update SettlementGroup : {}", settlementGroupDTO);
 
+        if (settlementGroupDTO.getParentGroup() != null) {
+            validateCircularReference(settlementGroupDTO);
+        }
+
         return settlementGroupRepository
             .findById(settlementGroupDTO.getId())
             .map(existingSettlementGroup -> {
@@ -141,6 +145,10 @@ public class SettlementGroupServiceImpl implements SettlementGroupService {
         
         if (currentId != null && currentId.equals(parentId)) {
             throw new IllegalArgumentException("Settlement group cannot be its own parent");
+        }
+
+        if (parentId == null) {
+            return;
         }
 
         int depth = 0;
