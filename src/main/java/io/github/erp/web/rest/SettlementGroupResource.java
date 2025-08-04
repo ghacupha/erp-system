@@ -173,10 +173,7 @@ public class SettlementGroupResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of settlementGroups in body.
      */
     @GetMapping("/settlement-groups")
-    public ResponseEntity<List<SettlementGroupDTO>> getAllSettlementGroups(
-        SettlementGroupCriteria criteria,
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable
-    ) {
+    public ResponseEntity<List<SettlementGroupDTO>> getAllSettlementGroups(SettlementGroupCriteria criteria, Pageable pageable) {
         log.debug("REST request to get SettlementGroups by criteria: {}", criteria);
         Page<SettlementGroupDTO> page = settlementGroupQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -233,10 +230,7 @@ public class SettlementGroupResource {
      * @return the result of the search.
      */
     @GetMapping("/_search/settlement-groups")
-    public ResponseEntity<List<SettlementGroupDTO>> searchSettlementGroups(
-        @RequestParam String query,
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable
-    ) {
+    public ResponseEntity<List<SettlementGroupDTO>> searchSettlementGroups(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of SettlementGroups for query {}", query);
         Page<SettlementGroupDTO> page = settlementGroupService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
