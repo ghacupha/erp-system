@@ -173,12 +173,12 @@ public class SettlementQueryService extends QueryService<Settlement> {
                         )
                     );
             }
-            if (criteria.getGroupSettlementId() != null) {
+            if (criteria.getSettlementGroupId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(
-                            criteria.getGroupSettlementId(),
-                            root -> root.join(Settlement_.groupSettlement, JoinType.LEFT).get(Settlement_.id)
+                            criteria.getSettlementGroupId(),
+                            root -> root.join(Settlement_.settlementGroup, JoinType.LEFT).get(SettlementGroup_.id)
                         )
                     );
             }

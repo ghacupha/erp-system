@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <!--
+        Migrate existing settlement group relationships to new SettlementGroup entity.
+    -->
+    <changeSet id="20250804182802-1" author="jhipster">
+        <comment>Create SettlementGroup entries for existing grouped settlements</comment>
+        
+        <!-- Create settlement groups for existing group settlements -->
+        <sql>
+            INSERT INTO settlement_group (id, group_name, description, remarks)
+            SELECT DISTINCT 
+                s.id,
+                CONCAT('Group-', COALESCE(s.payment_number, s.id)),
+                CONCAT('Settlement group for ', COALESCE(s.description, 'Settlement')),
+                'Migrated from existing settlement group relationship'
+            FROM settlement s
+            WHERE s.id IN (
+                SELECT DISTINCT group_settlement_id 
+                FROM settlement 
+                WHERE group_settlement_id IS NOT NULL
+            )
+            AND NOT EXISTS (
+                SELECT 1 FROM settlement_group sg WHERE sg.id = s.id
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="20250804182802-2" author="jhipster">
+        <comment>Add settlement_group_id column to settlement table</comment>
+        
+        <addColumn tableName="settlement">
+            <column name="settlement_group_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250804182802-3" author="jhipster">
+        <comment>Migrate settlement group relationships</comment>
+        
+        <!-- Update settlements to reference the new settlement groups -->
+        <sql>
+            UPDATE settlement s1
+            SET settlement_group_id = s1.group_settlement_id
+            WHERE s1.group_settlement_id IS NOT NULL;
+        </sql>
+    </changeSet>
+
+    <changeSet id="20250804182802-4" author="jhipster">
+        <comment>Add foreign key constraint for settlement_group_id</comment>
+        
+        <addForeignKeyConstraint baseColumnNames="settlement_group_id"
+                                 baseTableName="settlement"
+                                 constraintName="fk_settlement__settlement_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="settlement_group"/>
+    </changeSet>
+
+    <changeSet id="20250804182802-5" author="jhipster">
+        <comment>Drop old group_settlement_id column</comment>
+        
+        <!-- First drop the foreign key constraint -->
+        <dropForeignKeyConstraint baseTableName="settlement" constraintName="fk_settlement__group_settlement_id"/>
+        
+        <!-- Then drop the column -->
+        <dropColumn tableName="settlement" columnName="group_settlement_id"/>
+    </changeSet>
+</databaseChangeLog>

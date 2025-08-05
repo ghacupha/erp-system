@@ -1,0 +1,4 @@
+id;group_name;description;remarks;parent_group_id
+1;Default Group;Default settlement group;Default group for settlements;
+2;Vendor Payments;Payments to vendors;Group for vendor payment settlements;
+3;Employee Reimbursements;Employee expense reimbursements;Group for employee reimbursement settlements;

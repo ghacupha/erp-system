@@ -78,9 +78,9 @@
       "relationshipValidateRules": ["required"]
     },
     {
-      "otherEntityField": "id",
-      "otherEntityName": "settlement",
-      "relationshipName": "groupSettlement",
+      "otherEntityField": "groupName",
+      "otherEntityName": "settlementGroup",
+      "relationshipName": "settlementGroup",
       "relationshipType": "many-to-one"
     },
     {

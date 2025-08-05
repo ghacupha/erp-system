@@ -593,6 +593,9 @@
     <include file="config/liquibase/changelog/20241115103432_added_entity_constraints_ReportingEntity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250203103056_added_entity_constraints_WIPListReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250203110822_added_entity_constraints_WIPTransferListReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250804182800_added_entity_SettlementGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250804182801_added_entity_constraints_SettlementGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250804182802_migrate_settlement_group_data.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

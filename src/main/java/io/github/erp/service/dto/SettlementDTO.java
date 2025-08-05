@@ -63,7 +63,7 @@ public class SettlementDTO implements Serializable {
 
     private PaymentCategoryDTO paymentCategory;
 
-    private SettlementDTO groupSettlement;
+    private SettlementGroupDTO settlementGroup;
 
     private DealerDTO biller;
 
@@ -193,12 +193,12 @@ public class SettlementDTO implements Serializable {
         this.paymentCategory = paymentCategory;
     }
 
-    public SettlementDTO getGroupSettlement() {
-        return groupSettlement;
+    public SettlementGroupDTO getSettlementGroup() {
+        return settlementGroup;
     }
 
-    public void setGroupSettlement(SettlementDTO groupSettlement) {
-        this.groupSettlement = groupSettlement;
+    public void setSettlementGroup(SettlementGroupDTO settlementGroup) {
+        this.settlementGroup = settlementGroup;
     }
 
     public DealerDTO getBiller() {
@@ -272,7 +272,7 @@ public class SettlementDTO implements Serializable {
             ", settlementCurrency=" + getSettlementCurrency() +
             ", paymentLabels=" + getPaymentLabels() +
             ", paymentCategory=" + getPaymentCategory() +
-            ", groupSettlement=" + getGroupSettlement() +
+            ", settlementGroup=" + getSettlementGroup() +
             ", biller=" + getBiller() +
             ", paymentInvoices=" + getPaymentInvoices() +
             ", signatories=" + getSignatories() +

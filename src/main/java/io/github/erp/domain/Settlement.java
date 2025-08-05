@@ -125,21 +125,8 @@ public class Settlement implements Serializable {
     private PaymentCategory paymentCategory;
 
     @ManyToOne
-    @JsonIgnoreProperties(
-        value = {
-            "placeholders",
-            "settlementCurrency",
-            "paymentLabels",
-            "paymentCategory",
-            "groupSettlement",
-            "biller",
-            "paymentInvoices",
-            "signatories",
-            "businessDocuments",
-        },
-        allowSetters = true
-    )
-    private Settlement groupSettlement;
+    @JsonIgnoreProperties(value = { "parentGroup", "placeholders" }, allowSetters = true)
+    private SettlementGroup settlementGroup;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -416,16 +403,16 @@ public class Settlement implements Serializable {
         return this;
     }
 
-    public Settlement getGroupSettlement() {
-        return this.groupSettlement;
+    public SettlementGroup getSettlementGroup() {
+        return this.settlementGroup;
     }
 
-    public void setGroupSettlement(Settlement settlement) {
-        this.groupSettlement = settlement;
+    public void setSettlementGroup(SettlementGroup settlementGroup) {
+        this.settlementGroup = settlementGroup;
     }
 
-    public Settlement groupSettlement(Settlement settlement) {
-        this.setGroupSettlement(settlement);
+    public Settlement settlementGroup(SettlementGroup settlementGroup) {
+        this.setSettlementGroup(settlementGroup);
         return this;
     }
 
