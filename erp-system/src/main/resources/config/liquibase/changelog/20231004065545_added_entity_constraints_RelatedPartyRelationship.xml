@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity RelatedPartyRelationship.
+    -->
+    <changeSet id="20231004065545-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="bank_code_id"
+                                 baseTableName="related_party_relationship"
+                                 constraintName="fk_related_party_relationship__bank_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="institution_code"/>
+
+        <addForeignKeyConstraint baseColumnNames="branch_id_id"
+                                 baseTableName="related_party_relationship"
+                                 constraintName="fk_related_party_relationship__branch_id_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="bank_branch_code"/>
+
+        <addForeignKeyConstraint baseColumnNames="relationship_type_id"
+                                 baseTableName="related_party_relationship"
+                                 constraintName="fk_related_party_relationship__relationship_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="party_relation_type"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity CollateralInformation.
+    -->
+    <changeSet id="20231004123713-1" author="jhipster">
+        <createTable tableName="collateral_information">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="reporting_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="collateral_id" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="loan_contract_id" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="customer_id" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="registration_property_number" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="collateral_omv_in_ccy" type="decimal(21,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="collateral_fsv_in_lcy" type="decimal(21,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="collateral_discounted_value" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="amount_charged" type="decimal(21,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="collateral_discount_rate" type="double">
+                <constraints nullable="true" />
+            </column>
+            <column name="loan_to_value_ratio" type="double">
+                <constraints nullable="true" />
+            </column>
+            <column name="name_of_property_valuer" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="collateral_last_valuation_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="insured_flag" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="name_of_insurer" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="amount_insured" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="insurance_expiry_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="guarantee_insurers" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="bank_code_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="branch_code_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="collateral_type_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="county_code_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20231004123713-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/collateral_information.csv"
+                  separator=";"
+                  tableName="collateral_information"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="reporting_date" type="date"/>
+            <column name="collateral_id" type="string"/>
+            <column name="loan_contract_id" type="string"/>
+            <column name="customer_id" type="string"/>
+            <column name="registration_property_number" type="string"/>
+            <column name="collateral_omv_in_ccy" type="numeric"/>
+            <column name="collateral_fsv_in_lcy" type="numeric"/>
+            <column name="collateral_discounted_value" type="numeric"/>
+            <column name="amount_charged" type="numeric"/>
+            <column name="collateral_discount_rate" type="numeric"/>
+            <column name="loan_to_value_ratio" type="numeric"/>
+            <column name="name_of_property_valuer" type="string"/>
+            <column name="collateral_last_valuation_date" type="date"/>
+            <column name="insured_flag" type="string"/>
+            <column name="name_of_insurer" type="string"/>
+            <column name="amount_insured" type="numeric"/>
+            <column name="insurance_expiry_date" type="date"/>
+            <column name="guarantee_insurers" type="string"/>
+            <column name="bank_code_id" type="numeric"/>
+            <column name="branch_code_id" type="numeric"/>
+            <column name="collateral_type_id" type="numeric"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

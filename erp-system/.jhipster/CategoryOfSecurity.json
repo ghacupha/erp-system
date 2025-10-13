@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "categoryOfSecurity",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "categoryOfSecurityDetails",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "categoryOfSecurityDescription",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CategoryOfSecurity",
+  "changelogDate": "20230914094109",
+  "incrementalChangelog": false
+}

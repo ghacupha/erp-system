@@ -1,0 +1,111 @@
+{
+  "fields": [
+    {
+      "fieldName": "assetNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetTag",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nbvIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "compilationJobIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "compilationBatchIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "elapsedMonths",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "priorMonths",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "usefulLifeYears",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "netBookValueAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "previousNetBookValueAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "historicalCost",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "capitalizationDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "serviceOutlet",
+      "otherEntityName": "serviceOutlet",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "outletCode"
+    },
+    {
+      "relationshipName": "depreciationPeriod",
+      "otherEntityName": "depreciationPeriod",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "endDate"
+    },
+    {
+      "relationshipName": "fiscalMonth",
+      "otherEntityName": "fiscalMonth",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "fiscalMonthCode"
+    },
+    {
+      "relationshipName": "depreciationMethod",
+      "otherEntityName": "depreciationMethod",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "depreciationMethodName"
+    },
+    {
+      "relationshipName": "assetRegistration",
+      "otherEntityName": "assetRegistration",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "assetCategory",
+      "otherEntityName": "assetCategory",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "assetCategoryName"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "netBookValueEntry"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "infinite-scroll",
+  "name": "NetBookValueEntry",
+  "changelogDate": "20240219053625",
+  "incrementalChangelog": false
+}

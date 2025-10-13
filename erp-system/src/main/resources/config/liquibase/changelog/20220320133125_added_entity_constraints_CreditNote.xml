@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity CreditNote.
+    -->
+    <changeSet id="20220320133125-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="credit_note_id"
+                                 baseTableName="rel_credit_note__purchase_orders"
+                                 constraintName="fk_rel_credit_note__purchase_orders__credit_note_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="credit_note"/>
+
+        <addForeignKeyConstraint baseColumnNames="purchase_orders_id"
+                                 baseTableName="rel_credit_note__purchase_orders"
+                                 constraintName="fk_rel_credit_note__purchase_orders__purchase_orders_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="purchase_order"/>
+
+        <addForeignKeyConstraint baseColumnNames="credit_note_id"
+                                 baseTableName="rel_credit_note__invoices"
+                                 constraintName="fk_rel_credit_note__invoices__credit_note_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="credit_note"/>
+
+        <addForeignKeyConstraint baseColumnNames="invoices_id"
+                                 baseTableName="rel_credit_note__invoices"
+                                 constraintName="fk_rel_credit_note__invoices__invoices_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_invoice"/>
+
+        <addForeignKeyConstraint baseColumnNames="credit_note_id"
+                                 baseTableName="rel_credit_note__payment_label"
+                                 constraintName="fk_rel_credit_note__payment_label__credit_note_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="credit_note"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_label_id"
+                                 baseTableName="rel_credit_note__payment_label"
+                                 constraintName="fk_rel_credit_note__payment_label__payment_label_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_label"/>
+
+        <addForeignKeyConstraint baseColumnNames="credit_note_id"
+                                 baseTableName="rel_credit_note__placeholder"
+                                 constraintName="fk_rel_credit_note__placeholder__credit_note_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="credit_note"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_credit_note__placeholder"
+                                 constraintName="fk_rel_credit_note__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="settlement_currency_id"
+                                 baseTableName="credit_note"
+                                 constraintName="fk_credit_note__settlement_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="settlement_currency"/>
+    </changeSet>
+</databaseChangeLog>

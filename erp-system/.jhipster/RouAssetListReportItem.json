@@ -1,0 +1,69 @@
+{
+  "fields": [
+    {
+      "fieldName": "modelTitle",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "modelVersion",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "leaseTermPeriods",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "rouModelReference",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "commencementDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "expirationDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "leaseContractTitle",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetAccountNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "depreciationAccountNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "accruedDepreciationAccountNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetCategoryName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "leaseAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "leaseContractSerialNumber",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": true,
+  "pagination": "infinite-scroll",
+  "name": "RouAssetListReportItem",
+  "changelogDate": "20240313083108",
+  "incrementalChangelog": false
+}

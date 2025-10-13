@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "interestCalculationMethodCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "interestCalculationMthodType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "interestCalculationMethodDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "InterestCalcMethod",
+  "changelogDate": "20230914061533",
+  "incrementalChangelog": false
+}

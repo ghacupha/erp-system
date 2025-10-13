@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity ContractMetadata.
+    -->
+    <changeSet id="20230321110432-1" author="jhipster">
+        <createTable tableName="contract_metadata">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="type_of_contract" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="contract_status" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="start_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="termination_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="comments_and_attachment" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="contract_title" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_contract_metadata__contract_title" />
+            </column>
+            <column name="contract_identifier" type="${uuidType}">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_contract_metadata__contract_identifier" />
+            </column>
+            <column name="contract_identifier_short" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_contract_metadata__contract_identifier_short" />
+            </column>
+            <column name="department_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="contract_partner_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="responsible_person_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="security_clearance_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20230321110432-1-relations" author="jhipster">
+
+        <createTable tableName="rel_contract_metadata__related_contracts">
+            <column name="related_contracts_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contract_metadata_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="contract_metadata_id, related_contracts_id" tableName="rel_contract_metadata__related_contracts"/>
+
+        <createTable tableName="rel_contract_metadata__signatory">
+            <column name="signatory_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contract_metadata_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="contract_metadata_id, signatory_id" tableName="rel_contract_metadata__signatory"/>
+
+        <createTable tableName="rel_contract_metadata__placeholder">
+            <column name="placeholder_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contract_metadata_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="contract_metadata_id, placeholder_id" tableName="rel_contract_metadata__placeholder"/>
+
+        <createTable tableName="rel_contract_metadata__contract_document_file">
+            <column name="contract_document_file_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contract_metadata_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="contract_metadata_id, contract_document_file_id" tableName="rel_contract_metadata__contract_document_file"/>
+
+        <createTable tableName="rel_contract_metadata__contract_mappings">
+            <column name="contract_mappings_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contract_metadata_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="contract_metadata_id, contract_mappings_id" tableName="rel_contract_metadata__contract_mappings"/>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20230321110432-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/contract_metadata.csv"
+                  separator=";"
+                  tableName="contract_metadata"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="description" type="string"/>
+            <column name="type_of_contract" type="string"/>
+            <column name="contract_status" type="string"/>
+            <column name="start_date" type="date"/>
+            <column name="termination_date" type="date"/>
+            <column name="comments_and_attachment" type="clob"/>
+            <column name="contract_title" type="string"/>
+            <column name="contract_identifier" type="${uuidType}"/>
+            <column name="contract_identifier_short" type="string"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity UniversallyUniqueMapping.
+    -->
+    <changeSet id="20220608075128-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="parent_mapping_id"
+                                 baseTableName="universally_unique_mapping"
+                                 constraintName="fk_universally_unique_mapping__parent_mapping_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+
+        <addForeignKeyConstraint baseColumnNames="universally_unique_mapping_id"
+                                 baseTableName="rel_universally_unique_mapping__placeholder"
+                                 constraintName="fk_rel_universally_unique_mappi__universally_unique_mappi_60_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_universally_unique_mapping__placeholder"
+                                 constraintName="fk_rel_universally_unique_mapping__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>

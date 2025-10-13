@@ -1,0 +1,11 @@
+id;entry_id;transaction_date;description;amount;is_deleted;posting_id;created_at;modified_at;transaction_type;debit_account_id;credit_account_id
+1;57212;2024-10-14;synergies;2775;true;f9c6ac84-fc6b-42b1-9fcc-6db327a1970a;2024-10-13T15:17:40;2024-10-13T22:06:05;Business-focused portals Shore;1;1
+2;75280;2024-10-14;invoice;84253;false;503dc2d8-6850-4ff8-93d4-4da2835b816a;2024-10-14T03:45:26;2024-10-13T19:49:18;Licensed back-end;2;2
+3;68523;2024-10-13;function copying Licensed;70035;false;ea630979-127d-49a0-897d-c439fff4b015;2024-10-13T17:50:20;2024-10-13T20:55:09;Buckinghamshire;3;3
+4;73429;2024-10-14;generation vortals;74947;true;ed09bb0e-fdf5-4aa8-a2f7-6f5aa62ae13f;2024-10-14T13:49:21;2024-10-13T15:03:12;TCP;4;4
+5;6673;2024-10-14;Markets Unbranded overriding;19390;true;f16137fc-7857-4378-9b1d-bdb86a44afc7;2024-10-13T23:46:09;2024-10-13T16:01:30;Anguilla intangible Island;5;5
+6;72946;2024-10-13;Customer-focused;98031;true;cbebd7fa-4e3d-44a4-9080-f8e6c94ced00;2024-10-14T02:18:14;2024-10-14T04:39:23;JSON synergistic;6;6
+7;72207;2024-10-14;Shirt;34351;true;13b8ad7c-3045-471d-af6f-60614541e938;2024-10-13T19:40:09;2024-10-14T12:19:46;Solomon;7;7
+8;52587;2024-10-14;Account;20795;false;2bd78509-4ff8-4efd-bf68-b47e9902be10;2024-10-14T02:12:15;2024-10-13T16:37:38;Chicken Ramp Rubber;8;8
+9;11804;2024-10-14;Gloves;39818;true;b766a2d2-4e01-4127-81d2-94236dc292cb;2024-10-14T01:11:13;2024-10-14T06:59:55;Bedfordshire;9;9
+10;3683;2024-10-14;SCSI Dollar generate;87530;false;a9fb9b8a-d77b-41a0-89c3-5331f9e2c26f;2024-10-14T07:07:11;2024-10-14T02:28:20;HTTP monitor;10;10

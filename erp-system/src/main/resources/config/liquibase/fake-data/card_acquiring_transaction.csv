@@ -1,0 +1,11 @@
+id;reporting_date;terminal_id;number_of_transactions;value_of_transactions_in_lcy;bank_code_id;channel_type_id;card_brand_type_id;currency_of_transaction_id;card_issuer_category_id
+1;2023-10-04;Rupee Rupiah;96984;23828;1;1;1;1;1
+2;2023-10-03;Concrete Incredible;25395;31980;2;2;2;2;2
+3;2023-10-04;lavender;33410;8211;3;3;3;3;3
+4;2023-10-04;ivory Berkshire Account;82523;9497;4;4;4;4;4
+5;2023-10-03;Electronics Gourde;90303;26942;5;5;5;5;5
+6;2023-10-03;PNG;85490;41597;6;6;6;6;6
+7;2023-10-03;Montana generating Savings;25681;82774;7;7;7;7;7
+8;2023-10-04;invoice Kiribati;63117;70171;8;8;8;8;8
+9;2023-10-04;Alaska Mouse;70332;24620;9;9;9;9;9
+10;2023-10-04;Legacy Branding;47551;14762;10;10;10;10;10

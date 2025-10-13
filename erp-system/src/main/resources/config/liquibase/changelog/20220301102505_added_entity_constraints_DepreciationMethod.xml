@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity DepreciationMethod.
+    -->
+    <changeSet id="20220301102505-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="depreciation_method_id"
+                                 baseTableName="rel_depreciation_method__placeholder"
+                                 constraintName="fk_rel_depreciation_method__pla__depreciation_method_0e_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="depreciation_method"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_depreciation_method__placeholder"
+                                 constraintName="fk_rel_depreciation_method__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>

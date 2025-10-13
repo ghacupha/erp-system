@@ -1,0 +1,13 @@
+node_modules/
+logs/
+delete.*
+target/
+.env
+business-documents/
+env.txt
+reports-directory/
+kafka-queue/
+search-index-directory/
+zookeeper-data/
+zookeeper-logs/
+postgresql-data/

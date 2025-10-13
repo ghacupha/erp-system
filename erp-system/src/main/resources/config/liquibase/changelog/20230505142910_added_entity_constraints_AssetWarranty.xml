@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity AssetWarranty.
+    -->
+    <changeSet id="20230505142910-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="asset_warranty_id"
+                                 baseTableName="rel_asset_warranty__placeholder"
+                                 constraintName="fk_rel_asset_warranty__placeholder__asset_warranty_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_warranty"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_asset_warranty__placeholder"
+                                 constraintName="fk_rel_asset_warranty__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_warranty_id"
+                                 baseTableName="rel_asset_warranty__universally_unique_mapping"
+                                 constraintName="fk_rel_asset_warranty__universa__asset_warranty_7c_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_warranty"/>
+
+        <addForeignKeyConstraint baseColumnNames="universally_unique_mapping_id"
+                                 baseTableName="rel_asset_warranty__universally_unique_mapping"
+                                 constraintName="fk_rel_asset_warranty__universa__universally_unique_mappi_26_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+
+        <addForeignKeyConstraint baseColumnNames="dealer_id"
+                                 baseTableName="asset_warranty"
+                                 constraintName="fk_asset_warranty__dealer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id"
+                                 baseTableName="asset_warranty"
+                                 constraintName="fk_asset_warranty__asset_registration_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_warranty_id"
+                                 baseTableName="rel_asset_warranty__warranty_attachment"
+                                 constraintName="fk_rel_asset_warranty__warranty_attachment__asset_warranty_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_warranty"/>
+
+        <addForeignKeyConstraint baseColumnNames="warranty_attachment_id"
+                                 baseTableName="rel_asset_warranty__warranty_attachment"
+                                 constraintName="fk_rel_asset_warranty__warranty__warranty_attachment_5a_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="business_document"/>
+    </changeSet>
+</databaseChangeLog>

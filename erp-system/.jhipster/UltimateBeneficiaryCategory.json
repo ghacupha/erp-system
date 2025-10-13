@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "ultimateBeneficiaryCategoryTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "ultimateBeneficiaryType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "ultimateBeneficiaryCategoryTypeDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "UltimateBeneficiaryCategory",
+  "changelogDate": "20230914090353",
+  "incrementalChangelog": false
+}

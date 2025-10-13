@@ -1,0 +1,86 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-8">
+        <addColumn tableName="lease_liability">
+            <column name="interest_rate" type="numeric(21, 2)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-9">
+        <addUniqueConstraint columnNames="charge_type_category" constraintName="UC_CRB_PRODUCT_SERVICE_FEE_TYPECHARGE_TYPE_CATEGORY_COL" tableName="crb_product_service_fee_type"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-10">
+        <addUniqueConstraint columnNames="asset_written_off_id" constraintName="UK_2ei09lwga2up8y8tmnu4gb8jn" tableName="asset_write_off"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-11">
+        <addForeignKeyConstraint baseColumnNames="amortization_period_id" baseTableName="prepayment_amortization" constraintName="FK378twemm2mnl1e2mtfssljr7x" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="amortization_period" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-12">
+        <addForeignKeyConstraint baseColumnNames="transfer_settlement_id" baseTableName="work_in_progress_transfer" constraintName="FKbnmcaxnqc4few4wejwk2hb701" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-13">
+        <addForeignKeyConstraint baseColumnNames="original_settlement_id" baseTableName="work_in_progress_transfer" constraintName="FKfyqmwp5qn6ypsmbchw81wji58" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-14">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution_context" constraintName="job_exec_ctx_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-15">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution_params" constraintName="job_exec_params_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-16">
+        <dropForeignKeyConstraint baseTableName="batch_step_execution" constraintName="job_execution_step_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-17">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution" constraintName="job_instance_execution_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-18">
+        <dropForeignKeyConstraint baseTableName="batch_step_execution_context" constraintName="step_exec_ctx_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-19">
+        <dropTable tableName="batch_job_execution"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-20">
+        <dropTable tableName="batch_job_execution_context"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-21">
+        <dropTable tableName="batch_job_execution_params"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-22">
+        <dropTable tableName="batch_job_instance"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-23">
+        <dropTable tableName="batch_step_execution"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-24">
+        <dropTable tableName="batch_step_execution_context"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-25">
+        <dropSequence sequenceName="batch_job_execution_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-26">
+        <dropSequence sequenceName="batch_job_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-27">
+        <dropSequence sequenceName="batch_step_execution_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-1">
+        <alterSequence sequenceName="sequence_generator"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-2">
+        <addNotNullConstraint columnDataType="bigint" columnName="acquiring_transaction_id" tableName="asset_registration" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-3">
+        <addNotNullConstraint columnDataType="bigint" columnName="amortization_period_id" tableName="prepayment_amortization" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-4">
+        <addNotNullConstraint columnDataType="bigint" columnName="biller_id" tableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-5">
+        <addNotNullConstraint columnDataType="bigint" columnName="lease_period_id" tableName="rou_account_balance_report" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-6">
+        <addNotNullConstraint columnDataType="bigint" columnName="lease_period_id" tableName="rou_assetnbvreport" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1720088159167-7">
+        <addNotNullConstraint columnDataType="bigint" columnName="payment_category_id" tableName="settlement" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity LeaseModelMetadata.
+    -->
+    <changeSet id="20230328100320-1" author="jhipster">
+        <createTable tableName="lease_model_metadata">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="model_title" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_lease_model_metadata__model_title" />
+            </column>
+            <column name="model_version" type="double">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="model_notes" type="longblob">
+                <constraints nullable="true" />
+            </column>
+            <column name="model_notes_content_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="annual_discounting_rate" type="double">
+                <constraints nullable="false" />
+            </column>
+            <column name="commencement_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="terminal_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="total_reporting_periods" type="double">
+                <constraints nullable="true" />
+            </column>
+            <column name="reporting_periods_per_year" type="double">
+                <constraints nullable="true" />
+            </column>
+            <column name="settlement_periods_per_year" type="double">
+                <constraints nullable="true" />
+            </column>
+            <column name="initial_liability_amount" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="initial_rou_amount" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="total_depreciation_periods" type="double">
+                <constraints nullable="true" />
+            </column>
+            <column name="lease_contract_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="predecessor_id" type="bigint">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_lease_model_metadata__predecessor_id" />
+            </column>
+            <column name="liability_currency_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="rou_asset_currency_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="model_attachments_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="security_clearance_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="lease_liability_account_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="interest_payable_account_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="interest_expense_account_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="rou_asset_account_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="rou_depreciation_account_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="accrued_depreciation_account_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20230328100320-1-relations" author="jhipster">
+
+        <createTable tableName="rel_lease_model_metadata__placeholder">
+            <column name="placeholder_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lease_model_metadata_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="lease_model_metadata_id, placeholder_id" tableName="rel_lease_model_metadata__placeholder"/>
+
+        <createTable tableName="rel_lease_model_metadata__lease_mapping">
+            <column name="lease_mapping_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lease_model_metadata_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="lease_model_metadata_id, lease_mapping_id" tableName="rel_lease_model_metadata__lease_mapping"/>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20230328100320-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/lease_model_metadata.csv"
+                  separator=";"
+                  tableName="lease_model_metadata"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="model_title" type="string"/>
+            <column name="model_version" type="numeric"/>
+            <column name="description" type="string"/>
+            <column name="model_notes" type="blob"/>
+            <column name="model_notes_content_type" type="string"/>
+            <column name="annual_discounting_rate" type="numeric"/>
+            <column name="commencement_date" type="date"/>
+            <column name="terminal_date" type="date"/>
+            <column name="total_reporting_periods" type="numeric"/>
+            <column name="reporting_periods_per_year" type="numeric"/>
+            <column name="settlement_periods_per_year" type="numeric"/>
+            <column name="initial_liability_amount" type="numeric"/>
+            <column name="initial_rou_amount" type="numeric"/>
+            <column name="total_depreciation_periods" type="numeric"/>
+            <column name="lease_contract_id" type="numeric"/>
+            <column name="liability_currency_id" type="numeric"/>
+            <column name="rou_asset_currency_id" type="numeric"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

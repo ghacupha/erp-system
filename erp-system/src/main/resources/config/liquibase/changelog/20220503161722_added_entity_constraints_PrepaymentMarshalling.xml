@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity PrepaymentMarshalling.
+    -->
+    <changeSet id="20220503161722-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="prepayment_account_id"
+                                 baseTableName="prepayment_marshalling"
+                                 constraintName="fk_prepayment_marshalling__prepayment_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="prepayment_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="prepayment_marshalling_id"
+                                 baseTableName="rel_prepayment_marshalling__placeholder"
+                                 constraintName="fk_rel_prepayment_marshalling____prepayment_marshalling_85_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="prepayment_marshalling"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_prepayment_marshalling__placeholder"
+                                 constraintName="fk_rel_prepayment_marshalling__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>

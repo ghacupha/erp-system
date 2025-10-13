@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1718700392834-8">
+        <addColumn tableName="lease_liability_schedule_item">
+            <column name="lease_amortization_schedule_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718700392834-12">
+        <addForeignKeyConstraint baseColumnNames="lease_period_id" baseTableName="lease_liability_schedule_item" constraintName="FK3bl3dv4bithwvwltpg5vrbtrl" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_period" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718700392834-13">
+        <addForeignKeyConstraint baseColumnNames="lease_amortization_schedule_id" baseTableName="lease_liability_schedule_item" constraintName="FK58pk297qla3cs7s2n6oyk5lms" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_amortization_schedule" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718700392834-14">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_document_id" baseTableName="ifrs16lease_contract" constraintName="FK5yvrkf1pls8axxspgciks4tu0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="business_document" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1718700392834-17">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_calculations_id" baseTableName="ifrs16lease_contract" constraintName="FKhkm061g98hbwsmbh8cpddj2wl" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="business_document" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

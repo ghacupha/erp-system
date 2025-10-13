@@ -1,0 +1,25 @@
+{
+  "fields": [
+    {
+      "fieldName": "fiscalMonthStartDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "fiscalMonthEndDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "totalDepreciationAmount",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "infinite-scroll",
+  "name": "RouMonthlyDepreciationReportItem",
+  "changelogDate": "20240313103024",
+  "incrementalChangelog": false
+}

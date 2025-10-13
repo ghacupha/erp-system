@@ -1,0 +1,140 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <!--<changeSet author="edwin.njeru (generated)" id="1692262521830-8">
+        <createTable tableName="rel_depreciation_job_notice__placeholder">
+            <column name="depreciation_job_notice_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="placeholder_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>-->
+    <!--<changeSet author="edwin.njeru (generated)" id="1692262521830-9">
+        <createTable tableName="rel_depreciation_job_notice__universally_unique_mapping">
+            <column name="depreciation_job_notice_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="universally_unique_mapping_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>-->
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-17">
+        <addColumn tableName="depreciation_period">
+            <column name="fiscal_month_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-18">
+        <addColumn tableName="depreciation_period">
+            <column name="fiscal_quarter_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-19">
+        <addColumn tableName="depreciation_period">
+            <column name="fiscal_year_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-27">
+        <addForeignKeyConstraint baseColumnNames="fiscal_year_id" baseTableName="depreciation_period" constraintName="FK20ekm0ytrakgkt2o0aqob1f4q" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_year" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-28">
+        <addForeignKeyConstraint baseColumnNames="fiscal_month_id" baseTableName="depreciation_period" constraintName="FK2jbc61mp3bx8wfg1l2p3cl6ed" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_month" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-29">
+        <addForeignKeyConstraint baseColumnNames="fiscal_month_id" baseTableName="rel_fiscal_month__universally_unique_mapping" constraintName="FK3kk44op2o3ah6bxpq03osopgh" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_month" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-30">
+        <addForeignKeyConstraint baseColumnNames="fiscal_quarter_id" baseTableName="depreciation_period" constraintName="FK545qqihaoejub9dbyllgvmr4r" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_quarter" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-31">
+        <addForeignKeyConstraint baseColumnNames="created_by_id" baseTableName="fiscal_year" constraintName="FK5i3ii24kecvpuv1e50r8pqwqu" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-32">
+        <addForeignKeyConstraint baseColumnNames="placeholder_id" baseTableName="rel_fiscal_year__placeholder" constraintName="FK66pva5ndik415d934i1a1xefo" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="placeholder" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-33">
+        <addForeignKeyConstraint baseColumnNames="placeholder_id" baseTableName="rel_fiscal_quarter__placeholder" constraintName="FK7iyav759bhqd7utpxtghvbbrg" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="placeholder" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-34">
+        <addForeignKeyConstraint baseColumnNames="depreciation_job_notice_id" baseTableName="rel_depreciation_job_notice__placeholder" constraintName="FK7l34pxg10q8u4vfv1blwtl27n" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="depreciation_job_notice" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-35">
+        <addForeignKeyConstraint baseColumnNames="placeholder_id" baseTableName="rel_fiscal_month__placeholder" constraintName="FK8lyntyc7d4yn5w68i0p0rtx0f" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="placeholder" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-36">
+        <addForeignKeyConstraint baseColumnNames="fiscal_year_id" baseTableName="rel_fiscal_year__universally_unique_mapping" constraintName="FK8u876ddhs8yxvmxifhgjhrdon" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_year" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-37">
+        <addForeignKeyConstraint baseColumnNames="fiscal_quarter_id" baseTableName="rel_fiscal_quarter__placeholder" constraintName="FKasccls5muk15h0xrksvl6w44n" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_quarter" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-38">
+        <addForeignKeyConstraint baseColumnNames="fiscal_year_id" baseTableName="fiscal_quarter" constraintName="FKbrd2icd6076eyi6og1gpad1df" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_year" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-39">
+        <addForeignKeyConstraint baseColumnNames="universally_unique_mapping_id" baseTableName="rel_asset_registration__universally_unique_mapping" constraintName="FKc3qld7q0n98ytihlhwtpo298i" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="universally_unique_mapping" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-40">
+        <addForeignKeyConstraint baseColumnNames="fiscal_year_id" baseTableName="rel_fiscal_year__placeholder" constraintName="FKc8gfxwrsyu0m9f5mvjcftodbj" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_year" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-41">
+        <addForeignKeyConstraint baseColumnNames="created_by_id" baseTableName="depreciation_period" constraintName="FKek4u12oyfjiyooe290vi730xy" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-42">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id" baseTableName="rel_lease_contract__contract_metadata" constraintName="FKfy1ueuj29219e9bwwajk0pwi6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lease_contract" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-43">
+        <addForeignKeyConstraint baseColumnNames="fiscal_quarter_id" baseTableName="rel_fiscal_quarter__universally_unique_mapping" constraintName="FKgb533env4l8vdir77fhcr8t25" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_quarter" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-44">
+        <addForeignKeyConstraint baseColumnNames="fiscal_month_id" baseTableName="rel_fiscal_month__placeholder" constraintName="FKhlj45mmdjvtl1xtxqgojmugu4" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_month" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-45">
+        <addForeignKeyConstraint baseColumnNames="fiscal_year_id" baseTableName="fiscal_month" constraintName="FKibj06o04iovtg4d1cp7gs2pnu" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="fiscal_year" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-46">
+        <addForeignKeyConstraint baseColumnNames="settlement_requisition_id" baseTableName="rel_settlement_requisition__settlement" constraintName="FKjypbqghsx3b0rn97s3ddc5bkg" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement_requisition" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-47">
+        <addForeignKeyConstraint baseColumnNames="superintended_id" baseTableName="depreciation_job_notice" constraintName="FKl68pvusupi9aw1x7ckcn31wfh" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-48">
+        <addForeignKeyConstraint baseColumnNames="depreciation_job_notice_id" baseTableName="rel_depreciation_job_notice__universally_unique_mapping" constraintName="FKm8hrwb11rywyjx30i0ucrpk7b" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="depreciation_job_notice" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-49">
+        <addForeignKeyConstraint baseColumnNames="universally_unique_mapping_id" baseTableName="rel_fiscal_year__universally_unique_mapping" constraintName="FKmd11988c9wh3dhl2yrmhjgvt1" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="universally_unique_mapping" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-50">
+        <addForeignKeyConstraint baseColumnNames="settlement_id" baseTableName="rel_settlement_requisition__settlement" constraintName="FKnnfvl3bij994hykmjngrrpoe0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-51">
+        <addForeignKeyConstraint baseColumnNames="universally_unique_mapping_id" baseTableName="rel_depreciation_job_notice__universally_unique_mapping" constraintName="FKnrpvb6pv675k5x6k6dq1wd8wu" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="universally_unique_mapping" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-52">
+        <addForeignKeyConstraint baseColumnNames="depreciation_period_id" baseTableName="depreciation_job_notice" constraintName="FKntjm6v6rnllrky3gnsuu7ghrr" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="depreciation_period" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-53">
+        <addForeignKeyConstraint baseColumnNames="universally_unique_mapping_id" baseTableName="rel_fiscal_quarter__universally_unique_mapping" constraintName="FKo7new3ketn46t5scnphwau6c6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="universally_unique_mapping" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-54">
+        <addForeignKeyConstraint baseColumnNames="universally_unique_mapping_id" baseTableName="rel_fiscal_month__universally_unique_mapping" constraintName="FKoyfefuxc00gj0ed7507qaeh9e" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="universally_unique_mapping" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-55">
+        <addForeignKeyConstraint baseColumnNames="depreciation_batch_sequence_id" baseTableName="depreciation_job_notice" constraintName="FKpw1esplunqt6uki5v9dv19np6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="depreciation_batch_sequence" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-56">
+        <addForeignKeyConstraint baseColumnNames="last_updated_by_id" baseTableName="fiscal_year" constraintName="FKqdjoekvs7sety9jlvrkacgvlr" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-57">
+        <addForeignKeyConstraint baseColumnNames="depreciation_job_id" baseTableName="depreciation_job_notice" constraintName="FKqho1rx0n38eioht65waj89be3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="depreciation_job" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1692262521830-58">
+        <addForeignKeyConstraint baseColumnNames="placeholder_id" baseTableName="rel_depreciation_job_notice__placeholder" constraintName="FKthtgjgn76qrmnsn9o9c5l42ur" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="placeholder" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

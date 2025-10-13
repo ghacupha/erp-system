@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity PrepaymentCompilationRequest.
+    -->
+    <changeSet id="20231121114011-2" author="jhipster">
+
+        <!--<addForeignKeyConstraint baseColumnNames="prepayment_compilation_request_id"
+                                 baseTableName="rel_prepayment_compilation_request__placeholder"
+                                 constraintName="fk_rel_prepayment_compilation_r__prepayment_compilation_r_88_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="prepayment_compilation_request"/>-->
+
+        <!--<addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_prepayment_compilation_request__placeholder"
+                                 constraintName="fk_rel_prepayment_compilation_r__placeholder_69_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>-->
+    </changeSet>
+</databaseChangeLog>

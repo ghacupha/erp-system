@@ -1,0 +1,40 @@
+{
+  "fields": [
+    {
+      "fieldName": "timeOfRequest",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "compilationStatus",
+      "fieldType": "CompilationStatusTypes",
+      "fieldValues": "STARTED,IN_PROGRESS,COMPLETE,REVERSED"
+    },
+    {
+      "fieldName": "itemsProcessed",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "prepaymentCompilationRequest"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "PrepaymentCompilationRequest",
+  "changelogDate": "20231121114011",
+  "incrementalChangelog": false
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity WeeklyCashHolding.
+    -->
+    <changeSet id="20231004061118-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="bank_code_id"
+                                 baseTableName="weekly_cash_holding"
+                                 constraintName="fk_weekly_cash_holding__bank_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="institution_code"/>
+
+        <addForeignKeyConstraint baseColumnNames="branch_id_id"
+                                 baseTableName="weekly_cash_holding"
+                                 constraintName="fk_weekly_cash_holding__branch_id_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="bank_branch_code"/>
+
+        <addForeignKeyConstraint baseColumnNames="sub_county_code_id"
+                                 baseTableName="weekly_cash_holding"
+                                 constraintName="fk_weekly_cash_holding__sub_county_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="county_sub_county_code"/>
+
+        <addForeignKeyConstraint baseColumnNames="denomination_id"
+                                 baseTableName="weekly_cash_holding"
+                                 constraintName="fk_weekly_cash_holding__denomination_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="kenyan_currency_denomination"/>
+    </changeSet>
+</databaseChangeLog>

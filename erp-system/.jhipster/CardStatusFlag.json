@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "cardStatusFlag",
+      "fieldType": "FlagCodes",
+      "fieldValues": "Y,N",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "cardStatusFlagDescription",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "cardStatusFlagDetails",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceClass",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CardStatusFlag",
+  "changelogDate": "20230912112004",
+  "incrementalChangelog": false
+}
