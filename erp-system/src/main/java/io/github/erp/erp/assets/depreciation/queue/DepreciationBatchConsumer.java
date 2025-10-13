@@ -21,6 +21,7 @@ import io.github.erp.domain.enumeration.DepreciationBatchStatusType;
 import io.github.erp.domain.enumeration.DepreciationJobStatusType;
 import io.github.erp.erp.assets.depreciation.BatchSequenceDepreciationService;
 import io.github.erp.erp.assets.depreciation.DepreciationEntrySinkProcessor;
+import io.github.erp.erp.assets.depreciation.DepreciationNetBookValueService;
 import io.github.erp.erp.assets.depreciation.context.DepreciationAmountContext;
 import io.github.erp.erp.assets.depreciation.context.DepreciationJobContext;
 import io.github.erp.erp.assets.depreciation.exceptions.UnexpectedDepreciationDataset;
@@ -48,14 +49,22 @@ public class DepreciationBatchConsumer {
     private final DepreciationBatchSequenceService depreciationBatchSequenceService;
 
     private final DepreciationEntrySinkProcessor depreciationEntrySinkProcessor;
+    private final DepreciationNetBookValueService depreciationNetBookValueService;
 
     private final Lock depreciationLock = new ReentrantLock();
 
-    public DepreciationBatchConsumer(BatchSequenceDepreciationService batchSequenceDepreciationService, DepreciationJobService depreciationJobService, DepreciationBatchSequenceService depreciationBatchSequenceService, DepreciationEntrySinkProcessor depreciationEntrySinkProcessor) {
+    public DepreciationBatchConsumer(
+        BatchSequenceDepreciationService batchSequenceDepreciationService,
+        DepreciationJobService depreciationJobService,
+        DepreciationBatchSequenceService depreciationBatchSequenceService,
+        DepreciationEntrySinkProcessor depreciationEntrySinkProcessor,
+        DepreciationNetBookValueService depreciationNetBookValueService
+    ) {
         this.batchSequenceDepreciationService = batchSequenceDepreciationService;
         this.depreciationJobService = depreciationJobService;
         this.depreciationBatchSequenceService = depreciationBatchSequenceService;
         this.depreciationEntrySinkProcessor = depreciationEntrySinkProcessor;
+        this.depreciationNetBookValueService = depreciationNetBookValueService;
     }
 
     @KafkaListener(topics = "depreciation_batch_topic", groupId = "erp-system-depreciation", concurrency = "8")
@@ -103,6 +112,7 @@ public class DepreciationBatchConsumer {
 
                 if (message.isLastBatch()) {
                     depreciationEntrySinkProcessor.flushRemainingItems(message.getContextInstance().getDepreciationJobCountDownContextId());
+                    depreciationNetBookValueService.flushPendingEntries();
 
                     // TODO check possible duplication updateDepreciationJobCompleted(message, numberOfProcessed);
                 }
@@ -119,6 +129,7 @@ public class DepreciationBatchConsumer {
                     int itemsProcessed = amountContext.getNumberOfProcessedItems();
 
                     depreciationEntrySinkProcessor.flushRemainingItems(message.getContextInstance().getDepreciationJobCountDownContextId());
+                    depreciationNetBookValueService.flushPendingEntries();
 
                     updateDepreciationJobCompleted(message, itemsProcessed);
 
