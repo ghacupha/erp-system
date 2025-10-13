@@ -32,6 +32,7 @@ import io.github.erp.erp.assets.depreciation.exceptions.FiscalMonthNotConfigured
 import io.github.erp.erp.assets.depreciation.exceptions.ServiceOutletNotConfiguredException;
 import io.github.erp.erp.assets.depreciation.model.DepreciationArtefact;
 import io.github.erp.erp.assets.depreciation.model.DepreciationBatchMessage;
+import io.github.erp.erp.assets.depreciation.DepreciationNetBookValueService;
 import io.github.erp.internal.service.assets.InternalAssetDisposalService;
 import io.github.erp.internal.service.assets.InternalAssetWriteOffService;
 import io.github.erp.service.*;
@@ -89,6 +90,7 @@ public class BatchSequenceDepreciationService {
 
     private final DepreciationEntryMapper depreciationEntryMapper;
     private final DepreciationEntrySinkProcessor depreciationEntrySinkProcessor;
+    private final DepreciationNetBookValueService depreciationNetBookValueService;
 
     private final InternalAssetDisposalService internalAssetDisposalService;
     private final InternalAssetWriteOffService internalAssetWriteOffService;
@@ -108,6 +110,7 @@ public class BatchSequenceDepreciationService {
         DepreciationBatchSequenceService batchSequenceService,
         DepreciationEntryMapper depreciationEntryMapper,
         DepreciationEntrySinkProcessor depreciationEntrySinkProcessor,
+        DepreciationNetBookValueService depreciationNetBookValueService,
         InternalAssetDisposalService internalAssetDisposalService,
         InternalAssetWriteOffService internalAssetWriteOffService,
         @Qualifier("aggregateAssetCostAdjustmentService") AdjustedCostService adjustedCostService) {
@@ -123,6 +126,7 @@ public class BatchSequenceDepreciationService {
         this.batchSequenceService = batchSequenceService;
         this.depreciationEntryMapper = depreciationEntryMapper;
         this.depreciationEntrySinkProcessor = depreciationEntrySinkProcessor;
+        this.depreciationNetBookValueService = depreciationNetBookValueService;
         this.internalAssetDisposalService = internalAssetDisposalService;
         this.internalAssetWriteOffService = internalAssetWriteOffService;
         this.adjustedCostService = adjustedCostService;
@@ -310,6 +314,17 @@ public class BatchSequenceDepreciationService {
         depreciationEntry.setCapitalizationDate(depreciationArtefact.getCapitalizationDate());
 
         depreciationEntrySinkProcessor.addDepreciationEntry(depreciationEntryMapper.toEntity(depreciationEntry), depreciationJobCountDownContextId);
+
+        depreciationNetBookValueService.enqueueNetBookValueEntry(
+            depreciationArtefact,
+            assetRegistration,
+            depreciationPeriod,
+            fiscalMonth,
+            depreciationMethod,
+            assetCategory,
+            serviceOutlet,
+            depreciationBatchSequenceDTO
+        );
     }
 
     private boolean serviceOutletNotConfigured(DepreciationBatchSequenceDTO batchSequence, DepreciationJobDTO depreciationJob, DepreciationPeriodDTO depreciationPeriod, io.github.erp.service.dto.AssetRegistrationDTO assetRegistration) {
