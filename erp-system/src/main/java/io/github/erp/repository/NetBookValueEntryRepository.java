@@ -19,6 +19,7 @@ package io.github.erp.repository;
  */
 
 import io.github.erp.domain.NetBookValueEntry;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -45,4 +46,9 @@ public interface NetBookValueEntryRepository extends JpaRepository<NetBookValueE
         "select netBookValueEntry from NetBookValueEntry netBookValueEntry left join fetch netBookValueEntry.placeholders where netBookValueEntry.id =:id"
     )
     Optional<NetBookValueEntry> findOneWithEagerRelationships(@Param("id") Long id);
+
+    Optional<NetBookValueEntry> findTopByAssetRegistrationIdAndDepreciationPeriodEndDateBeforeOrderByDepreciationPeriodEndDateDesc(
+        Long assetRegistrationId,
+        LocalDate depreciationPeriodEndDate
+    );
 }
