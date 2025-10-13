@@ -1,0 +1,13 @@
+node_modules/
+src/main/docker/
+src/main/webapp/content/datatables/
+src/test/javascript/protractor.conf.js
+src/test/javascript/cypress/
+jest.conf.js
+webpack/
+target/
+build/
+dist/
+node/
+postcss.config.js
+server.js

@@ -1,0 +1,215 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-rou-monthly-depreciation-report-heading" data-cy="RouMonthlyDepreciationReportCreateUpdateHeading">
+        Create or edit a Rou Monthly Depreciation Report
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_requestId">Request Id</label>
+          <input type="text" class="form-control" name="requestId" id="field_requestId" data-cy="requestId" formControlName="requestId" />
+          <div *ngIf="editForm.get('requestId')!.invalid && (editForm.get('requestId')!.dirty || editForm.get('requestId')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('requestId')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_timeOfRequest">Time Of Request</label>
+          <div class="d-flex">
+            <input
+              id="field_timeOfRequest"
+              data-cy="timeOfRequest"
+              type="datetime-local"
+              class="form-control"
+              name="timeOfRequest"
+              formControlName="timeOfRequest"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          <div
+            *ngIf="
+              editForm.get('timeOfRequest')!.invalid && (editForm.get('timeOfRequest')!.dirty || editForm.get('timeOfRequest')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('timeOfRequest')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('timeOfRequest')?.errors?.ZonedDateTimelocal">
+              This field should be a date and time.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportIsCompiled">Report Is Compiled</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="reportIsCompiled"
+            id="field_reportIsCompiled"
+            data-cy="reportIsCompiled"
+            formControlName="reportIsCompiled"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileChecksum">File Checksum</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fileChecksum"
+            id="field_fileChecksum"
+            data-cy="fileChecksum"
+            formControlName="fileChecksum"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_tampered">Tampered</label>
+          <input type="checkbox" class="form-check" name="tampered" id="field_tampered" data-cy="tampered" formControlName="tampered" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_filename">Filename</label>
+          <input type="text" class="form-control" name="filename" id="field_filename" data-cy="filename" formControlName="filename" />
+          <div *ngIf="editForm.get('filename')!.invalid && (editForm.get('filename')!.dirty || editForm.get('filename')!.touched)"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportParameters">Report Parameters</label>
+          <input
+            type="text"
+            class="form-control"
+            name="reportParameters"
+            id="field_reportParameters"
+            data-cy="reportParameters"
+            formControlName="reportParameters"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportFile">Report File</label>
+          <div>
+            <div *ngIf="editForm.get('reportFile')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('reportFile')!.value, editForm.get('reportFileContentType')!.value)"
+                >open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('reportFileContentType')!.value }}, {{ byteSize(editForm.get('reportFile')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ reportFile: null }); editForm.patchValue({ reportFileContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_reportFile" data-cy="reportFile" (change)="setFileData($event, 'reportFile', false)" />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="reportFile"
+            id="field_reportFile"
+            data-cy="reportFile"
+            formControlName="reportFile"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="reportFileContentType"
+            id="field_reportFileContentType"
+            formControlName="reportFileContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_requestedBy">Requested By</label>
+          <select class="form-control" id="field_requestedBy" data-cy="requestedBy" name="requestedBy" formControlName="requestedBy">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                applicationUserOption.id === editForm.get('requestedBy')!.value?.id
+                  ? editForm.get('requestedBy')!.value
+                  : applicationUserOption
+              "
+              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
+            >
+              {{ applicationUserOption.applicationIdentity }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportingYear">Reporting Year</label>
+          <select
+            class="form-control"
+            id="field_reportingYear"
+            data-cy="reportingYear"
+            name="reportingYear"
+            formControlName="reportingYear"
+          >
+            <option *ngIf="!editForm.get('reportingYear')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                fiscalYearOption.id === editForm.get('reportingYear')!.value?.id ? editForm.get('reportingYear')!.value : fiscalYearOption
+              "
+              *ngFor="let fiscalYearOption of fiscalYearsSharedCollection; trackBy: trackFiscalYearById"
+            >
+              {{ fiscalYearOption.fiscalYearCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['reportingYear'])!.invalid && (editForm.get(['reportingYear'])!.dirty || editForm.get(['reportingYear'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['reportingYear'])?.errors?.required"> This field is required. </small>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

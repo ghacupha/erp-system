@@ -1,0 +1,115 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="rouDepreciationEntry">
+      <h2 data-cy="rouDepreciationEntryDetailsHeading"><span>Rou Depreciation Entry</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ rouDepreciationEntry.id }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ rouDepreciationEntry.description }}</span>
+        </dd>
+        <dt><span>Depreciation Amount</span></dt>
+        <dd>
+          <span>{{ rouDepreciationEntry.depreciationAmount }}</span>
+        </dd>
+        <dt><span>Outstanding Amount</span></dt>
+        <dd>
+          <span>{{ rouDepreciationEntry.outstandingAmount }}</span>
+        </dd>
+        <dt><span>Rou Asset Identifier</span></dt>
+        <dd>
+          <span>{{ rouDepreciationEntry.rouAssetIdentifier }}</span>
+        </dd>
+        <dt><span>Rou Depreciation Identifier</span></dt>
+        <dd>
+          <span>{{ rouDepreciationEntry.rouDepreciationIdentifier }}</span>
+        </dd>
+        <dt><span>Sequence Number</span></dt>
+        <dd>
+          <span>{{ rouDepreciationEntry.sequenceNumber }}</span>
+        </dd>
+        <dt><span>Invalidated</span></dt>
+        <dd>
+          <span>{{ rouDepreciationEntry.invalidated }}</span>
+        </dd>
+        <dt><span>Debit Account</span></dt>
+        <dd>
+          <div *ngIf="rouDepreciationEntry.debitAccount">
+            <a [routerLink]="['/transaction-account', rouDepreciationEntry.debitAccount?.id, 'view']">{{
+              rouDepreciationEntry.debitAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Credit Account</span></dt>
+        <dd>
+          <div *ngIf="rouDepreciationEntry.creditAccount">
+            <a [routerLink]="['/transaction-account', rouDepreciationEntry.creditAccount?.id, 'view']">{{
+              rouDepreciationEntry.creditAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Asset Category</span></dt>
+        <dd>
+          <div *ngIf="rouDepreciationEntry.assetCategory">
+            <a [routerLink]="['/asset-category', rouDepreciationEntry.assetCategory?.id, 'view']">{{
+              rouDepreciationEntry.assetCategory?.assetCategoryName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Contract</span></dt>
+        <dd>
+          <div *ngIf="rouDepreciationEntry.leaseContract">
+            <a [routerLink]="['/ifrs-16-lease-contract', rouDepreciationEntry.leaseContract?.id, 'view']">{{
+              rouDepreciationEntry.leaseContract?.bookingId
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Rou Metadata</span></dt>
+        <dd>
+          <div *ngIf="rouDepreciationEntry.rouMetadata">
+            <a [routerLink]="['/rou-model-metadata', rouDepreciationEntry.rouMetadata?.id, 'view']">{{
+              rouDepreciationEntry.rouMetadata?.modelTitle
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/rou-depreciation-entry', rouDepreciationEntry.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

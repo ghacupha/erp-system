@@ -1,0 +1,61 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<h3 id="cacheMetrics">Cache statistics</h3>
+
+<div class="table-responsive" *ngIf="!updating && cacheMetrics">
+  <table class="table table-striped" aria-describedby="cacheMetrics">
+    <thead>
+      <tr>
+        <th scope="col">Cache name</th>
+        <th scope="col" class="text-right">Cache Hits</th>
+        <th scope="col" class="text-right">Cache Misses</th>
+        <th scope="col" class="text-right">Cache Gets</th>
+        <th scope="col" class="text-right">Cache Puts</th>
+        <th scope="col" class="text-right">Cache Removals</th>
+        <th scope="col" class="text-right">Cache Evictions</th>
+        <th scope="col" class="text-right">Cache Hit %</th>
+        <th scope="col" class="text-right">Cache Miss %</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let entry of cacheMetrics | keyvalue">
+        <td>{{ entry.key }}</td>
+        <td class="text-right">{{ entry.value['cache.gets.hit'] }}</td>
+        <td class="text-right">{{ entry.value['cache.gets.miss'] }}</td>
+        <td class="text-right">{{ entry.value['cache.gets.hit'] + entry.value['cache.gets.miss'] }}</td>
+        <td class="text-right">{{ entry.value['cache.puts'] }}</td>
+        <td class="text-right">{{ entry.value['cache.removals'] }}</td>
+        <td class="text-right">{{ entry.value['cache.evictions'] }}</td>
+        <td class="text-right">
+          {{
+            filterNaN((100 * entry.value['cache.gets.hit']) / (entry.value['cache.gets.hit'] + entry.value['cache.gets.miss']))
+              | number: '1.0-4'
+          }}
+        </td>
+        <td class="text-right">
+          {{
+            filterNaN((100 * entry.value['cache.gets.miss']) / (entry.value['cache.gets.hit'] + entry.value['cache.gets.miss']))
+              | number: '1.0-4'
+          }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

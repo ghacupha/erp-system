@@ -1,0 +1,138 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="iFRS16LeaseContract">
+      <h2 data-cy="iFRS16LeaseContractDetailsHeading"><span>IFRS 16 Lease Contract</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ iFRS16LeaseContract.id }}</span>
+        </dd>
+        <dt><span>Booking Id</span></dt>
+        <dd>
+          <span>{{ iFRS16LeaseContract.bookingId }}</span>
+        </dd>
+        <dt><span>Lease Title</span></dt>
+        <dd>
+          <span>{{ iFRS16LeaseContract.leaseTitle }}</span>
+        </dd>
+        <dt><span>Short Title</span></dt>
+        <dd>
+          <span>{{ iFRS16LeaseContract.shortTitle }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ iFRS16LeaseContract.description }}</span>
+        </dd>
+        <dt><span>Inception Date</span></dt>
+        <dd>
+          <span>{{ iFRS16LeaseContract.inceptionDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Commencement Date</span></dt>
+        <dd>
+          <span>{{ iFRS16LeaseContract.commencementDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Serial Number</span></dt>
+        <dd>
+          <span>{{ iFRS16LeaseContract.serialNumber }}</span>
+        </dd>
+        <dt><span>Superintendent Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="iFRS16LeaseContract.superintendentServiceOutlet">
+            <a [routerLink]="['/service-outlet', iFRS16LeaseContract.superintendentServiceOutlet?.id, 'view']">{{
+              iFRS16LeaseContract.superintendentServiceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Main Dealer</span></dt>
+        <dd>
+          <div *ngIf="iFRS16LeaseContract.mainDealer">
+            <a [routerLink]="['/dealer', iFRS16LeaseContract.mainDealer?.id, 'view']">{{ iFRS16LeaseContract.mainDealer?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>First Reporting Period</span></dt>
+        <dd>
+          <div *ngIf="iFRS16LeaseContract.firstReportingPeriod">
+            <a [routerLink]="['/fiscal-month', iFRS16LeaseContract.firstReportingPeriod?.id, 'view']">{{
+              iFRS16LeaseContract.firstReportingPeriod?.fiscalMonthCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Last Reporting Period</span></dt>
+        <dd>
+          <div *ngIf="iFRS16LeaseContract.lastReportingPeriod">
+            <a [routerLink]="['/fiscal-month', iFRS16LeaseContract.lastReportingPeriod?.id, 'view']">{{
+              iFRS16LeaseContract.lastReportingPeriod?.fiscalMonthCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Contract Document</span></dt>
+        <dd>
+          <div *ngIf="iFRS16LeaseContract.leaseContractDocument">
+            <a [routerLink]="['/business-document', iFRS16LeaseContract.leaseContractDocument?.id, 'view']">{{
+              iFRS16LeaseContract.leaseContractDocument?.documentTitle
+              }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Contract Calculations</span></dt>
+        <dd>
+          <div *ngIf="iFRS16LeaseContract.leaseContractCalculations">
+            <a [routerLink]="['/business-document', iFRS16LeaseContract.leaseContractCalculations?.id, 'view']">{{
+              iFRS16LeaseContract.leaseContractCalculations?.documentTitle
+              }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button
+        type="submit"
+        (click)="previousState()"
+        class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      &nbsp;
+      <button
+        type="button"
+        (click)='editButtonEvent(iFRS16LeaseContract)'
+        [routerLink]="['/ifrs-16-lease-contract', iFRS16LeaseContract.id, 'edit']"
+        class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+
+      &nbsp;
+      <button
+        type="button"
+        (click)='copyButtonEvent(iFRS16LeaseContract)'
+        [routerLink]="['/ifrs-16-lease-contract', iFRS16LeaseContract.id, 'copy']"
+        class="btn btn-primary">
+        <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
+      </button>
+    </div>
+  </div>
+</div>

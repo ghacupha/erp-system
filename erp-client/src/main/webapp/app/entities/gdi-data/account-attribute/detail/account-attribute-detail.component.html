@@ -1,0 +1,119 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="accountAttribute">
+      <h2 data-cy="accountAttributeDetailsHeading"><span>Account Attribute</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ accountAttribute.id }}</span>
+        </dd>
+        <dt><span>Reporting Date</span></dt>
+        <dd>
+          <span>{{ accountAttribute.reportingDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Customer Number</span></dt>
+        <dd>
+          <span>{{ accountAttribute.customerNumber }}</span>
+        </dd>
+        <dt><span>Account Contract Number</span></dt>
+        <dd>
+          <span>{{ accountAttribute.accountContractNumber }}</span>
+        </dd>
+        <dt><span>Account Name</span></dt>
+        <dd>
+          <span>{{ accountAttribute.accountName }}</span>
+        </dd>
+        <dt><span>Account Opening Date</span></dt>
+        <dd>
+          <span>{{ accountAttribute.accountOpeningDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Account Closing Date</span></dt>
+        <dd>
+          <span>{{ accountAttribute.accountClosingDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Debit Interest Rate</span></dt>
+        <dd>
+          <span>{{ accountAttribute.debitInterestRate }}</span>
+        </dd>
+        <dt><span>Credit Interest Rate</span></dt>
+        <dd>
+          <span>{{ accountAttribute.creditInterestRate }}</span>
+        </dd>
+        <dt><span>Sanctioned Account Limit Fcy</span></dt>
+        <dd>
+          <span>{{ accountAttribute.sanctionedAccountLimitFcy }}</span>
+        </dd>
+        <dt><span>Sanctioned Account Limit Lcy</span></dt>
+        <dd>
+          <span>{{ accountAttribute.sanctionedAccountLimitLcy }}</span>
+        </dd>
+        <dt><span>Account Status Change Date</span></dt>
+        <dd>
+          <span>{{ accountAttribute.accountStatusChangeDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Expiry Date</span></dt>
+        <dd>
+          <span>{{ accountAttribute.expiryDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Bank Code</span></dt>
+        <dd>
+          <div *ngIf="accountAttribute.bankCode">
+            <a [routerLink]="['/institution-code', accountAttribute.bankCode?.id, 'view']">{{
+              accountAttribute.bankCode?.institutionCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Branch Code</span></dt>
+        <dd>
+          <div *ngIf="accountAttribute.branchCode">
+            <a [routerLink]="['/bank-branch-code', accountAttribute.branchCode?.id, 'view']">{{
+              accountAttribute.branchCode?.branchCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Account Ownership Type</span></dt>
+        <dd>
+          <div *ngIf="accountAttribute.accountOwnershipType">
+            <a [routerLink]="['/account-ownership-type', accountAttribute.accountOwnershipType?.id, 'view']">{{
+              accountAttribute.accountOwnershipType?.accountOwnershipType
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/account-attribute', accountAttribute.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

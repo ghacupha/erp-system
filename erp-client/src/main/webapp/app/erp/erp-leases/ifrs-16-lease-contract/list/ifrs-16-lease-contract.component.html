@@ -1,0 +1,216 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="IFRS16LeaseContractHeading">
+    <span>IFRS 16 Lease Contracts</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-ifrs-16-lease-contract"
+        [routerLink]="['/ifrs-16-lease-contract/new']"
+        (click)='createButtonEvent()'
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new IFRS 16 Lease Contract </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="iFRS16LeaseContracts?.length === 0">
+    <span>No iFRS16LeaseContracts found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="iFRS16LeaseContracts && iFRS16LeaseContracts.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="bookingId"><span>Booking Id</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="leaseTitle"><span>Lease Title</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="shortTitle"><span>Short Title</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="inceptionDate"><span>Inception Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="commencementDate"><span>Commencement Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="superintendentServiceOutlet.outletCode">
+            <span>Superintendent Service Outlet</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="mainDealer.dealerName"><span>Main Dealer</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="firstReportingPeriod.fiscalMonthCode">
+            <span>First Reporting Period</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="lastReportingPeriod.fiscalMonthCode">
+            <span>Last Reporting Period</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="leaseContractDocument.documentTitle">
+            <span>Lease Contract Document</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="leaseContractCalculations.documentTitle">
+            <span>Lease Contract Calculations</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let iFRS16LeaseContract of iFRS16LeaseContracts; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/ifrs-16-lease-contract', iFRS16LeaseContract.id, 'view']">{{ iFRS16LeaseContract.id }}</a>
+          </td>
+          <td>{{ iFRS16LeaseContract.bookingId }}</td>
+          <td>{{ iFRS16LeaseContract.leaseTitle }}</td>
+          <td>{{ iFRS16LeaseContract.shortTitle }}</td>
+          <td>{{ iFRS16LeaseContract.description }}</td>
+          <td>{{ iFRS16LeaseContract.inceptionDate | formatMediumDate }}</td>
+          <td>{{ iFRS16LeaseContract.commencementDate | formatMediumDate }}</td>
+          <td>
+            <div *ngIf="iFRS16LeaseContract.superintendentServiceOutlet">
+              <a [routerLink]="['/service-outlet', iFRS16LeaseContract.superintendentServiceOutlet?.id, 'view']">{{
+                iFRS16LeaseContract.superintendentServiceOutlet?.outletCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="iFRS16LeaseContract.mainDealer">
+              <a [routerLink]="['/dealer', iFRS16LeaseContract.mainDealer?.id, 'view']">{{ iFRS16LeaseContract.mainDealer?.dealerName }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="iFRS16LeaseContract.firstReportingPeriod">
+              <a [routerLink]="['/fiscal-month', iFRS16LeaseContract.firstReportingPeriod?.id, 'view']">{{
+                iFRS16LeaseContract.firstReportingPeriod?.fiscalMonthCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="iFRS16LeaseContract.lastReportingPeriod">
+              <a [routerLink]="['/fiscal-month', iFRS16LeaseContract.lastReportingPeriod?.id, 'view']">{{
+                iFRS16LeaseContract.lastReportingPeriod?.fiscalMonthCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="iFRS16LeaseContract.leaseContractDocument">
+              <a [routerLink]="['/business-document', iFRS16LeaseContract.leaseContractDocument?.id, 'view']">{{
+                iFRS16LeaseContract.leaseContractDocument?.documentTitle
+                }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="iFRS16LeaseContract.leaseContractCalculations">
+              <a [routerLink]="['/business-document', iFRS16LeaseContract.leaseContractCalculations?.id, 'view']">{{
+                iFRS16LeaseContract.leaseContractCalculations?.documentTitle
+                }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/ifrs-16-lease-contract', iFRS16LeaseContract.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </button>
+
+              &nbsp;
+              <button
+                type="submit"
+                [routerLink]="['/ifrs-16-lease-contract', iFRS16LeaseContract.id, 'edit']"
+                (click)='editButtonEvent(iFRS16LeaseContract)'
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </button>
+
+              &nbsp;
+              <button
+                type="submit"
+                [routerLink]="['/ifrs-16-lease-contract', iFRS16LeaseContract.id, 'copy']"
+                (click)='copyButtonEvent(iFRS16LeaseContract)'
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </button>
+
+              &nbsp;
+              <button type="submit" (click)="delete(iFRS16LeaseContract)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </button>
+
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="iFRS16LeaseContracts && iFRS16LeaseContracts.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

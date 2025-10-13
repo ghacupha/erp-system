@@ -1,0 +1,86 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="rouDepreciationPostingReport">
+      <h2 data-cy="rouDepreciationPostingReportDetailsHeading"><span>Rou Depreciation Posting Report</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ rouDepreciationPostingReport.id }}</span>
+        </dd>
+        <dt><span>Time Of Request</span></dt>
+        <dd>
+          <span>{{ rouDepreciationPostingReport.timeOfRequest | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span *ngIf='rouDepreciationPostingReport.tampered'>Tampered</span></dt>
+        <dd>
+          <span *ngIf='rouDepreciationPostingReport.tampered'>{{ rouDepreciationPostingReport.tampered }}</span>
+        </dd>
+        <dt><span>Report Parameters</span></dt>
+        <dd>
+          <span>{{ rouDepreciationPostingReport.reportParameters }}</span>
+        </dd>
+        <dt><span>Report File</span></dt>
+        <dd>
+          <div *ngIf="rouDepreciationPostingReport.reportFile">
+            <a (click)="openFile(rouDepreciationPostingReport.reportFile, rouDepreciationPostingReport.reportFileContentType)">open</a>
+            {{ rouDepreciationPostingReport.reportFileContentType }}, {{ byteSize(rouDepreciationPostingReport.reportFile) }}
+          </div>
+        </dd>
+        <dt><span>Lease Period</span></dt>
+        <dd>
+          <div *ngIf="rouDepreciationPostingReport.leasePeriod">
+            <a [routerLink]="['/lease-period', rouDepreciationPostingReport.leasePeriod?.id, 'view']">{{
+              rouDepreciationPostingReport.leasePeriod?.periodCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Requested By</span></dt>
+        <dd>
+          <div *ngIf="rouDepreciationPostingReport.requestedBy">
+            <a [routerLink]="['/application-user', rouDepreciationPostingReport.requestedBy?.id, 'view']">{{
+              rouDepreciationPostingReport.requestedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/rou-depreciation-posting-report', rouDepreciationPostingReport.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

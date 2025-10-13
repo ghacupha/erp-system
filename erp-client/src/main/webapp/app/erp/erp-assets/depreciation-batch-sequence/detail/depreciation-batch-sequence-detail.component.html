@@ -1,0 +1,95 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="depreciationBatchSequence">
+      <h2 data-cy="depreciationBatchSequenceDetailsHeading"><span>Depreciation Batch Sequence</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.id }}</span>
+        </dd>
+        <dt><span>Start Index</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.startIndex }}</span>
+        </dd>
+        <dt><span>End Index</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.endIndex }}</span>
+        </dd>
+        <dt><span>Created At</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.createdAt | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Depreciation Batch Status</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.depreciationBatchStatus }}</span>
+        </dd>
+        <dt><span>Batch Size</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.batchSize }}</span>
+        </dd>
+        <dt><span>Processed Items</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.processedItems }}</span>
+        </dd>
+        <dt><span>Sequence Number</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.sequenceNumber }}</span>
+        </dd>
+        <dt><span>Is Last Batch</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.isLastBatch }}</span>
+        </dd>
+        <dt><span>Processing Time</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.processingTime | duration }} ({{ depreciationBatchSequence.processingTime }})</span>
+        </dd>
+        <dt><span>Total Items</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.totalItems }}</span>
+        </dd>
+        <dt><span>Depreciation Job</span></dt>
+        <dd>
+          <div *ngIf="depreciationBatchSequence.depreciationJob">
+            <a [routerLink]="['/depreciation-job', depreciationBatchSequence.depreciationJob?.id, 'view']">{{
+              depreciationBatchSequence.depreciationJob?.id
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/depreciation-batch-sequence', depreciationBatchSequence.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

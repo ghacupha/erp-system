@@ -1,0 +1,173 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="WorkProjectRegisterHeading">
+    <span>Work Project Registers</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-work-project-register"
+        [routerLink]="['/work-project-register/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new Work Project Register </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="workProjectRegisters?.length === 0">
+    <span>No workProjectRegisters found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="workProjectRegisters && workProjectRegisters.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="catalogueNumber">
+            <span>Catalogue Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="projectTitle"><span>Project Title</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="details"><span>Details</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="totalProjectCost"><span>Total Project Cost</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="additionalNotes">
+            <span>Additional Notes</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
+            <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let workProjectRegister of workProjectRegisters; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/work-project-register', workProjectRegister.id, 'view']">{{ workProjectRegister.id }}</a>
+          </td>
+          <td>{{ workProjectRegister.catalogueNumber }}</td>
+          <td>{{ workProjectRegister.projectTitle }}</td>
+          <td>{{ workProjectRegister.description }}</td>
+          <td>
+            <a *ngIf="workProjectRegister.details" (click)="openFile(workProjectRegister.details, workProjectRegister.detailsContentType)"
+              >open</a
+            >
+            <span *ngIf="workProjectRegister.details"
+              >{{ workProjectRegister.detailsContentType }}, {{ byteSize(workProjectRegister.details) }}</span
+            >
+          </td>
+          <td>{{ workProjectRegister.totalProjectCost | currency }}</td>
+          <td>
+            <a
+              *ngIf="workProjectRegister.additionalNotes"
+              (click)="openFile(workProjectRegister.additionalNotes, workProjectRegister.additionalNotesContentType)"
+              >open</a
+            >
+            <span *ngIf="workProjectRegister.additionalNotes"
+              >{{ workProjectRegister.additionalNotesContentType }}, {{ byteSize(workProjectRegister.additionalNotes) }}</span
+            >
+          </td>
+          <td>
+            <div *ngIf="workProjectRegister.settlementCurrency">
+              <a [routerLink]="['/settlement-currency', workProjectRegister.settlementCurrency?.id, 'view']">{{
+                workProjectRegister.settlementCurrency?.iso4217CurrencyCode
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/work-project-register', workProjectRegister.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/work-project-register', workProjectRegister.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(workProjectRegister)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="workProjectRegisters && workProjectRegisters.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

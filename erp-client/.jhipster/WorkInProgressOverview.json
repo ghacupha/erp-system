@@ -1,0 +1,28 @@
+{
+  "clientRootFolder": "wip",
+  "fields": [
+    {
+      "fieldName": "numberOfItems",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "instalmentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalTransferAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "outstandingAmount",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [],
+  "service": "no",
+  "readOnly": true,
+  "pagination": "pagination",
+  "name": "WorkInProgressOverview",
+  "changelogDate": "20231114132844",
+  "incrementalChangelog": false
+}

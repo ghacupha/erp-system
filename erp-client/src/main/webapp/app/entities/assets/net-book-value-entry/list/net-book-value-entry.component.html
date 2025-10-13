@@ -1,0 +1,195 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="NetBookValueEntryHeading">
+    <span>Net Book Value Entries</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-net-book-value-entry"
+        [routerLink]="['/net-book-value-entry/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new Net Book Value Entry </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="netBookValueEntries?.length === 0">
+    <span>No netBookValueEntries found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="netBookValueEntries && netBookValueEntries.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="assetNumber"><span>Asset Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="assetTag"><span>Asset Tag</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="assetDescription">
+            <span>Asset Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="nbvIdentifier"><span>Nbv Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="compilationJobIdentifier">
+            <span>Compilation Job Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="compilationBatchIdentifier">
+            <span>Compilation Batch Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="elapsedMonths"><span>Elapsed Months</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="priorMonths"><span>Prior Months</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="usefulLifeYears"><span>Useful Life Years</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="netBookValueAmount"><span>Net Book Value Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="previousNetBookValueAmount">
+            <span>Previous Net Book Value Amount</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="historicalCost"><span>Historical Cost</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="serviceOutlet.outletCode"><span>Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="depreciationPeriod.endDate"><span>Depreciation Period</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fiscalMonth.fiscalMonthCode"><span>Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="depreciationMethod.depreciationMethodName">
+            <span>Depreciation Method</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="assetRegistration.id"><span>Asset Registration</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+        <tr *ngFor="let netBookValueEntry of netBookValueEntries; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/net-book-value-entry', netBookValueEntry.id, 'view']">{{ netBookValueEntry.id }}</a>
+          </td>
+          <td>{{ netBookValueEntry.assetNumber }}</td>
+          <td>{{ netBookValueEntry.assetTag }}</td>
+          <td>{{ netBookValueEntry.assetDescription }}</td>
+          <td>{{ netBookValueEntry.nbvIdentifier }}</td>
+          <td>{{ netBookValueEntry.compilationJobIdentifier }}</td>
+          <td>{{ netBookValueEntry.compilationBatchIdentifier }}</td>
+          <td>{{ netBookValueEntry.elapsedMonths }}</td>
+          <td>{{ netBookValueEntry.priorMonths }}</td>
+          <td>{{ netBookValueEntry.usefulLifeYears }}</td>
+          <td>{{ netBookValueEntry.netBookValueAmount }}</td>
+          <td>{{ netBookValueEntry.previousNetBookValueAmount }}</td>
+          <td>{{ netBookValueEntry.historicalCost }}</td>
+          <td>
+            <div *ngIf="netBookValueEntry.serviceOutlet">
+              <a [routerLink]="['/service-outlet', netBookValueEntry.serviceOutlet?.id, 'view']">{{
+                netBookValueEntry.serviceOutlet?.outletCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="netBookValueEntry.depreciationPeriod">
+              <a [routerLink]="['/depreciation-period', netBookValueEntry.depreciationPeriod?.id, 'view']">{{
+                netBookValueEntry.depreciationPeriod?.endDate
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="netBookValueEntry.fiscalMonth">
+              <a [routerLink]="['/fiscal-month', netBookValueEntry.fiscalMonth?.id, 'view']">{{
+                netBookValueEntry.fiscalMonth?.fiscalMonthCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="netBookValueEntry.depreciationMethod">
+              <a [routerLink]="['/depreciation-method', netBookValueEntry.depreciationMethod?.id, 'view']">{{
+                netBookValueEntry.depreciationMethod?.depreciationMethodName
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="netBookValueEntry.assetRegistration">
+              <a [routerLink]="['/asset-registration', netBookValueEntry.assetRegistration?.id, 'view']">{{
+                netBookValueEntry.assetRegistration?.id
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="netBookValueEntry.assetCategory">
+              <a [routerLink]="['/asset-category', netBookValueEntry.assetCategory?.id, 'view']">{{
+                netBookValueEntry.assetCategory?.assetCategoryName
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/net-book-value-entry', netBookValueEntry.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/net-book-value-entry', netBookValueEntry.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(netBookValueEntry)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,151 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="depreciationEntry">
+      <h2 data-cy="depreciationEntryDetailsHeading"><span>Depreciation Entry</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ depreciationEntry.id }}</span>
+        </dd>
+        <dt><span>Posted At</span></dt>
+        <dd>
+          <span>{{ depreciationEntry.postedAt | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Depreciation Amount</span></dt>
+        <dd>
+          <span>{{ depreciationEntry.depreciationAmount }}</span>
+        </dd>
+        <dt><span>Asset Number</span></dt>
+        <dd>
+          <span>{{ depreciationEntry.assetNumber }}</span>
+        </dd>
+        <dt><span>Batch Sequence Number</span></dt>
+        <dd>
+          <span>{{ depreciationEntry.batchSequenceNumber }}</span>
+        </dd>
+        <dt><span>Processed Items</span></dt>
+        <dd>
+          <span>{{ depreciationEntry.processedItems }}</span>
+        </dd>
+        <dt><span>Total Items Processed</span></dt>
+        <dd>
+          <span>{{ depreciationEntry.totalItemsProcessed }}</span>
+        </dd>
+        <dt><span>Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.serviceOutlet">
+            <a [routerLink]="['/service-outlet', depreciationEntry.serviceOutlet?.id, 'view']">{{
+              depreciationEntry.serviceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Asset Category</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.assetCategory">
+            <a [routerLink]="['/asset-category', depreciationEntry.assetCategory?.id, 'view']">{{
+              depreciationEntry.assetCategory?.assetCategoryName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Depreciation Method</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.depreciationMethod">
+            <a [routerLink]="['/depreciation-method', depreciationEntry.depreciationMethod?.id, 'view']">{{
+              depreciationEntry.depreciationMethod?.depreciationMethodName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Asset Registration</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.assetRegistration">
+            <a [routerLink]="['/asset-registration', depreciationEntry.assetRegistration?.id, 'view']">{{
+              depreciationEntry.assetRegistration?.assetNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Depreciation Period</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.depreciationPeriod">
+            <a [routerLink]="['/depreciation-period', depreciationEntry.depreciationPeriod?.id, 'view']">{{
+              depreciationEntry.depreciationPeriod?.endDate
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Fiscal Month</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.fiscalMonth">
+            <a [routerLink]="['/fiscal-month', depreciationEntry.fiscalMonth?.id, 'view']">{{
+              depreciationEntry.fiscalMonth?.fiscalMonthCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Fiscal Quarter</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.fiscalQuarter">
+            <a [routerLink]="['/fiscal-quarter', depreciationEntry.fiscalQuarter?.id, 'view']">{{
+              depreciationEntry.fiscalQuarter?.fiscalQuarterCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Fiscal Year</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.fiscalYear">
+            <a [routerLink]="['/fiscal-year', depreciationEntry.fiscalYear?.id, 'view']">{{
+              depreciationEntry.fiscalYear?.fiscalYearCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Depreciation Job</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.depreciationJob">
+            <a [routerLink]="['/depreciation-job', depreciationEntry.depreciationJob?.id, 'view']">{{
+              depreciationEntry.depreciationJob?.description
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Depreciation Batch Sequence</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.depreciationBatchSequence">
+            <a [routerLink]="['/depreciation-batch-sequence', depreciationEntry.depreciationBatchSequence?.id, 'view']">{{
+              depreciationEntry.depreciationBatchSequence?.id
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/depreciation-entry', depreciationEntry.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

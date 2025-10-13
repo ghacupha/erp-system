@@ -1,0 +1,148 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="contractMetadata">
+      <h2 data-cy="contractMetadataDetailsHeading"><span>Contract Metadata</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ contractMetadata.id }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ contractMetadata.description }}</span>
+        </dd>
+        <dt><span>Type Of Contract</span></dt>
+        <dd>
+          <span>{{ contractMetadata.typeOfContract }}</span>
+        </dd>
+        <dt><span>Contract Status</span></dt>
+        <dd>
+          <span>{{ contractMetadata.contractStatus }}</span>
+        </dd>
+        <dt><span>Start Date</span></dt>
+        <dd>
+          <span>{{ contractMetadata.startDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Termination Date</span></dt>
+        <dd>
+          <span>{{ contractMetadata.terminationDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Comments And Attachment</span></dt>
+        <dd>
+          <span>{{ contractMetadata.commentsAndAttachment }}</span>
+        </dd>
+        <dt><span>Contract Title</span></dt>
+        <dd>
+          <span>{{ contractMetadata.contractTitle }}</span>
+        </dd>
+        <dt><span>Contract Identifier</span></dt>
+        <dd>
+          <span>{{ contractMetadata.contractIdentifier }}</span>
+        </dd>
+        <dt><span>Contract Identifier Short</span></dt>
+        <dd>
+          <span>{{ contractMetadata.contractIdentifierShort }}</span>
+        </dd>
+        <dt><span>Related Contracts</span></dt>
+        <dd>
+          <span *ngFor="let relatedContracts of contractMetadata.relatedContracts; let last = last">
+            <a [routerLink]="['/contract-metadata', relatedContracts?.id, 'view']">{{ relatedContracts.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Department</span></dt>
+        <dd>
+          <div *ngIf="contractMetadata.department">
+            <a [routerLink]="['/dealer', contractMetadata.department?.id, 'view']">{{ contractMetadata.department?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Contract Partner</span></dt>
+        <dd>
+          <div *ngIf="contractMetadata.contractPartner">
+            <a [routerLink]="['/dealer', contractMetadata.contractPartner?.id, 'view']">{{
+              contractMetadata.contractPartner?.dealerName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Responsible Person</span></dt>
+        <dd>
+          <div *ngIf="contractMetadata.responsiblePerson">
+            <a [routerLink]="['/application-user', contractMetadata.responsiblePerson?.id, 'view']">{{
+              contractMetadata.responsiblePerson?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Signatory</span></dt>
+        <dd>
+          <span *ngFor="let signatory of contractMetadata.signatories; let last = last">
+            <a [routerLink]="['/application-user', signatory?.id, 'view']">{{ signatory.applicationIdentity }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Security Clearance</span></dt>
+        <dd>
+          <div *ngIf="contractMetadata.securityClearance">
+            <a [routerLink]="['/security-clearance', contractMetadata.securityClearance?.id, 'view']">{{
+              contractMetadata.securityClearance?.clearanceLevel
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of contractMetadata.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Contract Document File</span></dt>
+        <dd>
+          <span *ngFor="let contractDocumentFile of contractMetadata.contractDocumentFiles; let last = last">
+            <a [routerLink]="['/business-document', contractDocumentFile?.id, 'view']">{{ contractDocumentFile.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Contract Mappings</span></dt>
+        <dd>
+          <span *ngFor="let contractMappings of contractMetadata.contractMappings; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', contractMappings?.id, 'view']">{{ contractMappings.universalKey }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/contract-metadata', contractMetadata.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

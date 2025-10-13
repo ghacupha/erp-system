@@ -1,0 +1,85 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-rou-asset-nbv-report-heading" data-cy="RouAssetNBVReportCreateUpdateHeading">Create or edit a Rou Asset NBV Report</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_requestId">Request Id</label>
+          <input type="text" class="form-control" name="requestId" id="field_requestId" data-cy="requestId" formControlName="requestId" />
+          <div *ngIf="editForm.get('requestId')!.invalid && (editForm.get('requestId')!.dirty || editForm.get('requestId')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('requestId')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_timeOfRequest">Time Of Request</label>
+          <div class="d-flex">
+            <input
+              id="field_timeOfRequest"
+              data-cy="timeOfRequest"
+              type="datetime-local"
+              class="form-control"
+              name="timeOfRequest"
+              formControlName="timeOfRequest"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <jhi-m21-lease-period-form-control
+          ngDefaultControl
+          formControlName='leasePeriod'
+          [inputValue]="editForm.get(['leasePeriod'])!.value"
+          (valueSelected)='updateLeasePeriod($event)'
+          inputControlLabel='Lease Period (Required)'
+        >
+          <option [ngValue]="editForm.get(['leasePeriod'])!.value"></option>
+        </jhi-m21-lease-period-form-control>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

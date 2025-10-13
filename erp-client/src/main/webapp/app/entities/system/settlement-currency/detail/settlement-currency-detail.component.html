@@ -1,0 +1,82 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="settlementCurrency">
+      <h2 data-cy="settlementCurrencyDetailsHeading"><span>Settlement Currency</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ settlementCurrency.id }}</span>
+        </dd>
+        <dt><span>Iso 4217 Currency Code</span></dt>
+        <dd>
+          <span>{{ settlementCurrency.iso4217CurrencyCode }}</span>
+        </dd>
+        <dt><span>Currency Name</span></dt>
+        <dd>
+          <span>{{ settlementCurrency.currencyName }}</span>
+        </dd>
+        <dt><span>Country</span></dt>
+        <dd>
+          <span>{{ settlementCurrency.country }}</span>
+        </dd>
+        <dt><span>Numeric Code</span></dt>
+        <dd>
+          <span>{{ settlementCurrency.numericCode }}</span>
+        </dd>
+        <dt><span>Minor Unit</span></dt>
+        <dd>
+          <span>{{ settlementCurrency.minorUnit }}</span>
+        </dd>
+        <dt><span>File Upload Token</span></dt>
+        <dd>
+          <span>{{ settlementCurrency.fileUploadToken }}</span>
+        </dd>
+        <dt><span>Compilation Token</span></dt>
+        <dd>
+          <span>{{ settlementCurrency.compilationToken }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of settlementCurrency.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/settlement-currency', settlementCurrency.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

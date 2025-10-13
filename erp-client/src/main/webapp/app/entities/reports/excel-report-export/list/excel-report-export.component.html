@@ -1,0 +1,223 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="ExcelReportExportHeading">
+    <span>Excel Report Exports</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-excel-report-export"
+        [routerLink]="['/excel-report-export/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new Excel Report Export </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="excelReportExports?.length === 0">
+    <span>No excelReportExports found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="excelReportExports && excelReportExports.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportName"><span>Report Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportPassword">
+            <span>Report Password</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="reportNotes"><span>Report Notes</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileCheckSum"><span>File Check Sum</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportFile"><span>Report File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportTimeStamp"><span>Report Time Stamp</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportId"><span>Report Id</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportStatus.id"><span>Report Status</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="securityClearance.clearanceLevel"><span>Security Clearance</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportCreator.applicationIdentity"><span>Report Creator</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="organization.dealerName"><span>Organization</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="department.dealerName"><span>Department</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="systemModule.moduleName"><span>System Module</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportDesign.designation"><span>Report Design</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileCheckSumAlgorithm.name"><span>File Check Sum Algorithm</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let excelReportExport of excelReportExports; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/excel-report-export', excelReportExport.id, 'view']">{{ excelReportExport.id }}</a>
+          </td>
+          <td>{{ excelReportExport.reportName }}</td>
+          <td>{{ excelReportExport.reportPassword }}</td>
+          <td>
+            <a
+              *ngIf="excelReportExport.reportNotes"
+              (click)="openFile(excelReportExport.reportNotes, excelReportExport.reportNotesContentType)"
+              >open</a
+            >
+            <span *ngIf="excelReportExport.reportNotes"
+              >{{ excelReportExport.reportNotesContentType }}, {{ byteSize(excelReportExport.reportNotes) }}</span
+            >
+          </td>
+          <td>{{ excelReportExport.fileCheckSum }}</td>
+          <td>
+            <a
+              *ngIf="excelReportExport.reportFile"
+              (click)="openFile(excelReportExport.reportFile, excelReportExport.reportFileContentType)"
+              >open</a
+            >
+            <span *ngIf="excelReportExport.reportFile"
+              >{{ excelReportExport.reportFileContentType }}, {{ byteSize(excelReportExport.reportFile) }}</span
+            >
+          </td>
+          <td>{{ excelReportExport.reportTimeStamp | formatMediumDatetime }}</td>
+          <td>{{ excelReportExport.reportId }}</td>
+          <td>
+            <div *ngIf="excelReportExport.reportStatus">
+              <a [routerLink]="['/report-status', excelReportExport.reportStatus?.id, 'view']">{{ excelReportExport.reportStatus?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="excelReportExport.securityClearance">
+              <a [routerLink]="['/security-clearance', excelReportExport.securityClearance?.id, 'view']">{{
+                excelReportExport.securityClearance?.clearanceLevel
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="excelReportExport.reportCreator">
+              <a [routerLink]="['/application-user', excelReportExport.reportCreator?.id, 'view']">{{
+                excelReportExport.reportCreator?.applicationIdentity
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="excelReportExport.organization">
+              <a [routerLink]="['/dealer', excelReportExport.organization?.id, 'view']">{{ excelReportExport.organization?.dealerName }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="excelReportExport.department">
+              <a [routerLink]="['/dealer', excelReportExport.department?.id, 'view']">{{ excelReportExport.department?.dealerName }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="excelReportExport.systemModule">
+              <a [routerLink]="['/system-module', excelReportExport.systemModule?.id, 'view']">{{
+                excelReportExport.systemModule?.moduleName
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="excelReportExport.reportDesign">
+              <a [routerLink]="['/report-design', excelReportExport.reportDesign?.id, 'view']">{{
+                excelReportExport.reportDesign?.designation
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="excelReportExport.fileCheckSumAlgorithm">
+              <a [routerLink]="['/algorithm', excelReportExport.fileCheckSumAlgorithm?.id, 'view']">{{
+                excelReportExport.fileCheckSumAlgorithm?.name
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/excel-report-export', excelReportExport.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/excel-report-export', excelReportExport.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(excelReportExport)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="excelReportExports && excelReportExports.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

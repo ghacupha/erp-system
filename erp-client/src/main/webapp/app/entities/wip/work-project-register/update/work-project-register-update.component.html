@@ -1,0 +1,261 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-work-project-register-heading" data-cy="WorkProjectRegisterCreateUpdateHeading">
+        Create or edit a Work Project Register
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_catalogueNumber">Catalogue Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="catalogueNumber"
+            id="field_catalogueNumber"
+            data-cy="catalogueNumber"
+            formControlName="catalogueNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('catalogueNumber')!.invalid &&
+              (editForm.get('catalogueNumber')!.dirty || editForm.get('catalogueNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('catalogueNumber')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_projectTitle">Project Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="projectTitle"
+            id="field_projectTitle"
+            data-cy="projectTitle"
+            formControlName="projectTitle"
+          />
+          <div
+            *ngIf="editForm.get('projectTitle')!.invalid && (editForm.get('projectTitle')!.dirty || editForm.get('projectTitle')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('projectTitle')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_details">Details</label>
+          <div>
+            <div *ngIf="editForm.get('details')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('details')!.value, editForm.get('detailsContentType')!.value)">open</a
+              ><br />
+              <span class="pull-left">{{ editForm.get('detailsContentType')!.value }}, {{ byteSize(editForm.get('details')!.value) }}</span>
+              <button
+                type="button"
+                (click)="editForm.patchValue({ details: null }); editForm.patchValue({ detailsContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_details" data-cy="details" (change)="setFileData($event, 'details', false)" />
+          </div>
+          <input type="hidden" class="form-control" name="details" id="field_details" data-cy="details" formControlName="details" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="detailsContentType"
+            id="field_detailsContentType"
+            formControlName="detailsContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalProjectCost">Total Project Cost</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalProjectCost"
+            id="field_totalProjectCost"
+            data-cy="totalProjectCost"
+            formControlName="totalProjectCost"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_additionalNotes">Additional Notes</label>
+          <div>
+            <div *ngIf="editForm.get('additionalNotes')!.value" class="form-text text-danger clearfix">
+              <a
+                class="pull-left"
+                (click)="openFile(editForm.get('additionalNotes')!.value, editForm.get('additionalNotesContentType')!.value)"
+                >open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('additionalNotesContentType')!.value }}, {{ byteSize(editForm.get('additionalNotes')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ additionalNotes: null }); editForm.patchValue({ additionalNotesContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input
+              type="file"
+              id="file_additionalNotes"
+              data-cy="additionalNotes"
+              (change)="setFileData($event, 'additionalNotes', false)"
+            />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="additionalNotes"
+            id="field_additionalNotes"
+            data-cy="additionalNotes"
+            formControlName="additionalNotes"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="additionalNotesContentType"
+            id="field_additionalNotesContentType"
+            formControlName="additionalNotesContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="field_dealers">Dealers</label>
+          <select class="form-control" id="field_dealers" data-cy="dealers" multiple name="dealers" formControlName="dealers">
+            <option
+              [ngValue]="getSelectedDealer(dealerOption, editForm.get('dealers')!.value)"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['dealers'])!.invalid && (editForm.get(['dealers'])!.dirty || editForm.get(['dealers'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['dealers'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
+          <select
+            class="form-control"
+            id="field_settlementCurrency"
+            data-cy="settlementCurrency"
+            name="settlementCurrency"
+            formControlName="settlementCurrency"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
+                  ? editForm.get('settlementCurrency')!.value
+                  : settlementCurrencyOption
+              "
+              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
+            >
+              {{ settlementCurrencyOption.iso4217CurrencyCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_businessDocuments">Business Document</label>
+          <select
+            class="form-control"
+            id="field_businessDocuments"
+            data-cy="businessDocument"
+            multiple
+            name="businessDocuments"
+            formControlName="businessDocuments"
+          >
+            <option
+              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('businessDocuments')!.value)"
+              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
+            >
+              {{ businessDocumentOption.documentTitle }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

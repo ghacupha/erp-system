@@ -1,0 +1,159 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="NbvCompilationBatchHeading">
+    <span>Nbv Compilation Batches</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-nbv-compilation-batch"
+        [routerLink]="['/nbv-compilation-batch/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new Nbv Compilation Batch </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="nbvCompilationBatches?.length === 0">
+    <span>No nbvCompilationBatches found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="nbvCompilationBatches && nbvCompilationBatches.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="startIndex"><span>Start Index</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="endIndex"><span>End Index</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="compilationBatchStatus">
+            <span>Compilation Batch Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="compilationBatchIdentifier">
+            <span>Compilation Batch Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="compilationJobidentifier">
+            <span>Compilation Jobidentifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="depreciationPeriodIdentifier">
+            <span>Depreciation Period Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="fiscalMonthIdentifier">
+            <span>Fiscal Month Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="batchSize"><span>Batch Size</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="processedItems"><span>Processed Items</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="sequenceNumber"><span>Sequence Number</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="isLastBatch"><span>Is Last Batch</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="processingTime">
+            <span>Processing Time</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="totalItems"><span>Total Items</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="nbvCompilationJob.jobTitle"><span>Nbv Compilation Job</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+        <tr *ngFor="let nbvCompilationBatch of nbvCompilationBatches; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/nbv-compilation-batch', nbvCompilationBatch.id, 'view']">{{ nbvCompilationBatch.id }}</a>
+          </td>
+          <td>{{ nbvCompilationBatch.startIndex }}</td>
+          <td>{{ nbvCompilationBatch.endIndex }}</td>
+          <td>{{ nbvCompilationBatch.compilationBatchStatus }}</td>
+          <td>{{ nbvCompilationBatch.compilationBatchIdentifier }}</td>
+          <td>{{ nbvCompilationBatch.compilationJobidentifier }}</td>
+          <td>{{ nbvCompilationBatch.depreciationPeriodIdentifier }}</td>
+          <td>{{ nbvCompilationBatch.fiscalMonthIdentifier }}</td>
+          <td>{{ nbvCompilationBatch.batchSize }}</td>
+          <td>{{ nbvCompilationBatch.processedItems }}</td>
+          <td>{{ nbvCompilationBatch.sequenceNumber }}</td>
+          <td>{{ nbvCompilationBatch.isLastBatch }}</td>
+          <td title="{{ nbvCompilationBatch.processingTime }}">{{ nbvCompilationBatch.processingTime | duration }}</td>
+          <td>{{ nbvCompilationBatch.totalItems }}</td>
+          <td>
+            <div *ngIf="nbvCompilationBatch.nbvCompilationJob">
+              <a [routerLink]="['/nbv-compilation-job', nbvCompilationBatch.nbvCompilationJob?.id, 'view']">{{
+                nbvCompilationBatch.nbvCompilationJob?.jobTitle
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/nbv-compilation-batch', nbvCompilationBatch.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/nbv-compilation-batch', nbvCompilationBatch.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(nbvCompilationBatch)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

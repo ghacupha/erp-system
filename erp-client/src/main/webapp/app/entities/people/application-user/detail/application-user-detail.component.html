@@ -1,0 +1,92 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="applicationUser">
+      <h2 data-cy="applicationUserDetailsHeading"><span>Application User</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ applicationUser.id }}</span>
+        </dd>
+        <dt><span>Designation</span></dt>
+        <dd>
+          <span>{{ applicationUser.designation }}</span>
+        </dd>
+        <dt><span>Application Identity</span></dt>
+        <dd>
+          <span>{{ applicationUser.applicationIdentity }}</span>
+        </dd>
+        <dt><span>Organization</span></dt>
+        <dd>
+          <div *ngIf="applicationUser.organization">
+            <a [routerLink]="['/dealer', applicationUser.organization?.id, 'view']">{{ applicationUser.organization?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Department</span></dt>
+        <dd>
+          <div *ngIf="applicationUser.department">
+            <a [routerLink]="['/dealer', applicationUser.department?.id, 'view']">{{ applicationUser.department?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Security Clearance</span></dt>
+        <dd>
+          <div *ngIf="applicationUser.securityClearance">
+            <a [routerLink]="['/security-clearance', applicationUser.securityClearance?.id, 'view']">{{
+              applicationUser.securityClearance?.clearanceLevel
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>System Identity</span></dt>
+        <dd>
+          <span>{{ applicationUser.systemIdentity?.login }}</span>
+        </dd>
+        <dt><span>User Properties</span></dt>
+        <dd>
+          <span *ngFor="let userProperties of applicationUser.userProperties; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', userProperties?.id, 'view']">{{ userProperties.mappedValue }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Dealer Identity</span></dt>
+        <dd>
+          <div *ngIf="applicationUser.dealerIdentity">
+            <a [routerLink]="['/dealer', applicationUser.dealerIdentity?.id, 'view']">{{ applicationUser.dealerIdentity?.dealerName }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/application-user', applicationUser.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

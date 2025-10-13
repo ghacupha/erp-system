@@ -1,0 +1,67 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="isoCurrencyCode">
+      <h2 data-cy="isoCurrencyCodeDetailsHeading"><span>Iso Currency Code</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ isoCurrencyCode.id }}</span>
+        </dd>
+        <dt><span>Alphabetic Code</span></dt>
+        <dd>
+          <span>{{ isoCurrencyCode.alphabeticCode }}</span>
+        </dd>
+        <dt><span>Numeric Code</span></dt>
+        <dd>
+          <span>{{ isoCurrencyCode.numericCode }}</span>
+        </dd>
+        <dt><span>Minor Unit</span></dt>
+        <dd>
+          <span>{{ isoCurrencyCode.minorUnit }}</span>
+        </dd>
+        <dt><span>Currency</span></dt>
+        <dd>
+          <span>{{ isoCurrencyCode.currency }}</span>
+        </dd>
+        <dt><span>Country</span></dt>
+        <dd>
+          <span>{{ isoCurrencyCode.country }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/iso-currency-code', isoCurrencyCode.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

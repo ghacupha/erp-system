@@ -1,0 +1,162 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class='row justify-content-center'>
+  <div class='col-8'>
+    <form name='editForm' role='form' novalidate (ngSubmit)='save()' [formGroup]='editForm'>
+      <h2 id='jhi-application-user-heading' data-cy='ApplicationUserCreateUpdateHeading'>Create or edit a Application
+        User</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class='form-group' [hidden]="editForm.get('id')!.value == null">
+          <label class='form-control-label' for='field_id'>ID</label>
+          <input type='number' class='form-control' name='id' id='field_id' data-cy='id' formControlName='id'
+                 [readonly]='true' />
+        </div>
+
+        <div class='form-group'>
+          <label class='form-control-label' for='field_designation'>Designation</label>
+          <input
+            type='text'
+            class='form-control'
+            name='designation'
+            id='field_designation'
+            data-cy='designation'
+            formControlName='designation'
+          />
+          <div
+            *ngIf="editForm.get('designation')!.invalid && (editForm.get('designation')!.dirty || editForm.get('designation')!.touched)">
+            <small class='form-text text-danger' *ngIf="editForm.get('designation')?.errors?.required"> This field is
+              required. </small>
+          </div>
+        </div>
+
+        <div class='form-group'>
+          <label class='form-control-label' for='field_applicationIdentity'>Application Identity</label>
+          <input
+            type='text'
+            class='form-control'
+            name='applicationIdentity'
+            id='field_applicationIdentity'
+            data-cy='applicationIdentity'
+            formControlName='applicationIdentity'
+          />
+          <div
+            *ngIf="
+              editForm.get('applicationIdentity')!.invalid &&
+              (editForm.get('applicationIdentity')!.dirty || editForm.get('applicationIdentity')!.touched)
+            "
+          >
+            <small class='form-text text-danger' *ngIf="editForm.get('applicationIdentity')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='organization'
+          [inputValue]="editForm.get('organization')!.value"
+          (valueSelected)='updateOrganization($event)'
+          inputControlLabel='organization (Required)'
+        >
+          <option [ngValue]="editForm.get('organization')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='department'
+          [inputValue]="editForm.get('department')!.value"
+          (valueSelected)='updateDepartment($event)'
+          inputControlLabel='Department (Required)'
+        >
+          <option [ngValue]="editForm.get('department')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <jhi-m21-security-clearance-form-control
+          ngDefaultControl
+          formControlName='securityClearance'
+          [inputValue]="editForm.get('securityClearance')!.value"
+          (valueSelected)='updateSecurityClearance($event)'
+          inputControlLabel='Security Clearance'
+        >
+          <option [ngValue]="editForm.get('securityClearance')!.value"></option>
+        </jhi-m21-security-clearance-form-control>
+
+        <jhi-m21-user-form-control
+          ngDefaultControl
+          formControlName='systemIdentity'
+          [inputValue]="editForm.get('systemIdentity')!.value"
+          (valueSelected)='updateSystemIdentity($event)'
+          inputControlLabel='System Identity (Required)'
+        >
+          <option [ngValue]="editForm.get('systemIdentity')!.value"></option>
+        </jhi-m21-user-form-control>
+
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='userProperties'
+          [inputValues]="editForm.get(['userProperties'])!.value"
+          (selectedValues)='updateParameters($event)'
+          inputControlLabel='User Properties'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='dealerIdentity'
+          [inputValue]="editForm.get('dealerIdentity')!.value"
+          (valueSelected)='updateDealerIdentity($event)'
+          inputControlLabel='Dealer Id (Required)'
+        >
+          <option [ngValue]="editForm.get('dealerIdentity')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+      </div>
+
+      <div>
+        <button type='button' id='cancel-save' data-cy='entityCreateCancelButton' class='btn btn-secondary'
+                (click)='previousState()'>
+          <fa-icon icon='ban'></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type='submit'
+          id='save-entity'
+          data-cy='entityCreateSaveButton'
+          [disabled]='editForm.invalid || isSaving'
+          class='btn btn-primary'
+        >
+          <fa-icon icon='save'></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

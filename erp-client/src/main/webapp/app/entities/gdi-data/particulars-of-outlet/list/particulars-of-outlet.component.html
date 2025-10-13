@@ -1,0 +1,189 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="ParticularsOfOutletHeading">
+    <span>Particulars Of Outlets</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-particulars-of-outlet"
+        [routerLink]="['/particulars-of-outlet/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new Particulars Of Outlet </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="particularsOfOutlets?.length === 0">
+    <span>No particularsOfOutlets found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="particularsOfOutlets && particularsOfOutlets.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="businessReportingDate"><span>Business Reporting Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="outletName"><span>Outlet Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="town"><span>Town</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="iso6709Latitute"><span>Iso 6709 Latitute</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="iso6709Longitude"><span>Iso 6709 Longitude</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="cbkApprovalDate"><span>Cbk Approval Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="outletOpeningDate"><span>Outlet Opening Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="outletClosureDate"><span>Outlet Closure Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="licenseFeePayable"><span>License Fee Payable</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="subCountyCode.subCountyName"><span>Sub County Code</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="bankCode.institutionName"><span>Bank Code</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="outletId.branchCode"><span>Outlet Id</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="typeOfOutlet.outletType"><span>Type Of Outlet</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="outletStatus.branchStatusType"><span>Outlet Status</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let particularsOfOutlet of particularsOfOutlets; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/particulars-of-outlet', particularsOfOutlet.id, 'view']">{{ particularsOfOutlet.id }}</a>
+          </td>
+          <td>{{ particularsOfOutlet.businessReportingDate | formatMediumDate }}</td>
+          <td>{{ particularsOfOutlet.outletName }}</td>
+          <td>{{ particularsOfOutlet.town }}</td>
+          <td>{{ particularsOfOutlet.iso6709Latitute }}</td>
+          <td>{{ particularsOfOutlet.iso6709Longitude }}</td>
+          <td>{{ particularsOfOutlet.cbkApprovalDate | formatMediumDate }}</td>
+          <td>{{ particularsOfOutlet.outletOpeningDate | formatMediumDate }}</td>
+          <td>{{ particularsOfOutlet.outletClosureDate | formatMediumDate }}</td>
+          <td>{{ particularsOfOutlet.licenseFeePayable }}</td>
+          <td>
+            <div *ngIf="particularsOfOutlet.subCountyCode">
+              <a [routerLink]="['/county-sub-county-code', particularsOfOutlet.subCountyCode?.id, 'view']">{{
+                particularsOfOutlet.subCountyCode?.subCountyName
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="particularsOfOutlet.bankCode">
+              <a [routerLink]="['/institution-code', particularsOfOutlet.bankCode?.id, 'view']">{{
+                particularsOfOutlet.bankCode?.institutionName
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="particularsOfOutlet.outletId">
+              <a [routerLink]="['/bank-branch-code', particularsOfOutlet.outletId?.id, 'view']">{{
+                particularsOfOutlet.outletId?.branchCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="particularsOfOutlet.typeOfOutlet">
+              <a [routerLink]="['/outlet-type', particularsOfOutlet.typeOfOutlet?.id, 'view']">{{
+                particularsOfOutlet.typeOfOutlet?.outletType
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="particularsOfOutlet.outletStatus">
+              <a [routerLink]="['/outlet-status', particularsOfOutlet.outletStatus?.id, 'view']">{{
+                particularsOfOutlet.outletStatus?.branchStatusType
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/particulars-of-outlet', particularsOfOutlet.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/particulars-of-outlet', particularsOfOutlet.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(particularsOfOutlet)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="particularsOfOutlets && particularsOfOutlets.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

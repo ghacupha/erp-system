@@ -1,9 +1,0 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
-    <changeSet author="edwin.njeru (generated)" id="1720436747106-13">
-        <dropForeignKeyConstraint baseTableName="lease_payment" constraintName="fk_lease_payment__lease_liability_id"/>
-    </changeSet>
-    <changeSet author="edwin.njeru (generated)" id="1720436747106-25">
-        <dropColumn columnName="lease_liability_id" tableName="lease_payment"/>
-    </changeSet>
-</databaseChangeLog>

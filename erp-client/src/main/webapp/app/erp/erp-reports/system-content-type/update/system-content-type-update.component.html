@@ -1,0 +1,150 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-system-content-type-heading" data-cy="SystemContentTypeCreateUpdateHeading">Create or edit a System Content Type</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_contentTypeName">Content Type Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="contentTypeName"
+            id="field_contentTypeName"
+            data-cy="contentTypeName"
+            formControlName="contentTypeName"
+          />
+          <div
+            *ngIf="
+              editForm.get('contentTypeName')!.invalid &&
+              (editForm.get('contentTypeName')!.dirty || editForm.get('contentTypeName')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('contentTypeName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_contentTypeHeader">Content Type Header</label>
+          <input
+            type="text"
+            class="form-control"
+            name="contentTypeHeader"
+            id="field_contentTypeHeader"
+            data-cy="contentTypeHeader"
+            formControlName="contentTypeHeader"
+          />
+          <div
+            *ngIf="
+              editForm.get('contentTypeHeader')!.invalid &&
+              (editForm.get('contentTypeHeader')!.dirty || editForm.get('contentTypeHeader')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('contentTypeHeader')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_comments">Comments</label>
+          <textarea class="form-control" name="comments" id="field_comments" data-cy="comments" formControlName="comments"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_availability">Availability</label>
+          <select class="form-control" name="availability" formControlName="availability" id="field_availability" data-cy="availability">
+            <option [ngValue]="null"></option>
+            <option
+              *ngFor="let systemContentTypeAvailability of systemContentTypeAvailabilityValues"
+              [value]="systemContentTypeAvailability"
+            >
+              systemContentTypeAvailability
+            </option>
+          </select>
+          <div
+            *ngIf="editForm.get('availability')!.invalid && (editForm.get('availability')!.dirty || editForm.get('availability')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('availability')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholders</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholders"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_sysMaps">Sys Maps</label>
+          <select class="form-control" id="field_sysMaps" data-cy="sysMaps" multiple name="sysMaps" formControlName="sysMaps">
+            <option
+              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('sysMaps')!.value)"
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.mappedValue }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

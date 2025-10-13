@@ -1,0 +1,345 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-card-usage-information-heading" data-cy="CardUsageInformationCreateUpdateHeading">
+        Create or edit a Card Usage Information
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportingDate">Reporting Date</label>
+          <div class="input-group">
+            <input
+              id="field_reportingDate"
+              data-cy="reportingDate"
+              type="text"
+              class="form-control"
+              name="reportingDate"
+              ngbDatepicker
+              #reportingDateDp="ngbDatepicker"
+              formControlName="reportingDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="reportingDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('reportingDate')!.invalid && (editForm.get('reportingDate')!.dirty || editForm.get('reportingDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('reportingDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalNumberOfLiveCards">Total Number Of Live Cards</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalNumberOfLiveCards"
+            id="field_totalNumberOfLiveCards"
+            data-cy="totalNumberOfLiveCards"
+            formControlName="totalNumberOfLiveCards"
+          />
+          <div
+            *ngIf="
+              editForm.get('totalNumberOfLiveCards')!.invalid &&
+              (editForm.get('totalNumberOfLiveCards')!.dirty || editForm.get('totalNumberOfLiveCards')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('totalNumberOfLiveCards')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('totalNumberOfLiveCards')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('totalNumberOfLiveCards')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalActiveCards">Total Active Cards</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalActiveCards"
+            id="field_totalActiveCards"
+            data-cy="totalActiveCards"
+            formControlName="totalActiveCards"
+          />
+          <div
+            *ngIf="
+              editForm.get('totalActiveCards')!.invalid &&
+              (editForm.get('totalActiveCards')!.dirty || editForm.get('totalActiveCards')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('totalActiveCards')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('totalActiveCards')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('totalActiveCards')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalNumberOfTransactionsDone">Total Number Of Transactions Done</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalNumberOfTransactionsDone"
+            id="field_totalNumberOfTransactionsDone"
+            data-cy="totalNumberOfTransactionsDone"
+            formControlName="totalNumberOfTransactionsDone"
+          />
+          <div
+            *ngIf="
+              editForm.get('totalNumberOfTransactionsDone')!.invalid &&
+              (editForm.get('totalNumberOfTransactionsDone')!.dirty || editForm.get('totalNumberOfTransactionsDone')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('totalNumberOfTransactionsDone')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('totalNumberOfTransactionsDone')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('totalNumberOfTransactionsDone')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalValueOfTransactionsDoneInLCY">Total Value Of Transactions Done In LCY</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalValueOfTransactionsDoneInLCY"
+            id="field_totalValueOfTransactionsDoneInLCY"
+            data-cy="totalValueOfTransactionsDoneInLCY"
+            formControlName="totalValueOfTransactionsDoneInLCY"
+          />
+          <div
+            *ngIf="
+              editForm.get('totalValueOfTransactionsDoneInLCY')!.invalid &&
+              (editForm.get('totalValueOfTransactionsDoneInLCY')!.dirty || editForm.get('totalValueOfTransactionsDoneInLCY')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('totalValueOfTransactionsDoneInLCY')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('totalValueOfTransactionsDoneInLCY')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('totalValueOfTransactionsDoneInLCY')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_bankCode">Bank Code</label>
+          <select class="form-control" id="field_bankCode" data-cy="bankCode" name="bankCode" formControlName="bankCode">
+            <option *ngIf="!editForm.get('bankCode')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                institutionCodeOption.id === editForm.get('bankCode')!.value?.id ? editForm.get('bankCode')!.value : institutionCodeOption
+              "
+              *ngFor="let institutionCodeOption of institutionCodesSharedCollection; trackBy: trackInstitutionCodeById"
+            >
+              {{ institutionCodeOption.institutionName }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['bankCode'])!.invalid && (editForm.get(['bankCode'])!.dirty || editForm.get(['bankCode'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['bankCode'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_cardType">Card Type</label>
+          <select class="form-control" id="field_cardType" data-cy="cardType" name="cardType" formControlName="cardType">
+            <option *ngIf="!editForm.get('cardType')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="cardTypesOption.id === editForm.get('cardType')!.value?.id ? editForm.get('cardType')!.value : cardTypesOption"
+              *ngFor="let cardTypesOption of cardTypesSharedCollection; trackBy: trackCardTypesById"
+            >
+              {{ cardTypesOption.cardType }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['cardType'])!.invalid && (editForm.get(['cardType'])!.dirty || editForm.get(['cardType'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['cardType'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_cardBrand">Card Brand</label>
+          <select class="form-control" id="field_cardBrand" data-cy="cardBrand" name="cardBrand" formControlName="cardBrand">
+            <option *ngIf="!editForm.get('cardBrand')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                cardBrandTypeOption.id === editForm.get('cardBrand')!.value?.id ? editForm.get('cardBrand')!.value : cardBrandTypeOption
+              "
+              *ngFor="let cardBrandTypeOption of cardBrandTypesSharedCollection; trackBy: trackCardBrandTypeById"
+            >
+              {{ cardBrandTypeOption.cardBrandType }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['cardBrand'])!.invalid && (editForm.get(['cardBrand'])!.dirty || editForm.get(['cardBrand'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['cardBrand'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_cardCategoryType">Card Category Type</label>
+          <select
+            class="form-control"
+            id="field_cardCategoryType"
+            data-cy="cardCategoryType"
+            name="cardCategoryType"
+            formControlName="cardCategoryType"
+          >
+            <option *ngIf="!editForm.get('cardCategoryType')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                cardCategoryTypeOption.id === editForm.get('cardCategoryType')!.value?.id
+                  ? editForm.get('cardCategoryType')!.value
+                  : cardCategoryTypeOption
+              "
+              *ngFor="let cardCategoryTypeOption of cardCategoryTypesSharedCollection; trackBy: trackCardCategoryTypeById"
+            >
+              {{ cardCategoryTypeOption.cardCategoryDescription }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['cardCategoryType'])!.invalid &&
+            (editForm.get(['cardCategoryType'])!.dirty || editForm.get(['cardCategoryType'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['cardCategoryType'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_transactionType">Transaction Type</label>
+          <select
+            class="form-control"
+            id="field_transactionType"
+            data-cy="transactionType"
+            name="transactionType"
+            formControlName="transactionType"
+          >
+            <option *ngIf="!editForm.get('transactionType')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                bankTransactionTypeOption.id === editForm.get('transactionType')!.value?.id
+                  ? editForm.get('transactionType')!.value
+                  : bankTransactionTypeOption
+              "
+              *ngFor="let bankTransactionTypeOption of bankTransactionTypesSharedCollection; trackBy: trackBankTransactionTypeById"
+            >
+              {{ bankTransactionTypeOption.transactionTypeDetails }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['transactionType'])!.invalid &&
+            (editForm.get(['transactionType'])!.dirty || editForm.get(['transactionType'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['transactionType'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_channelType">Channel Type</label>
+          <select class="form-control" id="field_channelType" data-cy="channelType" name="channelType" formControlName="channelType">
+            <option *ngIf="!editForm.get('channelType')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                channelTypeOption.id === editForm.get('channelType')!.value?.id ? editForm.get('channelType')!.value : channelTypeOption
+              "
+              *ngFor="let channelTypeOption of channelTypesSharedCollection; trackBy: trackChannelTypeById"
+            >
+              {{ channelTypeOption.channelTypes }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['channelType'])!.invalid && (editForm.get(['channelType'])!.dirty || editForm.get(['channelType'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['channelType'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_cardState">Card State</label>
+          <select class="form-control" id="field_cardState" data-cy="cardState" name="cardState" formControlName="cardState">
+            <option *ngIf="!editForm.get('cardState')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="cardStateOption.id === editForm.get('cardState')!.value?.id ? editForm.get('cardState')!.value : cardStateOption"
+              *ngFor="let cardStateOption of cardStatesSharedCollection; trackBy: trackCardStateById"
+            >
+              {{ cardStateOption.cardStateFlagDetails }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['cardState'])!.invalid && (editForm.get(['cardState'])!.dirty || editForm.get(['cardState'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['cardState'])?.errors?.required"> This field is required. </small>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

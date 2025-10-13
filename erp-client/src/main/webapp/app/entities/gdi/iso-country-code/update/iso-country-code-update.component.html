@@ -1,0 +1,104 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-iso-country-code-heading" data-cy="IsoCountryCodeCreateUpdateHeading">Create or edit a Iso Country Code</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_countryCode">Country Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="countryCode"
+            id="field_countryCode"
+            data-cy="countryCode"
+            formControlName="countryCode"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_countryDescription">Country Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="countryDescription"
+            id="field_countryDescription"
+            data-cy="countryDescription"
+            formControlName="countryDescription"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_continentCode">Continent Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="continentCode"
+            id="field_continentCode"
+            data-cy="continentCode"
+            formControlName="continentCode"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_continentName">Continent Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="continentName"
+            id="field_continentName"
+            data-cy="continentName"
+            formControlName="continentName"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_subRegion">Sub Region</label>
+          <input type="text" class="form-control" name="subRegion" id="field_subRegion" data-cy="subRegion" formControlName="subRegion" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

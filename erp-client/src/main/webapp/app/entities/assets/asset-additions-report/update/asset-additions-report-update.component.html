@@ -1,0 +1,193 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-asset-additions-report-heading" data-cy="AssetAdditionsReportCreateUpdateHeading">
+        Create or edit a Asset Additions Report
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_timeOfRequest">Time Of Request</label>
+          <div class="input-group">
+            <input
+              id="field_timeOfRequest"
+              data-cy="timeOfRequest"
+              type="text"
+              class="form-control"
+              name="timeOfRequest"
+              ngbDatepicker
+              #timeOfRequestDp="ngbDatepicker"
+              formControlName="timeOfRequest"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="timeOfRequestDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportStartDate">Report Start Date</label>
+          <div class="input-group">
+            <input
+              id="field_reportStartDate"
+              data-cy="reportStartDate"
+              type="text"
+              class="form-control"
+              name="reportStartDate"
+              ngbDatepicker
+              #reportStartDateDp="ngbDatepicker"
+              formControlName="reportStartDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="reportStartDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportEndDate">Report End Date</label>
+          <div class="input-group">
+            <input
+              id="field_reportEndDate"
+              data-cy="reportEndDate"
+              type="text"
+              class="form-control"
+              name="reportEndDate"
+              ngbDatepicker
+              #reportEndDateDp="ngbDatepicker"
+              formControlName="reportEndDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="reportEndDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_requestId">Request Id</label>
+          <input type="text" class="form-control" name="requestId" id="field_requestId" data-cy="requestId" formControlName="requestId" />
+          <div *ngIf="editForm.get('requestId')!.invalid && (editForm.get('requestId')!.dirty || editForm.get('requestId')!.touched)"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_tampered">Tampered</label>
+          <input type="checkbox" class="form-check" name="tampered" id="field_tampered" data-cy="tampered" formControlName="tampered" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportParameters">Report Parameters</label>
+          <input
+            type="text"
+            class="form-control"
+            name="reportParameters"
+            id="field_reportParameters"
+            data-cy="reportParameters"
+            formControlName="reportParameters"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportFile">Report File</label>
+          <div>
+            <div *ngIf="editForm.get('reportFile')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('reportFile')!.value, editForm.get('reportFileContentType')!.value)"
+                >open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('reportFileContentType')!.value }}, {{ byteSize(editForm.get('reportFile')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ reportFile: null }); editForm.patchValue({ reportFileContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_reportFile" data-cy="reportFile" (change)="setFileData($event, 'reportFile', false)" />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="reportFile"
+            id="field_reportFile"
+            data-cy="reportFile"
+            formControlName="reportFile"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="reportFileContentType"
+            id="field_reportFileContentType"
+            formControlName="reportFileContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_requestedBy">Requested By</label>
+          <select class="form-control" id="field_requestedBy" data-cy="requestedBy" name="requestedBy" formControlName="requestedBy">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                applicationUserOption.id === editForm.get('requestedBy')!.value?.id
+                  ? editForm.get('requestedBy')!.value
+                  : applicationUserOption
+              "
+              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
+            >
+              {{ applicationUserOption.applicationIdentity }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

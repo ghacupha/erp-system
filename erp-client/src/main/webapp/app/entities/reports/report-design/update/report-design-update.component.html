@@ -1,0 +1,369 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-report-design-heading" data-cy="ReportDesignCreateUpdateHeading">Create or edit a Report Design</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_catalogueNumber">Catalogue Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="catalogueNumber"
+            id="field_catalogueNumber"
+            data-cy="catalogueNumber"
+            formControlName="catalogueNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('catalogueNumber')!.invalid &&
+              (editForm.get('catalogueNumber')!.dirty || editForm.get('catalogueNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('catalogueNumber')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_designation">Designation</label>
+          <input
+            type="text"
+            class="form-control"
+            name="designation"
+            id="field_designation"
+            data-cy="designation"
+            formControlName="designation"
+          />
+          <div *ngIf="editForm.get('designation')!.invalid && (editForm.get('designation')!.dirty || editForm.get('designation')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('designation')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <textarea
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_notes">Notes</label>
+          <div>
+            <div *ngIf="editForm.get('notes')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('notes')!.value, editForm.get('notesContentType')!.value)">open</a><br />
+              <span class="pull-left">{{ editForm.get('notesContentType')!.value }}, {{ byteSize(editForm.get('notes')!.value) }}</span>
+              <button
+                type="button"
+                (click)="editForm.patchValue({ notes: null }); editForm.patchValue({ notesContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_notes" data-cy="notes" (change)="setFileData($event, 'notes', false)" />
+          </div>
+          <input type="hidden" class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="notesContentType"
+            id="field_notesContentType"
+            formControlName="notesContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportFile">Report File</label>
+          <div>
+            <div *ngIf="editForm.get('reportFile')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('reportFile')!.value, editForm.get('reportFileContentType')!.value)"
+                >open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('reportFileContentType')!.value }}, {{ byteSize(editForm.get('reportFile')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ reportFile: null }); editForm.patchValue({ reportFileContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_reportFile" data-cy="reportFile" (change)="setFileData($event, 'reportFile', false)" />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="reportFile"
+            id="field_reportFile"
+            data-cy="reportFile"
+            formControlName="reportFile"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="reportFileContentType"
+            id="field_reportFileContentType"
+            formControlName="reportFileContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportFileChecksum">Report File Checksum</label>
+          <input
+            type="text"
+            class="form-control"
+            name="reportFileChecksum"
+            id="field_reportFileChecksum"
+            data-cy="reportFileChecksum"
+            formControlName="reportFileChecksum"
+          />
+          <div
+            *ngIf="
+              editForm.get('reportFileChecksum')!.invalid &&
+              (editForm.get('reportFileChecksum')!.dirty || editForm.get('reportFileChecksum')!.touched)
+            "
+          ></div>
+        </div>
+
+        <div class="form-group">
+          <label for="field_parameters">Parameters</label>
+          <select class="form-control" id="field_parameters" data-cy="parameters" multiple name="parameters" formControlName="parameters">
+            <option
+              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('parameters')!.value)"
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.mappedValue }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
+          <select
+            class="form-control"
+            id="field_securityClearance"
+            data-cy="securityClearance"
+            name="securityClearance"
+            formControlName="securityClearance"
+          >
+            <option *ngIf="!editForm.get('securityClearance')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                securityClearanceOption.id === editForm.get('securityClearance')!.value?.id
+                  ? editForm.get('securityClearance')!.value
+                  : securityClearanceOption
+              "
+              *ngFor="let securityClearanceOption of securityClearancesSharedCollection; trackBy: trackSecurityClearanceById"
+            >
+              {{ securityClearanceOption.clearanceLevel }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['securityClearance'])!.invalid &&
+            (editForm.get(['securityClearance'])!.dirty || editForm.get(['securityClearance'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['securityClearance'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportDesigner">Report Designer</label>
+          <select
+            class="form-control"
+            id="field_reportDesigner"
+            data-cy="reportDesigner"
+            name="reportDesigner"
+            formControlName="reportDesigner"
+          >
+            <option *ngIf="!editForm.get('reportDesigner')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                applicationUserOption.id === editForm.get('reportDesigner')!.value?.id
+                  ? editForm.get('reportDesigner')!.value
+                  : applicationUserOption
+              "
+              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
+            >
+              {{ applicationUserOption.applicationIdentity }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['reportDesigner'])!.invalid &&
+            (editForm.get(['reportDesigner'])!.dirty || editForm.get(['reportDesigner'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['reportDesigner'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_organization">Organization</label>
+          <select class="form-control" id="field_organization" data-cy="organization" name="organization" formControlName="organization">
+            <option *ngIf="!editForm.get('organization')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('organization')!.value?.id ? editForm.get('organization')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['organization'])!.invalid && (editForm.get(['organization'])!.dirty || editForm.get(['organization'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['organization'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_department">Department</label>
+          <select class="form-control" id="field_department" data-cy="department" name="department" formControlName="department">
+            <option *ngIf="!editForm.get('department')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('department')!.value?.id ? editForm.get('department')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['department'])!.invalid && (editForm.get(['department'])!.dirty || editForm.get(['department'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['department'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_systemModule">System Module</label>
+          <select class="form-control" id="field_systemModule" data-cy="systemModule" name="systemModule" formControlName="systemModule">
+            <option *ngIf="!editForm.get('systemModule')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                systemModuleOption.id === editForm.get('systemModule')!.value?.id ? editForm.get('systemModule')!.value : systemModuleOption
+              "
+              *ngFor="let systemModuleOption of systemModulesSharedCollection; trackBy: trackSystemModuleById"
+            >
+              {{ systemModuleOption.moduleName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['systemModule'])!.invalid && (editForm.get(['systemModule'])!.dirty || editForm.get(['systemModule'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['systemModule'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileCheckSumAlgorithm">File Check Sum Algorithm</label>
+          <select
+            class="form-control"
+            id="field_fileCheckSumAlgorithm"
+            data-cy="fileCheckSumAlgorithm"
+            name="fileCheckSumAlgorithm"
+            formControlName="fileCheckSumAlgorithm"
+          >
+            <option *ngIf="!editForm.get('fileCheckSumAlgorithm')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                algorithmOption.id === editForm.get('fileCheckSumAlgorithm')!.value?.id
+                  ? editForm.get('fileCheckSumAlgorithm')!.value
+                  : algorithmOption
+              "
+              *ngFor="let algorithmOption of algorithmsSharedCollection; trackBy: trackAlgorithmById"
+            >
+              {{ algorithmOption.name }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['fileCheckSumAlgorithm'])!.invalid &&
+            (editForm.get(['fileCheckSumAlgorithm'])!.dirty || editForm.get(['fileCheckSumAlgorithm'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['fileCheckSumAlgorithm'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

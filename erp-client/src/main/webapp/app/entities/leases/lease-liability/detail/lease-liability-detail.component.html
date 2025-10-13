@@ -1,0 +1,83 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="leaseLiability">
+      <h2 data-cy="leaseLiabilityDetailsHeading"><span>Lease Liability</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ leaseLiability.id }}</span>
+        </dd>
+        <dt><span>Lease Id</span></dt>
+        <dd>
+          <span>{{ leaseLiability.leaseId }}</span>
+        </dd>
+        <dt><span>Liability Amount</span></dt>
+        <dd>
+          <span>{{ leaseLiability.liabilityAmount }}</span>
+        </dd>
+        <dt><span>Start Date</span></dt>
+        <dd>
+          <span>{{ leaseLiability.startDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>End Date</span></dt>
+        <dd>
+          <span>{{ leaseLiability.endDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Interest Rate</span></dt>
+        <dd>
+          <span>{{ leaseLiability.interestRate }}</span>
+        </dd>
+        <dt><span>Lease Amortization Calculation</span></dt>
+        <dd>
+          <div *ngIf="leaseLiability.leaseAmortizationCalculation">
+            <a [routerLink]="['/lease-amortization-calculation', leaseLiability.leaseAmortizationCalculation?.id, 'view']">{{
+              leaseLiability.leaseAmortizationCalculation?.id
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Contract</span></dt>
+        <dd>
+          <div *ngIf="leaseLiability.leaseContract">
+            <a [routerLink]="['/ifrs-16-lease-contract', leaseLiability.leaseContract?.id, 'view']">{{
+              leaseLiability.leaseContract?.bookingId
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/lease-liability', leaseLiability.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

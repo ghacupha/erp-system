@@ -1,0 +1,63 @@
+{
+  "changelogDate": "20230912115809",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "itemCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "attribute1ReceiptPaymentPurposeCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "attribute1ReceiptPaymentPurposeType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "attribute2ReceiptPaymentPurposeCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "attribute2ReceiptPaymentPurposeDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "attribute3ReceiptPaymentPurposeCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "attribute3ReceiptPaymentPurposeDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "attribute4ReceiptPaymentPurposeCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "attribute4ReceiptPaymentPurposeDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "attribute5ReceiptPaymentPurposeCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "attribute5ReceiptPaymentPurposeDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lastChild",
+      "fieldType": "String"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "FxReceiptPurposeType",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

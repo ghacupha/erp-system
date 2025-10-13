@@ -1,0 +1,93 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="fileUpload">
+      <h2 data-cy="fileUploadDetailsHeading"><span>File Upload</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ fileUpload.id }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ fileUpload.description }}</span>
+        </dd>
+        <dt><span>File Name</span></dt>
+        <dd>
+          <span>{{ fileUpload.fileName }}</span>
+        </dd>
+        <dt><span>Period From</span></dt>
+        <dd>
+          <span>{{ fileUpload.periodFrom | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Period To</span></dt>
+        <dd>
+          <span>{{ fileUpload.periodTo | formatMediumDate }}</span>
+        </dd>
+        <dt><span>File Type Id</span></dt>
+        <dd>
+          <span>{{ fileUpload.fileTypeId }}</span>
+        </dd>
+        <dt><span>Data File</span></dt>
+        <dd>
+          <div *ngIf="fileUpload.dataFile">
+            <a (click)="openFile(fileUpload.dataFile, fileUpload.dataFileContentType)">open</a>
+            {{ fileUpload.dataFileContentType }}, {{ byteSize(fileUpload.dataFile) }}
+          </div>
+        </dd>
+        <dt><span>Upload Successful</span></dt>
+        <dd>
+          <span>{{ fileUpload.uploadSuccessful }}</span>
+        </dd>
+        <dt><span>Upload Processed</span></dt>
+        <dd>
+          <span>{{ fileUpload.uploadProcessed }}</span>
+        </dd>
+        <dt><span>Upload Token</span></dt>
+        <dd>
+          <span>{{ fileUpload.uploadToken }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of fileUpload.placeholders; let last = last">
+            <a [routerLink]="['/erp/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/erp/file-upload', fileUpload.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,83 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="leaseLiabilityScheduleReportItem">
+      <h2 data-cy="leaseLiabilityScheduleReportItemDetailsHeading"><span>Lease Liability Schedule Report Item</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReportItem.id }}</span>
+        </dd>
+        <dt><span>Sequence Number</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReportItem.sequenceNumber }}</span>
+        </dd>
+        <dt><span>Opening Balance</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReportItem.openingBalance }}</span>
+        </dd>
+        <dt><span>Cash Payment</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReportItem.cashPayment }}</span>
+        </dd>
+        <dt><span>Principal Payment</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReportItem.principalPayment }}</span>
+        </dd>
+        <dt><span>Interest Payment</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReportItem.interestPayment }}</span>
+        </dd>
+        <dt><span>Outstanding Balance</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReportItem.outstandingBalance }}</span>
+        </dd>
+        <dt><span>Interest Payable Opening</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReportItem.interestPayableOpening }}</span>
+        </dd>
+        <dt><span>Interest Accrued</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReportItem.interestAccrued }}</span>
+        </dd>
+        <dt><span>Interest Payable Closing</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReportItem.interestPayableClosing }}</span>
+        </dd>
+        <dt><span>Amortization Schedule Id</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReportItem.amortizationScheduleId }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+    </div>
+  </div>
+</div>

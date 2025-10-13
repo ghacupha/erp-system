@@ -1,0 +1,439 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div [ngSwitch]='isAuthenticated()'>
+  <ul class='navbar-nav ml-auto'>
+    <li *ngSwitchCase='true' ngbDropdown class='nav-item dropdown pointer' display='dynamic'
+        routerLinkActive='active' [routerLinkActiveOptions]='{ exact: true }'>
+      <a class='nav-link dropdown-toggle' ngbDropdownToggle href='javascript:void(0);' id='general-maintenance-menu'>
+          <span>
+              <fa-icon icon='wrench'></fa-icon>
+              <span>
+                 Maintenance
+              </span>
+          </span>
+      </a>
+      <ul class='dropdown-menu' ngbDropdownMenu aria-labelledby='general-maintenance-menu'>
+        <li *jhiHasAnyAuthority="'ROLE_LEASE_MANAGER'">
+          <a
+            class='dropdown-item'
+            routerLink='lease-period'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Lease Period</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="'ROLE_PREPAYMENTS_MODULE_USER'">
+          <a
+            class='dropdown-item'
+            routerLink='prepayment-mapping'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Prepayment Parameters</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="'ROLE_PREPAYMENTS_MODULE_USER'">
+          <a
+            class='dropdown-item'
+            routerLink='amortization-period'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Amortization Period</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="'ROLE_PREPAYMENTS_MODULE_USER'">
+          <a
+            class='dropdown-item'
+            routerLink='amortization-sequence'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Amortization Sequence</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="'ROLE_BOOK_KEEPING'">
+          <a
+            class='dropdown-item'
+            routerLink='transaction-account'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Transaction Account</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority=
+              "[
+                'ROLE_PREPAYMENTS_MODULE_USER',
+                'ROLE_LEASE_MANAGER',
+                'ROLE_FIXED_ASSETS_USER',
+                ]"
+        >
+          <a
+            class='dropdown-item'
+            routerLink='settlement'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Settlements</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority=
+          "[
+          'ROLE_PREPAYMENTS_MODULE_USER',
+          'ROLE_LEASE_MANAGER',
+           'ROLE_FIXED_ASSETS_USER',
+          ]">
+          <a
+            class='dropdown-item'
+            routerLink='payment-invoice'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Invoices</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority=
+              "[
+                'ROLE_PREPAYMENTS_MODULE_USER',
+                'ROLE_FIXED_ASSETS_USER',
+                'ROLE_LEASE_MANAGER',
+                ]">
+          <a
+            class='dropdown-item'
+            routerLink='service-outlet'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Service Outlet</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_CONTRACT_MANAGER', 'ROLE_LEASE_MANAGER']">
+          <a
+            class='dropdown-item'
+            routerLink='contract-metadata'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Contract Metadata</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='/erp/dealer'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+          <span>
+              <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+              <span>Dealers</span>
+          </span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='/placeholder'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+          <span>
+              <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+              <span>Placeholders</span>
+          </span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='/universally-unique-mapping'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+          <span>
+              <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+              <span>Application Mapping</span>
+          </span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="[
+        'ROLE_LEASE_MANAGER',
+        'ROLE_FIXED_ASSETS_USER',
+        'ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class='dropdown-item'
+            routerLink='/business-document'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+          <span>
+              <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+              <span>Business Documents</span>
+          </span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="fiscal-month"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fiscal Month</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="fiscal-quarter"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fiscal Quarter</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="fiscal-year"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fiscal Year</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="prepayment-mapping"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Prepayment Mapping</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="[
+        'ROLE_LEASE_MANAGER',
+        'ROLE_FIXED_ASSETS_USER',
+        ]">
+          <a
+            class="dropdown-item"
+            routerLink="depreciation-method"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Depreciation Method</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="[
+        'ROLE_LEASE_MANAGER',
+        'ROLE_FIXED_ASSETS_USER',
+        ]">
+          <a
+            class="dropdown-item"
+            routerLink="delivery-note"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Delivery Note</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="[
+        'ROLE_LEASE_MANAGER',
+        'ROLE_FIXED_ASSETS_USER',
+        ]">
+          <a
+            class="dropdown-item"
+            routerLink="business-stamp"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Business Stamp</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="[
+        'ROLE_LEASE_MANAGER',
+        'ROLE_FIXED_ASSETS_USER',
+        ]">
+          <a
+            class="dropdown-item"
+            routerLink="purchase-order"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Purchase Order</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="[
+        'ROLE_LEASE_MANAGER',
+        'ROLE_FIXED_ASSETS_USER',
+        ]">
+          <a
+            class="dropdown-item"
+            routerLink="payment-invoice"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Payment Invoice</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="[
+        'ROLE_LEASE_MANAGER',
+        'ROLE_FIXED_ASSETS_USER',
+        ]">
+          <a
+            class="dropdown-item"
+            routerLink="settlement"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Settlement</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="[
+        'ROLE_LEASE_MANAGER',
+        'ROLE_FIXED_ASSETS_USER',
+        ]">
+          <a
+            class="dropdown-item"
+            routerLink="service-outlet"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Service Outlet</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="[
+        'ROLE_LEASE_MANAGER',
+        'ROLE_FIXED_ASSETS_USER',
+        ]">
+          <a
+            class="dropdown-item"
+            routerLink="bank-branch-code"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Bank Branch Code</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="[
+        'ROLE_LEASE_MANAGER',
+        'ROLE_FIXED_ASSETS_USER',
+        ]">
+          <a
+            class="dropdown-item"
+            routerLink="county-code"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>County Code</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="[
+        'ROLE_LEASE_MANAGER',
+        'ROLE_FIXED_ASSETS_USER',
+        ]">
+          <a
+            class="dropdown-item"
+            routerLink="outlet-status"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Outlet Status</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="[
+        'ROLE_LEASE_MANAGER',
+        'ROLE_FIXED_ASSETS_USER',
+        ]">
+          <a
+            class="dropdown-item"
+            routerLink="outlet-type"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Outlet Type</span>
+          </a>
+        </li>
+
+      </ul>
+    </li>
+  </ul>
+</div>

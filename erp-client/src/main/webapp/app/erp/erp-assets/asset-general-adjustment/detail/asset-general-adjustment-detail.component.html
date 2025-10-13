@@ -1,0 +1,115 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="assetGeneralAdjustment">
+      <h2 data-cy="assetGeneralAdjustmentDetailsHeading"><span>Asset General Adjustment</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ assetGeneralAdjustment.id }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ assetGeneralAdjustment.description }}</span>
+        </dd>
+        <dt><span>Devaluation Amount</span></dt>
+        <dd>
+          <span>{{ assetGeneralAdjustment.devaluationAmount | currency }}</span>
+        </dd>
+        <dt><span>Adjustment Date</span></dt>
+        <dd>
+          <span>{{ assetGeneralAdjustment.adjustmentDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Time Of Creation</span></dt>
+        <dd>
+          <span>{{ assetGeneralAdjustment.timeOfCreation | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Adjustment Reference Id</span></dt>
+        <dd>
+          <span>{{ assetGeneralAdjustment.adjustmentReferenceId }}</span>
+        </dd>
+        <dt><span>Effective Period</span></dt>
+        <dd>
+          <div *ngIf="assetGeneralAdjustment.effectivePeriod">
+            <a [routerLink]="['/depreciation-period', assetGeneralAdjustment.effectivePeriod?.id, 'view']">{{
+              assetGeneralAdjustment.effectivePeriod?.periodCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Asset Registration</span></dt>
+        <dd>
+          <div *ngIf="assetGeneralAdjustment.assetRegistration">
+            <a [routerLink]="['/asset-registration', assetGeneralAdjustment.assetRegistration?.id, 'view']">{{
+              assetGeneralAdjustment.assetRegistration?.assetNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Created By</span></dt>
+        <dd>
+          <div *ngIf="assetGeneralAdjustment.createdBy">
+            <a [routerLink]="['/application-user', assetGeneralAdjustment.createdBy?.id, 'view']">{{
+              assetGeneralAdjustment.createdBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Last Modified By</span></dt>
+        <dd>
+          <div *ngIf="assetGeneralAdjustment.lastModifiedBy">
+            <a [routerLink]="['/application-user', assetGeneralAdjustment.lastModifiedBy?.id, 'view']">{{
+              assetGeneralAdjustment.lastModifiedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Last Accessed By</span></dt>
+        <dd>
+          <div *ngIf="assetGeneralAdjustment.lastAccessedBy">
+            <a [routerLink]="['/application-user', assetGeneralAdjustment.lastAccessedBy?.id, 'view']">{{
+              assetGeneralAdjustment.lastAccessedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <div *ngIf="assetGeneralAdjustment.placeholder">
+            <a [routerLink]="['/placeholder', assetGeneralAdjustment.placeholder?.id, 'view']">{{
+              assetGeneralAdjustment.placeholder?.description
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/asset-general-adjustment', assetGeneralAdjustment.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

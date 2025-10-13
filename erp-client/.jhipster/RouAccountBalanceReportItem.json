@@ -1,0 +1,46 @@
+{
+  "clientRootFolder": "leases",
+  "fields": [
+    {
+      "fieldName": "assetAccountName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetAccountNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "depreciationAccountNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "totalLeaseAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "accruedDepreciationAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "currentPeriodDepreciationAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "netBookValue",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "fiscalPeriodEndDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": true,
+  "pagination": "infinite-scroll",
+  "name": "RouAccountBalanceReportItem",
+  "changelogDate": "20240313091444",
+  "incrementalChangelog": false
+}

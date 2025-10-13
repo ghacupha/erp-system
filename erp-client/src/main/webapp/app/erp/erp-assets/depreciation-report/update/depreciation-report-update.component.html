@@ -1,0 +1,149 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-depreciation-report-heading" data-cy="DepreciationReportCreateUpdateHeading">Create or edit a Depreciation Report</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportName">Report Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="reportName"
+            id="field_reportName"
+            data-cy="reportName"
+            formControlName="reportName"
+          />
+          <div *ngIf="editForm.get('reportName')!.invalid && (editForm.get('reportName')!.dirty || editForm.get('reportName')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('reportName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_timeOfReportRequest">Time Of Report Request</label>
+          <div class="d-flex">
+            <input
+              id="field_timeOfReportRequest"
+              data-cy="timeOfReportRequest"
+              type="datetime-local"
+              class="form-control"
+              name="timeOfReportRequest"
+              formControlName="timeOfReportRequest"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          <div
+            *ngIf="
+              editForm.get('timeOfReportRequest')!.invalid &&
+              (editForm.get('timeOfReportRequest')!.dirty || editForm.get('timeOfReportRequest')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('timeOfReportRequest')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('timeOfReportRequest')?.errors?.ZonedDateTimelocal">
+              This field should be a date and time.
+            </small>
+          </div>
+        </div>
+
+        <jhi-depreciation-period-form-control
+          ngDefaultControl
+          formControlName='depreciationPeriod'
+          [inputValue]="editForm.get('depreciationPeriod')!.value"
+          (valueSelected)='updateDepreciationPeriod($event)'
+          inputControlLabel='Depreciation Period'
+        >
+        </jhi-depreciation-period-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_serviceOutlet">Service Outlet</label>
+          <select
+            class="form-control"
+            id="field_serviceOutlet"
+            data-cy="serviceOutlet"
+            name="serviceOutlet"
+            formControlName="serviceOutlet"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                serviceOutletOption.id === editForm.get('serviceOutlet')!.value?.id
+                  ? editForm.get('serviceOutlet')!.value
+                  : serviceOutletOption
+              "
+              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
+            >
+              {{ serviceOutletOption.outletCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetCategory">Asset Category</label>
+          <select
+            class="form-control"
+            id="field_assetCategory"
+            data-cy="assetCategory"
+            name="assetCategory"
+            formControlName="assetCategory"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                assetCategoryOption.id === editForm.get('assetCategory')!.value?.id
+                  ? editForm.get('assetCategory')!.value
+                  : assetCategoryOption
+              "
+              *ngFor="let assetCategoryOption of assetCategoriesSharedCollection; trackBy: trackAssetCategoryById"
+            >
+              {{ assetCategoryOption.assetCategoryName }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

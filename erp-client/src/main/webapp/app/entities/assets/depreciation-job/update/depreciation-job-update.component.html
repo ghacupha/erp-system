@@ -1,0 +1,204 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-depreciation-job-heading" data-cy="DepreciationJobCreateUpdateHeading">Create or edit a Depreciation Job</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_timeOfCommencement">Time Of Commencement</label>
+          <div class="d-flex">
+            <input
+              id="field_timeOfCommencement"
+              data-cy="timeOfCommencement"
+              type="datetime-local"
+              class="form-control"
+              name="timeOfCommencement"
+              formControlName="timeOfCommencement"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationJobStatus">Depreciation Job Status</label>
+          <select
+            class="form-control"
+            name="depreciationJobStatus"
+            formControlName="depreciationJobStatus"
+            id="field_depreciationJobStatus"
+            data-cy="depreciationJobStatus"
+          >
+            <option [ngValue]="null"></option>
+            <option *ngFor="let depreciationJobStatusType of depreciationJobStatusTypeValues" [value]="depreciationJobStatusType">
+              depreciationJobStatusType
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_numberOfBatches">Number Of Batches</label>
+          <input
+            type="number"
+            class="form-control"
+            name="numberOfBatches"
+            id="field_numberOfBatches"
+            data-cy="numberOfBatches"
+            formControlName="numberOfBatches"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processedBatches">Processed Batches</label>
+          <input
+            type="number"
+            class="form-control"
+            name="processedBatches"
+            id="field_processedBatches"
+            data-cy="processedBatches"
+            formControlName="processedBatches"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_lastBatchSize">Last Batch Size</label>
+          <input
+            type="number"
+            class="form-control"
+            name="lastBatchSize"
+            id="field_lastBatchSize"
+            data-cy="lastBatchSize"
+            formControlName="lastBatchSize"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processedItems">Processed Items</label>
+          <input
+            type="number"
+            class="form-control"
+            name="processedItems"
+            id="field_processedItems"
+            data-cy="processedItems"
+            formControlName="processedItems"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processingTime">Processing Time</label>
+          <input
+            type="text"
+            class="form-control"
+            name="processingTime"
+            id="field_processingTime"
+            data-cy="processingTime"
+            formControlName="processingTime"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalItems">Total Items</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalItems"
+            id="field_totalItems"
+            data-cy="totalItems"
+            formControlName="totalItems"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_createdBy">Created By</label>
+          <select class="form-control" id="field_createdBy" data-cy="createdBy" name="createdBy" formControlName="createdBy">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                applicationUserOption.id === editForm.get('createdBy')!.value?.id ? editForm.get('createdBy')!.value : applicationUserOption
+              "
+              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
+            >
+              {{ applicationUserOption.designation }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationPeriod">Depreciation Period</label>
+          <select
+            class="form-control"
+            id="field_depreciationPeriod"
+            data-cy="depreciationPeriod"
+            name="depreciationPeriod"
+            formControlName="depreciationPeriod"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                depreciationPeriodOption.id === editForm.get('depreciationPeriod')!.value?.id
+                  ? editForm.get('depreciationPeriod')!.value
+                  : depreciationPeriodOption
+              "
+              *ngFor="let depreciationPeriodOption of depreciationPeriodsCollection; trackBy: trackDepreciationPeriodById"
+            >
+              {{ depreciationPeriodOption.endDate }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

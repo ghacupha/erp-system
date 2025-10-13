@@ -1,0 +1,91 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="agentBankingActivity">
+      <h2 data-cy="agentBankingActivityDetailsHeading"><span>Agent Banking Activity</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ agentBankingActivity.id }}</span>
+        </dd>
+        <dt><span>Reporting Date</span></dt>
+        <dd>
+          <span>{{ agentBankingActivity.reportingDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Agent Unique Id</span></dt>
+        <dd>
+          <span>{{ agentBankingActivity.agentUniqueId }}</span>
+        </dd>
+        <dt><span>Terminal Unique Id</span></dt>
+        <dd>
+          <span>{{ agentBankingActivity.terminalUniqueId }}</span>
+        </dd>
+        <dt><span>Total Count Of Transactions</span></dt>
+        <dd>
+          <span>{{ agentBankingActivity.totalCountOfTransactions }}</span>
+        </dd>
+        <dt><span>Total Value Of Transactions In LCY</span></dt>
+        <dd>
+          <span>{{ agentBankingActivity.totalValueOfTransactionsInLCY }}</span>
+        </dd>
+        <dt><span>Bank Code</span></dt>
+        <dd>
+          <div *ngIf="agentBankingActivity.bankCode">
+            <a [routerLink]="['/institution-code', agentBankingActivity.bankCode?.id, 'view']">{{
+              agentBankingActivity.bankCode?.institutionName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Branch Code</span></dt>
+        <dd>
+          <div *ngIf="agentBankingActivity.branchCode">
+            <a [routerLink]="['/bank-branch-code', agentBankingActivity.branchCode?.id, 'view']">{{
+              agentBankingActivity.branchCode?.branchCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Transaction Type</span></dt>
+        <dd>
+          <div *ngIf="agentBankingActivity.transactionType">
+            <a [routerLink]="['/bank-transaction-type', agentBankingActivity.transactionType?.id, 'view']">{{
+              agentBankingActivity.transactionType?.transactionTypeCode
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/agent-banking-activity', agentBankingActivity.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+{
+  "changelogDate": "20210722140431",
+  "clientRootFolder": "tax",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "entityTableName": "tax_rule",
+  "fields": [
+    {
+      "fieldName": "telcoExciseDuty",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "valueAddedTax",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "withholdingVAT",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "withholdingTaxConsultancy",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "withholdingTaxRent",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "cateringLevy",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "serviceCharge",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "withholdingTaxImportedService",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "erpService",
+  "name": "TaxRule",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl"
+}

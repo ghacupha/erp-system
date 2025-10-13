@@ -1,0 +1,66 @@
+{
+  "changelogDate": "20210721172450",
+  "clientRootFolder": "settlement",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "entityTableName": "payment_calculation",
+  "fields": [
+    {
+      "fieldName": "paymentExpense",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "withholdingVAT",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "withholdingTax",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "paymentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "erpService",
+  "name": "PaymentCalculation",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "paymentLabel",
+      "otherEntityRelationshipName": "paymentCalculation",
+      "ownerSide": true,
+      "relationshipName": "paymentLabel",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "paymentCategory",
+      "otherEntityRelationshipName": "paymentCalculation",
+      "relationshipName": "paymentCategory",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl"
+}

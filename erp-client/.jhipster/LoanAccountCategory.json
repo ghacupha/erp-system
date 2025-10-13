@@ -1,0 +1,35 @@
+{
+  "changelogDate": "20230914091202",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "loanAccountMutationCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "loanAccountMutationType",
+      "fieldType": "LoanAccountMutationTypes",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "RESTRUCTURED,WRITTEN_OFF,NPL_RECOVERY"
+    },
+    {
+      "fieldName": "loanAccountMutationDetails",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "loanAccountMutationDescription",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "LoanAccountCategory",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

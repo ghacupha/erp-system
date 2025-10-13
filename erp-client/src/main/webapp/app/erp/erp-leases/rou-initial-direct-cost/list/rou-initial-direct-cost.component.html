@@ -1,0 +1,171 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="RouInitialDirectCostHeading">
+    <span>ROU Initial Direct Costs</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-rou-initial-direct-cost"
+        [routerLink]="['/rou-initial-direct-cost/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new Rou Initial Direct Cost </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="rouInitialDirectCosts?.length === 0">
+    <span>No rouInitialDirectCosts found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="rouInitialDirectCosts && rouInitialDirectCosts.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="transactionDate"><span>Transaction Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="cost"><span>Cost</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="referenceNumber"><span>Reference Number</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="leaseContract.shortTitle"><span>Lease Contract</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="settlementDetails.paymentNumber"><span>Settlement Details</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="targetROUAccount.accountName"><span>Target ROU Account</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="transferAccount.accountName"><span>Transfer Account</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rouInitialDirectCost of rouInitialDirectCosts; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/rou-initial-direct-cost', rouInitialDirectCost.id, 'view']">{{ rouInitialDirectCost.id }}</a>
+          </td>
+          <td>{{ rouInitialDirectCost.transactionDate | formatMediumDate }}</td>
+          <td>{{ rouInitialDirectCost.description }}</td>
+          <td>{{ rouInitialDirectCost.cost | currency }}</td>
+          <td>{{ rouInitialDirectCost.referenceNumber }}</td>
+          <td>
+            <div *ngIf="rouInitialDirectCost.leaseContract">
+              <a [routerLink]="['/ifrs-16-lease-contract', rouInitialDirectCost.leaseContract?.id, 'view']">{{
+                rouInitialDirectCost.leaseContract?.shortTitle
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="rouInitialDirectCost.settlementDetails">
+              <a [routerLink]="['/settlement', rouInitialDirectCost.settlementDetails?.id, 'view']">{{
+                rouInitialDirectCost.settlementDetails?.paymentNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="rouInitialDirectCost.targetROUAccount">
+              <a [routerLink]="['/transaction-account', rouInitialDirectCost.targetROUAccount?.id, 'view']">{{
+                rouInitialDirectCost.targetROUAccount?.accountName
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="rouInitialDirectCost.transferAccount">
+              <a [routerLink]="['/transaction-account', rouInitialDirectCost.transferAccount?.id, 'view']">{{
+                rouInitialDirectCost.transferAccount?.accountName
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/rou-initial-direct-cost', rouInitialDirectCost.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/rou-initial-direct-cost', rouInitialDirectCost.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(rouInitialDirectCost)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="rouInitialDirectCosts && rouInitialDirectCosts.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

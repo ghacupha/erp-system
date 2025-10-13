@@ -1,0 +1,181 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="DepreciationPeriodHeading">
+    <span>Depreciation Periods</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-depreciation-period"
+        [routerLink]="['/depreciation-period/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new Depreciation Period </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="depreciationPeriods?.length === 0">
+    <span>No depreciationPeriods found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="depreciationPeriods && depreciationPeriods.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="startDate"><span>Start Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="endDate"><span>End Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="depreciationPeriodStatus">
+            <span>Depreciation Period Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="periodCode"><span>Period Code</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="processLocked"><span>Process Locked</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="previousPeriod.endDate"><span>Previous Period</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="createdBy.applicationIdentity"><span>Created By</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fiscalYear.fiscalYearCode"><span>Fiscal Year</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fiscalMonth.id"><span>Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fiscalQuarter.id"><span>Fiscal Quarter</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let depreciationPeriod of depreciationPeriods; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/depreciation-period', depreciationPeriod.id, 'view']">{{ depreciationPeriod.id }}</a>
+          </td>
+          <td>{{ depreciationPeriod.startDate | formatMediumDate }}</td>
+          <td>{{ depreciationPeriod.endDate | formatMediumDate }}</td>
+          <td>{{ depreciationPeriod.depreciationPeriodStatus }}</td>
+          <td>{{ depreciationPeriod.periodCode }}</td>
+          <td>{{ depreciationPeriod.processLocked }}</td>
+          <td>
+            <div *ngIf="depreciationPeriod.previousPeriod">
+              <a [routerLink]="['/depreciation-period', depreciationPeriod.previousPeriod?.id, 'view']">{{
+                depreciationPeriod.previousPeriod?.endDate
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="depreciationPeriod.createdBy">
+              <a [routerLink]="['/application-user', depreciationPeriod.createdBy?.id, 'view']">{{
+                depreciationPeriod.createdBy?.applicationIdentity
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="depreciationPeriod.fiscalYear">
+              <a [routerLink]="['/fiscal-year', depreciationPeriod.fiscalYear?.id, 'view']">{{
+                depreciationPeriod.fiscalYear?.fiscalYearCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="depreciationPeriod.fiscalMonth">
+              <a [routerLink]="['/fiscal-month', depreciationPeriod.fiscalMonth?.id, 'view']">{{ depreciationPeriod.fiscalMonth?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="depreciationPeriod.fiscalQuarter">
+              <a [routerLink]="['/fiscal-quarter', depreciationPeriod.fiscalQuarter?.id, 'view']">{{
+                depreciationPeriod.fiscalQuarter?.id
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/depreciation-period', depreciationPeriod.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/depreciation-period', depreciationPeriod.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(depreciationPeriod)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="depreciationPeriods && depreciationPeriods.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

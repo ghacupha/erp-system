@@ -1,0 +1,189 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-depreciation-batch-sequence-heading" data-cy="DepreciationBatchSequenceCreateUpdateHeading">
+        Create or edit a Depreciation Batch Sequence
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_startIndex">Start Index</label>
+          <input
+            type="number"
+            class="form-control"
+            name="startIndex"
+            id="field_startIndex"
+            data-cy="startIndex"
+            formControlName="startIndex"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_endIndex">End Index</label>
+          <input type="number" class="form-control" name="endIndex" id="field_endIndex" data-cy="endIndex" formControlName="endIndex" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_createdAt">Created At</label>
+          <div class="d-flex">
+            <input
+              id="field_createdAt"
+              data-cy="createdAt"
+              type="datetime-local"
+              class="form-control"
+              name="createdAt"
+              formControlName="createdAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationBatchStatus">Depreciation Batch Status</label>
+          <select
+            class="form-control"
+            name="depreciationBatchStatus"
+            formControlName="depreciationBatchStatus"
+            id="field_depreciationBatchStatus"
+            data-cy="depreciationBatchStatus"
+          >
+            <option [ngValue]="null"></option>
+            <option *ngFor="let depreciationBatchStatusType of depreciationBatchStatusTypeValues" [value]="depreciationBatchStatusType">
+              depreciationBatchStatusType
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_batchSize">Batch Size</label>
+          <input type="number" class="form-control" name="batchSize" id="field_batchSize" data-cy="batchSize" formControlName="batchSize" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processedItems">Processed Items</label>
+          <input
+            type="number"
+            class="form-control"
+            name="processedItems"
+            id="field_processedItems"
+            data-cy="processedItems"
+            formControlName="processedItems"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sequenceNumber">Sequence Number</label>
+          <input
+            type="number"
+            class="form-control"
+            name="sequenceNumber"
+            id="field_sequenceNumber"
+            data-cy="sequenceNumber"
+            formControlName="sequenceNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_isLastBatch">Is Last Batch</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="isLastBatch"
+            id="field_isLastBatch"
+            data-cy="isLastBatch"
+            formControlName="isLastBatch"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processingTime">Processing Time</label>
+          <input
+            type="text"
+            class="form-control"
+            name="processingTime"
+            id="field_processingTime"
+            data-cy="processingTime"
+            formControlName="processingTime"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalItems">Total Items</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalItems"
+            id="field_totalItems"
+            data-cy="totalItems"
+            formControlName="totalItems"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationJob">Depreciation Job</label>
+          <select
+            class="form-control"
+            id="field_depreciationJob"
+            data-cy="depreciationJob"
+            name="depreciationJob"
+            formControlName="depreciationJob"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                depreciationJobOption.id === editForm.get('depreciationJob')!.value?.id
+                  ? editForm.get('depreciationJob')!.value
+                  : depreciationJobOption
+              "
+              *ngFor="let depreciationJobOption of depreciationJobsSharedCollection; trackBy: trackDepreciationJobById"
+            >
+              {{ depreciationJobOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

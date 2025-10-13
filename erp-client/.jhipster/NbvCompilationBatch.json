@@ -1,0 +1,74 @@
+{
+  "fields": [
+    {
+      "fieldName": "startIndex",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "endIndex",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "compilationBatchStatus",
+      "fieldType": "CompilationBatchStatusTypes",
+      "fieldValues": "CREATED,RUNNING,COMPLETED,ERRORED,INTERRUPTED,ENQUEUED"
+    },
+    {
+      "fieldName": "compilationBatchIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "compilationJobidentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "depreciationPeriodIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "fiscalMonthIdentifier",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "batchSize",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "processedItems",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "sequenceNumber",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "isLastBatch",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "processingTime",
+      "fieldType": "Duration"
+    },
+    {
+      "fieldName": "totalItems",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "nbvCompilationJob",
+      "otherEntityName": "nbvCompilationJob",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "jobTitle"
+    }
+  ],
+  "clientRootFolder": "assets",
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "infinite-scroll",
+  "name": "NbvCompilationBatch",
+  "changelogDate": "20240219093155",
+  "incrementalChangelog": false
+}

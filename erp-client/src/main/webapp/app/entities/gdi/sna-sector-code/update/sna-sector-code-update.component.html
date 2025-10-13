@@ -1,0 +1,142 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-sna-sector-code-heading" data-cy="SnaSectorCodeCreateUpdateHeading">Create or edit a Sna Sector Code</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sectorTypeCode">Sector Type Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="sectorTypeCode"
+            id="field_sectorTypeCode"
+            data-cy="sectorTypeCode"
+            formControlName="sectorTypeCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('sectorTypeCode')!.invalid && (editForm.get('sectorTypeCode')!.dirty || editForm.get('sectorTypeCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('sectorTypeCode')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_mainSectorCode">Main Sector Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="mainSectorCode"
+            id="field_mainSectorCode"
+            data-cy="mainSectorCode"
+            formControlName="mainSectorCode"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_mainSectorTypeName">Main Sector Type Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="mainSectorTypeName"
+            id="field_mainSectorTypeName"
+            data-cy="mainSectorTypeName"
+            formControlName="mainSectorTypeName"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_subSectorCode">Sub Sector Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="subSectorCode"
+            id="field_subSectorCode"
+            data-cy="subSectorCode"
+            formControlName="subSectorCode"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_subSectorName">Sub Sector Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="subSectorName"
+            id="field_subSectorName"
+            data-cy="subSectorName"
+            formControlName="subSectorName"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_subSubSectorCode">Sub Sub Sector Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="subSubSectorCode"
+            id="field_subSubSectorCode"
+            data-cy="subSubSectorCode"
+            formControlName="subSubSectorCode"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_subSubSectorName">Sub Sub Sector Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="subSubSectorName"
+            id="field_subSubSectorName"
+            data-cy="subSubSectorName"
+            formControlName="subSubSectorName"
+          />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,324 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-depreciation-job-notice-heading" data-cy="DepreciationJobNoticeCreateUpdateHeading">
+        Create or edit a Depreciation Job Notice
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_eventNarrative">Event Narrative</label>
+          <input
+            type="text"
+            class="form-control"
+            name="eventNarrative"
+            id="field_eventNarrative"
+            data-cy="eventNarrative"
+            formControlName="eventNarrative"
+          />
+          <div
+            *ngIf="
+              editForm.get('eventNarrative')!.invalid && (editForm.get('eventNarrative')!.dirty || editForm.get('eventNarrative')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('eventNarrative')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_eventTimeStamp">Event Time Stamp</label>
+          <div class="d-flex">
+            <input
+              id="field_eventTimeStamp"
+              data-cy="eventTimeStamp"
+              type="datetime-local"
+              class="form-control"
+              name="eventTimeStamp"
+              formControlName="eventTimeStamp"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          <div
+            *ngIf="
+              editForm.get('eventTimeStamp')!.invalid && (editForm.get('eventTimeStamp')!.dirty || editForm.get('eventTimeStamp')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('eventTimeStamp')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('eventTimeStamp')?.errors?.ZonedDateTimelocal">
+              This field should be a date and time.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationNoticeStatus">Depreciation Notice Status</label>
+          <select
+            class="form-control"
+            name="depreciationNoticeStatus"
+            formControlName="depreciationNoticeStatus"
+            id="field_depreciationNoticeStatus"
+            data-cy="depreciationNoticeStatus"
+          >
+            <option [ngValue]="null"></option>
+            <option *ngFor="let depreciationNoticeStatusType of depreciationNoticeStatusTypeValues" [value]="depreciationNoticeStatusType">
+              depreciationNoticeStatusType
+            </option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('depreciationNoticeStatus')!.invalid &&
+              (editForm.get('depreciationNoticeStatus')!.dirty || editForm.get('depreciationNoticeStatus')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('depreciationNoticeStatus')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sourceModule">Source Module</label>
+          <input
+            type="text"
+            class="form-control"
+            name="sourceModule"
+            id="field_sourceModule"
+            data-cy="sourceModule"
+            formControlName="sourceModule"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sourceEntity">Source Entity</label>
+          <input
+            type="text"
+            class="form-control"
+            name="sourceEntity"
+            id="field_sourceEntity"
+            data-cy="sourceEntity"
+            formControlName="sourceEntity"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_errorCode">Error Code</label>
+          <input type="text" class="form-control" name="errorCode" id="field_errorCode" data-cy="errorCode" formControlName="errorCode" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_errorMessage">Error Message</label>
+          <textarea
+            class="form-control"
+            name="errorMessage"
+            id="field_errorMessage"
+            data-cy="errorMessage"
+            formControlName="errorMessage"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_userAction">User Action</label>
+          <input
+            type="text"
+            class="form-control"
+            name="userAction"
+            id="field_userAction"
+            data-cy="userAction"
+            formControlName="userAction"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_technicalDetails">Technical Details</label>
+          <textarea
+            class="form-control"
+            name="technicalDetails"
+            id="field_technicalDetails"
+            data-cy="technicalDetails"
+            formControlName="technicalDetails"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationJob">Depreciation Job</label>
+          <select
+            class="form-control"
+            id="field_depreciationJob"
+            data-cy="depreciationJob"
+            name="depreciationJob"
+            formControlName="depreciationJob"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                depreciationJobOption.id === editForm.get('depreciationJob')!.value?.id
+                  ? editForm.get('depreciationJob')!.value
+                  : depreciationJobOption
+              "
+              *ngFor="let depreciationJobOption of depreciationJobsSharedCollection; trackBy: trackDepreciationJobById"
+            >
+              {{ depreciationJobOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationBatchSequence">Depreciation Batch Sequence</label>
+          <select
+            class="form-control"
+            id="field_depreciationBatchSequence"
+            data-cy="depreciationBatchSequence"
+            name="depreciationBatchSequence"
+            formControlName="depreciationBatchSequence"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                depreciationBatchSequenceOption.id === editForm.get('depreciationBatchSequence')!.value?.id
+                  ? editForm.get('depreciationBatchSequence')!.value
+                  : depreciationBatchSequenceOption
+              "
+              *ngFor="
+                let depreciationBatchSequenceOption of depreciationBatchSequencesSharedCollection;
+                trackBy: trackDepreciationBatchSequenceById
+              "
+            >
+              {{ depreciationBatchSequenceOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationPeriod">Depreciation Period</label>
+          <select
+            class="form-control"
+            id="field_depreciationPeriod"
+            data-cy="depreciationPeriod"
+            name="depreciationPeriod"
+            formControlName="depreciationPeriod"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                depreciationPeriodOption.id === editForm.get('depreciationPeriod')!.value?.id
+                  ? editForm.get('depreciationPeriod')!.value
+                  : depreciationPeriodOption
+              "
+              *ngFor="let depreciationPeriodOption of depreciationPeriodsSharedCollection; trackBy: trackDepreciationPeriodById"
+            >
+              {{ depreciationPeriodOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_universallyUniqueMappings">Universally Unique Mapping</label>
+          <select
+            class="form-control"
+            id="field_universallyUniqueMappings"
+            data-cy="universallyUniqueMapping"
+            multiple
+            name="universallyUniqueMappings"
+            formControlName="universallyUniqueMappings"
+          >
+            <option
+              [ngValue]="
+                getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('universallyUniqueMappings')!.value)
+              "
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.universalKey }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_superintended">Superintended</label>
+          <select
+            class="form-control"
+            id="field_superintended"
+            data-cy="superintended"
+            name="superintended"
+            formControlName="superintended"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                applicationUserOption.id === editForm.get('superintended')!.value?.id
+                  ? editForm.get('superintended')!.value
+                  : applicationUserOption
+              "
+              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
+            >
+              {{ applicationUserOption.applicationIdentity }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

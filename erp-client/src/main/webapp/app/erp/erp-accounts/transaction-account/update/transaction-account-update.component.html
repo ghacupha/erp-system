@@ -1,0 +1,273 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-transaction-account-heading-new"
+        data-cy="TransactionAccountCreateUpdateHeading"
+        [hidden]='!weAreCreating'>
+        New Transaction Account
+      </h2>
+
+      <h2
+        id="jhi-transaction-account-heading-copy"
+        data-cy="TransactionAccountCreateUpdateHeading"
+        [hidden]='!weAreCopying'>
+        Copying Account# {{ selectedItem.accountNumber }}
+      </h2>
+
+      <h2
+        id="jhi-transaction-account-heading-edit"
+        data-cy="TransactionAccountCreateUpdateHeading"
+        [hidden]='!weAreEditing'>
+        Editing Account# {{ selectedItem.accountNumber }}
+      </h2>
+
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountNumber">Account Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="accountNumber"
+            id="field_accountNumber"
+            data-cy="accountNumber"
+            formControlName="accountNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('accountNumber')!.invalid && (editForm.get('accountNumber')!.dirty || editForm.get('accountNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('accountNumber')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountName">Account Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="accountName"
+            id="field_accountName"
+            data-cy="accountName"
+            formControlName="accountName"
+          />
+          <div *ngIf="editForm.get('accountName')!.invalid && (editForm.get('accountName')!.dirty || editForm.get('accountName')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('accountName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountType">Account Type</label>
+          <select class="form-control" name="accountType" formControlName="accountType" id="field_accountType" data-cy="accountType">
+            <option [ngValue]="null"></option>
+            <option *ngFor="let accountTypes of accountTypesValues" [value]="accountTypes"> {{ accountTypes }}</option>
+          </select>
+          <div *ngIf="editForm.get('accountType')!.invalid && (editForm.get('accountType')!.dirty || editForm.get('accountType')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('accountType')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountSubType">Account Sub Type</label>
+          <select
+            class="form-control"
+            name="accountSubType"
+            formControlName="accountSubType"
+            id="field_accountSubType"
+            data-cy="accountSubType"
+          >
+            <option [ngValue]="null"></option>
+            <option *ngFor="let accountSubTypes of accountSubTypesValues" [value]="accountSubTypes"> {{ accountSubTypes }}</option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('accountSubType')!.invalid && (editForm.get('accountSubType')!.dirty || editForm.get('accountSubType')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('accountSubType')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dummyAccount">Dummy Account</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="dummyAccount"
+            id="field_dummyAccount"
+            data-cy="dummyAccount"
+            formControlName="dummyAccount"
+          />
+        </div>
+
+        <jhi-m21-account-ledger-form-control
+          ngDefaultControl
+          formControlName='accountLedger'
+          [inputValue]="editForm.get('accountLedger')!.value"
+          (valueSelected)='updateAccountLedger($event)'
+          inputControlLabel="Account Ledger"
+        >
+          <option [ngValue]="editForm.get('accountLedger')!.value"></option>
+        </jhi-m21-account-ledger-form-control>
+
+        <jhi-m21-account-category-form-control
+          ngDefaultControl
+          formControlName='accountCategory'
+          [inputValue]="editForm.get('accountCategory')!.value"
+          (valueSelected)='updateAccountCategory($event)'
+          inputControlLabel="Account Category"
+        >
+          <option [ngValue]="editForm.get('accountCategory')!.value"></option>
+        </jhi-m21-account-category-form-control>
+
+        <jhi-m21-service-outlet-form-control
+          ngDefaultControl
+          formControlName='serviceOutlet'
+          [inputValue]="editForm.get('serviceOutlet')!.value"
+          (valueSelected)='updateServiceOutlet($event)'
+          inputControlLabel="Service Outlet"
+        >
+          <option [ngValue]="editForm.get('serviceOutlet')!.value"></option>
+        </jhi-m21-service-outlet-form-control>
+
+        <jhi-m21-settlement-currency-form-control
+          ngDefaultControl
+          formControlName='settlementCurrency'
+          [inputValue]="editForm.get('settlementCurrency')!.value"
+          (valueSelected)='updateSettlementCurrency($event)'
+          inputControlLabel="Currency"
+        >
+          <option [ngValue]="editForm.get('settlementCurrency')!.value"></option>
+        </jhi-m21-settlement-currency-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_institution">Institution</label>
+          <select class="form-control" id="field_institution" data-cy="institution" name="institution" formControlName="institution">
+            <option *ngIf="!editForm.get('institution')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                reportingEntityOption.id === editForm.get('institution')!.value?.id
+                  ? editForm.get('institution')!.value
+                  : reportingEntityOption
+              "
+              *ngFor="let reportingEntityOption of reportingEntitiesSharedCollection; trackBy: trackReportingEntityById"
+            >
+              {{ reportingEntityOption.entityName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['institution'])!.invalid && (editForm.get(['institution'])!.dirty || editForm.get(['institution'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['institution'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_notes">Notes</label>
+          <div>
+            <div *ngIf="editForm.get('notes')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('notes')!.value, editForm.get('notesContentType')!.value)">open</a><br />
+              <span class="pull-left">{{ editForm.get('notesContentType')!.value }}, {{ byteSize(editForm.get('notes')!.value) }}</span>
+              <button
+                type="button"
+                (click)="editForm.patchValue({ notes: null }); editForm.patchValue({ notesContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_notes" data-cy="notes" (change)="setFileData($event, 'notes', false)" />
+          </div>
+          <input type="hidden" class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="notesContentType"
+            id="field_notesContentType"
+            formControlName="notesContentType"
+          />
+        </div>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

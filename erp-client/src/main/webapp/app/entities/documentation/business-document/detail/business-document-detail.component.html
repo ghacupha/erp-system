@@ -1,0 +1,136 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="businessDocument">
+      <h2 data-cy="businessDocumentDetailsHeading"><span>Business Document</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ businessDocument.id }}</span>
+        </dd>
+        <dt><span>Document Title</span></dt>
+        <dd>
+          <span>{{ businessDocument.documentTitle }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ businessDocument.description }}</span>
+        </dd>
+        <dt><span>Document Serial</span></dt>
+        <dd>
+          <span>{{ businessDocument.documentSerial }}</span>
+        </dd>
+        <dt><span>Last Modified</span></dt>
+        <dd>
+          <span>{{ businessDocument.lastModified | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Attachment File Path</span></dt>
+        <dd>
+          <span>{{ businessDocument.attachmentFilePath }}</span>
+        </dd>
+        <dt><span>Document File</span></dt>
+        <dd>
+          <div *ngIf="businessDocument.documentFile">
+            <a (click)="openFile(businessDocument.documentFile, businessDocument.documentFileContentType)">open</a>
+            {{ businessDocument.documentFileContentType }}, {{ byteSize(businessDocument.documentFile) }}
+          </div>
+        </dd>
+        <dt><span>File Tampered</span></dt>
+        <dd>
+          <span>{{ businessDocument.fileTampered }}</span>
+        </dd>
+        <dt><span>Document File Checksum</span></dt>
+        <dd>
+          <span>{{ businessDocument.documentFileChecksum }}</span>
+        </dd>
+        <dt><span>Created By</span></dt>
+        <dd>
+          <div *ngIf="businessDocument.createdBy">
+            <a [routerLink]="['/application-user', businessDocument.createdBy?.id, 'view']">{{
+              businessDocument.createdBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Last Modified By</span></dt>
+        <dd>
+          <div *ngIf="businessDocument.lastModifiedBy">
+            <a [routerLink]="['/application-user', businessDocument.lastModifiedBy?.id, 'view']">{{
+              businessDocument.lastModifiedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Originating Department</span></dt>
+        <dd>
+          <div *ngIf="businessDocument.originatingDepartment">
+            <a [routerLink]="['/dealer', businessDocument.originatingDepartment?.id, 'view']">{{
+              businessDocument.originatingDepartment?.dealerName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Application Mappings</span></dt>
+        <dd>
+          <span *ngFor="let applicationMappings of businessDocument.applicationMappings; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', applicationMappings?.id, 'view']">{{ applicationMappings.universalKey }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of businessDocument.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>File Checksum Algorithm</span></dt>
+        <dd>
+          <div *ngIf="businessDocument.fileChecksumAlgorithm">
+            <a [routerLink]="['/algorithm', businessDocument.fileChecksumAlgorithm?.id, 'view']">{{
+              businessDocument.fileChecksumAlgorithm?.name
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Security Clearance</span></dt>
+        <dd>
+          <div *ngIf="businessDocument.securityClearance">
+            <a [routerLink]="['/security-clearance', businessDocument.securityClearance?.id, 'view']">{{
+              businessDocument.securityClearance?.clearanceLevel
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/business-document', businessDocument.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

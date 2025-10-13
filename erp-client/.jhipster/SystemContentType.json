@@ -1,0 +1,52 @@
+{
+  "changelogDate": "20220616121830",
+  "clientRootFolder": "system",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "contentTypeName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "contentTypeHeader",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "comments",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "availability",
+      "fieldType": "SystemContentTypeAvailability",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SUPPORTED,NOT_SUPPORTED"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "SystemContentType",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "systemContentType",
+      "ownerSide": true,
+      "relationshipName": "placeholders",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "systemContentType",
+      "ownerSide": true,
+      "relationshipName": "sysMaps",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

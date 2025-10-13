@@ -1,0 +1,141 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-tax-reference-heading" data-cy="TaxReferenceCreateUpdateHeading">Create or edit a Tax Reference</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_taxName">Tax Name</label>
+          <input type="text" class="form-control" name="taxName" id="field_taxName" data-cy="taxName" formControlName="taxName" />
+          <div *ngIf="editForm.get('taxName')!.invalid && (editForm.get('taxName')!.dirty || editForm.get('taxName')!.touched)"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_taxDescription">Tax Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="taxDescription"
+            id="field_taxDescription"
+            data-cy="taxDescription"
+            formControlName="taxDescription"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_taxPercentage">Tax Percentage</label>
+          <input
+            type="number"
+            class="form-control"
+            name="taxPercentage"
+            id="field_taxPercentage"
+            data-cy="taxPercentage"
+            formControlName="taxPercentage"
+          />
+          <div
+            *ngIf="
+              editForm.get('taxPercentage')!.invalid && (editForm.get('taxPercentage')!.dirty || editForm.get('taxPercentage')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('taxPercentage')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('taxPercentage')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_taxReferenceType">Tax Reference Type</label>
+          <select
+            class="form-control"
+            name="taxReferenceType"
+            formControlName="taxReferenceType"
+            id="field_taxReferenceType"
+            data-cy="taxReferenceType"
+          >
+            <option [ngValue]="null"></option>
+            <option value="TELCO_EXCISE_DUTY">TELCO_EXCISE_DUTY</option>
+            <option value="VALUE_ADDED_TAX">VALUE_ADDED_TAX</option>
+            <option value="WITHHOLDING_VAT">WITHHOLDING_VAT</option>
+            <option value="WITHHOLDING_TAX_ON_CONSULTANCY">WITHHOLDING_TAX_ON_CONSULTANCY</option>
+            <option value="WITHHOLDING_TAX_ON_RENT">WITHHOLDING_TAX_ON_RENT</option>
+            <option value="CATERING_LEVY">CATERING_LEVY</option>
+            <option value="SERVICE_CHARGE">SERVICE_CHARGE</option>
+            <option value="WITHHOLDING_TAX_ON_IMPORTED_SERVICE">WITHHOLDING_TAX_ON_IMPORTED_SERVICE</option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('taxReferenceType')!.invalid &&
+              (editForm.get('taxReferenceType')!.dirty || editForm.get('taxReferenceType')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('taxReferenceType')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

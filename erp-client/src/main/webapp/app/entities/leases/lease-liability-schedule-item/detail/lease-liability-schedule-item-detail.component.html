@@ -1,0 +1,135 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="leaseLiabilityScheduleItem">
+      <h2 data-cy="leaseLiabilityScheduleItemDetailsHeading"><span>Lease Liability Schedule Item</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleItem.id }}</span>
+        </dd>
+        <dt><span>Sequence Number</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleItem.sequenceNumber }}</span>
+        </dd>
+        <dt><span>Opening Balance</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleItem.openingBalance }}</span>
+        </dd>
+        <dt><span>Cash Payment</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleItem.cashPayment }}</span>
+        </dd>
+        <dt><span>Principal Payment</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleItem.principalPayment }}</span>
+        </dd>
+        <dt><span>Interest Payment</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleItem.interestPayment }}</span>
+        </dd>
+        <dt><span>Outstanding Balance</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleItem.outstandingBalance }}</span>
+        </dd>
+        <dt><span>Interest Payable Opening</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleItem.interestPayableOpening }}</span>
+        </dd>
+        <dt><span>Interest Accrued</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleItem.interestAccrued }}</span>
+        </dd>
+        <dt><span>Interest Payable Closing</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleItem.interestPayableClosing }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of leaseLiabilityScheduleItem.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Universally Unique Mapping</span></dt>
+        <dd>
+          <span *ngFor="let universallyUniqueMapping of leaseLiabilityScheduleItem.universallyUniqueMappings; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', universallyUniqueMapping?.id, 'view']">{{
+              universallyUniqueMapping.universalKey
+            }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Lease Amortization Schedule</span></dt>
+        <dd>
+          <div *ngIf="leaseLiabilityScheduleItem.leaseAmortizationSchedule">
+            <a [routerLink]="['/lease-amortization-schedule', leaseLiabilityScheduleItem.leaseAmortizationSchedule?.id, 'view']">{{
+              leaseLiabilityScheduleItem.leaseAmortizationSchedule?.id
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Contract</span></dt>
+        <dd>
+          <div *ngIf="leaseLiabilityScheduleItem.leaseContract">
+            <a [routerLink]="['/ifrs-16-lease-contract', leaseLiabilityScheduleItem.leaseContract?.id, 'view']">{{
+              leaseLiabilityScheduleItem.leaseContract?.bookingId
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Liability</span></dt>
+        <dd>
+          <div *ngIf="leaseLiabilityScheduleItem.leaseLiability">
+            <a [routerLink]="['/lease-liability', leaseLiabilityScheduleItem.leaseLiability?.id, 'view']">{{
+              leaseLiabilityScheduleItem.leaseLiability?.id
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Period</span></dt>
+        <dd>
+          <div *ngIf="leaseLiabilityScheduleItem.leasePeriod">
+            <a [routerLink]="['/lease-repayment-period', leaseLiabilityScheduleItem.leasePeriod?.id, 'view']">{{
+              leaseLiabilityScheduleItem.leasePeriod?.periodCode
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/lease-liability-schedule-item', leaseLiabilityScheduleItem.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

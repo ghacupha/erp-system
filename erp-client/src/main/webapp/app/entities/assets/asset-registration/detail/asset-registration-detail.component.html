@@ -1,0 +1,218 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="assetRegistration">
+      <h2 data-cy="assetRegistrationDetailsHeading"><span>Asset Registration</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ assetRegistration.id }}</span>
+        </dd>
+        <dt><span>Asset Number</span></dt>
+        <dd>
+          <span>{{ assetRegistration.assetNumber }}</span>
+        </dd>
+        <dt><span>Asset Tag</span></dt>
+        <dd>
+          <span>{{ assetRegistration.assetTag }}</span>
+        </dd>
+        <dt><span>Asset Details</span></dt>
+        <dd>
+          <span>{{ assetRegistration.assetDetails }}</span>
+        </dd>
+        <dt><span>Asset Cost</span></dt>
+        <dd>
+          <span>{{ assetRegistration.assetCost }}</span>
+        </dd>
+        <dt><span>Comments</span></dt>
+        <dd>
+          <div *ngIf="assetRegistration.comments">
+            <a (click)="openFile(assetRegistration.comments, assetRegistration.commentsContentType)">open</a>
+            {{ assetRegistration.commentsContentType }}, {{ byteSize(assetRegistration.comments) }}
+          </div>
+        </dd>
+        <dt><span>Model Number</span></dt>
+        <dd>
+          <span>{{ assetRegistration.modelNumber }}</span>
+        </dd>
+        <dt><span>Serial Number</span></dt>
+        <dd>
+          <span>{{ assetRegistration.serialNumber }}</span>
+        </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ assetRegistration.remarks }}</span>
+        </dd>
+        <dt><span>Capitalization Date</span></dt>
+        <dd>
+          <span>{{ assetRegistration.capitalizationDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Historical Cost</span></dt>
+        <dd>
+          <span>{{ assetRegistration.historicalCost }}</span>
+        </dd>
+        <dt><span>Registration Date</span></dt>
+        <dd>
+          <span>{{ assetRegistration.registrationDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of assetRegistration.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Payment Invoices</span></dt>
+        <dd>
+          <span *ngFor="let paymentInvoices of assetRegistration.paymentInvoices; let last = last">
+            <a [routerLink]="['/payment-invoice', paymentInvoices?.id, 'view']">{{ paymentInvoices.invoiceNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Other Related Service Outlets</span></dt>
+        <dd>
+          <span *ngFor="let otherRelatedServiceOutlets of assetRegistration.otherRelatedServiceOutlets; let last = last">
+            <a [routerLink]="['/service-outlet', otherRelatedServiceOutlets?.id, 'view']">{{ otherRelatedServiceOutlets.outletCode }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Other Related Settlements</span></dt>
+        <dd>
+          <span *ngFor="let otherRelatedSettlements of assetRegistration.otherRelatedSettlements; let last = last">
+            <a [routerLink]="['/settlement', otherRelatedSettlements?.id, 'view']">{{ otherRelatedSettlements.paymentNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Asset Category</span></dt>
+        <dd>
+          <div *ngIf="assetRegistration.assetCategory">
+            <a [routerLink]="['/asset-category', assetRegistration.assetCategory?.id, 'view']">{{
+              assetRegistration.assetCategory?.assetCategoryName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Purchase Order</span></dt>
+        <dd>
+          <span *ngFor="let purchaseOrder of assetRegistration.purchaseOrders; let last = last">
+            <a [routerLink]="['/purchase-order', purchaseOrder?.id, 'view']">{{ purchaseOrder.purchaseOrderNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Delivery Note</span></dt>
+        <dd>
+          <span *ngFor="let deliveryNote of assetRegistration.deliveryNotes; let last = last">
+            <a [routerLink]="['/delivery-note', deliveryNote?.id, 'view']">{{ deliveryNote.deliveryNoteNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Job Sheet</span></dt>
+        <dd>
+          <span *ngFor="let jobSheet of assetRegistration.jobSheets; let last = last">
+            <a [routerLink]="['/job-sheet', jobSheet?.id, 'view']">{{ jobSheet.serialNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Dealer</span></dt>
+        <dd>
+          <div *ngIf="assetRegistration.dealer">
+            <a [routerLink]="['/dealer', assetRegistration.dealer?.id, 'view']">{{ assetRegistration.dealer?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Designated Users</span></dt>
+        <dd>
+          <span *ngFor="let designatedUsers of assetRegistration.designatedUsers; let last = last">
+            <a [routerLink]="['/dealer', designatedUsers?.id, 'view']">{{ designatedUsers.dealerName }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="assetRegistration.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', assetRegistration.settlementCurrency?.id, 'view']">{{
+              assetRegistration.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Business Document</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of assetRegistration.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Asset Warranty</span></dt>
+        <dd>
+          <span *ngFor="let assetWarranty of assetRegistration.assetWarranties; let last = last">
+            <a [routerLink]="['/asset-warranty', assetWarranty?.id, 'view']">{{ assetWarranty.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Universally Unique Mapping</span></dt>
+        <dd>
+          <span *ngFor="let universallyUniqueMapping of assetRegistration.universallyUniqueMappings; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', universallyUniqueMapping?.id, 'view']">{{
+              universallyUniqueMapping.universalKey
+            }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Asset Accessory</span></dt>
+        <dd>
+          <span *ngFor="let assetAccessory of assetRegistration.assetAccessories; let last = last">
+            <a [routerLink]="['/asset-accessory', assetAccessory?.id, 'view']">{{ assetAccessory.assetDetails }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Main Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="assetRegistration.mainServiceOutlet">
+            <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
+              assetRegistration.mainServiceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Acquiring Transaction</span></dt>
+        <dd>
+          <div *ngIf="assetRegistration.acquiringTransaction">
+            <a [routerLink]="['/settlement', assetRegistration.acquiringTransaction?.id, 'view']">{{
+              assetRegistration.acquiringTransaction?.paymentDate
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/asset-registration', assetRegistration.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

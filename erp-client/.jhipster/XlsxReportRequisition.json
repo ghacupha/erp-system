@@ -1,0 +1,66 @@
+{
+  "changelogDate": "20220605111232",
+  "clientRootFolder": "reports",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "reportName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "reportDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "userPassword",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "reportFileChecksum",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reportStatus",
+      "fieldType": "ReportStatusTypes",
+      "fieldValues": "GENERATING,SUCCESSFUL,FAILED"
+    },
+    {
+      "fieldName": "reportId",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "XlsxReportRequisition",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "catalogueNumber",
+      "otherEntityName": "reportTemplate",
+      "relationshipName": "reportTemplate",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "xlsxReportRequisition",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "xlsxReportRequisition",
+      "ownerSide": true,
+      "relationshipName": "parameters",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

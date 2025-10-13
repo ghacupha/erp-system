@@ -1,0 +1,337 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-ifrs-16-lease-contract-heading" data-cy="IFRS16LeaseContractCreateUpdateHeading">
+        Create or edit a IFRS 16 Lease Contract
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_bookingId">Booking Id</label>
+          <input type="text" class="form-control" name="bookingId" id="field_bookingId" data-cy="bookingId" formControlName="bookingId" />
+          <div *ngIf="editForm.get('bookingId')!.invalid && (editForm.get('bookingId')!.dirty || editForm.get('bookingId')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('bookingId')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseTitle">Lease Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="leaseTitle"
+            id="field_leaseTitle"
+            data-cy="leaseTitle"
+            formControlName="leaseTitle"
+          />
+          <div *ngIf="editForm.get('leaseTitle')!.invalid && (editForm.get('leaseTitle')!.dirty || editForm.get('leaseTitle')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('leaseTitle')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_shortTitle">Short Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="shortTitle"
+            id="field_shortTitle"
+            data-cy="shortTitle"
+            formControlName="shortTitle"
+          />
+          <div
+            *ngIf="editForm.get('shortTitle')!.invalid && (editForm.get('shortTitle')!.dirty || editForm.get('shortTitle')!.touched)"
+          ></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_inceptionDate">Inception Date</label>
+          <div class="input-group">
+            <input
+              id="field_inceptionDate"
+              data-cy="inceptionDate"
+              type="text"
+              class="form-control"
+              name="inceptionDate"
+              ngbDatepicker
+              #inceptionDateDp="ngbDatepicker"
+              formControlName="inceptionDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="inceptionDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('inceptionDate')!.invalid && (editForm.get('inceptionDate')!.dirty || editForm.get('inceptionDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('inceptionDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_commencementDate">Commencement Date</label>
+          <div class="input-group">
+            <input
+              id="field_commencementDate"
+              data-cy="commencementDate"
+              type="text"
+              class="form-control"
+              name="commencementDate"
+              ngbDatepicker
+              #commencementDateDp="ngbDatepicker"
+              formControlName="commencementDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="commencementDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('commencementDate')!.invalid &&
+              (editForm.get('commencementDate')!.dirty || editForm.get('commencementDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('commencementDate')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_serialNumber">Serial Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="serialNumber"
+            id="field_serialNumber"
+            data-cy="serialNumber"
+            formControlName="serialNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_superintendentServiceOutlet">Superintendent Service Outlet</label>
+          <select
+            class="form-control"
+            id="field_superintendentServiceOutlet"
+            data-cy="superintendentServiceOutlet"
+            name="superintendentServiceOutlet"
+            formControlName="superintendentServiceOutlet"
+          >
+            <option *ngIf="!editForm.get('superintendentServiceOutlet')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                serviceOutletOption.id === editForm.get('superintendentServiceOutlet')!.value?.id
+                  ? editForm.get('superintendentServiceOutlet')!.value
+                  : serviceOutletOption
+              "
+              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
+            >
+              {{ serviceOutletOption.outletCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['superintendentServiceOutlet'])!.invalid &&
+            (editForm.get(['superintendentServiceOutlet'])!.dirty || editForm.get(['superintendentServiceOutlet'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['superintendentServiceOutlet'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_mainDealer">Main Dealer</label>
+          <select class="form-control" id="field_mainDealer" data-cy="mainDealer" name="mainDealer" formControlName="mainDealer">
+            <option *ngIf="!editForm.get('mainDealer')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('mainDealer')!.value?.id ? editForm.get('mainDealer')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['mainDealer'])!.invalid && (editForm.get(['mainDealer'])!.dirty || editForm.get(['mainDealer'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['mainDealer'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_firstReportingPeriod">First Reporting Period</label>
+          <select
+            class="form-control"
+            id="field_firstReportingPeriod"
+            data-cy="firstReportingPeriod"
+            name="firstReportingPeriod"
+            formControlName="firstReportingPeriod"
+          >
+            <option *ngIf="!editForm.get('firstReportingPeriod')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                fiscalMonthOption.id === editForm.get('firstReportingPeriod')!.value?.id
+                  ? editForm.get('firstReportingPeriod')!.value
+                  : fiscalMonthOption
+              "
+              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
+            >
+              {{ fiscalMonthOption.fiscalMonthCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['firstReportingPeriod'])!.invalid &&
+            (editForm.get(['firstReportingPeriod'])!.dirty || editForm.get(['firstReportingPeriod'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['firstReportingPeriod'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_lastReportingPeriod">Last Reporting Period</label>
+          <select
+            class="form-control"
+            id="field_lastReportingPeriod"
+            data-cy="lastReportingPeriod"
+            name="lastReportingPeriod"
+            formControlName="lastReportingPeriod"
+          >
+            <option *ngIf="!editForm.get('lastReportingPeriod')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                fiscalMonthOption.id === editForm.get('lastReportingPeriod')!.value?.id
+                  ? editForm.get('lastReportingPeriod')!.value
+                  : fiscalMonthOption
+              "
+              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
+            >
+              {{ fiscalMonthOption.fiscalMonthCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['lastReportingPeriod'])!.invalid &&
+            (editForm.get(['lastReportingPeriod'])!.dirty || editForm.get(['lastReportingPeriod'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['lastReportingPeriod'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseContractDocument">Lease Contract Document</label>
+          <select
+            class="form-control"
+            id="field_leaseContractDocument"
+            data-cy="leaseContractDocument"
+            name="leaseContractDocument"
+            formControlName="leaseContractDocument"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                businessDocumentOption.id === editForm.get('leaseContractDocument')!.value?.id
+                  ? editForm.get('leaseContractDocument')!.value
+                  : businessDocumentOption
+              "
+              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
+            >
+              {{ businessDocumentOption.documentTitle }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseContractCalculations">Lease Contract Calculations</label>
+          <select
+            class="form-control"
+            id="field_leaseContractCalculations"
+            data-cy="leaseContractCalculations"
+            name="leaseContractCalculations"
+            formControlName="leaseContractCalculations"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                businessDocumentOption.id === editForm.get('leaseContractCalculations')!.value?.id
+                  ? editForm.get('leaseContractCalculations')!.value
+                  : businessDocumentOption
+              "
+              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
+            >
+              {{ businessDocumentOption.documentTitle }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

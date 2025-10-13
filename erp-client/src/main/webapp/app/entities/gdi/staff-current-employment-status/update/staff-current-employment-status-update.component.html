@@ -1,0 +1,112 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-staff-current-employment-status-heading" data-cy="StaffCurrentEmploymentStatusCreateUpdateHeading">
+        Create or edit a Staff Current Employment Status
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_staffCurrentEmploymentStatusTypeCode"
+            >Staff Current Employment Status Type Code</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="staffCurrentEmploymentStatusTypeCode"
+            id="field_staffCurrentEmploymentStatusTypeCode"
+            data-cy="staffCurrentEmploymentStatusTypeCode"
+            formControlName="staffCurrentEmploymentStatusTypeCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('staffCurrentEmploymentStatusTypeCode')!.invalid &&
+              (editForm.get('staffCurrentEmploymentStatusTypeCode')!.dirty || editForm.get('staffCurrentEmploymentStatusTypeCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('staffCurrentEmploymentStatusTypeCode')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_staffCurrentEmploymentStatusType">Staff Current Employment Status Type</label>
+          <input
+            type="text"
+            class="form-control"
+            name="staffCurrentEmploymentStatusType"
+            id="field_staffCurrentEmploymentStatusType"
+            data-cy="staffCurrentEmploymentStatusType"
+            formControlName="staffCurrentEmploymentStatusType"
+          />
+          <div
+            *ngIf="
+              editForm.get('staffCurrentEmploymentStatusType')!.invalid &&
+              (editForm.get('staffCurrentEmploymentStatusType')!.dirty || editForm.get('staffCurrentEmploymentStatusType')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('staffCurrentEmploymentStatusType')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_staffCurrentEmploymentStatusTypeDetails"
+            >Staff Current Employment Status Type Details</label
+          >
+          <textarea
+            class="form-control"
+            name="staffCurrentEmploymentStatusTypeDetails"
+            id="field_staffCurrentEmploymentStatusTypeDetails"
+            data-cy="staffCurrentEmploymentStatusTypeDetails"
+            formControlName="staffCurrentEmploymentStatusTypeDetails"
+          ></textarea>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

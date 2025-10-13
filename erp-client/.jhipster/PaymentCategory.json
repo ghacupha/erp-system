@@ -1,0 +1,64 @@
+{
+  "changelogDate": "20210723153046",
+  "clientRootFolder": "settlement",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "entityTableName": "payment_category",
+  "fields": [
+    {
+      "fieldName": "categoryName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "categoryDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "categoryType",
+      "fieldType": "CategoryTypes",
+      "fieldValidateRules": ["required", "unique"],
+      "fieldValues": "UNDEFINED,CATEGORY0,CATEGORY1,CATEGORY2,CATEGORY3,CATEGORY4,CATEGORY5,CATEGORY6,CATEGORY7,CATEGORY8,CATEGORY9,CATEGORY10,CATEGORY11,CATEGORY12,CATEGORY13,CATEGORY14,CATEGORY15,CATEGORY16,CATEGORY17"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "erpService",
+  "name": "PaymentCategory",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "paymentLabel",
+      "otherEntityRelationshipName": "paymentCategory",
+      "ownerSide": true,
+      "relationshipName": "paymentLabel",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "paymentCalculation",
+      "otherEntityRelationshipName": "paymentCategory",
+      "relationshipName": "paymentCalculation",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl"
+}

@@ -1,0 +1,91 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="creditNote">
+      <h2 data-cy="creditNoteDetailsHeading"><span>Credit Note</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ creditNote.id }}</span>
+        </dd>
+        <dt><span>Credit Number</span></dt>
+        <dd>
+          <span>{{ creditNote.creditNumber }}</span>
+        </dd>
+        <dt><span>Credit Note Date</span></dt>
+        <dd>
+          <span>{{ creditNote.creditNoteDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Credit Amount</span></dt>
+        <dd>
+          <span>{{ creditNote.creditAmount }}</span>
+        </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ creditNote.remarks }}</span>
+        </dd>
+        <dt><span>Purchase Orders</span></dt>
+        <dd>
+          <span *ngFor="let purchaseOrders of creditNote.purchaseOrders; let last = last">
+            <a [routerLink]="['/purchase-order', purchaseOrders?.id, 'view']">{{ purchaseOrders.purchaseOrderNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Invoices</span></dt>
+        <dd>
+          <span *ngFor="let invoices of creditNote.invoices; let last = last">
+            <a [routerLink]="['/payment-invoice', invoices?.id, 'view']">{{ invoices.invoiceNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Payment Label</span></dt>
+        <dd>
+          <span *ngFor="let paymentLabel of creditNote.paymentLabels; let last = last">
+            <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of creditNote.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/credit-note', creditNote.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

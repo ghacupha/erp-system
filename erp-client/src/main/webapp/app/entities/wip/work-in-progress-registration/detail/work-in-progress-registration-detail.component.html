@@ -1,0 +1,190 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="workInProgressRegistration">
+      <h2 data-cy="workInProgressRegistrationDetailsHeading"><span>Work In Progress Registration</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ workInProgressRegistration.id }}</span>
+        </dd>
+        <dt><span>Sequence Number</span></dt>
+        <dd>
+          <span>{{ workInProgressRegistration.sequenceNumber }}</span>
+        </dd>
+        <dt><span>Particulars</span></dt>
+        <dd>
+          <span>{{ workInProgressRegistration.particulars }}</span>
+        </dd>
+        <dt><span>Instalment Date</span></dt>
+        <dd>
+          <span>{{ workInProgressRegistration.instalmentDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Instalment Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressRegistration.instalmentAmount }}</span>
+        </dd>
+        <dt><span>Comments</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.comments">
+            <a (click)="openFile(workInProgressRegistration.comments, workInProgressRegistration.commentsContentType)">open</a>
+            {{ workInProgressRegistration.commentsContentType }}, {{ byteSize(workInProgressRegistration.comments) }}
+          </div>
+        </dd>
+        <dt><span>Level Of Completion</span></dt>
+        <dd>
+          <span>{{ workInProgressRegistration.levelOfCompletion }}</span>
+        </dd>
+        <dt><span>Completed</span></dt>
+        <dd>
+          <span>{{ workInProgressRegistration.completed }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of workInProgressRegistration.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Work In Progress Group</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.workInProgressGroup">
+            <a [routerLink]="['/work-in-progress-registration', workInProgressRegistration.workInProgressGroup?.id, 'view']">{{
+              workInProgressRegistration.workInProgressGroup?.sequenceNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', workInProgressRegistration.settlementCurrency?.id, 'view']">{{
+              workInProgressRegistration.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Work Project Register</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.workProjectRegister">
+            <a [routerLink]="['/work-project-register', workInProgressRegistration.workProjectRegister?.id, 'view']">{{
+              workInProgressRegistration.workProjectRegister?.catalogueNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Business Document</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of workInProgressRegistration.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Asset Accessory</span></dt>
+        <dd>
+          <span *ngFor="let assetAccessory of workInProgressRegistration.assetAccessories; let last = last">
+            <a [routerLink]="['/asset-accessory', assetAccessory?.id, 'view']">{{ assetAccessory.assetDetails }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Asset Warranty</span></dt>
+        <dd>
+          <span *ngFor="let assetWarranty of workInProgressRegistration.assetWarranties; let last = last">
+            <a [routerLink]="['/asset-warranty', assetWarranty?.id, 'view']">{{ assetWarranty.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Invoice</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.invoice">
+            <a [routerLink]="['/payment-invoice', workInProgressRegistration.invoice?.id, 'view']">{{
+              workInProgressRegistration.invoice?.invoiceNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Outlet Code</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.outletCode">
+            <a [routerLink]="['/service-outlet', workInProgressRegistration.outletCode?.id, 'view']">{{
+              workInProgressRegistration.outletCode?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Settlement Transaction</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.settlementTransaction">
+            <a [routerLink]="['/settlement', workInProgressRegistration.settlementTransaction?.id, 'view']">{{
+              workInProgressRegistration.settlementTransaction?.paymentNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Purchase Order</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.purchaseOrder">
+            <a [routerLink]="['/purchase-order', workInProgressRegistration.purchaseOrder?.id, 'view']">{{
+              workInProgressRegistration.purchaseOrder?.purchaseOrderNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Delivery Note</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.deliveryNote">
+            <a [routerLink]="['/delivery-note', workInProgressRegistration.deliveryNote?.id, 'view']">{{
+              workInProgressRegistration.deliveryNote?.deliveryNoteNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Job Sheet</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.jobSheet">
+            <a [routerLink]="['/job-sheet', workInProgressRegistration.jobSheet?.id, 'view']">{{
+              workInProgressRegistration.jobSheet?.serialNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Dealer</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.dealer">
+            <a [routerLink]="['/dealer', workInProgressRegistration.dealer?.id, 'view']">{{
+              workInProgressRegistration.dealer?.dealerName
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

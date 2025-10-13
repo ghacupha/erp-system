@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.erp</groupId>
+    <artifactId>erp-client</artifactId>
+    <version>1.7.8</version>
+    <name>Erp System</name>
+    <description>Mark X No 10 (Jehoiada Series) Client 1.7.8</description>
+
+    <repositories>
+        <!-- jhipster-needle-maven-repository -->
+    </repositories>
+
+    <pluginRepositories>
+        <!-- jhipster-needle-maven-plugin-repository -->
+    </pluginRepositories>
+
+    <!-- jhipster-needle-distribution-management -->
+
+    <properties>
+        <!-- Build properties -->
+        <maven.version>3.3.9</maven.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+
+        <erp.system.dev.db>${env.ERP_SYSTEM_DEV_DB}</erp.system.dev.db>
+        <docker.image.prefix>ghacupha</docker.image.prefix>
+        <founder.website>https://github.com/ghacupha</founder.website>
+        <owner.email>mailnjeru@gmail.com</owner.email>
+        <project.inceptionYear>2021 - 2024</project.inceptionYear>
+        <project.owner>Edwin Njeru</project.owner>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>4.0.rc2</version>
+                <configuration>
+                    <excludes>
+                        <exclude>.idea/**</exclude>
+                        <exclude>.jhipster/**</exclude>
+                        <exclude>node/**</exclude>
+                        <exclude>node_modules/**</exclude>
+                        <exclude>**/README</exclude>
+                        <exclude>**/pom.xml</exclude>
+                        <exclude>**/LICENSE</exclude>
+                        <exclude>src/test/resources/**</exclude>
+                        <exclude>src/main/resources/**</exclude>
+                        <!--// TODO review license for production-->
+                    </excludes>
+                    <header>com/mycila/maven/plugin/license/templates/GPL-3.txt</header>
+                    <properties>
+                        <owner>${project.owner}</owner>
+                        <email>${owner.email}</email>
+                        <year>${project.inceptionYear}</year>
+                        <website>${founder.website}</website>
+                    </properties>
+                    <project>
+                        <name>${project.name}</name>
+                        <inceptionYear>${project.inceptionYear}</inceptionYear>
+                        <description>${project.description}</description>
+                    </project>
+                    <mapping>
+                        <java>JAVAPKG_STYLE</java>
+                    </mapping>
+                </configuration>
+                <executions>
+                    <execution>
+                        <!--<phase>process-sources</phase>-->
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

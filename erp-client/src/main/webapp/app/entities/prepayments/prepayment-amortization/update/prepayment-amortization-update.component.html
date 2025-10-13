@@ -1,0 +1,297 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-prepayment-amortization-heading" data-cy="PrepaymentAmortizationCreateUpdateHeading">
+        Create or edit a Prepayment Amortization
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_prepaymentPeriod">Prepayment Period</label>
+          <div class="input-group">
+            <input
+              id="field_prepaymentPeriod"
+              data-cy="prepaymentPeriod"
+              type="text"
+              class="form-control"
+              name="prepaymentPeriod"
+              ngbDatepicker
+              #prepaymentPeriodDp="ngbDatepicker"
+              formControlName="prepaymentPeriod"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="prepaymentPeriodDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_prepaymentAmount">Prepayment Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="prepaymentAmount"
+            id="field_prepaymentAmount"
+            data-cy="prepaymentAmount"
+            formControlName="prepaymentAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_inactive">Inactive</label>
+          <input type="checkbox" class="form-check" name="inactive" id="field_inactive" data-cy="inactive" formControlName="inactive" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_prepaymentAccount">Prepayment Account</label>
+          <select
+            class="form-control"
+            id="field_prepaymentAccount"
+            data-cy="prepaymentAccount"
+            name="prepaymentAccount"
+            formControlName="prepaymentAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                prepaymentAccountOption.id === editForm.get('prepaymentAccount')!.value?.id
+                  ? editForm.get('prepaymentAccount')!.value
+                  : prepaymentAccountOption
+              "
+              *ngFor="let prepaymentAccountOption of prepaymentAccountsSharedCollection; trackBy: trackPrepaymentAccountById"
+            >
+              {{ prepaymentAccountOption.catalogueNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
+          <select
+            class="form-control"
+            id="field_settlementCurrency"
+            data-cy="settlementCurrency"
+            name="settlementCurrency"
+            formControlName="settlementCurrency"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
+                  ? editForm.get('settlementCurrency')!.value
+                  : settlementCurrencyOption
+              "
+              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
+            >
+              {{ settlementCurrencyOption.iso4217CurrencyCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_debitAccount">Debit Account</label>
+          <select class="form-control" id="field_debitAccount" data-cy="debitAccount" name="debitAccount" formControlName="debitAccount">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('debitAccount')!.value?.id
+                  ? editForm.get('debitAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_creditAccount">Credit Account</label>
+          <select
+            class="form-control"
+            id="field_creditAccount"
+            data-cy="creditAccount"
+            name="creditAccount"
+            formControlName="creditAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('creditAccount')!.value?.id
+                  ? editForm.get('creditAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalMonth">Fiscal Month</label>
+          <select class="form-control" id="field_fiscalMonth" data-cy="fiscalMonth" name="fiscalMonth" formControlName="fiscalMonth">
+            <option *ngIf="!editForm.get('fiscalMonth')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                fiscalMonthOption.id === editForm.get('fiscalMonth')!.value?.id ? editForm.get('fiscalMonth')!.value : fiscalMonthOption
+              "
+              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
+            >
+              {{ fiscalMonthOption.endDate }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['fiscalMonth'])!.invalid && (editForm.get(['fiscalMonth'])!.dirty || editForm.get(['fiscalMonth'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['fiscalMonth'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_prepaymentCompilationRequest">Prepayment Compilation Request</label>
+          <select
+            class="form-control"
+            id="field_prepaymentCompilationRequest"
+            data-cy="prepaymentCompilationRequest"
+            name="prepaymentCompilationRequest"
+            formControlName="prepaymentCompilationRequest"
+          >
+            <option *ngIf="!editForm.get('prepaymentCompilationRequest')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                prepaymentCompilationRequestOption.id === editForm.get('prepaymentCompilationRequest')!.value?.id
+                  ? editForm.get('prepaymentCompilationRequest')!.value
+                  : prepaymentCompilationRequestOption
+              "
+              *ngFor="
+                let prepaymentCompilationRequestOption of prepaymentCompilationRequestsSharedCollection;
+                trackBy: trackPrepaymentCompilationRequestById
+              "
+            >
+              {{ prepaymentCompilationRequestOption.id }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['prepaymentCompilationRequest'])!.invalid &&
+            (editForm.get(['prepaymentCompilationRequest'])!.dirty || editForm.get(['prepaymentCompilationRequest'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['prepaymentCompilationRequest'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_amortizationPeriod">Amortization Period</label>
+          <select
+            class="form-control"
+            id="field_amortizationPeriod"
+            data-cy="amortizationPeriod"
+            name="amortizationPeriod"
+            formControlName="amortizationPeriod"
+          >
+            <option *ngIf="!editForm.get('amortizationPeriod')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                amortizationPeriodOption.id === editForm.get('amortizationPeriod')!.value?.id
+                  ? editForm.get('amortizationPeriod')!.value
+                  : amortizationPeriodOption
+              "
+              *ngFor="let amortizationPeriodOption of amortizationPeriodsSharedCollection; trackBy: trackAmortizationPeriodById"
+            >
+              {{ amortizationPeriodOption.periodCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['amortizationPeriod'])!.invalid &&
+            (editForm.get(['amortizationPeriod'])!.dirty || editForm.get(['amortizationPeriod'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['amortizationPeriod'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

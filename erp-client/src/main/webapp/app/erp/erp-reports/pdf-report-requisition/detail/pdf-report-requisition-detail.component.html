@@ -1,0 +1,104 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="pdfReportRequisition">
+      <h2 data-cy="pdfReportRequisitionDetailsHeading"><span>Pdf Report Requisition</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ pdfReportRequisition.id }}</span>
+        </dd>
+        <dt><span>Report Name</span></dt>
+        <dd>
+          <span>{{ pdfReportRequisition.reportName }}</span>
+        </dd>
+        <dt><span>Report Date</span></dt>
+        <dd>
+          <span>{{ pdfReportRequisition.reportDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>User Password</span></dt>
+        <dd>
+          <span>{{ pdfReportRequisition.userPassword }}</span>
+        </dd>
+        <dt><span>Owner Password</span></dt>
+        <dd>
+          <span>{{ pdfReportRequisition.ownerPassword }}</span>
+        </dd>
+        <dt><span>Report Status</span></dt>
+        <dd>
+          <span>{{ pdfReportRequisition.reportStatus }}</span>
+        </dd>
+        <dt><span>Report Id</span></dt>
+        <dd>
+          <span>{{ pdfReportRequisition.reportId }}</span>
+        </dd>
+        <dt><span>Report File</span></dt>
+        <dd>
+          <div *ngIf="pdfReportRequisition.reportAttachment">
+            <a (click)="openFile(pdfReportRequisition.reportAttachment, contentType)">open</a>
+            {{ contentType }}, {{ byteSize(pdfReportRequisition.reportAttachment) }}
+          </div>
+        </dd>
+        <dt><span>Report File Checksum</span></dt>
+        <dd>
+          <span>{{ pdfReportRequisition.reportFileChecksum }}</span>
+        </dd>
+        <dt><span>Report Template</span></dt>
+        <dd>
+          <div *ngIf="pdfReportRequisition.reportTemplate">
+            <a [routerLink]="['/report-template', pdfReportRequisition.reportTemplate?.id, 'view']">{{
+              pdfReportRequisition.reportTemplate?.catalogueNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Parameters</span></dt>
+        <dd>
+          <span *ngFor="let parameters of pdfReportRequisition.parameters; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', parameters?.id, 'view']">{{ parameters.mappedValue }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of pdfReportRequisition.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/pdf-report-requisition', pdfReportRequisition.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

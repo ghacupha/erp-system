@@ -1,0 +1,64 @@
+{
+  "changelogDate": "20221101101632",
+  "clientRootFolder": "system",
+  "fields": [
+    {
+      "fieldName": "value",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "key",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "label",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "required",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "order",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "controlType",
+      "fieldType": "ControlTypes",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "TEXTBOX,DATETIME_LOCAL,DATE,PASSWORD,NUMBER,SEARCH,EMAIL,MONTH,WEEK,TEL,TEXTAREA"
+    },
+    {
+      "fieldName": "placeholder",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "iterable",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "StringQuestionBase",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "stringQuestionBase",
+      "ownerSide": true,
+      "relationshipName": "parameters",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "stringQuestionBase",
+      "ownerSide": true,
+      "relationshipName": "placeholderItem",
+      "relationshipType": "many-to-many"
+    }
+  ]
+}

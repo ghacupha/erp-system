@@ -1,0 +1,38 @@
+server {
+    listen 80;
+    index index.html;
+    server_name ${SERVER_API_DOCKER_DEPLOY_HOST};
+    error_log  /var/log/nginx/error.log;
+    client_max_body_size ${ERP_DOCUMENTS_MAX_FILE_SIZE};
+
+    root /usr/share/nginx/html;
+
+    location /api {
+        proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/api;
+    }
+    location /services {
+        proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/services;
+    }
+    location /management {
+        proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/management;
+    }
+    location /swagger-resources {
+        proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/swagger-resources;
+    }
+    location /v2 {
+       proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/v2;
+    }
+    location /v3 {
+       proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/v3;
+    }
+    location /auth {
+       proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/auth;
+    }
+    location /health {
+       proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/health;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}

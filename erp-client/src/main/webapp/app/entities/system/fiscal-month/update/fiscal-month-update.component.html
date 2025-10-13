@@ -1,0 +1,221 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-fiscal-month-heading" data-cy="FiscalMonthCreateUpdateHeading">Create or edit a Fiscal Month</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_monthNumber">Month Number</label>
+          <input
+            type="number"
+            class="form-control"
+            name="monthNumber"
+            id="field_monthNumber"
+            data-cy="monthNumber"
+            formControlName="monthNumber"
+          />
+          <div *ngIf="editForm.get('monthNumber')!.invalid && (editForm.get('monthNumber')!.dirty || editForm.get('monthNumber')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('monthNumber')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('monthNumber')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_startDate">Start Date</label>
+          <div class="input-group">
+            <input
+              id="field_startDate"
+              data-cy="startDate"
+              type="text"
+              class="form-control"
+              name="startDate"
+              ngbDatepicker
+              #startDateDp="ngbDatepicker"
+              formControlName="startDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="startDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div *ngIf="editForm.get('startDate')!.invalid && (editForm.get('startDate')!.dirty || editForm.get('startDate')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('startDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_endDate">End Date</label>
+          <div class="input-group">
+            <input
+              id="field_endDate"
+              data-cy="endDate"
+              type="text"
+              class="form-control"
+              name="endDate"
+              ngbDatepicker
+              #endDateDp="ngbDatepicker"
+              formControlName="endDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="endDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+            </span>
+          </div>
+          <div *ngIf="editForm.get('endDate')!.invalid && (editForm.get('endDate')!.dirty || editForm.get('endDate')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('endDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalMonthCode">Fiscal Month Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fiscalMonthCode"
+            id="field_fiscalMonthCode"
+            data-cy="fiscalMonthCode"
+            formControlName="fiscalMonthCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('fiscalMonthCode')!.invalid &&
+              (editForm.get('fiscalMonthCode')!.dirty || editForm.get('fiscalMonthCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('fiscalMonthCode')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalYear">Fiscal Year</label>
+          <select class="form-control" id="field_fiscalYear" data-cy="fiscalYear" name="fiscalYear" formControlName="fiscalYear">
+            <option *ngIf="!editForm.get('fiscalYear')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                fiscalYearOption.id === editForm.get('fiscalYear')!.value?.id ? editForm.get('fiscalYear')!.value : fiscalYearOption
+              "
+              *ngFor="let fiscalYearOption of fiscalYearsSharedCollection; trackBy: trackFiscalYearById"
+            >
+              {{ fiscalYearOption.fiscalYearCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['fiscalYear'])!.invalid && (editForm.get(['fiscalYear'])!.dirty || editForm.get(['fiscalYear'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['fiscalYear'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_universallyUniqueMappings">Universally Unique Mapping</label>
+          <select
+            class="form-control"
+            id="field_universallyUniqueMappings"
+            data-cy="universallyUniqueMapping"
+            multiple
+            name="universallyUniqueMappings"
+            formControlName="universallyUniqueMappings"
+          >
+            <option
+              [ngValue]="
+                getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('universallyUniqueMappings')!.value)
+              "
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.universalKey }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalQuarter">Fiscal Quarter</label>
+          <select
+            class="form-control"
+            id="field_fiscalQuarter"
+            data-cy="fiscalQuarter"
+            name="fiscalQuarter"
+            formControlName="fiscalQuarter"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                fiscalQuarterOption.id === editForm.get('fiscalQuarter')!.value?.id
+                  ? editForm.get('fiscalQuarter')!.value
+                  : fiscalQuarterOption
+              "
+              *ngFor="let fiscalQuarterOption of fiscalQuartersSharedCollection; trackBy: trackFiscalQuarterById"
+            >
+              {{ fiscalQuarterOption.fiscalQuarterCode }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

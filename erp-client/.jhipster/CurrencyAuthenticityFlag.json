@@ -1,0 +1,31 @@
+{
+  "changelogDate": "20230914063738",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "currencyAuthenticityFlag",
+      "fieldType": "CurrencyAuthenticityFlags",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "Y,N"
+    },
+    {
+      "fieldName": "currencyAuthenticityType",
+      "fieldType": "CurrencyAuthenticityTypes",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "GENUINE,COUNTERFEIT"
+    },
+    {
+      "fieldName": "currencyAuthenticityTypeDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "CurrencyAuthenticityFlag",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

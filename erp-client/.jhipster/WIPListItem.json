@@ -1,0 +1,54 @@
+{
+  "clientRootFolder": "wip",
+  "fields": [
+    {
+      "fieldName": "sequenceNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "particulars",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "instalmentDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "instalmentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "settlementCurrency",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "outletCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "settlementTransaction",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "settlementTransactionDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "dealerName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "workProject",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": true,
+  "pagination": "pagination",
+  "name": "WIPListItem",
+  "changelogDate": "20250203102026",
+  "incrementalChangelog": false
+}

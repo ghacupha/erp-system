@@ -1,0 +1,101 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="cardIssuerCharges">
+      <h2 data-cy="cardIssuerChargesDetailsHeading"><span>Card Issuer Charges</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ cardIssuerCharges.id }}</span>
+        </dd>
+        <dt><span>Reporting Date</span></dt>
+        <dd>
+          <span>{{ cardIssuerCharges.reportingDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Card Fee Charge In LCY</span></dt>
+        <dd>
+          <span>{{ cardIssuerCharges.cardFeeChargeInLCY }}</span>
+        </dd>
+        <dt><span>Bank Code</span></dt>
+        <dd>
+          <div *ngIf="cardIssuerCharges.bankCode">
+            <a [routerLink]="['/institution-code', cardIssuerCharges.bankCode?.id, 'view']">{{
+              cardIssuerCharges.bankCode?.institutionName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Card Category</span></dt>
+        <dd>
+          <div *ngIf="cardIssuerCharges.cardCategory">
+            <a [routerLink]="['/card-category-type', cardIssuerCharges.cardCategory?.id, 'view']">{{
+              cardIssuerCharges.cardCategory?.cardCategoryDescription
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Card Type</span></dt>
+        <dd>
+          <div *ngIf="cardIssuerCharges.cardType">
+            <a [routerLink]="['/card-types', cardIssuerCharges.cardType?.id, 'view']">{{ cardIssuerCharges.cardType?.cardType }}</a>
+          </div>
+        </dd>
+        <dt><span>Card Brand</span></dt>
+        <dd>
+          <div *ngIf="cardIssuerCharges.cardBrand">
+            <a [routerLink]="['/card-brand-type', cardIssuerCharges.cardBrand?.id, 'view']">{{
+              cardIssuerCharges.cardBrand?.cardBrandType
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Card Class</span></dt>
+        <dd>
+          <div *ngIf="cardIssuerCharges.cardClass">
+            <a [routerLink]="['/card-class-type', cardIssuerCharges.cardClass?.id, 'view']">{{
+              cardIssuerCharges.cardClass?.cardClassType
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Card Charge Type</span></dt>
+        <dd>
+          <div *ngIf="cardIssuerCharges.cardChargeType">
+            <a [routerLink]="['/card-charges', cardIssuerCharges.cardChargeType?.id, 'view']">{{
+              cardIssuerCharges.cardChargeType?.cardChargeTypeName
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/card-issuer-charges', cardIssuerCharges.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

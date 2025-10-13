@@ -1,0 +1,88 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="autonomousReport">
+      <h2 data-cy="autonomousReportDetailsHeading"><span>Autonomous Report</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ autonomousReport.id }}</span>
+        </dd>
+        <dt><span>Report Name</span></dt>
+        <dd>
+          <span>{{ autonomousReport.reportName }}</span>
+        </dd>
+        <dt><span>Report Parameters</span></dt>
+        <dd>
+          <span>{{ autonomousReport.reportParameters }}</span>
+        </dd>
+        <dt><span>Created At</span></dt>
+        <dd>
+          <span>{{ autonomousReport.createdAt | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Report File</span></dt>
+        <dd>
+          <div *ngIf="autonomousReport.reportFile">
+            <a (click)="openFile(autonomousReport.reportFile, autonomousReport.reportFileContentType)">open</a>
+            {{ autonomousReport.reportFileContentType }}, {{ byteSize(autonomousReport.reportFile) }}
+          </div>
+        </dd>
+        <dt><span>Report Tampered</span></dt>
+        <dd>
+          <span>{{ autonomousReport.reportTampered }}</span>
+        </dd>
+        <dt><span>Report Mapping</span></dt>
+        <dd>
+          <span *ngFor="let reportMapping of autonomousReport.reportMappings; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', reportMapping?.id, 'view']">{{ reportMapping.mappedValue }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of autonomousReport.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Created By</span></dt>
+        <dd>
+          <div *ngIf="autonomousReport.createdBy">
+            <a [routerLink]="['/application-user', autonomousReport.createdBy?.id, 'view']">{{
+              autonomousReport.createdBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+    </div>
+  </div>
+</div>

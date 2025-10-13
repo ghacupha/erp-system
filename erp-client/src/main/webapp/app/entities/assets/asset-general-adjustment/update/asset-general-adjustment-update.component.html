@@ -1,0 +1,305 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-asset-general-adjustment-heading" data-cy="AssetGeneralAdjustmentCreateUpdateHeading">
+        Create or edit a Asset General Adjustment
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_devaluationAmount">Devaluation Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="devaluationAmount"
+            id="field_devaluationAmount"
+            data-cy="devaluationAmount"
+            formControlName="devaluationAmount"
+          />
+          <div
+            *ngIf="
+              editForm.get('devaluationAmount')!.invalid &&
+              (editForm.get('devaluationAmount')!.dirty || editForm.get('devaluationAmount')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('devaluationAmount')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('devaluationAmount')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_adjustmentDate">Adjustment Date</label>
+          <div class="input-group">
+            <input
+              id="field_adjustmentDate"
+              data-cy="adjustmentDate"
+              type="text"
+              class="form-control"
+              name="adjustmentDate"
+              ngbDatepicker
+              #adjustmentDateDp="ngbDatepicker"
+              formControlName="adjustmentDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="adjustmentDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('adjustmentDate')!.invalid && (editForm.get('adjustmentDate')!.dirty || editForm.get('adjustmentDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('adjustmentDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_timeOfCreation">Time Of Creation</label>
+          <div class="d-flex">
+            <input
+              id="field_timeOfCreation"
+              data-cy="timeOfCreation"
+              type="datetime-local"
+              class="form-control"
+              name="timeOfCreation"
+              formControlName="timeOfCreation"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          <div
+            *ngIf="
+              editForm.get('timeOfCreation')!.invalid && (editForm.get('timeOfCreation')!.dirty || editForm.get('timeOfCreation')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('timeOfCreation')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('timeOfCreation')?.errors?.ZonedDateTimelocal">
+              This field should be a date and time.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_adjustmentReferenceId">Adjustment Reference Id</label>
+          <input
+            type="text"
+            class="form-control"
+            name="adjustmentReferenceId"
+            id="field_adjustmentReferenceId"
+            data-cy="adjustmentReferenceId"
+            formControlName="adjustmentReferenceId"
+          />
+          <div
+            *ngIf="
+              editForm.get('adjustmentReferenceId')!.invalid &&
+              (editForm.get('adjustmentReferenceId')!.dirty || editForm.get('adjustmentReferenceId')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('adjustmentReferenceId')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_effectivePeriod">Effective Period</label>
+          <select
+            class="form-control"
+            id="field_effectivePeriod"
+            data-cy="effectivePeriod"
+            name="effectivePeriod"
+            formControlName="effectivePeriod"
+          >
+            <option *ngIf="!editForm.get('effectivePeriod')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                depreciationPeriodOption.id === editForm.get('effectivePeriod')!.value?.id
+                  ? editForm.get('effectivePeriod')!.value
+                  : depreciationPeriodOption
+              "
+              *ngFor="let depreciationPeriodOption of depreciationPeriodsSharedCollection; trackBy: trackDepreciationPeriodById"
+            >
+              {{ depreciationPeriodOption.periodCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['effectivePeriod'])!.invalid &&
+            (editForm.get(['effectivePeriod'])!.dirty || editForm.get(['effectivePeriod'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['effectivePeriod'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetRegistration">Asset Registration</label>
+          <select
+            class="form-control"
+            id="field_assetRegistration"
+            data-cy="assetRegistration"
+            name="assetRegistration"
+            formControlName="assetRegistration"
+          >
+            <option *ngIf="!editForm.get('assetRegistration')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                assetRegistrationOption.id === editForm.get('assetRegistration')!.value?.id
+                  ? editForm.get('assetRegistration')!.value
+                  : assetRegistrationOption
+              "
+              *ngFor="let assetRegistrationOption of assetRegistrationsSharedCollection; trackBy: trackAssetRegistrationById"
+            >
+              {{ assetRegistrationOption.assetNumber }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['assetRegistration'])!.invalid &&
+            (editForm.get(['assetRegistration'])!.dirty || editForm.get(['assetRegistration'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['assetRegistration'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_createdBy">Created By</label>
+          <select class="form-control" id="field_createdBy" data-cy="createdBy" name="createdBy" formControlName="createdBy">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                applicationUserOption.id === editForm.get('createdBy')!.value?.id ? editForm.get('createdBy')!.value : applicationUserOption
+              "
+              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
+            >
+              {{ applicationUserOption.applicationIdentity }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_lastModifiedBy">Last Modified By</label>
+          <select
+            class="form-control"
+            id="field_lastModifiedBy"
+            data-cy="lastModifiedBy"
+            name="lastModifiedBy"
+            formControlName="lastModifiedBy"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                applicationUserOption.id === editForm.get('lastModifiedBy')!.value?.id
+                  ? editForm.get('lastModifiedBy')!.value
+                  : applicationUserOption
+              "
+              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
+            >
+              {{ applicationUserOption.applicationIdentity }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_lastAccessedBy">Last Accessed By</label>
+          <select
+            class="form-control"
+            id="field_lastAccessedBy"
+            data-cy="lastAccessedBy"
+            name="lastAccessedBy"
+            formControlName="lastAccessedBy"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                applicationUserOption.id === editForm.get('lastAccessedBy')!.value?.id
+                  ? editForm.get('lastAccessedBy')!.value
+                  : applicationUserOption
+              "
+              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
+            >
+              {{ applicationUserOption.applicationIdentity }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_placeholder">Placeholder</label>
+          <select class="form-control" id="field_placeholder" data-cy="placeholder" name="placeholder" formControlName="placeholder">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                placeholderOption.id === editForm.get('placeholder')!.value?.id ? editForm.get('placeholder')!.value : placeholderOption
+              "
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

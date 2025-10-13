@@ -1,0 +1,104 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="workInProgressOutstandingReport">
+      <h2 data-cy="workInProgressOutstandingReportDetailsHeading"><span>Work In Progress Outstanding Report</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <a [routerLink]="['/work-in-progress-registration', workInProgressOutstandingReport?.id, 'view']">
+           <span>{{ workInProgressOutstandingReport.id }}</span>
+          </a>
+        </dd>
+        <dt><span>Sequence Number</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.sequenceNumber }}</span>
+        </dd>
+        <dt><span>Capital WIP Transaction</span></dt>
+        <dd>
+          <span># {{ settlementTransaction?.paymentNumber }} dated: {{ settlementTransaction?.paymentDate | formatMediumDate }} => {{ settlementTransaction?.paymentAmount | currency }}</span>
+        </dd>
+        <dt><span>Particulars</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.particulars }}</span>
+        </dd>
+        <dt><span>Dealer Name</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.dealerName }}</span>
+        </dd>
+        <dt><span>Instalment Transaction Number</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.instalmentTransactionNumber }}</span>
+        </dd>
+        <dt><span>Instalment Transaction Date</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.instalmentTransactionDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Iso 4217 Code</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.iso4217Code }}</span>
+        </dd>
+        <dt><span>Instalment Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.instalmentAmount | currency }}</span>
+        </dd>
+        <dt><span>Total Transfer Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.totalTransferAmount | currency }}</span>
+        </dd>
+        <dt><span>Outstanding Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.outstandingAmount | currency }}</span>
+        </dd>
+
+        <dt><span>Transfer Items Applied</span></dt>
+        <dd>
+          <ul>
+            <li *ngFor="let transferItem of appliedWorkInProgressTransferItems; let last = last">
+              <a [routerLink]="['/work-in-progress-transfer', transferItem?.id, 'view']">
+                {{ transferItem.transferType }} |
+                {{ transferItem.transferAmount | currency }} |
+                {{ transferItem.transferDate | formatMediumDate }} |
+                {{ transferItem.description }} |
+              </a>
+              <a [routerLink]="['/settlement', transferItem?.transferSettlement?.id, 'view']">
+                {{ transferItem.transferSettlement?.paymentNumber }}
+              </a>
+              {{ last ? '' : ', ' }}
+            </li>
+          </ul>
+        </dd>
+
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,184 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-prepayment-marshalling-heading-new"
+        data-cy="PrepaymentMarshallingCreateUpdateHeading"
+        [hidden]='!weAreCreating'>
+        New Prepayment Marshalling
+      </h2>
+
+      <h2
+        id="jhi-prepayment-marshalling-copying-heading"
+        data-cy="PrepaymentMarshallingCreateUpdateHeading"
+        [hidden]='!weAreCopying'>
+        Copy Marshalling # {{ selectedItem.id }} For Catalogue No. {{ selectedItem.prepaymentAccount?.catalogueNumber }}
+      </h2>
+
+      <h2
+        id="jhi-prepayment-marshalling-editing-heading"
+        data-cy="PrepaymentMarshallingCreateUpdateHeading"
+        [hidden]='!weAreEditing'>
+        Edit Marshalling # {{ selectedItem.id }} For Catalogue No. {{ selectedItem.prepaymentAccount?.catalogueNumber }}
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null || weAreCopying">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group" >
+          <label class="form-control-label" for="field_amortizationPeriods">Amortization Periods</label>
+          <input
+            [readonly]="editForm.get('processed')!.value == true && weAreEditing"
+            type="number"
+            class="form-control"
+            name="amortizationPeriods"
+            id="field_amortizationPeriods"
+            data-cy="amortizationPeriods"
+            formControlName="amortizationPeriods"
+          />
+        </div>
+
+        <jhi-m21-prepayment-account-form-control
+          ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
+          formControlName='prepaymentAccount'
+          [inputValue]="editForm.get('prepaymentAccount')!.value"
+          (valueSelected)='updatePrepaymentAccount($event)'
+          inputControlLabel='Prepayment Account'
+        >
+          <option [ngValue]="editForm.get('prepaymentAccount')!.value"></option>
+        </jhi-m21-prepayment-account-form-control>
+
+
+        <!--// TODO firstAmortizationPeriod -->
+        <jhi-m21-amortization-period-form-control
+          ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
+          formControlName='firstAmortizationPeriod'
+          [inputValue]="editForm.get('firstAmortizationPeriod')!.value"
+          (valueSelected)='updateFirstAmortizationPeriod($event)'
+          inputControlLabel='First Amortization Period'
+          >
+          <option [ngValue]="editForm.get('firstAmortizationPeriod')!.value"></option>
+        </jhi-m21-amortization-period-form-control>
+
+        <jhi-m21-fiscal-month-form-control
+          ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
+          formControlName='firstFiscalMonth'
+          [inputValue]="editForm.get('firstFiscalMonth')!.value"
+          (valueSelected)='updateFirstFiscalMonth($event)'
+          inputControlLabel='First Fiscal Month'
+        >
+          <option [ngValue]="editForm.get('firstFiscalMonth')!.value"></option>
+        </jhi-m21-fiscal-month-form-control>
+
+        <jhi-m21-fiscal-month-form-control
+          ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
+          formControlName='lastFiscalMonth'
+          [inputValue]="editForm.get('lastFiscalMonth')!.value"
+          (valueSelected)='updateLastFiscalMonth($event)'
+          inputControlLabel='Last Fiscal Month'
+        >
+          <option [ngValue]="editForm.get('lastFiscalMonth')!.value"></option>
+        </jhi-m21-fiscal-month-form-control>
+        <div
+          *ngIf="
+            editForm.get(['lastFiscalMonth'])!.invalid &&
+            (editForm.get(['lastFiscalMonth'])!.dirty || editForm.get(['lastFiscalMonth'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['lastFiscalMonth'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_inactive">Inactive</label>
+          <input type="checkbox" class="form-check" name="inactive" id="field_inactive" data-cy="inactive" formControlName="inactive" />
+          <div *ngIf="editForm.get('inactive')!.invalid && (editForm.get('inactive')!.dirty || editForm.get('inactive')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('inactive')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
+        </button>
+      </div>
+
+
+    </form>
+  </div>
+</div>

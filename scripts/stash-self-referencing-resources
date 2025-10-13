@@ -1,4 +1,0 @@
-#!/bin/sh
-
-git stash -- src/test/java/io/github/erp/web/rest/ContractMetadataResourceIT.java src/test/java/io/github/erp/web/rest/SecurityClearanceResourceIT.java
-

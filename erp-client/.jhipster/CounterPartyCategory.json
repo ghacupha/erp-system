@@ -1,0 +1,30 @@
+{
+  "changelogDate": "20230914091919",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "counterpartyCategoryCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "counterpartyCategoryCodeDetails",
+      "fieldType": "CounterpartyCategory",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "LOCAL,FOREIGN"
+    },
+    {
+      "fieldName": "counterpartyCategoryDescription",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "CounterPartyCategory",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

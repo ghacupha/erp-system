@@ -1,0 +1,97 @@
+{
+  "clientRootFolder": "assets",
+  "fields": [
+    {
+      "fieldName": "eventNarrative",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "eventTimeStamp",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "depreciationNoticeStatus",
+      "fieldType": "DepreciationNoticeStatusType",
+      "fieldValues": "INFO,WARNING,ERROR",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sourceModule",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "sourceEntity",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "errorCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "errorMessage",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "userAction",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "technicalDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "depreciationJob",
+      "otherEntityName": "depreciationJob",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "depreciationBatchSequence",
+      "otherEntityName": "depreciationBatchSequence",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "depreciationPeriod",
+      "otherEntityName": "depreciationPeriod",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "depreciationJobNotice"
+    },
+    {
+      "relationshipName": "universallyUniqueMapping",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "universalKey",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "depreciationJobNotice"
+    },
+    {
+      "relationshipName": "superintended",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "DepreciationJobNotice",
+  "changelogDate": "20230816150648",
+  "incrementalChangelog": false
+}

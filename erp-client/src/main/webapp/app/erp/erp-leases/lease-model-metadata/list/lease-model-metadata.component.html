@@ -1,0 +1,276 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="LeaseModelMetadataHeading">
+    <span>Lease Model Metadata</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-lease-model-metadata"
+        [routerLink]="['/lease-model-metadata/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new Lease Model Metadata </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="leaseModelMetadata?.length === 0">
+    <span>No leaseModelMetadata found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="leaseModelMetadata && leaseModelMetadata.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="modelTitle"><span>Model Title</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="modelVersion"><span>Model Version</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="modelNotes"><span>Model Notes</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="annualDiscountingRate"><span>Annual Discounting Rate</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="commencementDate"><span>Commencement Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="terminalDate"><span>Terminal Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="totalReportingPeriods"><span>Total Reporting Periods</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportingPeriodsPerYear"><span>Reporting Periods Per Year</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="settlementPeriodsPerYear"><span>Settlement Periods Per Year</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="initialLiabilityAmount"><span>Initial Liability Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="initialROUAmount"><span>Initial ROU Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="totalDepreciationPeriods"><span>Total Depreciation Periods</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="leaseContract.bookingId"><span>Lease Contract</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="predecessor.modelTitle"><span>Predecessor</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="liabilityCurrency.iso4217CurrencyCode">
+            <span>Liability Currency</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="rouAssetCurrency.iso4217CurrencyCode">
+            <span>Rou Asset Currency</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="modelAttachments.documentTitle"><span>Model Attachments</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="securityClearance.clearanceLevel"><span>Security Clearance</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="leaseLiabilityAccount.accountNumber">
+            <span>Lease Liability Account</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="interestPayableAccount.accountNumber">
+            <span>Interest Payable Account</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="interestExpenseAccount.accountNumber">
+            <span>Interest Expense Account</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="rouAssetAccount.accountNumber"><span>Rou Asset Account</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="rouDepreciationAccount.accountNumber">
+            <span>Rou Depreciation Account</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="accruedDepreciationAccount.accountNumber">
+            <span>Accrued Depreciation Account</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let leaseModelMetadata of leaseModelMetadata; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/lease-model-metadata', leaseModelMetadata.id, 'view']">{{ leaseModelMetadata.id }}</a>
+          </td>
+          <td>{{ leaseModelMetadata.modelTitle }}</td>
+          <td>{{ leaseModelMetadata.modelVersion }}</td>
+          <td>{{ leaseModelMetadata.description }}</td>
+          <td>
+            <a
+              *ngIf="leaseModelMetadata.modelNotes"
+              (click)="openFile(leaseModelMetadata.modelNotes, leaseModelMetadata.modelNotesContentType)"
+              >open</a
+            >
+            <span *ngIf="leaseModelMetadata.modelNotes"
+              >{{ leaseModelMetadata.modelNotesContentType }}, {{ byteSize(leaseModelMetadata.modelNotes) }}</span
+            >
+          </td>
+          <td>{{ leaseModelMetadata.annualDiscountingRate }}</td>
+          <td>{{ leaseModelMetadata.commencementDate | formatMediumDate }}</td>
+          <td>{{ leaseModelMetadata.terminalDate | formatMediumDate }}</td>
+          <td>{{ leaseModelMetadata.totalReportingPeriods }}</td>
+          <td>{{ leaseModelMetadata.reportingPeriodsPerYear }}</td>
+          <td>{{ leaseModelMetadata.settlementPeriodsPerYear }}</td>
+          <td>{{ leaseModelMetadata.initialLiabilityAmount }}</td>
+          <td>{{ leaseModelMetadata.initialROUAmount }}</td>
+          <td>{{ leaseModelMetadata.totalDepreciationPeriods }}</td>
+          <td>
+            <div *ngIf="leaseModelMetadata.leaseContract">
+              <a [routerLink]="['/lease-contract', leaseModelMetadata.leaseContract?.id, 'view']">{{
+                leaseModelMetadata.leaseContract?.bookingId
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseModelMetadata.predecessor">
+              <a [routerLink]="['/lease-model-metadata', leaseModelMetadata.predecessor?.id, 'view']">{{
+                leaseModelMetadata.predecessor?.modelTitle
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseModelMetadata.liabilityCurrency">
+              <a [routerLink]="['/settlement-currency', leaseModelMetadata.liabilityCurrency?.id, 'view']">{{
+                leaseModelMetadata.liabilityCurrency?.iso4217CurrencyCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseModelMetadata.rouAssetCurrency">
+              <a [routerLink]="['/settlement-currency', leaseModelMetadata.rouAssetCurrency?.id, 'view']">{{
+                leaseModelMetadata.rouAssetCurrency?.iso4217CurrencyCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseModelMetadata.modelAttachments">
+              <a [routerLink]="['/business-document', leaseModelMetadata.modelAttachments?.id, 'view']">{{
+                leaseModelMetadata.modelAttachments?.documentTitle
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseModelMetadata.securityClearance">
+              <a [routerLink]="['/security-clearance', leaseModelMetadata.securityClearance?.id, 'view']">{{
+                leaseModelMetadata.securityClearance?.clearanceLevel
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseModelMetadata.leaseLiabilityAccount">
+              <a [routerLink]="['/transaction-account', leaseModelMetadata.leaseLiabilityAccount?.id, 'view']">{{
+                leaseModelMetadata.leaseLiabilityAccount?.accountNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseModelMetadata.interestPayableAccount">
+              <a [routerLink]="['/transaction-account', leaseModelMetadata.interestPayableAccount?.id, 'view']">{{
+                leaseModelMetadata.interestPayableAccount?.accountNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseModelMetadata.interestExpenseAccount">
+              <a [routerLink]="['/transaction-account', leaseModelMetadata.interestExpenseAccount?.id, 'view']">{{
+                leaseModelMetadata.interestExpenseAccount?.accountNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseModelMetadata.rouAssetAccount">
+              <a [routerLink]="['/transaction-account', leaseModelMetadata.rouAssetAccount?.id, 'view']">{{
+                leaseModelMetadata.rouAssetAccount?.accountNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseModelMetadata.rouDepreciationAccount">
+              <a [routerLink]="['/transaction-account', leaseModelMetadata.rouDepreciationAccount?.id, 'view']">{{
+                leaseModelMetadata.rouDepreciationAccount?.accountNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseModelMetadata.accruedDepreciationAccount">
+              <a [routerLink]="['/transaction-account', leaseModelMetadata.accruedDepreciationAccount?.id, 'view']">{{
+                leaseModelMetadata.accruedDepreciationAccount?.accountNumber
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/lease-model-metadata', leaseModelMetadata.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/lease-model-metadata', leaseModelMetadata.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(leaseModelMetadata)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="leaseModelMetadata && leaseModelMetadata.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,278 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-agency-notice-heading" data-cy="AgencyNoticeCreateUpdateHeading">Create or edit a Agency Notice</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_referenceNumber">Reference Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="referenceNumber"
+            id="field_referenceNumber"
+            data-cy="referenceNumber"
+            formControlName="referenceNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('referenceNumber')!.invalid &&
+              (editForm.get('referenceNumber')!.dirty || editForm.get('referenceNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('referenceNumber')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_referenceDate">Reference Date</label>
+          <div class="input-group">
+            <input
+              id="field_referenceDate"
+              data-cy="referenceDate"
+              type="text"
+              class="form-control"
+              name="referenceDate"
+              ngbDatepicker
+              #referenceDateDp="ngbDatepicker"
+              formControlName="referenceDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="referenceDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <!--<div class="form-group">
+          <label class="form-control-label" for="field_taxCode">Tax Code</label>
+          <input type="text" class="form-control" name="taxCode" id="field_taxCode" data-cy="taxCode" formControlName="taxCode" />
+        </div>-->
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assessmentAmount">Assessment Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="assessmentAmount"
+            id="field_assessmentAmount"
+            data-cy="assessmentAmount"
+            formControlName="assessmentAmount"
+          />
+          <div
+            *ngIf="
+              editForm.get('assessmentAmount')!.invalid &&
+              (editForm.get('assessmentAmount')!.dirty || editForm.get('assessmentAmount')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('assessmentAmount')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('assessmentAmount')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <!-- // TODO use typical drop-down values as this approach has failed to take-off in chrome ver 98-->
+        <div class="form-group">
+          <label class="form-control-label" for="field_agencyStatus">Agency Status</label>
+          <select class="form-control" name="agencyStatus" formControlName="agencyStatus" id="field_agencyStatus" data-cy="agencyStatus">
+            <!--<option [ngValue]="null"></option>
+            <option *ngFor="let agencyStatusType of agencyStatusTypeValues" [value]="agencyStatusType">agencyStatusType</option>-->
+            <option [ngValue]="null"></option>
+            <option value="CLEARED">CLEARED</option>
+            <option value="NOT_CLEARED">NOT CLEARED</option>
+          </select>
+          <div
+            *ngIf="editForm.get('agencyStatus')!.invalid && (editForm.get('agencyStatus')!.dirty || editForm.get('agencyStatus')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('agencyStatus')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assessmentNotice">Assessment Notice</label>
+          <div>
+            <div *ngIf="editForm.get('assessmentNotice')!.value" class="form-text text-danger clearfix">
+              <a
+                class="pull-left"
+                (click)="openFile(editForm.get('assessmentNotice')!.value, editForm.get('assessmentNoticeContentType')!.value)"
+              >open</a
+              ><br />
+              <span class="pull-left"
+              >{{ editForm.get('assessmentNoticeContentType')!.value }}, {{ byteSize(editForm.get('assessmentNotice')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ assessmentNotice: null }); editForm.patchValue({ assessmentNoticeContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input
+              type="file"
+              id="file_assessmentNotice"
+              data-cy="assessmentNotice"
+              (change)="setFileData($event, 'assessmentNotice', false)"
+            />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="assessmentNotice"
+            id="field_assessmentNotice"
+            data-cy="assessmentNotice"
+            formControlName="assessmentNotice"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="assessmentNoticeContentType"
+            id="field_assessmentNoticeContentType"
+            formControlName="assessmentNoticeContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label">Correspondents</label>
+          <ng-select
+            [items]="correspondentLookups$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackCorrespondentByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="correspondentsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="correspondentControlInput$"
+            formControlName="correspondents"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of correspondentLookups$ | async" [value]="option">
+              {{ option.dealerName }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.dealerName}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label">Settlement Currency</label>
+          <ng-select
+            [items]="settlementCurrencyLookups$ | async"
+            bindLabel="iso4217CurrencyCode"
+            [trackByFn]="trackCurrencyByFn"
+            [minTermLength]="3"
+            [loading]="settlementCurrenciesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="settlementCurrencyControlInput$"
+            formControlName="settlementCurrency"
+          >
+            <option [ngValue]="editForm.get('settlementCurrency')!.value"></option>
+          </ng-select>
+          <div>{{editForm.get(['settlementCurrency'])!.value|formatSettlementCurrency: [2, '...']}}</div>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['settlementCurrency'])!.invalid &&
+            (editForm.get(['settlementCurrency'])!.dirty || editForm.get(['settlementCurrency'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label">Assessor</label>
+          <ng-select
+            [items]="assessorLookup$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackAssessorByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="assessorsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="assessorInput$"
+            formControlName="assessor"
+          >
+            <option [ngValue]="editForm.get('assessor')!.value"></option>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['assessor'])!.value|formatDealerId}}</div>
+        </div>
+        <div *ngIf="editForm.get(['assessor'])!.invalid && (editForm.get(['assessor'])!.dirty || editForm.get(['assessor'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['assessor'])?.errors?.required"> This field is required. </small>
+        </div>
+
+      <div class="form-group">
+        <label class="form-control-label">Placeholders</label>
+        <ng-select
+          [items]="placeholderLookups$ | async"
+          bindLabel="description"
+          [trackByFn]="trackPlaceholdersByFn"
+          [minTermLength]="minAccountLengthTerm"
+          [loading]="placeholdersLoading"
+          typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+          [typeahead]="placeholderControlInput$"
+          formControlName="placeholders"
+          [multiple]='true'
+        >
+          <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
+            {{ option.description }}
+          </ng-option>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+            <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
+          </ng-template>
+        </ng-select>
+        <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
+      </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

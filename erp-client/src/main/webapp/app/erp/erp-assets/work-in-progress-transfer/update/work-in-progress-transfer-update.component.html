@@ -1,0 +1,206 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-work-in-progress-transfer-heading" data-cy="WorkInProgressTransferCreateUpdateHeading">
+        Create or edit a Work In Progress Transfer
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <jhi-m21-wip-registration-form-control
+          ngDefaultControl
+          formControlName='workInProgressRegistration'
+          [inputValue]="editForm.get('workInProgressRegistration')!.value"
+          (valueSelected)='updateWIPRegistration($event)'
+          inputControlLabel='WIP Registration'
+        >
+          <option [ngValue]="editForm.get('workInProgressRegistration')!.value"></option>
+        </jhi-m21-wip-registration-form-control>
+
+        <jhi-m21-settlement-form-control
+          ngDefaultControl
+          formControlName='paymentNumber'
+          [inputValue]="editForm.get(['transferSettlement'])!.value"
+          (valueSelected)='updateTransferSettlement($event)'
+          inputControlLabel='Transfer Settlement'
+        >
+          <option [ngValue]="editForm.get(['transferSettlement'])!.value"></option>
+        </jhi-m21-settlement-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_transferAmount">Transfer Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="transferAmount"
+            id="field_transferAmount"
+            data-cy="transferAmount"
+            formControlName="transferAmount"
+          />
+          <div
+            *ngIf="
+              editForm.get('transferAmount')!.invalid && (editForm.get('transferAmount')!.dirty || editForm.get('transferAmount')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('transferAmount')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('transferAmount')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_transferDate">Transfer Date</label>
+          <div class="input-group">
+            <input
+              id="field_transferDate"
+              data-cy="transferDate"
+              type="text"
+              class="form-control"
+              name="transferDate"
+              ngbDatepicker
+              #transferDateDp="ngbDatepicker"
+              formControlName="transferDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="transferDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="editForm.get('transferDate')!.invalid && (editForm.get('transferDate')!.dirty || editForm.get('transferDate')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('transferDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_transferType">Transfer Type</label>
+          <select class="form-control" name="transferType" formControlName="transferType" id="field_transferType" data-cy="transferType">
+            <option [ngValue]="null"></option>
+            <option *ngFor="let workInProgressTransferType of workInProgressTransferTypeValues" [value]="workInProgressTransferType">
+              {{  workInProgressTransferType }}
+            </option>
+          </select>
+          <div
+            *ngIf="editForm.get('transferType')!.invalid && (editForm.get('transferType')!.dirty || editForm.get('transferType')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('transferType')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <jhi-m21-asset-category-form-control
+          ngDefaultControl
+          formControlName='assetCategory'
+          [inputValue]="editForm.get(['assetCategory'])!.value"
+          (valueSelected)='updateAssetCategory($event)'
+          inputControlLabel='Asset Category'
+        >
+          <option [ngValue]="editForm.get(['assetCategory'])!.value"></option>
+        </jhi-m21-asset-category-form-control>
+
+        <jhi-m21-settlement-form-control
+          ngDefaultControl
+          formControlName='paymentNumber'
+          [inputValue]="editForm.get(['originalSettlement'])!.value"
+          (valueSelected)='updateOriginalSettlement($event)'
+          inputControlLabel='Original Settlement'
+        >
+          <option [ngValue]="editForm.get(['originalSettlement'])!.value"></option>
+        </jhi-m21-settlement-form-control>
+
+        <jhi-m21-service-outlet-form-control
+          ngDefaultControl
+          formControlName='serviceOutlet'
+          [inputValue]="editForm.get(['serviceOutlet'])!.value"
+          (valueSelected)='updateServiceOutlet($event)'
+          inputControlLabel='Service Outlet'
+        >
+          <option [ngValue]="editForm.get(['serviceOutlet'])!.value"></option>
+        </jhi-m21-service-outlet-form-control>
+
+        <jhi-m21-work-project-register-form-control
+          ngDefaultControl
+          formControlName='workProjectRegister'
+          [inputValue]="editForm.get('workProjectRegister')!.value"
+          (valueSelected)='updateWorkProjectRegister($event)'
+          inputControlLabel='Work Project'
+        >
+          <option [ngValue]="editForm.get('workProjectRegister')!.value"></option>
+        </jhi-m21-work-project-register-form-control>
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='businessDocuments'
+          [inputValues]="editForm.get(['businessDocuments'])!.value"
+          (selectedValues)='updateBusinessDocuments($event)'
+          inputControlLabel='businessDocument(s)'
+        >
+        </jhi-m2m-business-document-form-control>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholders)'
+        >
+        </jhi-m2m-placeholder-form-control>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

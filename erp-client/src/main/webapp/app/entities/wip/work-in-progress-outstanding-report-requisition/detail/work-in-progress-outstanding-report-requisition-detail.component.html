@@ -1,0 +1,113 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="workInProgressOutstandingReportRequisition">
+      <h2 data-cy="workInProgressOutstandingReportRequisitionDetailsHeading">
+        <span>Work In Progress Outstanding Report Requisition</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReportRequisition.id }}</span>
+        </dd>
+        <dt><span>Request Id</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReportRequisition.requestId }}</span>
+        </dd>
+        <dt><span>Report Date</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReportRequisition.reportDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Time Of Requisition</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReportRequisition.timeOfRequisition | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>File Checksum</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReportRequisition.fileChecksum }}</span>
+        </dd>
+        <dt><span>Tampered</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReportRequisition.tampered }}</span>
+        </dd>
+        <dt><span>Filename</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReportRequisition.filename }}</span>
+        </dd>
+        <dt><span>Report Parameters</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReportRequisition.reportParameters }}</span>
+        </dd>
+        <dt><span>Report File</span></dt>
+        <dd>
+          <div *ngIf="workInProgressOutstandingReportRequisition.reportFile">
+            <a
+              (click)="
+                openFile(
+                  workInProgressOutstandingReportRequisition.reportFile,
+                  workInProgressOutstandingReportRequisition.reportFileContentType
+                )
+              "
+              >open</a
+            >
+            {{ workInProgressOutstandingReportRequisition.reportFileContentType }},
+            {{ byteSize(workInProgressOutstandingReportRequisition.reportFile) }}
+          </div>
+        </dd>
+        <dt><span>Requested By</span></dt>
+        <dd>
+          <div *ngIf="workInProgressOutstandingReportRequisition.requestedBy">
+            <a [routerLink]="['/application-user', workInProgressOutstandingReportRequisition.requestedBy?.id, 'view']">{{
+              workInProgressOutstandingReportRequisition.requestedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Last Accessed By</span></dt>
+        <dd>
+          <div *ngIf="workInProgressOutstandingReportRequisition.lastAccessedBy">
+            <a [routerLink]="['/application-user', workInProgressOutstandingReportRequisition.lastAccessedBy?.id, 'view']">{{
+              workInProgressOutstandingReportRequisition.lastAccessedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/work-in-progress-outstanding-report-requisition', workInProgressOutstandingReportRequisition.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

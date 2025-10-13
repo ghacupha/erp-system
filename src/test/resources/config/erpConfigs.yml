@@ -1,5 +1,0 @@
-erp:
-  reportsDirectory: 'reports-directory/'
-  business:
-    documents:
-      businessDocumentsDirectory: 'business-documents/'

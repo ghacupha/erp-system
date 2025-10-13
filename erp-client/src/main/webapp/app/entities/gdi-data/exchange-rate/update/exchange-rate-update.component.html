@@ -1,0 +1,251 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-exchange-rate-heading" data-cy="ExchangeRateCreateUpdateHeading">Create or edit a Exchange Rate</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_businessReportingDay">Business Reporting Day</label>
+          <div class="input-group">
+            <input
+              id="field_businessReportingDay"
+              data-cy="businessReportingDay"
+              type="text"
+              class="form-control"
+              name="businessReportingDay"
+              ngbDatepicker
+              #businessReportingDayDp="ngbDatepicker"
+              formControlName="businessReportingDay"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="businessReportingDayDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('businessReportingDay')!.invalid &&
+              (editForm.get('businessReportingDay')!.dirty || editForm.get('businessReportingDay')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('businessReportingDay')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_buyingRate">Buying Rate</label>
+          <input
+            type="number"
+            class="form-control"
+            name="buyingRate"
+            id="field_buyingRate"
+            data-cy="buyingRate"
+            formControlName="buyingRate"
+          />
+          <div *ngIf="editForm.get('buyingRate')!.invalid && (editForm.get('buyingRate')!.dirty || editForm.get('buyingRate')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('buyingRate')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('buyingRate')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sellingRate">Selling Rate</label>
+          <input
+            type="number"
+            class="form-control"
+            name="sellingRate"
+            id="field_sellingRate"
+            data-cy="sellingRate"
+            formControlName="sellingRate"
+          />
+          <div *ngIf="editForm.get('sellingRate')!.invalid && (editForm.get('sellingRate')!.dirty || editForm.get('sellingRate')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('sellingRate')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('sellingRate')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_meanRate">Mean Rate</label>
+          <input type="number" class="form-control" name="meanRate" id="field_meanRate" data-cy="meanRate" formControlName="meanRate" />
+          <div *ngIf="editForm.get('meanRate')!.invalid && (editForm.get('meanRate')!.dirty || editForm.get('meanRate')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('meanRate')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('meanRate')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_closingBidRate">Closing Bid Rate</label>
+          <input
+            type="number"
+            class="form-control"
+            name="closingBidRate"
+            id="field_closingBidRate"
+            data-cy="closingBidRate"
+            formControlName="closingBidRate"
+          />
+          <div
+            *ngIf="
+              editForm.get('closingBidRate')!.invalid && (editForm.get('closingBidRate')!.dirty || editForm.get('closingBidRate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('closingBidRate')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('closingBidRate')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_closingOfferRate">Closing Offer Rate</label>
+          <input
+            type="number"
+            class="form-control"
+            name="closingOfferRate"
+            id="field_closingOfferRate"
+            data-cy="closingOfferRate"
+            formControlName="closingOfferRate"
+          />
+          <div
+            *ngIf="
+              editForm.get('closingOfferRate')!.invalid &&
+              (editForm.get('closingOfferRate')!.dirty || editForm.get('closingOfferRate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('closingOfferRate')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('closingOfferRate')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_usdCrossRate">Usd Cross Rate</label>
+          <input
+            type="number"
+            class="form-control"
+            name="usdCrossRate"
+            id="field_usdCrossRate"
+            data-cy="usdCrossRate"
+            formControlName="usdCrossRate"
+          />
+          <div
+            *ngIf="editForm.get('usdCrossRate')!.invalid && (editForm.get('usdCrossRate')!.dirty || editForm.get('usdCrossRate')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('usdCrossRate')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('usdCrossRate')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_institutionCode">Institution Code</label>
+          <select
+            class="form-control"
+            id="field_institutionCode"
+            data-cy="institutionCode"
+            name="institutionCode"
+            formControlName="institutionCode"
+          >
+            <option *ngIf="!editForm.get('institutionCode')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                institutionCodeOption.id === editForm.get('institutionCode')!.value?.id
+                  ? editForm.get('institutionCode')!.value
+                  : institutionCodeOption
+              "
+              *ngFor="let institutionCodeOption of institutionCodesSharedCollection; trackBy: trackInstitutionCodeById"
+            >
+              {{ institutionCodeOption.institutionName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['institutionCode'])!.invalid &&
+            (editForm.get(['institutionCode'])!.dirty || editForm.get(['institutionCode'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['institutionCode'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_currencyCode">Currency Code</label>
+          <select class="form-control" id="field_currencyCode" data-cy="currencyCode" name="currencyCode" formControlName="currencyCode">
+            <option *ngIf="!editForm.get('currencyCode')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                isoCurrencyCodeOption.id === editForm.get('currencyCode')!.value?.id
+                  ? editForm.get('currencyCode')!.value
+                  : isoCurrencyCodeOption
+              "
+              *ngFor="let isoCurrencyCodeOption of isoCurrencyCodesSharedCollection; trackBy: trackIsoCurrencyCodeById"
+            >
+              {{ isoCurrencyCodeOption.alphabeticCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['currencyCode'])!.invalid && (editForm.get(['currencyCode'])!.dirty || editForm.get(['currencyCode'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['currencyCode'])?.errors?.required"> This field is required. </small>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

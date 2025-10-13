@@ -1,0 +1,89 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="gdiTransactionDataIndex">
+      <h2 data-cy="gdiTransactionDataIndexDetailsHeading"><span>Gdi Transaction Data Index</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ gdiTransactionDataIndex.id }}</span>
+        </dd>
+        <dt><span>Dataset Name</span></dt>
+        <dd>
+          <span>{{ gdiTransactionDataIndex.datasetName }}</span>
+        </dd>
+        <dt><span>Database Name</span></dt>
+        <dd>
+          <span>{{ gdiTransactionDataIndex.databaseName }}</span>
+        </dd>
+        <dt><span>Update Frequency</span></dt>
+        <dd>
+          <span>{{ gdiTransactionDataIndex.updateFrequency }}</span>
+        </dd>
+        <dt><span>Dataset Behavior</span></dt>
+        <dd>
+          <span>{{ gdiTransactionDataIndex.datasetBehavior }}</span>
+        </dd>
+        <dt><span>Minimum Datarows Per Request</span></dt>
+        <dd>
+          <span>{{ gdiTransactionDataIndex.minimumDatarowsPerRequest }}</span>
+        </dd>
+        <dt><span>Maximum Data Rows Per Request</span></dt>
+        <dd>
+          <span>{{ gdiTransactionDataIndex.maximumDataRowsPerRequest }}</span>
+        </dd>
+        <dt><span>Dataset Description</span></dt>
+        <dd>
+          <span>{{ gdiTransactionDataIndex.datasetDescription }}</span>
+        </dd>
+        <dt><span>Data Template</span></dt>
+        <dd>
+          <div *ngIf="gdiTransactionDataIndex.dataTemplate">
+            <a (click)="openFile(gdiTransactionDataIndex.dataTemplate, gdiTransactionDataIndex.dataTemplateContentType)">open</a>
+            {{ gdiTransactionDataIndex.dataTemplateContentType }}, {{ byteSize(gdiTransactionDataIndex.dataTemplate) }}
+          </div>
+        </dd>
+        <dt><span>Master Data Item</span></dt>
+        <dd>
+          <span *ngFor="let masterDataItem of gdiTransactionDataIndex.masterDataItems; let last = last">
+            <a [routerLink]="['/gdi-master-data-index', masterDataItem?.id, 'view']">{{ masterDataItem.entityName }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/gdi-transaction-data-index', gdiTransactionDataIndex.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

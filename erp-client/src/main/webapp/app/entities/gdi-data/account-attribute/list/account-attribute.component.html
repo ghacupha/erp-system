@@ -1,0 +1,189 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="AccountAttributeHeading">
+    <span>Account Attributes</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-account-attribute"
+        [routerLink]="['/account-attribute/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new Account Attribute </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="accountAttributes?.length === 0">
+    <span>No accountAttributes found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="accountAttributes && accountAttributes.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportingDate"><span>Reporting Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="customerNumber">
+            <span>Customer Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="accountContractNumber">
+            <span>Account Contract Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="accountName"><span>Account Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="accountOpeningDate"><span>Account Opening Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="accountClosingDate"><span>Account Closing Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="debitInterestRate"><span>Debit Interest Rate</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="creditInterestRate"><span>Credit Interest Rate</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="sanctionedAccountLimitFcy">
+            <span>Sanctioned Account Limit Fcy</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="sanctionedAccountLimitLcy">
+            <span>Sanctioned Account Limit Lcy</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="accountStatusChangeDate"><span>Account Status Change Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="expiryDate"><span>Expiry Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="bankCode.institutionCode"><span>Bank Code</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="branchCode.branchCode"><span>Branch Code</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="accountOwnershipType.accountOwnershipType">
+            <span>Account Ownership Type</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let accountAttribute of accountAttributes; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/account-attribute', accountAttribute.id, 'view']">{{ accountAttribute.id }}</a>
+          </td>
+          <td>{{ accountAttribute.reportingDate | formatMediumDate }}</td>
+          <td>{{ accountAttribute.customerNumber }}</td>
+          <td>{{ accountAttribute.accountContractNumber }}</td>
+          <td>{{ accountAttribute.accountName }}</td>
+          <td>{{ accountAttribute.accountOpeningDate | formatMediumDate }}</td>
+          <td>{{ accountAttribute.accountClosingDate | formatMediumDate }}</td>
+          <td>{{ accountAttribute.debitInterestRate }}</td>
+          <td>{{ accountAttribute.creditInterestRate }}</td>
+          <td>{{ accountAttribute.sanctionedAccountLimitFcy }}</td>
+          <td>{{ accountAttribute.sanctionedAccountLimitLcy }}</td>
+          <td>{{ accountAttribute.accountStatusChangeDate | formatMediumDate }}</td>
+          <td>{{ accountAttribute.expiryDate | formatMediumDate }}</td>
+          <td>
+            <div *ngIf="accountAttribute.bankCode">
+              <a [routerLink]="['/institution-code', accountAttribute.bankCode?.id, 'view']">{{
+                accountAttribute.bankCode?.institutionCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="accountAttribute.branchCode">
+              <a [routerLink]="['/bank-branch-code', accountAttribute.branchCode?.id, 'view']">{{
+                accountAttribute.branchCode?.branchCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="accountAttribute.accountOwnershipType">
+              <a [routerLink]="['/account-ownership-type', accountAttribute.accountOwnershipType?.id, 'view']">{{
+                accountAttribute.accountOwnershipType?.accountOwnershipType
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/account-attribute', accountAttribute.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/account-attribute', accountAttribute.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(accountAttribute)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="accountAttributes && accountAttributes.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

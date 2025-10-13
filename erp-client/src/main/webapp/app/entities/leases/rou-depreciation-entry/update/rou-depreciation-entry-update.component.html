@@ -1,0 +1,315 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-rou-depreciation-entry-heading" data-cy="RouDepreciationEntryCreateUpdateHeading">
+        Create or edit a Rou Depreciation Entry
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationAmount">Depreciation Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="depreciationAmount"
+            id="field_depreciationAmount"
+            data-cy="depreciationAmount"
+            formControlName="depreciationAmount"
+          />
+          <div
+            *ngIf="
+              editForm.get('depreciationAmount')!.invalid &&
+              (editForm.get('depreciationAmount')!.dirty || editForm.get('depreciationAmount')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('depreciationAmount')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('depreciationAmount')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('depreciationAmount')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_outstandingAmount">Outstanding Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="outstandingAmount"
+            id="field_outstandingAmount"
+            data-cy="outstandingAmount"
+            formControlName="outstandingAmount"
+          />
+          <div
+            *ngIf="
+              editForm.get('outstandingAmount')!.invalid &&
+              (editForm.get('outstandingAmount')!.dirty || editForm.get('outstandingAmount')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('outstandingAmount')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('outstandingAmount')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('outstandingAmount')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_rouAssetIdentifier">Rou Asset Identifier</label>
+          <input
+            type="text"
+            class="form-control"
+            name="rouAssetIdentifier"
+            id="field_rouAssetIdentifier"
+            data-cy="rouAssetIdentifier"
+            formControlName="rouAssetIdentifier"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_rouDepreciationIdentifier">Rou Depreciation Identifier</label>
+          <input
+            type="text"
+            class="form-control"
+            name="rouDepreciationIdentifier"
+            id="field_rouDepreciationIdentifier"
+            data-cy="rouDepreciationIdentifier"
+            formControlName="rouDepreciationIdentifier"
+          />
+          <div
+            *ngIf="
+              editForm.get('rouDepreciationIdentifier')!.invalid &&
+              (editForm.get('rouDepreciationIdentifier')!.dirty || editForm.get('rouDepreciationIdentifier')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('rouDepreciationIdentifier')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sequenceNumber">Sequence Number</label>
+          <input
+            type="number"
+            class="form-control"
+            name="sequenceNumber"
+            id="field_sequenceNumber"
+            data-cy="sequenceNumber"
+            formControlName="sequenceNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_invalidated">Invalidated</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="invalidated"
+            id="field_invalidated"
+            data-cy="invalidated"
+            formControlName="invalidated"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_debitAccount">Debit Account</label>
+          <select class="form-control" id="field_debitAccount" data-cy="debitAccount" name="debitAccount" formControlName="debitAccount">
+            <option *ngIf="!editForm.get('debitAccount')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('debitAccount')!.value?.id
+                  ? editForm.get('debitAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['debitAccount'])!.invalid && (editForm.get(['debitAccount'])!.dirty || editForm.get(['debitAccount'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['debitAccount'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_creditAccount">Credit Account</label>
+          <select
+            class="form-control"
+            id="field_creditAccount"
+            data-cy="creditAccount"
+            name="creditAccount"
+            formControlName="creditAccount"
+          >
+            <option *ngIf="!editForm.get('creditAccount')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('creditAccount')!.value?.id
+                  ? editForm.get('creditAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['creditAccount'])!.invalid && (editForm.get(['creditAccount'])!.dirty || editForm.get(['creditAccount'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['creditAccount'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetCategory">Asset Category</label>
+          <select
+            class="form-control"
+            id="field_assetCategory"
+            data-cy="assetCategory"
+            name="assetCategory"
+            formControlName="assetCategory"
+          >
+            <option *ngIf="!editForm.get('assetCategory')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                assetCategoryOption.id === editForm.get('assetCategory')!.value?.id
+                  ? editForm.get('assetCategory')!.value
+                  : assetCategoryOption
+              "
+              *ngFor="let assetCategoryOption of assetCategoriesSharedCollection; trackBy: trackAssetCategoryById"
+            >
+              {{ assetCategoryOption.assetCategoryName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['assetCategory'])!.invalid && (editForm.get(['assetCategory'])!.dirty || editForm.get(['assetCategory'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['assetCategory'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseContract">Lease Contract</label>
+          <select
+            class="form-control"
+            id="field_leaseContract"
+            data-cy="leaseContract"
+            name="leaseContract"
+            formControlName="leaseContract"
+          >
+            <option *ngIf="!editForm.get('leaseContract')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                iFRS16LeaseContractOption.id === editForm.get('leaseContract')!.value?.id
+                  ? editForm.get('leaseContract')!.value
+                  : iFRS16LeaseContractOption
+              "
+              *ngFor="let iFRS16LeaseContractOption of iFRS16LeaseContractsSharedCollection; trackBy: trackIFRS16LeaseContractById"
+            >
+              {{ iFRS16LeaseContractOption.bookingId }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['leaseContract'])!.invalid && (editForm.get(['leaseContract'])!.dirty || editForm.get(['leaseContract'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['leaseContract'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_rouMetadata">Rou Metadata</label>
+          <select class="form-control" id="field_rouMetadata" data-cy="rouMetadata" name="rouMetadata" formControlName="rouMetadata">
+            <option *ngIf="!editForm.get('rouMetadata')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                rouModelMetadataOption.id === editForm.get('rouMetadata')!.value?.id
+                  ? editForm.get('rouMetadata')!.value
+                  : rouModelMetadataOption
+              "
+              *ngFor="let rouModelMetadataOption of rouModelMetadataSharedCollection; trackBy: trackRouModelMetadataById"
+            >
+              {{ rouModelMetadataOption.modelTitle }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['rouMetadata'])!.invalid && (editForm.get(['rouMetadata'])!.dirty || editForm.get(['rouMetadata'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['rouMetadata'])?.errors?.required"> This field is required. </small>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+{
+  "clientRootFolder": "leases",
+  "fields": [
+    {
+      "fieldName": "leaseContractNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "leaseDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fiscalMonthCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "accountForCredit",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "accountForDebit",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "depreciationAmount",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": true,
+  "pagination": "infinite-scroll",
+  "name": "RouDepreciationPostingReportItem",
+  "changelogDate": "20240313102017",
+  "incrementalChangelog": false
+}

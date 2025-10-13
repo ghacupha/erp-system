@@ -1,0 +1,164 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="assetAccessory">
+      <h2 data-cy="assetAccessoryDetailsHeading"><span>Asset Accessory</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ assetAccessory.id }}</span>
+        </dd>
+        <dt><span>Asset Tag</span></dt>
+        <dd>
+          <span>{{ assetAccessory.assetTag }}</span>
+        </dd>
+        <dt><span>Asset Details</span></dt>
+        <dd>
+          <span>{{ assetAccessory.assetDetails }}</span>
+        </dd>
+        <dt><span>Comments</span></dt>
+        <dd>
+          <div *ngIf="assetAccessory.comments">
+            <a (click)="openFile(assetAccessory.comments, assetAccessory.commentsContentType)">open</a>
+            {{ assetAccessory.commentsContentType }}, {{ byteSize(assetAccessory.comments) }}
+          </div>
+        </dd>
+        <dt><span>Model Number</span></dt>
+        <dd>
+          <span>{{ assetAccessory.modelNumber }}</span>
+        </dd>
+        <dt><span>Serial Number</span></dt>
+        <dd>
+          <span>{{ assetAccessory.serialNumber }}</span>
+        </dd>
+        <dt><span>Asset Warranty</span></dt>
+        <dd>
+          <span *ngFor="let assetWarranty of assetAccessory.assetWarranties; let last = last">
+            <a [routerLink]="['/asset-warranty', assetWarranty?.id, 'view']">{{ assetWarranty.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of assetAccessory.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Payment Invoices</span></dt>
+        <dd>
+          <span *ngFor="let paymentInvoices of assetAccessory.paymentInvoices; let last = last">
+            <a [routerLink]="['/payment-invoice', paymentInvoices?.id, 'view']">{{ paymentInvoices.invoiceNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="assetAccessory.serviceOutlet">
+            <a [routerLink]="['/service-outlet', assetAccessory.serviceOutlet?.id, 'view']">{{
+              assetAccessory.serviceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Settlement</span></dt>
+        <dd>
+          <span *ngFor="let settlement of assetAccessory.settlements; let last = last">
+            <a [routerLink]="['/settlement', settlement?.id, 'view']">{{ settlement.paymentNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Asset Category</span></dt>
+        <dd>
+          <div *ngIf="assetAccessory.assetCategory">
+            <a [routerLink]="['/asset-category', assetAccessory.assetCategory?.id, 'view']">{{
+              assetAccessory.assetCategory?.assetCategoryName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Purchase Order</span></dt>
+        <dd>
+          <span *ngFor="let purchaseOrder of assetAccessory.purchaseOrders; let last = last">
+            <a [routerLink]="['/purchase-order', purchaseOrder?.id, 'view']">{{ purchaseOrder.purchaseOrderNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Delivery Note</span></dt>
+        <dd>
+          <span *ngFor="let deliveryNote of assetAccessory.deliveryNotes; let last = last">
+            <a [routerLink]="['/delivery-note', deliveryNote?.id, 'view']">{{ deliveryNote.deliveryNoteNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Job Sheet</span></dt>
+        <dd>
+          <span *ngFor="let jobSheet of assetAccessory.jobSheets; let last = last">
+            <a [routerLink]="['/job-sheet', jobSheet?.id, 'view']">{{ jobSheet.serialNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Dealer</span></dt>
+        <dd>
+          <div *ngIf="assetAccessory.dealer">
+            <a [routerLink]="['/dealer', assetAccessory.dealer?.id, 'view']">{{ assetAccessory.dealer?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Designated Users</span></dt>
+        <dd>
+          <span *ngFor="let designatedUsers of assetAccessory.designatedUsers; let last = last">
+            <a [routerLink]="['/dealer', designatedUsers?.id, 'view']">{{ designatedUsers.dealerName }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Business Document</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of assetAccessory.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Universally Unique Mapping</span></dt>
+        <dd>
+          <span *ngFor="let universallyUniqueMapping of assetAccessory.universallyUniqueMappings; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', universallyUniqueMapping?.id, 'view']">{{
+              universallyUniqueMapping.universalKey
+            }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/asset-accessory', assetAccessory.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

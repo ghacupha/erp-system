@@ -1,0 +1,102 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="depreciationReport">
+      <h2 data-cy="depreciationReportDetailsHeading"><span>Depreciation Report</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ depreciationReport.id }}</span>
+        </dd>
+        <dt><span>Report Name</span></dt>
+        <dd>
+          <span>{{ depreciationReport.reportName }}</span>
+        </dd>
+        <dt><span>Time Of Report Request</span></dt>
+        <dd>
+          <span>{{ depreciationReport.timeOfReportRequest | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Tampered</span></dt>
+        <dd>
+          <span>{{ depreciationReport.tampered }}</span>
+        </dd>
+        <dt><span>Report Parameters</span></dt>
+        <dd>
+          <span>{{ depreciationReport.reportParameters }}</span>
+        </dd>
+        <dt><span>Report File</span></dt>
+        <dd>
+          <div *ngIf="depreciationReport.reportFile">
+            <a (click)="openFile(depreciationReport.reportFile, depreciationReport.reportFileContentType)">open</a>
+            {{ depreciationReport.reportFileContentType }}, {{ byteSize(depreciationReport.reportFile) }}
+          </div>
+        </dd>
+        <dt><span>Requested By</span></dt>
+        <dd>
+          <div *ngIf="depreciationReport.requestedBy">
+            <a [routerLink]="['/application-user', depreciationReport.requestedBy?.id, 'view']">{{
+              depreciationReport.requestedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Depreciation Period</span></dt>
+        <dd>
+          <div *ngIf="depreciationReport.depreciationPeriod">
+            <a [routerLink]="['/depreciation-period', depreciationReport.depreciationPeriod?.id, 'view']">{{
+              depreciationReport.depreciationPeriod?.periodCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="depreciationReport.serviceOutlet">
+            <a [routerLink]="['/service-outlet', depreciationReport.serviceOutlet?.id, 'view']">{{
+              depreciationReport.serviceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Asset Category</span></dt>
+        <dd>
+          <div *ngIf="depreciationReport.assetCategory">
+            <a [routerLink]="['/asset-category', depreciationReport.assetCategory?.id, 'view']">{{
+              depreciationReport.assetCategory?.assetCategoryName
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/depreciation-report', depreciationReport.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

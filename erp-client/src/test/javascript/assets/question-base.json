@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1001,
+    "context": "Payments",
+    "serial": "86ffcc9d-1ba2-4af6-aa95-f182d4622023",
+    "questionBaseValue": "",
+    "questionBaseKey": "profession",
+    "questionBaseLabel": "Profession",
+    "required": true,
+    "order": 3,
+    "controlType": "TEXTBOX",
+    "placeholder": "",
+    "iterable": false,
+    "parameters": [],
+    "placeholderItems": []
+  },
+  {
+    "id": 1001,
+    "context": "Payments",
+    "serial": "ccf1812e-ee50-47f6-be4d-e2693730fbc8",
+    "questionBaseValue": "",
+    "questionBaseKey": "address",
+    "questionBaseLabel": "Address",
+    "required": true,
+    "order": 1,
+    "controlType": "TEXTBOX",
+    "placeholder": "",
+    "iterable": false,
+    "parameters": [],
+    "placeholderItems": []
+  },
+  {
+    "id": 1001,
+    "context": "Payments",
+    "serial": "f102727b-1b31-4d90-8228-61496c0b8032",
+    "questionBaseValue": "",
+    "questionBaseKey": "gender",
+    "questionBaseLabel":"Gender",
+    "required": true,
+    "order": 2,
+    "controlType": "TEXTBOX",
+    "placeholder": "",
+    "iterable": false,
+    "parameters": [],
+    "placeholderItems": []
+  }
+]

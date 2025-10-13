@@ -1,0 +1,19 @@
+{
+  "changelogDate": "20220701141203",
+  "clientRootFolder": "system",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "moduleName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "SystemModule",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

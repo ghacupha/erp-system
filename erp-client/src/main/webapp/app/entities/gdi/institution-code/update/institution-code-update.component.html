@@ -1,0 +1,177 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-institution-code-heading" data-cy="InstitutionCodeCreateUpdateHeading">Create or edit a Institution Code</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_institutionCode">Institution Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="institutionCode"
+            id="field_institutionCode"
+            data-cy="institutionCode"
+            formControlName="institutionCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('institutionCode')!.invalid &&
+              (editForm.get('institutionCode')!.dirty || editForm.get('institutionCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('institutionCode')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_institutionName">Institution Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="institutionName"
+            id="field_institutionName"
+            data-cy="institutionName"
+            formControlName="institutionName"
+          />
+          <div
+            *ngIf="
+              editForm.get('institutionName')!.invalid &&
+              (editForm.get('institutionName')!.dirty || editForm.get('institutionName')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('institutionName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_shortName">Short Name</label>
+          <input type="text" class="form-control" name="shortName" id="field_shortName" data-cy="shortName" formControlName="shortName" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_category">Category</label>
+          <input type="text" class="form-control" name="category" id="field_category" data-cy="category" formControlName="category" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_institutionCategory">Institution Category</label>
+          <input
+            type="text"
+            class="form-control"
+            name="institutionCategory"
+            id="field_institutionCategory"
+            data-cy="institutionCategory"
+            formControlName="institutionCategory"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_institutionOwnership">Institution Ownership</label>
+          <input
+            type="text"
+            class="form-control"
+            name="institutionOwnership"
+            id="field_institutionOwnership"
+            data-cy="institutionOwnership"
+            formControlName="institutionOwnership"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dateLicensed">Date Licensed</label>
+          <div class="input-group">
+            <input
+              id="field_dateLicensed"
+              data-cy="dateLicensed"
+              type="text"
+              class="form-control"
+              name="dateLicensed"
+              ngbDatepicker
+              #dateLicensedDp="ngbDatepicker"
+              formControlName="dateLicensed"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="dateLicensedDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_institutionStatus">Institution Status</label>
+          <input
+            type="text"
+            class="form-control"
+            name="institutionStatus"
+            id="field_institutionStatus"
+            data-cy="institutionStatus"
+            formControlName="institutionStatus"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,416 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-amortization-sequence-heading" data-cy="AmortizationSequenceCreateUpdateHeading">
+        Create or edit a Amortization Sequence
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_prepaymentAccountGuid">Prepayment Account Guid</label>
+          <input
+            type="text"
+            class="form-control"
+            name="prepaymentAccountGuid"
+            id="field_prepaymentAccountGuid"
+            data-cy="prepaymentAccountGuid"
+            formControlName="prepaymentAccountGuid"
+          />
+          <div
+            *ngIf="
+              editForm.get('prepaymentAccountGuid')!.invalid &&
+              (editForm.get('prepaymentAccountGuid')!.dirty || editForm.get('prepaymentAccountGuid')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('prepaymentAccountGuid')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_recurrenceGuid">Recurrence Guid</label>
+          <input
+            type="text"
+            class="form-control"
+            name="recurrenceGuid"
+            id="field_recurrenceGuid"
+            data-cy="recurrenceGuid"
+            formControlName="recurrenceGuid"
+          />
+          <div
+            *ngIf="
+              editForm.get('recurrenceGuid')!.invalid && (editForm.get('recurrenceGuid')!.dirty || editForm.get('recurrenceGuid')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('recurrenceGuid')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sequenceNumber">Sequence Number</label>
+          <input
+            type="number"
+            class="form-control"
+            name="sequenceNumber"
+            id="field_sequenceNumber"
+            data-cy="sequenceNumber"
+            formControlName="sequenceNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('sequenceNumber')!.invalid && (editForm.get('sequenceNumber')!.dirty || editForm.get('sequenceNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('sequenceNumber')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('sequenceNumber')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_particulars">Particulars</label>
+          <input
+            type="text"
+            class="form-control"
+            name="particulars"
+            id="field_particulars"
+            data-cy="particulars"
+            formControlName="particulars"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_currentAmortizationDate">Current Amortization Date</label>
+          <div class="input-group">
+            <input
+              id="field_currentAmortizationDate"
+              data-cy="currentAmortizationDate"
+              type="text"
+              class="form-control"
+              name="currentAmortizationDate"
+              ngbDatepicker
+              #currentAmortizationDateDp="ngbDatepicker"
+              formControlName="currentAmortizationDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="currentAmortizationDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('currentAmortizationDate')!.invalid &&
+              (editForm.get('currentAmortizationDate')!.dirty || editForm.get('currentAmortizationDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('currentAmortizationDate')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_previousAmortizationDate">Previous Amortization Date</label>
+          <div class="input-group">
+            <input
+              id="field_previousAmortizationDate"
+              data-cy="previousAmortizationDate"
+              type="text"
+              class="form-control"
+              name="previousAmortizationDate"
+              ngbDatepicker
+              #previousAmortizationDateDp="ngbDatepicker"
+              formControlName="previousAmortizationDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="previousAmortizationDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_nextAmortizationDate">Next Amortization Date</label>
+          <div class="input-group">
+            <input
+              id="field_nextAmortizationDate"
+              data-cy="nextAmortizationDate"
+              type="text"
+              class="form-control"
+              name="nextAmortizationDate"
+              ngbDatepicker
+              #nextAmortizationDateDp="ngbDatepicker"
+              formControlName="nextAmortizationDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="nextAmortizationDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_isCommencementSequence">Is Commencement Sequence</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="isCommencementSequence"
+            id="field_isCommencementSequence"
+            data-cy="isCommencementSequence"
+            formControlName="isCommencementSequence"
+          />
+          <div
+            *ngIf="
+              editForm.get('isCommencementSequence')!.invalid &&
+              (editForm.get('isCommencementSequence')!.dirty || editForm.get('isCommencementSequence')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('isCommencementSequence')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_isTerminalSequence">Is Terminal Sequence</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="isTerminalSequence"
+            id="field_isTerminalSequence"
+            data-cy="isTerminalSequence"
+            formControlName="isTerminalSequence"
+          />
+          <div
+            *ngIf="
+              editForm.get('isTerminalSequence')!.invalid &&
+              (editForm.get('isTerminalSequence')!.dirty || editForm.get('isTerminalSequence')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('isTerminalSequence')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_amortizationAmount">Amortization Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="amortizationAmount"
+            id="field_amortizationAmount"
+            data-cy="amortizationAmount"
+            formControlName="amortizationAmount"
+          />
+          <div
+            *ngIf="
+              editForm.get('amortizationAmount')!.invalid &&
+              (editForm.get('amortizationAmount')!.dirty || editForm.get('amortizationAmount')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('amortizationAmount')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('amortizationAmount')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('amortizationAmount')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sequenceGuid">Sequence Guid</label>
+          <input
+            type="text"
+            class="form-control"
+            name="sequenceGuid"
+            id="field_sequenceGuid"
+            data-cy="sequenceGuid"
+            formControlName="sequenceGuid"
+          />
+          <div
+            *ngIf="editForm.get('sequenceGuid')!.invalid && (editForm.get('sequenceGuid')!.dirty || editForm.get('sequenceGuid')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('sequenceGuid')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_prepaymentAccount">Prepayment Account</label>
+          <select
+            class="form-control"
+            id="field_prepaymentAccount"
+            data-cy="prepaymentAccount"
+            name="prepaymentAccount"
+            formControlName="prepaymentAccount"
+          >
+            <option *ngIf="!editForm.get('prepaymentAccount')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                prepaymentAccountOption.id === editForm.get('prepaymentAccount')!.value?.id
+                  ? editForm.get('prepaymentAccount')!.value
+                  : prepaymentAccountOption
+              "
+              *ngFor="let prepaymentAccountOption of prepaymentAccountsSharedCollection; trackBy: trackPrepaymentAccountById"
+            >
+              {{ prepaymentAccountOption.catalogueNumber }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['prepaymentAccount'])!.invalid &&
+            (editForm.get(['prepaymentAccount'])!.dirty || editForm.get(['prepaymentAccount'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['prepaymentAccount'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_amortizationRecurrence">Amortization Recurrence</label>
+          <select
+            class="form-control"
+            id="field_amortizationRecurrence"
+            data-cy="amortizationRecurrence"
+            name="amortizationRecurrence"
+            formControlName="amortizationRecurrence"
+          >
+            <option *ngIf="!editForm.get('amortizationRecurrence')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                amortizationRecurrenceOption.id === editForm.get('amortizationRecurrence')!.value?.id
+                  ? editForm.get('amortizationRecurrence')!.value
+                  : amortizationRecurrenceOption
+              "
+              *ngFor="let amortizationRecurrenceOption of amortizationRecurrencesSharedCollection; trackBy: trackAmortizationRecurrenceById"
+            >
+              {{ amortizationRecurrenceOption.particulars }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['amortizationRecurrence'])!.invalid &&
+            (editForm.get(['amortizationRecurrence'])!.dirty || editForm.get(['amortizationRecurrence'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['amortizationRecurrence'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_prepaymentMappings">Prepayment Mapping</label>
+          <select
+            class="form-control"
+            id="field_prepaymentMappings"
+            data-cy="prepaymentMapping"
+            multiple
+            name="prepaymentMappings"
+            formControlName="prepaymentMappings"
+          >
+            <option
+              [ngValue]="getSelectedPrepaymentMapping(prepaymentMappingOption, editForm.get('prepaymentMappings')!.value)"
+              *ngFor="let prepaymentMappingOption of prepaymentMappingsSharedCollection; trackBy: trackPrepaymentMappingById"
+            >
+              {{ prepaymentMappingOption.parameter }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_applicationParameters">Application Parameters</label>
+          <select
+            class="form-control"
+            id="field_applicationParameters"
+            data-cy="applicationParameters"
+            multiple
+            name="applicationParameters"
+            formControlName="applicationParameters"
+          >
+            <option
+              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('applicationParameters')!.value)"
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.mappedValue }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="workInProgressReport">
+      <h2 data-cy="workInProgressReportDetailsHeading"><span>Work In Progress Report</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ workInProgressReport.id }}</span>
+        </dd>
+        <dt><span>Project Title</span></dt>
+        <dd>
+          <span>{{ workInProgressReport.projectTitle }}</span>
+        </dd>
+        <dt><span>Dealer Name</span></dt>
+        <dd>
+          <span>{{ workInProgressReport.dealerName }}</span>
+        </dd>
+        <dt><span>Number Of Items</span></dt>
+        <dd>
+          <span>{{ workInProgressReport.numberOfItems }}</span>
+        </dd>
+        <dt><span>Instalment Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressReport.instalmentAmount | currency : ' ' : 'symbol': '0.2-2' }}</span>
+        </dd>
+        <dt><span>Transfer Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressReport.transferAmount | currency : ' ' : 'symbol': '0.2-2' }}</span>
+        </dd>
+        <dt><span>Outstanding Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressReport.outstandingAmount | currency : ' ' : 'symbol': '0.2-2' }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+    </div>
+  </div>
+</div>

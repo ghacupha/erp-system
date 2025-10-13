@@ -1,0 +1,171 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="ServiceOutletHeading">
+    <span>Service Outlets</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-service-outlet"
+        [routerLink]="['/service-outlet/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new Service Outlet </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="serviceOutlets?.length === 0">
+    <span>No serviceOutlets found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="serviceOutlets && serviceOutlets.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="outletCode"><span>Outlet Code</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="outletName"><span>Outlet Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="town"><span>Town</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="parliamentaryConstituency">
+            <span>Parliamentary Constituency</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="gpsCoordinates">
+            <span>Gps Coordinates</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="outletOpeningDate"><span>Outlet Opening Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="regulatorApprovalDate"><span>Regulator Approval Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="outletClosureDate"><span>Outlet Closure Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="dateLastModified"><span>Date Last Modified</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="licenseFeePayable"><span>License Fee Payable</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="bankCode.branchCode"><span>Bank Code</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="outletType.outletType"><span>Outlet Type</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="outletStatus.branchStatusType"><span>Outlet Status</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="countyName.countyName"><span>County Name</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="subCountyName.subCountyName"><span>Sub County Name</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+        <tr *ngFor="let serviceOutlet of serviceOutlets; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/service-outlet', serviceOutlet.id, 'view']">{{ serviceOutlet.id }}</a>
+          </td>
+          <td>{{ serviceOutlet.outletCode }}</td>
+          <td>{{ serviceOutlet.outletName }}</td>
+          <td>{{ serviceOutlet.town }}</td>
+          <td>{{ serviceOutlet.parliamentaryConstituency }}</td>
+          <td>{{ serviceOutlet.gpsCoordinates }}</td>
+          <td>{{ serviceOutlet.outletOpeningDate | formatMediumDate }}</td>
+          <td>{{ serviceOutlet.regulatorApprovalDate | formatMediumDate }}</td>
+          <td>{{ serviceOutlet.outletClosureDate | formatMediumDate }}</td>
+          <td>{{ serviceOutlet.dateLastModified | formatMediumDate }}</td>
+          <td>{{ serviceOutlet.licenseFeePayable }}</td>
+          <td>
+            <div *ngIf="serviceOutlet.bankCode">
+              <a [routerLink]="['/bank-branch-code', serviceOutlet.bankCode?.id, 'view']">{{ serviceOutlet.bankCode?.branchCode }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="serviceOutlet.outletType">
+              <a [routerLink]="['/outlet-type', serviceOutlet.outletType?.id, 'view']">{{ serviceOutlet.outletType?.outletType }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="serviceOutlet.outletStatus">
+              <a [routerLink]="['/outlet-status', serviceOutlet.outletStatus?.id, 'view']">{{
+                serviceOutlet.outletStatus?.branchStatusType
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="serviceOutlet.countyName">
+              <a [routerLink]="['/county-code', serviceOutlet.countyName?.id, 'view']">{{ serviceOutlet.countyName?.countyName }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="serviceOutlet.subCountyName">
+              <a [routerLink]="['/county-code', serviceOutlet.subCountyName?.id, 'view']">{{
+                serviceOutlet.subCountyName?.subCountyName
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/service-outlet', serviceOutlet.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/service-outlet', serviceOutlet.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(serviceOutlet)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

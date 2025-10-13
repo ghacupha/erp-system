@@ -1,0 +1,336 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-contract-metadata-heading" data-cy="ContractMetadataCreateUpdateHeading">Create or edit a Contract Metadata</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_typeOfContract">Type Of Contract</label>
+          <select
+            class="form-control"
+            name="typeOfContract"
+            formControlName="typeOfContract"
+            id="field_typeOfContract"
+            data-cy="typeOfContract"
+          >
+            <option [ngValue]="null"></option>
+            <option *ngFor="let contractType of contractTypeValues" [value]="contractType">{{ contractType }}</option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('typeOfContract')!.invalid && (editForm.get('typeOfContract')!.dirty || editForm.get('typeOfContract')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('typeOfContract')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_contractStatus">Contract Status</label>
+          <select
+            class="form-control"
+            name="contractStatus"
+            formControlName="contractStatus"
+            id="field_contractStatus"
+            data-cy="contractStatus"
+          >
+            <option [ngValue]="null"></option>
+            <option *ngFor="let contractStatus of contractStatusValues" [value]="contractStatus">{{ contractStatus }}</option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('contractStatus')!.invalid && (editForm.get('contractStatus')!.dirty || editForm.get('contractStatus')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('contractStatus')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_startDate">Start Date</label>
+          <div class="input-group">
+            <input
+              id="field_startDate"
+              data-cy="startDate"
+              type="text"
+              class="form-control"
+              name="startDate"
+              ngbDatepicker
+              #startDateDp="ngbDatepicker"
+              formControlName="startDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="startDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div *ngIf="editForm.get('startDate')!.invalid && (editForm.get('startDate')!.dirty || editForm.get('startDate')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('startDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_terminationDate">Termination Date</label>
+          <div class="input-group">
+            <input
+              id="field_terminationDate"
+              data-cy="terminationDate"
+              type="text"
+              class="form-control"
+              name="terminationDate"
+              ngbDatepicker
+              #terminationDateDp="ngbDatepicker"
+              formControlName="terminationDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="terminationDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('terminationDate')!.invalid &&
+              (editForm.get('terminationDate')!.dirty || editForm.get('terminationDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('terminationDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_commentsAndAttachment">Comments And Attachment</label>
+          <textarea
+            class="form-control"
+            name="commentsAndAttachment"
+            id="field_commentsAndAttachment"
+            data-cy="commentsAndAttachment"
+            formControlName="commentsAndAttachment"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_contractTitle">Contract Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="contractTitle"
+            id="field_contractTitle"
+            data-cy="contractTitle"
+            formControlName="contractTitle"
+          />
+          <div
+            *ngIf="
+              editForm.get('contractTitle')!.invalid && (editForm.get('contractTitle')!.dirty || editForm.get('contractTitle')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('contractTitle')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_contractIdentifier">Contract Identifier</label>
+          <input
+            type="text"
+            class="form-control"
+            name="contractIdentifier"
+            id="field_contractIdentifier"
+            data-cy="contractIdentifier"
+            formControlName="contractIdentifier"
+            [readonly]="true"
+          />
+          <div
+            *ngIf="
+              editForm.get('contractIdentifier')!.invalid &&
+              (editForm.get('contractIdentifier')!.dirty || editForm.get('contractIdentifier')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('contractIdentifier')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_contractIdentifierShort">Contract Identifier Short</label>
+          <input
+            type="text"
+            class="form-control"
+            name="contractIdentifierShort"
+            id="field_contractIdentifierShort"
+            data-cy="contractIdentifierShort"
+            formControlName="contractIdentifierShort"
+            [readonly]="true"
+          />
+          <div
+            *ngIf="
+              editForm.get('contractIdentifierShort')!.invalid &&
+              (editForm.get('contractIdentifierShort')!.dirty || editForm.get('contractIdentifierShort')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('contractIdentifierShort')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('contractIdentifierShort')?.errors?.minlength">
+              This field is required to be at least 6 characters.
+            </small>
+          </div>
+        </div>
+
+        <jhi-m2m-contract-metadata-form-control
+          ngDefaultControl
+          formControlName="relatedContracts"
+          [inputValues]="editForm.get(['relatedContracts'])!.value"
+          (valueSelected)='updateRelatedContracts($event)'
+          inputControlLabel='Related Contracts'
+        >
+        </jhi-m2m-contract-metadata-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName="department"
+          [inputValue]="editForm.get('department')!.value"
+          (valueSelected)='updateDepartment($event)'
+          inputControlLabel="Department"
+        >
+          <option [ngValue]="editForm.get('department')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName="contractPartner"
+          [inputValue]="editForm.get('contractPartner')!.value"
+          (valueSelected)='updateContractPartner($event)'
+          inputControlLabel='Contract Partner'
+        >
+         <option [ngValue]="editForm.get('contractPartner')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <jhi-m21-application-user-form-control
+          ngDefaultControl
+          formControlName="responsiblePerson"
+          [inputValue]="editForm.get('responsiblePerson')!.value"
+          (valueSelected)='updateResponsiblePerson($event)'
+          inputControlLabel='Responsible Person'
+        >
+          <option [ngValue]="editForm.get('responsiblePerson')!.value"></option>
+        </jhi-m21-application-user-form-control>
+
+        <jhi-m2m-dealer-form-control
+          ngDefaultControl
+          formControlName="signatories"
+          [inputValues]="editForm.get(['signatories'])!.value"
+          (valueSelected)='updateSignatories($event)'
+          inputControlLabel='Signatories'
+        >
+        </jhi-m2m-dealer-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
+          <select
+            class="form-control"
+            id="field_securityClearance"
+            data-cy="securityClearance"
+            name="securityClearance"
+            formControlName="securityClearance"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                securityClearanceOption.id === editForm.get('securityClearance')!.value?.id
+                  ? editForm.get('securityClearance')!.value
+                  : securityClearanceOption
+              "
+              *ngFor="let securityClearanceOption of securityClearancesSharedCollection; trackBy: trackSecurityClearanceById"
+            >
+              {{ securityClearanceOption.clearanceLevel }}
+            </option>
+          </select>
+        </div>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName="contractDocumentFiles"
+          [inputValues]="editForm.get(['contractDocumentFiles'])!.value"
+          (selectedValues)='updateContractDocuments($event)'
+          inputControlLabel='Contract Document Files'
+        >
+        </jhi-m2m-business-document-form-control>
+
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName="contractMappings"
+          [inputValues]="editForm.get(['contractMappings'])!.value"
+          (selectedValues)='updateContractMappings($event)'
+          inputControlLabel='Contract Mappings'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

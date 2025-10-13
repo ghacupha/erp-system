@@ -1,0 +1,30 @@
+{
+  "changelogDate": "20230914084202",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "submittedFileStatusTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "submittedFileStatusType",
+      "fieldType": "SubmittedFileStatusTypes",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CORRECT,INCORRECT,DID_NOT_SUBMIT"
+    },
+    {
+      "fieldName": "submittedFileStatusTypeDescription",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "CrbFileTransmissionStatus",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}

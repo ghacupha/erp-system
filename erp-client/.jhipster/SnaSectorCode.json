@@ -1,0 +1,43 @@
+{
+  "changelogDate": "20230912072634",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "sectorTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "mainSectorCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "mainSectorTypeName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "subSectorCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "subSectorName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "subSubSectorCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "subSubSectorName",
+      "fieldType": "String"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "SnaSectorCode",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}
