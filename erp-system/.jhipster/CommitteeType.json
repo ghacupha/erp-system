@@ -1,0 +1,27 @@
+{
+  "fields": [
+    {
+      "fieldName": "committeeTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "committeeType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "committeeTypeDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CommitteeType",
+  "changelogDate": "20230912143438",
+  "incrementalChangelog": false
+}

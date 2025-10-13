@@ -1,0 +1,17 @@
+{
+  "fields": [
+    {
+      "fieldName": "action",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "MemoAction",
+  "changelogDate": "20240530082522",
+  "incrementalChangelog": false
+}

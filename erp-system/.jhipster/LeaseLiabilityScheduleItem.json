@@ -1,0 +1,93 @@
+{
+  "fields": [
+    {
+      "fieldName": "sequenceNumber",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "openingBalance",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "cashPayment",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "principalPayment",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "interestPayment",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "outstandingBalance",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "interestPayableOpening",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "interestAccrued",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "interestPayableClosing",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "leaseLiabilityScheduleItem"
+    },
+    {
+      "relationshipName": "universallyUniqueMapping",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "universalKey",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "leaseLiabilityScheduleItem"
+    },
+    {
+      "relationshipName": "leaseAmortizationSchedule",
+      "otherEntityName": "leaseAmortizationSchedule",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "iFRS16LeaseContract",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "bookingId"
+    },
+    {
+      "relationshipName": "leaseLiability",
+      "otherEntityName": "leaseLiability",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "leasePeriod",
+      "otherEntityName": "leaseRepaymentPeriod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "periodCode"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "LeaseLiabilityScheduleItem",
+  "changelogDate": "20230328143440",
+  "incrementalChangelog": false
+}

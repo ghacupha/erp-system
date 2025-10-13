@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity WorkInProgressRegistration.
+    -->
+    <changeSet id="20220413185958-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="work_in_progress_registration_id"
+                                 baseTableName="rel_work_in_progress_registration__placeholder"
+                                 constraintName="fk_rel_work_in_progress_registr__work_in_progress_registr_16_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_in_progress_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_work_in_progress_registration__placeholder"
+                                 constraintName="fk_rel_work_in_progress_registr__placeholder_6e_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="work_in_progress_registration_id"
+                                 baseTableName="rel_work_in_progress_registration__payment_invoices"
+                                 constraintName="fk_rel_work_in_progress_registr__work_in_progress_registr_a3_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_in_progress_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_invoices_id"
+                                 baseTableName="rel_work_in_progress_registration__payment_invoices"
+                                 constraintName="fk_rel_work_in_progress_registr__payment_invoices_47_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_invoice"/>
+
+        <addForeignKeyConstraint baseColumnNames="work_in_progress_registration_id"
+                                 baseTableName="rel_work_in_progress_registration__service_outlet"
+                                 constraintName="fk_rel_work_in_progress_registr__work_in_progress_registr_e2_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_in_progress_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="service_outlet_id"
+                                 baseTableName="rel_work_in_progress_registration__service_outlet"
+                                 constraintName="fk_rel_work_in_progress_registr__service_outlet_e1_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="service_outlet"/>
+
+        <addForeignKeyConstraint baseColumnNames="work_in_progress_registration_id"
+                                 baseTableName="rel_work_in_progress_registration__settlement"
+                                 constraintName="fk_rel_work_in_progress_registr__work_in_progress_registr_d4_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_in_progress_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="settlement_id"
+                                 baseTableName="rel_work_in_progress_registration__settlement"
+                                 constraintName="fk_rel_work_in_progress_registr__settlement_10_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="settlement"/>
+
+        <addForeignKeyConstraint baseColumnNames="work_in_progress_registration_id"
+                                 baseTableName="rel_work_in_progress_registration__purchase_order"
+                                 constraintName="fk_rel_work_in_progress_registr__work_in_progress_registr_22_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_in_progress_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="purchase_order_id"
+                                 baseTableName="rel_work_in_progress_registration__purchase_order"
+                                 constraintName="fk_rel_work_in_progress_registr__purchase_order_9a_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="purchase_order"/>
+
+        <addForeignKeyConstraint baseColumnNames="work_in_progress_registration_id"
+                                 baseTableName="rel_work_in_progress_registration__delivery_note"
+                                 constraintName="fk_rel_work_in_progress_registr__work_in_progress_registr_50_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_in_progress_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="delivery_note_id"
+                                 baseTableName="rel_work_in_progress_registration__delivery_note"
+                                 constraintName="fk_rel_work_in_progress_registr__delivery_note_dc_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="delivery_note"/>
+
+        <addForeignKeyConstraint baseColumnNames="work_in_progress_registration_id"
+                                 baseTableName="rel_work_in_progress_registration__job_sheet"
+                                 constraintName="fk_rel_work_in_progress_registr__work_in_progress_registr_23_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_in_progress_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="job_sheet_id"
+                                 baseTableName="rel_work_in_progress_registration__job_sheet"
+                                 constraintName="fk_rel_work_in_progress_registration__job_sheet__job_sheet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="job_sheet"/>
+
+        <addForeignKeyConstraint baseColumnNames="dealer_id"
+                                 baseTableName="work_in_progress_registration"
+                                 constraintName="fk_work_in_progress_registration__dealer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="work_in_progress_group_id"
+                                 baseTableName="work_in_progress_registration"
+                                 constraintName="fk_work_in_progress_registration__work_in_progress_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_in_progress_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="settlement_currency_id"
+                                 baseTableName="work_in_progress_registration"
+                                 constraintName="fk_work_in_progress_registration__settlement_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="settlement_currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="work_project_register_id"
+                                 baseTableName="work_in_progress_registration"
+                                 constraintName="fk_work_in_progress_registration__work_project_register_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_project_register"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,39 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1731583273186-9">
+        <addColumn tableName="transaction_account">
+            <column name="account_category_id" type="int8">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1731583273186-10">
+        <addColumn tableName="transaction_account">
+            <column name="account_ledger_id" type="int8">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1731583273186-11">
+        <addColumn tableName="transaction_account_category">
+            <column name="account_ledger_id" type="int8">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+   <!-- <changeSet author="edwin.njeru (generated)" id="1731583273186-14">
+        <addForeignKeyConstraint baseColumnNames="account_ledger_id" baseTableName="transaction_account" constraintName="FK56d5a8kotr0u5ae970wfr6dlq" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="transaction_account_ledger" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1731583273186-16">
+        <addForeignKeyConstraint baseColumnNames="account_category_id" baseTableName="transaction_account" constraintName="FKcmc8lq1ekb1jrokc76bt13vu5" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="transaction_account_category" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1731583273186-19">
+        <addForeignKeyConstraint baseColumnNames="account_ledger_id" baseTableName="transaction_account_category" constraintName="FKg838mnk6hgj0fgakvjt7bf1pa" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="transaction_account_ledger" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1731583273186-2">
+        <addNotNullConstraint columnDataType="varchar(255)" columnName="account_sub_type" tableName="transaction_account" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1731583273186-3">
+        <addNotNullConstraint columnDataType="varchar(255)" columnName="account_type" tableName="transaction_account" validate="true"/>
+    </changeSet>-->
+</databaseChangeLog>

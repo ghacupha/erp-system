@@ -1,0 +1,11 @@
+id;prepayment_account_guid;recurrence_guid;sequence_number;particulars;current_amortization_date;previous_amortization_date;next_amortization_date;is_commencement_sequence;is_terminal_sequence;amortization_amount;sequence_guid;prepayment_account_id;amortization_recurrence_id
+1;5465bb34-7904-4809-af53-0a5a6c02815e;d9db0ce4-6ed1-4def-afb8-a028c029deba;44268;green Lari Intelligent;2022-08-01;2022-08-01;2022-08-02;true;true;23407;aa1af672-dee3-463f-b1ea-86ffa9edb638;1;1
+2;3df7b364-690f-46a0-8ec3-0ae26679fdeb;dc9eb457-1d54-49e6-9dfb-fccc97345adb;31786;Account Seamless;2022-08-01;2022-08-02;2022-08-01;false;true;27776;f902ee25-8a71-49eb-b67b-b273a5b5b16c;2;2
+3;e62b38da-0752-40b7-bf2b-45f5b92dd764;2407138e-51f2-4ca5-89ea-6da80e827143;81165;orange deposit withdrawal;2022-08-01;2022-08-01;2022-08-01;false;false;90252;30d87758-e057-45d9-8402-b71cb968ccdd;3;3
+4;ce43e719-b4ed-40bd-a87c-025ffd5a33b2;2f7a5661-9825-4331-a887-d4bed0f15cfa;77376;Bridge Mexico;2022-08-01;2022-08-01;2022-08-02;false;false;80240;c3f5fc0e-da67-48a0-a1a6-102ffd4c4aac;4;4
+5;9698ea3b-eeef-4b8d-a580-9c6565547c62;8ccfe09d-dde2-4e33-addb-74dbd422b970;46175;vertical hack;2022-08-01;2022-08-01;2022-08-02;false;true;32968;0fa4003a-982b-422f-b983-e242a1ec7044;5;5
+6;377b56df-a02f-4dae-a1f0-2329ba1406f8;693ea465-ebea-4710-8de0-a192b6baefac;97837;Pants Delaware cultivate;2022-08-02;2022-08-02;2022-08-01;true;false;38229;43f5fdf1-6666-49d0-a369-d07780eb084e;6;6
+7;d39855c5-8715-44fe-a984-6aa03004582b;d4c3140b-dd7f-4958-b150-8b98d8e005f2;80273;Enterprise-wide Dinar;2022-08-01;2022-08-01;2022-08-01;true;true;24218;b2c87f9d-41eb-4a88-aa62-bf4a3c4bfbd1;7;7
+8;f3fadcd9-adf7-4228-a044-043eb0737e0c;2277ab47-d772-43ca-beee-66a4331a64b6;32351;Chair proactive Proactive;2022-08-02;2022-08-02;2022-08-01;false;true;31031;c648d226-274f-4e71-ab94-51ad6e642f3d;8;8
+9;4e078af8-3d36-4f1d-8e09-edf738eeb3c3;4817f313-cfa1-4978-91cd-bc43b992d754;28641;calculating;2022-08-01;2022-08-01;2022-08-02;false;true;96376;720dd4ae-d5e0-4345-a722-c4da67ec3a03;9;9
+10;25446a76-de5b-4b63-9aa2-1efe76fe456e;ea77154f-b0f4-4087-86cf-8a9a424c3f45;8399;digital Fish;2022-08-02;2022-08-02;2022-08-02;true;false;92292;129b7b50-bd25-490b-a658-c43e997eecb8;10;10

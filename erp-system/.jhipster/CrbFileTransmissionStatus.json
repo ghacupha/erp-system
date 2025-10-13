@@ -1,0 +1,29 @@
+{
+  "fields": [
+    {
+      "fieldName": "submittedFileStatusTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "submittedFileStatusType",
+      "fieldType": "SubmittedFileStatusTypes",
+      "fieldValues": "CORRECT,INCORRECT,DID_NOT_SUBMIT",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "submittedFileStatusTypeDescription",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceClass",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CrbFileTransmissionStatus",
+  "changelogDate": "20230914084202",
+  "incrementalChangelog": false
+}

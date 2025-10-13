@@ -1,0 +1,98 @@
+{
+  "fields": [
+    {
+      "fieldName": "assetDisposalReference",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetCost",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "historicalCost",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "accruedDepreciation",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": 0
+    },
+    {
+      "fieldName": "netBookValue",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": 0
+    },
+    {
+      "fieldName": "decommissioningDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "disposalDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dormant",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "createdBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
+    },
+    {
+      "relationshipName": "modifiedBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
+    },
+    {
+      "relationshipName": "lastAccessedBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
+    },
+    {
+      "relationshipName": "effectivePeriod",
+      "otherEntityName": "depreciationPeriod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "startDate"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "assetDisposal"
+    },
+    {
+      "relationshipName": "assetDisposed",
+      "otherEntityName": "assetRegistration",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "assetNumber",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "assetDisposal"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "AssetDisposal",
+  "changelogDate": "20240321051842",
+  "incrementalChangelog": false
+}

@@ -1,0 +1,23 @@
+{
+  "fields": [
+    {
+      "fieldName": "agentServiceTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "agentServiceTypeDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CrbAgentServiceType",
+  "changelogDate": "20230914084425",
+  "incrementalChangelog": false
+}

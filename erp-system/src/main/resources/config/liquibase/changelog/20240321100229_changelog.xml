@@ -1,0 +1,12 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1711015486824-7">
+        <addUniqueConstraint columnNames="asset_written_off_id" constraintName="UK_2ei09lwga2up8y8tmnu4gb8jn" tableName="asset_write_off"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1711015486824-8">
+        <addUniqueConstraint columnNames="asset_disposed_id" constraintName="UK_2ver6d9h01wn5nqj9wbkqp6kv" tableName="asset_disposal"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1711015486824-9">
+        <addForeignKeyConstraint baseColumnNames="asset_disposed_id" baseTableName="asset_disposal" constraintName="FK50jwhqbihjcibvmxm4rcub4u5" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="asset_registration" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

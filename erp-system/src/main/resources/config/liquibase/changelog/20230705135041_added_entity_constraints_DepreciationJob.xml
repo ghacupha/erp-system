@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity DepreciationJob.
+    -->
+    <changeSet id="20230705135041-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="created_by_id"
+                                 baseTableName="depreciation_job"
+                                 constraintName="fk_depreciation_job__created_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="depreciation_period_id"
+                                 baseTableName="depreciation_job"
+                                 constraintName="fk_depreciation_job__depreciation_period_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="depreciation_period"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,8 @@
+logs/
+node_modules/
+generated-reports/
+reports-directory/
+business-documents/
+search-index-directory/
+target/
+.env

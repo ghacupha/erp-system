@@ -1,0 +1,29 @@
+{
+  "fields": [
+    {
+      "fieldName": "loanRestructureFlagCode",
+      "fieldType": "FlagCodes",
+      "fieldValues": "Y,N",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "loanRestructureFlagType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "loanRestructureFlagDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "LoanRestructureFlag",
+  "changelogDate": "20230912111144",
+  "incrementalChangelog": false
+}

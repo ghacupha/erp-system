@@ -1,0 +1,166 @@
+{
+  "fields": [
+    {
+      "fieldName": "modelTitle",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "modelVersion",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "modelNotes",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "annualDiscountingRate",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "commencementDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "terminalDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "totalReportingPeriods",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "reportingPeriodsPerYear",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "settlementPeriodsPerYear",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "initialLiabilityAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "initialROUAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalDepreciationPeriods",
+      "fieldType": "Double"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "leaseModelMetadata"
+    },
+    {
+      "relationshipName": "leaseMapping",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "universalKey",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "leaseModelMetadata"
+    },
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "leaseContract",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "bookingId"
+    },
+    {
+      "relationshipName": "predecessor",
+      "otherEntityName": "leaseModelMetadata",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "modelTitle",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "successor"
+    },
+    {
+      "relationshipName": "liabilityCurrency",
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "iso4217CurrencyCode"
+    },
+    {
+      "relationshipName": "rouAssetCurrency",
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "iso4217CurrencyCode"
+    },
+    {
+      "relationshipName": "modelAttachments",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "documentTitle"
+    },
+    {
+      "relationshipName": "securityClearance",
+      "otherEntityName": "securityClearance",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "clearanceLevel"
+    },
+    {
+      "relationshipName": "leaseLiabilityAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
+    },
+    {
+      "relationshipName": "interestPayableAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
+    },
+    {
+      "relationshipName": "interestExpenseAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
+    },
+    {
+      "relationshipName": "rouAssetAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
+    },
+    {
+      "relationshipName": "rouDepreciationAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
+    },
+    {
+      "relationshipName": "accruedDepreciationAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "LeaseModelMetadata",
+  "changelogDate": "20230328100320",
+  "incrementalChangelog": false
+}

@@ -1,0 +1,105 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <!--<changeSet author="edwin.njeru (generated)" id="1651645924478-6">
+        <createTable tableName="rel_delivery_note__other_purchase_orders">
+            <column name="delivery_note_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="other_purchase_orders_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>-->
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-7">
+        <createTable tableName="rel_payment_invoice__delivery_note">
+            <column name="payment_invoice_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="delivery_note_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-8">
+        <createTable tableName="rel_payment_invoice__job_sheet">
+            <column name="payment_invoice_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="job_sheet_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-13">
+        <addColumn tableName="dealer">
+            <column name="other_names" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-14">
+        <addColumn tableName="asset_registration">
+            <column name="settlement_currency_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-15">
+        <addColumn tableName="credit_note">
+            <column name="settlement_currency_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-16">
+        <addColumn tableName="work_in_progress_registration">
+            <column name="settlement_currency_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-17">
+        <addColumn tableName="work_in_progress_registration">
+            <column name="work_in_progress_group_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-18">
+        <addColumn tableName="work_in_progress_registration">
+            <column name="work_project_register_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-22">
+        <addForeignKeyConstraint baseColumnNames="settlement_currency_id" baseTableName="work_in_progress_registration" constraintName="FK1oln1fov0v567amq8db6cm8de" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement_currency" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-24">
+        <addForeignKeyConstraint baseColumnNames="work_project_register_id" baseTableName="work_in_progress_registration" constraintName="FK5w8sqsm5qebiqcf3ed1j8k5f7" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="work_project_register" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-25">
+        <addForeignKeyConstraint baseColumnNames="work_in_progress_group_id" baseTableName="work_in_progress_registration" constraintName="FK65rfp31fdf45g74fwldpmyb4o" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="work_in_progress_registration" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-26">
+        <addForeignKeyConstraint baseColumnNames="payment_invoice_id" baseTableName="rel_payment_invoice__delivery_note" constraintName="FK6ixoaqck998wwfmn1s8okt8fr" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="payment_invoice" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-27">
+        <addForeignKeyConstraint baseColumnNames="settlement_currency_id" baseTableName="work_project_register" constraintName="FKfh0ey7ffwq2hndwt7hj0j0mjx" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement_currency" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-28">
+        <addForeignKeyConstraint baseColumnNames="placeholder_id" baseTableName="rel_work_project_register__placeholder" constraintName="FKflkxva7dcxqb238a3n1xoor4p" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="placeholder" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-29">
+        <addForeignKeyConstraint baseColumnNames="delivery_note_id" baseTableName="rel_payment_invoice__delivery_note" constraintName="FKhac4e2f7ae3e8c48in1uv0fwo" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="delivery_note" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-31">
+        <addForeignKeyConstraint baseColumnNames="settlement_currency_id" baseTableName="asset_registration" constraintName="FKltv6pp81pxev7hx5fn1f4ih6t" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement_currency" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-32">
+        <addForeignKeyConstraint baseColumnNames="delivery_note_id" baseTableName="rel_delivery_note__other_purchase_orders" constraintName="FKn0ctkyee6y67o8g0aw9q9m9hl" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="delivery_note" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-33">
+        <addForeignKeyConstraint baseColumnNames="job_sheet_id" baseTableName="rel_payment_invoice__job_sheet" constraintName="FKntpd6pswam75hcxryxacky620" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="job_sheet" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-34">
+        <addForeignKeyConstraint baseColumnNames="payment_invoice_id" baseTableName="rel_payment_invoice__job_sheet" constraintName="FKp13ml8k2b8m4esnb89arp7yi4" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="payment_invoice" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-35">
+        <addForeignKeyConstraint baseColumnNames="other_purchase_orders_id" baseTableName="rel_delivery_note__other_purchase_orders" constraintName="FKsenp87ky1uovh100ugeppfq7i" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="purchase_order" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-36">
+        <addForeignKeyConstraint baseColumnNames="settlement_currency_id" baseTableName="credit_note" constraintName="FKtexijf3e07ntsih9nj9kcc08r" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement_currency" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1651645924478-37">
+        <addForeignKeyConstraint baseColumnNames="work_project_register_id" baseTableName="rel_work_project_register__placeholder" constraintName="FKxacwso3hkahv8wugg84o7pyk" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="work_project_register" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

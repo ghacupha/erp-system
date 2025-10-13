@@ -1,0 +1,193 @@
+{
+  "changelogDate": "20220413150618",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "assetNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "assetTag",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "assetDetails",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetCost",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "comments",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "modelNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "serialNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "remarks",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "capitalizationDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "historicalCost",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "registrationDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "AssetRegistration",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "assetRegistration",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "invoiceNumber",
+      "otherEntityName": "paymentInvoice",
+      "otherEntityRelationshipName": "assetRegistration",
+      "ownerSide": true,
+      "relationshipName": "paymentInvoices",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "outletCode",
+      "otherEntityName": "serviceOutlet",
+      "otherEntityRelationshipName": "assetRegistration",
+      "ownerSide": true,
+      "relationshipName": "otherRelatedServiceOutlets",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "paymentNumber",
+      "otherEntityName": "settlement",
+      "otherEntityRelationshipName": "assetRegistration",
+      "ownerSide": true,
+      "relationshipName": "otherRelatedSettlements",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "assetCategoryName",
+      "otherEntityName": "assetCategory",
+      "relationshipName": "assetCategory",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "purchaseOrderNumber",
+      "otherEntityName": "purchaseOrder",
+      "otherEntityRelationshipName": "assetRegistration",
+      "ownerSide": true,
+      "relationshipName": "purchaseOrder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "deliveryNoteNumber",
+      "otherEntityName": "deliveryNote",
+      "otherEntityRelationshipName": "assetRegistration",
+      "ownerSide": true,
+      "relationshipName": "deliveryNote",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "serialNumber",
+      "otherEntityName": "jobSheet",
+      "otherEntityRelationshipName": "assetRegistration",
+      "ownerSide": true,
+      "relationshipName": "jobSheet",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "dealer",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "otherEntityRelationshipName": "assetRegistration",
+      "ownerSide": true,
+      "relationshipName": "designatedUsers",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "relationshipName": "settlementCurrency",
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "iso4217CurrencyCode"
+    },
+    {
+      "relationshipName": "businessDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "assetRegistration"
+    },
+    {
+      "relationshipName": "assetWarranty",
+      "otherEntityName": "assetWarranty",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "assetRegistration"
+    },
+    {
+      "relationshipName": "universallyUniqueMapping",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "universalKey",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "assetRegistration"
+    },
+    {
+      "relationshipName": "assetAccessory",
+      "otherEntityName": "assetAccessory",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "assetDetails",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "assetRegistration"
+    },
+    {
+      "relationshipName": "mainServiceOutlet",
+      "otherEntityName": "serviceOutlet",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "outletCode"
+    },
+    {
+      "relationshipName": "acquiringTransaction",
+      "otherEntityName": "settlement",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "paymentNumber"
+    }
+  ],
+  "service": "serviceImpl"
+}

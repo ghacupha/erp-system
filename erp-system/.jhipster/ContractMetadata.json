@@ -1,0 +1,125 @@
+{
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "typeOfContract",
+      "fieldType": "ContractType",
+      "fieldValues": "SUPPLIER,CUSTOMER,BUSINESS_PARTNER,STAFF",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "contractStatus",
+      "fieldType": "ContractStatus",
+      "fieldValues": "ACTIVE,INACTIVE,UNDER_RENEGOTIATION,TERMINATED",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "startDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "terminationDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "commentsAndAttachment",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "contractTitle",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "contractIdentifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "contractIdentifierShort",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "minlength"],
+      "fieldValidateRulesMinlength": "6"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "relatedContracts",
+      "otherEntityName": "contractMetadata",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "contractMetadata"
+    },
+    {
+      "relationshipName": "department",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "dealerName"
+    },
+    {
+      "relationshipName": "contractPartner",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "dealerName"
+    },
+    {
+      "relationshipName": "responsiblePerson",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
+    },
+    {
+      "relationshipName": "signatory",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "applicationIdentity",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "contractMetadata"
+    },
+    {
+      "relationshipName": "securityClearance",
+      "otherEntityName": "securityClearance",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "clearanceLevel"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "contractMetadata"
+    },
+    {
+      "relationshipName": "contractDocumentFile",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "contractMetadata"
+    },
+    {
+      "relationshipName": "contractMappings",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "universalKey",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "contractMetadata"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "ContractMetadata",
+  "changelogDate": "20230321110432",
+  "incrementalChangelog": false
+}

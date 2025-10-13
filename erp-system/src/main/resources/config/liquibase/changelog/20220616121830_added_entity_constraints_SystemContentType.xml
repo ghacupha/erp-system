@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity SystemContentType.
+    -->
+    <changeSet id="20220616121830-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="system_content_type_id"
+                                 baseTableName="rel_system_content_type__placeholders"
+                                 constraintName="fk_rel_system_content_type__pla__system_content_type_d3_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="system_content_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholders_id"
+                                 baseTableName="rel_system_content_type__placeholders"
+                                 constraintName="fk_rel_system_content_type__placeholders__placeholders_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="system_content_type_id"
+                                 baseTableName="rel_system_content_type__sys_maps"
+                                 constraintName="fk_rel_system_content_type__sys_maps__system_content_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="system_content_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="sys_maps_id"
+                                 baseTableName="rel_system_content_type__sys_maps"
+                                 constraintName="fk_rel_system_content_type__sys_maps__sys_maps_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+    </changeSet>
+</databaseChangeLog>

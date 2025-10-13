@@ -1,0 +1,5 @@
+This is the client, system and elasticsearch servers deployment
+
+Simply run
+
+" docker-compose pull && docker-compose up -d && docker system prune "

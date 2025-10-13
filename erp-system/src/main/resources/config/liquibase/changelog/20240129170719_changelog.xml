@@ -1,0 +1,123 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-5">
+        <createTable tableName="rel_asset_registration__other_related_service_outlets">
+            <column name="asset_registration_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="other_related_service_outlets_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-6">
+        <createTable tableName="rel_asset_registration__other_related_settlements">
+            <column name="asset_registration_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="other_related_settlements_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-7">
+        <addColumn tableName="work_in_progress_report">
+            <column name="dealer_name" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-8">
+        <addColumn tableName="work_in_progress_report">
+            <column name="project_title" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-9">
+        <addUniqueConstraint columnNames="charge_type_category" constraintName="UC_CRB_PRODUCT_SERVICE_FEE_TYPECHARGE_TYPE_CATEGORY_COL" tableName="crb_product_service_fee_type"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-10">
+        <addForeignKeyConstraint baseColumnNames="other_related_service_outlets_id" baseTableName="rel_asset_registration__other_related_service_outlets" constraintName="FKd5xcuto2x5o6csdiwyphmu0rf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="service_outlet" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-11">
+        <addForeignKeyConstraint baseColumnNames="acquiring_transaction_id" baseTableName="asset_registration" constraintName="FKkj7ixpwg7x5ukti8r9jbf1aub" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-12">
+        <addForeignKeyConstraint baseColumnNames="other_related_settlements_id" baseTableName="rel_asset_registration__other_related_settlements" constraintName="FKoc7dfhbik88omwvpot9fwh6kj" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-13">
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id" baseTableName="rel_asset_registration__other_related_settlements" constraintName="FKpwranarh5m8wusym43l70789h" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="asset_registration" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-14">
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id" baseTableName="rel_asset_registration__other_related_service_outlets" constraintName="FKqldnertxoooxy8xau79kqk55p" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="asset_registration" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-15">
+        <dropForeignKeyConstraint baseTableName="rel_asset_registration__service_outlet" constraintName="fk_rel_asset_registration__serv__asset_registration_00_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-16">
+        <dropForeignKeyConstraint baseTableName="rel_asset_registration__service_outlet" constraintName="fk_rel_asset_registration__service_outlet__service_outlet_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-17">
+        <dropForeignKeyConstraint baseTableName="rel_asset_registration__settlement" constraintName="fk_rel_asset_registration__settlement__asset_registration_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-18">
+        <dropForeignKeyConstraint baseTableName="rel_asset_registration__settlement" constraintName="fk_rel_asset_registration__settlement__settlement_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-19">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution_context" constraintName="job_exec_ctx_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-20">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution_params" constraintName="job_exec_params_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-21">
+        <dropForeignKeyConstraint baseTableName="batch_step_execution" constraintName="job_execution_step_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-22">
+        <dropForeignKeyConstraint baseTableName="batch_job_execution" constraintName="job_instance_execution_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-23">
+        <dropForeignKeyConstraint baseTableName="batch_step_execution_context" constraintName="step_exec_ctx_fk"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-24">
+        <dropTable tableName="batch_job_execution"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-25">
+        <dropTable tableName="batch_job_execution_context"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-26">
+        <dropTable tableName="batch_job_execution_params"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-27">
+        <dropTable tableName="batch_job_instance"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-28">
+        <dropTable tableName="batch_step_execution"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-29">
+        <dropTable tableName="batch_step_execution_context"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-30">
+        <dropTable tableName="rel_asset_registration__service_outlet"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-31">
+        <dropTable tableName="rel_asset_registration__settlement"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-32">
+        <dropSequence sequenceName="batch_job_execution_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-33">
+        <dropSequence sequenceName="batch_job_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-34">
+        <dropSequence sequenceName="batch_step_execution_seq"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-1">
+        <alterSequence sequenceName="sequence_generator"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-2">
+        <addNotNullConstraint columnDataType="bigint" columnName="acquiring_transaction_id" tableName="asset_registration" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-3">
+        <addNotNullConstraint columnDataType="bigint" columnName="biller_id" tableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1706548145858-4">
+        <addNotNullConstraint columnDataType="bigint" columnName="payment_category_id" tableName="settlement" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

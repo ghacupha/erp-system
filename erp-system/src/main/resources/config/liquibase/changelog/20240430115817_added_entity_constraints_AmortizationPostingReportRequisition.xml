@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity AmortizationPostingReportRequisition.
+    -->
+    <changeSet id="20240430115817-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="amortization_period_id"
+                                 baseTableName="amortization_posting_report_rx"
+                                 constraintName="fk_amortization_posting_report_rx__amortization_period_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="amortization_period"/>
+
+        <addForeignKeyConstraint baseColumnNames="requested_by_id"
+                                 baseTableName="amortization_posting_report_rx"
+                                 constraintName="fk_amortization_posting_report_rx__requested_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="last_accessed_by_id"
+                                 baseTableName="amortization_posting_report_rx"
+                                 constraintName="fk_amortization_posting_report_rx__last_accessed_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+    </changeSet>
+</databaseChangeLog>

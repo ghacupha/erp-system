@@ -1,0 +1,11 @@
+id;submitted_file_status_type_code;submitted_file_status_type;submitted_file_status_type_description
+1;Cambodia compelling;DID_NOT_SUBMIT;../fake-data/blob/hipster.txt
+2;bluetooth Licensed;CORRECT;../fake-data/blob/hipster.txt
+3;Enterprise-wide;DID_NOT_SUBMIT;../fake-data/blob/hipster.txt
+4;withdrawal Tactics;INCORRECT;../fake-data/blob/hipster.txt
+5;Metal Cotton HTTP;INCORRECT;../fake-data/blob/hipster.txt
+6;Loan Cross-platform;CORRECT;../fake-data/blob/hipster.txt
+7;white;INCORRECT;../fake-data/blob/hipster.txt
+8;SMTP concept Awesome;CORRECT;../fake-data/blob/hipster.txt
+9;CSS;DID_NOT_SUBMIT;../fake-data/blob/hipster.txt
+10;Toys;INCORRECT;../fake-data/blob/hipster.txt

@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "submittingInstitutionCategoryTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "submittingInstitutionCategoryType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "submittingInstitutionCategoryDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CrbSubmittingInstitutionCategory",
+  "changelogDate": "20230914081144",
+  "incrementalChangelog": false
+}

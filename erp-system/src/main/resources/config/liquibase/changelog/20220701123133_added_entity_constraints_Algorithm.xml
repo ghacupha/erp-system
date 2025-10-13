@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity Algorithm.
+    -->
+    <changeSet id="20220701123133-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="algorithm_id"
+                                 baseTableName="rel_algorithm__placeholder"
+                                 constraintName="fk_rel_algorithm__placeholder__algorithm_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="algorithm"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_algorithm__placeholder"
+                                 constraintName="fk_rel_algorithm__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="algorithm_id"
+                                 baseTableName="rel_algorithm__parameters"
+                                 constraintName="fk_rel_algorithm__parameters__algorithm_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="algorithm"/>
+
+        <addForeignKeyConstraint baseColumnNames="parameters_id"
+                                 baseTableName="rel_algorithm__parameters"
+                                 constraintName="fk_rel_algorithm__parameters__parameters_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+    </changeSet>
+</databaseChangeLog>

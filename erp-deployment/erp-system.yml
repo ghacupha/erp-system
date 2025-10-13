@@ -1,0 +1,88 @@
+#
+# Erp System - Caleb Series
+# Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+
+version: '3.3'
+services:
+  erp-system-server:
+    image: ghacupha/erp-system:1.0.5-SNAPSHOT
+    volumes:
+      - ./logs/:/logs/
+      - ./reports-directory/:/reports-directory/
+      - ./generated-reports/:/generated-reports/
+      - ./business-documents/:/business-documents/
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:admin@jhipster-registry:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+      #- SPRING_DATASOURCE_URL=jdbc:postgresql://erpsystem-postgresql:5432/erpSystem
+      #- SPRING_LIQUIBASE_URL=jdbc:postgresql://erpsystem-postgresql:5432/erpSystem
+      - SPRING_DATASOURCE_URL=${LOCAL_PG_SERVER}/${ERP_SYSTEM_PROD_DB}
+      - SPRING_LIQUIBASE_URL=${LOCAL_PG_SERVER}/${ERP_SYSTEM_PROD_DB}
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      #- SPRING_ELASTICSEARCH_REST_URIS=http://erpsystem-elasticsearch:9200
+      - SPRING_ELASTICSEARCH_REST_URIS=${SPRING_DATA_JEST_URI}
+      - ERP_SYSTEM_PROD_DB=${ERP_SYSTEM_PROD_DB}
+      - ERP_SYSTEM_DEV_DB=${ERP_SYSTEM_DEV_DB}
+      - ERP_SYSTEM_PORT=${ERP_SYSTEM_PORT}
+      - PG_DATABASE_DEV_USER=${PG_DATABASE_DEV_USER}
+      - PG_DATABASE_PROD_USER=${PG_DATABASE_PROD_USER}
+      - PG_DATABASE_DEV_PASSWORD=${PG_DATABASE_DEV_PASSWORD}
+      - PG_DATABASE_PROD_PASSWORD=${PG_DATABASE_PROD_PASSWORD}
+      - LOCAL_PG_SERVER=${LOCAL_PG_SERVER}
+      - ERP_SYSTEM_DEV_PORT=${ERP_SYSTEM_DEV_PORT}
+      - ERP_SYSTEM_PROD_PORT=${ERP_SYSTEM_PROD_PORT}
+      - ERP_SYSTEM_PROD_MAIL_BASE_URL=${ERP_SYSTEM_PROD_MAIL_BASE_URL}
+      - ERP_SYSTEM_DEV_MAIL_BASE_URL=${ERP_SYSTEM_DEV_MAIL_BASE_URL}
+      - SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=${SECURITY_AUTHENTICATION_JWT_BASE64_SECRET}
+      - UPLOADS_SIZE=${UPLOADS_SIZE}
+      - SANDBOX_INSTANCE_URLS=${SANDBOX_INSTANCE_URLS}
+      - ERP_REINDEXER_INTERVAL=${ERP_REINDEXER_INTERVAL}
+      - ERP_DOCUMENTS_MAX_FILE_SIZE=${ERP_DOCUMENTS_MAX_FILE_SIZE}
+      # - LOGGING_CONFIG=${LOGGING_CONFIG}
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      #- 8980:8980
+      - ${ERP_SERVER_DEPLOYMENT_PROD_PORT}
+
+  erp-client-web:
+    image: ghacupha/erp-client:1.2.2
+    # For some, even now uknown reason, the below configuration prevents rather than helps
+    # a successful substitution. What gives?
+    # volumes:
+    # - ./templates:/etc/nginx/templates
+    environment:
+      # - SERVER_API_URL="http://localhost:8980/"
+      # - SERVER_API_URL_URL=http://localhost:8980
+      # - SERVER_API_WS_URL=ws://127.0.0.1:8980
+      # - ERP_SYSTEM_DEV_PORT=8980
+      # - SERVER_API_DOCKER_DEPLOY_HOST=http://172.21.0.3
+      # - SERVER_API_DOCKER_DEPLOY_PORT=8980
+      - SERVER_API_URL=${SERVER_API_URL}
+      - SERVER_API_URL_URL=${SERVER_API_URL_URL}
+      - SERVER_API_WS_URL=${SERVER_API_WS_URL}
+      - ERP_SYSTEM_DEV_PORT=${ERP_SYSTEM_DEV_PORT}
+      - ERP_CLIENT_DEV_PORT=${ERP_CLIENT_DEV_PORT}
+      - SERVER_API_DOCKER_DEPLOY_HOST=${SERVER_API_DOCKER_DEPLOY_HOST}
+      - SERVER_API_DOCKER_DEPLOY_HOST=http://erp-system-server
+      #- SERVER_API_DOCKER_DEPLOY_PORT=${SERVER_API_DOCKER_DEPLOY_PORT}
+    ports:
+      #- "8981:80"
+      - ${ERP_CLIENT_DEPLOYMENT_PROD_PORT}

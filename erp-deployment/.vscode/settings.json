@@ -1,0 +1,8 @@
+{
+    "terminal.integrated.env.windows": {
+        "SERVER_API_DOCKER_DEPLOY_HOST": "http://172.19.0.4",
+        "ERP_SYSTEM_DEV_DB":"erpSystem",
+        "SANDBOX_INSTANCE_URLS":"http://localhost:8984,http://localhost:9000,http://localhost:8985,http://172.21.0.4:9000"
+    },
+    "java.configuration.updateBuildConfiguration": "interactive"
+}

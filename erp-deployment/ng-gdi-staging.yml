@@ -1,0 +1,25 @@
+  version: '3.3'
+  services:
+    ng-gdi-staging:
+      image: ghacupha/ng-gdi-staging:0.0.1
+      # For some, even now uknown reason, the below nginx configuration prevents rather than helps
+      # a successful substitution. What gives?
+      # volumes:
+      # - ./templates:/etc/nginx/templates
+      environment:
+        # - SERVER_API_URL="http://localhost:8980/"
+        # - SERVER_API_URL_URL=http://localhost:8980
+        # - SERVER_API_WS_URL=ws://127.0.0.1:8980
+        # - ERP_SYSTEM_DEV_PORT=8980
+        # - SERVER_API_DOCKER_DEPLOY_HOST=http://172.21.0.3
+        # - SERVER_API_DOCKER_DEPLOY_PORT=8980
+        - SERVER_API_URL="http://erp-system-server:${SERVER_API_DOCKER_DEPLOY_PORT}/"
+        - SERVER_API_URL_URL=http://erp-system-server
+        - ERP_SYSTEM_DEV_PORT=${ERP_SYSTEM_DEV_PORT}
+        - ERP_CLIENT_DEV_PORT=${ERP_CLIENT_DEV_PORT}
+        - SERVER_API_DOCKER_DEPLOY_HOST=http://erp-system-server
+        - SERVER_API_DOCKER_DEPLOY_PORT=${SERVER_API_DOCKER_DEPLOY_PORT}
+      ports:
+        - "8987:80"
+      networks:
+        - erp-system-network

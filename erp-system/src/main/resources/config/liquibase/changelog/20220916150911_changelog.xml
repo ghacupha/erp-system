@@ -1,0 +1,57 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1663341089493-7">
+        <createTable tableName="rel_application_user__placeholder">
+            <column name="application_user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="placeholder_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1663341089493-8">
+        <createTable tableName="rel_system_module__application_mapping">
+            <column name="system_module_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="application_mapping_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1663341089493-9">
+        <createTable tableName="rel_system_module__placeholder">
+            <column name="system_module_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="placeholder_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1663341089493-13">
+        <addForeignKeyConstraint baseColumnNames="application_mapping_id" baseTableName="rel_system_module__application_mapping" constraintName="FK6wfk93nk5e7fxit7dumscaqdg" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="universally_unique_mapping" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1663341089493-14">
+        <addForeignKeyConstraint baseColumnNames="placeholder_id" baseTableName="rel_application_user__placeholder" constraintName="FKd352ruwbhk0a4pjx6h0at17i6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="placeholder" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1663341089493-16">
+        <addForeignKeyConstraint baseColumnNames="system_module_id" baseTableName="rel_system_module__application_mapping" constraintName="FKo613lxxb14a4dc5vmxe625agq" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="system_module" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1663341089493-17">
+        <addForeignKeyConstraint baseColumnNames="system_module_id" baseTableName="rel_system_module__placeholder" constraintName="FKskkj3ob7h29m7ksewtgg5n825" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="system_module" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1663341089493-18">
+        <addForeignKeyConstraint baseColumnNames="placeholder_id" baseTableName="rel_system_module__placeholder" constraintName="FKste6doft9759ixomxble4behx" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="placeholder" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1663341089493-19">
+        <addForeignKeyConstraint baseColumnNames="application_user_id" baseTableName="rel_application_user__placeholder" constraintName="FKtkmnwsw0ba0fii3mf6kg2e2qk" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1663341089493-5">
+        <dropNotNullConstraint columnDataType="bytea" columnName="report_file" tableName="report_design"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1663341089493-6">
+        <dropNotNullConstraint columnDataType="varchar(255)" columnName="report_file_content_type" tableName="report_design"/>
+    </changeSet>
+</databaseChangeLog>

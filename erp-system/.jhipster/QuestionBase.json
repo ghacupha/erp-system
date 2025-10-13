@@ -1,0 +1,77 @@
+{
+  "fields": [
+    {
+      "fieldName": "context",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "serial",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "questionBaseValue",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "questionBaseKey",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "questionBaseLabel",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "required",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "order",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "controlType",
+      "fieldType": "ControlTypes",
+      "fieldValues": "TEXTBOX,DATETIME_LOCAL,DATE,PASSWORD,NUMBER,SEARCH,EMAIL,MONTH,WEEK,TEL,TEXTAREA",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "placeholder",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "iterable",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "parameters",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "universalKey",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "questionBase"
+    },
+    {
+      "relationshipName": "placeholderItem",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "questionBase"
+    }
+  ],
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "QuestionBase",
+  "changelogDate": "20220928095647",
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "dto": "mapstruct",
+  "service": "serviceImpl"
+}
