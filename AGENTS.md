@@ -15,6 +15,7 @@ This system is generated with JHipster. Follow these conventions when contributi
    - Always update the main .gitignore file with any sensitive files from the subfolders and even the main project folder
    - create an integrated test, to the extent that it's possible to test workflows in the user stories
    - detailing workflows from the user navigating to the appropriate frontend components and all the way to the related services involved in report submission
+   - for workflows that involve custom queries, create an sql file showing the relevant postgresql sql query, and include in the queries forlder under erp-system subfolder, just for review purposes and side tests against the actual database  
 
 3. **Project Structure**
    - Keep files in the standard JHipster layout and naming conventions for the report-submission service.
