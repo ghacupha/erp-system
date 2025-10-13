@@ -1,0 +1,390 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-account-attribute-heading" data-cy="AccountAttributeCreateUpdateHeading">Create or edit a Account Attribute</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportingDate">Reporting Date</label>
+          <div class="input-group">
+            <input
+              id="field_reportingDate"
+              data-cy="reportingDate"
+              type="text"
+              class="form-control"
+              name="reportingDate"
+              ngbDatepicker
+              #reportingDateDp="ngbDatepicker"
+              formControlName="reportingDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="reportingDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('reportingDate')!.invalid && (editForm.get('reportingDate')!.dirty || editForm.get('reportingDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('reportingDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_customerNumber">Customer Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="customerNumber"
+            id="field_customerNumber"
+            data-cy="customerNumber"
+            formControlName="customerNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('customerNumber')!.invalid && (editForm.get('customerNumber')!.dirty || editForm.get('customerNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('customerNumber')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountContractNumber">Account Contract Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="accountContractNumber"
+            id="field_accountContractNumber"
+            data-cy="accountContractNumber"
+            formControlName="accountContractNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('accountContractNumber')!.invalid &&
+              (editForm.get('accountContractNumber')!.dirty || editForm.get('accountContractNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('accountContractNumber')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountName">Account Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="accountName"
+            id="field_accountName"
+            data-cy="accountName"
+            formControlName="accountName"
+          />
+          <div *ngIf="editForm.get('accountName')!.invalid && (editForm.get('accountName')!.dirty || editForm.get('accountName')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('accountName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountOpeningDate">Account Opening Date</label>
+          <div class="input-group">
+            <input
+              id="field_accountOpeningDate"
+              data-cy="accountOpeningDate"
+              type="text"
+              class="form-control"
+              name="accountOpeningDate"
+              ngbDatepicker
+              #accountOpeningDateDp="ngbDatepicker"
+              formControlName="accountOpeningDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="accountOpeningDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountClosingDate">Account Closing Date</label>
+          <div class="input-group">
+            <input
+              id="field_accountClosingDate"
+              data-cy="accountClosingDate"
+              type="text"
+              class="form-control"
+              name="accountClosingDate"
+              ngbDatepicker
+              #accountClosingDateDp="ngbDatepicker"
+              formControlName="accountClosingDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="accountClosingDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_debitInterestRate">Debit Interest Rate</label>
+          <input
+            type="number"
+            class="form-control"
+            name="debitInterestRate"
+            id="field_debitInterestRate"
+            data-cy="debitInterestRate"
+            formControlName="debitInterestRate"
+          />
+          <div
+            *ngIf="
+              editForm.get('debitInterestRate')!.invalid &&
+              (editForm.get('debitInterestRate')!.dirty || editForm.get('debitInterestRate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('debitInterestRate')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('debitInterestRate')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_creditInterestRate">Credit Interest Rate</label>
+          <input
+            type="number"
+            class="form-control"
+            name="creditInterestRate"
+            id="field_creditInterestRate"
+            data-cy="creditInterestRate"
+            formControlName="creditInterestRate"
+          />
+          <div
+            *ngIf="
+              editForm.get('creditInterestRate')!.invalid &&
+              (editForm.get('creditInterestRate')!.dirty || editForm.get('creditInterestRate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('creditInterestRate')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('creditInterestRate')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sanctionedAccountLimitFcy">Sanctioned Account Limit Fcy</label>
+          <input
+            type="number"
+            class="form-control"
+            name="sanctionedAccountLimitFcy"
+            id="field_sanctionedAccountLimitFcy"
+            data-cy="sanctionedAccountLimitFcy"
+            formControlName="sanctionedAccountLimitFcy"
+          />
+          <div
+            *ngIf="
+              editForm.get('sanctionedAccountLimitFcy')!.invalid &&
+              (editForm.get('sanctionedAccountLimitFcy')!.dirty || editForm.get('sanctionedAccountLimitFcy')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('sanctionedAccountLimitFcy')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('sanctionedAccountLimitFcy')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sanctionedAccountLimitLcy">Sanctioned Account Limit Lcy</label>
+          <input
+            type="number"
+            class="form-control"
+            name="sanctionedAccountLimitLcy"
+            id="field_sanctionedAccountLimitLcy"
+            data-cy="sanctionedAccountLimitLcy"
+            formControlName="sanctionedAccountLimitLcy"
+          />
+          <div
+            *ngIf="
+              editForm.get('sanctionedAccountLimitLcy')!.invalid &&
+              (editForm.get('sanctionedAccountLimitLcy')!.dirty || editForm.get('sanctionedAccountLimitLcy')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('sanctionedAccountLimitLcy')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('sanctionedAccountLimitLcy')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountStatusChangeDate">Account Status Change Date</label>
+          <div class="input-group">
+            <input
+              id="field_accountStatusChangeDate"
+              data-cy="accountStatusChangeDate"
+              type="text"
+              class="form-control"
+              name="accountStatusChangeDate"
+              ngbDatepicker
+              #accountStatusChangeDateDp="ngbDatepicker"
+              formControlName="accountStatusChangeDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="accountStatusChangeDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_expiryDate">Expiry Date</label>
+          <div class="input-group">
+            <input
+              id="field_expiryDate"
+              data-cy="expiryDate"
+              type="text"
+              class="form-control"
+              name="expiryDate"
+              ngbDatepicker
+              #expiryDateDp="ngbDatepicker"
+              formControlName="expiryDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="expiryDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_bankCode">Bank Code</label>
+          <select class="form-control" id="field_bankCode" data-cy="bankCode" name="bankCode" formControlName="bankCode">
+            <option *ngIf="!editForm.get('bankCode')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                institutionCodeOption.id === editForm.get('bankCode')!.value?.id ? editForm.get('bankCode')!.value : institutionCodeOption
+              "
+              *ngFor="let institutionCodeOption of institutionCodesSharedCollection; trackBy: trackInstitutionCodeById"
+            >
+              {{ institutionCodeOption.institutionCode }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['bankCode'])!.invalid && (editForm.get(['bankCode'])!.dirty || editForm.get(['bankCode'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['bankCode'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_branchCode">Branch Code</label>
+          <select class="form-control" id="field_branchCode" data-cy="branchCode" name="branchCode" formControlName="branchCode">
+            <option *ngIf="!editForm.get('branchCode')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                bankBranchCodeOption.id === editForm.get('branchCode')!.value?.id ? editForm.get('branchCode')!.value : bankBranchCodeOption
+              "
+              *ngFor="let bankBranchCodeOption of bankBranchCodesSharedCollection; trackBy: trackBankBranchCodeById"
+            >
+              {{ bankBranchCodeOption.branchCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['branchCode'])!.invalid && (editForm.get(['branchCode'])!.dirty || editForm.get(['branchCode'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['branchCode'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountOwnershipType">Account Ownership Type</label>
+          <select
+            class="form-control"
+            id="field_accountOwnershipType"
+            data-cy="accountOwnershipType"
+            name="accountOwnershipType"
+            formControlName="accountOwnershipType"
+          >
+            <option *ngIf="!editForm.get('accountOwnershipType')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                accountOwnershipTypeOption.id === editForm.get('accountOwnershipType')!.value?.id
+                  ? editForm.get('accountOwnershipType')!.value
+                  : accountOwnershipTypeOption
+              "
+              *ngFor="let accountOwnershipTypeOption of accountOwnershipTypesSharedCollection; trackBy: trackAccountOwnershipTypeById"
+            >
+              {{ accountOwnershipTypeOption.accountOwnershipType }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['accountOwnershipType'])!.invalid &&
+            (editForm.get(['accountOwnershipType'])!.dirty || editForm.get(['accountOwnershipType'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['accountOwnershipType'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

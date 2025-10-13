@@ -1,0 +1,75 @@
+{
+  "changelogDate": "20210721173014",
+  "clientRootFolder": "settlement",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "entityTableName": "payment_requisition",
+  "fields": [
+    {
+      "fieldName": "receptionDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "dealerName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "briefDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "requisitionNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "invoicedAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "disbursementCost",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "taxableAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "requisitionProcessed",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "erpService",
+  "name": "PaymentRequisition",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "paymentLabel",
+      "otherEntityRelationshipName": "paymentRequisition",
+      "ownerSide": true,
+      "relationshipName": "paymentLabel",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl"
+}

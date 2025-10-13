@@ -1,0 +1,28 @@
+{
+  "changelogDate": "20230914064020",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "currencyDenominationCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "currencyDenominationType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "currencyDenominationTypeDetails",
+      "fieldType": "String"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "KenyanCurrencyDenomination",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

@@ -1,0 +1,384 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-settlement-heading" data-cy="SettlementCreateUpdateHeading">Create or edit a Settlement</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentNumber">Payment Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="paymentNumber"
+            id="field_paymentNumber"
+            data-cy="paymentNumber"
+            formControlName="paymentNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentDate">Payment Date</label>
+          <div class="input-group">
+            <input
+              id="field_paymentDate"
+              data-cy="paymentDate"
+              type="text"
+              class="form-control"
+              name="paymentDate"
+              ngbDatepicker
+              #paymentDateDp="ngbDatepicker"
+              formControlName="paymentDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="paymentDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="paymentAmount"
+            id="field_paymentAmount"
+            data-cy="paymentAmount"
+            formControlName="paymentAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_notes">Notes</label>
+          <input type="text" class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_calculationFile">Calculation File</label>
+          <div>
+            <div *ngIf="editForm.get('calculationFile')!.value" class="form-text text-danger clearfix">
+              <a
+                class="pull-left"
+                (click)="openFile(editForm.get('calculationFile')!.value, editForm.get('calculationFileContentType')!.value)"
+                >open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('calculationFileContentType')!.value }}, {{ byteSize(editForm.get('calculationFile')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ calculationFile: null }); editForm.patchValue({ calculationFileContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input
+              type="file"
+              id="file_calculationFile"
+              data-cy="calculationFile"
+              (change)="setFileData($event, 'calculationFile', false)"
+            />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="calculationFile"
+            id="field_calculationFile"
+            data-cy="calculationFile"
+            formControlName="calculationFile"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="calculationFileContentType"
+            id="field_calculationFileContentType"
+            formControlName="calculationFileContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fileUploadToken"
+            id="field_fileUploadToken"
+            data-cy="fileUploadToken"
+            formControlName="fileUploadToken"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="compilationToken"
+            id="field_compilationToken"
+            data-cy="compilationToken"
+            formControlName="compilationToken"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_remarks">Remarks</label>
+          <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
+          <select
+            class="form-control"
+            id="field_settlementCurrency"
+            data-cy="settlementCurrency"
+            name="settlementCurrency"
+            formControlName="settlementCurrency"
+          >
+            <option *ngIf="!editForm.get('settlementCurrency')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
+                  ? editForm.get('settlementCurrency')!.value
+                  : settlementCurrencyOption
+              "
+              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
+            >
+              {{ settlementCurrencyOption.iso4217CurrencyCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['settlementCurrency'])!.invalid &&
+            (editForm.get(['settlementCurrency'])!.dirty || editForm.get(['settlementCurrency'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="field_paymentLabels">Payment Label</label>
+          <select
+            class="form-control"
+            id="field_paymentLabels"
+            data-cy="paymentLabel"
+            multiple
+            name="paymentLabels"
+            formControlName="paymentLabels"
+          >
+            <option
+              [ngValue]="getSelectedPaymentLabel(paymentLabelOption, editForm.get('paymentLabels')!.value)"
+              *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
+            >
+              {{ paymentLabelOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
+          <select
+            class="form-control"
+            id="field_paymentCategory"
+            data-cy="paymentCategory"
+            name="paymentCategory"
+            formControlName="paymentCategory"
+          >
+            <option *ngIf="!editForm.get('paymentCategory')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                paymentCategoryOption.id === editForm.get('paymentCategory')!.value?.id
+                  ? editForm.get('paymentCategory')!.value
+                  : paymentCategoryOption
+              "
+              *ngFor="let paymentCategoryOption of paymentCategoriesSharedCollection; trackBy: trackPaymentCategoryById"
+            >
+              {{ paymentCategoryOption.categoryName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['paymentCategory'])!.invalid &&
+            (editForm.get(['paymentCategory'])!.dirty || editForm.get(['paymentCategory'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['paymentCategory'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_groupSettlement">Group Settlement</label>
+          <select
+            class="form-control"
+            id="field_groupSettlement"
+            data-cy="groupSettlement"
+            name="groupSettlement"
+            formControlName="groupSettlement"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                settlementOption.id === editForm.get('groupSettlement')!.value?.id
+                  ? editForm.get('groupSettlement')!.value
+                  : settlementOption
+              "
+              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
+            >
+              {{ settlementOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_biller">Biller</label>
+          <select class="form-control" id="field_biller" data-cy="biller" name="biller" formControlName="biller">
+            <option *ngIf="!editForm.get('biller')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('biller')!.value?.id ? editForm.get('biller')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label for="field_paymentInvoices">Payment Invoice</label>
+          <select
+            class="form-control"
+            id="field_paymentInvoices"
+            data-cy="paymentInvoice"
+            multiple
+            name="paymentInvoices"
+            formControlName="paymentInvoices"
+          >
+            <option
+              [ngValue]="getSelectedPaymentInvoice(paymentInvoiceOption, editForm.get('paymentInvoices')!.value)"
+              *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection; trackBy: trackPaymentInvoiceById"
+            >
+              {{ paymentInvoiceOption.invoiceNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_signatories">Signatories</label>
+          <select
+            class="form-control"
+            id="field_signatories"
+            data-cy="signatories"
+            multiple
+            name="signatories"
+            formControlName="signatories"
+          >
+            <option
+              [ngValue]="getSelectedDealer(dealerOption, editForm.get('signatories')!.value)"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_businessDocuments">Business Document</label>
+          <select
+            class="form-control"
+            id="field_businessDocuments"
+            data-cy="businessDocument"
+            multiple
+            name="businessDocuments"
+            formControlName="businessDocuments"
+          >
+            <option
+              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('businessDocuments')!.value)"
+              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
+            >
+              {{ businessDocumentOption.documentTitle }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

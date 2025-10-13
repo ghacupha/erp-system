@@ -1,0 +1,29 @@
+{
+  "changelogDate": "20230914080105",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "ultimateBeneficiaryTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "ultimateBeneficiaryType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "ultimateBeneficiaryTypeDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "UltimateBeneficiaryTypes",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

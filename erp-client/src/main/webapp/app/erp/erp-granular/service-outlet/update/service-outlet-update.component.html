@@ -1,0 +1,306 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-service-outlet-heading" data-cy="ServiceOutletCreateUpdateHeading">Create or edit a Service Outlet</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_outletCode">Outlet Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="outletCode"
+            id="field_outletCode"
+            data-cy="outletCode"
+            formControlName="outletCode"
+          />
+          <div *ngIf="editForm.get('outletCode')!.invalid && (editForm.get('outletCode')!.dirty || editForm.get('outletCode')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('outletCode')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_outletName">Outlet Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="outletName"
+            id="field_outletName"
+            data-cy="outletName"
+            formControlName="outletName"
+          />
+          <div *ngIf="editForm.get('outletName')!.invalid && (editForm.get('outletName')!.dirty || editForm.get('outletName')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('outletName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_town">Town</label>
+          <input type="text" class="form-control" name="town" id="field_town" data-cy="town" formControlName="town" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_parliamentaryConstituency">Parliamentary Constituency</label>
+          <input
+            type="text"
+            class="form-control"
+            name="parliamentaryConstituency"
+            id="field_parliamentaryConstituency"
+            data-cy="parliamentaryConstituency"
+            formControlName="parliamentaryConstituency"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_gpsCoordinates">Gps Coordinates</label>
+          <input
+            type="text"
+            class="form-control"
+            name="gpsCoordinates"
+            id="field_gpsCoordinates"
+            data-cy="gpsCoordinates"
+            formControlName="gpsCoordinates"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_outletOpeningDate">Outlet Opening Date</label>
+          <div class="input-group">
+            <input
+              id="field_outletOpeningDate"
+              data-cy="outletOpeningDate"
+              type="text"
+              class="form-control"
+              name="outletOpeningDate"
+              ngbDatepicker
+              #outletOpeningDateDp="ngbDatepicker"
+              formControlName="outletOpeningDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="outletOpeningDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_regulatorApprovalDate">Regulator Approval Date</label>
+          <div class="input-group">
+            <input
+              id="field_regulatorApprovalDate"
+              data-cy="regulatorApprovalDate"
+              type="text"
+              class="form-control"
+              name="regulatorApprovalDate"
+              ngbDatepicker
+              #regulatorApprovalDateDp="ngbDatepicker"
+              formControlName="regulatorApprovalDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="regulatorApprovalDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_outletClosureDate">Outlet Closure Date</label>
+          <div class="input-group">
+            <input
+              id="field_outletClosureDate"
+              data-cy="outletClosureDate"
+              type="text"
+              class="form-control"
+              name="outletClosureDate"
+              ngbDatepicker
+              #outletClosureDateDp="ngbDatepicker"
+              formControlName="outletClosureDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="outletClosureDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dateLastModified">Date Last Modified</label>
+          <div class="input-group">
+            <input
+              id="field_dateLastModified"
+              data-cy="dateLastModified"
+              type="text"
+              class="form-control"
+              name="dateLastModified"
+              ngbDatepicker
+              #dateLastModifiedDp="ngbDatepicker"
+              formControlName="dateLastModified"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="dateLastModifiedDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_licenseFeePayable">License Fee Payable</label>
+          <input
+            type="number"
+            class="form-control"
+            name="licenseFeePayable"
+            id="field_licenseFeePayable"
+            data-cy="licenseFeePayable"
+            formControlName="licenseFeePayable"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_bankCode">Bank Code</label>
+          <select class="form-control" id="field_bankCode" data-cy="bankCode" name="bankCode" formControlName="bankCode">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                bankBranchCodeOption.id === editForm.get('bankCode')!.value?.id ? editForm.get('bankCode')!.value : bankBranchCodeOption
+              "
+              *ngFor="let bankBranchCodeOption of bankBranchCodesSharedCollection; trackBy: trackBankBranchCodeById"
+            >
+              {{ bankBranchCodeOption.branchCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_outletType">Outlet Type</label>
+          <select class="form-control" id="field_outletType" data-cy="outletType" name="outletType" formControlName="outletType">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                outletTypeOption.id === editForm.get('outletType')!.value?.id ? editForm.get('outletType')!.value : outletTypeOption
+              "
+              *ngFor="let outletTypeOption of outletTypesSharedCollection; trackBy: trackOutletTypeById"
+            >
+              {{ outletTypeOption.outletType }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_outletStatus">Outlet Status</label>
+          <select class="form-control" id="field_outletStatus" data-cy="outletStatus" name="outletStatus" formControlName="outletStatus">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                outletStatusOption.id === editForm.get('outletStatus')!.value?.id ? editForm.get('outletStatus')!.value : outletStatusOption
+              "
+              *ngFor="let outletStatusOption of outletStatusesSharedCollection; trackBy: trackOutletStatusById"
+            >
+              {{ outletStatusOption.branchStatusType }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_countyName">County Name</label>
+          <select class="form-control" id="field_countyName" data-cy="countyName" name="countyName" formControlName="countyName">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                countyCodeOption.id === editForm.get('countyName')!.value?.id ? editForm.get('countyName')!.value : countyCodeOption
+              "
+              *ngFor="let countyCodeOption of countyCodesSharedCollection; trackBy: trackCountyCodeById"
+            >
+              {{ countyCodeOption.countyName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_subCountyName">Sub County Name</label>
+          <select
+            class="form-control"
+            id="field_subCountyName"
+            data-cy="subCountyName"
+            name="subCountyName"
+            formControlName="subCountyName"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                countyCodeOption.id === editForm.get('subCountyName')!.value?.id ? editForm.get('subCountyName')!.value : countyCodeOption
+              "
+              *ngFor="let countyCodeOption of countyCodesSharedCollection; trackBy: trackCountyCodeById"
+            >
+              {{ countyCodeOption.subCountyName }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+{
+  "changelogDate": "20230914061228",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "anticipatedMaturityTenorCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "aniticipatedMaturityTenorType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "anticipatedMaturityTenorDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "AnticipatedMaturityPeriood",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

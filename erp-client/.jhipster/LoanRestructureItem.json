@@ -1,0 +1,29 @@
+{
+  "changelogDate": "20230912110650",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "loanRestructureItemCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "loanRestructureItemType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "loanRestructureItemDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "LoanRestructureItem",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

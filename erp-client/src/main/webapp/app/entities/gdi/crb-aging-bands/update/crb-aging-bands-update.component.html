@@ -1,0 +1,117 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-crb-aging-bands-heading" data-cy="CrbAgingBandsCreateUpdateHeading">Create or edit a Crb Aging Bands</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_agingBandCategoryCode">Aging Band Category Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="agingBandCategoryCode"
+            id="field_agingBandCategoryCode"
+            data-cy="agingBandCategoryCode"
+            formControlName="agingBandCategoryCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('agingBandCategoryCode')!.invalid &&
+              (editForm.get('agingBandCategoryCode')!.dirty || editForm.get('agingBandCategoryCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('agingBandCategoryCode')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_agingBandCategory">Aging Band Category</label>
+          <input
+            type="text"
+            class="form-control"
+            name="agingBandCategory"
+            id="field_agingBandCategory"
+            data-cy="agingBandCategory"
+            formControlName="agingBandCategory"
+          />
+          <div
+            *ngIf="
+              editForm.get('agingBandCategory')!.invalid &&
+              (editForm.get('agingBandCategory')!.dirty || editForm.get('agingBandCategory')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('agingBandCategory')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_agingBandCategoryDetails">Aging Band Category Details</label>
+          <input
+            type="text"
+            class="form-control"
+            name="agingBandCategoryDetails"
+            id="field_agingBandCategoryDetails"
+            data-cy="agingBandCategoryDetails"
+            formControlName="agingBandCategoryDetails"
+          />
+          <div
+            *ngIf="
+              editForm.get('agingBandCategoryDetails')!.invalid &&
+              (editForm.get('agingBandCategoryDetails')!.dirty || editForm.get('agingBandCategoryDetails')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('agingBandCategoryDetails')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

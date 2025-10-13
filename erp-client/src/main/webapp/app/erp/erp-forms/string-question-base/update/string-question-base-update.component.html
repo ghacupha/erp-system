@@ -1,0 +1,148 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-string-question-base-heading" data-cy="StringQuestionBaseCreateUpdateHeading">Create or edit a String Question Base</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_value">Value</label>
+          <input type="text" class="form-control" name="value" id="field_value" data-cy="value" formControlName="value" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_key">Key</label>
+          <input type="text" class="form-control" name="key" id="field_key" data-cy="key" formControlName="key" />
+          <div *ngIf="editForm.get('key')!.invalid && (editForm.get('key')!.dirty || editForm.get('key')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('key')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_label">Label</label>
+          <input type="text" class="form-control" name="label" id="field_label" data-cy="label" formControlName="label" />
+          <div *ngIf="editForm.get('label')!.invalid && (editForm.get('label')!.dirty || editForm.get('label')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('label')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_required">Required</label>
+          <input type="checkbox" class="form-check" name="required" id="field_required" data-cy="required" formControlName="required" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_order">Order</label>
+          <input type="number" class="form-control" name="order" id="field_order" data-cy="order" formControlName="order" />
+          <div *ngIf="editForm.get('order')!.invalid && (editForm.get('order')!.dirty || editForm.get('order')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('order')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('order')?.errors?.number"> This field should be a number. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_controlType">Control Type</label>
+          <select class="form-control" name="controlType" formControlName="controlType" id="field_controlType" data-cy="controlType">
+            <option [ngValue]="null"></option>
+            <option *ngFor="let controlTypes of controlTypesValues" [value]="controlTypes">{{ controlTypes }}</option>
+          </select>
+          <div *ngIf="editForm.get('controlType')!.invalid && (editForm.get('controlType')!.dirty || editForm.get('controlType')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('controlType')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_placeholder">Placeholder</label>
+          <input
+            type="text"
+            class="form-control"
+            name="placeholder"
+            id="field_placeholder"
+            data-cy="placeholder"
+            formControlName="placeholder"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_iterable">Iterable</label>
+          <input type="checkbox" class="form-check" name="iterable" id="field_iterable" data-cy="iterable" formControlName="iterable" />
+        </div>
+
+        <div class="form-group">
+          <label for="field_parameters">Parameters</label>
+          <select class="form-control" id="field_parameters" data-cy="parameters" multiple name="parameters" formControlName="parameters">
+            <option
+              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('parameters')!.value)"
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.universalKey }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholderItems">Placeholder Item</label>
+          <select
+            class="form-control"
+            id="field_placeholderItems"
+            data-cy="placeholderItem"
+            multiple
+            name="placeholderItems"
+            formControlName="placeholderItems"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholderItems')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

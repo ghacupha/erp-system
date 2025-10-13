@@ -1,0 +1,29 @@
+{
+  "changelogDate": "20230912113857",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "channelsTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "channelTypes",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "channelTypeDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ChannelType",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

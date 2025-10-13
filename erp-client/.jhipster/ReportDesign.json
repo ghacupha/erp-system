@@ -1,0 +1,104 @@
+{
+  "changelogDate": "20220701140751",
+  "clientRootFolder": "reports",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "catalogueNumber",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "designation",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "notes",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "reportFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "reportFileChecksum",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ReportDesign",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "reportDesign",
+      "ownerSide": true,
+      "relationshipName": "parameters",
+      "relationshipType": "many-to-many",
+      "relationshipValidateRules": []
+    },
+    {
+      "otherEntityField": "clearanceLevel",
+      "otherEntityName": "securityClearance",
+      "relationshipName": "securityClearance",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "applicationIdentity",
+      "otherEntityName": "applicationUser",
+      "relationshipName": "reportDesigner",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "organization",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "department",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "reportDesign",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "moduleName",
+      "otherEntityName": "systemModule",
+      "relationshipName": "systemModule",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "algorithm",
+      "relationshipName": "fileCheckSumAlgorithm",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    }
+  ],
+  "service": "serviceImpl"
+}

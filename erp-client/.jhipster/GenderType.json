@@ -1,0 +1,30 @@
+{
+  "changelogDate": "20230911161057",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "genderCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "genderType",
+      "fieldType": "genderTypes",
+      "fieldValidateRules": ["required", "unique"],
+      "fieldValues": "MALE,FEMALE,CORPORATE,INTERSEX,OTHERS"
+    },
+    {
+      "fieldName": "genderDescription",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "GenderType",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

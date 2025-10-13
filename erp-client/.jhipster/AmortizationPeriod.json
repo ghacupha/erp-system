@@ -1,0 +1,49 @@
+{
+  "clientRootFolder": "prepayments",
+  "fields": [
+    {
+      "fieldName": "sequenceNumber",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "startDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "periodCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "fiscalMonth",
+      "otherEntityName": "fiscalMonth",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "fiscalMonthCode"
+    },
+    {
+      "relationshipName": "amortizationPeriod",
+      "otherEntityName": "amortizationPeriod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "periodCode"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "AmortizationPeriod",
+  "changelogDate": "20240427185244",
+  "incrementalChangelog": false
+}

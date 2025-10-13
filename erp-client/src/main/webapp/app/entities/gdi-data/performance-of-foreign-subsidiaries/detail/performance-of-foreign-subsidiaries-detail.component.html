@@ -1,0 +1,127 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="performanceOfForeignSubsidiaries">
+      <h2 data-cy="performanceOfForeignSubsidiariesDetailsHeading"><span>Performance Of Foreign Subsidiaries</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.id }}</span>
+        </dd>
+        <dt><span>Subsidiary Name</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.subsidiaryName }}</span>
+        </dd>
+        <dt><span>Reporting Date</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.reportingDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Subsidiary Id</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.subsidiaryId }}</span>
+        </dd>
+        <dt><span>Gross Loans Amount</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.grossLoansAmount }}</span>
+        </dd>
+        <dt><span>Gross NPA Loan Amount</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.grossNPALoanAmount }}</span>
+        </dd>
+        <dt><span>Gross Assets Amount</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.grossAssetsAmount }}</span>
+        </dd>
+        <dt><span>Gross Deposits Amount</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.grossDepositsAmount }}</span>
+        </dd>
+        <dt><span>Profit Before Tax</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.profitBeforeTax }}</span>
+        </dd>
+        <dt><span>Total Capital Adequacy Ratio</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.totalCapitalAdequacyRatio }}</span>
+        </dd>
+        <dt><span>Liquidity Ratio</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.liquidityRatio }}</span>
+        </dd>
+        <dt><span>General Provisions</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.generalProvisions }}</span>
+        </dd>
+        <dt><span>Specific Provisions</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.specificProvisions }}</span>
+        </dd>
+        <dt><span>Interest In Suspense Amount</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.interestInSuspenseAmount }}</span>
+        </dd>
+        <dt><span>Total Number Of Staff</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.totalNumberOfStaff }}</span>
+        </dd>
+        <dt><span>Number Of Branches</span></dt>
+        <dd>
+          <span>{{ performanceOfForeignSubsidiaries.numberOfBranches }}</span>
+        </dd>
+        <dt><span>Bank Code</span></dt>
+        <dd>
+          <div *ngIf="performanceOfForeignSubsidiaries.bankCode">
+            <a [routerLink]="['/institution-code', performanceOfForeignSubsidiaries.bankCode?.id, 'view']">{{
+              performanceOfForeignSubsidiaries.bankCode?.institutionName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Subsidiary Country Code</span></dt>
+        <dd>
+          <div *ngIf="performanceOfForeignSubsidiaries.subsidiaryCountryCode">
+            <a [routerLink]="['/iso-country-code', performanceOfForeignSubsidiaries.subsidiaryCountryCode?.id, 'view']">{{
+              performanceOfForeignSubsidiaries.subsidiaryCountryCode?.countryDescription
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/performance-of-foreign-subsidiaries', performanceOfForeignSubsidiaries.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

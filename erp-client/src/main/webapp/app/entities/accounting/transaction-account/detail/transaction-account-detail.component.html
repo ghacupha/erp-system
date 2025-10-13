@@ -1,0 +1,121 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="transactionAccount">
+      <h2 data-cy="transactionAccountDetailsHeading"><span>Transaction Account</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ transactionAccount.id }}</span>
+        </dd>
+        <dt><span>Account Number</span></dt>
+        <dd>
+          <span>{{ transactionAccount.accountNumber }}</span>
+        </dd>
+        <dt><span>Account Name</span></dt>
+        <dd>
+          <span>{{ transactionAccount.accountName }}</span>
+        </dd>
+        <dt><span>Notes</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.notes">
+            <a (click)="openFile(transactionAccount.notes, transactionAccount.notesContentType)">open</a>
+            {{ transactionAccount.notesContentType }}, {{ byteSize(transactionAccount.notes) }}
+          </div>
+        </dd>
+        <dt><span>Account Type</span></dt>
+        <dd>
+          <span>{{ transactionAccount.accountType }}</span>
+        </dd>
+        <dt><span>Account Sub Type</span></dt>
+        <dd>
+          <span>{{ transactionAccount.accountSubType }}</span>
+        </dd>
+        <dt><span>Dummy Account</span></dt>
+        <dd>
+          <span>{{ transactionAccount.dummyAccount }}</span>
+        </dd>
+        <dt><span>Account Ledger</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.accountLedger">
+            <a [routerLink]="['/transaction-account-ledger', transactionAccount.accountLedger?.id, 'view']">{{
+              transactionAccount.accountLedger?.ledgerName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Account Category</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.accountCategory">
+            <a [routerLink]="['/transaction-account-category', transactionAccount.accountCategory?.id, 'view']">{{
+              transactionAccount.accountCategory?.name
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of transactionAccount.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.serviceOutlet">
+            <a [routerLink]="['/service-outlet', transactionAccount.serviceOutlet?.id, 'view']">{{
+              transactionAccount.serviceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', transactionAccount.settlementCurrency?.id, 'view']">{{
+              transactionAccount.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Institution</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.institution">
+            <a [routerLink]="['/reporting-entity', transactionAccount.institution?.id, 'view']">{{
+              transactionAccount.institution?.entityName
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/transaction-account', transactionAccount.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

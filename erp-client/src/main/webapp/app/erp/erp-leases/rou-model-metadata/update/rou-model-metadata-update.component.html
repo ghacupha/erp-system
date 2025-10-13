@@ -1,0 +1,364 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-rou-model-metadata-heading-new"
+        data-cy="RouModelMetadataCreateUpdateHeading"
+        [hidden]='!weAreCreating'>
+        New Rou Model Metadata
+      </h2>
+
+      <h2
+        id="jhi-rou-model-metadata-heading-copy"
+        data-cy="RouModelMetadataCreateUpdateHeading"
+        [hidden]='!weAreCopying'>
+        Copy Rou Metadata # {{ selectedItem.id }} | {{ selectedItem.modelTitle }}
+      </h2>
+
+      <h2
+        id="jhi-rou-model-metadata-heading-edit"
+        data-cy="RouModelMetadataCreateUpdateHeading"
+        [hidden]='!weAreEditing'>
+        Edit Rou Metadata # {{ selectedItem.id }} Entitled: {{ selectedItem.modelTitle }}
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null || weAreCopying">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_modelTitle">Model Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="modelTitle"
+            id="field_modelTitle"
+            data-cy="modelTitle"
+            formControlName="modelTitle"
+          />
+          <div *ngIf="editForm.get('modelTitle')!.invalid && (editForm.get('modelTitle')!.dirty || editForm.get('modelTitle')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('modelTitle')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_modelVersion">Model Version</label>
+          <input
+            type="number"
+            class="form-control"
+            name="modelVersion"
+            id="field_modelVersion"
+            data-cy="modelVersion"
+            formControlName="modelVersion"
+          />
+          <div
+            *ngIf="editForm.get('modelVersion')!.invalid && (editForm.get('modelVersion')!.dirty || editForm.get('modelVersion')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('modelVersion')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('modelVersion')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseTermPeriods">Lease Term Periods</label>
+          <input
+            type="number"
+            class="form-control"
+            name="leaseTermPeriods"
+            id="field_leaseTermPeriods"
+            data-cy="leaseTermPeriods"
+            formControlName="leaseTermPeriods"
+          />
+          <div
+            *ngIf="
+              editForm.get('leaseTermPeriods')!.invalid &&
+              (editForm.get('leaseTermPeriods')!.dirty || editForm.get('leaseTermPeriods')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('leaseTermPeriods')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('leaseTermPeriods')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseAmount">Lease Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="leaseAmount"
+            id="field_leaseAmount"
+            data-cy="leaseAmount"
+            formControlName="leaseAmount"
+          />
+          <div *ngIf="editForm.get('leaseAmount')!.invalid && (editForm.get('leaseAmount')!.dirty || editForm.get('leaseAmount')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('leaseAmount')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('leaseAmount')?.errors?.min"> This field should be at least 0. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('leaseAmount')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_rouModelReference">Rou Model Reference</label>
+          <input
+            type="text"
+            class="form-control"
+            name="rouModelReference"
+            id="field_rouModelReference"
+            data-cy="rouModelReference"
+            formControlName="rouModelReference"
+          />
+          <div
+            *ngIf="
+              editForm.get('rouModelReference')!.invalid &&
+              (editForm.get('rouModelReference')!.dirty || editForm.get('rouModelReference')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('rouModelReference')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <jhi-m21-ifrs16-lease-form-control
+          ngDefaultControl
+          formControlName='ifrs16LeaseContract'
+          [inputValue]="editForm.get(['ifrs16LeaseContract'])!.value"
+          (valueSelected)='updateContractMetadata($event)'
+          inputControlLabel='IFRS16 Lease Contract'
+        >
+          <option [ngValue]="editForm.get(['ifrs16LeaseContract'])!.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='assetAccount'
+          [inputValue]="editForm.get('assetAccount')!.value"
+          (valueSelected)='updateAssetAccount($event)'
+          inputControlLabel="Asset Account (for tracking ROU value)"
+        >
+          <option [ngValue]="editForm.get('assetAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+        <div
+          *ngIf="
+            editForm.get(['assetAccount'])!.invalid && (editForm.get(['assetAccount'])!.dirty || editForm.get(['assetAccount'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['assetAccount'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='depreciationAccount'
+          [inputValue]="editForm.get('depreciationAccount')!.value"
+          (valueSelected)='updateDepreciationAccount($event)'
+          inputControlLabel="Depreciation Account (for tracking Depreciation entries)"
+        >
+          <option [ngValue]="editForm.get('depreciationAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+        <div
+          *ngIf="
+            editForm.get(['depreciationAccount'])!.invalid &&
+            (editForm.get(['depreciationAccount'])!.dirty || editForm.get(['depreciationAccount'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['depreciationAccount'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='accruedDepreciationAccount'
+          [inputValue]="editForm.get('accruedDepreciationAccount')!.value"
+          (valueSelected)='updateAccruedDepreciationAccount($event)'
+          inputControlLabel="Accrued Depreciation Account (for tracking Asset W & T)"
+        >
+          <option [ngValue]="editForm.get('accruedDepreciationAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+        <div
+          *ngIf="
+            editForm.get(['accruedDepreciationAccount'])!.invalid &&
+            (editForm.get(['accruedDepreciationAccount'])!.dirty || editForm.get(['accruedDepreciationAccount'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['accruedDepreciationAccount'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <jhi-m21-asset-category-form-control
+          ngDefaultControl
+          formControlName='assetCategory'
+          [inputValue]="editForm.get(['assetCategory'])!.value"
+          (valueSelected)='updateAssetCategory($event)'
+          inputControlLabel='Asset Category'
+        >
+          <option [ngValue]="editForm.get(['assetCategory'])!.value"></option>
+        </jhi-m21-asset-category-form-control>
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='documentAttachments'
+          [inputValues]="editForm.get(['documentAttachments'])!.value"
+          (selectedValues)='updateDocumentAttachments($event)'
+          inputControlLabel='Document Attachments(s)'
+        >
+        </jhi-m2m-business-document-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_commencementDate">Commencement Date</label>
+          <div class="input-group">
+            <input
+              id="field_commencementDate"
+              data-cy="commencementDate"
+              type="text"
+              class="form-control"
+              name="commencementDate"
+              ngbDatepicker
+              #commencementDateDp="ngbDatepicker"
+              formControlName="commencementDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="commencementDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_expirationDate">Expiration Date</label>
+          <div class="input-group">
+            <input
+              id="field_expirationDate"
+              data-cy="expirationDate"
+              type="text"
+              class="form-control"
+              name="expirationDate"
+              ngbDatepicker
+              #expirationDateDp="ngbDatepicker"
+              formControlName="expirationDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="expirationDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_hasBeenFullyAmortised">Has Been Fully Amortised</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="hasBeenFullyAmortised"
+            id="field_hasBeenFullyAmortised"
+            data-cy="hasBeenFullyAmortised"
+            formControlName="hasBeenFullyAmortised"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_hasBeenDecommissioned">Has Been Decommissioned</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="hasBeenDecommissioned"
+            id="field_hasBeenDecommissioned"
+            data-cy="hasBeenDecommissioned"
+            formControlName="hasBeenDecommissioned"
+          />
+        </div>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
+        </button>
+
+
+      </div>
+    </form>
+  </div>
+</div>

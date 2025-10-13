@@ -1,0 +1,43 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="form-group">
+  <label class="form-control-label">{{ inputControlLabel }}</label>
+  <ng-select
+    [items]="valueLookUps$ | async"
+    bindLabel="shortTitle"
+    [disabled]="disabledInput"
+    [trackByFn]="trackValueByFn"
+    [minTermLength]="minAccountLengthTerm"
+    [loading]="valuesLoading"
+    typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+    [typeahead]="valueControlInput$"
+    [(ngModel)]='inputValue'
+    (change)="getValues()"
+  >
+    <option [ngValue]="inputValue"></option>
+    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+      <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+      <jhi-ifrs16-lease-contract-option-view [item]='item'></jhi-ifrs16-lease-contract-option-view>
+    </ng-template>
+  </ng-select>
+  <!--// TODO Add entity-specific views-->
+  <div>{{inputValue|formatIFRS16LeaseContract }}</div>
+  <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputValue|json }}</div>
+</div>

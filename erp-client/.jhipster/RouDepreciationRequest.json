@@ -1,0 +1,43 @@
+{
+  "clientRootFolder": "leases",
+  "fields": [
+    {
+      "fieldName": "requisitionId",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "timeOfRequest",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "depreciationProcessStatus",
+      "fieldType": "depreciationProcessStatusTypes",
+      "fieldValues": "STARTED,RUNNING,ERRORED,COMPLETE,INVALIDATED"
+    },
+    {
+      "fieldName": "numberOfEnumeratedItems",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "invalidated",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "initiatedBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "RouDepreciationRequest",
+  "changelogDate": "20240313080709",
+  "incrementalChangelog": false
+}

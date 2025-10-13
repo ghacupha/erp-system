@@ -1,0 +1,31 @@
+{
+  "changelogDate": "20230914064245",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "currencyServiceabilityFlag",
+      "fieldType": "CurrencyServiceabilityFlagTypes",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "Y,N"
+    },
+    {
+      "fieldName": "currencyServiceability",
+      "fieldType": "CurrencyServiceability",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "FIT,UNFIT"
+    },
+    {
+      "fieldName": "currencyServiceabilityFlagDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "CurrencyServiceabilityFlag",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

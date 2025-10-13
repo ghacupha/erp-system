@@ -1,0 +1,112 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="deliveryNote">
+      <h2 data-cy="deliveryNoteDetailsHeading"><span>Delivery Note</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ deliveryNote.id }}</span>
+        </dd>
+        <dt><span>Delivery Note Number</span></dt>
+        <dd>
+          <span>{{ deliveryNote.deliveryNoteNumber }}</span>
+        </dd>
+        <dt><span>Document Date</span></dt>
+        <dd>
+          <span>{{ deliveryNote.documentDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ deliveryNote.description }}</span>
+        </dd>
+        <dt><span>Serial Number</span></dt>
+        <dd>
+          <span>{{ deliveryNote.serialNumber }}</span>
+        </dd>
+        <dt><span>Quantity</span></dt>
+        <dd>
+          <span>{{ deliveryNote.quantity }}</span>
+        </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ deliveryNote.remarks }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of deliveryNote.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Received By</span></dt>
+        <dd>
+          <div *ngIf="deliveryNote.receivedBy">
+            <a [routerLink]="['/erp/dealer', deliveryNote.receivedBy?.id, 'view']">{{ deliveryNote.receivedBy?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Delivery Stamps</span></dt>
+        <dd>
+          <span *ngFor="let deliveryStamps of deliveryNote.deliveryStamps; let last = last">
+            <a [routerLink]="['/business-stamp', deliveryStamps?.id, 'view']">{{ deliveryStamps.details }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Purchase Order</span></dt>
+        <dd>
+          <div *ngIf="deliveryNote.purchaseOrder">
+            <a [routerLink]="['/purchase-order', deliveryNote.purchaseOrder?.id, 'view']">{{
+              deliveryNote.purchaseOrder?.purchaseOrderNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Supplier</span></dt>
+        <dd>
+          <div *ngIf="deliveryNote.supplier">
+            <a [routerLink]="['/erp/dealer', deliveryNote.supplier?.id, 'view']">{{ deliveryNote.supplier?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Signatories</span></dt>
+        <dd>
+          <span *ngFor="let signatories of deliveryNote.signatories; let last = last">
+            <a [routerLink]="['/erp/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/delivery-note', deliveryNote.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

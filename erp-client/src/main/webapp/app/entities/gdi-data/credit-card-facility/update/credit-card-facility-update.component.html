@@ -1,0 +1,350 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-credit-card-facility-heading" data-cy="CreditCardFacilityCreateUpdateHeading">Create or edit a Credit Card Facility</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportingDate">Reporting Date</label>
+          <div class="input-group">
+            <input
+              id="field_reportingDate"
+              data-cy="reportingDate"
+              type="text"
+              class="form-control"
+              name="reportingDate"
+              ngbDatepicker
+              #reportingDateDp="ngbDatepicker"
+              formControlName="reportingDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="reportingDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('reportingDate')!.invalid && (editForm.get('reportingDate')!.dirty || editForm.get('reportingDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('reportingDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalNumberOfActiveCreditCards">Total Number Of Active Credit Cards</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalNumberOfActiveCreditCards"
+            id="field_totalNumberOfActiveCreditCards"
+            data-cy="totalNumberOfActiveCreditCards"
+            formControlName="totalNumberOfActiveCreditCards"
+          />
+          <div
+            *ngIf="
+              editForm.get('totalNumberOfActiveCreditCards')!.invalid &&
+              (editForm.get('totalNumberOfActiveCreditCards')!.dirty || editForm.get('totalNumberOfActiveCreditCards')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('totalNumberOfActiveCreditCards')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('totalNumberOfActiveCreditCards')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('totalNumberOfActiveCreditCards')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalCreditCardLimitsInCCY">Total Credit Card Limits In CCY</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalCreditCardLimitsInCCY"
+            id="field_totalCreditCardLimitsInCCY"
+            data-cy="totalCreditCardLimitsInCCY"
+            formControlName="totalCreditCardLimitsInCCY"
+          />
+          <div
+            *ngIf="
+              editForm.get('totalCreditCardLimitsInCCY')!.invalid &&
+              (editForm.get('totalCreditCardLimitsInCCY')!.dirty || editForm.get('totalCreditCardLimitsInCCY')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('totalCreditCardLimitsInCCY')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('totalCreditCardLimitsInCCY')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('totalCreditCardLimitsInCCY')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalCreditCardLimitsInLCY">Total Credit Card Limits In LCY</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalCreditCardLimitsInLCY"
+            id="field_totalCreditCardLimitsInLCY"
+            data-cy="totalCreditCardLimitsInLCY"
+            formControlName="totalCreditCardLimitsInLCY"
+          />
+          <div
+            *ngIf="
+              editForm.get('totalCreditCardLimitsInLCY')!.invalid &&
+              (editForm.get('totalCreditCardLimitsInLCY')!.dirty || editForm.get('totalCreditCardLimitsInLCY')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('totalCreditCardLimitsInLCY')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('totalCreditCardLimitsInLCY')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('totalCreditCardLimitsInLCY')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalCreditCardAmountUtilisedInCCY">Total Credit Card Amount Utilised In CCY</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalCreditCardAmountUtilisedInCCY"
+            id="field_totalCreditCardAmountUtilisedInCCY"
+            data-cy="totalCreditCardAmountUtilisedInCCY"
+            formControlName="totalCreditCardAmountUtilisedInCCY"
+          />
+          <div
+            *ngIf="
+              editForm.get('totalCreditCardAmountUtilisedInCCY')!.invalid &&
+              (editForm.get('totalCreditCardAmountUtilisedInCCY')!.dirty || editForm.get('totalCreditCardAmountUtilisedInCCY')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('totalCreditCardAmountUtilisedInCCY')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('totalCreditCardAmountUtilisedInCCY')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('totalCreditCardAmountUtilisedInCCY')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalCreditCardAmountUtilisedInLcy">Total Credit Card Amount Utilised In Lcy</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalCreditCardAmountUtilisedInLcy"
+            id="field_totalCreditCardAmountUtilisedInLcy"
+            data-cy="totalCreditCardAmountUtilisedInLcy"
+            formControlName="totalCreditCardAmountUtilisedInLcy"
+          />
+          <div
+            *ngIf="
+              editForm.get('totalCreditCardAmountUtilisedInLcy')!.invalid &&
+              (editForm.get('totalCreditCardAmountUtilisedInLcy')!.dirty || editForm.get('totalCreditCardAmountUtilisedInLcy')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('totalCreditCardAmountUtilisedInLcy')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('totalCreditCardAmountUtilisedInLcy')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('totalCreditCardAmountUtilisedInLcy')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalNPACreditCardAmountInFCY">Total NPA Credit Card Amount In FCY</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalNPACreditCardAmountInFCY"
+            id="field_totalNPACreditCardAmountInFCY"
+            data-cy="totalNPACreditCardAmountInFCY"
+            formControlName="totalNPACreditCardAmountInFCY"
+          />
+          <div
+            *ngIf="
+              editForm.get('totalNPACreditCardAmountInFCY')!.invalid &&
+              (editForm.get('totalNPACreditCardAmountInFCY')!.dirty || editForm.get('totalNPACreditCardAmountInFCY')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('totalNPACreditCardAmountInFCY')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('totalNPACreditCardAmountInFCY')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('totalNPACreditCardAmountInFCY')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalNPACreditCardAmountInLCY">Total NPA Credit Card Amount In LCY</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalNPACreditCardAmountInLCY"
+            id="field_totalNPACreditCardAmountInLCY"
+            data-cy="totalNPACreditCardAmountInLCY"
+            formControlName="totalNPACreditCardAmountInLCY"
+          />
+          <div
+            *ngIf="
+              editForm.get('totalNPACreditCardAmountInLCY')!.invalid &&
+              (editForm.get('totalNPACreditCardAmountInLCY')!.dirty || editForm.get('totalNPACreditCardAmountInLCY')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('totalNPACreditCardAmountInLCY')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('totalNPACreditCardAmountInLCY')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('totalNPACreditCardAmountInLCY')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_bankCode">Bank Code</label>
+          <select class="form-control" id="field_bankCode" data-cy="bankCode" name="bankCode" formControlName="bankCode">
+            <option *ngIf="!editForm.get('bankCode')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                institutionCodeOption.id === editForm.get('bankCode')!.value?.id ? editForm.get('bankCode')!.value : institutionCodeOption
+              "
+              *ngFor="let institutionCodeOption of institutionCodesSharedCollection; trackBy: trackInstitutionCodeById"
+            >
+              {{ institutionCodeOption.institutionName }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['bankCode'])!.invalid && (editForm.get(['bankCode'])!.dirty || editForm.get(['bankCode'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['bankCode'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_customerCategory">Customer Category</label>
+          <select
+            class="form-control"
+            id="field_customerCategory"
+            data-cy="customerCategory"
+            name="customerCategory"
+            formControlName="customerCategory"
+          >
+            <option *ngIf="!editForm.get('customerCategory')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                creditCardOwnershipOption.id === editForm.get('customerCategory')!.value?.id
+                  ? editForm.get('customerCategory')!.value
+                  : creditCardOwnershipOption
+              "
+              *ngFor="let creditCardOwnershipOption of creditCardOwnershipsSharedCollection; trackBy: trackCreditCardOwnershipById"
+            >
+              {{ creditCardOwnershipOption.creditCardOwnershipCategoryType }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['customerCategory'])!.invalid &&
+            (editForm.get(['customerCategory'])!.dirty || editForm.get(['customerCategory'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['customerCategory'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_currencyCode">Currency Code</label>
+          <select class="form-control" id="field_currencyCode" data-cy="currencyCode" name="currencyCode" formControlName="currencyCode">
+            <option *ngIf="!editForm.get('currencyCode')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                isoCurrencyCodeOption.id === editForm.get('currencyCode')!.value?.id
+                  ? editForm.get('currencyCode')!.value
+                  : isoCurrencyCodeOption
+              "
+              *ngFor="let isoCurrencyCodeOption of isoCurrencyCodesSharedCollection; trackBy: trackIsoCurrencyCodeById"
+            >
+              {{ isoCurrencyCodeOption.alphabeticCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['currencyCode'])!.invalid && (editForm.get(['currencyCode'])!.dirty || editForm.get(['currencyCode'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['currencyCode'])?.errors?.required"> This field is required. </small>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,199 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-asset-category-heading" data-cy="AssetCategoryCreateUpdateHeading">Create or edit a Asset Category</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetCategoryName">Asset Category Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="assetCategoryName"
+            id="field_assetCategoryName"
+            data-cy="assetCategoryName"
+            formControlName="assetCategoryName"
+          />
+          <div
+            *ngIf="
+              editForm.get('assetCategoryName')!.invalid &&
+              (editForm.get('assetCategoryName')!.dirty || editForm.get('assetCategoryName')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('assetCategoryName')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_notes">Notes</label>
+          <input type="text" class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_remarks">Remarks</label>
+          <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationRateYearly">Depreciation Rate Yearly</label>
+          <input
+            type="number"
+            class="form-control"
+            name="depreciationRateYearly"
+            id="field_depreciationRateYearly"
+            data-cy="depreciationRateYearly"
+            formControlName="depreciationRateYearly"
+          />
+        </div>
+
+        <!--<div class="form-group">
+          <label class="form-control-label" for="field_depreciationMethod">Depreciation Method</label>
+          <select
+            class="form-control"
+            id="field_depreciationMethod"
+            data-cy="depreciationMethod"
+            name="depreciationMethod"
+            formControlName="depreciationMethod"
+          >
+            <option *ngIf="!editForm.get('depreciationMethod')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                depreciationMethodOption.id === editForm.get('depreciationMethod')!.value?.id
+                  ? editForm.get('depreciationMethod')!.value
+                  : depreciationMethodOption
+              "
+              *ngFor="let depreciationMethodOption of depreciationMethodsSharedCollection; trackBy: trackDepreciationMethodById"
+            >
+              {{ depreciationMethodOption.depreciationMethodName }}
+            </option>
+          </select>
+        </div>-->
+        <div class="form-group">
+          <label class="form-control-label">Depreciation Method</label>
+          <ng-select
+            [items]="depreciationMethodLookups$ | async"
+            bindLabel="depreciationMethodName"
+            [trackByFn]="trackDepreciationMethodsByFn"
+            [minTermLength]="3"
+            [loading]="depreciationMethodsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="depreciationMethodsControlInput$"
+            formControlName="depreciationMethod"
+          >
+            <option [ngValue]="editForm.get('depreciationMethod')!.value"></option>
+          </ng-select>
+          <div>{{editForm.get(['depreciationMethod'])!.value|formatDepreciationMethod: [2, '...']}}</div>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['depreciationMethod'])!.invalid &&
+            (editForm.get(['depreciationMethod'])!.dirty || editForm.get(['depreciationMethod'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['depreciationMethod'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <!--<div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>-->
+        <div class="form-group">
+          <label class="form-control-label">Placeholders</label>
+          <ng-select
+            [items]="placeholderLookups$ | async"
+            bindLabel="description"
+            [trackByFn]="trackPlaceholdersByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="placeholdersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="placeholderControlInput$"
+            formControlName="placeholders"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
+              {{ option.description }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
+        </div>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,193 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="WorkInProgressRegistrationHeading">
+    <span>Work In Progress Registrations</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-work-in-progress-registration"
+        [routerLink]="['/work-in-progress-registration/new']"
+        (click)='createButtonEvent()'
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new Work In Progress Registration </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="workInProgressRegistrations?.length === 0">
+    <span>No workInProgressRegistrations found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="workInProgressRegistrations && workInProgressRegistrations.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="sequenceNumber">
+            <span>Sequence Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="particulars"><span>Particulars</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="instalmentDate"><span>Instalment Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="instalmentAmount"><span>Instalment Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
+            <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="outletCode.outletCode"><span>Outlet Code</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="settlementTransaction.paymentNumber">
+            <span>Settlement Transaction</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let workInProgressRegistration of workInProgressRegistrations; trackBy: trackId" data-cy="entityTable">
+            <td>
+              <a [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'view']">{{
+                workInProgressRegistration.id
+                }}</a>
+            </td>
+            <td>{{ workInProgressRegistration.sequenceNumber }}</td>
+            <td>{{ workInProgressRegistration.particulars }}</td>
+            <td>{{ workInProgressRegistration.instalmentDate | formatMediumDate }}</td>
+            <td>{{ workInProgressRegistration.instalmentAmount | currency : ' ' : 'symbol': '0.2-2' }}</td>
+            <td>
+              <div *ngIf="workInProgressRegistration.settlementCurrency">
+                <a [routerLink]="['/settlement-currency', workInProgressRegistration.settlementCurrency?.id, 'view']">{{
+                  workInProgressRegistration.settlementCurrency?.iso4217CurrencyCode
+                  }}</a>
+              </div>
+            </td>
+            <td>
+              <div *ngIf="workInProgressRegistration.outletCode">
+                <a [routerLink]="['/service-outlet', workInProgressRegistration.outletCode?.id, 'view']">{{
+                  workInProgressRegistration.outletCode?.outletCode
+                  }}</a>
+              </div>
+            </td>
+            <td>
+              <div *ngIf="workInProgressRegistration.settlementTransaction">
+                <a [routerLink]="['/settlement', workInProgressRegistration.settlementTransaction?.id, 'view']">{{
+                  workInProgressRegistration.settlementTransaction?.paymentNumber
+                  }}</a>
+              </div>
+            </td>
+            <td>
+              <div *ngIf="workInProgressRegistration.dealer">
+                <a [routerLink]="['/erp/dealer', workInProgressRegistration.dealer?.id, 'view']">{{
+                  workInProgressRegistration.dealer?.dealerName
+                  }}</a>
+              </div>
+            </td>
+            <td class="text-right">
+              <div class="btn-group">
+                <button
+                  type="submit"
+                  [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'view']"
+                  class="btn btn-info btn-sm"
+                  data-cy="entityDetailsButton"
+                >
+                  <fa-icon icon="eye"></fa-icon>
+                  <span class="d-none d-md-inline"></span>
+                </button>
+
+                <button
+                  type="submit"
+                  [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'edit']"
+                  class="btn btn-primary btn-sm"
+                  data-cy="entityEditButton"
+                  (click)='editButtonEvent(workInProgressRegistration)'
+                >
+                  <fa-icon icon="pencil-alt"></fa-icon>
+                  <span class="d-none d-md-inline"></span>
+                </button>
+
+                <button
+                  type="submit"
+                  [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'copy']"
+                  class="btn btn-primary btn-sm"
+                  data-cy="entityEditButton"
+                  (click)='copyButtonEvent(workInProgressRegistration)'
+                >
+                  <fa-icon icon="copy"></fa-icon>
+                  <span class="d-none d-md-inline"></span>
+                </button>
+
+                <button type="submit" (click)="delete(workInProgressRegistration)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                  <fa-icon icon="times"></fa-icon>
+                  <span class="d-none d-md-inline"></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="workInProgressRegistrations && workInProgressRegistrations.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+
+</div>

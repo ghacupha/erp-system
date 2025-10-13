@@ -1,0 +1,289 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-prepayment-account-heading-new"
+        data-cy="PrepaymentAccountCreateUpdateHeading"
+        [hidden]='!weAreCreating'>
+        New Prepayment Account
+      </h2>
+
+      <h2
+        id="jhi-prepayment-account-copying-heading"
+        data-cy="PrepaymentAccountCreateUpdateHeading"
+        [hidden]='!weAreCopying'>
+        Copy # {{ selectedItem.id }} Cat. No. {{ selectedItem.catalogueNumber }}
+      </h2>
+
+      <h2
+        id="jhi-prepayment-account-editing-heading"
+        data-cy="PrepaymentAccountCreateUpdateHeading"
+        [hidden]='!weAreEditing'>
+        Edit # {{ selectedItem.id }} Cat. No. {{ selectedItem.catalogueNumber }}
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null || weAreCopying">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_catalogueNumber">Catalogue Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="catalogueNumber"
+            id="field_catalogueNumber"
+            data-cy="catalogueNumber"
+            formControlName="catalogueNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('catalogueNumber')!.invalid &&
+              (editForm.get('catalogueNumber')!.dirty || editForm.get('catalogueNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('catalogueNumber')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <jhi-m21-settlement-form-control
+          ngDefaultControl
+          formControlName='prepaymentTransaction'
+          [inputValue]="editForm.get('prepaymentTransaction')!.value"
+          (valueSelected)='updateSettlement($event)'
+          inputControlLabel='Prepayment Transaction'
+        >
+        </jhi-m21-settlement-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_recognitionDate">Recognition Date</label>
+          <div class="input-group">
+            <input
+              id="field_recognitionDate"
+              data-cy="recognitionDate"
+              type="text"
+              class="form-control"
+              name="recognitionDate"
+              ngbDatepicker
+              #recognitionDateDp="ngbDatepicker"
+              formControlName="recognitionDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="recognitionDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('recognitionDate')!.invalid &&
+              (editForm.get('recognitionDate')!.dirty || editForm.get('recognitionDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('recognitionDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_particulars">Particulars</label>
+          <input
+            type="text"
+            class="form-control"
+            name="particulars"
+            id="field_particulars"
+            data-cy="particulars"
+            formControlName="particulars"
+          />
+          <div *ngIf="editForm.get('particulars')!.invalid && (editForm.get('particulars')!.dirty || editForm.get('particulars')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('particulars')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_notes">Notes</label>
+          <textarea class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_prepaymentAmount">Prepayment Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="prepaymentAmount"
+            id="field_prepaymentAmount"
+            data-cy="prepaymentAmount"
+            formControlName="prepaymentAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_prepaymentGuid">Prepayment Guid</label>
+          <input
+            type="text"
+            class="form-control"
+            name="prepaymentGuid"
+            id="field_prepaymentGuid"
+            data-cy="prepaymentGuid"
+            formControlName="prepaymentGuid"
+          />
+        </div>
+
+        <jhi-m21-settlement-currency-form-control
+          ngDefaultControl
+          formControlName='settlementCurrency'
+          [inputValue]="editForm.get(['settlementCurrency'])!.value"
+          (valueSelected)='updateCurrencies($event)'
+          inputControlLabel='Currency Code (Required)'
+        >
+          <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
+        </jhi-m21-settlement-currency-form-control>
+
+        <jhi-m21-service-outlet-form-control
+          ngDefaultControl
+          formControlName='serviceOutlet'
+          [inputValue]="editForm.get('serviceOutlet')!.value"
+          (valueSelected)='updateServiceOutlet($event)'
+          inputControlLabel="Department"
+        >
+          <option [ngValue]="editForm.get('serviceOutlet')!.value"></option>
+        </jhi-m21-service-outlet-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='dealer'
+          [inputValue]="editForm.get('dealer')!.value"
+          (valueSelected)='updateDealer($event)'
+          inputControlLabel="Dealer's Name"
+        >
+          <option [ngValue]="editForm.get('dealer')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='debitAccount'
+          [inputValue]="editForm.get('debitAccount')!.value"
+          (valueSelected)='updateTransactionAccount($event)'
+          inputControlLabel="Account debited (by prepayment transaction)"
+        >
+          <option [ngValue]="editForm.get('debitAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <!--jhi-m21-transaction-account-form-control-->
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='transferAccount'
+          [inputValue]="editForm.get('transferAccount')!.value"
+          (valueSelected)='updateTransferAccount($event)'
+          inputControlLabel="Transfer Account (debited by amortization routines)"
+        >
+          <option [ngValue]="editForm.get('transferAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='businessDocuments'
+          [inputValues]="editForm.get(['businessDocuments'])!.value"
+          (selectedValues)='updateBusinessDocument($event)'
+          inputControlLabel='Business Document Attachments'
+        >
+        </jhi-m2m-business-document-form-control>
+
+        <!--jhi-m2m-placeholder-form-control-->
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+        <!--jhi-m2m-universally-unique-mapping-form-control-->
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='generalParameters'
+          [inputValues]="editForm.get(['generalParameters'])!.value"
+          (selectedValues)='updateGeneralParameters($event)'
+          inputControlLabel='General Parameters'
+          >
+        </jhi-m2m-universally-unique-mapping-form-control>
+
+        <!--jhi-m2m-prepayment-mapping-form-control-->
+        <jhi-m2m-prepayment-mapping-form-control
+          ngDefaultControl
+          formControlName='prepaymentParameters'
+          [inputValues]="editForm.get(['prepaymentParameters'])!.value"
+          (selectedValues)='updatePrepaymentParameters($event)'
+          inputControlLabel='Prepayment Parameters'
+        >
+        </jhi-m2m-prepayment-mapping-form-control>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

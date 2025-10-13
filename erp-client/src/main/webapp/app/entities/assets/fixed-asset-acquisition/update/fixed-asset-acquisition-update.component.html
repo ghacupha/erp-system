@@ -1,0 +1,175 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-fixed-asset-acquisition-heading" data-cy="FixedAssetAcquisitionCreateUpdateHeading">
+        Create or edit a Fixed Asset Acquisition
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetNumber">Asset Number</label>
+          <input
+            type="number"
+            class="form-control"
+            name="assetNumber"
+            id="field_assetNumber"
+            data-cy="assetNumber"
+            formControlName="assetNumber"
+          />
+          <div *ngIf="editForm.get('assetNumber')!.invalid && (editForm.get('assetNumber')!.dirty || editForm.get('assetNumber')!.touched)">
+            <small class="form-text text-danger" [hidden]="!editForm.get('assetNumber')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_serviceOutletCode">Service Outlet Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="serviceOutletCode"
+            id="field_serviceOutletCode"
+            data-cy="serviceOutletCode"
+            formControlName="serviceOutletCode"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetTag">Asset Tag</label>
+          <input type="text" class="form-control" name="assetTag" id="field_assetTag" data-cy="assetTag" formControlName="assetTag" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetDescription">Asset Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="assetDescription"
+            id="field_assetDescription"
+            data-cy="assetDescription"
+            formControlName="assetDescription"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_purchaseDate">Purchase Date</label>
+          <div class="input-group">
+            <input
+              id="field_purchaseDate"
+              data-cy="purchaseDate"
+              type="text"
+              class="form-control"
+              name="purchaseDate"
+              ngbDatepicker
+              #purchaseDateDp="ngbDatepicker"
+              formControlName="purchaseDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="purchaseDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetCategory">Asset Category</label>
+          <input
+            type="text"
+            class="form-control"
+            name="assetCategory"
+            id="field_assetCategory"
+            data-cy="assetCategory"
+            formControlName="assetCategory"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_purchasePrice">Purchase Price</label>
+          <input
+            type="number"
+            class="form-control"
+            name="purchasePrice"
+            id="field_purchasePrice"
+            data-cy="purchasePrice"
+            formControlName="purchasePrice"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fileUploadToken"
+            id="field_fileUploadToken"
+            data-cy="fileUploadToken"
+            formControlName="fileUploadToken"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

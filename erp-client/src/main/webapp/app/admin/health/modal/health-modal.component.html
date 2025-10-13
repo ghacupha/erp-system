@@ -1,0 +1,55 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="modal-header">
+  <h4 class="modal-title" id="showHealthLabel" *ngIf="health">
+    <span class="text-capitalize">{{ health.key }}</span>
+  </h4>
+
+  <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body pad">
+  <div *ngIf="health">
+    <h5>Properties</h5>
+
+    <div class="table-responsive">
+      <table class="table table-striped" aria-describedby="showHealthLabel">
+        <thead>
+          <tr>
+            <th scope="col" class="text-left">Name</th>
+            <th scope="col" class="text-left">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let healthDetail of health.value.details! | keyvalue">
+            <td class="text-left">{{ healthDetail.key }}</td>
+            <td class="text-left">{{ readableValue(healthDetail.value) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button data-dismiss="modal" class="btn btn-secondary float-left" type="button" (click)="dismiss()">Done</button>
+</div>

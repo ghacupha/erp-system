@@ -1,0 +1,200 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-weekly-counterfeit-holding-heading" data-cy="WeeklyCounterfeitHoldingCreateUpdateHeading">
+        Create or edit a Weekly Counterfeit Holding
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportingDate">Reporting Date</label>
+          <div class="input-group">
+            <input
+              id="field_reportingDate"
+              data-cy="reportingDate"
+              type="text"
+              class="form-control"
+              name="reportingDate"
+              ngbDatepicker
+              #reportingDateDp="ngbDatepicker"
+              formControlName="reportingDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="reportingDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('reportingDate')!.invalid && (editForm.get('reportingDate')!.dirty || editForm.get('reportingDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('reportingDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dateConfiscated">Date Confiscated</label>
+          <div class="input-group">
+            <input
+              id="field_dateConfiscated"
+              data-cy="dateConfiscated"
+              type="text"
+              class="form-control"
+              name="dateConfiscated"
+              ngbDatepicker
+              #dateConfiscatedDp="ngbDatepicker"
+              formControlName="dateConfiscated"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="dateConfiscatedDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('dateConfiscated')!.invalid &&
+              (editForm.get('dateConfiscated')!.dirty || editForm.get('dateConfiscated')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('dateConfiscated')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_serialNumber">Serial Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="serialNumber"
+            id="field_serialNumber"
+            data-cy="serialNumber"
+            formControlName="serialNumber"
+          />
+          <div
+            *ngIf="editForm.get('serialNumber')!.invalid && (editForm.get('serialNumber')!.dirty || editForm.get('serialNumber')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('serialNumber')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depositorsNames">Depositors Names</label>
+          <input
+            type="text"
+            class="form-control"
+            name="depositorsNames"
+            id="field_depositorsNames"
+            data-cy="depositorsNames"
+            formControlName="depositorsNames"
+          />
+          <div
+            *ngIf="
+              editForm.get('depositorsNames')!.invalid &&
+              (editForm.get('depositorsNames')!.dirty || editForm.get('depositorsNames')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('depositorsNames')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_tellersNames">Tellers Names</label>
+          <input
+            type="text"
+            class="form-control"
+            name="tellersNames"
+            id="field_tellersNames"
+            data-cy="tellersNames"
+            formControlName="tellersNames"
+          />
+          <div
+            *ngIf="editForm.get('tellersNames')!.invalid && (editForm.get('tellersNames')!.dirty || editForm.get('tellersNames')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('tellersNames')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dateSubmittedToCBK">Date Submitted To CBK</label>
+          <div class="input-group">
+            <input
+              id="field_dateSubmittedToCBK"
+              data-cy="dateSubmittedToCBK"
+              type="text"
+              class="form-control"
+              name="dateSubmittedToCBK"
+              ngbDatepicker
+              #dateSubmittedToCBKDp="ngbDatepicker"
+              formControlName="dateSubmittedToCBK"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="dateSubmittedToCBKDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('dateSubmittedToCBK')!.invalid &&
+              (editForm.get('dateSubmittedToCBK')!.dirty || editForm.get('dateSubmittedToCBK')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('dateSubmittedToCBK')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_remarks">Remarks</label>
+          <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

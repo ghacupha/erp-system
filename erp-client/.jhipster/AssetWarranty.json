@@ -1,0 +1,66 @@
+{
+  "changelogDate": "20230505142910",
+  "clientRootFolder": "assets",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "assetTag",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "modelNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "serialNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "expiryDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "AssetWarranty",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "assetWarranty",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "assetWarranty",
+      "ownerSide": true,
+      "relationshipName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "dealer",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "assetWarranty",
+      "ownerSide": true,
+      "relationshipName": "warrantyAttachment",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

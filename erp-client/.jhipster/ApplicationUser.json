@@ -1,0 +1,74 @@
+{
+  "changelogDate": "20220701133235",
+  "clientRootFolder": "people",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "designation",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "applicationIdentity",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ApplicationUser",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "organization",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "department",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "clearanceLevel",
+      "otherEntityName": "securityClearance",
+      "relationshipName": "securityClearance",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "id": false,
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "applicationUser",
+      "ownerSide": true,
+      "relationshipName": "systemIdentity",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "applicationUser",
+      "ownerSide": true,
+      "relationshipName": "userProperties",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "id": false,
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "otherEntityRelationshipName": "applicationUser",
+      "ownerSide": true,
+      "relationshipName": "dealerIdentity",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"]
+    }
+  ],
+  "service": "serviceImpl"
+}

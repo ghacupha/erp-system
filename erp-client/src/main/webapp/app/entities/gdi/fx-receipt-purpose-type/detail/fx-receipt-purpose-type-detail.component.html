@@ -1,0 +1,95 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="fxReceiptPurposeType">
+      <h2 data-cy="fxReceiptPurposeTypeDetailsHeading"><span>Fx Receipt Purpose Type</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ fxReceiptPurposeType.id }}</span>
+        </dd>
+        <dt><span>Item Code</span></dt>
+        <dd>
+          <span>{{ fxReceiptPurposeType.itemCode }}</span>
+        </dd>
+        <dt><span>Attribute 1 Receipt Payment Purpose Code</span></dt>
+        <dd>
+          <span>{{ fxReceiptPurposeType.attribute1ReceiptPaymentPurposeCode }}</span>
+        </dd>
+        <dt><span>Attribute 1 Receipt Payment Purpose Type</span></dt>
+        <dd>
+          <span>{{ fxReceiptPurposeType.attribute1ReceiptPaymentPurposeType }}</span>
+        </dd>
+        <dt><span>Attribute 2 Receipt Payment Purpose Code</span></dt>
+        <dd>
+          <span>{{ fxReceiptPurposeType.attribute2ReceiptPaymentPurposeCode }}</span>
+        </dd>
+        <dt><span>Attribute 2 Receipt Payment Purpose Description</span></dt>
+        <dd>
+          <span>{{ fxReceiptPurposeType.attribute2ReceiptPaymentPurposeDescription }}</span>
+        </dd>
+        <dt><span>Attribute 3 Receipt Payment Purpose Code</span></dt>
+        <dd>
+          <span>{{ fxReceiptPurposeType.attribute3ReceiptPaymentPurposeCode }}</span>
+        </dd>
+        <dt><span>Attribute 3 Receipt Payment Purpose Description</span></dt>
+        <dd>
+          <span>{{ fxReceiptPurposeType.attribute3ReceiptPaymentPurposeDescription }}</span>
+        </dd>
+        <dt><span>Attribute 4 Receipt Payment Purpose Code</span></dt>
+        <dd>
+          <span>{{ fxReceiptPurposeType.attribute4ReceiptPaymentPurposeCode }}</span>
+        </dd>
+        <dt><span>Attribute 4 Receipt Payment Purpose Description</span></dt>
+        <dd>
+          <span>{{ fxReceiptPurposeType.attribute4ReceiptPaymentPurposeDescription }}</span>
+        </dd>
+        <dt><span>Attribute 5 Receipt Payment Purpose Code</span></dt>
+        <dd>
+          <span>{{ fxReceiptPurposeType.attribute5ReceiptPaymentPurposeCode }}</span>
+        </dd>
+        <dt><span>Attribute 5 Receipt Payment Purpose Description</span></dt>
+        <dd>
+          <span>{{ fxReceiptPurposeType.attribute5ReceiptPaymentPurposeDescription }}</span>
+        </dd>
+        <dt><span>Last Child</span></dt>
+        <dd>
+          <span>{{ fxReceiptPurposeType.lastChild }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/fx-receipt-purpose-type', fxReceiptPurposeType.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

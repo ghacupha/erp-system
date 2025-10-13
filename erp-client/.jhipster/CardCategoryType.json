@@ -1,0 +1,30 @@
+{
+  "changelogDate": "20230912112528",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "cardCategoryFlag",
+      "fieldType": "CardCategoryFlag",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "L,I"
+    },
+    {
+      "fieldName": "cardCategoryDescription",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "cardCategoryDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "CardCategoryType",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

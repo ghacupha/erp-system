@@ -1,0 +1,402 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div  [ngSwitch]="isAuthenticated()">
+  <ul  class="navbar-nav ml-auto">
+    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+          <span>
+              <fa-icon icon="book-open"></fa-icon>
+              <span>
+                 Registry
+              </span>
+          </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="asset-registration"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fixed Asset Registration</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="fixed-asset-acquisition"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fixed Asset Acquisition</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="asset-category"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Asset Category</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="asset-accessory"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Asset Accessory</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="asset-warranty"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Asset Warranty</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="asset-disposal"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Asset Disposal</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="asset-write-off"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Asset Write Off</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="asset-revaluation"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Asset Revaluation</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="asset-general-adjustment"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Asset General Adjustment</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="work-in-progress-menu">
+          <span>
+              <fa-icon icon="battery-half"></fa-icon>
+              <span>
+                 Work In Progress
+              </span>
+          </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="work-project-register"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Work Project Register</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="work-in-progress-registration"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>W.I.P. Registration</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="work-in-progress-transfer"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>W.I.P. Transfer</span>
+          </a>
+        </li>
+
+      </ul>
+    </li>
+
+    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="net-book-value-menu">
+          <span>
+              <fa-icon icon="battery-half"></fa-icon>
+              <span>
+                 NBV
+              </span>
+          </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="nbv-compilation-job"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>NBV Compilation Job</span>
+          </a>
+        </li>
+
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="nbv-compilation-batch"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>NBV Compilation Batch</span>
+          </a>
+        </li>
+
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="net-book-value-entry"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>NBV Entry</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="depreciation-menu">
+          <span>
+              <fa-icon icon="battery-half"></fa-icon>
+              <span>
+                 Depreciation
+              </span>
+          </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="depreciation-job"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Depreciation Job</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="depreciation-batch-sequence"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Batch Sequence</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="depreciation-job-notice"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Depreciation Notices</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="depreciation-entry"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Depreciation Entries</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="fixed-asset-net-book-value"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fixed Asset Net Book Value</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="fixed-asset-depreciation"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fixed Asset Depreciation</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="periods-menu">
+          <span>
+              <fa-icon icon="battery-half"></fa-icon>
+              <span>
+                 Periods
+              </span>
+          </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="depreciation-period"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Depreciation Period</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="fiscal-year"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fiscal Year</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="fiscal-month"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fiscal Month</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="fiscal-quarter"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fiscal Quarter</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Navigation for maintenance modules-->
+    <jhi-maintenance-nav></jhi-maintenance-nav>
+
+  </ul>
+</div>

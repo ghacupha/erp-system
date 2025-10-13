@@ -1,0 +1,86 @@
+{
+  "changelogDate": "20220616111329",
+  "clientRootFolder": "reports",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "reportName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "reportRequestTime",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "reportPassword",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "minlength"],
+      "fieldValidateRulesMinlength": "6"
+    },
+    {
+      "fieldName": "reportStatus",
+      "fieldType": "ReportStatusTypes",
+      "fieldValues": "GENERATING,SUCCESSFUL,FAILED"
+    },
+    {
+      "fieldName": "reportId",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "reportFileAttachment",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "reportFileCheckSum",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "reportNotes",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ReportRequisition",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "reportRequisition",
+      "ownerSide": true,
+      "relationshipName": "placeholders",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "reportRequisition",
+      "ownerSide": true,
+      "relationshipName": "parameters",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "catalogueNumber",
+      "otherEntityName": "reportTemplate",
+      "relationshipName": "reportTemplate",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "reportTypeName",
+      "otherEntityName": "reportContentType",
+      "relationshipName": "reportContentType",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    }
+  ],
+  "service": "serviceImpl"
+}

@@ -1,0 +1,237 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-application-user-heading" data-cy="ApplicationUserCreateUpdateHeading">Create or edit a Application User</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_designation">Designation</label>
+          <input
+            type="text"
+            class="form-control"
+            name="designation"
+            id="field_designation"
+            data-cy="designation"
+            formControlName="designation"
+          />
+          <div *ngIf="editForm.get('designation')!.invalid && (editForm.get('designation')!.dirty || editForm.get('designation')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('designation')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_applicationIdentity">Application Identity</label>
+          <input
+            type="text"
+            class="form-control"
+            name="applicationIdentity"
+            id="field_applicationIdentity"
+            data-cy="applicationIdentity"
+            formControlName="applicationIdentity"
+          />
+          <div
+            *ngIf="
+              editForm.get('applicationIdentity')!.invalid &&
+              (editForm.get('applicationIdentity')!.dirty || editForm.get('applicationIdentity')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('applicationIdentity')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_organization">Organization</label>
+          <select class="form-control" id="field_organization" data-cy="organization" name="organization" formControlName="organization">
+            <option *ngIf="!editForm.get('organization')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('organization')!.value?.id ? editForm.get('organization')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['organization'])!.invalid && (editForm.get(['organization'])!.dirty || editForm.get(['organization'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['organization'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_department">Department</label>
+          <select class="form-control" id="field_department" data-cy="department" name="department" formControlName="department">
+            <option *ngIf="!editForm.get('department')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('department')!.value?.id ? editForm.get('department')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['department'])!.invalid && (editForm.get(['department'])!.dirty || editForm.get(['department'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['department'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
+          <select
+            class="form-control"
+            id="field_securityClearance"
+            data-cy="securityClearance"
+            name="securityClearance"
+            formControlName="securityClearance"
+          >
+            <option *ngIf="!editForm.get('securityClearance')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                securityClearanceOption.id === editForm.get('securityClearance')!.value?.id
+                  ? editForm.get('securityClearance')!.value
+                  : securityClearanceOption
+              "
+              *ngFor="let securityClearanceOption of securityClearancesSharedCollection; trackBy: trackSecurityClearanceById"
+            >
+              {{ securityClearanceOption.clearanceLevel }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['securityClearance'])!.invalid &&
+            (editForm.get(['securityClearance'])!.dirty || editForm.get(['securityClearance'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['securityClearance'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_systemIdentity">System Identity</label>
+          <select
+            class="form-control"
+            id="field_systemIdentity"
+            data-cy="systemIdentity"
+            name="systemIdentity"
+            formControlName="systemIdentity"
+          >
+            <option *ngIf="!editForm.get('systemIdentity')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="userOption.id === editForm.get('systemIdentity')!.value?.id ? editForm.get('systemIdentity')!.value : userOption"
+              *ngFor="let userOption of usersSharedCollection; trackBy: trackUserById"
+            >
+              {{ userOption.login }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['systemIdentity'])!.invalid &&
+            (editForm.get(['systemIdentity'])!.dirty || editForm.get(['systemIdentity'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['systemIdentity'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label for="field_userProperties">User Properties</label>
+          <select
+            class="form-control"
+            id="field_userProperties"
+            data-cy="userProperties"
+            multiple
+            name="userProperties"
+            formControlName="userProperties"
+          >
+            <option
+              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('userProperties')!.value)"
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.mappedValue }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dealerIdentity">Dealer Identity</label>
+          <select
+            class="form-control"
+            id="field_dealerIdentity"
+            data-cy="dealerIdentity"
+            name="dealerIdentity"
+            formControlName="dealerIdentity"
+          >
+            <option *ngIf="editForm.get(['dealerIdentity'])!.value == null" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                dealerOption.id === editForm.get('dealerIdentity')!.value?.id ? editForm.get('dealerIdentity')!.value : dealerOption
+              "
+              *ngFor="let dealerOption of dealerIdentitiesCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['dealerIdentity'])!.invalid &&
+            (editForm.get(['dealerIdentity'])!.dirty || editForm.get(['dealerIdentity'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['dealerIdentity'])?.errors?.required"> This field is required. </small>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

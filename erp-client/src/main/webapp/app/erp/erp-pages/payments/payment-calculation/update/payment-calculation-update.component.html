@@ -1,0 +1,160 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-payment-calculation-heading" data-cy="PaymentCalculationCreateUpdateHeading">Create or edit a Payment Calculation</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentExpense">Payment Expense</label>
+          <input
+            type="number"
+            class="form-control"
+            name="paymentExpense"
+            id="field_paymentExpense"
+            data-cy="paymentExpense"
+            formControlName="paymentExpense"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_withholdingVAT">Withholding VAT</label>
+          <input
+            type="number"
+            class="form-control"
+            name="withholdingVAT"
+            id="field_withholdingVAT"
+            data-cy="withholdingVAT"
+            formControlName="withholdingVAT"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_withholdingTax">Withholding Tax</label>
+          <input
+            type="number"
+            class="form-control"
+            name="withholdingTax"
+            id="field_withholdingTax"
+            data-cy="withholdingTax"
+            formControlName="withholdingTax"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="paymentAmount"
+            id="field_paymentAmount"
+            data-cy="paymentAmount"
+            formControlName="paymentAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="field_paymentLabels">Payment Label</label>
+          <select
+            class="form-control"
+            id="field_paymentLabels"
+            data-cy="paymentLabel"
+            multiple
+            name="paymentLabels"
+            formControlName="paymentLabels"
+          >
+            <option
+              [ngValue]="getSelectedPaymentLabel(paymentLabelOption, editForm.get('paymentLabels')!.value)"
+              *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
+            >
+              {{ paymentLabelOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
+          <select
+            class="form-control"
+            id="field_paymentCategory"
+            data-cy="paymentCategory"
+            name="paymentCategory"
+            formControlName="paymentCategory"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                paymentCategoryOption.id === editForm.get('paymentCategory')!.value?.id
+                  ? editForm.get('paymentCategory')!.value
+                  : paymentCategoryOption
+              "
+              *ngFor="let paymentCategoryOption of paymentCategoriesSharedCollection; trackBy: trackPaymentCategoryById"
+            >
+              {{ paymentCategoryOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

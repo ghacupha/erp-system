@@ -1,0 +1,151 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="collateralInformation">
+      <h2 data-cy="collateralInformationDetailsHeading"><span>Collateral Information</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ collateralInformation.id }}</span>
+        </dd>
+        <dt><span>Reporting Date</span></dt>
+        <dd>
+          <span>{{ collateralInformation.reportingDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Collateral Id</span></dt>
+        <dd>
+          <span>{{ collateralInformation.collateralId }}</span>
+        </dd>
+        <dt><span>Loan Contract Id</span></dt>
+        <dd>
+          <span>{{ collateralInformation.loanContractId }}</span>
+        </dd>
+        <dt><span>Customer Id</span></dt>
+        <dd>
+          <span>{{ collateralInformation.customerId }}</span>
+        </dd>
+        <dt><span>Registration Property Number</span></dt>
+        <dd>
+          <span>{{ collateralInformation.registrationPropertyNumber }}</span>
+        </dd>
+        <dt><span>Collateral OMV In CCY</span></dt>
+        <dd>
+          <span>{{ collateralInformation.collateralOMVInCCY }}</span>
+        </dd>
+        <dt><span>Collateral FSV In LCY</span></dt>
+        <dd>
+          <span>{{ collateralInformation.collateralFSVInLCY }}</span>
+        </dd>
+        <dt><span>Collateral Discounted Value</span></dt>
+        <dd>
+          <span>{{ collateralInformation.collateralDiscountedValue }}</span>
+        </dd>
+        <dt><span>Amount Charged</span></dt>
+        <dd>
+          <span>{{ collateralInformation.amountCharged }}</span>
+        </dd>
+        <dt><span>Collateral Discount Rate</span></dt>
+        <dd>
+          <span>{{ collateralInformation.collateralDiscountRate }}</span>
+        </dd>
+        <dt><span>Loan To Value Ratio</span></dt>
+        <dd>
+          <span>{{ collateralInformation.loanToValueRatio }}</span>
+        </dd>
+        <dt><span>Name Of Property Valuer</span></dt>
+        <dd>
+          <span>{{ collateralInformation.nameOfPropertyValuer }}</span>
+        </dd>
+        <dt><span>Collateral Last Valuation Date</span></dt>
+        <dd>
+          <span>{{ collateralInformation.collateralLastValuationDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Insured Flag</span></dt>
+        <dd>
+          <span>{{ collateralInformation.insuredFlag }}</span>
+        </dd>
+        <dt><span>Name Of Insurer</span></dt>
+        <dd>
+          <span>{{ collateralInformation.nameOfInsurer }}</span>
+        </dd>
+        <dt><span>Amount Insured</span></dt>
+        <dd>
+          <span>{{ collateralInformation.amountInsured }}</span>
+        </dd>
+        <dt><span>Insurance Expiry Date</span></dt>
+        <dd>
+          <span>{{ collateralInformation.insuranceExpiryDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Guarantee Insurers</span></dt>
+        <dd>
+          <span>{{ collateralInformation.guaranteeInsurers }}</span>
+        </dd>
+        <dt><span>Bank Code</span></dt>
+        <dd>
+          <div *ngIf="collateralInformation.bankCode">
+            <a [routerLink]="['/institution-code', collateralInformation.bankCode?.id, 'view']">{{
+              collateralInformation.bankCode?.institutionName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Branch Code</span></dt>
+        <dd>
+          <div *ngIf="collateralInformation.branchCode">
+            <a [routerLink]="['/bank-branch-code', collateralInformation.branchCode?.id, 'view']">{{
+              collateralInformation.branchCode?.branchCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Collateral Type</span></dt>
+        <dd>
+          <div *ngIf="collateralInformation.collateralType">
+            <a [routerLink]="['/collateral-type', collateralInformation.collateralType?.id, 'view']">{{
+              collateralInformation.collateralType?.collateralType
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>County Code</span></dt>
+        <dd>
+          <div *ngIf="collateralInformation.countyCode">
+            <a [routerLink]="['/county-sub-county-code', collateralInformation.countyCode?.id, 'view']">{{
+              collateralInformation.countyCode?.subCountyName
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/collateral-information', collateralInformation.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

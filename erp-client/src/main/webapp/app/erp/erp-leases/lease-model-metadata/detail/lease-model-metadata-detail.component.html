@@ -1,0 +1,212 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="leaseModelMetadata">
+      <h2 data-cy="leaseModelMetadataDetailsHeading"><span>Lease Model Metadata</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ leaseModelMetadata.id }}</span>
+        </dd>
+        <dt><span>Model Title</span></dt>
+        <dd>
+          <span>{{ leaseModelMetadata.modelTitle }}</span>
+        </dd>
+        <dt><span>Model Version</span></dt>
+        <dd>
+          <span>{{ leaseModelMetadata.modelVersion }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ leaseModelMetadata.description }}</span>
+        </dd>
+        <dt><span>Model Notes</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.modelNotes">
+            <a (click)="openFile(leaseModelMetadata.modelNotes, leaseModelMetadata.modelNotesContentType)">open</a>
+            {{ leaseModelMetadata.modelNotesContentType }}, {{ byteSize(leaseModelMetadata.modelNotes) }}
+          </div>
+        </dd>
+        <dt><span>Annual Discounting Rate</span></dt>
+        <dd>
+          <span>{{ leaseModelMetadata.annualDiscountingRate }}</span>
+        </dd>
+        <dt><span>Commencement Date</span></dt>
+        <dd>
+          <span>{{ leaseModelMetadata.commencementDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Terminal Date</span></dt>
+        <dd>
+          <span>{{ leaseModelMetadata.terminalDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Total Reporting Periods</span></dt>
+        <dd>
+          <span>{{ leaseModelMetadata.totalReportingPeriods }}</span>
+        </dd>
+        <dt><span>Reporting Periods Per Year</span></dt>
+        <dd>
+          <span>{{ leaseModelMetadata.reportingPeriodsPerYear }}</span>
+        </dd>
+        <dt><span>Settlement Periods Per Year</span></dt>
+        <dd>
+          <span>{{ leaseModelMetadata.settlementPeriodsPerYear }}</span>
+        </dd>
+        <dt><span>Initial Liability Amount</span></dt>
+        <dd>
+          <span>{{ leaseModelMetadata.initialLiabilityAmount }}</span>
+        </dd>
+        <dt><span>Initial ROU Amount</span></dt>
+        <dd>
+          <span>{{ leaseModelMetadata.initialROUAmount }}</span>
+        </dd>
+        <dt><span>Total Depreciation Periods</span></dt>
+        <dd>
+          <span>{{ leaseModelMetadata.totalDepreciationPeriods }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of leaseModelMetadata.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Lease Mapping</span></dt>
+        <dd>
+          <span *ngFor="let leaseMapping of leaseModelMetadata.leaseMappings; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', leaseMapping?.id, 'view']">{{ leaseMapping.universalKey }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Lease Contract</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.leaseContract">
+            <a [routerLink]="['/lease-contract', leaseModelMetadata.leaseContract?.id, 'view']">{{
+              leaseModelMetadata.leaseContract?.bookingId
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Predecessor</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.predecessor">
+            <a [routerLink]="['/lease-model-metadata', leaseModelMetadata.predecessor?.id, 'view']">{{
+              leaseModelMetadata.predecessor?.modelTitle
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Liability Currency</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.liabilityCurrency">
+            <a [routerLink]="['/settlement-currency', leaseModelMetadata.liabilityCurrency?.id, 'view']">{{
+              leaseModelMetadata.liabilityCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Rou Asset Currency</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.rouAssetCurrency">
+            <a [routerLink]="['/settlement-currency', leaseModelMetadata.rouAssetCurrency?.id, 'view']">{{
+              leaseModelMetadata.rouAssetCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Model Attachments</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.modelAttachments">
+            <a [routerLink]="['/business-document', leaseModelMetadata.modelAttachments?.id, 'view']">{{
+              leaseModelMetadata.modelAttachments?.documentTitle
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Security Clearance</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.securityClearance">
+            <a [routerLink]="['/security-clearance', leaseModelMetadata.securityClearance?.id, 'view']">{{
+              leaseModelMetadata.securityClearance?.clearanceLevel
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Liability Account</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.leaseLiabilityAccount">
+            <a [routerLink]="['/transaction-account', leaseModelMetadata.leaseLiabilityAccount?.id, 'view']">{{
+              leaseModelMetadata.leaseLiabilityAccount?.accountNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Interest Payable Account</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.interestPayableAccount">
+            <a [routerLink]="['/transaction-account', leaseModelMetadata.interestPayableAccount?.id, 'view']">{{
+              leaseModelMetadata.interestPayableAccount?.accountNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Interest Expense Account</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.interestExpenseAccount">
+            <a [routerLink]="['/transaction-account', leaseModelMetadata.interestExpenseAccount?.id, 'view']">{{
+              leaseModelMetadata.interestExpenseAccount?.accountNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Rou Asset Account</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.rouAssetAccount">
+            <a [routerLink]="['/transaction-account', leaseModelMetadata.rouAssetAccount?.id, 'view']">{{
+              leaseModelMetadata.rouAssetAccount?.accountNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Rou Depreciation Account</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.rouDepreciationAccount">
+            <a [routerLink]="['/transaction-account', leaseModelMetadata.rouDepreciationAccount?.id, 'view']">{{
+              leaseModelMetadata.rouDepreciationAccount?.accountNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Accrued Depreciation Account</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.accruedDepreciationAccount">
+            <a [routerLink]="['/transaction-account', leaseModelMetadata.accruedDepreciationAccount?.id, 'view']">{{
+              leaseModelMetadata.accruedDepreciationAccount?.accountNumber
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/lease-model-metadata', leaseModelMetadata.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

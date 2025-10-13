@@ -1,0 +1,361 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-payment-invoice-heading"
+          data-cy="PaymentInvoiceCreateUpdateHeading"
+          [hidden]='!weAreCreating'>
+        New Invoice
+      </h2>
+
+      <h2 id="jhi-payment-invoice-copy-heading"
+          data-cy="PaymentInvoiceCreateUpdateHeading"
+          [hidden]='!weAreCopying'>
+        Copy: Invoice# {{ selectedItem.invoiceNumber }} Dated: {{ selectedItem!.invoiceDate | formatMediumDate }}
+      </h2>
+
+      <h2 id="jhi-payment-invoice-edit-heading"
+          data-cy="PaymentInvoiceCreateUpdateHeading"
+          *ngIf='selectedItem.invoiceDate'
+          [hidden]='!weAreEditing'>
+        Edit: Invoice# {{ selectedItem.invoiceNumber }} Dated: {{ selectedItem.invoiceDate | formatMediumDate }}
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label">Purchase Order</label>
+          <ng-select
+            [items]="purchaseOrderLookups$ | async"
+            bindLabel="purchaseOrderNumber"
+            [trackByFn]="trackPurchaseOrderByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="purchaseOrdersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="purchaseOrderControlInput$"
+            formControlName="purchaseOrders"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of purchaseOrderLookups$ | async" [value]="option">
+              {{ option.purchaseOrderNumber }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              <jhi-purchase-order-option-view [item]='item'></jhi-purchase-order-option-view>
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'" >{{editForm.get(['purchaseOrders'])!.value|json}}</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label">Biller</label>
+          <ng-select
+            [items]="billerLookups$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackBillerByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="billersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="billersInput$"
+            formControlName="biller"
+          >
+            <option [ngValue]="editForm.get('biller')!.value"></option>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['biller'])!.value|formatDealerId}}</div>
+        </div>
+        <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_invoiceNumber">Invoice Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="invoiceNumber"
+            id="field_invoiceNumber"
+            data-cy="invoiceNumber"
+            formControlName="invoiceNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('invoiceNumber')!.invalid && (editForm.get('invoiceNumber')!.dirty || editForm.get('invoiceNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('invoiceNumber')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_invoiceDate">Invoice Date</label>
+          <div class="input-group">
+            <input
+              id="field_invoiceDate"
+              data-cy="invoiceDate"
+              type="text"
+              class="form-control"
+              name="invoiceDate"
+              ngbDatepicker
+              #invoiceDateDp="ngbDatepicker"
+              formControlName="invoiceDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="invoiceDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label">Settlement Currency</label>
+          <ng-select
+            [items]="settlementCurrencyLookups$ | async"
+            bindLabel="iso4217CurrencyCode"
+            [trackByFn]="trackCurrencyByFn"
+            [minTermLength]="3"
+            [loading]="settlementCurrenciesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="settlementCurrencyControlInput$"
+            formControlName="settlementCurrency"
+          >
+            <option [ngValue]="editForm.get('settlementCurrency')!.value"></option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              <jhi-settlement-currency-option-view [item]='item'></jhi-settlement-currency-option-view>
+            </ng-template>
+          </ng-select>
+          <div>{{editForm.get(['settlementCurrency'])!.value|formatSettlementCurrency: [2, '...']}}</div>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['settlementCurrency'])!.invalid &&
+            (editForm.get(['settlementCurrency'])!.dirty || editForm.get(['settlementCurrency'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_invoiceAmount">Invoice Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="invoiceAmount"
+            id="field_invoiceAmount"
+            data-cy="invoiceAmount"
+            formControlName="invoiceAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label">Delivery Note(s)</label>
+          <ng-select
+            [items]="deliveryNoteLookups$ | async"
+            bindLabel="deliveryNoteNumber"
+            [trackByFn]="trackDeliveryNotesByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="deliveryNotesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="deliveryNotesControlInput$"
+            formControlName="deliveryNotes"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of deliveryNoteLookups$ | async" [value]="option">
+              {{ option.deliveryNoteNumber }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              <jhi-delivery-note-option-view [item]='item'></jhi-delivery-note-option-view>
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get('deliveryNotes')!.value|json}}</div>
+        </div>
+
+        <!--// TODO Job-Sheet (s)-->
+        <div class="form-group">
+          <label class="form-control-label">Job Sheet(s)</label>
+          <ng-select
+            [items]="jobSheetLookups$ | async"
+            bindLabel="serialNumber"
+            [trackByFn]="trackJobSheetByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="jobSheetsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="jobSheetsControlInput$"
+            formControlName="jobSheets"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of jobSheetLookups$ | async" [value]="option">
+              {{ option.serialNumber }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              <jhi-job-sheet-option-view [item]='item'></jhi-job-sheet-option-view>
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{ editForm.get('jobSheets')!.value|json }}</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label">Payment Labels</label>
+          <ng-select
+            [items]="labelLookups$ | async"
+            bindLabel="description"
+            [trackByFn]="trackLabelByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="labelsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="labelControlInput$"
+            formControlName="paymentLabels"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of labelLookups$ | async" [value]="option">
+              {{ option.description }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'" >{{editForm.get(['paymentLabels'])!.value|json}}</div>
+        </div>
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='businessDocuments'
+          [inputValues]="editForm.get(['businessDocuments'])!.value"
+          (selectedValues)='updateBusinessDocument($event)'
+          inputControlLabel='Business Document Attachments'
+        >
+        </jhi-m2m-business-document-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label">Placeholders</label>
+          <ng-select
+            [items]="placeholderLookups$ | async"
+            bindLabel="description"
+            [trackByFn]="trackPlaceholdersByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="placeholdersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="placeholderControlInput$"
+            formControlName="placeholders"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
+              {{ option.description }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fileUploadToken"
+            id="field_fileUploadToken"
+            data-cy="fileUploadToken"
+            formControlName="fileUploadToken"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="compilationToken"
+            id="field_compilationToken"
+            data-cy="compilationToken"
+            formControlName="compilationToken"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_remarks">Remarks</label>
+          <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
+        </div>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update Inv # {{ selectedItem.invoiceNumber }} Date: {{ selectedItem.invoiceDate | formatMediumDate }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy Inv # {{ selectedItem.invoiceNumber }} Date: {{ selectedItem.invoiceDate | formatMediumDate }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

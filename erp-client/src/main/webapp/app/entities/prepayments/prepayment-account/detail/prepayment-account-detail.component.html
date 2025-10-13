@@ -1,0 +1,145 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="prepaymentAccount">
+      <h2 data-cy="prepaymentAccountDetailsHeading"><span>Prepayment Account</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.id }}</span>
+        </dd>
+        <dt><span>Catalogue Number</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.catalogueNumber }}</span>
+        </dd>
+        <dt><span>Recognition Date</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.recognitionDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Particulars</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.particulars }}</span>
+        </dd>
+        <dt><span>Notes</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.notes }}</span>
+        </dd>
+        <dt><span>Prepayment Amount</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.prepaymentAmount }}</span>
+        </dd>
+        <dt><span>Prepayment Guid</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.prepaymentGuid }}</span>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAccount.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', prepaymentAccount.settlementCurrency?.id, 'view']">{{
+              prepaymentAccount.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Prepayment Transaction</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAccount.prepaymentTransaction">
+            <a [routerLink]="['/settlement', prepaymentAccount.prepaymentTransaction?.id, 'view']">{{
+              prepaymentAccount.prepaymentTransaction?.paymentNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAccount.serviceOutlet">
+            <a [routerLink]="['/service-outlet', prepaymentAccount.serviceOutlet?.id, 'view']">{{
+              prepaymentAccount.serviceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Dealer</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAccount.dealer">
+            <a [routerLink]="['/dealer', prepaymentAccount.dealer?.id, 'view']">{{ prepaymentAccount.dealer?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Debit Account</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAccount.debitAccount">
+            <a [routerLink]="['/transaction-account', prepaymentAccount.debitAccount?.id, 'view']">{{
+              prepaymentAccount.debitAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Transfer Account</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAccount.transferAccount">
+            <a [routerLink]="['/transaction-account', prepaymentAccount.transferAccount?.id, 'view']">{{
+              prepaymentAccount.transferAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of prepaymentAccount.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>General Parameters</span></dt>
+        <dd>
+          <span *ngFor="let generalParameters of prepaymentAccount.generalParameters; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', generalParameters?.id, 'view']">{{ generalParameters.mappedValue }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Prepayment Parameters</span></dt>
+        <dd>
+          <span *ngFor="let prepaymentParameters of prepaymentAccount.prepaymentParameters; let last = last">
+            <a [routerLink]="['/prepayment-mapping', prepaymentParameters?.id, 'view']">{{ prepaymentParameters.parameterKey }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Business Document</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of prepaymentAccount.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/prepayment-account', prepaymentAccount.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

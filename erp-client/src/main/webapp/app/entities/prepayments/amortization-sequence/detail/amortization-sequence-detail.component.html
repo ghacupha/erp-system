@@ -1,0 +1,128 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="amortizationSequence">
+      <h2 data-cy="amortizationSequenceDetailsHeading"><span>Amortization Sequence</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ amortizationSequence.id }}</span>
+        </dd>
+        <dt><span>Prepayment Account Guid</span></dt>
+        <dd>
+          <span>{{ amortizationSequence.prepaymentAccountGuid }}</span>
+        </dd>
+        <dt><span>Recurrence Guid</span></dt>
+        <dd>
+          <span>{{ amortizationSequence.recurrenceGuid }}</span>
+        </dd>
+        <dt><span>Sequence Number</span></dt>
+        <dd>
+          <span>{{ amortizationSequence.sequenceNumber }}</span>
+        </dd>
+        <dt><span>Particulars</span></dt>
+        <dd>
+          <span>{{ amortizationSequence.particulars }}</span>
+        </dd>
+        <dt><span>Current Amortization Date</span></dt>
+        <dd>
+          <span>{{ amortizationSequence.currentAmortizationDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Previous Amortization Date</span></dt>
+        <dd>
+          <span>{{ amortizationSequence.previousAmortizationDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Next Amortization Date</span></dt>
+        <dd>
+          <span>{{ amortizationSequence.nextAmortizationDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Is Commencement Sequence</span></dt>
+        <dd>
+          <span>{{ amortizationSequence.isCommencementSequence }}</span>
+        </dd>
+        <dt><span>Is Terminal Sequence</span></dt>
+        <dd>
+          <span>{{ amortizationSequence.isTerminalSequence }}</span>
+        </dd>
+        <dt><span>Amortization Amount</span></dt>
+        <dd>
+          <span>{{ amortizationSequence.amortizationAmount }}</span>
+        </dd>
+        <dt><span>Sequence Guid</span></dt>
+        <dd>
+          <span>{{ amortizationSequence.sequenceGuid }}</span>
+        </dd>
+        <dt><span>Prepayment Account</span></dt>
+        <dd>
+          <div *ngIf="amortizationSequence.prepaymentAccount">
+            <a [routerLink]="['/prepayment-account', amortizationSequence.prepaymentAccount?.id, 'view']">{{
+              amortizationSequence.prepaymentAccount?.catalogueNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Amortization Recurrence</span></dt>
+        <dd>
+          <div *ngIf="amortizationSequence.amortizationRecurrence">
+            <a [routerLink]="['/amortization-recurrence', amortizationSequence.amortizationRecurrence?.id, 'view']">{{
+              amortizationSequence.amortizationRecurrence?.particulars
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of amortizationSequence.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Prepayment Mapping</span></dt>
+        <dd>
+          <span *ngFor="let prepaymentMapping of amortizationSequence.prepaymentMappings; let last = last">
+            <a [routerLink]="['/prepayment-mapping', prepaymentMapping?.id, 'view']">{{ prepaymentMapping.parameter }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Application Parameters</span></dt>
+        <dd>
+          <span *ngFor="let applicationParameters of amortizationSequence.applicationParameters; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', applicationParameters?.id, 'view']">{{ applicationParameters.mappedValue }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/amortization-sequence', amortizationSequence.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

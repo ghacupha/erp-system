@@ -1,0 +1,86 @@
+{
+  "changelogDate": "20220320084318",
+  "clientRootFolder": "settlement",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "serialNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "jobSheetDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "details",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "remarks",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": true,
+  "jpaMetamodelFiltering": true,
+  "name": "JobSheet",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "biller",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "otherEntityRelationshipName": "jobSheet",
+      "ownerSide": true,
+      "relationshipName": "signatories",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "contactPerson",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "details",
+      "otherEntityName": "businessStamp",
+      "otherEntityRelationshipName": "jobSheet",
+      "ownerSide": true,
+      "relationshipName": "businessStamps",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "jobSheet",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "paymentLabel",
+      "otherEntityRelationshipName": "jobSheet",
+      "ownerSide": true,
+      "relationshipName": "paymentLabel",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "businessDocument",
+      "ownerSide": true,
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

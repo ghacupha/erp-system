@@ -1,0 +1,55 @@
+{
+  "changelogDate": "20210721174739",
+  "clientRootFolder": "tax",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "entityTableName": "tax_reference",
+  "fields": [
+    {
+      "fieldName": "taxName",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "taxDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "taxPercentage",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "taxReferenceType",
+      "fieldType": "taxReferenceTypes",
+      "fieldValidateRules": ["required", "unique"],
+      "fieldValues": "TELCO_EXCISE_DUTY,VALUE_ADDED_TAX,WITHHOLDING_VAT,WITHHOLDING_TAX_ON_CONSULTANCY,WITHHOLDING_TAX_ON_RENT,CATERING_LEVY,SERVICE_CHARGE,WITHHOLDING_TAX_ON_IMPORTED_SERVICE"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "erpService",
+  "name": "TaxReference",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl"
+}

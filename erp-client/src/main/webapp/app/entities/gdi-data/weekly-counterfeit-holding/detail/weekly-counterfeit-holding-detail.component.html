@@ -1,0 +1,75 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="weeklyCounterfeitHolding">
+      <h2 data-cy="weeklyCounterfeitHoldingDetailsHeading"><span>Weekly Counterfeit Holding</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ weeklyCounterfeitHolding.id }}</span>
+        </dd>
+        <dt><span>Reporting Date</span></dt>
+        <dd>
+          <span>{{ weeklyCounterfeitHolding.reportingDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Date Confiscated</span></dt>
+        <dd>
+          <span>{{ weeklyCounterfeitHolding.dateConfiscated | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Serial Number</span></dt>
+        <dd>
+          <span>{{ weeklyCounterfeitHolding.serialNumber }}</span>
+        </dd>
+        <dt><span>Depositors Names</span></dt>
+        <dd>
+          <span>{{ weeklyCounterfeitHolding.depositorsNames }}</span>
+        </dd>
+        <dt><span>Tellers Names</span></dt>
+        <dd>
+          <span>{{ weeklyCounterfeitHolding.tellersNames }}</span>
+        </dd>
+        <dt><span>Date Submitted To CBK</span></dt>
+        <dd>
+          <span>{{ weeklyCounterfeitHolding.dateSubmittedToCBK | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ weeklyCounterfeitHolding.remarks }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/weekly-counterfeit-holding', weeklyCounterfeitHolding.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

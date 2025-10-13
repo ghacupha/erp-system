@@ -1,0 +1,54 @@
+{
+  "changelogDate": "20210414144655",
+  "clientRootFolder": "system",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "message_token",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "timeSent",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "tokenValue",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "received",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "actioned",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "contentFullyEnqueued",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "erpService",
+  "name": "MessageToken",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl"
+}

@@ -1,0 +1,114 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="purchaseOrder">
+      <h2 data-cy="purchaseOrderDetailsHeading"><span>Purchase Order</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ purchaseOrder.id }}</span>
+        </dd>
+        <dt><span>Purchase Order Number</span></dt>
+        <dd>
+          <span>{{ purchaseOrder.purchaseOrderNumber }}</span>
+        </dd>
+        <dt><span>Purchase Order Date</span></dt>
+        <dd>
+          <span>{{ purchaseOrder.purchaseOrderDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Purchase Order Amount</span></dt>
+        <dd>
+          <span>{{ purchaseOrder.purchaseOrderAmount }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ purchaseOrder.description }}</span>
+        </dd>
+        <dt><span>Notes</span></dt>
+        <dd>
+          <span>{{ purchaseOrder.notes }}</span>
+        </dd>
+        <dt><span>File Upload Token</span></dt>
+        <dd>
+          <span>{{ purchaseOrder.fileUploadToken }}</span>
+        </dd>
+        <dt><span>Compilation Token</span></dt>
+        <dd>
+          <span>{{ purchaseOrder.compilationToken }}</span>
+        </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ purchaseOrder.remarks }}</span>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="purchaseOrder.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', purchaseOrder.settlementCurrency?.id, 'view']">{{
+              purchaseOrder.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of purchaseOrder.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Signatories</span></dt>
+        <dd>
+          <span *ngFor="let signatories of purchaseOrder.signatories; let last = last">
+            <a [routerLink]="['/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Vendor</span></dt>
+        <dd>
+          <div *ngIf="purchaseOrder.vendor">
+            <a [routerLink]="['/dealer', purchaseOrder.vendor?.id, 'view']">{{ purchaseOrder.vendor?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Business Document</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of purchaseOrder.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/purchase-order', purchaseOrder.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

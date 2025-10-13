@@ -1,0 +1,150 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="netBookValueEntry">
+      <h2 data-cy="netBookValueEntryDetailsHeading"><span>Net Book Value Entry</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ netBookValueEntry.id }}</span>
+        </dd>
+        <dt><span>Asset Number</span></dt>
+        <dd>
+          <span>{{ netBookValueEntry.assetNumber }}</span>
+        </dd>
+        <dt><span>Asset Tag</span></dt>
+        <dd>
+          <span>{{ netBookValueEntry.assetTag }}</span>
+        </dd>
+        <dt><span>Asset Description</span></dt>
+        <dd>
+          <span>{{ netBookValueEntry.assetDescription }}</span>
+        </dd>
+        <dt><span>Nbv Identifier</span></dt>
+        <dd>
+          <span>{{ netBookValueEntry.nbvIdentifier }}</span>
+        </dd>
+        <dt><span>Compilation Job Identifier</span></dt>
+        <dd>
+          <span>{{ netBookValueEntry.compilationJobIdentifier }}</span>
+        </dd>
+        <dt><span>Compilation Batch Identifier</span></dt>
+        <dd>
+          <span>{{ netBookValueEntry.compilationBatchIdentifier }}</span>
+        </dd>
+        <dt><span>Elapsed Months</span></dt>
+        <dd>
+          <span>{{ netBookValueEntry.elapsedMonths }}</span>
+        </dd>
+        <dt><span>Prior Months</span></dt>
+        <dd>
+          <span>{{ netBookValueEntry.priorMonths }}</span>
+        </dd>
+        <dt><span>Useful Life Years</span></dt>
+        <dd>
+          <span>{{ netBookValueEntry.usefulLifeYears }}</span>
+        </dd>
+        <dt><span>Net Book Value Amount</span></dt>
+        <dd>
+          <span>{{ netBookValueEntry.netBookValueAmount }}</span>
+        </dd>
+        <dt><span>Previous Net Book Value Amount</span></dt>
+        <dd>
+          <span>{{ netBookValueEntry.previousNetBookValueAmount }}</span>
+        </dd>
+        <dt><span>Historical Cost</span></dt>
+        <dd>
+          <span>{{ netBookValueEntry.historicalCost }}</span>
+        </dd>
+        <dt><span>Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="netBookValueEntry.serviceOutlet">
+            <a [routerLink]="['/service-outlet', netBookValueEntry.serviceOutlet?.id, 'view']">{{
+              netBookValueEntry.serviceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Depreciation Period</span></dt>
+        <dd>
+          <div *ngIf="netBookValueEntry.depreciationPeriod">
+            <a [routerLink]="['/depreciation-period', netBookValueEntry.depreciationPeriod?.id, 'view']">{{
+              netBookValueEntry.depreciationPeriod?.endDate
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Fiscal Month</span></dt>
+        <dd>
+          <div *ngIf="netBookValueEntry.fiscalMonth">
+            <a [routerLink]="['/fiscal-month', netBookValueEntry.fiscalMonth?.id, 'view']">{{
+              netBookValueEntry.fiscalMonth?.fiscalMonthCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Depreciation Method</span></dt>
+        <dd>
+          <div *ngIf="netBookValueEntry.depreciationMethod">
+            <a [routerLink]="['/depreciation-method', netBookValueEntry.depreciationMethod?.id, 'view']">{{
+              netBookValueEntry.depreciationMethod?.depreciationMethodName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Asset Registration</span></dt>
+        <dd>
+          <div *ngIf="netBookValueEntry.assetRegistration">
+            <a [routerLink]="['/asset-registration', netBookValueEntry.assetRegistration?.id, 'view']">{{
+              netBookValueEntry.assetRegistration?.id
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Asset Category</span></dt>
+        <dd>
+          <div *ngIf="netBookValueEntry.assetCategory">
+            <a [routerLink]="['/asset-category', netBookValueEntry.assetCategory?.id, 'view']">{{
+              netBookValueEntry.assetCategory?.assetCategoryName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of netBookValueEntry.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/net-book-value-entry', netBookValueEntry.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

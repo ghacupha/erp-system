@@ -1,0 +1,341 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-work-in-progress-registration-heading"
+          data-cy="WorkInProgressRegistrationCreateUpdateHeading"
+          [hidden]='!weAreCreating'>
+        New Work In Progress Registration
+      </h2>
+
+      <h2 id="jhi-work-in-progress-registration-copy-heading"
+          data-cy="WorkInProgressRegistrationCreateUpdateHeading"
+          [hidden]='!weAreCopying'>
+        Copy # {{ selectedItem.id }} Sequence No. {{ selectedItem.sequenceNumber }}
+      </h2>
+
+      <h2 id="jhi-work-in-progress-registration-edit-heading"
+          data-cy="WorkInProgressRegistrationCreateUpdateHeading"
+          [hidden]='!weAreEditing'>
+        Edit # {{ selectedItem.id }} Sequence No. {{ selectedItem.sequenceNumber }}
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sequenceNumber">Sequence Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="sequenceNumber"
+            id="field_sequenceNumber"
+            data-cy="sequenceNumber"
+            formControlName="sequenceNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('sequenceNumber')!.invalid && (editForm.get('sequenceNumber')!.dirty || editForm.get('sequenceNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('sequenceNumber')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <jhi-m21-settlement-form-control
+          ngDefaultControl
+          formControlName='settlementTransaction'
+          [inputValue]="editForm.get(['settlementTransaction'])!.value"
+          (valueSelected)='updateSettlementTransaction($event)'
+          inputControlLabel='Settlement'
+        >
+        </jhi-m21-settlement-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_particulars">Particulars</label>
+          <input
+            type="text"
+            class="form-control"
+            name="particulars"
+            id="field_particulars"
+            data-cy="particulars"
+            formControlName="particulars"
+          />
+        </div>
+
+        <jhi-m21-settlement-currency-form-control
+          ngDefaultControl
+          formControlName='settlementCurrency'
+          [inputValue]="editForm.get(['settlementCurrency'])!.value"
+          (valueSelected)='updateCurrency($event)'
+          inputControlLabel='Currency Code (Required)'
+        >
+          <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
+        </jhi-m21-settlement-currency-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_instalmentDate">Instalment Date</label>
+          <div class="input-group">
+            <input
+              id="field_instalmentDate"
+              data-cy="instalmentDate"
+              type="text"
+              class="form-control"
+              name="instalmentDate"
+              ngbDatepicker
+              #instalmentDateDp="ngbDatepicker"
+              formControlName="instalmentDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="instalmentDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('instalmentDate')!.invalid && (editForm.get('instalmentDate')!.dirty || editForm.get('instalmentDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('instalmentDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_instalmentAmount">Instalment Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="instalmentAmount"
+            id="field_instalmentAmount"
+            data-cy="instalmentAmount"
+            formControlName="instalmentAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_comments">Comments</label>
+          <div>
+            <div *ngIf="editForm.get('comments')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('comments')!.value, editForm.get('commentsContentType')!.value)">open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('commentsContentType')!.value }}, {{ byteSize(editForm.get('comments')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ comments: null }); editForm.patchValue({ commentsContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_comments" data-cy="comments" (change)="setFileData($event, 'comments', false)" />
+          </div>
+          <input type="hidden" class="form-control" name="comments" id="field_comments" data-cy="comments" formControlName="comments" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="commentsContentType"
+            id="field_commentsContentType"
+            formControlName="commentsContentType"
+          />
+        </div>
+
+        <jhi-m21-payment-invoice-form-control
+          ngDefaultControl
+          formControlName='invoice'
+          [inputValue]="editForm.get(['invoice'])!.value"
+          (valueSelected)='updateInvoice($event)'
+          inputControlLabel='Payment Invoice(s)'
+        >
+        </jhi-m21-payment-invoice-form-control>
+
+        <jhi-m21-service-outlet-form-control
+          ngDefaultControl
+          formControlName='outletCode'
+          [inputValue]="editForm.get(['outletCode'])!.value"
+          (valueSelected)='updateOutletCode($event)'
+          inputControlLabel='Service Outlet'
+        >
+          <option [ngValue]="editForm.get(['outletCode'])!.value"></option>
+        </jhi-m21-service-outlet-form-control>
+
+        <jhi-m21-purchase-order-form-control
+          ngDefaultControl
+          formControlName='purchaseOrder'
+          [inputValue]="editForm.get(['purchaseOrder'])!.value"
+          (valueSelected)='updatePurchaseOrder($event)'
+          inputControlLabel='Purchase Order'
+        >
+        </jhi-m21-purchase-order-form-control>
+
+        <jhi-m21-delivery-note-form-control
+          ngDefaultControl
+          formControlName='deliveryNote'
+          [inputValue]="editForm.get(['deliveryNote'])!.value"
+          (valueSelected)='updateDeliveryNote($event)'
+          inputControlLabel='Delivery Note'
+        >
+        </jhi-m21-delivery-note-form-control>
+
+        <jhi-m21-job-sheet-form-control
+          ngDefaultControl
+          formControlName='jobSheet'
+          [inputValue]="editForm.get(['jobSheet'])!.value"
+          (valueSelected)='updateJobSheet($event)'
+          inputControlLabel='Job Sheet'
+        >
+        </jhi-m21-job-sheet-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='dealer'
+          [inputValue]="editForm.get(['dealer'])!.value"
+          (valueSelected)='updateDealer($event)'
+          inputControlLabel='Dealer'
+        >
+        </jhi-m21-dealer-form-control>
+
+        <jhi-m2m-asset-accessory-form-control
+          ngDefaultControl
+          formControlName='assetAccessories'
+          [inputValues]="editForm.get(['assetAccessories'])!.value"
+          (selectedValues)='updateAssetAccessories($event)'
+          inputControlLabel='Asset Accessor(y/ies)'
+        >
+        </jhi-m2m-asset-accessory-form-control>
+
+        <jhi-m2m-asset-warranty-form-control
+          ngDefaultControl
+          formControlName='assetWarranties'
+          [inputValues]="editForm.get(['assetWarranties'])!.value"
+          (selectedValues)='updateAssetWarranties($event)'
+          inputControlLabel='Asset Warranty(ies)'
+        >
+        </jhi-m2m-asset-warranty-form-control>
+
+        <jhi-m21-work-project-register-form-control
+          ngDefaultControl
+          formControlName='workProjectRegister'
+          [inputValue]="editForm.get('workProjectRegister')!.value"
+          (valueSelected)='updateWorkProjectRegister($event)'
+          inputControlLabel='Work Project'
+        >
+          <option [ngValue]="editForm.get('workProjectRegister')!.value"></option>
+        </jhi-m21-work-project-register-form-control>
+
+        <jhi-m21-wip-registration-form-control
+          ngDefaultControl
+          formControlName='workInProgressGroup'
+          [inputValue]="editForm.get('workInProgressGroup')!.value"
+          (valueSelected)='updateWorkInProgressGroup($event)'
+          inputControlLabel='WIP Registration Group'
+        >
+          <option [ngValue]="editForm.get('workInProgressGroup')!.value"></option>
+        </jhi-m21-wip-registration-form-control>
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='businessDocuments'
+          [inputValues]="editForm.get(['businessDocuments'])!.value"
+          (selectedValues)='updateBusinessDocuments($event)'
+          inputControlLabel='Business Documents'
+        >
+        </jhi-m2m-business-document-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_levelOfCompletion">Level Of Completion</label>
+          <input
+            type="number"
+            class="form-control"
+            name="levelOfCompletion"
+            id="field_levelOfCompletion"
+            data-cy="levelOfCompletion"
+            formControlName="levelOfCompletion"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_completed">Completed</label>
+          <input type="checkbox" class="form-check" name="completed" id="field_completed" data-cy="completed" formControlName="completed" />
+        </div>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholders'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

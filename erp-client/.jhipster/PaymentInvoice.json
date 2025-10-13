@@ -1,0 +1,103 @@
+{
+  "changelogDate": "20220203125725",
+  "clientRootFolder": "settlement",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "invoiceNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "invoiceDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "invoiceAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "remarks",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "PaymentInvoice",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "purchaseOrderNumber",
+      "otherEntityName": "purchaseOrder",
+      "otherEntityRelationshipName": "paymentInvoice",
+      "ownerSide": true,
+      "relationshipName": "purchaseOrder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "paymentInvoice",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "paymentLabel",
+      "otherEntityRelationshipName": "paymentInvoice",
+      "ownerSide": true,
+      "relationshipName": "paymentLabel",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "iso4217CurrencyCode",
+      "otherEntityName": "settlementCurrency",
+      "relationshipName": "settlementCurrency",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "biller",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "deliveryNoteNumber",
+      "otherEntityName": "deliveryNote",
+      "otherEntityRelationshipName": "paymentInvoice",
+      "ownerSide": true,
+      "relationshipName": "deliveryNote",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "serialNumber",
+      "otherEntityName": "jobSheet",
+      "otherEntityRelationshipName": "paymentInvoice",
+      "ownerSide": true,
+      "relationshipName": "jobSheet",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "paymentInvoice",
+      "ownerSide": true,
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

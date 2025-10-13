@@ -1,0 +1,181 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="AssetWriteOffHeading">
+    <span>Asset Write Offs</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-asset-write-off"
+        [routerLink]="['/asset-write-off/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new Asset Write Off </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="assetWriteOffs?.length === 0">
+    <span>No assetWriteOffs found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="assetWriteOffs && assetWriteOffs.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="writeOffAmount"><span>Write Off Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="writeOffDate"><span>Write Off Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="writeOffReferenceId">
+            <span>Write Off Reference Id</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="createdBy.applicationIdentity"><span>Created By</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="modifiedBy.applicationIdentity"><span>Modified By</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="lastAccessedBy.applicationIdentity"><span>Last Accessed By</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="effectivePeriod.startDate"><span>Effective Period</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="assetWrittenOff.assetNumber"><span>Asset Written Off</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let assetWriteOff of assetWriteOffs; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/asset-write-off', assetWriteOff.id, 'view']">{{ assetWriteOff.id }}</a>
+          </td>
+          <td>{{ assetWriteOff.description }}</td>
+          <td>{{ assetWriteOff.writeOffAmount }}</td>
+          <td>{{ assetWriteOff.writeOffDate | formatMediumDate }}</td>
+          <td>{{ assetWriteOff.writeOffReferenceId }}</td>
+          <td>
+            <div *ngIf="assetWriteOff.createdBy">
+              <a [routerLink]="['/application-user', assetWriteOff.createdBy?.id, 'view']">{{
+                assetWriteOff.createdBy?.applicationIdentity
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="assetWriteOff.modifiedBy">
+              <a [routerLink]="['/application-user', assetWriteOff.modifiedBy?.id, 'view']">{{
+                assetWriteOff.modifiedBy?.applicationIdentity
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="assetWriteOff.lastAccessedBy">
+              <a [routerLink]="['/application-user', assetWriteOff.lastAccessedBy?.id, 'view']">{{
+                assetWriteOff.lastAccessedBy?.applicationIdentity
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="assetWriteOff.effectivePeriod">
+              <a [routerLink]="['/depreciation-period', assetWriteOff.effectivePeriod?.id, 'view']">{{
+                assetWriteOff.effectivePeriod?.startDate
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="assetWriteOff.assetWrittenOff">
+              <a [routerLink]="['/asset-registration', assetWriteOff.assetWrittenOff?.id, 'view']">{{
+                assetWriteOff.assetWrittenOff?.assetNumber
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/asset-write-off', assetWriteOff.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/asset-write-off', assetWriteOff.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(assetWriteOff)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="assetWriteOffs && assetWriteOffs.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

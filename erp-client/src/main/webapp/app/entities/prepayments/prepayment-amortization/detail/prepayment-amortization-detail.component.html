@@ -1,0 +1,126 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="prepaymentAmortization">
+      <h2 data-cy="prepaymentAmortizationDetailsHeading"><span>Prepayment Amortization</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ prepaymentAmortization.id }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ prepaymentAmortization.description }}</span>
+        </dd>
+        <dt><span>Prepayment Period</span></dt>
+        <dd>
+          <span>{{ prepaymentAmortization.prepaymentPeriod | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Prepayment Amount</span></dt>
+        <dd>
+          <span>{{ prepaymentAmortization.prepaymentAmount }}</span>
+        </dd>
+        <dt><span>Inactive</span></dt>
+        <dd>
+          <span>{{ prepaymentAmortization.inactive }}</span>
+        </dd>
+        <dt><span>Prepayment Account</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAmortization.prepaymentAccount">
+            <a [routerLink]="['/prepayment-account', prepaymentAmortization.prepaymentAccount?.id, 'view']">{{
+              prepaymentAmortization.prepaymentAccount?.catalogueNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAmortization.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', prepaymentAmortization.settlementCurrency?.id, 'view']">{{
+              prepaymentAmortization.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Debit Account</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAmortization.debitAccount">
+            <a [routerLink]="['/transaction-account', prepaymentAmortization.debitAccount?.id, 'view']">{{
+              prepaymentAmortization.debitAccount?.accountNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Credit Account</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAmortization.creditAccount">
+            <a [routerLink]="['/transaction-account', prepaymentAmortization.creditAccount?.id, 'view']">{{
+              prepaymentAmortization.creditAccount?.accountNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of prepaymentAmortization.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Fiscal Month</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAmortization.fiscalMonth">
+            <a [routerLink]="['/fiscal-month', prepaymentAmortization.fiscalMonth?.id, 'view']">{{
+              prepaymentAmortization.fiscalMonth?.endDate
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Prepayment Compilation Request</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAmortization.prepaymentCompilationRequest">
+            <a [routerLink]="['/prepayment-compilation-request', prepaymentAmortization.prepaymentCompilationRequest?.id, 'view']">{{
+              prepaymentAmortization.prepaymentCompilationRequest?.id
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Amortization Period</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAmortization.amortizationPeriod">
+            <a [routerLink]="['/amortization-period', prepaymentAmortization.amortizationPeriod?.id, 'view']">{{
+              prepaymentAmortization.amortizationPeriod?.periodCode
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/prepayment-amortization', prepaymentAmortization.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

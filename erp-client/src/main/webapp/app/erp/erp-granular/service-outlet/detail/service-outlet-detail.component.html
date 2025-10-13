@@ -1,0 +1,126 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="serviceOutlet">
+      <h2 data-cy="serviceOutletDetailsHeading"><span>Service Outlet</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ serviceOutlet.id }}</span>
+        </dd>
+        <dt><span>Outlet Code</span></dt>
+        <dd>
+          <span>{{ serviceOutlet.outletCode }}</span>
+        </dd>
+        <dt><span>Outlet Name</span></dt>
+        <dd>
+          <span>{{ serviceOutlet.outletName }}</span>
+        </dd>
+        <dt><span>Town</span></dt>
+        <dd>
+          <span>{{ serviceOutlet.town }}</span>
+        </dd>
+        <dt><span>Parliamentary Constituency</span></dt>
+        <dd>
+          <span>{{ serviceOutlet.parliamentaryConstituency }}</span>
+        </dd>
+        <dt><span>Gps Coordinates</span></dt>
+        <dd>
+          <span>{{ serviceOutlet.gpsCoordinates }}</span>
+        </dd>
+        <dt><span>Outlet Opening Date</span></dt>
+        <dd>
+          <span>{{ serviceOutlet.outletOpeningDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Regulator Approval Date</span></dt>
+        <dd>
+          <span>{{ serviceOutlet.regulatorApprovalDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Outlet Closure Date</span></dt>
+        <dd>
+          <span>{{ serviceOutlet.outletClosureDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Date Last Modified</span></dt>
+        <dd>
+          <span>{{ serviceOutlet.dateLastModified | formatMediumDate }}</span>
+        </dd>
+        <dt><span>License Fee Payable</span></dt>
+        <dd>
+          <span>{{ serviceOutlet.licenseFeePayable }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of serviceOutlet.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Bank Code</span></dt>
+        <dd>
+          <div *ngIf="serviceOutlet.bankCode">
+            <a [routerLink]="['/bank-branch-code', serviceOutlet.bankCode?.id, 'view']">{{ serviceOutlet.bankCode?.branchCode }}</a>
+          </div>
+        </dd>
+        <dt><span>Outlet Type</span></dt>
+        <dd>
+          <div *ngIf="serviceOutlet.outletType">
+            <a [routerLink]="['/outlet-type', serviceOutlet.outletType?.id, 'view']">{{ serviceOutlet.outletType?.outletType }}</a>
+          </div>
+        </dd>
+        <dt><span>Outlet Status</span></dt>
+        <dd>
+          <div *ngIf="serviceOutlet.outletStatus">
+            <a [routerLink]="['/outlet-status', serviceOutlet.outletStatus?.id, 'view']">{{
+              serviceOutlet.outletStatus?.branchStatusType
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>County Name</span></dt>
+        <dd>
+          <div *ngIf="serviceOutlet.countyName">
+            <a [routerLink]="['/county-code', serviceOutlet.countyName?.id, 'view']">{{ serviceOutlet.countyName?.countyName }}</a>
+          </div>
+        </dd>
+        <dt><span>Sub County Name</span></dt>
+        <dd>
+          <div *ngIf="serviceOutlet.subCountyName">
+            <a [routerLink]="['/county-code', serviceOutlet.subCountyName?.id, 'view']">{{ serviceOutlet.subCountyName?.subCountyName }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/service-outlet', serviceOutlet.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

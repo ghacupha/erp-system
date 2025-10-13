@@ -1,0 +1,124 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="workInProgressTransfer">
+      <h2 data-cy="workInProgressTransferDetailsHeading"><span>Work In Progress Transfer</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ workInProgressTransfer.id }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ workInProgressTransfer.description }}</span>
+        </dd>
+        <dt><span>Transfer Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressTransfer.transferAmount | currency : ' ' : 'symbol': '0.2-2' }}</span>
+        </dd>
+        <dt><span>Transfer Date</span></dt>
+        <dd>
+          <span>{{ workInProgressTransfer.transferDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Transfer Type</span></dt>
+        <dd>
+          <span>{{ workInProgressTransfer.transferType }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of workInProgressTransfer.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Business Document</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of workInProgressTransfer.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Asset Category</span></dt>
+        <dd>
+          <div *ngIf="workInProgressTransfer.assetCategory">
+            <a [routerLink]="['/asset-category', workInProgressTransfer.assetCategory?.id, 'view']">{{
+              workInProgressTransfer.assetCategory?.assetCategoryName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Work In Progress Registration</span></dt>
+        <dd>
+          <div *ngIf="workInProgressTransfer.workInProgressRegistration">
+            <a [routerLink]="['/work-in-progress-registration', workInProgressTransfer.workInProgressRegistration?.id, 'view']">{{
+              workInProgressTransfer.workInProgressRegistration?.sequenceNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="workInProgressTransfer.serviceOutlet">
+            <a [routerLink]="['/service-outlet', workInProgressTransfer.serviceOutlet?.id, 'view']">{{
+              workInProgressTransfer.serviceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Transfer Settlement</span></dt>
+        <dd>
+          <div *ngIf="workInProgressTransfer.transferSettlement">
+            <a [routerLink]="['/settlement', workInProgressTransfer.transferSettlement?.id, 'view']">{{
+              workInProgressTransfer.transferSettlement?.paymentNumber
+              }}</a>
+          </div>
+        </dd>
+        <dt><span>Original Settlement</span></dt>
+        <dd>
+          <div *ngIf="workInProgressTransfer.originalSettlement">
+            <a [routerLink]="['/settlement', workInProgressTransfer.originalSettlement?.id, 'view']">{{
+              workInProgressTransfer.originalSettlement?.paymentNumber
+              }}</a>
+          </div>
+        <dt><span>Work Project Register</span></dt>
+        <dd>
+          <div *ngIf="workInProgressTransfer.workProjectRegister">
+            <a [routerLink]="['/work-project-register', workInProgressTransfer.workProjectRegister?.id, 'view']">{{
+              workInProgressTransfer.workProjectRegister?.projectTitle
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/work-in-progress-transfer', workInProgressTransfer.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

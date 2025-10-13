@@ -1,0 +1,41 @@
+{
+  "changelogDate": "20220608075128",
+  "clientRootFolder": "system",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "universalKey",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "mappedValue",
+      "fieldType": "String",
+      "fieldValidateRules": []
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "UniversallyUniqueMapping",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipName": "parentMapping",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "universallyUniqueMapping",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

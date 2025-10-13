@@ -1,0 +1,97 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-crb-account-holder-type-heading" data-cy="CrbAccountHolderTypeCreateUpdateHeading">
+        Create or edit a Crb Account Holder Type
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountHolderCategoryTypeCode">Account Holder Category Type Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="accountHolderCategoryTypeCode"
+            id="field_accountHolderCategoryTypeCode"
+            data-cy="accountHolderCategoryTypeCode"
+            formControlName="accountHolderCategoryTypeCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('accountHolderCategoryTypeCode')!.invalid &&
+              (editForm.get('accountHolderCategoryTypeCode')!.dirty || editForm.get('accountHolderCategoryTypeCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('accountHolderCategoryTypeCode')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountHolderCategoryType">Account Holder Category Type</label>
+          <input
+            type="text"
+            class="form-control"
+            name="accountHolderCategoryType"
+            id="field_accountHolderCategoryType"
+            data-cy="accountHolderCategoryType"
+            formControlName="accountHolderCategoryType"
+          />
+          <div
+            *ngIf="
+              editForm.get('accountHolderCategoryType')!.invalid &&
+              (editForm.get('accountHolderCategoryType')!.dirty || editForm.get('accountHolderCategoryType')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('accountHolderCategoryType')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

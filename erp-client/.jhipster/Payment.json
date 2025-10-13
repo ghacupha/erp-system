@@ -1,0 +1,95 @@
+{
+  "changelogDate": "20210627092712",
+  "clientRootFolder": "settlement",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "payment",
+  "fields": [
+    {
+      "fieldName": "paymentNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "paymentDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "invoicedAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "paymentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "settlementCurrency",
+      "fieldType": "CurrencyTypes",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "KES,USD,GBP,EUR,INR,ZAR,AED,CNY,CHF,UGX,TZS,JPY,CAD"
+    },
+    {
+      "fieldName": "calculationFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "dealerName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "purchaseOrderNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "erpService",
+  "name": "Payment",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "paymentLabel",
+      "otherEntityRelationshipName": "payment",
+      "ownerSide": true,
+      "relationshipName": "paymentLabel",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "categoryName",
+      "otherEntityName": "paymentCategory",
+      "relationshipName": "paymentCategory",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "payment",
+      "relationshipName": "paymentGroup",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl"
+}

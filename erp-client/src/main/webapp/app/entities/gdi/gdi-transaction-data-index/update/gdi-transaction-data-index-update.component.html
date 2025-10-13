@@ -1,0 +1,224 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-gdi-transaction-data-index-heading" data-cy="GdiTransactionDataIndexCreateUpdateHeading">
+        Create or edit a Gdi Transaction Data Index
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_datasetName">Dataset Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="datasetName"
+            id="field_datasetName"
+            data-cy="datasetName"
+            formControlName="datasetName"
+          />
+          <div *ngIf="editForm.get('datasetName')!.invalid && (editForm.get('datasetName')!.dirty || editForm.get('datasetName')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('datasetName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_databaseName">Database Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="databaseName"
+            id="field_databaseName"
+            data-cy="databaseName"
+            formControlName="databaseName"
+          />
+          <div
+            *ngIf="editForm.get('databaseName')!.invalid && (editForm.get('databaseName')!.dirty || editForm.get('databaseName')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('databaseName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_updateFrequency">Update Frequency</label>
+          <select
+            class="form-control"
+            name="updateFrequency"
+            formControlName="updateFrequency"
+            id="field_updateFrequency"
+            data-cy="updateFrequency"
+          >
+            <option [ngValue]="null"></option>
+            <option *ngFor="let updateFrequencyTypes of updateFrequencyTypesValues" [value]="updateFrequencyTypes">
+              updateFrequencyTypes
+            </option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('updateFrequency')!.invalid &&
+              (editForm.get('updateFrequency')!.dirty || editForm.get('updateFrequency')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('updateFrequency')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_datasetBehavior">Dataset Behavior</label>
+          <select
+            class="form-control"
+            name="datasetBehavior"
+            formControlName="datasetBehavior"
+            id="field_datasetBehavior"
+            data-cy="datasetBehavior"
+          >
+            <option [ngValue]="null"></option>
+            <option *ngFor="let datasetBehaviorTypes of datasetBehaviorTypesValues" [value]="datasetBehaviorTypes">
+              datasetBehaviorTypes
+            </option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('datasetBehavior')!.invalid &&
+              (editForm.get('datasetBehavior')!.dirty || editForm.get('datasetBehavior')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('datasetBehavior')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_minimumDatarowsPerRequest">Minimum Datarows Per Request</label>
+          <input
+            type="number"
+            class="form-control"
+            name="minimumDatarowsPerRequest"
+            id="field_minimumDatarowsPerRequest"
+            data-cy="minimumDatarowsPerRequest"
+            formControlName="minimumDatarowsPerRequest"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_maximumDataRowsPerRequest">Maximum Data Rows Per Request</label>
+          <input
+            type="number"
+            class="form-control"
+            name="maximumDataRowsPerRequest"
+            id="field_maximumDataRowsPerRequest"
+            data-cy="maximumDataRowsPerRequest"
+            formControlName="maximumDataRowsPerRequest"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_datasetDescription">Dataset Description</label>
+          <textarea
+            class="form-control"
+            name="datasetDescription"
+            id="field_datasetDescription"
+            data-cy="datasetDescription"
+            formControlName="datasetDescription"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dataTemplate">Data Template</label>
+          <div>
+            <div *ngIf="editForm.get('dataTemplate')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('dataTemplate')!.value, editForm.get('dataTemplateContentType')!.value)"
+                >open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('dataTemplateContentType')!.value }}, {{ byteSize(editForm.get('dataTemplate')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ dataTemplate: null }); editForm.patchValue({ dataTemplateContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_dataTemplate" data-cy="dataTemplate" (change)="setFileData($event, 'dataTemplate', false)" />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="dataTemplate"
+            id="field_dataTemplate"
+            data-cy="dataTemplate"
+            formControlName="dataTemplate"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="dataTemplateContentType"
+            id="field_dataTemplateContentType"
+            formControlName="dataTemplateContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="field_masterDataItems">Master Data Item</label>
+          <select
+            class="form-control"
+            id="field_masterDataItems"
+            data-cy="masterDataItem"
+            multiple
+            name="masterDataItems"
+            formControlName="masterDataItems"
+          >
+            <option
+              [ngValue]="getSelectedGdiMasterDataIndex(gdiMasterDataIndexOption, editForm.get('masterDataItems')!.value)"
+              *ngFor="let gdiMasterDataIndexOption of gdiMasterDataIndicesSharedCollection; trackBy: trackGdiMasterDataIndexById"
+            >
+              {{ gdiMasterDataIndexOption.entityName }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

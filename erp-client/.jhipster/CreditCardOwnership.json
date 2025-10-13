@@ -1,0 +1,30 @@
+{
+  "changelogDate": "20230914093957",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "creditCardOwnershipCategoryCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "creditCardOwnershipCategoryType",
+      "fieldType": "CreditCardOwnershipTypes",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "INDIVIDUAL,CORPORATE,NONRESIDENTS"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "CreditCardOwnership",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

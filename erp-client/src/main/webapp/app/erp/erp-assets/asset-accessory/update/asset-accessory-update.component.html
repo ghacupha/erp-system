@@ -1,0 +1,270 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-asset-accessory-heading" data-cy="AssetAccessoryCreateUpdateHeading" [hidden]='!weAreCreating'>Record a new Asset Accessory</h2>
+      <h2 id="jhi-asset-accessory-copy-heading" data-cy="AssetAccessoryCreateUpdateHeading" [hidden]='!weAreCopying'>Copy accessory # {{ selectedItem.id }}</h2>
+      <h2 id="jhi-asset-accessory-edit-heading" data-cy="AssetAccessoryCreateUpdateHeading" [hidden]='!weAreEditing'>Edit accessory # {{ selectedItem.id }}</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null || weAreCopying">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetTag">Asset Tag</label>
+          <input type="text" class="form-control" name="assetTag" id="field_assetTag" data-cy="assetTag" formControlName="assetTag" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetDetails">Asset Details</label>
+          <input
+            type="text"
+            class="form-control"
+            name="assetDetails"
+            id="field_assetDetails"
+            data-cy="assetDetails"
+            formControlName="assetDetails"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_comments">Comments</label>
+          <div>
+            <div *ngIf="editForm.get('comments')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('comments')!.value, editForm.get('commentsContentType')!.value)">open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('commentsContentType')!.value }}, {{ byteSize(editForm.get('comments')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ comments: null }); editForm.patchValue({ commentsContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_comments" data-cy="comments" (change)="setFileData($event, 'comments', false)" />
+          </div>
+          <input type="hidden" class="form-control" name="comments" id="field_comments" data-cy="comments" formControlName="comments" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="commentsContentType"
+            id="field_commentsContentType"
+            formControlName="commentsContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_modelNumber">Model Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="modelNumber"
+            id="field_modelNumber"
+            data-cy="modelNumber"
+            formControlName="modelNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_serialNumber">Serial Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="serialNumber"
+            id="field_serialNumber"
+            data-cy="serialNumber"
+            formControlName="serialNumber"
+          />
+        </div>
+
+        <jhi-m2m-asset-warranty-form-control
+          ngDefaultControl
+          formControlName='assetWarranties'
+          [inputValues]="editForm.get(['assetWarranties'])!.value"
+          (selectedValues)='updateAssetWarranties($event)'
+          inputControlLabel='Asset Warrant(y/ies)'
+        >
+        </jhi-m2m-asset-warranty-form-control>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+        <jhi-m2m-payment-invoice-form-control
+          ngDefaultControl
+          formControlName='paymentInvoices'
+          [inputValues]="editForm.get(['paymentInvoices'])!.value"
+          (valueSelected)='updatePaymentInvoices($event)'
+          inputControlLabel='Invoice(s)'
+        >
+        </jhi-m2m-payment-invoice-form-control>
+
+        <jhi-m21-service-outlet-form-control
+          ngDefaultControl
+          formControlName='serviceOutlet'
+          [inputValue]="editForm.get('serviceOutlet')!.value"
+          (valueSelected)='updateServiceOutlet($event)'
+          inputControlLabel='Service Outlet'
+        >
+          <option [ngValue]="editForm.get('serviceOutlet')!.value"></option>
+        </jhi-m21-service-outlet-form-control>
+
+        <jhi-m2m-settlement-form-control
+          ngDefaultControl
+          formControlName='settlements'
+          [inputValues]="editForm.get(['settlements'])!.value"
+          (valueSelected)='updateSettlements($event)'
+          inputControlLabel='Settlement(s)'
+        >
+        </jhi-m2m-settlement-form-control>
+
+        <jhi-m2m-purchase-order-form-control
+          ngDefaultControl
+          formControlName='purchaseOrders'
+          [inputValues]="editForm.get(['purchaseOrders'])!.value"
+          (selectedValues)='updatePurchaseOrders($event)'
+          inputControlLabel='Purchase Orders(s)'
+        >
+        </jhi-m2m-purchase-order-form-control>
+
+        <jhi-m2m-delivery-note-form-control
+          ngDefaultControl
+          formControlName='deliveryNotes'
+          [inputValues]="editForm.get(['deliveryNotes'])!.value"
+          (selectedValues)='updateDeliveryNotes($event)'
+          inputControlLabel='Delivery Note(s)'
+        >
+        </jhi-m2m-delivery-note-form-control>
+
+        <jhi-m2m-job-sheet-form-control
+          ngDefaultControl
+          formControlName='jobSheets'
+          [inputValues]="editForm.get(['jobSheets'])!.value"
+          (selectedValues)='updateJobSheets($event)'
+          inputControlLabel='Job Sheet(s)'
+        >
+        </jhi-m2m-job-sheet-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='dealer'
+          [inputValue]="editForm.get('dealer')!.value"
+          (valueSelected)='updateDealer($event)'
+          inputControlLabel=Biller
+        >
+          <option [ngValue]="editForm.get('dealer')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <jhi-m2m-dealer-form-control
+          ngDefaultControl
+          formControlName='designatedUsers'
+          [inputValues]="editForm.get(['designatedUsers'])!.value"
+          (valueSelected)='updateDesignatedUsers($event)'
+          inputControlLabel='Designated User(s)'
+        >
+        </jhi-m2m-dealer-form-control>
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='businessDocuments'
+          [inputValues]="editForm.get(['businessDocuments'])!.value"
+          (selectedValues)='updateBusinessDocuments($event)'
+          inputControlLabel='Business Document Attachments'
+        >
+        </jhi-m2m-business-document-form-control>
+
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='universallyUniqueMappings'
+          [inputValues]="editForm.get(['universallyUniqueMappings'])!.value"
+          (selectedValues)='updateUniversallyUniqueMappings($event)'
+          inputControlLabel='System Mapping(s)'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
+
+        <jhi-m21-asset-category-form-control
+          ngDefaultControl
+          formControlName='assetCategory'
+          [inputValue]="editForm.get('assetCategory')!.value"
+          (valueSelected)='updateAssetCategory($event)'
+          inputControlLabel='Asset Category'
+        >
+          <option [ngValue]="editForm.get('assetCategory')!.value"></option>
+        </jhi-m21-asset-category-form-control>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

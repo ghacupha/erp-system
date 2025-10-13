@@ -1,0 +1,55 @@
+{
+  "clientRootFolder": "leases",
+  "fields": [
+    {
+      "fieldName": "sequenceNumber",
+      "fieldType": "Integer",
+      "fieldValidateRules": []
+    },
+    {
+      "fieldName": "openingBalance",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "cashPayment",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "principalPayment",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "interestPayment",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "outstandingBalance",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "interestPayableOpening",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "interestAccrued",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "interestPayableClosing",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "amortizationScheduleId",
+      "fieldType": "Long"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": true,
+  "pagination": "infinite-scroll",
+  "name": "LeaseLiabilityScheduleReportItem",
+  "changelogDate": "20240828092411",
+  "incrementalChangelog": false
+}

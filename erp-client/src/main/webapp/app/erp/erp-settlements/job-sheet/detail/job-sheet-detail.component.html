@@ -1,0 +1,103 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="jobSheet">
+      <h2 data-cy="jobSheetDetailsHeading"><span>Job Sheet</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ jobSheet.id }}</span>
+        </dd>
+        <dt><span>Serial Number</span></dt>
+        <dd>
+          <span>{{ jobSheet.serialNumber }}</span>
+        </dd>
+        <dt><span>Job Sheet Date</span></dt>
+        <dd>
+          <span>{{ jobSheet.jobSheetDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Details</span></dt>
+        <dd>
+          <span>{{ jobSheet.details }}</span>
+        </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ jobSheet.remarks }}</span>
+        </dd>
+        <dt><span>Biller</span></dt>
+        <dd>
+          <div *ngIf="jobSheet.biller">
+            <a [routerLink]="['/erp/dealer', jobSheet.biller?.id, 'view']">{{ jobSheet.biller?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Signatories</span></dt>
+        <dd>
+          <span *ngFor="let signatories of jobSheet.signatories; let last = last">
+            <a [routerLink]="['/erp/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Contact Person</span></dt>
+        <dd>
+          <div *ngIf="jobSheet.contactPerson">
+            <a [routerLink]="['/erp/dealer', jobSheet.contactPerson?.id, 'view']">{{ jobSheet.contactPerson?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Business Stamps</span></dt>
+        <dd>
+          <span *ngFor="let businessStamps of jobSheet.businessStamps; let last = last">
+            <a [routerLink]="['/business-stamp', businessStamps?.id, 'view']">{{ businessStamps.details }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of jobSheet.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Payment Label</span></dt>
+        <dd>
+          <span *ngFor="let paymentLabel of jobSheet.paymentLabels; let last = last">
+            <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/job-sheet', jobSheet.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

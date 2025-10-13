@@ -1,0 +1,133 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="reportDesign">
+      <h2 data-cy="reportDesignDetailsHeading"><span>Report Design</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ reportDesign.id }}</span>
+        </dd>
+        <dt><span>Catalogue Number</span></dt>
+        <dd>
+          <span>{{ reportDesign.catalogueNumber }}</span>
+        </dd>
+        <dt><span>Designation</span></dt>
+        <dd>
+          <span>{{ reportDesign.designation }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ reportDesign.description }}</span>
+        </dd>
+        <dt><span>Notes</span></dt>
+        <dd>
+          <div *ngIf="reportDesign.notes">
+            <a (click)="openFile(reportDesign.notes, reportDesign.notesContentType)">open</a>
+            {{ reportDesign.notesContentType }}, {{ byteSize(reportDesign.notes) }}
+          </div>
+        </dd>
+        <dt><span>Report File</span></dt>
+        <dd>
+          <div *ngIf="reportDesign.reportFile">
+            <a (click)="openFile(reportDesign.reportFile, reportDesign.reportFileContentType)">open</a>
+            {{ reportDesign.reportFileContentType }}, {{ byteSize(reportDesign.reportFile) }}
+          </div>
+        </dd>
+        <dt><span>Report File Checksum</span></dt>
+        <dd>
+          <span>{{ reportDesign.reportFileChecksum }}</span>
+        </dd>
+        <dt><span>Parameters</span></dt>
+        <dd>
+          <span *ngFor="let parameters of reportDesign.parameters; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', parameters?.id, 'view']">{{ parameters.mappedValue }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Security Clearance</span></dt>
+        <dd>
+          <div *ngIf="reportDesign.securityClearance">
+            <a [routerLink]="['/security-clearance', reportDesign.securityClearance?.id, 'view']">{{
+              reportDesign.securityClearance?.clearanceLevel
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Report Designer</span></dt>
+        <dd>
+          <div *ngIf="reportDesign.reportDesigner">
+            <a [routerLink]="['/application-user', reportDesign.reportDesigner?.id, 'view']">{{
+              reportDesign.reportDesigner?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Organization</span></dt>
+        <dd>
+          <div *ngIf="reportDesign.organization">
+            <a [routerLink]="['/dealer', reportDesign.organization?.id, 'view']">{{ reportDesign.organization?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Department</span></dt>
+        <dd>
+          <div *ngIf="reportDesign.department">
+            <a [routerLink]="['/dealer', reportDesign.department?.id, 'view']">{{ reportDesign.department?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of reportDesign.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>System Module</span></dt>
+        <dd>
+          <div *ngIf="reportDesign.systemModule">
+            <a [routerLink]="['/system-module', reportDesign.systemModule?.id, 'view']">{{ reportDesign.systemModule?.moduleName }}</a>
+          </div>
+        </dd>
+        <dt><span>File Check Sum Algorithm</span></dt>
+        <dd>
+          <div *ngIf="reportDesign.fileCheckSumAlgorithm">
+            <a [routerLink]="['/algorithm', reportDesign.fileCheckSumAlgorithm?.id, 'view']">{{
+              reportDesign.fileCheckSumAlgorithm?.name
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/report-design', reportDesign.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+{
+  "clientRootFolder": "leases",
+  "fields": [
+    {
+      "fieldName": "interestRate",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "periodicity",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "leaseAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "numberOfPeriods",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "leaseLiability",
+      "otherEntityName": "leaseLiability",
+      "relationshipType": "one-to-one",
+      "ownerSide": false,
+      "otherEntityRelationshipName": "leaseAmortizationCalculation"
+    },
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "iFRS16LeaseContract",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "bookingId",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "leaseAmortizationCalculation"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "LeaseAmortizationCalculation",
+  "changelogDate": "20240614144622",
+  "incrementalChangelog": false
+}

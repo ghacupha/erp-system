@@ -1,0 +1,77 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="systemContentType">
+      <h2 data-cy="systemContentTypeDetailsHeading"><span>System Content Type</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ systemContentType.id }}</span>
+        </dd>
+        <dt><span>Content Type Name</span></dt>
+        <dd>
+          <span>{{ systemContentType.contentTypeName }}</span>
+        </dd>
+        <dt><span>Content Type Header</span></dt>
+        <dd>
+          <span>{{ systemContentType.contentTypeHeader }}</span>
+        </dd>
+        <dt><span>Comments</span></dt>
+        <dd>
+          <span>{{ systemContentType.comments }}</span>
+        </dd>
+        <dt><span>Availability</span></dt>
+        <dd>
+          <span>{{ systemContentType.availability }}</span>
+        </dd>
+        <dt><span>Placeholders</span></dt>
+        <dd>
+          <span *ngFor="let placeholders of systemContentType.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholders?.id, 'view']">{{ placeholders.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Sys Maps</span></dt>
+        <dd>
+          <span *ngFor="let sysMaps of systemContentType.sysMaps; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', sysMaps?.id, 'view']">{{ sysMaps.mappedValue }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/system-content-type', systemContentType.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

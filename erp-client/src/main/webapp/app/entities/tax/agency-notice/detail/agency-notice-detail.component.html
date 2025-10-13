@@ -1,0 +1,105 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="agencyNotice">
+      <h2 data-cy="agencyNoticeDetailsHeading"><span>Agency Notice</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ agencyNotice.id }}</span>
+        </dd>
+        <dt><span>Reference Number</span></dt>
+        <dd>
+          <span>{{ agencyNotice.referenceNumber }}</span>
+        </dd>
+        <dt><span>Reference Date</span></dt>
+        <dd>
+          <span>{{ agencyNotice.referenceDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Assessment Amount</span></dt>
+        <dd>
+          <span>{{ agencyNotice.assessmentAmount }}</span>
+        </dd>
+        <dt><span>Agency Status</span></dt>
+        <dd>
+          <span>{{ agencyNotice.agencyStatus }}</span>
+        </dd>
+        <dt><span>Assessment Notice</span></dt>
+        <dd>
+          <div *ngIf="agencyNotice.assessmentNotice">
+            <a (click)="openFile(agencyNotice.assessmentNotice, agencyNotice.assessmentNoticeContentType)">open</a>
+            {{ agencyNotice.assessmentNoticeContentType }}, {{ byteSize(agencyNotice.assessmentNotice) }}
+          </div>
+        </dd>
+        <dt><span>Correspondents</span></dt>
+        <dd>
+          <span *ngFor="let correspondents of agencyNotice.correspondents; let last = last">
+            <a [routerLink]="['/dealer', correspondents?.id, 'view']">{{ correspondents.dealerName }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="agencyNotice.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', agencyNotice.settlementCurrency?.id, 'view']">{{
+              agencyNotice.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Assessor</span></dt>
+        <dd>
+          <div *ngIf="agencyNotice.assessor">
+            <a [routerLink]="['/dealer', agencyNotice.assessor?.id, 'view']">{{ agencyNotice.assessor?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of agencyNotice.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Business Document</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of agencyNotice.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/agency-notice', agencyNotice.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

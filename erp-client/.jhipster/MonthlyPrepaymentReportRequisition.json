@@ -1,0 +1,49 @@
+{
+  "clientRootFolder": "prepayments",
+  "fields": [
+    {
+      "fieldName": "requestId",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "timeOfRequisition",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fileChecksum",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "filename",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "reportParameters",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reportFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "tampered",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "fiscalYear",
+      "otherEntityName": "fiscalYear",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "startDate"
+    }
+  ],
+  "readOnly": false,
+  "pagination": "pagination",
+  "entityTableName": "monthly_prepayment_requisition",
+  "name": "MonthlyPrepaymentReportRequisition",
+  "changelogDate": "20240305103128"
+}

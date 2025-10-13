@@ -1,0 +1,161 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+
+      <h2
+        id="jhi-ta-amortization-rule-heading-new"
+        data-cy="TAAmortizationRuleCreateUpdateHeading"
+        [hidden]='!weAreCreating'>
+        New Amortization Rule
+      </h2>
+
+      <h2
+        id="jhi-ta-amortization-rule-heading-copy"
+        data-cy="TAAmortizationRuleCreateUpdateHeading"
+        [hidden]='!weAreCopying'>
+        Copying Rule Title {{ selectedItem.name }}
+      </h2>
+
+      <h2
+        id="jhi-ta-amortization-rule-heading-edit"
+        data-cy="TAAmortizationRuleCreateUpdateHeading"
+        [hidden]='!weAreEditing'>
+        Editing Rule Title {{ selectedItem.name }}
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+          <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_identifier">Identifier</label>
+          <input
+            type="text"
+            class="form-control"
+            name="identifier"
+            id="field_identifier"
+            data-cy="identifier"
+            formControlName="identifier"
+          />
+          <div *ngIf="editForm.get('identifier')!.invalid && (editForm.get('identifier')!.dirty || editForm.get('identifier')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('identifier')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <jhi-m21-ifrs16-lease-form-control
+          ngDefaultControl
+          formControlName='leaseContract'
+          [inputValue]="editForm.get('leaseContract')!.value"
+          (valueSelected)='updateLeaseContract($event)'
+          inputControlLabel="Lease Contract"
+        >
+          <option [ngValue]="editForm.get('leaseContract')!.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='debit'
+          [inputValue]="editForm.get('debit')!.value"
+          (valueSelected)='updateDebitAccount($event)'
+          inputControlLabel="Debit Account (account posted on the debit side)"
+        >
+          <option [ngValue]="editForm.get('debit')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='credit'
+          [inputValue]="editForm.get('credit')!.value"
+          (valueSelected)='updateCreditAccount($event)'
+          inputControlLabel="Credit Account (account posted on the credit side)"
+        >
+          <option [ngValue]="editForm.get('debit')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder(s)'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
+        </button>
+
+      </div>
+    </form>
+  </div>
+</div>

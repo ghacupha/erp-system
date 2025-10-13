@@ -1,0 +1,95 @@
+{
+  "changelogDate": "20220301132923",
+  "dto": "mapstruct",
+  "clientRootFolder": "system",
+  "fields": [
+    {
+      "fieldName": "outletCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "outletName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "town",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "parliamentaryConstituency",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "gpsCoordinates",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "outletOpeningDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "regulatorApprovalDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "outletClosureDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "dateLastModified",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "licenseFeePayable",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ServiceOutlet",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "serviceOutlet",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "branchCode",
+      "otherEntityName": "bankBranchCode",
+      "relationshipName": "bankCode",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "outletType",
+      "otherEntityName": "outletType",
+      "relationshipName": "outletType",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "branchStatusType",
+      "otherEntityName": "outletStatus",
+      "relationshipName": "outletStatus",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "countyName",
+      "otherEntityName": "countyCode",
+      "relationshipName": "countyName",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "subCountyName",
+      "otherEntityName": "countyCode",
+      "relationshipName": "subCountyName",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

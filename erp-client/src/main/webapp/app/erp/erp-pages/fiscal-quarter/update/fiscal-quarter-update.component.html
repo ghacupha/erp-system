@@ -1,0 +1,172 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-fiscal-quarter-heading" data-cy="FiscalQuarterCreateUpdateHeading">Create or edit a Fiscal Quarter</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalQuarterCode">Fiscal Quarter Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fiscalQuarterCode"
+            id="field_fiscalQuarterCode"
+            data-cy="fiscalQuarterCode"
+            formControlName="fiscalQuarterCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('fiscalQuarterCode')!.invalid &&
+              (editForm.get('fiscalQuarterCode')!.dirty || editForm.get('fiscalQuarterCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('fiscalQuarterCode')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_quarterNumber">Quarter Number</label>
+          <input
+            type="number"
+            class="form-control"
+            name="quarterNumber"
+            id="field_quarterNumber"
+            data-cy="quarterNumber"
+            formControlName="quarterNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('quarterNumber')!.invalid && (editForm.get('quarterNumber')!.dirty || editForm.get('quarterNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('quarterNumber')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('quarterNumber')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_startDate">Start Date</label>
+          <div class="input-group">
+            <input
+              id="field_startDate"
+              data-cy="startDate"
+              type="text"
+              class="form-control"
+              name="startDate"
+              ngbDatepicker
+              #startDateDp="ngbDatepicker"
+              formControlName="startDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="startDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div *ngIf="editForm.get('startDate')!.invalid && (editForm.get('startDate')!.dirty || editForm.get('startDate')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('startDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_endDate">End Date</label>
+          <div class="input-group">
+            <input
+              id="field_endDate"
+              data-cy="endDate"
+              type="text"
+              class="form-control"
+              name="endDate"
+              ngbDatepicker
+              #endDateDp="ngbDatepicker"
+              formControlName="endDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="endDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+            </span>
+          </div>
+          <div *ngIf="editForm.get('endDate')!.invalid && (editForm.get('endDate')!.dirty || editForm.get('endDate')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('endDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <jhi-m21-fiscal-year-form-control
+          ngDefaultControl
+          formControlName='fiscalYear'
+          [inputValue]="editForm.get('fiscalYear')!.value"
+          (valueSelected)='updateFiscalYear($event)'
+          inputControlLabel="Fiscal Year"
+        >
+          <option [ngValue]="editForm.get('fiscalYear')!.value"></option>
+        </jhi-m21-fiscal-year-form-control>
+
+        <!--jhi-m2m-placeholder-form-control-->
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+        <!--jhi-m2m-universally-unique-mapping-form-control-->
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='universallyUniqueMappings'
+          [inputValues]="editForm.get(['universallyUniqueMappings'])!.value"
+          (selectedValues)='updateUniversallyUniqueMappings($event)'
+          inputControlLabel='General Mappings'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+{
+  "changelogDate": "20230912122145",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "shareHolderTypeCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "shareHolderType",
+      "fieldType": "ShareHolderTypes",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "INDIVIDUAL,PARTNERSHIP,CORPORATE"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ShareholderType",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

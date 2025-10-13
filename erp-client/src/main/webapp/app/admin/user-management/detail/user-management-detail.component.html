@@ -1,0 +1,70 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="user">
+      <h2>
+        <span>User</span> [<strong>{{ user.login }}</strong
+        >]
+      </h2>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>Login</span></dt>
+        <dd>
+          <span>{{ user.login }}</span>
+          <span *ngIf="user.activated" class="badge badge-success">Activated</span>
+          <span *ngIf="!user.activated" class="badge badge-danger">Deactivated</span>
+        </dd>
+
+        <dt><span>First Name</span></dt>
+        <dd>{{ user.firstName }}</dd>
+
+        <dt><span>Last Name</span></dt>
+        <dd>{{ user.lastName }}</dd>
+
+        <dt><span>Email</span></dt>
+        <dd>{{ user.email }}</dd>
+
+        <dt><span>Created By</span></dt>
+        <dd>{{ user.createdBy }}</dd>
+
+        <dt><span>Created Date</span></dt>
+        <dd>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
+
+        <dt><span>Last Modified By</span></dt>
+        <dd>{{ user.lastModifiedBy }}</dd>
+
+        <dt><span>Last Modified Date</span></dt>
+        <dd>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
+
+        <dt><span>Profiles</span></dt>
+        <dd>
+          <ul class="list-unstyled">
+            <li *ngFor="let authority of user.authorities">
+              <span class="badge badge-info">{{ authority }}</span>
+            </li>
+          </ul>
+        </dd>
+      </dl>
+
+      <button type="submit" routerLink="../../" class="btn btn-info"><fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span></button>
+    </div>
+  </div>
+</div>

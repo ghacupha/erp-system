@@ -1,0 +1,173 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-asset-revaluation-heading" data-cy="AssetRevaluationCreateUpdateHeading">Create or edit a Asset Revaluation</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_devaluationAmount">Devaluation Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="devaluationAmount"
+            id="field_devaluationAmount"
+            data-cy="devaluationAmount"
+            formControlName="devaluationAmount"
+          />
+          <div
+            *ngIf="
+              editForm.get('devaluationAmount')!.invalid &&
+              (editForm.get('devaluationAmount')!.dirty || editForm.get('devaluationAmount')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('devaluationAmount')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('devaluationAmount')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_revaluationDate">Revaluation Date</label>
+          <div class="input-group">
+            <input
+              id="field_revaluationDate"
+              data-cy="revaluationDate"
+              type="text"
+              class="form-control"
+              name="revaluationDate"
+              ngbDatepicker
+              #revaluationDateDp="ngbDatepicker"
+              formControlName="revaluationDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="revaluationDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('revaluationDate')!.invalid &&
+              (editForm.get('revaluationDate')!.dirty || editForm.get('revaluationDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('revaluationDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_revaluationReferenceId">Revaluation Reference Id</label>
+          <input
+            type="text"
+            class="form-control"
+            name="revaluationReferenceId"
+            id="field_revaluationReferenceId"
+            data-cy="revaluationReferenceId"
+            formControlName="revaluationReferenceId"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_timeOfCreation">Time Of Creation</label>
+          <div class="d-flex">
+            <input
+              id="field_timeOfCreation"
+              data-cy="timeOfCreation"
+              type="datetime-local"
+              class="form-control"
+              name="timeOfCreation"
+              formControlName="timeOfCreation"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='revaluer'
+          [inputValue]="editForm.get(['revaluer'])!.value"
+          (valueSelected)='updateRevaluer($event)'
+          inputControlLabel='Valuer'
+        >
+          <option [ngValue]="editForm.get(['revaluer'])!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <jhi-depreciation-period-form-control
+          ngDefaultControl
+          formControlName='effectivePeriod'
+          [inputValue]="editForm.get('effectivePeriod')!.value"
+          (valueSelected)='updateEffectivePeriod($event)'
+          inputControlLabel='Effective Period'
+        >
+        </jhi-depreciation-period-form-control>
+
+        <jhi-m21-asset-registration-form-control
+          ngDefaultControl
+          formControlName='revaluedAsset'
+          [inputValue]="editForm.get('revaluedAsset')!.value"
+          (valueSelected)='updateRevaluedAsset($event)'
+          inputControlLabel='Revalued Asset'
+        >
+        </jhi-m21-asset-registration-form-control>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

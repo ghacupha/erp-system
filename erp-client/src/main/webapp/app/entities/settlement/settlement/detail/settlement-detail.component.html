@@ -1,0 +1,149 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="settlement">
+      <h2 data-cy="settlementDetailsHeading"><span>Settlement</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ settlement.id }}</span>
+        </dd>
+        <dt><span>Payment Number</span></dt>
+        <dd>
+          <span>{{ settlement.paymentNumber }}</span>
+        </dd>
+        <dt><span>Payment Date</span></dt>
+        <dd>
+          <span>{{ settlement.paymentDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Payment Amount</span></dt>
+        <dd>
+          <span>{{ settlement.paymentAmount }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ settlement.description }}</span>
+        </dd>
+        <dt><span>Notes</span></dt>
+        <dd>
+          <span>{{ settlement.notes }}</span>
+        </dd>
+        <dt><span>Calculation File</span></dt>
+        <dd>
+          <div *ngIf="settlement.calculationFile">
+            <a (click)="openFile(settlement.calculationFile, settlement.calculationFileContentType)">open</a>
+            {{ settlement.calculationFileContentType }}, {{ byteSize(settlement.calculationFile) }}
+          </div>
+        </dd>
+        <dt><span>File Upload Token</span></dt>
+        <dd>
+          <span>{{ settlement.fileUploadToken }}</span>
+        </dd>
+        <dt><span>Compilation Token</span></dt>
+        <dd>
+          <span>{{ settlement.compilationToken }}</span>
+        </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ settlement.remarks }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of settlement.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="settlement.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', settlement.settlementCurrency?.id, 'view']">{{
+              settlement.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Payment Label</span></dt>
+        <dd>
+          <span *ngFor="let paymentLabel of settlement.paymentLabels; let last = last">
+            <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Payment Category</span></dt>
+        <dd>
+          <div *ngIf="settlement.paymentCategory">
+            <a [routerLink]="['/payment-category', settlement.paymentCategory?.id, 'view']">{{
+              settlement.paymentCategory?.categoryName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Group Settlement</span></dt>
+        <dd>
+          <div *ngIf="settlement.groupSettlement">
+            <a [routerLink]="['/settlement', settlement.groupSettlement?.id, 'view']">{{ settlement.groupSettlement?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Biller</span></dt>
+        <dd>
+          <div *ngIf="settlement.biller">
+            <a [routerLink]="['/dealer', settlement.biller?.id, 'view']">{{ settlement.biller?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Payment Invoice</span></dt>
+        <dd>
+          <span *ngFor="let paymentInvoice of settlement.paymentInvoices; let last = last">
+            <a [routerLink]="['/payment-invoice', paymentInvoice?.id, 'view']">{{ paymentInvoice.invoiceNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Signatories</span></dt>
+        <dd>
+          <span *ngFor="let signatories of settlement.signatories; let last = last">
+            <a [routerLink]="['/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Business Document</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of settlement.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/settlement', settlement.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

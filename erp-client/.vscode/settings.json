@@ -1,0 +1,13 @@
+{
+    "terminal.integrated.env.windows": {
+        "SERVER_API_DOCKER_DEPLOY_HOST": "http://172.21.0.3",
+        "ERP_SYSTEM_DEV_DB": "erpSystem",
+        "ERP_SYSTEM_PROD_DB": "erpSystem"
+    },
+    "terminal.integrated.env.osx": {
+        "SERVER_API_DOCKER_DEPLOY_HOST": "http://localhost",
+        "ERP_SYSTEM_DEV_DB": "erp-system-dev",
+        "ERP_SYSTEM_PROD_DB": "erp-system"
+    },
+    "java.configuration.updateBuildConfiguration": "interactive"
+}

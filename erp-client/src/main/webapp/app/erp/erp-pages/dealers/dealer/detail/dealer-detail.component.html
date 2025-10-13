@@ -1,0 +1,135 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="dealer">
+      <h2 data-cy="dealerDetailsHeading"><span>Dealer</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ dealer.id }}</span>
+        </dd>
+        <dt><span>Dealer Name</span></dt>
+        <dd>
+          <span>{{ dealer.dealerName }}</span>
+        </dd>
+        <dt><span>Other Names</span></dt>
+        <dd>
+          <span>{{ dealer.otherNames }}</span>
+        </dd>
+        <dt><span>Tax Number</span></dt>
+        <dd>
+          <span>{{ dealer.taxNumber }}</span>
+        </dd>
+        <dt><span>Identification Document Number</span></dt>
+        <dd>
+          <span>{{ dealer.identificationDocumentNumber }}</span>
+        </dd>
+        <dt><span>Organization Name</span></dt>
+        <dd>
+          <span>{{ dealer.organizationName }}</span>
+        </dd>
+        <dt><span>Department</span></dt>
+        <dd>
+          <span>{{ dealer.department }}</span>
+        </dd>
+        <dt><span>Position</span></dt>
+        <dd>
+          <span>{{ dealer.position }}</span>
+        </dd>
+        <dt><span>Postal Address</span></dt>
+        <dd>
+          <span>{{ dealer.postalAddress }}</span>
+        </dd>
+        <dt><span>Physical Address</span></dt>
+        <dd>
+          <span>{{ dealer.physicalAddress }}</span>
+        </dd>
+        <dt><span>Account Name</span></dt>
+        <dd>
+          <span>{{ dealer.accountName }}</span>
+        </dd>
+        <dt><span>Account Number</span></dt>
+        <dd>
+          <span>{{ dealer.accountNumber }}</span>
+        </dd>
+        <dt><span>Bankers Name</span></dt>
+        <dd>
+          <span>{{ dealer.bankersName }}</span>
+        </dd>
+        <dt><span>Bankers Branch</span></dt>
+        <dd>
+          <span>{{ dealer.bankersBranch }}</span>
+        </dd>
+        <dt><span>Bankers Swift Code</span></dt>
+        <dd>
+          <span>{{ dealer.bankersSwiftCode }}</span>
+        </dd>
+        <dt><span>File Upload Token</span></dt>
+        <dd>
+          <span>{{ dealer.fileUploadToken }}</span>
+        </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ dealer.remarks }}</span>
+        </dd>
+        <dt><span>Compilation Token</span></dt>
+        <dd>
+          <span>{{ dealer.compilationToken }}</span>
+        </dd>
+        <dt><span>Payment Label</span></dt>
+        <dd>
+          <span *ngFor="let paymentLabel of dealer.paymentLabels; let last = last">
+            <a [routerLink]="['/erp/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Dealer Group</span></dt>
+        <dd>
+          <div *ngIf="dealer.dealerGroup">
+            <a [routerLink]="['/erp/dealer', dealer.dealerGroup?.id, 'view']">{{ dealer.dealerGroup?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of dealer.placeholders; let last = last">
+            <a [routerLink]="['/erp/placeholder', placeholder?.id, 'view']">{{ placeholder.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/erp/dealer', dealer.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

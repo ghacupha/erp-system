@@ -1,7 +1,0 @@
-erp:
-  report:
-    reportPassword: "systemPass"
-  reportsDirectory: 'reports-directory/'
-  business:
-    documents:
-      businessDocumentsDirectory: 'business-documents/'

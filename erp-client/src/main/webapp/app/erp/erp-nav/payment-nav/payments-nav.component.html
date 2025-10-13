@@ -1,0 +1,276 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div  [ngSwitch]="isAuthenticated()">
+  <ul  class="navbar-nav ml-auto">
+    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+          <span>
+              <fa-icon icon="dochub"></fa-icon>
+              <span>
+                  Transactions
+              </span>
+          </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+        <li *jhiHasAnyAuthority="'ROLE_DOCUMENT_MODULE_USER'">
+          <a
+            class="dropdown-item"
+            routerLink="business-document"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Business Document File</span>
+          </span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="payment-invoice"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Payment Invoice</span>
+          </span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="credit-note"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Credit Note</span>
+          </span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="purchase-order"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Purchase Order</span>
+          </span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="delivery-note"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Delivery Note</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="business-stamp"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Business Stamp</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="job-sheet"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Job Sheet</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!--Payment records-->
+    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+          <span>
+              <fa-icon icon="cash-register"></fa-icon>
+              <span>
+                  Payments
+              </span>
+          </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
+          <a
+            class="dropdown-item"
+            routerLink="/erp/payment"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Payments</span>
+          </span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="settlement"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Settlements</span>
+          </span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="'ROLE_REQUISITION_MANAGER'">
+          <a
+            class="dropdown-item"
+            routerLink="settlement-requisition"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Requisition</span>
+          </span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
+          <a
+            class="dropdown-item"
+            routerLink="/erp/signed-payment"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Signed-payment</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
+          <a
+            class="dropdown-item"
+            routerLink="/erp/payment-requisition"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Payment Requisition</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!--Maintenance modules navigation-->
+    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+          <span>
+              <fa-icon icon="wrench"></fa-icon>
+              <span>
+                  Maintenance
+              </span>
+          </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="settlement-currency"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Settlement Currency</span>
+          </span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="/erp/dealer"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Dealers</span>
+          </span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="/erp/payment-label"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Payment Label</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="/erp/payment-category"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Payment Category</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

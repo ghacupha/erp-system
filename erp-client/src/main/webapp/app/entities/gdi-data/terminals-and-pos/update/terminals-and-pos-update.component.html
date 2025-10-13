@@ -1,0 +1,374 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-terminals-and-pos-heading" data-cy="TerminalsAndPOSCreateUpdateHeading">Create or edit a Terminals And POS</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportingDate">Reporting Date</label>
+          <div class="input-group">
+            <input
+              id="field_reportingDate"
+              data-cy="reportingDate"
+              type="text"
+              class="form-control"
+              name="reportingDate"
+              ngbDatepicker
+              #reportingDateDp="ngbDatepicker"
+              formControlName="reportingDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="reportingDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('reportingDate')!.invalid && (editForm.get('reportingDate')!.dirty || editForm.get('reportingDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('reportingDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_terminalId">Terminal Id</label>
+          <input
+            type="text"
+            class="form-control"
+            name="terminalId"
+            id="field_terminalId"
+            data-cy="terminalId"
+            formControlName="terminalId"
+          />
+          <div *ngIf="editForm.get('terminalId')!.invalid && (editForm.get('terminalId')!.dirty || editForm.get('terminalId')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('terminalId')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_merchantId">Merchant Id</label>
+          <input
+            type="text"
+            class="form-control"
+            name="merchantId"
+            id="field_merchantId"
+            data-cy="merchantId"
+            formControlName="merchantId"
+          />
+          <div *ngIf="editForm.get('merchantId')!.invalid && (editForm.get('merchantId')!.dirty || editForm.get('merchantId')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('merchantId')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_terminalName">Terminal Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="terminalName"
+            id="field_terminalName"
+            data-cy="terminalName"
+            formControlName="terminalName"
+          />
+          <div
+            *ngIf="editForm.get('terminalName')!.invalid && (editForm.get('terminalName')!.dirty || editForm.get('terminalName')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('terminalName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_terminalLocation">Terminal Location</label>
+          <input
+            type="text"
+            class="form-control"
+            name="terminalLocation"
+            id="field_terminalLocation"
+            data-cy="terminalLocation"
+            formControlName="terminalLocation"
+          />
+          <div
+            *ngIf="
+              editForm.get('terminalLocation')!.invalid &&
+              (editForm.get('terminalLocation')!.dirty || editForm.get('terminalLocation')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('terminalLocation')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_iso6709Latitute">Iso 6709 Latitute</label>
+          <input
+            type="number"
+            class="form-control"
+            name="iso6709Latitute"
+            id="field_iso6709Latitute"
+            data-cy="iso6709Latitute"
+            formControlName="iso6709Latitute"
+          />
+          <div
+            *ngIf="
+              editForm.get('iso6709Latitute')!.invalid &&
+              (editForm.get('iso6709Latitute')!.dirty || editForm.get('iso6709Latitute')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('iso6709Latitute')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('iso6709Latitute')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_iso6709Longitude">Iso 6709 Longitude</label>
+          <input
+            type="number"
+            class="form-control"
+            name="iso6709Longitude"
+            id="field_iso6709Longitude"
+            data-cy="iso6709Longitude"
+            formControlName="iso6709Longitude"
+          />
+          <div
+            *ngIf="
+              editForm.get('iso6709Longitude')!.invalid &&
+              (editForm.get('iso6709Longitude')!.dirty || editForm.get('iso6709Longitude')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('iso6709Longitude')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('iso6709Longitude')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_terminalOpeningDate">Terminal Opening Date</label>
+          <div class="input-group">
+            <input
+              id="field_terminalOpeningDate"
+              data-cy="terminalOpeningDate"
+              type="text"
+              class="form-control"
+              name="terminalOpeningDate"
+              ngbDatepicker
+              #terminalOpeningDateDp="ngbDatepicker"
+              formControlName="terminalOpeningDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="terminalOpeningDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('terminalOpeningDate')!.invalid &&
+              (editForm.get('terminalOpeningDate')!.dirty || editForm.get('terminalOpeningDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('terminalOpeningDate')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_terminalClosureDate">Terminal Closure Date</label>
+          <div class="input-group">
+            <input
+              id="field_terminalClosureDate"
+              data-cy="terminalClosureDate"
+              type="text"
+              class="form-control"
+              name="terminalClosureDate"
+              ngbDatepicker
+              #terminalClosureDateDp="ngbDatepicker"
+              formControlName="terminalClosureDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="terminalClosureDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_terminalType">Terminal Type</label>
+          <select class="form-control" id="field_terminalType" data-cy="terminalType" name="terminalType" formControlName="terminalType">
+            <option *ngIf="!editForm.get('terminalType')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                terminalTypesOption.id === editForm.get('terminalType')!.value?.id
+                  ? editForm.get('terminalType')!.value
+                  : terminalTypesOption
+              "
+              *ngFor="let terminalTypesOption of terminalTypesSharedCollection; trackBy: trackTerminalTypesById"
+            >
+              {{ terminalTypesOption.txnTerminalTypeCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['terminalType'])!.invalid && (editForm.get(['terminalType'])!.dirty || editForm.get(['terminalType'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['terminalType'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_terminalFunctionality">Terminal Functionality</label>
+          <select
+            class="form-control"
+            id="field_terminalFunctionality"
+            data-cy="terminalFunctionality"
+            name="terminalFunctionality"
+            formControlName="terminalFunctionality"
+          >
+            <option *ngIf="!editForm.get('terminalFunctionality')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                terminalFunctionsOption.id === editForm.get('terminalFunctionality')!.value?.id
+                  ? editForm.get('terminalFunctionality')!.value
+                  : terminalFunctionsOption
+              "
+              *ngFor="let terminalFunctionsOption of terminalFunctionsSharedCollection; trackBy: trackTerminalFunctionsById"
+            >
+              {{ terminalFunctionsOption.terminalFunctionality }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['terminalFunctionality'])!.invalid &&
+            (editForm.get(['terminalFunctionality'])!.dirty || editForm.get(['terminalFunctionality'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['terminalFunctionality'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_physicalLocation">Physical Location</label>
+          <select
+            class="form-control"
+            id="field_physicalLocation"
+            data-cy="physicalLocation"
+            name="physicalLocation"
+            formControlName="physicalLocation"
+          >
+            <option *ngIf="!editForm.get('physicalLocation')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                countySubCountyCodeOption.id === editForm.get('physicalLocation')!.value?.id
+                  ? editForm.get('physicalLocation')!.value
+                  : countySubCountyCodeOption
+              "
+              *ngFor="let countySubCountyCodeOption of countySubCountyCodesSharedCollection; trackBy: trackCountySubCountyCodeById"
+            >
+              {{ countySubCountyCodeOption.subCountyCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['physicalLocation'])!.invalid &&
+            (editForm.get(['physicalLocation'])!.dirty || editForm.get(['physicalLocation'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['physicalLocation'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_bankId">Bank Id</label>
+          <select class="form-control" id="field_bankId" data-cy="bankId" name="bankId" formControlName="bankId">
+            <option *ngIf="!editForm.get('bankId')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                institutionCodeOption.id === editForm.get('bankId')!.value?.id ? editForm.get('bankId')!.value : institutionCodeOption
+              "
+              *ngFor="let institutionCodeOption of institutionCodesSharedCollection; trackBy: trackInstitutionCodeById"
+            >
+              {{ institutionCodeOption.institutionName }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['bankId'])!.invalid && (editForm.get(['bankId'])!.dirty || editForm.get(['bankId'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['bankId'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_branchId">Branch Id</label>
+          <select class="form-control" id="field_branchId" data-cy="branchId" name="branchId" formControlName="branchId">
+            <option *ngIf="!editForm.get('branchId')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                bankBranchCodeOption.id === editForm.get('branchId')!.value?.id ? editForm.get('branchId')!.value : bankBranchCodeOption
+              "
+              *ngFor="let bankBranchCodeOption of bankBranchCodesSharedCollection; trackBy: trackBankBranchCodeById"
+            >
+              {{ bankBranchCodeOption.branchCode }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['branchId'])!.invalid && (editForm.get(['branchId'])!.dirty || editForm.get(['branchId'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['branchId'])?.errors?.required"> This field is required. </small>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

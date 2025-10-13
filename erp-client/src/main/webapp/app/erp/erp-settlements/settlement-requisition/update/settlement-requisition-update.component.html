@@ -1,0 +1,334 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-settlement-requisition-heading" data-cy="SettlementRequisitionCreateUpdateHeading">
+        Create or edit a Settlement Requisition
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_serialNumber">Serial Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="serialNumber"
+            id="field_serialNumber"
+            data-cy="serialNumber"
+            formControlName="serialNumber"
+            [readonly]="true"
+          />
+          <div
+            *ngIf="editForm.get('serialNumber')!.invalid && (editForm.get('serialNumber')!.dirty || editForm.get('serialNumber')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('serialNumber')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_timeOfRequisition">Time Of Requisition</label>
+          <div class="d-flex">
+            <input
+              id="field_timeOfRequisition"
+              data-cy="timeOfRequisition"
+              type="datetime-local"
+              class="form-control"
+              name="timeOfRequisition"
+              formControlName="timeOfRequisition"
+              placeholder="YYYY-MM-DD HH:mm"
+              [readonly]="true"
+            />
+          </div>
+          <div
+            *ngIf="
+              editForm.get('timeOfRequisition')!.invalid &&
+              (editForm.get('timeOfRequisition')!.dirty || editForm.get('timeOfRequisition')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('timeOfRequisition')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('timeOfRequisition')?.errors?.ZonedDateTimelocal">
+              This field should be a date and time.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_requisitionNumber">Requisition Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="requisitionNumber"
+            id="field_requisitionNumber"
+            data-cy="requisitionNumber"
+            formControlName="requisitionNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('requisitionNumber')!.invalid &&
+              (editForm.get('requisitionNumber')!.dirty || editForm.get('requisitionNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('requisitionNumber')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="paymentAmount"
+            id="field_paymentAmount"
+            data-cy="paymentAmount"
+            formControlName="paymentAmount"
+          />
+          <div
+            *ngIf="
+              editForm.get('paymentAmount')!.invalid && (editForm.get('paymentAmount')!.dirty || editForm.get('paymentAmount')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('paymentAmount')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('paymentAmount')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_paymentStatus">Payment Status</label>
+          <select
+            class="form-control"
+            name="paymentStatus"
+            formControlName="paymentStatus"
+            id="field_paymentStatus"
+            data-cy="paymentStatus"
+          >
+            <option [ngValue]="paymentStatusValues[0]"></option>
+            <option *ngFor="let paymentStatus of paymentStatusValues" [value]="paymentStatus">{{ paymentStatus }}</option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('paymentStatus')!.invalid && (editForm.get('paymentStatus')!.dirty || editForm.get('paymentStatus')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('paymentStatus')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <jhi-m21-settlement-currency-form-control
+          ngDefaultControl
+          formControlName='settlementCurrency'
+          [inputValue]="editForm.get(['settlementCurrency'])!.value"
+          (valueSelected)='updateCurrencies($event)'
+          inputControlLabel='Currency Code (Required)'
+        >
+          <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
+        </jhi-m21-settlement-currency-form-control>
+
+        <jhi-m21-application-user-form-control
+          ngDefaultControl
+          formControlName='currentOwner'
+          [inputValue]="editForm.get(['currentOwner'])!.value"
+          (valueSelected)='updateCurrentOwner($event)'
+          inputControlLabel='Current Owner (Required)'
+        >
+          <option [ngValue]="editForm.get(['currentOwner'])!.value"></option>
+        </jhi-m21-application-user-form-control>
+
+        <jhi-m21-application-user-form-control
+          ngDefaultControl
+          formControlName='nativeOwner'
+          [inputValue]="editForm.get(['nativeOwner'])!.value"
+          (valueSelected)='updateNativeOwner($event)'
+          inputControlLabel='Native Owner (Required)'
+        >
+          <option [ngValue]="editForm.get(['nativeOwner'])!.value"></option>
+        </jhi-m21-application-user-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='nativeDepartment'
+          [inputValue]="editForm.get('nativeDepartment')!.value"
+          (valueSelected)='updateNativeDepartment($event)'
+          inputControlLabel='Originating Department (Where requisition came from)'
+        >
+          <option [ngValue]="editForm.get('biller')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='biller'
+          [inputValue]="editForm.get('biller')!.value"
+          (valueSelected)='updateBiller($event)'
+          inputControlLabel=Biller
+        >
+          <option [ngValue]="editForm.get('biller')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_transactionId">Transaction Id</label>
+          <input
+            type="text"
+            class="form-control"
+            name="transactionId"
+            id="field_transactionId"
+            data-cy="transactionId"
+            formControlName="transactionId"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_transactionDate">Transaction Date</label>
+          <div class="input-group">
+            <input
+              id="field_transactionDate"
+              data-cy="transactionDate"
+              type="text"
+              class="form-control"
+              name="transactionDate"
+              ngbDatepicker
+              #transactionDateDp="ngbDatepicker"
+              formControlName="transactionDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="transactionDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <jhi-m2m-payment-invoice-form-control
+          ngDefaultControl
+          formControlName='invoiceNumber'
+          [inputValues]="editForm.get(['paymentInvoices'])!.value"
+          (valueSelected)='updatePaymentInvoices($event)'
+          inputControlLabel='Invoices (Could be multiple)'
+        >
+        </jhi-m2m-payment-invoice-form-control>
+
+        <jhi-m2m-settlement-form-control
+          ngDefaultControl
+          formControlName='settlements'
+          [inputValues]="editForm.get(['settlements'])!.value"
+          (valueSelected)='updateSettlements($event)'
+          inputControlLabel='Settlement(s)'
+        >
+        </jhi-m2m-settlement-form-control>
+
+        <jhi-m2m-delivery-note-form-control
+          ngDefaultControl
+          formControlName='deliveryNotes'
+          [inputValues]="editForm.get(['deliveryNotes'])!.value"
+          (selectedValues)='updateDeliveryNotesItems($event)'
+          inputControlLabel='Delivery Notes (If any)'
+        >
+        </jhi-m2m-delivery-note-form-control>
+
+        <jhi-m2m-job-sheet-form-control
+          ngDefaultControl
+          formControlName='jobSheets'
+          [inputValues]="editForm.get(['jobSheets'])!.value"
+          (selectedValues)='updateJobSheetItems($event)'
+          inputControlLabel='Job sheet details (If any)'
+        >
+        </jhi-m2m-job-sheet-form-control>
+
+        <jhi-m2m-dealer-form-control
+          ngDefaultControl
+          formControlName='signatures'
+          [inputValues]="editForm.get(['signatures'])!.value"
+          (valueSelected)='updateSignatories($event)'
+          inputControlLabel='Signatories (Multiple)'
+        >
+        </jhi-m2m-dealer-form-control>
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='businessDocuments'
+          [inputValues]="editForm.get(['businessDocuments'])!.value"
+          (selectedValues)='updateBusinessDocument($event)'
+          inputControlLabel='Requisition Document'
+        >
+        </jhi-m2m-business-document-form-control>
+
+        <!--jhi-m2m-universally-unique-mapping-form-control-->
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='applicationMappings'
+          [inputValues]="editForm.get(['applicationMappings'])!.value"
+          (selectedValues)='updateApplicationMapping($event)'
+          inputControlLabel='Application Mapping(s)'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

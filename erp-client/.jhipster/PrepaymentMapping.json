@@ -1,0 +1,38 @@
+{
+  "changelogDate": "20220726145438",
+  "clientRootFolder": "prepayments",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "parameterKey",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "parameterGuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "parameter",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "PrepaymentMapping",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "prepaymentMapping",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

@@ -1,0 +1,428 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-work-in-progress-registration-heading" data-cy="WorkInProgressRegistrationCreateUpdateHeading">
+        Create or edit a Work In Progress Registration
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sequenceNumber">Sequence Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="sequenceNumber"
+            id="field_sequenceNumber"
+            data-cy="sequenceNumber"
+            formControlName="sequenceNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('sequenceNumber')!.invalid && (editForm.get('sequenceNumber')!.dirty || editForm.get('sequenceNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('sequenceNumber')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_particulars">Particulars</label>
+          <input
+            type="text"
+            class="form-control"
+            name="particulars"
+            id="field_particulars"
+            data-cy="particulars"
+            formControlName="particulars"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_instalmentDate">Instalment Date</label>
+          <div class="input-group">
+            <input
+              id="field_instalmentDate"
+              data-cy="instalmentDate"
+              type="text"
+              class="form-control"
+              name="instalmentDate"
+              ngbDatepicker
+              #instalmentDateDp="ngbDatepicker"
+              formControlName="instalmentDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="instalmentDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_instalmentAmount">Instalment Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="instalmentAmount"
+            id="field_instalmentAmount"
+            data-cy="instalmentAmount"
+            formControlName="instalmentAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_comments">Comments</label>
+          <div>
+            <div *ngIf="editForm.get('comments')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('comments')!.value, editForm.get('commentsContentType')!.value)">open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('commentsContentType')!.value }}, {{ byteSize(editForm.get('comments')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ comments: null }); editForm.patchValue({ commentsContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_comments" data-cy="comments" (change)="setFileData($event, 'comments', false)" />
+          </div>
+          <input type="hidden" class="form-control" name="comments" id="field_comments" data-cy="comments" formControlName="comments" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="commentsContentType"
+            id="field_commentsContentType"
+            formControlName="commentsContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_levelOfCompletion">Level Of Completion</label>
+          <input
+            type="number"
+            class="form-control"
+            name="levelOfCompletion"
+            id="field_levelOfCompletion"
+            data-cy="levelOfCompletion"
+            formControlName="levelOfCompletion"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_completed">Completed</label>
+          <input type="checkbox" class="form-check" name="completed" id="field_completed" data-cy="completed" formControlName="completed" />
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_workInProgressGroup">Work In Progress Group</label>
+          <select
+            class="form-control"
+            id="field_workInProgressGroup"
+            data-cy="workInProgressGroup"
+            name="workInProgressGroup"
+            formControlName="workInProgressGroup"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                workInProgressRegistrationOption.id === editForm.get('workInProgressGroup')!.value?.id
+                  ? editForm.get('workInProgressGroup')!.value
+                  : workInProgressRegistrationOption
+              "
+              *ngFor="
+                let workInProgressRegistrationOption of workInProgressRegistrationsSharedCollection;
+                trackBy: trackWorkInProgressRegistrationById
+              "
+            >
+              {{ workInProgressRegistrationOption.sequenceNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
+          <select
+            class="form-control"
+            id="field_settlementCurrency"
+            data-cy="settlementCurrency"
+            name="settlementCurrency"
+            formControlName="settlementCurrency"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
+                  ? editForm.get('settlementCurrency')!.value
+                  : settlementCurrencyOption
+              "
+              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
+            >
+              {{ settlementCurrencyOption.iso4217CurrencyCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_workProjectRegister">Work Project Register</label>
+          <select
+            class="form-control"
+            id="field_workProjectRegister"
+            data-cy="workProjectRegister"
+            name="workProjectRegister"
+            formControlName="workProjectRegister"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                workProjectRegisterOption.id === editForm.get('workProjectRegister')!.value?.id
+                  ? editForm.get('workProjectRegister')!.value
+                  : workProjectRegisterOption
+              "
+              *ngFor="let workProjectRegisterOption of workProjectRegistersSharedCollection; trackBy: trackWorkProjectRegisterById"
+            >
+              {{ workProjectRegisterOption.catalogueNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_businessDocuments">Business Document</label>
+          <select
+            class="form-control"
+            id="field_businessDocuments"
+            data-cy="businessDocument"
+            multiple
+            name="businessDocuments"
+            formControlName="businessDocuments"
+          >
+            <option
+              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('businessDocuments')!.value)"
+              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
+            >
+              {{ businessDocumentOption.documentTitle }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_assetAccessories">Asset Accessory</label>
+          <select
+            class="form-control"
+            id="field_assetAccessories"
+            data-cy="assetAccessory"
+            multiple
+            name="assetAccessories"
+            formControlName="assetAccessories"
+          >
+            <option
+              [ngValue]="getSelectedAssetAccessory(assetAccessoryOption, editForm.get('assetAccessories')!.value)"
+              *ngFor="let assetAccessoryOption of assetAccessoriesSharedCollection; trackBy: trackAssetAccessoryById"
+            >
+              {{ assetAccessoryOption.assetDetails }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_assetWarranties">Asset Warranty</label>
+          <select
+            class="form-control"
+            id="field_assetWarranties"
+            data-cy="assetWarranty"
+            multiple
+            name="assetWarranties"
+            formControlName="assetWarranties"
+          >
+            <option
+              [ngValue]="getSelectedAssetWarranty(assetWarrantyOption, editForm.get('assetWarranties')!.value)"
+              *ngFor="let assetWarrantyOption of assetWarrantiesSharedCollection; trackBy: trackAssetWarrantyById"
+            >
+              {{ assetWarrantyOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_invoice">Invoice</label>
+          <select class="form-control" id="field_invoice" data-cy="invoice" name="invoice" formControlName="invoice">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                paymentInvoiceOption.id === editForm.get('invoice')!.value?.id ? editForm.get('invoice')!.value : paymentInvoiceOption
+              "
+              *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection; trackBy: trackPaymentInvoiceById"
+            >
+              {{ paymentInvoiceOption.invoiceNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_outletCode">Outlet Code</label>
+          <select class="form-control" id="field_outletCode" data-cy="outletCode" name="outletCode" formControlName="outletCode">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                serviceOutletOption.id === editForm.get('outletCode')!.value?.id ? editForm.get('outletCode')!.value : serviceOutletOption
+              "
+              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
+            >
+              {{ serviceOutletOption.outletCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_settlementTransaction">Settlement Transaction</label>
+          <select
+            class="form-control"
+            id="field_settlementTransaction"
+            data-cy="settlementTransaction"
+            name="settlementTransaction"
+            formControlName="settlementTransaction"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                settlementOption.id === editForm.get('settlementTransaction')!.value?.id
+                  ? editForm.get('settlementTransaction')!.value
+                  : settlementOption
+              "
+              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
+            >
+              {{ settlementOption.paymentNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_purchaseOrder">Purchase Order</label>
+          <select
+            class="form-control"
+            id="field_purchaseOrder"
+            data-cy="purchaseOrder"
+            name="purchaseOrder"
+            formControlName="purchaseOrder"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                purchaseOrderOption.id === editForm.get('purchaseOrder')!.value?.id
+                  ? editForm.get('purchaseOrder')!.value
+                  : purchaseOrderOption
+              "
+              *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection; trackBy: trackPurchaseOrderById"
+            >
+              {{ purchaseOrderOption.purchaseOrderNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_deliveryNote">Delivery Note</label>
+          <select class="form-control" id="field_deliveryNote" data-cy="deliveryNote" name="deliveryNote" formControlName="deliveryNote">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                deliveryNoteOption.id === editForm.get('deliveryNote')!.value?.id ? editForm.get('deliveryNote')!.value : deliveryNoteOption
+              "
+              *ngFor="let deliveryNoteOption of deliveryNotesSharedCollection; trackBy: trackDeliveryNoteById"
+            >
+              {{ deliveryNoteOption.deliveryNoteNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_jobSheet">Job Sheet</label>
+          <select class="form-control" id="field_jobSheet" data-cy="jobSheet" name="jobSheet" formControlName="jobSheet">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="jobSheetOption.id === editForm.get('jobSheet')!.value?.id ? editForm.get('jobSheet')!.value : jobSheetOption"
+              *ngFor="let jobSheetOption of jobSheetsSharedCollection; trackBy: trackJobSheetById"
+            >
+              {{ jobSheetOption.serialNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dealer">Dealer</label>
+          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

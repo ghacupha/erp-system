@@ -1,0 +1,30 @@
+{
+  "changelogDate": "20230912074501",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "accountStatusCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "accountStatusType",
+      "fieldType": "AccountStatusTypes",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ACTIVE,INACTIVE,DORMANT,CLOSED"
+    },
+    {
+      "fieldName": "accountStatusDescription",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "AccountStatusType",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

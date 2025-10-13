@@ -1,0 +1,180 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-isic-economic-activity-heading" data-cy="IsicEconomicActivityCreateUpdateHeading">
+        Create or edit a Isic Economic Activity
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_businessEconomicActivityCode">Business Economic Activity Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="businessEconomicActivityCode"
+            id="field_businessEconomicActivityCode"
+            data-cy="businessEconomicActivityCode"
+            formControlName="businessEconomicActivityCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('businessEconomicActivityCode')!.invalid &&
+              (editForm.get('businessEconomicActivityCode')!.dirty || editForm.get('businessEconomicActivityCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('businessEconomicActivityCode')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_section">Section</label>
+          <input type="text" class="form-control" name="section" id="field_section" data-cy="section" formControlName="section" />
+          <div *ngIf="editForm.get('section')!.invalid && (editForm.get('section')!.dirty || editForm.get('section')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('section')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sectionLabel">Section Label</label>
+          <input
+            type="text"
+            class="form-control"
+            name="sectionLabel"
+            id="field_sectionLabel"
+            data-cy="sectionLabel"
+            formControlName="sectionLabel"
+          />
+          <div
+            *ngIf="editForm.get('sectionLabel')!.invalid && (editForm.get('sectionLabel')!.dirty || editForm.get('sectionLabel')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('sectionLabel')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_division">Division</label>
+          <input type="text" class="form-control" name="division" id="field_division" data-cy="division" formControlName="division" />
+          <div *ngIf="editForm.get('division')!.invalid && (editForm.get('division')!.dirty || editForm.get('division')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('division')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_divisionLabel">Division Label</label>
+          <input
+            type="text"
+            class="form-control"
+            name="divisionLabel"
+            id="field_divisionLabel"
+            data-cy="divisionLabel"
+            formControlName="divisionLabel"
+          />
+          <div
+            *ngIf="
+              editForm.get('divisionLabel')!.invalid && (editForm.get('divisionLabel')!.dirty || editForm.get('divisionLabel')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('divisionLabel')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_groupCode">Group Code</label>
+          <input type="text" class="form-control" name="groupCode" id="field_groupCode" data-cy="groupCode" formControlName="groupCode" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_groupLabel">Group Label</label>
+          <input
+            type="text"
+            class="form-control"
+            name="groupLabel"
+            id="field_groupLabel"
+            data-cy="groupLabel"
+            formControlName="groupLabel"
+          />
+          <div *ngIf="editForm.get('groupLabel')!.invalid && (editForm.get('groupLabel')!.dirty || editForm.get('groupLabel')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('groupLabel')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_classCode">Class Code</label>
+          <input type="text" class="form-control" name="classCode" id="field_classCode" data-cy="classCode" formControlName="classCode" />
+          <div *ngIf="editForm.get('classCode')!.invalid && (editForm.get('classCode')!.dirty || editForm.get('classCode')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('classCode')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_businessEconomicActivityType">Business Economic Activity Type</label>
+          <input
+            type="text"
+            class="form-control"
+            name="businessEconomicActivityType"
+            id="field_businessEconomicActivityType"
+            data-cy="businessEconomicActivityType"
+            formControlName="businessEconomicActivityType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_businessEconomicActivityTypeDescription"
+            >Business Economic Activity Type Description</label
+          >
+          <textarea
+            class="form-control"
+            name="businessEconomicActivityTypeDescription"
+            id="field_businessEconomicActivityTypeDescription"
+            data-cy="businessEconomicActivityTypeDescription"
+            formControlName="businessEconomicActivityTypeDescription"
+          ></textarea>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<h3 id="requestMetrics">HTTP requests (time in millisecond)</h3>
+
+<table class="table table-striped" *ngIf="!updating && requestMetrics" aria-describedby="requestMetrics">
+  <thead>
+    <tr>
+      <th scope="col">Code</th>
+      <th scope="col">Count</th>
+      <th scope="col" class="text-right">Mean</th>
+      <th scope="col" class="text-right">Max</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let entry of requestMetrics['percode'] | keyvalue">
+      <td>{{ entry.key }}</td>
+      <td>
+        <ngb-progressbar [max]="requestMetrics['all'].count" [value]="entry.value.count" [striped]="true" [animated]="false" type="success">
+          <span>{{ entry.value.count }}</span>
+        </ngb-progressbar>
+      </td>
+      <td class="text-right">
+        {{ filterNaN(entry.value.mean) | number: '1.0-2' }}
+      </td>
+      <td class="text-right">{{ entry.value.max | number: '1.0-2' }}</td>
+    </tr>
+  </tbody>
+</table>

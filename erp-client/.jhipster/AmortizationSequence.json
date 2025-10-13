@@ -1,0 +1,106 @@
+{
+  "changelogDate": "20220802080530",
+  "clientRootFolder": "prepayments",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "prepaymentAccountGuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "recurrenceGuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sequenceNumber",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "particulars",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "currentAmortizationDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "previousAmortizationDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "nextAmortizationDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "isCommencementSequence",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isTerminalSequence",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "amortizationAmount",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": 0
+    },
+    {
+      "fieldName": "sequenceGuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "AmortizationSequence",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "catalogueNumber",
+      "otherEntityName": "prepaymentAccount",
+      "relationshipName": "prepaymentAccount",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "particulars",
+      "otherEntityName": "amortizationRecurrence",
+      "relationshipName": "amortizationRecurrence",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "amortizationSequence",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "parameter",
+      "otherEntityName": "prepaymentMapping",
+      "otherEntityRelationshipName": "amortizationSequence",
+      "ownerSide": true,
+      "relationshipName": "prepaymentMapping",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "amortizationSequence",
+      "ownerSide": true,
+      "relationshipName": "applicationParameters",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

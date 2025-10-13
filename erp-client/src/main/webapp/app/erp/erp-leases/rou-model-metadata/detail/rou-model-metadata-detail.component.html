@@ -1,0 +1,151 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="rouModelMetadata">
+      <h2 data-cy="rouModelMetadataDetailsHeading"><span>Rou Model Metadata</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.id }}</span>
+        </dd>
+        <dt><span>Rou Model Reference</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.rouModelReference }}</span>
+        </dd>
+        <dt><span>Model Title</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.modelTitle }}</span>
+        </dd>
+        <dt><span>Model Version</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.modelVersion }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.description }}</span>
+        </dd>
+        <dt><span>Lease Term Periods</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.leaseTermPeriods }}</span>
+        </dd>
+        <dt><span>Lease Amount</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.leaseAmount | currency }}</span>
+        </dd>
+        <dt><span>Ifrs 16 Lease Contract</span></dt>
+        <dd>
+          <div *ngIf="rouModelMetadata.ifrs16LeaseContract">
+            <a [routerLink]="['/ifrs-16-lease-contract', rouModelMetadata.ifrs16LeaseContract?.id, 'view']">{{
+              rouModelMetadata.ifrs16LeaseContract?.shortTitle
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Asset Account</span></dt>
+        <dd>
+          <div *ngIf="rouModelMetadata.assetAccount">
+            <a [routerLink]="['/transaction-account', rouModelMetadata.assetAccount?.id, 'view']">{{
+              rouModelMetadata.assetAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Depreciation Account</span></dt>
+        <dd>
+          <div *ngIf="rouModelMetadata.depreciationAccount">
+            <a [routerLink]="['/transaction-account', rouModelMetadata.depreciationAccount?.id, 'view']">{{
+              rouModelMetadata.depreciationAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Accrued Depreciation Account</span></dt>
+        <dd>
+          <div *ngIf="rouModelMetadata.accruedDepreciationAccount">
+            <a [routerLink]="['/transaction-account', rouModelMetadata.accruedDepreciationAccount?.id, 'view']">{{
+              rouModelMetadata.accruedDepreciationAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Asset Category</span></dt>
+        <dd>
+          <div *ngIf="rouModelMetadata.assetCategory">
+            <a [routerLink]="['/asset-category', rouModelMetadata.assetCategory?.id, 'view']">{{
+              rouModelMetadata.assetCategory?.assetCategoryName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Document Attachments</span></dt>
+        <dd>
+          <span *ngFor="let documentAttachments of rouModelMetadata.documentAttachments; let last = last">
+            <a [routerLink]="['/business-document', documentAttachments?.id, 'view']">{{ documentAttachments.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Commencement Date</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.commencementDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Expiration Date</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.expirationDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Has Been Fully Amortised</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.hasBeenFullyAmortised }}</span>
+        </dd>
+        <dt><span>Has Been Decommissioned</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.hasBeenDecommissioned }}</span>
+        </dd>
+      </dl>
+
+      <button
+        type="submit"
+        (click)="previousState()"
+        class="btn btn-info"
+        data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        (click)='editButtonEvent(rouModelMetadata)'
+        [routerLink]="['/rou-model-metadata', rouModelMetadata.id, 'edit']"
+        class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+
+      <button
+        type="button"
+        (click)='copyButtonEvent(rouModelMetadata)'
+        [routerLink]="['/rou-model-metadata', rouModelMetadata.id, 'copy']"
+        class="btn btn-primary">
+        <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
+      </button>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,285 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-delivery-note-heading" data-cy="DeliveryNoteCreateUpdateHeading">Create or edit a Delivery Note</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_deliveryNoteNumber">Delivery Note Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="deliveryNoteNumber"
+            id="field_deliveryNoteNumber"
+            data-cy="deliveryNoteNumber"
+            formControlName="deliveryNoteNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('deliveryNoteNumber')!.invalid &&
+              (editForm.get('deliveryNoteNumber')!.dirty || editForm.get('deliveryNoteNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('deliveryNoteNumber')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_documentDate">Document Date</label>
+          <div class="input-group">
+            <input
+              id="field_documentDate"
+              data-cy="documentDate"
+              type="text"
+              class="form-control"
+              name="documentDate"
+              ngbDatepicker
+              #documentDateDp="ngbDatepicker"
+              formControlName="documentDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="documentDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="editForm.get('documentDate')!.invalid && (editForm.get('documentDate')!.dirty || editForm.get('documentDate')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('documentDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_serialNumber">Serial Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="serialNumber"
+            id="field_serialNumber"
+            data-cy="serialNumber"
+            formControlName="serialNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_quantity">Quantity</label>
+          <input type="number" class="form-control" name="quantity" id="field_quantity" data-cy="quantity" formControlName="quantity" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_remarks">Remarks</label>
+          <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_receivedBy">Received By</label>
+          <select class="form-control" id="field_receivedBy" data-cy="receivedBy" name="receivedBy" formControlName="receivedBy">
+            <option *ngIf="!editForm.get('receivedBy')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('receivedBy')!.value?.id ? editForm.get('receivedBy')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['receivedBy'])!.invalid && (editForm.get(['receivedBy'])!.dirty || editForm.get(['receivedBy'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['receivedBy'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label for="field_deliveryStamps">Delivery Stamps</label>
+          <select
+            class="form-control"
+            id="field_deliveryStamps"
+            data-cy="deliveryStamps"
+            multiple
+            name="deliveryStamps"
+            formControlName="deliveryStamps"
+          >
+            <option
+              [ngValue]="getSelectedBusinessStamp(businessStampOption, editForm.get('deliveryStamps')!.value)"
+              *ngFor="let businessStampOption of businessStampsSharedCollection; trackBy: trackBusinessStampById"
+            >
+              {{ businessStampOption.details }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_purchaseOrder">Purchase Order</label>
+          <select
+            class="form-control"
+            id="field_purchaseOrder"
+            data-cy="purchaseOrder"
+            name="purchaseOrder"
+            formControlName="purchaseOrder"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                purchaseOrderOption.id === editForm.get('purchaseOrder')!.value?.id
+                  ? editForm.get('purchaseOrder')!.value
+                  : purchaseOrderOption
+              "
+              *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection; trackBy: trackPurchaseOrderById"
+            >
+              {{ purchaseOrderOption.purchaseOrderNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_supplier">Supplier</label>
+          <select class="form-control" id="field_supplier" data-cy="supplier" name="supplier" formControlName="supplier">
+            <option *ngIf="!editForm.get('supplier')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('supplier')!.value?.id ? editForm.get('supplier')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['supplier'])!.invalid && (editForm.get(['supplier'])!.dirty || editForm.get(['supplier'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['supplier'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label for="field_signatories">Signatories</label>
+          <select
+            class="form-control"
+            id="field_signatories"
+            data-cy="signatories"
+            multiple
+            name="signatories"
+            formControlName="signatories"
+          >
+            <option
+              [ngValue]="getSelectedDealer(dealerOption, editForm.get('signatories')!.value)"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_otherPurchaseOrders">Other Purchase Orders</label>
+          <select
+            class="form-control"
+            id="field_otherPurchaseOrders"
+            data-cy="otherPurchaseOrders"
+            multiple
+            name="otherPurchaseOrders"
+            formControlName="otherPurchaseOrders"
+          >
+            <option
+              [ngValue]="getSelectedPurchaseOrder(purchaseOrderOption, editForm.get('otherPurchaseOrders')!.value)"
+              *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection; trackBy: trackPurchaseOrderById"
+            >
+              {{ purchaseOrderOption.purchaseOrderNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_businessDocuments">Business Document</label>
+          <select
+            class="form-control"
+            id="field_businessDocuments"
+            data-cy="businessDocument"
+            multiple
+            name="businessDocuments"
+            formControlName="businessDocuments"
+          >
+            <option
+              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('businessDocuments')!.value)"
+              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
+            >
+              {{ businessDocumentOption.documentTitle }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

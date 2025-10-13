@@ -1,0 +1,105 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="signedPayment">
+      <h2 data-cy="signedPaymentDetailsHeading"><span>Signed Payment</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ signedPayment.id }}</span>
+        </dd>
+        <dt><span>Transaction Number</span></dt>
+        <dd>
+          <span>{{ signedPayment.transactionNumber }}</span>
+        </dd>
+        <dt><span>Transaction Date</span></dt>
+        <dd>
+          <span>{{ signedPayment.transactionDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Transaction Currency</span></dt>
+        <dd>
+          <span>{{ signedPayment.transactionCurrency }}</span>
+        </dd>
+        <dt><span>Transaction Amount</span></dt>
+        <dd>
+          <span>{{ signedPayment.transactionAmount }}</span>
+        </dd>
+        <dt><span>Dealer Name</span></dt>
+        <dd>
+          <span>{{ signedPayment.dealerName }}</span>
+        </dd>
+        <dt><span>File Upload Token</span></dt>
+        <dd>
+          <span>{{ signedPayment.fileUploadToken }}</span>
+        </dd>
+        <dt><span>Compilation Token</span></dt>
+        <dd>
+          <span>{{ signedPayment.compilationToken }}</span>
+        </dd>
+        <dt><span>Payment Label</span></dt>
+        <dd>
+          <span *ngFor="let paymentLabel of signedPayment.paymentLabels; let last = last">
+            <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Payment Category</span></dt>
+        <dd>
+          <div *ngIf="signedPayment.paymentCategory">
+            <a [routerLink]="['/payment-category', signedPayment.paymentCategory?.id, 'view']">{{
+              signedPayment.paymentCategory?.categoryName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of signedPayment.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Signed Payment Group</span></dt>
+        <dd>
+          <div *ngIf="signedPayment.signedPaymentGroup">
+            <a [routerLink]="['/signed-payment', signedPayment.signedPaymentGroup?.id, 'view']">{{
+              signedPayment.signedPaymentGroup?.id
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/signed-payment', signedPayment.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

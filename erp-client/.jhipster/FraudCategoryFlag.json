@@ -1,0 +1,24 @@
+{
+  "changelogDate": "20230912120312",
+  "dto": "mapstruct",
+  "clientRootFolder": "gdi",
+  "fields": [
+    {
+      "fieldName": "fraudCategoryFlag",
+      "fieldType": "FlagCodes",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "Y,N"
+    },
+    {
+      "fieldName": "fraudCategoryTypeDetails",
+      "fieldType": "String"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": false,
+  "name": "FraudCategoryFlag",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

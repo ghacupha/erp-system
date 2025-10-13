@@ -1,0 +1,107 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="nbvCompilationBatch">
+      <h2 data-cy="nbvCompilationBatchDetailsHeading"><span>Nbv Compilation Batch</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.id }}</span>
+        </dd>
+        <dt><span>Start Index</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.startIndex }}</span>
+        </dd>
+        <dt><span>End Index</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.endIndex }}</span>
+        </dd>
+        <dt><span>Compilation Batch Status</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.compilationBatchStatus }}</span>
+        </dd>
+        <dt><span>Compilation Batch Identifier</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.compilationBatchIdentifier }}</span>
+        </dd>
+        <dt><span>Compilation Jobidentifier</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.compilationJobidentifier }}</span>
+        </dd>
+        <dt><span>Depreciation Period Identifier</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.depreciationPeriodIdentifier }}</span>
+        </dd>
+        <dt><span>Fiscal Month Identifier</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.fiscalMonthIdentifier }}</span>
+        </dd>
+        <dt><span>Batch Size</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.batchSize }}</span>
+        </dd>
+        <dt><span>Processed Items</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.processedItems }}</span>
+        </dd>
+        <dt><span>Sequence Number</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.sequenceNumber }}</span>
+        </dd>
+        <dt><span>Is Last Batch</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.isLastBatch }}</span>
+        </dd>
+        <dt><span>Processing Time</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.processingTime | duration }} ({{ nbvCompilationBatch.processingTime }})</span>
+        </dd>
+        <dt><span>Total Items</span></dt>
+        <dd>
+          <span>{{ nbvCompilationBatch.totalItems }}</span>
+        </dd>
+        <dt><span>Nbv Compilation Job</span></dt>
+        <dd>
+          <div *ngIf="nbvCompilationBatch.nbvCompilationJob">
+            <a [routerLink]="['/nbv-compilation-job', nbvCompilationBatch.nbvCompilationJob?.id, 'view']">{{
+              nbvCompilationBatch.nbvCompilationJob?.jobTitle
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/nbv-compilation-batch', nbvCompilationBatch.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

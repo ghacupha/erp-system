@@ -1,0 +1,165 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="settlementRequisition">
+      <h2 data-cy="settlementRequisitionDetailsHeading"><span>Settlement Requisition</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ settlementRequisition.id }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ settlementRequisition.description }}</span>
+        </dd>
+        <dt><span>Serial Number</span></dt>
+        <dd>
+          <span>{{ settlementRequisition.serialNumber }}</span>
+        </dd>
+        <dt><span>Time Of Requisition</span></dt>
+        <dd>
+          <span>{{ settlementRequisition.timeOfRequisition | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Requisition Number</span></dt>
+        <dd>
+          <span>{{ settlementRequisition.requisitionNumber }}</span>
+        </dd>
+        <dt><span>Payment Amount</span></dt>
+        <dd>
+          <span>{{ settlementRequisition.paymentAmount }}</span>
+        </dd>
+        <dt><span>Payment Status</span></dt>
+        <dd>
+          <span>{{ settlementRequisition.paymentStatus }}</span>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="settlementRequisition.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', settlementRequisition.settlementCurrency?.id, 'view']">{{
+              settlementRequisition.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Current Owner</span></dt>
+        <dd>
+          <div *ngIf="settlementRequisition.currentOwner">
+            <a [routerLink]="['/application-user', settlementRequisition.currentOwner?.id, 'view']">{{
+              settlementRequisition.currentOwner?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Native Owner</span></dt>
+        <dd>
+          <div *ngIf="settlementRequisition.nativeOwner">
+            <a [routerLink]="['/application-user', settlementRequisition.nativeOwner?.id, 'view']">{{
+              settlementRequisition.nativeOwner?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Native Department</span></dt>
+        <dd>
+          <div *ngIf="settlementRequisition.nativeDepartment">
+            <a [routerLink]="['/dealer', settlementRequisition.nativeDepartment?.id, 'view']">{{
+              settlementRequisition.nativeDepartment?.dealerName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Biller</span></dt>
+        <dd>
+          <div *ngIf="settlementRequisition.biller">
+            <a [routerLink]="['/dealer', settlementRequisition.biller?.id, 'view']">{{ settlementRequisition.biller?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Payment Invoice</span></dt>
+        <dd>
+          <span *ngFor="let paymentInvoice of settlementRequisition.paymentInvoices; let last = last">
+            <a [routerLink]="['/payment-invoice', paymentInvoice?.id, 'view']">{{ paymentInvoice.invoiceNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Delivery Note</span></dt>
+        <dd>
+          <span *ngFor="let deliveryNote of settlementRequisition.deliveryNotes; let last = last">
+            <a [routerLink]="['/delivery-note', deliveryNote?.id, 'view']">{{ deliveryNote.deliveryNoteNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Job Sheet</span></dt>
+        <dd>
+          <span *ngFor="let jobSheet of settlementRequisition.jobSheets; let last = last">
+            <a [routerLink]="['/job-sheet', jobSheet?.id, 'view']">{{ jobSheet.serialNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Signatures</span></dt>
+        <dd>
+          <span *ngFor="let signatures of settlementRequisition.signatures; let last = last">
+            <a [routerLink]="['/dealer', signatures?.id, 'view']">{{ signatures.dealerName }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Business Document</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of settlementRequisition.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Application Mapping</span></dt>
+        <dd>
+          <span *ngFor="let applicationMapping of settlementRequisition.applicationMappings; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', applicationMapping?.id, 'view']">{{ applicationMapping.universalKey }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of settlementRequisition.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Settlement</span></dt>
+        <dd>
+          <span *ngFor="let settlement of settlementRequisition.settlements; let last = last">
+            <a [routerLink]="['/settlement', settlement?.id, 'view']">{{ settlement.paymentNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/settlement-requisition', settlementRequisition.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

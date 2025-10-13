@@ -1,0 +1,187 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div>
+  <h2 id="page-heading" data-cy="CreditCardFacilityHeading">
+    <span>Credit Card Facilities</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-credit-card-facility"
+        [routerLink]="['/credit-card-facility/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down"> Create a new Credit Card Facility </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="creditCardFacilities?.length === 0">
+    <span>No creditCardFacilities found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="creditCardFacilities && creditCardFacilities.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportingDate"><span>Reporting Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="totalNumberOfActiveCreditCards">
+            <span>Total Number Of Active Credit Cards</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="totalCreditCardLimitsInCCY">
+            <span>Total Credit Card Limits In CCY</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="totalCreditCardLimitsInLCY">
+            <span>Total Credit Card Limits In LCY</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="totalCreditCardAmountUtilisedInCCY">
+            <span>Total Credit Card Amount Utilised In CCY</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="totalCreditCardAmountUtilisedInLcy">
+            <span>Total Credit Card Amount Utilised In Lcy</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="totalNPACreditCardAmountInFCY">
+            <span>Total NPA Credit Card Amount In FCY</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="totalNPACreditCardAmountInLCY">
+            <span>Total NPA Credit Card Amount In LCY</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="bankCode.institutionName"><span>Bank Code</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="customerCategory.creditCardOwnershipCategoryType">
+            <span>Customer Category</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="currencyCode.alphabeticCode"><span>Currency Code</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let creditCardFacility of creditCardFacilities; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/credit-card-facility', creditCardFacility.id, 'view']">{{ creditCardFacility.id }}</a>
+          </td>
+          <td>{{ creditCardFacility.reportingDate | formatMediumDate }}</td>
+          <td>{{ creditCardFacility.totalNumberOfActiveCreditCards }}</td>
+          <td>{{ creditCardFacility.totalCreditCardLimitsInCCY }}</td>
+          <td>{{ creditCardFacility.totalCreditCardLimitsInLCY }}</td>
+          <td>{{ creditCardFacility.totalCreditCardAmountUtilisedInCCY }}</td>
+          <td>{{ creditCardFacility.totalCreditCardAmountUtilisedInLcy }}</td>
+          <td>{{ creditCardFacility.totalNPACreditCardAmountInFCY }}</td>
+          <td>{{ creditCardFacility.totalNPACreditCardAmountInLCY }}</td>
+          <td>
+            <div *ngIf="creditCardFacility.bankCode">
+              <a [routerLink]="['/institution-code', creditCardFacility.bankCode?.id, 'view']">{{
+                creditCardFacility.bankCode?.institutionName
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="creditCardFacility.customerCategory">
+              <a [routerLink]="['/credit-card-ownership', creditCardFacility.customerCategory?.id, 'view']">{{
+                creditCardFacility.customerCategory?.creditCardOwnershipCategoryType
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="creditCardFacility.currencyCode">
+              <a [routerLink]="['/iso-currency-code', creditCardFacility.currencyCode?.id, 'view']">{{
+                creditCardFacility.currencyCode?.alphabeticCode
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/credit-card-facility', creditCardFacility.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/credit-card-facility', creditCardFacility.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(creditCardFacility)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="creditCardFacilities && creditCardFacilities.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

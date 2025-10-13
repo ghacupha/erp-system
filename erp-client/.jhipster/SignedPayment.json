@@ -1,0 +1,77 @@
+{
+  "changelogDate": "20210920145532",
+  "clientRootFolder": "settlement",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "transactionNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "transactionDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "transactionCurrency",
+      "fieldType": "CurrencyTypes",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "KES,USD,GBP,EUR,INR,ZAR,AED,CNY,CHF,UGX,TZS,JPY,CAD"
+    },
+    {
+      "fieldName": "transactionAmount",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": 0
+    },
+    {
+      "fieldName": "dealerName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compilationToken",
+      "fieldType": "String"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "SignedPayment",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "paymentLabel",
+      "otherEntityRelationshipName": "signedPayment",
+      "ownerSide": true,
+      "relationshipName": "paymentLabel",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "categoryName",
+      "otherEntityName": "paymentCategory",
+      "otherEntityRelationshipName": "signedPayment",
+      "relationshipName": "paymentCategory",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "signedPayment",
+      "relationshipName": "signedPaymentGroup",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

@@ -1,0 +1,26 @@
+{
+  "clientRootFolder": "prepayments",
+  "fields": [
+    {
+      "fieldName": "totalPrepaymentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalAmortisedAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalOutstandingAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "numberOfPrepaymentAccounts",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [],
+  "readOnly": true,
+  "pagination": "infinite-scroll",
+  "name": "PrepaymentOutstandingOverviewReport",
+  "changelogDate": "20231130132010"
+}

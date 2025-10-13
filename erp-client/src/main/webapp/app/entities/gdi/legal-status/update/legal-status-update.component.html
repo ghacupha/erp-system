@@ -1,0 +1,102 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-legal-status-heading" data-cy="LegalStatusCreateUpdateHeading">Create or edit a Legal Status</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_legalStatusCode">Legal Status Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="legalStatusCode"
+            id="field_legalStatusCode"
+            data-cy="legalStatusCode"
+            formControlName="legalStatusCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('legalStatusCode')!.invalid &&
+              (editForm.get('legalStatusCode')!.dirty || editForm.get('legalStatusCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('legalStatusCode')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_legalStatusType">Legal Status Type</label>
+          <input
+            type="text"
+            class="form-control"
+            name="legalStatusType"
+            id="field_legalStatusType"
+            data-cy="legalStatusType"
+            formControlName="legalStatusType"
+          />
+          <div
+            *ngIf="
+              editForm.get('legalStatusType')!.invalid &&
+              (editForm.get('legalStatusType')!.dirty || editForm.get('legalStatusType')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('legalStatusType')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_legalStatusDescription">Legal Status Description</label>
+          <textarea
+            class="form-control"
+            name="legalStatusDescription"
+            id="field_legalStatusDescription"
+            data-cy="legalStatusDescription"
+            formControlName="legalStatusDescription"
+          ></textarea>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

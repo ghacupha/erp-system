@@ -1,0 +1,288 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-dealer-heading" data-cy="DealerCreateUpdateHeading">Create or edit a Dealer</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dealerName">Dealer Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="dealerName"
+            id="field_dealerName"
+            data-cy="dealerName"
+            formControlName="dealerName"
+          />
+          <div *ngIf="editForm.get('dealerName')!.invalid && (editForm.get('dealerName')!.dirty || editForm.get('dealerName')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('dealerName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_taxNumber">Tax Number</label>
+          <input type="text" class="form-control" name="taxNumber" id="field_taxNumber" data-cy="taxNumber" formControlName="taxNumber" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_identificationDocumentNumber">Identification Document Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="identificationDocumentNumber"
+            id="field_identificationDocumentNumber"
+            data-cy="identificationDocumentNumber"
+            formControlName="identificationDocumentNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_organizationName">Organization Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="organizationName"
+            id="field_organizationName"
+            data-cy="organizationName"
+            formControlName="organizationName"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_department">Department</label>
+          <input
+            type="text"
+            class="form-control"
+            name="department"
+            id="field_department"
+            data-cy="department"
+            formControlName="department"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_position">Position</label>
+          <input type="text" class="form-control" name="position" id="field_position" data-cy="position" formControlName="position" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_postalAddress">Postal Address</label>
+          <input
+            type="text"
+            class="form-control"
+            name="postalAddress"
+            id="field_postalAddress"
+            data-cy="postalAddress"
+            formControlName="postalAddress"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_physicalAddress">Physical Address</label>
+          <input
+            type="text"
+            class="form-control"
+            name="physicalAddress"
+            id="field_physicalAddress"
+            data-cy="physicalAddress"
+            formControlName="physicalAddress"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountName">Account Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="accountName"
+            id="field_accountName"
+            data-cy="accountName"
+            formControlName="accountName"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountNumber">Account Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="accountNumber"
+            id="field_accountNumber"
+            data-cy="accountNumber"
+            formControlName="accountNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_bankersName">Bankers Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="bankersName"
+            id="field_bankersName"
+            data-cy="bankersName"
+            formControlName="bankersName"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_bankersBranch">Bankers Branch</label>
+          <input
+            type="text"
+            class="form-control"
+            name="bankersBranch"
+            id="field_bankersBranch"
+            data-cy="bankersBranch"
+            formControlName="bankersBranch"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_bankersSwiftCode">Bankers Swift Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="bankersSwiftCode"
+            id="field_bankersSwiftCode"
+            data-cy="bankersSwiftCode"
+            formControlName="bankersSwiftCode"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fileUploadToken"
+            id="field_fileUploadToken"
+            data-cy="fileUploadToken"
+            formControlName="fileUploadToken"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="compilationToken"
+            id="field_compilationToken"
+            data-cy="compilationToken"
+            formControlName="compilationToken"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_remarks">Remarks</label>
+          <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_otherNames">Other Names</label>
+          <input
+            type="text"
+            class="form-control"
+            name="otherNames"
+            id="field_otherNames"
+            data-cy="otherNames"
+            formControlName="otherNames"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="field_paymentLabels">Payment Label</label>
+          <select
+            class="form-control"
+            id="field_paymentLabels"
+            data-cy="paymentLabel"
+            multiple
+            name="paymentLabels"
+            formControlName="paymentLabels"
+          >
+            <option
+              [ngValue]="getSelectedPaymentLabel(paymentLabelOption, editForm.get('paymentLabels')!.value)"
+              *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
+            >
+              {{ paymentLabelOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dealerGroup">Dealer Group</label>
+          <select class="form-control" id="field_dealerGroup" data-cy="dealerGroup" name="dealerGroup" formControlName="dealerGroup">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('dealerGroup')!.value?.id ? editForm.get('dealerGroup')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

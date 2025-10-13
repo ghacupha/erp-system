@@ -1,0 +1,53 @@
+{
+  "clientRootFolder": "wip",
+  "fields": [
+    {
+      "fieldName": "timeOfRequest",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "requestId",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "fileChecksum",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "tampered",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "filename",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "reportParameters",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reportFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "requestedBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "WIPListReport",
+  "changelogDate": "20250203103056",
+  "incrementalChangelog": false
+}

@@ -1,0 +1,229 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-asset-disposal-heading" data-cy="AssetDisposalCreateUpdateHeading">Create or edit a Asset Disposal</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetDisposalReference">Asset Disposal Reference</label>
+          <input
+            type="text"
+            class="form-control"
+            name="assetDisposalReference"
+            id="field_assetDisposalReference"
+            data-cy="assetDisposalReference"
+            formControlName="assetDisposalReference"
+          />
+        </div>
+
+        <jhi-m21-asset-registration-form-control
+          ngDefaultControl
+          formControlName='assetDisposed'
+          [inputValue]="editForm.get('assetDisposed')!.value"
+          (valueSelected)='updateAssetDisposed($event)'
+          inputControlLabel='Asset Disposed'
+        >
+        </jhi-m21-asset-registration-form-control>
+        <div
+          *ngIf="
+            editForm.get(['assetDisposed'])!.invalid && (editForm.get(['assetDisposed'])!.dirty || editForm.get(['assetDisposed'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['assetDisposed'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetCost">Asset Cost</label>
+          <input type="number" class="form-control" name="assetCost" id="field_assetCost" data-cy="assetCost" formControlName="assetCost" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_historicalCost">Historical Cost</label>
+          <input
+            type="number"
+            class="form-control"
+            name="historicalCost"
+            id="field_historicalCost"
+            data-cy="historicalCost"
+            formControlName="historicalCost"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accruedDepreciation">Accrued Depreciation</label>
+          <input
+            type="number"
+            class="form-control"
+            name="accruedDepreciation"
+            id="field_accruedDepreciation"
+            data-cy="accruedDepreciation"
+            formControlName="accruedDepreciation"
+          />
+          <div
+            *ngIf="
+              editForm.get('accruedDepreciation')!.invalid &&
+              (editForm.get('accruedDepreciation')!.dirty || editForm.get('accruedDepreciation')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('accruedDepreciation')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('accruedDepreciation')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('accruedDepreciation')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_netBookValue">Net Book Value</label>
+          <input
+            type="number"
+            class="form-control"
+            name="netBookValue"
+            id="field_netBookValue"
+            data-cy="netBookValue"
+            formControlName="netBookValue"
+          />
+          <div
+            *ngIf="editForm.get('netBookValue')!.invalid && (editForm.get('netBookValue')!.dirty || editForm.get('netBookValue')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('netBookValue')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('netBookValue')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('netBookValue')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_decommissioningDate">Decommissioning Date</label>
+          <div class="input-group">
+            <input
+              id="field_decommissioningDate"
+              data-cy="decommissioningDate"
+              type="text"
+              class="form-control"
+              name="decommissioningDate"
+              ngbDatepicker
+              #decommissioningDateDp="ngbDatepicker"
+              formControlName="decommissioningDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="decommissioningDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_disposalDate">Disposal Date</label>
+          <div class="input-group">
+            <input
+              id="field_disposalDate"
+              data-cy="disposalDate"
+              type="text"
+              class="form-control"
+              name="disposalDate"
+              ngbDatepicker
+              #disposalDateDp="ngbDatepicker"
+              formControlName="disposalDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="disposalDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="editForm.get('disposalDate')!.invalid && (editForm.get('disposalDate')!.dirty || editForm.get('disposalDate')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('disposalDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dormant">Dormant</label>
+          <input type="checkbox" class="form-check" name="dormant" id="field_dormant" data-cy="dormant" formControlName="dormant" />
+        </div>
+
+        <jhi-depreciation-period-form-control
+          ngDefaultControl
+          formControlName='effectivePeriod'
+          [inputValue]="editForm.get('effectivePeriod')!.value"
+          (valueSelected)='updateEffectivePeriod($event)'
+          inputControlLabel='Effective Period'
+        >
+        </jhi-depreciation-period-form-control>
+        <div
+          *ngIf="
+            editForm.get(['effectivePeriod'])!.invalid &&
+            (editForm.get(['effectivePeriod'])!.dirty || editForm.get(['effectivePeriod'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['effectivePeriod'])?.errors?.required"> This field is required. </small>
+        </div>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+{
+  "changelogDate": "20221019140655",
+  "clientRootFolder": "documentation",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "documentTitle",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "documentSerial",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "lastModified",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "attachmentFilePath",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "documentFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "fileTampered",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "documentFileChecksum",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "BusinessDocument",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "applicationIdentity",
+      "otherEntityName": "applicationUser",
+      "relationshipName": "createdBy",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "applicationIdentity",
+      "otherEntityName": "applicationUser",
+      "relationshipName": "lastModifiedBy",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "originatingDepartment",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "businessDocument",
+      "ownerSide": true,
+      "relationshipName": "applicationMappings",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "businessDocument",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "algorithm",
+      "relationshipName": "fileChecksumAlgorithm",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "clearanceLevel",
+      "otherEntityName": "securityClearance",
+      "relationshipName": "securityClearance",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    }
+  ],
+  "service": "serviceImpl"
+}

@@ -1,0 +1,51 @@
+{
+  "clientRootFolder": "assets",
+  "fields": [
+    {
+      "fieldName": "timeOfRequest",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "reportStartDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "reportEndDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "requestId",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "tampered",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "reportParameters",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reportFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "requestedBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "AssetAdditionsReport",
+  "changelogDate": "20240126043430",
+  "incrementalChangelog": false
+}

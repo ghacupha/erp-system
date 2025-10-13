@@ -1,0 +1,62 @@
+{
+  "clientRootFolder": "wip",
+  "fields": [
+    {
+      "fieldName": "wipSequence",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "wipParticulars",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "transferType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "transferSettlement",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "transferSettlementDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "transferAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "wipTransferDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "originalSettlement",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "originalSettlementDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "assetCategory",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "serviceOutlet",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "workProject",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": true,
+  "pagination": "pagination",
+  "name": "WIPTransferListItem",
+  "changelogDate": "20250203103818",
+  "incrementalChangelog": false
+}

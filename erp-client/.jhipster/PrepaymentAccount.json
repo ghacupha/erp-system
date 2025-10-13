@@ -1,0 +1,111 @@
+{
+  "changelogDate": "20220501104047",
+  "clientRootFolder": "prepayments",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "catalogueNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "recognitionDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "particulars",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "notes",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "prepaymentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "prepaymentGuid",
+      "fieldType": "UUID"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "PrepaymentAccount",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "iso4217CurrencyCode",
+      "otherEntityName": "settlementCurrency",
+      "relationshipName": "settlementCurrency",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "paymentNumber",
+      "otherEntityName": "settlement",
+      "relationshipName": "prepaymentTransaction",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "outletCode",
+      "otherEntityName": "serviceOutlet",
+      "relationshipName": "serviceOutlet",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "dealer",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "accountName",
+      "otherEntityName": "transactionAccount",
+      "relationshipName": "debitAccount",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "accountName",
+      "otherEntityName": "transactionAccount",
+      "relationshipName": "transferAccount",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "prepaymentAccount",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "prepaymentAccount",
+      "ownerSide": true,
+      "relationshipName": "generalParameters",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "parameterKey",
+      "otherEntityName": "prepaymentMapping",
+      "otherEntityRelationshipName": "prepaymentAccount",
+      "ownerSide": true,
+      "relationshipName": "prepaymentParameters",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "prepaymentAccount",
+      "ownerSide": true,
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

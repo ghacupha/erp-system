@@ -1,0 +1,172 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class='row justify-content-center'>
+  <div class='col-8'>
+    <form name='editForm' role='form' novalidate (ngSubmit)='save()' [formGroup]='editForm'>
+      <h2 id='jhi-rou-initial-direct-cost-heading' data-cy='RouInitialDirectCostCreateUpdateHeading'>
+        Create or edit a Rou Initial Direct Cost
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class='form-group' [hidden]="editForm.get('id')!.value == null">
+          <label class='form-control-label' for='field_id'>ID</label>
+          <input type='number' class='form-control' name='id' id='field_id' data-cy='id' formControlName='id'
+                 [readonly]='true' />
+        </div>
+
+        <div class='form-group'>
+          <label class='form-control-label' for='field_referenceNumber'>Reference Number</label>
+          <input
+            type='number'
+            class='form-control'
+            name='referenceNumber'
+            id='field_referenceNumber'
+            data-cy='referenceNumber'
+            formControlName='referenceNumber'
+          />
+        </div>
+
+        <jhi-m21-ifrs16-lease-form-control
+          ngDefaultControl
+          formControlName='leaseContract'
+          [inputValue]="editForm.get('leaseContract')!.value"
+          (valueSelected)='leaseContract($event)'
+          inputControlLabel='Lease Contract'
+        >
+          <option [ngValue]="editForm.get('leaseContract')!.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
+
+        <jhi-m21-settlement-form-control
+          ngDefaultControl
+          formControlName='settlementDetails'
+          [inputValue]="editForm.get('settlementDetails')!.value"
+          (valueSelected)='settlementDetails($event)'
+          inputControlLabel='Settlement Details'
+        >
+          <option [ngValue]="editForm.get('settlementDetails')!.value"></option>
+        </jhi-m21-settlement-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='targetROUAccount'
+          [inputValue]="editForm.get('targetROUAccount')!.value"
+          (valueSelected)='targetROUAccount($event)'
+          inputControlLabel='Target ROU Account (Account debited by IFRS16 Recognition routine)'
+        >
+          <option [ngValue]="editForm.get('targetROUAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='transferAccount'
+          [inputValue]="editForm.get('transferAccount')!.value"
+          (valueSelected)='transferAccount($event)'
+          inputControlLabel='Transfer Account (Account credited by IFRS16 Recognition routine)'
+        >
+          <option [ngValue]="editForm.get('transferAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <div class='form-group'>
+          <label class='form-control-label' for='field_transactionDate'>Transaction Date</label>
+          <div class='input-group'>
+            <input
+              id='field_transactionDate'
+              data-cy='transactionDate'
+              type='text'
+              class='form-control'
+              name='transactionDate'
+              ngbDatepicker
+              #transactionDateDp='ngbDatepicker'
+              formControlName='transactionDate'
+            />
+            <span class='input-group-append'>
+              <button type='button' class='btn btn-secondary' (click)='transactionDateDp.toggle()'>
+                <fa-icon icon='calendar-alt'></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('transactionDate')!.invalid &&
+              (editForm.get('transactionDate')!.dirty || editForm.get('transactionDate')!.touched)
+            "
+          >
+            <small class='form-text text-danger' *ngIf="editForm.get('transactionDate')?.errors?.required"> This field
+              is required. </small>
+          </div>
+        </div>
+
+        <div class='form-group'>
+          <label class='form-control-label' for='field_description'>Description</label>
+          <input
+            type='text'
+            class='form-control'
+            name='description'
+            id='field_description'
+            data-cy='description'
+            formControlName='description'
+          />
+        </div>
+
+        <div class='form-group'>
+          <label class='form-control-label' for='field_cost'>Cost</label>
+          <input type='number' class='form-control' name='cost' id='field_cost' data-cy='cost' formControlName='cost' />
+          <div *ngIf="editForm.get('cost')!.invalid && (editForm.get('cost')!.dirty || editForm.get('cost')!.touched)">
+            <small class='form-text text-danger' *ngIf="editForm.get('cost')?.errors?.required"> This field is
+              required. </small>
+            <small class='form-text text-danger' *ngIf="editForm.get('cost')?.errors?.min"> This field should be at
+              least 0. </small>
+            <small class='form-text text-danger' [hidden]="!editForm.get('cost')?.errors?.number"> This field should be
+              a number. </small>
+          </div>
+        </div>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+      </div>
+
+      <div>
+        <button type='button' id='cancel-save' data-cy='entityCreateCancelButton' class='btn btn-secondary'
+                (click)='previousState()'>
+          <fa-icon icon='ban'></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type='submit'
+          id='save-entity'
+          data-cy='entityCreateSaveButton'
+          [disabled]='editForm.invalid || isSaving'
+          class='btn btn-primary'
+        >
+          <fa-icon icon='save'></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

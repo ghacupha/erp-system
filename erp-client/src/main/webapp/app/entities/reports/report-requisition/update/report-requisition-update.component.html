@@ -1,0 +1,325 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-report-requisition-heading" data-cy="ReportRequisitionCreateUpdateHeading">Create or edit a Report Requisition</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportName">Report Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="reportName"
+            id="field_reportName"
+            data-cy="reportName"
+            formControlName="reportName"
+          />
+          <div *ngIf="editForm.get('reportName')!.invalid && (editForm.get('reportName')!.dirty || editForm.get('reportName')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('reportName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportRequestTime">Report Request Time</label>
+          <div class="d-flex">
+            <input
+              id="field_reportRequestTime"
+              data-cy="reportRequestTime"
+              type="datetime-local"
+              class="form-control"
+              name="reportRequestTime"
+              formControlName="reportRequestTime"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          <div
+            *ngIf="
+              editForm.get('reportRequestTime')!.invalid &&
+              (editForm.get('reportRequestTime')!.dirty || editForm.get('reportRequestTime')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('reportRequestTime')?.errors?.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('reportRequestTime')?.errors?.ZonedDateTimelocal">
+              This field should be a date and time.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportPassword">Report Password</label>
+          <input
+            type="text"
+            class="form-control"
+            name="reportPassword"
+            id="field_reportPassword"
+            data-cy="reportPassword"
+            formControlName="reportPassword"
+          />
+          <div
+            *ngIf="
+              editForm.get('reportPassword')!.invalid && (editForm.get('reportPassword')!.dirty || editForm.get('reportPassword')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('reportPassword')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('reportPassword')?.errors?.minlength">
+              This field is required to be at least 6 characters.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportStatus">Report Status</label>
+          <select class="form-control" name="reportStatus" formControlName="reportStatus" id="field_reportStatus" data-cy="reportStatus">
+            <option [ngValue]="null"></option>
+            <option *ngFor="let reportStatusTypes of reportStatusTypesValues" [value]="reportStatusTypes">reportStatusTypes</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportId">Report Id</label>
+          <input type="text" class="form-control" name="reportId" id="field_reportId" data-cy="reportId" formControlName="reportId" />
+          <div *ngIf="editForm.get('reportId')!.invalid && (editForm.get('reportId')!.dirty || editForm.get('reportId')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('reportId')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportFileAttachment">Report File Attachment</label>
+          <div>
+            <div *ngIf="editForm.get('reportFileAttachment')!.value" class="form-text text-danger clearfix">
+              <a
+                class="pull-left"
+                (click)="openFile(editForm.get('reportFileAttachment')!.value, editForm.get('reportFileAttachmentContentType')!.value)"
+                >open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('reportFileAttachmentContentType')!.value }},
+                {{ byteSize(editForm.get('reportFileAttachment')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="
+                  editForm.patchValue({ reportFileAttachment: null }); editForm.patchValue({ reportFileAttachmentContentType: null })
+                "
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input
+              type="file"
+              id="file_reportFileAttachment"
+              data-cy="reportFileAttachment"
+              (change)="setFileData($event, 'reportFileAttachment', false)"
+            />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="reportFileAttachment"
+            id="field_reportFileAttachment"
+            data-cy="reportFileAttachment"
+            formControlName="reportFileAttachment"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="reportFileAttachmentContentType"
+            id="field_reportFileAttachmentContentType"
+            formControlName="reportFileAttachmentContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportFileCheckSum">Report File Check Sum</label>
+          <textarea
+            class="form-control"
+            name="reportFileCheckSum"
+            id="field_reportFileCheckSum"
+            data-cy="reportFileCheckSum"
+            formControlName="reportFileCheckSum"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportNotes">Report Notes</label>
+          <div>
+            <div *ngIf="editForm.get('reportNotes')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('reportNotes')!.value, editForm.get('reportNotesContentType')!.value)"
+                >open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('reportNotesContentType')!.value }}, {{ byteSize(editForm.get('reportNotes')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ reportNotes: null }); editForm.patchValue({ reportNotesContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_reportNotes" data-cy="reportNotes" (change)="setFileData($event, 'reportNotes', false)" />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="reportNotes"
+            id="field_reportNotes"
+            data-cy="reportNotes"
+            formControlName="reportNotes"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="reportNotesContentType"
+            id="field_reportNotesContentType"
+            formControlName="reportNotesContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholders</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholders"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_parameters">Parameters</label>
+          <select class="form-control" id="field_parameters" data-cy="parameters" multiple name="parameters" formControlName="parameters">
+            <option
+              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('parameters')!.value)"
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.mappedValue }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportTemplate">Report Template</label>
+          <select
+            class="form-control"
+            id="field_reportTemplate"
+            data-cy="reportTemplate"
+            name="reportTemplate"
+            formControlName="reportTemplate"
+          >
+            <option *ngIf="!editForm.get('reportTemplate')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                reportTemplateOption.id === editForm.get('reportTemplate')!.value?.id
+                  ? editForm.get('reportTemplate')!.value
+                  : reportTemplateOption
+              "
+              *ngFor="let reportTemplateOption of reportTemplatesSharedCollection; trackBy: trackReportTemplateById"
+            >
+              {{ reportTemplateOption.catalogueNumber }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['reportTemplate'])!.invalid &&
+            (editForm.get(['reportTemplate'])!.dirty || editForm.get(['reportTemplate'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['reportTemplate'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_reportContentType">Report Content Type</label>
+          <select
+            class="form-control"
+            id="field_reportContentType"
+            data-cy="reportContentType"
+            name="reportContentType"
+            formControlName="reportContentType"
+          >
+            <option *ngIf="!editForm.get('reportContentType')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                reportContentTypeOption.id === editForm.get('reportContentType')!.value?.id
+                  ? editForm.get('reportContentType')!.value
+                  : reportContentTypeOption
+              "
+              *ngFor="let reportContentTypeOption of reportContentTypesSharedCollection; trackBy: trackReportContentTypeById"
+            >
+              {{ reportContentTypeOption.reportTypeName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['reportContentType'])!.invalid &&
+            (editForm.get(['reportContentType'])!.dirty || editForm.get(['reportContentType'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['reportContentType'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

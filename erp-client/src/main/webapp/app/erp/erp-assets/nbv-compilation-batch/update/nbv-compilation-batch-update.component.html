@@ -1,0 +1,222 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-nbv-compilation-batch-heading" data-cy="NbvCompilationBatchCreateUpdateHeading">
+        Create or edit a Nbv Compilation Batch
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_startIndex">Start Index</label>
+          <input
+            type="number"
+            class="form-control"
+            name="startIndex"
+            id="field_startIndex"
+            data-cy="startIndex"
+            formControlName="startIndex"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_endIndex">End Index</label>
+          <input type="number" class="form-control" name="endIndex" id="field_endIndex" data-cy="endIndex" formControlName="endIndex" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_compilationBatchStatus">Compilation Batch Status</label>
+          <select
+            class="form-control"
+            name="compilationBatchStatus"
+            formControlName="compilationBatchStatus"
+            id="field_compilationBatchStatus"
+            data-cy="compilationBatchStatus"
+          >
+            <option [ngValue]="null"></option>
+            <option *ngFor="let compilationBatchStatusTypes of compilationBatchStatusTypesValues" [value]="compilationBatchStatusTypes">
+              {{ compilationBatchStatusTypes }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_compilationBatchIdentifier">Compilation Batch Identifier</label>
+          <input
+            type="text"
+            class="form-control"
+            name="compilationBatchIdentifier"
+            id="field_compilationBatchIdentifier"
+            data-cy="compilationBatchIdentifier"
+            formControlName="compilationBatchIdentifier"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_compilationJobidentifier">Compilation Jobidentifier</label>
+          <input
+            type="text"
+            class="form-control"
+            name="compilationJobidentifier"
+            id="field_compilationJobidentifier"
+            data-cy="compilationJobidentifier"
+            formControlName="compilationJobidentifier"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationPeriodIdentifier">Depreciation Period Identifier</label>
+          <input
+            type="text"
+            class="form-control"
+            name="depreciationPeriodIdentifier"
+            id="field_depreciationPeriodIdentifier"
+            data-cy="depreciationPeriodIdentifier"
+            formControlName="depreciationPeriodIdentifier"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalMonthIdentifier">Fiscal Month Identifier</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fiscalMonthIdentifier"
+            id="field_fiscalMonthIdentifier"
+            data-cy="fiscalMonthIdentifier"
+            formControlName="fiscalMonthIdentifier"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_batchSize">Batch Size</label>
+          <input type="number" class="form-control" name="batchSize" id="field_batchSize" data-cy="batchSize" formControlName="batchSize" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processedItems">Processed Items</label>
+          <input
+            type="number"
+            class="form-control"
+            name="processedItems"
+            id="field_processedItems"
+            data-cy="processedItems"
+            formControlName="processedItems"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sequenceNumber">Sequence Number</label>
+          <input
+            type="number"
+            class="form-control"
+            name="sequenceNumber"
+            id="field_sequenceNumber"
+            data-cy="sequenceNumber"
+            formControlName="sequenceNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_isLastBatch">Is Last Batch</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="isLastBatch"
+            id="field_isLastBatch"
+            data-cy="isLastBatch"
+            formControlName="isLastBatch"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processingTime">Processing Time</label>
+          <input
+            type="text"
+            class="form-control"
+            name="processingTime"
+            id="field_processingTime"
+            data-cy="processingTime"
+            formControlName="processingTime"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalItems">Total Items</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalItems"
+            id="field_totalItems"
+            data-cy="totalItems"
+            formControlName="totalItems"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_nbvCompilationJob">Nbv Compilation Job</label>
+          <select
+            class="form-control"
+            id="field_nbvCompilationJob"
+            data-cy="nbvCompilationJob"
+            name="nbvCompilationJob"
+            formControlName="nbvCompilationJob"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                nbvCompilationJobOption.id === editForm.get('nbvCompilationJob')!.value?.id
+                  ? editForm.get('nbvCompilationJob')!.value
+                  : nbvCompilationJobOption
+              "
+              *ngFor="let nbvCompilationJobOption of nbvCompilationJobsSharedCollection; trackBy: trackNbvCompilationJobById"
+            >
+              {{ nbvCompilationJobOption.jobTitle }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

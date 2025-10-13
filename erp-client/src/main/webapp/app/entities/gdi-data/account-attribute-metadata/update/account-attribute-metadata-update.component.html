@@ -1,0 +1,225 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-account-attribute-metadata-heading" data-cy="AccountAttributeMetadataCreateUpdateHeading">
+        Create or edit a Account Attribute Metadata
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_precedence">Precedence</label>
+          <input
+            type="number"
+            class="form-control"
+            name="precedence"
+            id="field_precedence"
+            data-cy="precedence"
+            formControlName="precedence"
+          />
+          <div *ngIf="editForm.get('precedence')!.invalid && (editForm.get('precedence')!.dirty || editForm.get('precedence')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('precedence')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('precedence')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_columnName">Column Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="columnName"
+            id="field_columnName"
+            data-cy="columnName"
+            formControlName="columnName"
+          />
+          <div *ngIf="editForm.get('columnName')!.invalid && (editForm.get('columnName')!.dirty || editForm.get('columnName')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('columnName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_shortName">Short Name</label>
+          <input type="text" class="form-control" name="shortName" id="field_shortName" data-cy="shortName" formControlName="shortName" />
+          <div *ngIf="editForm.get('shortName')!.invalid && (editForm.get('shortName')!.dirty || editForm.get('shortName')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('shortName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_detailedDefinition">Detailed Definition</label>
+          <textarea
+            class="form-control"
+            name="detailedDefinition"
+            id="field_detailedDefinition"
+            data-cy="detailedDefinition"
+            formControlName="detailedDefinition"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dataType">Data Type</label>
+          <input type="text" class="form-control" name="dataType" id="field_dataType" data-cy="dataType" formControlName="dataType" />
+          <div *ngIf="editForm.get('dataType')!.invalid && (editForm.get('dataType')!.dirty || editForm.get('dataType')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('dataType')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_length">Length</label>
+          <input type="number" class="form-control" name="length" id="field_length" data-cy="length" formControlName="length" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_columnIndex">Column Index</label>
+          <input
+            type="text"
+            class="form-control"
+            name="columnIndex"
+            id="field_columnIndex"
+            data-cy="columnIndex"
+            formControlName="columnIndex"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_mandatoryFieldFlag">Mandatory Field Flag</label>
+          <select
+            class="form-control"
+            name="mandatoryFieldFlag"
+            formControlName="mandatoryFieldFlag"
+            id="field_mandatoryFieldFlag"
+            data-cy="mandatoryFieldFlag"
+          >
+            <option [ngValue]="null"></option>
+            <option *ngFor="let mandatoryFieldFlagTypes of mandatoryFieldFlagTypesValues" [value]="mandatoryFieldFlagTypes">
+              mandatoryFieldFlagTypes
+            </option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('mandatoryFieldFlag')!.invalid &&
+              (editForm.get('mandatoryFieldFlag')!.dirty || editForm.get('mandatoryFieldFlag')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('mandatoryFieldFlag')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_businessValidation">Business Validation</label>
+          <textarea
+            class="form-control"
+            name="businessValidation"
+            id="field_businessValidation"
+            data-cy="businessValidation"
+            formControlName="businessValidation"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_technicalValidation">Technical Validation</label>
+          <textarea
+            class="form-control"
+            name="technicalValidation"
+            id="field_technicalValidation"
+            data-cy="technicalValidation"
+            formControlName="technicalValidation"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dbColumnName">Db Column Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="dbColumnName"
+            id="field_dbColumnName"
+            data-cy="dbColumnName"
+            formControlName="dbColumnName"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_metadataVersion">Metadata Version</label>
+          <input
+            type="number"
+            class="form-control"
+            name="metadataVersion"
+            id="field_metadataVersion"
+            data-cy="metadataVersion"
+            formControlName="metadataVersion"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_standardInputTemplate">Standard Input Template</label>
+          <select
+            class="form-control"
+            id="field_standardInputTemplate"
+            data-cy="standardInputTemplate"
+            name="standardInputTemplate"
+            formControlName="standardInputTemplate"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                gdiMasterDataIndexOption.id === editForm.get('standardInputTemplate')!.value?.id
+                  ? editForm.get('standardInputTemplate')!.value
+                  : gdiMasterDataIndexOption
+              "
+              *ngFor="let gdiMasterDataIndexOption of gdiMasterDataIndicesSharedCollection; trackBy: trackGdiMasterDataIndexById"
+            >
+              {{ gdiMasterDataIndexOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

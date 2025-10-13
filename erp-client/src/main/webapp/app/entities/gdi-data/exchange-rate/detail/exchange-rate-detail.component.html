@@ -1,0 +1,91 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="exchangeRate">
+      <h2 data-cy="exchangeRateDetailsHeading"><span>Exchange Rate</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ exchangeRate.id }}</span>
+        </dd>
+        <dt><span>Business Reporting Day</span></dt>
+        <dd>
+          <span>{{ exchangeRate.businessReportingDay | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Buying Rate</span></dt>
+        <dd>
+          <span>{{ exchangeRate.buyingRate }}</span>
+        </dd>
+        <dt><span>Selling Rate</span></dt>
+        <dd>
+          <span>{{ exchangeRate.sellingRate }}</span>
+        </dd>
+        <dt><span>Mean Rate</span></dt>
+        <dd>
+          <span>{{ exchangeRate.meanRate }}</span>
+        </dd>
+        <dt><span>Closing Bid Rate</span></dt>
+        <dd>
+          <span>{{ exchangeRate.closingBidRate }}</span>
+        </dd>
+        <dt><span>Closing Offer Rate</span></dt>
+        <dd>
+          <span>{{ exchangeRate.closingOfferRate }}</span>
+        </dd>
+        <dt><span>Usd Cross Rate</span></dt>
+        <dd>
+          <span>{{ exchangeRate.usdCrossRate }}</span>
+        </dd>
+        <dt><span>Institution Code</span></dt>
+        <dd>
+          <div *ngIf="exchangeRate.institutionCode">
+            <a [routerLink]="['/institution-code', exchangeRate.institutionCode?.id, 'view']">{{
+              exchangeRate.institutionCode?.institutionName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Currency Code</span></dt>
+        <dd>
+          <div *ngIf="exchangeRate.currencyCode">
+            <a [routerLink]="['/iso-currency-code', exchangeRate.currencyCode?.id, 'view']">{{
+              exchangeRate.currencyCode?.alphabeticCode
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/exchange-rate', exchangeRate.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

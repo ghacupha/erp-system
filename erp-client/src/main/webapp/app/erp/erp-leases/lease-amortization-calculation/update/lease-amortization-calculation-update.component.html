@@ -1,0 +1,163 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+
+      <h2
+        id="jhi-lease-amortization-calculation-heading-create"
+        data-cy="LeaseAmortizationCalculationCreateUpdateHeading"
+        [hidden]='!weAreCreating'>
+        New Lease Amortization Calculation Metadata
+      </h2>
+
+      <h2
+        id="jhi-lease-amortization-calculation-heading"
+        data-cy="LeaseAmortizationCalculationCreateUpdateHeading"
+        [hidden]='weAreCreating'>
+        Lease Amortization Calculation
+      </h2>
+
+
+      <h6
+        id="jhi-lease-amortization-calculation-heading-copy"
+        data-cy="LeaseAmortizationCalculationCreateUpdateHeading"
+        [hidden]='!weAreCopying'>
+        Copying # {{ selectedItem.id }} | Item # {{ selectedLeaseContract.bookingId }} | {{ selectedLeaseContract.leaseTitle }}
+      </h6>
+
+      <h6
+        id="jhi-ifrs-16-lease-contract-heading-edit"
+        data-cy="IFRS16LeaseContractCreateUpdateHeading"
+        [hidden]='!weAreEditing'>
+        Editing # {{ selectedItem.id }} | Item # {{ selectedLeaseContract.bookingId }} | {{ selectedLeaseContract.leaseTitle }}
+      </h6>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <jhi-m21-ifrs16-lease-form-control
+          ngDefaultControl
+          formControlName='leaseContract'
+          [inputValue]="editForm.get(['leaseContract'])!.value"
+          (valueSelected)='updateIFRS16LeaseContract($event)'
+          inputControlLabel='Lease Contract'
+        >
+          <option [ngValue]="editForm.get(['leaseContract'])!.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_interestRate">Interest Rate</label>
+          <input
+            type="number"
+            class="form-control"
+            name="interestRate"
+            id="field_interestRate"
+            data-cy="interestRate"
+            formControlName="interestRate"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_periodicity">Periodicity</label>
+          <input
+            type="text"
+            class="form-control"
+            name="periodicity"
+            id="field_periodicity"
+            data-cy="periodicity"
+            formControlName="periodicity"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseAmount">Lease Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="leaseAmount"
+            id="field_leaseAmount"
+            data-cy="leaseAmount"
+            formControlName="leaseAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_numberOfPeriods">Number Of Periods</label>
+          <input
+            type="number"
+            class="form-control"
+            name="numberOfPeriods"
+            id="field_numberOfPeriods"
+            data-cy="numberOfPeriods"
+            formControlName="numberOfPeriods"
+          />
+        </div>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityEditSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCopySaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,343 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-depreciation-entry-heading" data-cy="DepreciationEntryCreateUpdateHeading">Create or edit a Depreciation Entry</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_postedAt">Posted At</label>
+          <div class="d-flex">
+            <input
+              id="field_postedAt"
+              data-cy="postedAt"
+              type="datetime-local"
+              class="form-control"
+              name="postedAt"
+              formControlName="postedAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationAmount">Depreciation Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="depreciationAmount"
+            id="field_depreciationAmount"
+            data-cy="depreciationAmount"
+            formControlName="depreciationAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetNumber">Asset Number</label>
+          <input
+            type="number"
+            class="form-control"
+            name="assetNumber"
+            id="field_assetNumber"
+            data-cy="assetNumber"
+            formControlName="assetNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_batchSequenceNumber">Batch Sequence Number</label>
+          <input
+            type="number"
+            class="form-control"
+            name="batchSequenceNumber"
+            id="field_batchSequenceNumber"
+            data-cy="batchSequenceNumber"
+            formControlName="batchSequenceNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processedItems">Processed Items</label>
+          <input
+            type="text"
+            class="form-control"
+            name="processedItems"
+            id="field_processedItems"
+            data-cy="processedItems"
+            formControlName="processedItems"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalItemsProcessed">Total Items Processed</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalItemsProcessed"
+            id="field_totalItemsProcessed"
+            data-cy="totalItemsProcessed"
+            formControlName="totalItemsProcessed"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_serviceOutlet">Service Outlet</label>
+          <select
+            class="form-control"
+            id="field_serviceOutlet"
+            data-cy="serviceOutlet"
+            name="serviceOutlet"
+            formControlName="serviceOutlet"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                serviceOutletOption.id === editForm.get('serviceOutlet')!.value?.id
+                  ? editForm.get('serviceOutlet')!.value
+                  : serviceOutletOption
+              "
+              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
+            >
+              {{ serviceOutletOption.outletCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetCategory">Asset Category</label>
+          <select
+            class="form-control"
+            id="field_assetCategory"
+            data-cy="assetCategory"
+            name="assetCategory"
+            formControlName="assetCategory"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                assetCategoryOption.id === editForm.get('assetCategory')!.value?.id
+                  ? editForm.get('assetCategory')!.value
+                  : assetCategoryOption
+              "
+              *ngFor="let assetCategoryOption of assetCategoriesSharedCollection; trackBy: trackAssetCategoryById"
+            >
+              {{ assetCategoryOption.assetCategoryName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationMethod">Depreciation Method</label>
+          <select
+            class="form-control"
+            id="field_depreciationMethod"
+            data-cy="depreciationMethod"
+            name="depreciationMethod"
+            formControlName="depreciationMethod"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                depreciationMethodOption.id === editForm.get('depreciationMethod')!.value?.id
+                  ? editForm.get('depreciationMethod')!.value
+                  : depreciationMethodOption
+              "
+              *ngFor="let depreciationMethodOption of depreciationMethodsSharedCollection; trackBy: trackDepreciationMethodById"
+            >
+              {{ depreciationMethodOption.depreciationMethodName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetRegistration">Asset Registration</label>
+          <select
+            class="form-control"
+            id="field_assetRegistration"
+            data-cy="assetRegistration"
+            name="assetRegistration"
+            formControlName="assetRegistration"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                assetRegistrationOption.id === editForm.get('assetRegistration')!.value?.id
+                  ? editForm.get('assetRegistration')!.value
+                  : assetRegistrationOption
+              "
+              *ngFor="let assetRegistrationOption of assetRegistrationsSharedCollection; trackBy: trackAssetRegistrationById"
+            >
+              {{ assetRegistrationOption.assetNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationPeriod">Depreciation Period</label>
+          <select
+            class="form-control"
+            id="field_depreciationPeriod"
+            data-cy="depreciationPeriod"
+            name="depreciationPeriod"
+            formControlName="depreciationPeriod"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                depreciationPeriodOption.id === editForm.get('depreciationPeriod')!.value?.id
+                  ? editForm.get('depreciationPeriod')!.value
+                  : depreciationPeriodOption
+              "
+              *ngFor="let depreciationPeriodOption of depreciationPeriodsSharedCollection; trackBy: trackDepreciationPeriodById"
+            >
+              {{ depreciationPeriodOption.endDate }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalMonth">Fiscal Month</label>
+          <select class="form-control" id="field_fiscalMonth" data-cy="fiscalMonth" name="fiscalMonth" formControlName="fiscalMonth">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                fiscalMonthOption.id === editForm.get('fiscalMonth')!.value?.id ? editForm.get('fiscalMonth')!.value : fiscalMonthOption
+              "
+              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
+            >
+              {{ fiscalMonthOption.fiscalMonthCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalQuarter">Fiscal Quarter</label>
+          <select
+            class="form-control"
+            id="field_fiscalQuarter"
+            data-cy="fiscalQuarter"
+            name="fiscalQuarter"
+            formControlName="fiscalQuarter"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                fiscalQuarterOption.id === editForm.get('fiscalQuarter')!.value?.id
+                  ? editForm.get('fiscalQuarter')!.value
+                  : fiscalQuarterOption
+              "
+              *ngFor="let fiscalQuarterOption of fiscalQuartersSharedCollection; trackBy: trackFiscalQuarterById"
+            >
+              {{ fiscalQuarterOption.fiscalQuarterCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalYear">Fiscal Year</label>
+          <select class="form-control" id="field_fiscalYear" data-cy="fiscalYear" name="fiscalYear" formControlName="fiscalYear">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                fiscalYearOption.id === editForm.get('fiscalYear')!.value?.id ? editForm.get('fiscalYear')!.value : fiscalYearOption
+              "
+              *ngFor="let fiscalYearOption of fiscalYearsSharedCollection; trackBy: trackFiscalYearById"
+            >
+              {{ fiscalYearOption.fiscalYearCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationJob">Depreciation Job</label>
+          <select
+            class="form-control"
+            id="field_depreciationJob"
+            data-cy="depreciationJob"
+            name="depreciationJob"
+            formControlName="depreciationJob"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                depreciationJobOption.id === editForm.get('depreciationJob')!.value?.id
+                  ? editForm.get('depreciationJob')!.value
+                  : depreciationJobOption
+              "
+              *ngFor="let depreciationJobOption of depreciationJobsSharedCollection; trackBy: trackDepreciationJobById"
+            >
+              {{ depreciationJobOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationBatchSequence">Depreciation Batch Sequence</label>
+          <select
+            class="form-control"
+            id="field_depreciationBatchSequence"
+            data-cy="depreciationBatchSequence"
+            name="depreciationBatchSequence"
+            formControlName="depreciationBatchSequence"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                depreciationBatchSequenceOption.id === editForm.get('depreciationBatchSequence')!.value?.id
+                  ? editForm.get('depreciationBatchSequence')!.value
+                  : depreciationBatchSequenceOption
+              "
+              *ngFor="
+                let depreciationBatchSequenceOption of depreciationBatchSequencesSharedCollection;
+                trackBy: trackDepreciationBatchSequenceById
+              "
+            >
+              {{ depreciationBatchSequenceOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

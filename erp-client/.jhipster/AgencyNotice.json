@@ -1,0 +1,76 @@
+{
+  "changelogDate": "20220203144916",
+  "clientRootFolder": "tax",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "referenceNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "referenceDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "assessmentAmount",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "agencyStatus",
+      "fieldType": "AgencyStatusType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CLEARED,NOT_CLEARED"
+    },
+    {
+      "fieldName": "assessmentNotice",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "AgencyNotice",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "otherEntityRelationshipName": "agencyNotice",
+      "ownerSide": true,
+      "relationshipName": "correspondents",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "iso4217CurrencyCode",
+      "otherEntityName": "settlementCurrency",
+      "relationshipName": "settlementCurrency",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "assessor",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "agencyNotice",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "agencyNotice",
+      "ownerSide": true,
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}
