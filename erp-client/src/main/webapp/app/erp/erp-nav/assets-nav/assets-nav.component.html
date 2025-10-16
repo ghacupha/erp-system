@@ -194,58 +194,60 @@
       </ul>
     </li>
 
-    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
-        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="net-book-value-menu">
-          <span>
-              <fa-icon icon="battery-half"></fa-icon>
-              <span>
-                 NBV
-              </span>
-          </span>
-      </a>
-      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+    <div *jhiHasAnyAuthority="'ROLE_DEV'">
+      <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+          routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="net-book-value-menu">
+            <span>
+                <fa-icon icon="battery-half"></fa-icon>
+                <span>
+                   NBV
+                </span>
+            </span>
+        </a>
+        <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
 
-        <li>
-          <a
-            class="dropdown-item"
-            routerLink="nbv-compilation-job"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>NBV Compilation Job</span>
-          </a>
-        </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="nbv-compilation-job"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>NBV Compilation Job</span>
+            </a>
+          </li>
 
-        <li>
-          <a
-            class="dropdown-item"
-            routerLink="nbv-compilation-batch"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>NBV Compilation Batch</span>
-          </a>
-        </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="nbv-compilation-batch"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>NBV Compilation Batch</span>
+            </a>
+          </li>
 
-        <li>
-          <a
-            class="dropdown-item"
-            routerLink="net-book-value-entry"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>NBV Entry</span>
-          </a>
-        </li>
-      </ul>
-    </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="net-book-value-entry"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>NBV Entry</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </div>
 
     <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
         routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
