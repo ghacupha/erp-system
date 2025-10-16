@@ -136,7 +136,7 @@ public class NBVEntryBufferedSinkProcessorImpl implements BufferedSinkProcessor<
 
     private void flushBufferWithCount() {
 
-        log.info("Depreciation buffer flushing {} items to the sink", buffer.size());
+        log.info("NBV buffer flushing {} items to the sink", buffer.size());
 
         if (!buffer.isEmpty()) {
 
