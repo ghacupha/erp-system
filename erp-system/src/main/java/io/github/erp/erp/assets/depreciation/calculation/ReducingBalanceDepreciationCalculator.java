@@ -51,7 +51,7 @@ public class ReducingBalanceDepreciationCalculator implements CalculatesDeprecia
 
     public DepreciationArtefact calculateDepreciation(AssetRegistrationDTO asset, DepreciationPeriodDTO period, AssetCategoryDTO assetCategory, DepreciationMethodDTO depreciationMethod, BigDecimal costAdjustment) throws DepreciationRateNotProvidedException {
 
-        // opt out, no pain no pain
+        // opt out, no pain, no pain
         if (depreciationMethod.getDepreciationType() != DepreciationTypes.DECLINING_BALANCE) {
             return returnZeroAmountDepreciation(asset, ZERO, assetCategory.getDepreciationRateYearly(), period.getStartDate(), period.getEndDate());
         }
