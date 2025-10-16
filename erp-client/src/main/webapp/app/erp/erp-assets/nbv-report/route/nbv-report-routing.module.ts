@@ -30,7 +30,7 @@ const nbvReportRoute: Routes = [
     path: '',
     component: NbvReportComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },
