@@ -133,6 +133,16 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         .then(m => m.SystemContentTypeModule),
     },
     {
+      path: 'reports/view/:slug',
+      data: {
+        pageTitle: 'ERP | Dynamic report summary',
+        authorities: ['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER'],
+      },
+      canActivate: [UserRouteAccessService],
+      loadChildren: () =>
+        import('./report-summary-view/report-summary-view.module').then(m => m.ReportSummaryViewModule),
+    },
+    {
       path: 'work-in-progress-overview',
       data: {
         pageTitle: 'ERP | WIP Overview',
