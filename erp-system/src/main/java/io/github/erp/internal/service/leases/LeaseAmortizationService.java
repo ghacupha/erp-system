@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+// @Transactional // this might mess up with the transaction manager used by the batch
 public class LeaseAmortizationService implements LeaseAmortizationCompilationService {
 
     private static final RoundingMode ROUND_HALF_EVEN = RoundingMode.HALF_EVEN;
