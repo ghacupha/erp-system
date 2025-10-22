@@ -18,10 +18,48 @@ package io.github.erp.repository.search;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.ReportMetadata;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Spring Data Elasticsearch repository for the {@link ReportMetadata} entity.
  */
-public interface ReportMetadataSearchRepository extends ElasticsearchRepository<ReportMetadata, Long> {}
+public interface ReportMetadataSearchRepository extends ElasticsearchRepository<ReportMetadata, Long>, ReportMetadataSearchRepositoryInternal {}
+
+interface ReportMetadataSearchRepositoryInternal {
+    Page<ReportMetadata> search(String query, Pageable pageable);
+}
+
+class ReportMetadataSearchRepositoryInternalImpl implements ReportMetadataSearchRepositoryInternal {
+
+    private final ElasticsearchRestTemplate elasticsearchTemplate;
+
+    ReportMetadataSearchRepositoryInternalImpl(ElasticsearchRestTemplate elasticsearchTemplate) {
+        this.elasticsearchTemplate = elasticsearchTemplate;
+    }
+
+    @Override
+    public Page<ReportMetadata> search(String query, Pageable pageable) {
+        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
+        nativeSearchQuery.setPageable(pageable);
+        List<ReportMetadata> hits = elasticsearchTemplate
+            .search(nativeSearchQuery, ReportMetadata.class)
+            .map(SearchHit::getContent)
+            .stream()
+            .collect(Collectors.toList());
+
+        return new PageImpl<>(hits, pageable, hits.size());
+    }
+}
