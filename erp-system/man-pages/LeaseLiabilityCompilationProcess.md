@@ -37,6 +37,27 @@ This manual documents the backend workflow that produces IFRS16 lease amortizati
 - Missing prerequisite data surfaces as `IllegalArgumentException`s—capture these in logs or monitoring dashboards to inform data stewards.
 - Adjust chunk size or introduce parallel steps in `LeaseLiabilityCompilationBatchConfig` when scaling to larger portfolios.
 
+## Reporting recommendations for lease-period monitoring
+Engineering teams can expose focused reports to track how schedule items evolve for a specific lease period and compilation run.
+
+### Lease-period schedule delta view
+- **Objective** – Compare principal, interest, and outstanding balances for the same lease period across sequential compilation runs.
+- **Suggested inputs** – Lease contract booking ID, lease liability ID, repayment period ID/sequence, compilation timestamp.
+- **Data points** – Opening/closing balances, interest accrued, interest/principal payment split, cash payment, interest payable opening/closing.
+- **Implementation hint** – Query `LeaseLiabilityScheduleItem` entities joined on `leasePeriod.id` and `leaseLiability.id`, sorted by compilation execution time, and compute deltas across runs.
+
+### Lease-period payment variance audit
+- **Objective** – Validate that schedule cash payments align with expected lease payments for the period.
+- **Suggested inputs** – Lease contract booking ID, repayment period boundaries, payment date, compilation status.
+- **Data points** – Schedule cash payment, expected payment sourced from `LeasePayment` records, absolute/percentage variance, tolerance indicator.
+- **Implementation hint** – Blend schedule items with `LeasePayment` entries using date overlap logic from `LeaseAmortizationService`. Highlight exceptions exceeding tolerance to prompt data stewardship.
+
+### Compilation trend and exception dashboard
+- **Objective** – Surface lease periods that frequently change or fail due to missing inputs.
+- **Suggested inputs** – Compilation job execution date, lease liability ID, exception category, period sequence, batch identifier.
+- **Data points** – Count of compilations per period, number of failures or warning flags, average time between recompilations, outstanding exception age.
+- **Implementation hint** – Combine Spring Batch execution metadata with amortization service logs. Use heat maps or sparklines to visualize volatile periods and drive remediation.
+
 ## Related Artifacts
 - User stories describing this workflow are stored in `../user-stories/lease-liability-compilation.md` and `../erp-system/user-stories/lease-liability-compilation.md`.
 - Source implementations reside under `io.github.erp.erp.resources.leases`, `io.github.erp.aop.lease`, and `io.github.erp.internal.service.leases` packages.

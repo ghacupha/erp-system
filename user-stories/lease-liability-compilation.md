@@ -59,11 +59,21 @@ This collection of user stories documents how finance and accounting stakeholder
 - After correcting data, the user can resubmit the compilation request and receive a refreshed schedule.
 
 ## Story 6 – Review compiled schedules
-**As an** Accounting Specialist  
-**I want** to retrieve the generated schedule items linked to the compilation request  
+**As an** Accounting Specialist
+**I want** to retrieve the generated schedule items linked to the compilation request
 **So that** I can validate amortization figures against IFRS16 reporting requirements.
 
 ### Acceptance Criteria
 - Schedule items persist with references back to the originating liability and contract.
 - Retrieval endpoints reflect the results of the most recent successful compilation run.
 - Accounting teams can export the schedule data for disclosure or audit purposes.
+
+## Story 7 – Monitor lease-period schedule changes
+**As an** Accounting Specialist
+**I want** to access reports that highlight how liability schedule metrics shift for a specific lease period across compilations
+**So that** I can investigate unexpected balance or payment movements quickly.
+
+### Acceptance Criteria
+- A “Lease-period schedule delta” report compares opening/closing balances, principal, interest, and cash payments between any two compilation runs for the same lease period.
+- A payment variance view flags when the scheduled cash payment diverges from the expected lease payment captured in `LeasePaymentDTO`.
+- Dashboards trend recompilations and exception counts per lease period so accounting teams can prioritize remediation.

@@ -53,11 +53,21 @@ These user stories interpret the lease liability compilation workflow from the p
 - The writer supports repeated invocations within a single chunk and avoids duplicate persistence.
 
 ## Story F – Validate amortization inputs
-**As a** backend maintainer  
-**I want** `LeaseAmortizationService` to guard against missing liabilities, contracts, calculations, payments, or schedules  
+**As a** backend maintainer
+**I want** `LeaseAmortizationService` to guard against missing liabilities, contracts, calculations, payments, or schedules
 **So that** amortization runs fail fast with actionable error messages.
 
 ### Acceptance Criteria
-- `generateAmortizationSchedule` verifies the presence of each prerequisite entity and throws descriptive `IllegalArgumentException`s when absent.  
-- Payment matching respects repayment periods and defaults to zero when no payment is scheduled.  
+- `generateAmortizationSchedule` verifies the presence of each prerequisite entity and throws descriptive `IllegalArgumentException`s when absent.
+- Payment matching respects repayment periods and defaults to zero when no payment is scheduled.
 - Balances roll forward across periods, updating principal, interest, and outstanding amounts.
+
+## Story G – Expose lease-period monitoring reports
+**As a** backend maintainer
+**I want** reporting APIs and data extracts that surface liability schedule changes for a selected lease period across compilations
+**So that** downstream analytics and finance teams can monitor volatility and investigate anomalies.
+
+### Acceptance Criteria
+- Provide a reporting endpoint (or database view) that compares schedule item balances across compilation timestamps for the same `leaseLiabilityId` and `leasePeriod.id`.
+- Join schedule items to `LeasePayment` records to calculate payment variance metrics and expose tolerance breach indicators.
+- Persist batch job execution metadata necessary to trend recompilations and exception counts per lease period for dashboard consumption.
