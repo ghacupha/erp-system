@@ -45,7 +45,7 @@ public class LeaseLiabilityCompilationRequestInterceptor {
     @AfterReturning(
         pointcut="reportRequisitionPointcut()",
         returning="response")
-    public void getCreatedReportInfo(JoinPoint joinPoint, ResponseEntity<LeaseLiabilityCompilationDTO> response) {
+    public void getCompilationInfo(JoinPoint joinPoint, ResponseEntity<LeaseLiabilityCompilationDTO> response) {
 
         log.info("Lease compilation request response intercept completed successfully");
 
@@ -55,11 +55,11 @@ public class LeaseLiabilityCompilationRequestInterceptor {
 
         log.info("Lease compilation request with id: {} has been registered, with entity id # {} commencing compilation sequence...", requestId, entityId);
 
-        compileDepreciation(requestDTO);
+        compileAmortization(requestDTO);
     }
 
     @Async
-    void compileDepreciation(LeaseLiabilityCompilationDTO requestDTO) {
+    void compileAmortization(LeaseLiabilityCompilationDTO requestDTO) {
 
         leaseLiabilityCompilationJob.compileLeaseLiabilitySchedule(requestDTO);
     }
