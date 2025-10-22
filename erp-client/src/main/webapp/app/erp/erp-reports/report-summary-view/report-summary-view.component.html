@@ -1,0 +1,100 @@
+<!--
+
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="report-summary" *ngIf="metadata; else metadataError">
+  <div class="report-summary__header">
+    <h1 class="report-summary__title">{{ metadata?.reportTitle }}</h1>
+    <p class="report-summary__description" *ngIf="metadata?.description">{{ metadata?.description }}</p>
+  </div>
+
+  <div class="report-summary__filters" *ngIf="metadata?.displayLeasePeriod || metadata?.displayLeaseContract">
+    <div class="report-summary__filter" *ngIf="metadata?.displayLeasePeriod">
+      <label class="form-label" for="lease-period-select">Lease period</label>
+      <ng-select
+        id="lease-period-select"
+        [items]="leasePeriods"
+        bindLabel="periodCode"
+        [loading]="loadingLeasePeriods"
+        placeholder="Select lease period"
+        [(ngModel)]="selectedLeasePeriod"
+        (change)="onLeasePeriodChange()"
+        name="leasePeriod"
+      >
+        <ng-template ng-option-tmp let-item="item">
+          <div class="option-primary">{{ item.periodCode || ('#' + item.id) }}</div>
+          <small class="option-secondary" *ngIf="item.startDate && item.endDate">
+            {{ item.startDate.format('YYYY-MM-DD') }} → {{ item.endDate.format('YYYY-MM-DD') }}
+          </small>
+        </ng-template>
+      </ng-select>
+    </div>
+
+    <div class="report-summary__filter" *ngIf="metadata?.displayLeaseContract">
+      <label class="form-label" for="lease-liability-select">Lease liability</label>
+      <ng-select
+        id="lease-liability-select"
+        [items]="leaseLiabilities"
+        bindLabel="leaseId"
+        [loading]="loadingLeaseLiabilities"
+        placeholder="Select lease liability"
+        [(ngModel)]="selectedLeaseLiability"
+        (change)="onLeaseLiabilityChange()"
+        name="leaseLiability"
+      >
+        <ng-template ng-option-tmp let-item="item">
+          <div class="option-primary">{{ item.leaseId || ('Liability #' + item.id) }}</div>
+          <small class="option-secondary" *ngIf="item.leaseContract?.leaseTitle">{{ item.leaseContract?.leaseTitle }}</small>
+        </ng-template>
+      </ng-select>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" *ngIf="errorMessage && !loading">{{ errorMessage }}</div>
+
+  <div class="report-summary__loading" *ngIf="loading">
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <span class="loading-text">Loading summary...</span>
+  </div>
+
+  <div class="report-summary__empty" *ngIf="!loading && !errorMessage && !summaryItems.length">
+    No summary data available for the selected criteria.
+  </div>
+
+  <div class="table-responsive" *ngIf="summaryItems.length">
+    <table class="table table-striped table-hover table-sm align-middle">
+      <thead>
+        <tr>
+          <th *ngFor="let column of displayedColumns">{{ column }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of summaryItems; trackBy: trackRow">
+          <td *ngFor="let column of displayedColumns">{{ formatValue(row[column]) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #metadataError>
+  <div class="alert alert-danger" *ngIf="errorMessage; else metadataPlaceholder">{{ errorMessage }}</div>
+  <ng-template #metadataPlaceholder>
+    <div class="alert alert-info">Select a report from the search menu to view its summary.</div>
+  </ng-template>
+</ng-template>
