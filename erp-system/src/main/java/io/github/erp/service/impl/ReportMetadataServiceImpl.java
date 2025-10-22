@@ -113,6 +113,6 @@ public class ReportMetadataServiceImpl implements ReportMetadataService {
     @Transactional(readOnly = true)
     public Page<ReportMetadataDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of ReportMetadata for query {}", query);
-        return reportMetadataSearchRepository.search(queryStringQuery(query), pageable).map(reportMetadataMapper::toDto);
+        return reportMetadataSearchRepository.search(query, pageable).map(reportMetadataMapper::toDto);
     }
 }
