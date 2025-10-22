@@ -5,6 +5,9 @@
 /target/classes/static/**
 /src/test/javascript/coverage/
 
+# Reporting runtime caches
+reporting-cache/
+
 ######################
 # Node
 ######################

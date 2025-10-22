@@ -263,6 +263,7 @@
     <include file="config/liquibase/changelog/20240313091444_added_entity_RouAccountBalanceReportItem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240313092355_added_entity_RouAccountBalanceReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240313093232_added_entity_RouAssetListReport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240711123000_added_entity_ReportMetadata.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240313094655_added_entity_RouDepreciationPostingReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240313102017_added_entity_RouDepreciationPostingReportItem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240313103527_added_entity_RouMonthlyDepreciationReport.xml" relativeToChangelogFile="false"/>
