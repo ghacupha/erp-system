@@ -58,6 +58,78 @@ Navbar
   }
 }
 
+.navbar-search {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+  margin-left: 1rem;
+  min-width: 260px;
+
+  .input-group-text {
+    background-color: rgba($white, 0.12);
+    border: 1px solid rgba($white, 0.18);
+    color: $navbar-dark-color;
+  }
+
+  .form-control {
+    background-color: rgba($white, 0.08);
+    border-color: rgba($white, 0.18);
+    color: $navbar-dark-color;
+
+    &::placeholder {
+      color: rgba($navbar-dark-color, 0.75);
+    }
+  }
+
+  .report-search__clear-btn {
+    color: $navbar-dark-color;
+    border-color: rgba($white, 0.18);
+    background-color: transparent;
+
+    &:hover,
+    &:focus {
+      color: $white;
+      border-color: rgba($white, 0.4);
+    }
+  }
+}
+
+.report-search__dropdown {
+  width: 360px;
+  max-width: 80vw;
+  padding: 0;
+  box-shadow: 0 0.5rem 1.5rem rgba($black, 0.15);
+}
+
+.report-search__result-title {
+  font-weight: 600;
+  color: $gray-900;
+}
+
+.report-search__result-description {
+  display: block;
+  color: $gray-700;
+}
+
+.report-search__result-path {
+  display: block;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-search {
+    margin: 0 0 1rem;
+    width: 100%;
+  }
+
+  .report-search__dropdown {
+    width: calc(100vw - 3rem);
+    left: 0 !important;
+    right: 0 !important;
+    margin-top: 0.5rem;
+  }
+}
+
 /* ==========================================================================
 Logo styles
 ========================================================================== */

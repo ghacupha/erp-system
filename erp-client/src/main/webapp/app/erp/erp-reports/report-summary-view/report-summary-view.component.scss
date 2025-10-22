@@ -1,0 +1,117 @@
+/**
+ * Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+ * Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+@import '~bootstrap/scss/functions';
+@import '~bootswatch/dist/journal/variables';
+@import '~bootstrap/scss/variables';
+
+.report-summary {
+  padding: 1.5rem;
+  background-color: $body-bg;
+
+  &__header {
+    margin-bottom: 1.5rem;
+  }
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: $gray-900;
+    margin-bottom: 0.25rem;
+  }
+
+  &__description {
+    color: $gray-700;
+    max-width: 60rem;
+  }
+
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__filter {
+    flex: 1 1 260px;
+    min-width: 220px;
+  }
+
+  &__loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    color: $primary;
+    font-weight: 500;
+  }
+
+  &__empty {
+    padding: 1.25rem;
+    border: 1px dashed rgba($primary, 0.35);
+    border-radius: 0.5rem;
+    text-align: center;
+    color: $gray-600;
+    background-color: rgba($primary, 0.05);
+    margin-bottom: 1rem;
+  }
+
+  .table {
+    background-color: $body-bg;
+    border-radius: 0.5rem;
+    overflow: hidden;
+
+    thead th {
+      background-color: lighten($primary, 42%);
+      color: $gray-900;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    tbody td {
+      vertical-align: middle;
+    }
+  }
+}
+
+.option-primary {
+  font-weight: 600;
+  color: $gray-900;
+}
+
+.option-secondary {
+  display: block;
+  color: $gray-600;
+}
+
+@media (max-width: 767.98px) {
+  .report-summary {
+    padding: 1rem;
+
+    &__title {
+      font-size: 1.4rem;
+    }
+
+    &__filters {
+      flex-direction: column;
+    }
+
+    &__filter {
+      width: 100%;
+    }
+  }
+}
