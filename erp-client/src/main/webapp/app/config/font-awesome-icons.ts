@@ -62,7 +62,10 @@ import {
   faTrash,
   faBookOpen,
   faHdd,
-  faMoneyBillWaveAlt, faMapMarkedAlt
+  faMoneyBillWaveAlt,
+  faMapMarkedAlt,
+  faFileCsv,
+  faFileExcel
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -114,5 +117,7 @@ export const fontAwesomeIcons = [
   faHdd,
   faBookOpen,
   faMapMarkedAlt,
+  faFileCsv,
+  faFileExcel,
   // jhipster-needle-add-icon-import
 ];

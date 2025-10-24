@@ -13,6 +13,7 @@ Troubleshooting the **ROU Asset Balance by Account** report required the lease p
 2. **Dynamic endpoint resolution** – Enhanced `ReportSummaryDataService` with placeholder substitution logic. The service replaces tokens like `{leasePeriodId}` with runtime values and removes them from the query string prior to issuing the HTTP request.
 3. **Lease period selector refresh** – Introduced incremental search support in `ReportSummaryViewComponent`. Typing a value such as `202502` triggers a fresh `LeasePeriodService.query` call with a `periodCode.contains` filter, ensuring the dropdown shows relevant results beyond the initial page.
 4. **Regression coverage** – Added `report-summary-data.service.spec.ts` to verify placeholder handling so future refactors retain the behaviour.
+5. **Export enablement (October 2025)** – Added CSV and Excel export buttons that marshal full report datasets via the new `fetchAllSummary` helper, introduced a reusable export utility for consistent formatting, and validated the download pipeline with targeted unit tests.
 
 ## Resulting Workflow
 | Step | Actor | Action | Outcome |
@@ -22,11 +23,13 @@ Troubleshooting the **ROU Asset Balance by Account** report required the lease p
 | 3 | User | Selects a lease period | Component stores the selection and triggers data refresh |
 | 4 | Client | Calls `/api/leases/rou-account-balance-report-items/reports/{leasePeriodId}` | Server returns report rows for the selected period |
 | 5 | User | Reviews report table | Data reflects the newly selected period without lease liability filtering |
+| 6 | User | Chooses CSV or Excel export | The client fetches the complete dataset and downloads it with a timestamped filename |
 
 ## Verification Checklist
 - [x] Network inspector shows URLs such as `/api/leases/rou-account-balance-report-items/reports/12345`.
 - [x] Changing the typeahead term refreshes the lease period options.
 - [x] Selecting a new period triggers a new summary fetch with zero lease liability parameters.
+- [x] Export buttons are visible, display progress spinners during export, and yield files that include every column and record from the backend.
 
 ## Follow-up Considerations
 * Monitor API telemetry for the new endpoint to confirm all report invocations include the path parameter.

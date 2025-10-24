@@ -18,8 +18,8 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, EMPTY } from 'rxjs';
+import { expand, map, reduce } from 'rxjs/operators';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { ReportSummaryRecord } from '../report-metadata/report-metadata.model';
@@ -37,6 +37,18 @@ export class ReportSummaryDataService {
     return this.http
       .get<ReportSummaryRecord[]>(url, { params: httpParams })
       .pipe(map(response => response ?? []));
+  }
+
+  fetchAllSummary(apiPath: string, params?: Record<string, unknown>): Observable<ReportSummaryRecord[]> {
+    const endpoint = this.resolveEndpoint(apiPath);
+    const { url, remainingParams } = this.applyPathParams(endpoint, params);
+    const pageSize = this.resolvePageSize(remainingParams);
+
+    return this.loadSummaryPage(url, remainingParams, 0, pageSize).pipe(
+      expand(result => (result.complete ? EMPTY : this.loadSummaryPage(url, remainingParams, result.page + 1, pageSize))),
+      map(result => result.data),
+      reduce((all, pageData) => all.concat(pageData), [] as ReportSummaryRecord[])
+    );
   }
 
   private resolveEndpoint(apiPath: string): string {
@@ -79,17 +91,69 @@ export class ReportSummaryDataService {
     return { url: resolvedUrl, remainingParams };
   }
 
-  private buildParams(params?: Record<string, unknown>): HttpParams {
-    let httpParams = new HttpParams().set('size', this.defaultSize.toString());
+  private buildParams(params?: Record<string, unknown>, page?: number): HttpParams {
+    let httpParams = new HttpParams();
+    const providedSize = params && Object.prototype.hasOwnProperty.call(params, 'size') ? params['size'] : undefined;
+    const sizeValue = this.normalizeNumericValue(providedSize, this.defaultSize);
+    httpParams = httpParams.set('size', String(sizeValue));
+
+    if (page !== undefined && !(params && Object.prototype.hasOwnProperty.call(params, 'page'))) {
+      httpParams = httpParams.set('page', String(page));
+    }
+
     if (!params) {
       return httpParams;
     }
+
     Object.keys(params).forEach(key => {
       const value = params[key];
-      if (value !== undefined && value !== null && value !== '') {
-        httpParams = httpParams.set(key, String(value));
+      if (value === undefined || value === null || value === '') {
+        return;
       }
+      if (key === 'page' && page !== undefined) {
+        httpParams = httpParams.set('page', String(value));
+        return;
+      }
+      httpParams = httpParams.set(key, String(value));
     });
+
     return httpParams;
+  }
+
+  private resolvePageSize(params?: Record<string, unknown>): number {
+    if (!params) {
+      return this.defaultSize;
+    }
+    const providedSize = Object.prototype.hasOwnProperty.call(params, 'size') ? params['size'] : undefined;
+    return this.normalizeNumericValue(providedSize, this.defaultSize);
+  }
+
+  private normalizeNumericValue(value: unknown, fallback: number): number {
+    if (value === undefined || value === null || value === '') {
+      return fallback;
+    }
+    const parsed = Number(value);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+  }
+
+  private loadSummaryPage(
+    url: string,
+    params: Record<string, unknown> | undefined,
+    page: number,
+    pageSize: number
+  ): Observable<{ data: ReportSummaryRecord[]; page: number; complete: boolean }> {
+    const httpParams = this.buildParams(params, page);
+    return this.http
+      .get<ReportSummaryRecord[]>(url, { params: httpParams, observe: 'response' })
+      .pipe(
+        map(response => {
+          const data = response.body ?? [];
+          const totalCountHeader = response.headers.get('X-Total-Count');
+          const totalCount = totalCountHeader ? Number(totalCountHeader) : undefined;
+          const reachedTotal = totalCount && Number.isFinite(totalCount) ? (page + 1) * pageSize >= totalCount : false;
+          const complete = reachedTotal || data.length < pageSize;
+          return { data, page, complete };
+        })
+      );
   }
 }
