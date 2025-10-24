@@ -32,9 +32,10 @@ export class ReportSummaryDataService {
 
   fetchSummary(apiPath: string, params?: Record<string, unknown>): Observable<ReportSummaryRecord[]> {
     const endpoint = this.resolveEndpoint(apiPath);
-    const httpParams = this.buildParams(params);
+    const { url, remainingParams } = this.applyPathParams(endpoint, params);
+    const httpParams = this.buildParams(remainingParams);
     return this.http
-      .get<ReportSummaryRecord[]>(endpoint, { params: httpParams })
+      .get<ReportSummaryRecord[]>(url, { params: httpParams })
       .pipe(map(response => response ?? []));
   }
 
@@ -44,6 +45,38 @@ export class ReportSummaryDataService {
     }
     const sanitized = apiPath.startsWith('/') ? apiPath.substring(1) : apiPath;
     return this.applicationConfigService.getEndpointFor(sanitized);
+  }
+
+  private applyPathParams(
+    endpoint: string,
+    params?: Record<string, unknown>
+  ): { url: string; remainingParams?: Record<string, unknown> } {
+    if (!params) {
+      return { url: endpoint, remainingParams: undefined };
+    }
+
+    const placeholders = endpoint.match(/\{[^}]+\}/g);
+    if (!placeholders || placeholders.length === 0) {
+      return { url: endpoint, remainingParams: params };
+    }
+
+    const remainingParams: Record<string, unknown> = { ...params };
+    let resolvedUrl = endpoint;
+
+    placeholders.forEach(placeholder => {
+      const key = placeholder.slice(1, -1);
+      if (!Object.prototype.hasOwnProperty.call(remainingParams, key)) {
+        return;
+      }
+      const value = remainingParams[key];
+      delete remainingParams[key];
+      if (value === undefined || value === null || value === '') {
+        return;
+      }
+      resolvedUrl = resolvedUrl.replace(placeholder, encodeURIComponent(String(value)));
+    });
+
+    return { url: resolvedUrl, remainingParams };
   }
 
   private buildParams(params?: Record<string, unknown>): HttpParams {
