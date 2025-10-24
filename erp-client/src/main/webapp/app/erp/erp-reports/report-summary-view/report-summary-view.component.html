@@ -19,9 +19,35 @@
 -->
 <div class="report-summary" *ngIf="metadata; else metadataError">
   <div class="report-summary__header">
-    <h1 class="report-summary__title">{{ metadata?.reportTitle }}</h1>
-    <p class="report-summary__description" *ngIf="metadata?.description">{{ metadata?.description }}</p>
+    <div class="report-summary__intro">
+      <h1 class="report-summary__title">{{ metadata?.reportTitle }}</h1>
+      <p class="report-summary__description" *ngIf="metadata?.description">{{ metadata?.description }}</p>
+    </div>
+    <div class="report-summary__actions" *ngIf="metadata?.backendApi">
+      <button
+        type="button"
+        class="btn btn-outline-secondary btn-sm me-2"
+        (click)="exportToCsv()"
+        [disabled]="loading || exportingCsv || exportingExcel"
+      >
+        <fa-icon icon="file-csv" class="me-1"></fa-icon>
+        Export CSV
+        <span class="spinner-border spinner-border-sm" *ngIf="exportingCsv" role="status" aria-hidden="true"></span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary btn-sm"
+        (click)="exportToExcel()"
+        [disabled]="loading || exportingCsv || exportingExcel"
+      >
+        <fa-icon icon="file-excel" class="me-1"></fa-icon>
+        Export Excel
+        <span class="spinner-border spinner-border-sm" *ngIf="exportingExcel" role="status" aria-hidden="true"></span>
+      </button>
+    </div>
   </div>
+
+  <div class="alert alert-danger mt-2" *ngIf="exportErrorMessage">{{ exportErrorMessage }}</div>
 
   <div class="report-summary__filters" *ngIf="metadata?.displayLeasePeriod || metadata?.displayLeaseContract">
     <div class="report-summary__filter" *ngIf="metadata?.displayLeasePeriod">

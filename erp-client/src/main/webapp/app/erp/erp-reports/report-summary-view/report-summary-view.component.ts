@@ -32,6 +32,8 @@ import { LeaseLiabilityService } from 'app/entities/leases/lease-liability/servi
 import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
 import { HttpResponse } from '@angular/common/http';
 
+import { buildCsvContent, buildExcelArrayBuffer, deriveOrderedColumns } from './report-summary-export.util';
+
 @Component({
   selector: 'jhi-report-summary-view',
   templateUrl: './report-summary-view.component.html',
@@ -45,6 +47,9 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
   loadingLeasePeriods = false;
   loadingLeaseLiabilities = false;
   errorMessage?: string | null;
+  exportErrorMessage?: string | null;
+  exportingCsv = false;
+  exportingExcel = false;
 
   leasePeriods: ILeasePeriod[] = [];
   selectedLeasePeriod?: ILeasePeriod | null;
@@ -275,17 +280,7 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
       this.displayedColumns = [];
       return;
     }
-    const orderedColumns: string[] = [...Object.keys(items[0])];
-    const seen = new Set(orderedColumns);
-    items.slice(1).forEach(item => {
-      Object.keys(item).forEach(key => {
-        if (!seen.has(key)) {
-          seen.add(key);
-          orderedColumns.push(key);
-        }
-      });
-    });
-    this.displayedColumns = orderedColumns;
+    this.displayedColumns = deriveOrderedColumns(items, this.displayedColumns);
   }
 
   private buildQueryParams(): Record<string, unknown> {
@@ -336,5 +331,88 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
 
   trackRow(index: number): number {
     return index;
+  }
+
+  exportToCsv(): void {
+    this.exportSummary('csv');
+  }
+
+  exportToExcel(): void {
+    this.exportSummary('xlsx');
+  }
+
+  private exportSummary(format: 'csv' | 'xlsx'): void {
+    if (!this.metadata?.backendApi) {
+      this.exportErrorMessage = 'This report is not linked to a data endpoint, so it cannot be exported.';
+      return;
+    }
+
+    if (this.exportingCsv || this.exportingExcel) {
+      return;
+    }
+
+    this.exportErrorMessage = null;
+    if (format === 'csv') {
+      this.exportingCsv = true;
+    } else {
+      this.exportingExcel = true;
+    }
+
+    this.summaryDataService
+      .fetchAllSummary(this.metadata.backendApi, this.buildQueryParams())
+      .pipe(
+        finalize(() => {
+          if (format === 'csv') {
+            this.exportingCsv = false;
+          } else {
+            this.exportingExcel = false;
+          }
+        })
+      )
+      .subscribe({
+        next: data => {
+          if (!data.length) {
+            this.exportErrorMessage = 'No data is available for export with the current filters.';
+            return;
+          }
+
+          const orderedColumns = deriveOrderedColumns(data, this.displayedColumns);
+
+          if (format === 'csv') {
+            const csvContent = buildCsvContent(data, orderedColumns, value => this.formatValue(value));
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            this.triggerDownload(blob, 'csv');
+          } else {
+            const excelBuffer = buildExcelArrayBuffer(data, orderedColumns, value => this.formatValue(value));
+            const blob = new Blob([excelBuffer], {
+              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            });
+            this.triggerDownload(blob, 'xlsx');
+          }
+        },
+        error: () => {
+          this.exportErrorMessage = 'Unable to export report data. Please try again later.';
+        },
+      });
+  }
+
+  private triggerDownload(blob: Blob, extension: 'csv' | 'xlsx'): void {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = this.buildExportFileName(extension);
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  private buildExportFileName(extension: string): string {
+    const baseTitle = this.metadata?.reportTitle?.trim() ?? 'report-summary';
+    const normalizedTitle = baseTitle
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    const safeTitle = normalizedTitle || 'report-summary';
+    const timestamp = dayjs().format('YYYYMMDD-HHmmss');
+    return `${safeTitle}-${timestamp}.${extension}`;
   }
 }
