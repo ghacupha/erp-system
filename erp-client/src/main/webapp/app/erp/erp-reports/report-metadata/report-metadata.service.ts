@@ -27,7 +27,7 @@ import { IReportMetadata } from './report-metadata.model';
 
 @Injectable({ providedIn: 'root' })
 export class ReportMetadataService {
-  private readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/erp/reporting/report-metadata');
+  private readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/app/report-metadata');
 
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 

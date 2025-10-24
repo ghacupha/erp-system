@@ -44,7 +44,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * Extension resource that exposes simplified, read-only endpoints for report metadata discovery.
  */
 @RestController
-@RequestMapping("/api/erp/reporting")
+@RequestMapping("/api/app")
 public class ReportMetadataResourceExtension {
 
     private final Logger log = LoggerFactory.getLogger(ReportMetadataResourceExtension.class);
