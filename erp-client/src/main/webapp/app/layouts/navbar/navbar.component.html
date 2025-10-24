@@ -36,61 +36,6 @@
     <fa-icon icon="bars"></fa-icon>
   </a>
   <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="account !== null">
-    <div class="navbar-search" ngbDropdown #reportSearchDropdown="ngbDropdown" autoClose="outside">
-      <div class="input-group input-group-sm report-search__control">
-        <div class="input-group-prepend">
-          <span class="input-group-text"><fa-icon icon="search"></fa-icon></span>
-        </div>
-        <input
-          type="search"
-          class="form-control"
-          name="reportSearch"
-          placeholder="Search reports"
-          aria-label="Search dynamic reports"
-          [(ngModel)]="reportSearchTerm"
-          (ngModelChange)="onReportSearch($event)"
-          (focus)="reportSearchDropdown.open()"
-          (keyup.enter)="reportSearchResults.length ? navigateToReport(reportSearchResults[0], reportSearchDropdown) : null"
-        />
-        <div class="input-group-append" *ngIf="reportSearchTerm">
-          <button
-            type="button"
-            class="btn btn-outline-secondary report-search__clear-btn"
-            (click)="clearReportSearch(); reportSearchDropdown.close()"
-          >
-            <fa-icon icon="times"></fa-icon>
-            <span class="sr-only">Clear report search</span>
-          </button>
-        </div>
-      </div>
-      <div
-        class="dropdown-menu dropdown-menu-right report-search__dropdown"
-        ngbDropdownMenu
-        *ngIf="reportSearchTerm || reportSearchResults.length || searchingReports || reportSearchError"
-      >
-        <button class="dropdown-item disabled" type="button" *ngIf="searchingReports">
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          <span class="ml-2">Searching reports…</span>
-        </button>
-        <button
-          class="dropdown-item"
-          type="button"
-          *ngFor="let report of reportSearchResults; trackBy: trackReportById"
-          (click)="navigateToReport(report, reportSearchDropdown)"
-        >
-          <div class="report-search__result-title">{{ report.reportTitle }}</div>
-          <small class="report-search__result-description" *ngIf="report.description">{{ report.description }}</small>
-          <small class="text-muted report-search__result-path" *ngIf="report.pagePath">{{ report.pagePath }}</small>
-        </button>
-        <div
-          class="dropdown-item text-muted"
-          *ngIf="!searchingReports && !reportSearchResults.length && !reportSearchError && reportSearchTerm && reportSearchTerm.trim().length >= 2"
-        >
-          No matching reports found.
-        </div>
-        <div class="dropdown-item text-danger" *ngIf="reportSearchError">{{ reportSearchError }}</div>
-      </div>
-    </div>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
