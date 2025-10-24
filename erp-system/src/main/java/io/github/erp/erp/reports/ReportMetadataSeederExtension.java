@@ -65,11 +65,11 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             "Right-of-use asset positions summarised by asset account including net book values per fiscal period.",
             "Leases",
             "reports/view/rou-account-balance",
-            "api/leases/rou-account-balance-report-items",
+            "api/leases/rou-account-balance-report-items/reports/{leasePeriodId}",
             true,
             true,
             false,
-            "fiscalPeriodEndDate.equals",
+            "leasePeriodId",
             null
         ),
         new ReportMetadataSeed(

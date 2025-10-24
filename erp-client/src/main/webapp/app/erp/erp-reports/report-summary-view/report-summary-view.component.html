@@ -34,6 +34,7 @@
         placeholder="Select lease period"
         [(ngModel)]="selectedLeasePeriod"
         (change)="onLeasePeriodChange()"
+        (search)="onLeasePeriodSearch($event.term)"
         name="leasePeriod"
       >
         <ng-template ng-option-tmp let-item="item">

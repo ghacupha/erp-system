@@ -48,6 +48,7 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
 
   leasePeriods: ILeasePeriod[] = [];
   selectedLeasePeriod?: ILeasePeriod | null;
+  private leasePeriodSearchTerm?: string;
 
   leaseLiabilities: ILeaseLiability[] = [];
   selectedLeaseLiability?: ILeaseLiability | null;
@@ -89,6 +90,15 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
     this.loadSummaryData();
   }
 
+  onLeasePeriodSearch(term: string): void {
+    const normalizedTerm = term?.trim();
+    if (normalizedTerm === this.leasePeriodSearchTerm) {
+      return;
+    }
+    this.leasePeriodSearchTerm = normalizedTerm;
+    this.fetchLeasePeriods(normalizedTerm, false);
+  }
+
   onLeaseLiabilityChange(): void {
     this.loadSummaryData();
   }
@@ -120,6 +130,7 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
     this.displayedColumns = [];
     this.leasePeriods = [];
     this.selectedLeasePeriod = null;
+    this.leasePeriodSearchTerm = undefined;
     this.leaseLiabilities = [];
     this.selectedLeaseLiability = null;
     const pagePath = `reports/view/${slug}`;
@@ -144,26 +155,8 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
     let initiated = false;
     if (metadata.displayLeasePeriod) {
       initiated = true;
-      this.loadingLeasePeriods = true;
       this.selectedLeasePeriod = null;
-      this.leasePeriodService
-        .query({ size: 100, sort: ['id,desc'] })
-        .pipe(finalize(() => {
-          this.loadingLeasePeriods = false;
-          this.handleFilterRequestCompletion();
-        }))
-        .subscribe({
-          next: (res: HttpResponse<ILeasePeriod[]>) => {
-            this.leasePeriods = res.body ?? [];
-            if (this.leasePeriods.length > 0 && !this.selectedLeasePeriod) {
-              this.selectedLeasePeriod = this.leasePeriods[0];
-            }
-          },
-          error: () => {
-            this.errorMessage = 'Failed to load lease periods for the report.';
-          },
-        });
-      this.pendingFilterRequests++;
+      this.fetchLeasePeriods(undefined, true);
     } else {
       this.leasePeriods = [];
       this.selectedLeasePeriod = null;
@@ -230,6 +223,49 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
           this.summaryItems = [];
           this.displayedColumns = [];
           this.errorMessage = 'Unable to load report data. Please verify your selections and try again.';
+        },
+      });
+  }
+
+  private fetchLeasePeriods(term?: string, trackCompletion = false): void {
+    const request: Record<string, unknown> = { size: 100, sort: ['id,desc'] };
+    if (term) {
+      request['periodCode.contains'] = term;
+    }
+
+    if (trackCompletion) {
+      this.pendingFilterRequests++;
+    }
+
+    this.loadingLeasePeriods = true;
+    this.leasePeriodService
+      .query(request)
+      .pipe(
+        finalize(() => {
+          this.loadingLeasePeriods = false;
+          if (trackCompletion) {
+            this.handleFilterRequestCompletion();
+          }
+        })
+      )
+      .subscribe({
+        next: (res: HttpResponse<ILeasePeriod[]>) => {
+          const previousSelectionId = this.selectedLeasePeriod?.id;
+          this.leasePeriods = res.body ?? [];
+          const selectionStillPresent = previousSelectionId
+            ? this.leasePeriods.some(period => period.id === previousSelectionId)
+            : false;
+
+          if (!selectionStillPresent) {
+            if (trackCompletion && !this.selectedLeasePeriod && this.leasePeriods.length > 0) {
+              this.selectedLeasePeriod = this.leasePeriods[0];
+            } else if (!trackCompletion) {
+              this.selectedLeasePeriod = null;
+            }
+          }
+        },
+        error: () => {
+          this.errorMessage = 'Failed to load lease periods for the report.';
         },
       });
   }
