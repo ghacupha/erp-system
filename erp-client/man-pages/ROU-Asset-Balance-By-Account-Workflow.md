@@ -22,9 +22,19 @@ The ROU Asset Balance by Account summary view now calls the dedicated endpoint t
 * Eliminates accidental filtering by lease liability for this report.
 * Exposes the lease period identifier explicitly in network traces, simplifying debugging.
 * Ensures the selector can surface historical periods beyond the first 100 records returned at bootstrap.
+* Provides single-click CSV and Excel exports that collect the complete dataset, not just the rows rendered in the paginated table.
+
+## Export Enhancements (October 2025)
+1. **UI controls** – Added compact export buttons to `report-summary-view.component.html`. The controls live next to the report header so analysts can initiate downloads immediately after reviewing on-screen results.
+2. **Full dataset retrieval** – `ReportSummaryDataService.fetchAllSummary` now crawls through every page of the report endpoint. It reuses the existing placeholder and query parameter handling while iterating the `page` parameter until it reaches the end of the dataset.
+3. **Reusable export helpers** – `report-summary-export.util.ts` standardises column ordering and value formatting. Both CSV and Excel output preserve the column order displayed in the UI and apply the same formatting rules defined by `formatValue`.
+4. **Download flow** – The component converts the formatted data into a blob, generates a timestamped filename (e.g., `rou-asset-balance-report-20251024-161500.xlsx`), and triggers a browser download without leaving the page.
+5. **Error handling** – When the backend returns no rows or an error occurs, the component surfaces clear alerts in the header instead of silently producing empty files.
+6. **Regression coverage** – Added unit tests for both the component and the export utility to validate the CSV/Excel transformations and to verify the download flow wiring.
 
 ## Related Source Files
 * `src/main/webapp/app/erp/erp-reports/report-summary-view/report-summary-view.component.ts`
 * `src/main/webapp/app/erp/erp-reports/report-summary-view/report-summary-data.service.ts`
 * `src/main/java/io/github/erp/erp/reports/ReportMetadataSeederExtension.java`
+* `src/main/webapp/app/erp/erp-reports/report-summary-view/report-summary-export.util.ts`
 
