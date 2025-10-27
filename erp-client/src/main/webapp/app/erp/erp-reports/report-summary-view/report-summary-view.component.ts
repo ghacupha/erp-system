@@ -24,13 +24,13 @@ import { finalize } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 
 import { ReportMetadataService } from '../report-metadata/report-metadata.service';
-import { IReportMetadata, ReportSummaryRecord } from '../report-metadata/report-metadata.model';
+import {
+  IReportFilterDefinition,
+  IReportMetadata,
+  ReportSummaryRecord,
+} from '../report-metadata/report-metadata.model';
 import { ReportSummaryDataService } from './report-summary-data.service';
-import { LeasePeriodService } from 'app/entities/leases/lease-period/service/lease-period.service';
-import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
-import { LeaseLiabilityService } from 'app/entities/leases/lease-liability/service/lease-liability.service';
-import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
-import { HttpResponse } from '@angular/common/http';
+import { ReportFilterOption, ReportFilterOptionService } from './report-filter-option.service';
 
 import { buildCsvContent, buildExcelArrayBuffer, deriveOrderedColumns } from './report-summary-export.util';
 
@@ -39,24 +39,26 @@ import { buildCsvContent, buildExcelArrayBuffer, deriveOrderedColumns } from './
   templateUrl: './report-summary-view.component.html',
   styleUrls: ['./report-summary-view.component.scss'],
 })
+interface ReportFilterState {
+  definition: IReportFilterDefinition;
+  options: ReportFilterOption[];
+  selected: ReportFilterOption | null;
+  loading: boolean;
+  error: string | null;
+  lastSearchTerm?: string;
+}
+
 export class ReportSummaryViewComponent implements OnInit, OnDestroy {
   metadata?: IReportMetadata | null;
   summaryItems: ReportSummaryRecord[] = [];
   displayedColumns: string[] = [];
   loading = false;
-  loadingLeasePeriods = false;
-  loadingLeaseLiabilities = false;
   errorMessage?: string | null;
   exportErrorMessage?: string | null;
   exportingCsv = false;
   exportingExcel = false;
 
-  leasePeriods: ILeasePeriod[] = [];
-  selectedLeasePeriod?: ILeasePeriod | null;
-  private leasePeriodSearchTerm?: string;
-
-  leaseLiabilities: ILeaseLiability[] = [];
-  selectedLeaseLiability?: ILeaseLiability | null;
+  filters: ReportFilterState[] = [];
 
   private routeSub?: Subscription;
   private pendingFilterRequests = 0;
@@ -66,8 +68,7 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
     private readonly titleService: Title,
     private readonly reportMetadataService: ReportMetadataService,
     private readonly summaryDataService: ReportSummaryDataService,
-    private readonly leasePeriodService: LeasePeriodService,
-    private readonly leaseLiabilityService: LeaseLiabilityService
+    private readonly filterOptionService: ReportFilterOptionService
   ) {}
 
   ngOnInit(): void {
@@ -83,29 +84,35 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
     this.routeSub?.unsubscribe();
   }
 
-  trackLeasePeriodById(index: number, item: ILeasePeriod): number {
-    return item.id ?? index;
+  trackFilterByQueryKey(index: number, filter: ReportFilterState): string {
+    return filter.definition.queryParameterKey ?? String(index);
   }
 
-  trackLeaseLiabilityById(index: number, item: ILeaseLiability): number {
-    return item.id ?? index;
+  trackFilterOptionByValue(option: ReportFilterOption): unknown {
+    return option?.value ?? option;
   }
 
-  onLeasePeriodChange(): void {
+  onFilterSelectionChange(filter: ReportFilterState, option: ReportFilterOption | null): void {
+    filter.selected = option;
     this.loadSummaryData();
   }
 
-  onLeasePeriodSearch(term: string): void {
+  onFilterSearch(filter: ReportFilterState, term: string): void {
     const normalizedTerm = term?.trim();
-    if (normalizedTerm === this.leasePeriodSearchTerm) {
+    if (normalizedTerm === filter.lastSearchTerm) {
       return;
     }
-    this.leasePeriodSearchTerm = normalizedTerm;
-    this.fetchLeasePeriods(normalizedTerm, false);
+    filter.lastSearchTerm = normalizedTerm;
+    this.fetchFilterOptions(filter, normalizedTerm ?? undefined, false);
   }
 
-  onLeaseLiabilityChange(): void {
-    this.loadSummaryData();
+  buildFilterControlId(filter: ReportFilterState): string {
+    const base = filter.definition.queryParameterKey || filter.definition.label || 'filter';
+    return base
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .replace(/-{2,}/g, '-');
   }
 
   formatValue(value: unknown): string {
@@ -133,11 +140,8 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
     this.metadata = null;
     this.summaryItems = [];
     this.displayedColumns = [];
-    this.leasePeriods = [];
-    this.selectedLeasePeriod = null;
-    this.leasePeriodSearchTerm = undefined;
-    this.leaseLiabilities = [];
-    this.selectedLeaseLiability = null;
+    this.filters = [];
+    this.pendingFilterRequests = 0;
     const pagePath = `reports/view/${slug}`;
     this.reportMetadataService.findByPagePath(pagePath).subscribe({
       next: metadata => {
@@ -147,7 +151,7 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
         }
         this.metadata = metadata;
         this.titleService.setTitle(`ERP | ${metadata.reportTitle ?? 'Dynamic report'}`);
-        this.prepareFilters(metadata);
+        this.initializeFilters(this.deriveFilterDefinitions(metadata));
       },
       error: () => {
         this.errorMessage = 'Unable to load report metadata. Please try again later.';
@@ -155,52 +159,63 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  private prepareFilters(metadata: IReportMetadata): void {
+  private initializeFilters(definitions: IReportFilterDefinition[]): void {
+    this.filters = definitions.map(definition => ({
+      definition,
+      options: [],
+      selected: null,
+      loading: false,
+      error: null,
+      lastSearchTerm: undefined,
+    }));
     this.pendingFilterRequests = 0;
-    let initiated = false;
-    if (metadata.displayLeasePeriod) {
-      initiated = true;
-      this.selectedLeasePeriod = null;
-      this.fetchLeasePeriods(undefined, true);
-    } else {
-      this.leasePeriods = [];
-      this.selectedLeasePeriod = null;
-    }
 
-    if (metadata.displayLeaseContract) {
-      initiated = true;
-      this.loadingLeaseLiabilities = true;
-      this.selectedLeaseLiability = null;
-      this.leaseLiabilityService
-        .query({ size: 100, sort: ['id,desc'] })
-        .pipe(finalize(() => {
-          this.loadingLeaseLiabilities = false;
-          this.handleFilterRequestCompletion();
-        }))
-        .subscribe({
-          next: (res: HttpResponse<ILeaseLiability[]>) => {
-            this.leaseLiabilities = res.body ?? [];
-            if (this.leaseLiabilities.length > 0 && !this.selectedLeaseLiability) {
-              this.selectedLeaseLiability = this.leaseLiabilities[0];
-            }
-          },
-          error: () => {
-            this.errorMessage = 'Failed to load lease liabilities for the report.';
-          },
-        });
-      this.pendingFilterRequests++;
-    } else {
-      this.leaseLiabilities = [];
-      this.selectedLeaseLiability = null;
-    }
-
-    if (!initiated) {
+    if (!this.filters.length) {
       this.loadSummaryData();
+      return;
+    }
+
+    for (const filter of this.filters) {
+      this.fetchFilterOptions(filter, undefined, true);
     }
   }
 
+  private deriveFilterDefinitions(metadata: IReportMetadata): IReportFilterDefinition[] {
+    if (metadata.filters && metadata.filters.length) {
+      return metadata.filters.filter(
+        (filter): filter is IReportFilterDefinition =>
+          !!filter && !!filter.queryParameterKey && !!filter.valueSource && !!filter.label
+      );
+    }
+
+    const definitions: IReportFilterDefinition[] = [];
+
+    if (metadata.displayLeasePeriod) {
+      definitions.push({
+        label: 'Lease period',
+        queryParameterKey: metadata.leasePeriodQueryParam ?? 'leasePeriodId.equals',
+        valueSource: 'leasePeriods',
+        uiHint: 'dropdown',
+      });
+    }
+
+    if (metadata.displayLeaseContract) {
+      definitions.push({
+        label: 'Lease liability',
+        queryParameterKey: metadata.leaseContractQueryParam ?? 'leaseLiabilityId.equals',
+        valueSource: 'leaseContracts',
+        uiHint: 'typeahead',
+      });
+    }
+
+    return definitions;
+  }
+
   private loadSummaryData(): void {
-    if (!this.metadata) {
+    if (!this.metadata || this.pendingFilterRequests > 0) {
+      return;
+    }
+    if (this.filters.some(filter => filter.error)) {
       return;
     }
     if (!this.metadata.backendApi) {
@@ -211,8 +226,9 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
     }
     this.errorMessage = null;
     this.loading = true;
+    const queryParams = this.buildQueryParams();
     this.summaryDataService
-      .fetchSummary(this.metadata.backendApi, this.buildQueryParams())
+      .fetchSummary(this.metadata.backendApi, queryParams)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: data => {
@@ -232,45 +248,50 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
       });
   }
 
-  private fetchLeasePeriods(term?: string, trackCompletion = false): void {
-    const request: Record<string, unknown> = { size: 100, sort: ['id,desc'] };
-    if (term) {
-      request['periodCode.contains'] = term;
-    }
-
+  private fetchFilterOptions(filter: ReportFilterState, term?: string, trackCompletion = false): void {
+    const searchTerm = term?.trim();
     if (trackCompletion) {
       this.pendingFilterRequests++;
     }
 
-    this.loadingLeasePeriods = true;
-    this.leasePeriodService
-      .query(request)
+    filter.lastSearchTerm = searchTerm;
+    filter.loading = true;
+    filter.error = null;
+
+    this.filterOptionService
+      .loadOptions(filter.definition, searchTerm)
       .pipe(
         finalize(() => {
-          this.loadingLeasePeriods = false;
+          filter.loading = false;
           if (trackCompletion) {
             this.handleFilterRequestCompletion();
           }
         })
       )
       .subscribe({
-        next: (res: HttpResponse<ILeasePeriod[]>) => {
-          const previousSelectionId = this.selectedLeasePeriod?.id;
-          this.leasePeriods = res.body ?? [];
-          const selectionStillPresent = previousSelectionId
-            ? this.leasePeriods.some(period => period.id === previousSelectionId)
-            : false;
+        next: options => {
+          filter.options = options;
+          const previousValue = filter.selected?.value;
+          const matchingOption =
+            previousValue !== undefined && previousValue !== null
+              ? options.find(option => option.value === previousValue)
+              : undefined;
 
-          if (!selectionStillPresent) {
-            if (trackCompletion && !this.selectedLeasePeriod && this.leasePeriods.length > 0) {
-              this.selectedLeasePeriod = this.leasePeriods[0];
-            } else if (!trackCompletion) {
-              this.selectedLeasePeriod = null;
-            }
+          if (matchingOption) {
+            filter.selected = matchingOption;
+          } else if (trackCompletion && options.length > 0) {
+            filter.selected = options[0];
+          } else {
+            filter.selected = null;
           }
         },
         error: () => {
-          this.errorMessage = 'Failed to load lease periods for the report.';
+          filter.options = [];
+          filter.selected = null;
+          filter.error = `Failed to load options for ${filter.definition.label}.`;
+          if (!this.errorMessage) {
+            this.errorMessage = filter.error;
+          }
         },
       });
   }
@@ -285,39 +306,23 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
 
   private buildQueryParams(): Record<string, unknown> {
     const params: Record<string, unknown> = {};
-    if (this.metadata?.displayLeasePeriod && this.selectedLeasePeriod) {
-      const key = this.metadata.leasePeriodQueryParam ?? 'leasePeriodId.equals';
-      const value = this.resolveLeasePeriodValue(key, this.selectedLeasePeriod);
-      if (value !== undefined) {
-        params[key] = value;
-      }
-    }
-    if (this.metadata?.displayLeaseContract && this.selectedLeaseLiability) {
-      const key = this.metadata.leaseContractQueryParam ?? 'leaseLiabilityId.equals';
-      const identifier = this.selectedLeaseLiability.id ?? this.selectedLeaseLiability.leaseId;
-      if (identifier !== undefined && identifier !== null) {
-        params[key] = identifier;
-      }
-    }
-    return params;
-  }
 
-  private resolveLeasePeriodValue(paramKey: string, period: ILeasePeriod): string | number | undefined {
-    if (paramKey.toLowerCase().includes('date')) {
-      if (period.endDate) {
-        return period.endDate.format('YYYY-MM-DD');
+    for (const filter of this.filters) {
+      const key = filter.definition.queryParameterKey?.trim();
+      if (!key) {
+        continue;
       }
-      if (period.startDate) {
-        return period.startDate.format('YYYY-MM-DD');
+      const value = filter.selected?.value;
+      if (value === undefined || value === null) {
+        continue;
       }
+      if (typeof value === 'string' && value.trim() === '') {
+        continue;
+      }
+      params[key] = value;
     }
-    if (period.id !== undefined) {
-      return period.id;
-    }
-    if (period.periodCode) {
-      return period.periodCode;
-    }
-    return undefined;
+
+    return params;
   }
 
   private handleFilterRequestCompletion(): void {
