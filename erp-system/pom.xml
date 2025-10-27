@@ -269,10 +269,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-batch</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jeasy/easy-rules-core -->
         <dependency>
             <groupId>org.jeasy</groupId>
             <artifactId>easy-rules-core</artifactId>
-            <version>4.2.0</version>
+            <version>4.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
