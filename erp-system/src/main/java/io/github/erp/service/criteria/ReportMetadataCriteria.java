@@ -48,13 +48,13 @@ public class ReportMetadataCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
-    private BooleanFilter displayLeasePeriod;
+    private StringFilter filterLabel;
 
-    private BooleanFilter displayLeaseContract;
+    private StringFilter filterQueryParameterKey;
 
-    private StringFilter leasePeriodQueryParam;
+    private StringFilter filterValueSource;
 
-    private StringFilter leaseContractQueryParam;
+    private StringFilter filterUiHint;
 
     private Boolean distinct;
 
@@ -68,10 +68,10 @@ public class ReportMetadataCriteria implements Serializable, Criteria {
         this.pagePath = other.pagePath == null ? null : other.pagePath.copy();
         this.backendApi = other.backendApi == null ? null : other.backendApi.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.displayLeasePeriod = other.displayLeasePeriod == null ? null : other.displayLeasePeriod.copy();
-        this.displayLeaseContract = other.displayLeaseContract == null ? null : other.displayLeaseContract.copy();
-        this.leasePeriodQueryParam = other.leasePeriodQueryParam == null ? null : other.leasePeriodQueryParam.copy();
-        this.leaseContractQueryParam = other.leaseContractQueryParam == null ? null : other.leaseContractQueryParam.copy();
+        this.filterLabel = other.filterLabel == null ? null : other.filterLabel.copy();
+        this.filterQueryParameterKey = other.filterQueryParameterKey == null ? null : other.filterQueryParameterKey.copy();
+        this.filterValueSource = other.filterValueSource == null ? null : other.filterValueSource.copy();
+        this.filterUiHint = other.filterUiHint == null ? null : other.filterUiHint.copy();
         this.distinct = other.distinct;
     }
 
@@ -185,64 +185,64 @@ public class ReportMetadataCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
-    public BooleanFilter getDisplayLeasePeriod() {
-        return displayLeasePeriod;
+    public StringFilter getFilterLabel() {
+        return filterLabel;
     }
 
-    public BooleanFilter displayLeasePeriod() {
-        if (displayLeasePeriod == null) {
-            displayLeasePeriod = new BooleanFilter();
+    public StringFilter filterLabel() {
+        if (filterLabel == null) {
+            filterLabel = new StringFilter();
         }
-        return displayLeasePeriod;
+        return filterLabel;
     }
 
-    public void setDisplayLeasePeriod(BooleanFilter displayLeasePeriod) {
-        this.displayLeasePeriod = displayLeasePeriod;
+    public void setFilterLabel(StringFilter filterLabel) {
+        this.filterLabel = filterLabel;
     }
 
-    public BooleanFilter getDisplayLeaseContract() {
-        return displayLeaseContract;
+    public StringFilter getFilterQueryParameterKey() {
+        return filterQueryParameterKey;
     }
 
-    public BooleanFilter displayLeaseContract() {
-        if (displayLeaseContract == null) {
-            displayLeaseContract = new BooleanFilter();
+    public StringFilter filterQueryParameterKey() {
+        if (filterQueryParameterKey == null) {
+            filterQueryParameterKey = new StringFilter();
         }
-        return displayLeaseContract;
+        return filterQueryParameterKey;
     }
 
-    public void setDisplayLeaseContract(BooleanFilter displayLeaseContract) {
-        this.displayLeaseContract = displayLeaseContract;
+    public void setFilterQueryParameterKey(StringFilter filterQueryParameterKey) {
+        this.filterQueryParameterKey = filterQueryParameterKey;
     }
 
-    public StringFilter getLeasePeriodQueryParam() {
-        return leasePeriodQueryParam;
+    public StringFilter getFilterValueSource() {
+        return filterValueSource;
     }
 
-    public StringFilter leasePeriodQueryParam() {
-        if (leasePeriodQueryParam == null) {
-            leasePeriodQueryParam = new StringFilter();
+    public StringFilter filterValueSource() {
+        if (filterValueSource == null) {
+            filterValueSource = new StringFilter();
         }
-        return leasePeriodQueryParam;
+        return filterValueSource;
     }
 
-    public void setLeasePeriodQueryParam(StringFilter leasePeriodQueryParam) {
-        this.leasePeriodQueryParam = leasePeriodQueryParam;
+    public void setFilterValueSource(StringFilter filterValueSource) {
+        this.filterValueSource = filterValueSource;
     }
 
-    public StringFilter getLeaseContractQueryParam() {
-        return leaseContractQueryParam;
+    public StringFilter getFilterUiHint() {
+        return filterUiHint;
     }
 
-    public StringFilter leaseContractQueryParam() {
-        if (leaseContractQueryParam == null) {
-            leaseContractQueryParam = new StringFilter();
+    public StringFilter filterUiHint() {
+        if (filterUiHint == null) {
+            filterUiHint = new StringFilter();
         }
-        return leaseContractQueryParam;
+        return filterUiHint;
     }
 
-    public void setLeaseContractQueryParam(StringFilter leaseContractQueryParam) {
-        this.leaseContractQueryParam = leaseContractQueryParam;
+    public void setFilterUiHint(StringFilter filterUiHint) {
+        this.filterUiHint = filterUiHint;
     }
 
     public Boolean getDistinct() {
@@ -270,10 +270,10 @@ public class ReportMetadataCriteria implements Serializable, Criteria {
             Objects.equals(pagePath, that.pagePath) &&
             Objects.equals(backendApi, that.backendApi) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(displayLeasePeriod, that.displayLeasePeriod) &&
-            Objects.equals(displayLeaseContract, that.displayLeaseContract) &&
-            Objects.equals(leasePeriodQueryParam, that.leasePeriodQueryParam) &&
-            Objects.equals(leaseContractQueryParam, that.leaseContractQueryParam) &&
+            Objects.equals(filterLabel, that.filterLabel) &&
+            Objects.equals(filterQueryParameterKey, that.filterQueryParameterKey) &&
+            Objects.equals(filterValueSource, that.filterValueSource) &&
+            Objects.equals(filterUiHint, that.filterUiHint) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -288,10 +288,10 @@ public class ReportMetadataCriteria implements Serializable, Criteria {
             pagePath,
             backendApi,
             active,
-            displayLeasePeriod,
-            displayLeaseContract,
-            leasePeriodQueryParam,
-            leaseContractQueryParam,
+            filterLabel,
+            filterQueryParameterKey,
+            filterValueSource,
+            filterUiHint,
             distinct
         );
     }
@@ -307,10 +307,10 @@ public class ReportMetadataCriteria implements Serializable, Criteria {
             (pagePath != null ? "pagePath=" + pagePath + ", " : "") +
             (backendApi != null ? "backendApi=" + backendApi + ", " : "") +
             (active != null ? "active=" + active + ", " : "") +
-            (displayLeasePeriod != null ? "displayLeasePeriod=" + displayLeasePeriod + ", " : "") +
-            (displayLeaseContract != null ? "displayLeaseContract=" + displayLeaseContract + ", " : "") +
-            (leasePeriodQueryParam != null ? "leasePeriodQueryParam=" + leasePeriodQueryParam + ", " : "") +
-            (leaseContractQueryParam != null ? "leaseContractQueryParam=" + leaseContractQueryParam + ", " : "") +
+            (filterLabel != null ? "filterLabel=" + filterLabel + ", " : "") +
+            (filterQueryParameterKey != null ? "filterQueryParameterKey=" + filterQueryParameterKey + ", " : "") +
+            (filterValueSource != null ? "filterValueSource=" + filterValueSource + ", " : "") +
+            (filterUiHint != null ? "filterUiHint=" + filterUiHint + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

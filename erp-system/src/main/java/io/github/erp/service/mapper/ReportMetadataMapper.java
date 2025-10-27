@@ -18,7 +18,9 @@ package io.github.erp.service.mapper;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.ReportFilterDefinition;
 import io.github.erp.domain.ReportMetadata;
+import io.github.erp.service.dto.ReportFilterDefinitionDTO;
 import io.github.erp.service.dto.ReportMetadataDTO;
 import org.mapstruct.Mapper;
 
@@ -26,4 +28,8 @@ import org.mapstruct.Mapper;
  * Mapper for the entity {@link ReportMetadata} and its DTO {@link ReportMetadataDTO}.
  */
 @Mapper(componentModel = "spring")
-public interface ReportMetadataMapper extends EntityMapper<ReportMetadataDTO, ReportMetadata> {}
+public interface ReportMetadataMapper extends EntityMapper<ReportMetadataDTO, ReportMetadata> {
+    ReportFilterDefinitionDTO toDto(ReportFilterDefinition definition);
+
+    ReportFilterDefinition toEntity(ReportFilterDefinitionDTO dto);
+}
