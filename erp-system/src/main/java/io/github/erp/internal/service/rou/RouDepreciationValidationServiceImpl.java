@@ -22,6 +22,8 @@ import io.github.erp.domain.enumeration.depreciationProcessStatusTypes;
 import io.github.erp.internal.repository.InternalRouDepreciationRequestRepository;
 import io.github.erp.service.dto.RouDepreciationRequestDTO;
 import io.github.erp.service.mapper.RouDepreciationRequestMapper;
+import io.github.erp.internal.service.rou.rules.RouDepreciationValidationResult;
+import io.github.erp.internal.service.rou.rules.RouDepreciationValidationRuleEngine;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -35,6 +37,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static io.github.erp.internal.service.rou.batch.InvalidateDepreciationBatchConfig.INVALIDATE_DEPRECIATION_JOB_NAME;
@@ -54,19 +57,23 @@ public class RouDepreciationValidationServiceImpl implements RouDepreciationVali
 
     private final JobLauncher jobLauncher;
 
+    private final RouDepreciationValidationRuleEngine validationRuleEngine;
+
     public RouDepreciationValidationServiceImpl(
         InternalRouDepreciationRequestRepository rouDepreciationRequestRepository,
         InternalRouDepreciationRequestService internalRouDepreciationRequestService,
         RouDepreciationRequestMapper rouDepreciationRequestMapper,
         @Qualifier(INVALIDATE_DEPRECIATION_JOB_NAME) Job invalidateDepreciationJob,
         @Qualifier(REVALIDATE_DEPRECIATION_JOB_NAME) Job revalidateDepreciationJob,
-        JobLauncher jobLauncher) {
+        JobLauncher jobLauncher,
+        RouDepreciationValidationRuleEngine validationRuleEngine) {
         this.rouDepreciationRequestRepository = rouDepreciationRequestRepository;
         this.internalRouDepreciationRequestService = internalRouDepreciationRequestService;
         this.rouDepreciationRequestMapper = rouDepreciationRequestMapper;
         this.invalidateDepreciationJob = invalidateDepreciationJob;
         this.revalidateDepreciationJob = revalidateDepreciationJob;
         this.jobLauncher = jobLauncher;
+        this.validationRuleEngine = validationRuleEngine;
     }
 
     /**
@@ -78,13 +85,24 @@ public class RouDepreciationValidationServiceImpl implements RouDepreciationVali
     @Override
     public RouDepreciationRequestDTO invalidate(RouDepreciationRequestDTO rouDepreciationRequestDTO) {
 
-        RouDepreciationRequest requestEntity = rouDepreciationRequestRepository.findById(rouDepreciationRequestDTO.getId()).orElseThrow();
+        RouDepreciationRequest requestEntity = rouDepreciationRequestRepository
+            .findById(rouDepreciationRequestDTO.getId())
+            .orElseThrow();
 
-        requestEntity.setInvalidated(true);
+        RouDepreciationRequestDTO currentState = rouDepreciationRequestMapper.toDto(requestEntity);
+        RouDepreciationValidationResult validationResult = validationRuleEngine.evaluateInvalidation(currentState);
 
-        RouDepreciationRequestDTO requestDTO = internalRouDepreciationRequestService.save(rouDepreciationRequestMapper.toDto(requestEntity));
+        if (!validationResult.isValid()) {
+            throw new IllegalStateException(String.join(" ", validationResult.getMessages()));
+        }
 
-        runInvalidationJob(requestDTO);
+        logRuleMessages(validationResult);
+
+        currentState.setInvalidated(true);
+
+        RouDepreciationRequestDTO requestDTO = internalRouDepreciationRequestService.save(currentState);
+
+        runInvalidationJob(requestDTO, validationResult);
 
         return requestDTO;
     }
@@ -98,19 +116,30 @@ public class RouDepreciationValidationServiceImpl implements RouDepreciationVali
     @Override
     public RouDepreciationRequestDTO revalidate(RouDepreciationRequestDTO rouDepreciationRequestDTO) {
 
-        RouDepreciationRequest requestEntity = rouDepreciationRequestRepository.findById(rouDepreciationRequestDTO.getId()).orElseThrow();
+        RouDepreciationRequest requestEntity = rouDepreciationRequestRepository
+            .findById(rouDepreciationRequestDTO.getId())
+            .orElseThrow();
 
-        requestEntity.setInvalidated(false);
+        RouDepreciationRequestDTO currentState = rouDepreciationRequestMapper.toDto(requestEntity);
+        RouDepreciationValidationResult validationResult = validationRuleEngine.evaluateRevalidation(currentState);
 
-        RouDepreciationRequestDTO requestDTO = internalRouDepreciationRequestService.save(rouDepreciationRequestMapper.toDto(requestEntity));
+        if (!validationResult.isValid()) {
+            throw new IllegalStateException(String.join(" ", validationResult.getMessages()));
+        }
 
-        runRevalidationJob(requestDTO);
+        logRuleMessages(validationResult);
+
+        currentState.setInvalidated(false);
+
+        RouDepreciationRequestDTO requestDTO = internalRouDepreciationRequestService.save(currentState);
+
+        runRevalidationJob(requestDTO, validationResult);
 
         return requestDTO;
     }
 
     @Async
-    void runInvalidationJob(RouDepreciationRequestDTO requestDTO) {
+    void runInvalidationJob(RouDepreciationRequestDTO requestDTO, RouDepreciationValidationResult validationResult) {
 
         // Trigger the Spring Batch job
         try {
@@ -119,7 +148,7 @@ public class RouDepreciationValidationServiceImpl implements RouDepreciationVali
             JobParameters jobParameters = new JobParametersBuilder()
                 .addString("jobToken", String.valueOf(System.currentTimeMillis()))
                 .addString("batchJobIdentifier", batchJobIdentifier)
-                .addString("previousBatchJobIdentifier", requestDTO.getBatchJobIdentifier().toString())
+                .addString("previousBatchJobIdentifier", resolvePreviousBatchIdentifier(requestDTO, validationResult).toString())
                 .toJobParameters();
             jobLauncher.run(invalidateDepreciationJob, jobParameters);
 
@@ -147,7 +176,7 @@ public class RouDepreciationValidationServiceImpl implements RouDepreciationVali
     }
 
     @Async
-    void runRevalidationJob(RouDepreciationRequestDTO requestDTO) {
+    void runRevalidationJob(RouDepreciationRequestDTO requestDTO, RouDepreciationValidationResult validationResult) {
 
         // Trigger the Spring Batch job
         try {
@@ -156,7 +185,7 @@ public class RouDepreciationValidationServiceImpl implements RouDepreciationVali
             JobParameters jobParameters = new JobParametersBuilder()
                 .addString("jobToken", String.valueOf(System.currentTimeMillis()))
                 .addString("batchJobIdentifier", batchJobIdentifier)
-                .addString("previousBatchJobIdentifier", requestDTO.getBatchJobIdentifier().toString())
+                .addString("previousBatchJobIdentifier", resolvePreviousBatchIdentifier(requestDTO, validationResult).toString())
                 .toJobParameters();
             jobLauncher.run(revalidateDepreciationJob, jobParameters);
 
@@ -181,5 +210,20 @@ public class RouDepreciationValidationServiceImpl implements RouDepreciationVali
         requestDTO.setDepreciationProcessStatus(depreciationProcessStatusTypes.COMPLETE);
 
         internalRouDepreciationRequestService.save(requestDTO);
+    }
+
+    private void logRuleMessages(RouDepreciationValidationResult validationResult) {
+
+        validationResult.getMessages().forEach(message -> log.info("ROU depreciation validation: {}", message));
+    }
+
+    private UUID resolvePreviousBatchIdentifier(
+        RouDepreciationRequestDTO requestDTO,
+        RouDepreciationValidationResult validationResult
+    ) {
+        return validationResult
+            .getPreviousBatchJobIdentifier()
+            .or(() -> Optional.ofNullable(requestDTO.getBatchJobIdentifier()))
+            .orElseThrow(() -> new IllegalStateException("Unable to resolve previous batch job identifier for depreciation job"));
     }
 }
