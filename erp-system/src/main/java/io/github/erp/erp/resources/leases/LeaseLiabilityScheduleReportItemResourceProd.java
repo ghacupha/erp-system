@@ -17,10 +17,9 @@ package io.github.erp.erp.resources.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleReportItemRepository;
 import io.github.erp.internal.service.leases.InternalLeaseLiabilityScheduleReportItemService;
-import io.github.erp.repository.LeaseLiabilityScheduleReportItemRepository;
 import io.github.erp.service.LeaseLiabilityScheduleReportItemQueryService;
-import io.github.erp.service.LeaseLiabilityScheduleReportItemService;
 import io.github.erp.service.criteria.LeaseLiabilityScheduleReportItemCriteria;
 import io.github.erp.service.dto.LeaseLiabilityScheduleReportItemDTO;
 import org.slf4j.Logger;
@@ -48,13 +47,13 @@ public class LeaseLiabilityScheduleReportItemResourceProd {
 
     private final InternalLeaseLiabilityScheduleReportItemService leaseLiabilityScheduleReportItemService;
 
-    private final LeaseLiabilityScheduleReportItemRepository leaseLiabilityScheduleReportItemRepository;
+    private final InternalLeaseLiabilityScheduleReportItemRepository leaseLiabilityScheduleReportItemRepository;
 
     private final LeaseLiabilityScheduleReportItemQueryService leaseLiabilityScheduleReportItemQueryService;
 
     public LeaseLiabilityScheduleReportItemResourceProd(
         InternalLeaseLiabilityScheduleReportItemService leaseLiabilityScheduleReportItemService,
-        LeaseLiabilityScheduleReportItemRepository leaseLiabilityScheduleReportItemRepository,
+        InternalLeaseLiabilityScheduleReportItemRepository leaseLiabilityScheduleReportItemRepository,
         LeaseLiabilityScheduleReportItemQueryService leaseLiabilityScheduleReportItemQueryService
     ) {
         this.leaseLiabilityScheduleReportItemService = leaseLiabilityScheduleReportItemService;
