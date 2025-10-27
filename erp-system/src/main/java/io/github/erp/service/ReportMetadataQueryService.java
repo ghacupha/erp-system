@@ -19,6 +19,7 @@ package io.github.erp.service;
  */
 
 import io.github.erp.domain.ReportMetadata;
+import io.github.erp.domain.ReportMetadata_;
 import io.github.erp.repository.ReportMetadataRepository;
 import io.github.erp.repository.search.ReportMetadataSearchRepository;
 import io.github.erp.service.criteria.ReportMetadataCriteria;
