@@ -133,7 +133,7 @@ public class ReportMetadataQueryService extends QueryService<ReportMetadata> {
             }
             if (criteria.getFilterLabel() != null) {
                 specification = specification.and(
-                    buildStringSpecification(
+                    buildSpecification(
                         criteria.getFilterLabel(),
                         root -> root.join(ReportMetadata_.filters, JoinType.LEFT).get("label")
                     )
@@ -141,7 +141,7 @@ public class ReportMetadataQueryService extends QueryService<ReportMetadata> {
             }
             if (criteria.getFilterQueryParameterKey() != null) {
                 specification = specification.and(
-                    buildStringSpecification(
+                    buildSpecification(
                         criteria.getFilterQueryParameterKey(),
                         root -> root.join(ReportMetadata_.filters, JoinType.LEFT).get("queryParameterKey")
                     )
@@ -149,7 +149,7 @@ public class ReportMetadataQueryService extends QueryService<ReportMetadata> {
             }
             if (criteria.getFilterValueSource() != null) {
                 specification = specification.and(
-                    buildStringSpecification(
+                    buildSpecification(
                         criteria.getFilterValueSource(),
                         root -> root.join(ReportMetadata_.filters, JoinType.LEFT).get("valueSource")
                     )
@@ -157,7 +157,7 @@ public class ReportMetadataQueryService extends QueryService<ReportMetadata> {
             }
             if (criteria.getFilterUiHint() != null) {
                 specification = specification.and(
-                    buildStringSpecification(
+                    buildSpecification(
                         criteria.getFilterUiHint(),
                         root -> root.join(ReportMetadata_.filters, JoinType.LEFT).get("uiHint")
                     )
