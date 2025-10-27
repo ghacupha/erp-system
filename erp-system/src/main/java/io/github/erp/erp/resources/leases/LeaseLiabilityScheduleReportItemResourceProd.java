@@ -21,6 +21,7 @@ import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleReportIte
 import io.github.erp.internal.service.leases.InternalLeaseLiabilityScheduleReportItemService;
 import io.github.erp.service.LeaseLiabilityScheduleReportItemQueryService;
 import io.github.erp.service.criteria.LeaseLiabilityScheduleReportItemCriteria;
+import io.github.erp.service.dto.LeaseLiabilityInterestExpenseSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleReportItemDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +78,24 @@ public class LeaseLiabilityScheduleReportItemResourceProd {
         Page<LeaseLiabilityScheduleReportItemDTO> page = leaseLiabilityScheduleReportItemQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /lease-liability-schedule-report-items/interest-expense-summary/:leasePeriodId} :
+     * get the interest expense summary for the supplied lease period.
+     *
+     * @param leasePeriodId the lease period identifier guiding the report window.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of report rows in body.
+     */
+    @GetMapping("/lease-liability-schedule-report-items/interest-expense-summary/{leasePeriodId}")
+    public ResponseEntity<List<LeaseLiabilityInterestExpenseSummaryDTO>> getLeaseLiabilityInterestExpenseSummary(
+        @PathVariable long leasePeriodId
+    ) {
+        log.debug("REST request for lease liability interest expense summary for lease period id: {}", leasePeriodId);
+        List<LeaseLiabilityInterestExpenseSummaryDTO> reportItems = leaseLiabilityScheduleReportItemService.getLeaseLiabilityInterestExpenseSummary(
+            leasePeriodId
+        );
+        return ResponseEntity.ok(reportItems);
     }
 
     /**

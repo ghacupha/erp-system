@@ -18,10 +18,13 @@ package io.github.erp.internal.service.leases;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.LeaseLiabilityScheduleReportItem;
+import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.model.LeaseLiabilityInterestExpenseSummaryInternal;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleReportItemRepository;
 import io.github.erp.repository.LeaseLiabilityScheduleReportItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityScheduleReportItemSearchRepository;
 import io.github.erp.service.LeaseLiabilityScheduleReportItemService;
+import io.github.erp.service.dto.LeaseLiabilityInterestExpenseSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleReportItemDTO;
 import io.github.erp.service.mapper.LeaseLiabilityScheduleReportItemMapper;
 import org.slf4j.Logger;
@@ -31,7 +34,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link LeaseLiabilityScheduleReportItem}.
@@ -48,14 +53,19 @@ public class InternalLeaseLiabilityScheduleReportItemServiceImpl implements Inte
 
     private final LeaseLiabilityScheduleReportItemSearchRepository leaseLiabilityScheduleReportItemSearchRepository;
 
+    private final Mapping<LeaseLiabilityInterestExpenseSummaryInternal, LeaseLiabilityInterestExpenseSummaryDTO>
+        leaseLiabilityInterestExpenseSummaryMapping;
+
     public InternalLeaseLiabilityScheduleReportItemServiceImpl(
         InternalLeaseLiabilityScheduleReportItemRepository leaseLiabilityScheduleReportItemRepository,
         LeaseLiabilityScheduleReportItemMapper leaseLiabilityScheduleReportItemMapper,
-        LeaseLiabilityScheduleReportItemSearchRepository leaseLiabilityScheduleReportItemSearchRepository
+        LeaseLiabilityScheduleReportItemSearchRepository leaseLiabilityScheduleReportItemSearchRepository,
+        Mapping<LeaseLiabilityInterestExpenseSummaryInternal, LeaseLiabilityInterestExpenseSummaryDTO> leaseLiabilityInterestExpenseSummaryMapping
     ) {
         this.leaseLiabilityScheduleReportItemRepository = leaseLiabilityScheduleReportItemRepository;
         this.leaseLiabilityScheduleReportItemMapper = leaseLiabilityScheduleReportItemMapper;
         this.leaseLiabilityScheduleReportItemSearchRepository = leaseLiabilityScheduleReportItemSearchRepository;
+        this.leaseLiabilityInterestExpenseSummaryMapping = leaseLiabilityInterestExpenseSummaryMapping;
     }
 
     @Override
@@ -100,6 +110,18 @@ public class InternalLeaseLiabilityScheduleReportItemServiceImpl implements Inte
     public Page<LeaseLiabilityScheduleReportItemDTO> findAll(Pageable pageable) {
         log.debug("Request to get all LeaseLiabilityScheduleReportItems");
         return leaseLiabilityScheduleReportItemRepository.findAll(pageable).map(leaseLiabilityScheduleReportItemMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<LeaseLiabilityInterestExpenseSummaryDTO> getLeaseLiabilityInterestExpenseSummary(long leasePeriodId) {
+        log.debug("Request for lease liability interest expense summary for lease period id: {}", leasePeriodId);
+
+        return leaseLiabilityScheduleReportItemRepository
+            .getLeaseLiabilityInterestExpenseSummary(leasePeriodId)
+            .stream()
+            .map(leaseLiabilityInterestExpenseSummaryMapping::toValue2)
+            .collect(Collectors.toList());
     }
 
     @Override

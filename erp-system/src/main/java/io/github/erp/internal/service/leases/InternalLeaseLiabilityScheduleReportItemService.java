@@ -17,10 +17,12 @@ package io.github.erp.internal.service.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.service.dto.LeaseLiabilityInterestExpenseSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleReportItemDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -50,6 +52,14 @@ public interface InternalLeaseLiabilityScheduleReportItemService {
      * @return the list of entities.
      */
     Page<LeaseLiabilityScheduleReportItemDTO> findAll(Pageable pageable);
+
+    /**
+     * Get the lease liability interest expense summary for the supplied lease period.
+     *
+     * @param leasePeriodId the lease period identifier driving the report window.
+     * @return a fully mapped list of report rows.
+     */
+    List<LeaseLiabilityInterestExpenseSummaryDTO> getLeaseLiabilityInterestExpenseSummary(long leasePeriodId);
 
     /**
      * Get the "id" leaseLiabilityScheduleReportItem.
