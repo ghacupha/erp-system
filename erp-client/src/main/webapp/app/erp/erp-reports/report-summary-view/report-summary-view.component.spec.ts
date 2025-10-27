@@ -3,23 +3,25 @@ import { of, throwError } from 'rxjs';
 import { ReportSummaryViewComponent } from './report-summary-view.component';
 import { ReportSummaryDataService } from './report-summary-data.service';
 import * as ExportUtil from './report-summary-export.util';
-import { IReportMetadata } from '../report-metadata/report-metadata.model';
+import { IReportFilterDefinition, IReportMetadata } from '../report-metadata/report-metadata.model';
+import { ReportFilterOptionService } from './report-filter-option.service';
 
 describe('ReportSummaryViewComponent (export behaviour)', () => {
   let component: ReportSummaryViewComponent;
   let summaryDataService: jasmine.SpyObj<ReportSummaryDataService>;
+  let filterOptionService: jasmine.SpyObj<ReportFilterOptionService>;
   let anchorElement: HTMLAnchorElement;
 
   beforeEach(() => {
     summaryDataService = jasmine.createSpyObj('ReportSummaryDataService', ['fetchSummary', 'fetchAllSummary']);
+    filterOptionService = jasmine.createSpyObj('ReportFilterOptionService', ['loadOptions']);
 
     component = new ReportSummaryViewComponent(
       { paramMap: of() } as any,
       { setTitle: () => undefined } as any,
       {} as any,
       summaryDataService,
-      {} as any,
-      {} as any
+      filterOptionService
     );
 
     component.metadata = {
@@ -31,6 +33,77 @@ describe('ReportSummaryViewComponent (export behaviour)', () => {
     anchorElement = document.createElement('a');
     spyOn(document, 'createElement').and.returnValue(anchorElement);
     spyOn(anchorElement, 'click');
+  });
+
+  it('should initialise metadata-driven filters and request summary data once options load', () => {
+    const definitions: IReportFilterDefinition[] = [
+      { label: 'Lease Period', queryParameterKey: 'leasePeriodId.equals', valueSource: 'leasePeriods' },
+      { label: 'Lease Contract', queryParameterKey: 'leaseLiabilityId.equals', valueSource: 'leaseContracts' },
+    ];
+    const metadata = {
+      backendApi: '/api/report/summary',
+      reportTitle: 'Test Report',
+      filters: definitions,
+    } as IReportMetadata;
+
+    component.metadata = metadata;
+    summaryDataService.fetchSummary.and.returnValue(of([]));
+    filterOptionService.loadOptions.and.returnValues(
+      of([{ value: 101, label: 'Period 101' }]),
+      of([{ value: 202, label: 'Contract 202' }])
+    );
+
+    (component as any).initializeFilters(definitions);
+
+    expect(component.filters.length).toBe(2);
+    expect(component.filters[0].selected?.value).toBe(101);
+    expect(component.filters[1].selected?.value).toBe(202);
+    expect(summaryDataService.fetchSummary).toHaveBeenCalledWith('/api/report/summary', {
+      'leasePeriodId.equals': 101,
+      'leaseLiabilityId.equals': 202,
+    });
+  });
+
+  it('should build query parameters from selected filter values', () => {
+    const definitions: IReportFilterDefinition[] = [
+      { label: 'Period', queryParameterKey: 'leasePeriodId.equals', valueSource: 'leasePeriods' },
+      { label: 'Month', queryParameterKey: 'fiscalMonthId.equals', valueSource: 'fiscalMonths' },
+      { label: 'Ignored', queryParameterKey: '', valueSource: 'unknown' },
+    ];
+
+    component.filters = [
+      {
+        definition: definitions[0],
+        options: [],
+        selected: { value: 11, label: 'Period 11' } as any,
+        loading: false,
+        error: null,
+        lastSearchTerm: undefined,
+      },
+      {
+        definition: definitions[1],
+        options: [],
+        selected: { value: 22, label: 'Month 22' } as any,
+        loading: false,
+        error: null,
+        lastSearchTerm: undefined,
+      },
+      {
+        definition: definitions[2],
+        options: [],
+        selected: { value: '', label: 'Blank' } as any,
+        loading: false,
+        error: null,
+        lastSearchTerm: undefined,
+      },
+    ] as any;
+
+    const params = (component as any).buildQueryParams();
+
+    expect(params).toEqual({
+      'leasePeriodId.equals': 11,
+      'fiscalMonthId.equals': 22,
+    });
   });
 
   afterEach(() => {

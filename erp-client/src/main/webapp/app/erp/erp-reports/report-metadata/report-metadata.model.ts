@@ -28,6 +28,14 @@ export interface IReportMetadata {
   displayLeaseContract?: boolean;
   leasePeriodQueryParam?: string | null;
   leaseContractQueryParam?: string | null;
+  filters?: IReportFilterDefinition[] | null;
 }
 
 export type ReportSummaryRecord = Record<string, unknown>;
+
+export interface IReportFilterDefinition {
+  label: string;
+  queryParameterKey: string;
+  valueSource: string;
+  uiHint?: string | null;
+}
