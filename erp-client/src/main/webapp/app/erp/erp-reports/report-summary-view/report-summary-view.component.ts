@@ -34,11 +34,6 @@ import { ReportFilterOption, ReportFilterOptionService } from './report-filter-o
 
 import { buildCsvContent, buildExcelArrayBuffer, deriveOrderedColumns } from './report-summary-export.util';
 
-@Component({
-  selector: 'jhi-report-summary-view',
-  templateUrl: './report-summary-view.component.html',
-  styleUrls: ['./report-summary-view.component.scss'],
-})
 interface ReportFilterState {
   definition: IReportFilterDefinition;
   options: ReportFilterOption[];
@@ -48,6 +43,11 @@ interface ReportFilterState {
   lastSearchTerm?: string;
 }
 
+@Component({
+  selector: 'jhi-report-summary-view',
+  templateUrl: './report-summary-view.component.html',
+  styleUrls: ['./report-summary-view.component.scss'],
+})
 export class ReportSummaryViewComponent implements OnInit, OnDestroy {
   metadata?: IReportMetadata | null;
   summaryItems: ReportSummaryRecord[] = [];
