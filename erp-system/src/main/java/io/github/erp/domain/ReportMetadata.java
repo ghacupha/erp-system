@@ -19,7 +19,10 @@ package io.github.erp.domain;
  */
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Cache;
@@ -65,19 +68,13 @@ public class ReportMetadata implements Serializable {
     @Column(name = "active", nullable = false)
     private Boolean active = Boolean.TRUE;
 
-    @NotNull
-    @Column(name = "display_lease_period", nullable = false)
-    private Boolean displayLeasePeriod = Boolean.FALSE;
-
-    @NotNull
-    @Column(name = "display_lease_contract", nullable = false)
-    private Boolean displayLeaseContract = Boolean.FALSE;
-
-    @Column(name = "lease_period_query_param")
-    private String leasePeriodQueryParam;
-
-    @Column(name = "lease_contract_query_param")
-    private String leaseContractQueryParam;
+    @Valid
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "report_metadata_filters", joinColumns = @JoinColumn(name = "report_metadata_id"))
+    @OrderColumn(name = "filter_order")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Nested, includeInParent = true)
+    private List<ReportFilterDefinition> filters = new ArrayList<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -172,56 +169,24 @@ public class ReportMetadata implements Serializable {
         this.active = active;
     }
 
-    public Boolean getDisplayLeasePeriod() {
-        return this.displayLeasePeriod;
+    public List<ReportFilterDefinition> getFilters() {
+        return this.filters;
     }
 
-    public ReportMetadata displayLeasePeriod(Boolean displayLeasePeriod) {
-        this.setDisplayLeasePeriod(displayLeasePeriod);
+    public void setFilters(List<ReportFilterDefinition> filters) {
+        this.filters = filters != null ? new ArrayList<>(filters) : new ArrayList<>();
+    }
+
+    public ReportMetadata filters(List<ReportFilterDefinition> filters) {
+        this.setFilters(filters);
         return this;
     }
 
-    public void setDisplayLeasePeriod(Boolean displayLeasePeriod) {
-        this.displayLeasePeriod = displayLeasePeriod;
-    }
-
-    public Boolean getDisplayLeaseContract() {
-        return this.displayLeaseContract;
-    }
-
-    public ReportMetadata displayLeaseContract(Boolean displayLeaseContract) {
-        this.setDisplayLeaseContract(displayLeaseContract);
+    public ReportMetadata addFilter(ReportFilterDefinition filter) {
+        if (filter != null) {
+            this.filters.add(filter);
+        }
         return this;
-    }
-
-    public void setDisplayLeaseContract(Boolean displayLeaseContract) {
-        this.displayLeaseContract = displayLeaseContract;
-    }
-
-    public String getLeasePeriodQueryParam() {
-        return this.leasePeriodQueryParam;
-    }
-
-    public ReportMetadata leasePeriodQueryParam(String leasePeriodQueryParam) {
-        this.setLeasePeriodQueryParam(leasePeriodQueryParam);
-        return this;
-    }
-
-    public void setLeasePeriodQueryParam(String leasePeriodQueryParam) {
-        this.leasePeriodQueryParam = leasePeriodQueryParam;
-    }
-
-    public String getLeaseContractQueryParam() {
-        return this.leaseContractQueryParam;
-    }
-
-    public ReportMetadata leaseContractQueryParam(String leaseContractQueryParam) {
-        this.setLeaseContractQueryParam(leaseContractQueryParam);
-        return this;
-    }
-
-    public void setLeaseContractQueryParam(String leaseContractQueryParam) {
-        this.leaseContractQueryParam = leaseContractQueryParam;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -253,10 +218,7 @@ public class ReportMetadata implements Serializable {
             ", pagePath='" + getPagePath() + "'" +
             ", backendApi='" + getBackendApi() + "'" +
             ", active=" + getActive() +
-            ", displayLeasePeriod=" + getDisplayLeasePeriod() +
-            ", displayLeaseContract=" + getDisplayLeaseContract() +
-            ", leasePeriodQueryParam='" + getLeasePeriodQueryParam() + "'" +
-            ", leaseContractQueryParam='" + getLeaseContractQueryParam() + "'" +
+            ", filters=" + getFilters() +
             "}";
     }
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd"
+>
+    <changeSet id="20240801090000-1" author="assistant">
+        <dropColumn tableName="report_metadata" columnName="display_lease_period"/>
+        <dropColumn tableName="report_metadata" columnName="display_lease_contract"/>
+        <dropColumn tableName="report_metadata" columnName="lease_period_query_param"/>
+        <dropColumn tableName="report_metadata" columnName="lease_contract_query_param"/>
+    </changeSet>
+
+    <changeSet id="20240801090000-2" author="assistant">
+        <createTable tableName="report_metadata_filters">
+            <column name="report_metadata_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="filter_order" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="filter_label" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="query_parameter_key" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value_source" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ui_hint" type="varchar(1000)"/>
+        </createTable>
+        <addPrimaryKey tableName="report_metadata_filters" columnNames="report_metadata_id, filter_order" constraintName="pk_report_metadata_filters"/>
+        <addForeignKeyConstraint
+            baseTableName="report_metadata_filters"
+            baseColumnNames="report_metadata_id"
+            constraintName="fk_report_metadata_filters_report_metadata_id"
+            referencedTableName="report_metadata"
+            referencedColumnNames="id"
+            onDelete="CASCADE"
+        />
+    </changeSet>
+</databaseChangeLog>

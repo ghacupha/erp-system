@@ -18,7 +18,6 @@ package io.github.erp.repository.search;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.ReportMetadata;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
