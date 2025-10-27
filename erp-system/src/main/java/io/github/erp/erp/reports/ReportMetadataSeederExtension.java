@@ -18,14 +18,18 @@ package io.github.erp.erp.reports;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import io.github.erp.domain.ReportFilterDefinition;
 import io.github.erp.domain.ReportMetadata;
 import io.github.erp.repository.ReportMetadataRepository;
 import io.github.erp.service.ReportMetadataService;
+import io.github.erp.service.dto.ReportFilterDefinitionDTO;
 import io.github.erp.service.dto.ReportMetadataDTO;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -55,10 +59,7 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             "reports/view/lease-liability-by-account",
             "api/leases/lease-liability-by-account-report-items",
             true,
-            true,
-            false,
-            "leasePeriodId.equals",
-            null
+            List.of(filter("Lease Period", "leasePeriodId.equals", "leasePeriods", "dropdown"))
         ),
         new ReportMetadataSeed(
             "ROU Asset Balance by Account",
@@ -67,10 +68,7 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             "reports/view/rou-account-balance",
             "api/leases/rou-account-balance-report-items/reports/{leasePeriodId}",
             true,
-            true,
-            false,
-            "leasePeriodId",
-            null
+            List.of(filter("Lease Period", "leasePeriodId", "leasePeriods", "dropdown"))
         ),
         new ReportMetadataSeed(
             "ROU Depreciation by Account",
@@ -79,10 +77,7 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             "reports/view/rou-depreciation-by-account",
             "api/leases/rou-depreciation-posting-report-items",
             true,
-            true,
-            false,
-            "leasePeriodId.equals",
-            null
+            List.of(filter("Lease Period", "leasePeriodId.equals", "leasePeriods", "dropdown"))
         ),
         new ReportMetadataSeed(
             "Lease Liability by Service Outlet",
@@ -91,10 +86,7 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             "reports/view/lease-liability-by-outlet",
             "api/leases/lease-liability-schedule-report-items",
             false,
-            true,
-            false,
-            "leasePeriodId.equals",
-            null
+            List.of(filter("Lease Period", "leasePeriodId.equals", "leasePeriods", "dropdown"))
         ),
         new ReportMetadataSeed(
             "Lease Liability by Dealer",
@@ -103,10 +95,10 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             "reports/view/lease-liability-by-dealer",
             "api/leases/lease-liability-report-items",
             false,
-            true,
-            true,
-            "leasePeriodId.equals",
-            "leaseLiabilityId.equals"
+            List.of(
+                filter("Lease Period", "leasePeriodId.equals", "leasePeriods", "dropdown"),
+                filter("Lease Contract", "leaseLiabilityId.equals", "leaseContracts", "typeahead")
+            )
         ),
         new ReportMetadataSeed(
             "Lease Interest Accrued by Account",
@@ -115,10 +107,7 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             "reports/view/lease-interest-accrued",
             "api/leases/lease-liability-schedule-report-items",
             false,
-            true,
-            false,
-            "leasePeriodId.equals",
-            null
+            List.of(filter("Lease Period", "leasePeriodId.equals", "leasePeriods", "dropdown"))
         ),
         new ReportMetadataSeed(
             "Lease Interest Payments by Liability",
@@ -127,10 +116,46 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             "reports/view/lease-interest-payments",
             "api/leases/lease-liability-schedule-report-items",
             false,
+            List.of(
+                filter("Lease Period", "leasePeriodId.equals", "leasePeriods", "dropdown"),
+                filter("Lease Contract", "leaseLiabilityId.equals", "leaseContracts", "typeahead")
+            )
+        ),
+        new ReportMetadataSeed(
+            "Prepayment Outstanding Overview",
+            "Portfolio snapshot of outstanding prepayments grouped for financial reporting.",
+            "Prepayments",
+            "reports/view/prepayment-outstanding-overview",
+            "api/prepayments/prepayment-outstanding-overview-report-tuples",
             true,
+            List.of(
+                filter("Reporting Month", "fiscalMonthId.equals", "fiscalMonths", "dropdown"),
+                filter("Prepayment Account", "prepaymentAccountId.equals", "prepaymentAccounts", "typeahead")
+            )
+        ),
+        new ReportMetadataSeed(
+            "Prepayment Amortisation Schedule",
+            "Detail of prepayment amortisation entries scheduled for a selected period.",
+            "Prepayments",
+            "reports/view/prepayment-amortisation",
+            "api/prepayment-amortizations",
             true,
-            "leasePeriodId.equals",
-            "leaseLiabilityId.equals"
+            List.of(
+                filter("Schedule Period", "fiscalMonthId.equals", "fiscalMonths", "dropdown"),
+                filter("Prepayment Account", "prepaymentAccountId.equals", "prepaymentAccounts", "typeahead")
+            )
+        ),
+        new ReportMetadataSeed(
+            "Amortisation Posting Summary",
+            "Summary of amortisation postings grouped by recognition rule for reconciliation.",
+            "Amortisation",
+            "reports/view/amortisation-posting-summary",
+            "api/amortization-posting-reports",
+            true,
+            List.of(
+                filter("Posting Period", "fiscalMonthId.equals", "fiscalMonths", "dropdown"),
+                filter("Recognition Rule", "recognitionRuleId.equals", "amortizationRules", "dropdown")
+            )
         )
     );
 
@@ -166,10 +191,7 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             dto.setPagePath(seed.pagePath());
             dto.setBackendApi(seed.normalizeApi(seed.backendApi()));
             dto.setActive(seed.active());
-            dto.setDisplayLeasePeriod(seed.displayLeasePeriod());
-            dto.setDisplayLeaseContract(seed.displayLeaseContract());
-            dto.setLeasePeriodQueryParam(seed.leasePeriodQueryParam());
-            dto.setLeaseContractQueryParam(seed.leaseContractQueryParam());
+            dto.setFilters(seed.toFilterDtos());
             reportMetadataService.save(dto);
         }
     }
@@ -183,10 +205,16 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
         dto.setPagePath(reportMetadata.getPagePath());
         dto.setBackendApi(reportMetadata.getBackendApi());
         dto.setActive(reportMetadata.getActive());
-        dto.setDisplayLeasePeriod(reportMetadata.getDisplayLeasePeriod());
-        dto.setDisplayLeaseContract(reportMetadata.getDisplayLeaseContract());
-        dto.setLeasePeriodQueryParam(reportMetadata.getLeasePeriodQueryParam());
-        dto.setLeaseContractQueryParam(reportMetadata.getLeaseContractQueryParam());
+        dto.setFilters(reportMetadata.getFilters().stream().map(this::toFilterDto).collect(Collectors.toList()));
+        return dto;
+    }
+
+    private ReportFilterDefinitionDTO toFilterDto(ReportFilterDefinition definition) {
+        ReportFilterDefinitionDTO dto = new ReportFilterDefinitionDTO();
+        dto.setLabel(definition.getLabel());
+        dto.setQueryParameterKey(definition.getQueryParameterKey());
+        dto.setValueSource(definition.getValueSource());
+        dto.setUiHint(definition.getUiHint());
         return dto;
     }
 
@@ -197,10 +225,7 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
         String pagePath,
         String backendApi,
         boolean active,
-        boolean displayLeasePeriod,
-        boolean displayLeaseContract,
-        String leasePeriodQueryParam,
-        String leaseContractQueryParam
+        List<ReportFilterDescriptor> filters
     ) {
         boolean apply(ReportMetadata entity) {
             boolean changed = false;
@@ -228,23 +253,20 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
                 entity.setActive(active);
                 changed = true;
             }
-            if (!Objects.equals(entity.getDisplayLeasePeriod(), displayLeasePeriod)) {
-                entity.setDisplayLeasePeriod(displayLeasePeriod);
-                changed = true;
-            }
-            if (!Objects.equals(entity.getDisplayLeaseContract(), displayLeaseContract)) {
-                entity.setDisplayLeaseContract(displayLeaseContract);
-                changed = true;
-            }
-            if (!Objects.equals(entity.getLeasePeriodQueryParam(), leasePeriodQueryParam)) {
-                entity.setLeasePeriodQueryParam(leasePeriodQueryParam);
-                changed = true;
-            }
-            if (!Objects.equals(entity.getLeaseContractQueryParam(), leaseContractQueryParam)) {
-                entity.setLeaseContractQueryParam(leaseContractQueryParam);
+            List<ReportFilterDefinition> desiredFilters = toFilterDefinitions();
+            if (!Objects.equals(entity.getFilters(), desiredFilters)) {
+                entity.setFilters(new ArrayList<>(desiredFilters));
                 changed = true;
             }
             return changed;
+        }
+
+        List<ReportFilterDefinitionDTO> toFilterDtos() {
+            return filters.stream().map(ReportMetadataSeederExtension::toFilterDto).collect(Collectors.toList());
+        }
+
+        List<ReportFilterDefinition> toFilterDefinitions() {
+            return filters.stream().map(ReportMetadataSeederExtension::toFilterDefinition).collect(Collectors.toList());
         }
 
         private String normalizeApi(String api) {
@@ -261,4 +283,27 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             return trimmed;
         }
     }
+
+    private static ReportFilterDescriptor filter(String label, String queryParameterKey, String valueSource, String uiHint) {
+        return new ReportFilterDescriptor(label, queryParameterKey, valueSource, uiHint);
+    }
+
+    private static ReportFilterDefinitionDTO toFilterDto(ReportFilterDescriptor descriptor) {
+        ReportFilterDefinitionDTO dto = new ReportFilterDefinitionDTO();
+        dto.setLabel(descriptor.label());
+        dto.setQueryParameterKey(descriptor.queryParameterKey());
+        dto.setValueSource(descriptor.valueSource());
+        dto.setUiHint(descriptor.uiHint());
+        return dto;
+    }
+
+    private static ReportFilterDefinition toFilterDefinition(ReportFilterDescriptor descriptor) {
+        return new ReportFilterDefinition()
+            .label(descriptor.label())
+            .queryParameterKey(descriptor.queryParameterKey())
+            .valueSource(descriptor.valueSource())
+            .uiHint(descriptor.uiHint());
+    }
+
+    private record ReportFilterDescriptor(String label, String queryParameterKey, String valueSource, String uiHint) {}
 }

@@ -25,11 +25,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.ReportFilterDefinition;
 import io.github.erp.domain.ReportMetadata;
 import io.github.erp.repository.ReportMetadataRepository;
 import io.github.erp.repository.search.ReportMetadataSearchRepository;
 import io.github.erp.service.dto.ReportMetadataDTO;
 import io.github.erp.service.mapper.ReportMetadataMapper;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -75,17 +77,29 @@ class ReportMetadataResourceIT {
     private static final Boolean DEFAULT_ACTIVE = true;
     private static final Boolean UPDATED_ACTIVE = false;
 
-    private static final Boolean DEFAULT_DISPLAY_LEASE_PERIOD = true;
-    private static final Boolean UPDATED_DISPLAY_LEASE_PERIOD = false;
+    private static final String DEFAULT_FILTER_LABEL = "Lease Period";
+    private static final String UPDATED_FILTER_LABEL = "Fiscal Month";
 
-    private static final Boolean DEFAULT_DISPLAY_LEASE_CONTRACT = false;
-    private static final Boolean UPDATED_DISPLAY_LEASE_CONTRACT = true;
+    private static final String DEFAULT_FILTER_QUERY_KEY = "leasePeriodId.equals";
+    private static final String UPDATED_FILTER_QUERY_KEY = "fiscalMonthId.equals";
 
-    private static final String DEFAULT_LEASE_PERIOD_QUERY_PARAM = "leasePeriodId.equals";
-    private static final String UPDATED_LEASE_PERIOD_QUERY_PARAM = "fiscalPeriodEndDate.equals";
+    private static final String DEFAULT_FILTER_VALUE_SOURCE = "leasePeriods";
+    private static final String UPDATED_FILTER_VALUE_SOURCE = "fiscalMonths";
 
-    private static final String DEFAULT_LEASE_CONTRACT_QUERY_PARAM = "leaseLiabilityId.equals";
-    private static final String UPDATED_LEASE_CONTRACT_QUERY_PARAM = "leaseContractId.equals";
+    private static final String DEFAULT_FILTER_UI_HINT = "dropdown";
+    private static final String UPDATED_FILTER_UI_HINT = "typeahead";
+
+    private static final String DEFAULT_SECOND_FILTER_LABEL = "Lease Contract";
+    private static final String UPDATED_SECOND_FILTER_LABEL = "Prepayment Account";
+
+    private static final String DEFAULT_SECOND_FILTER_QUERY_KEY = "leaseLiabilityId.equals";
+    private static final String UPDATED_SECOND_FILTER_QUERY_KEY = "prepaymentAccountId.equals";
+
+    private static final String DEFAULT_SECOND_FILTER_VALUE_SOURCE = "leaseContracts";
+    private static final String UPDATED_SECOND_FILTER_VALUE_SOURCE = "prepaymentAccounts";
+
+    private static final String DEFAULT_SECOND_FILTER_UI_HINT = "typeahead";
+    private static final String UPDATED_SECOND_FILTER_UI_HINT = "dropdown";
 
     private static final String ENTITY_API_URL = "/api/report-metadata";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -123,11 +137,23 @@ class ReportMetadataResourceIT {
             .module(DEFAULT_MODULE)
             .pagePath(DEFAULT_PAGE_PATH)
             .backendApi(DEFAULT_BACKEND_API)
-            .active(DEFAULT_ACTIVE)
-            .displayLeasePeriod(DEFAULT_DISPLAY_LEASE_PERIOD)
-            .displayLeaseContract(DEFAULT_DISPLAY_LEASE_CONTRACT)
-            .leasePeriodQueryParam(DEFAULT_LEASE_PERIOD_QUERY_PARAM)
-            .leaseContractQueryParam(DEFAULT_LEASE_CONTRACT_QUERY_PARAM);
+            .active(DEFAULT_ACTIVE);
+        reportMetadata.setFilters(
+            new ArrayList<>(
+                List.of(
+                    new ReportFilterDefinition()
+                        .label(DEFAULT_FILTER_LABEL)
+                        .queryParameterKey(DEFAULT_FILTER_QUERY_KEY)
+                        .valueSource(DEFAULT_FILTER_VALUE_SOURCE)
+                        .uiHint(DEFAULT_FILTER_UI_HINT),
+                    new ReportFilterDefinition()
+                        .label(DEFAULT_SECOND_FILTER_LABEL)
+                        .queryParameterKey(DEFAULT_SECOND_FILTER_QUERY_KEY)
+                        .valueSource(DEFAULT_SECOND_FILTER_VALUE_SOURCE)
+                        .uiHint(DEFAULT_SECOND_FILTER_UI_HINT)
+                )
+            )
+        );
         return reportMetadata;
     }
 
@@ -138,11 +164,23 @@ class ReportMetadataResourceIT {
             .module(UPDATED_MODULE)
             .pagePath(UPDATED_PAGE_PATH)
             .backendApi(UPDATED_BACKEND_API)
-            .active(UPDATED_ACTIVE)
-            .displayLeasePeriod(UPDATED_DISPLAY_LEASE_PERIOD)
-            .displayLeaseContract(UPDATED_DISPLAY_LEASE_CONTRACT)
-            .leasePeriodQueryParam(UPDATED_LEASE_PERIOD_QUERY_PARAM)
-            .leaseContractQueryParam(UPDATED_LEASE_CONTRACT_QUERY_PARAM);
+            .active(UPDATED_ACTIVE);
+        reportMetadata.setFilters(
+            new ArrayList<>(
+                List.of(
+                    new ReportFilterDefinition()
+                        .label(UPDATED_FILTER_LABEL)
+                        .queryParameterKey(UPDATED_FILTER_QUERY_KEY)
+                        .valueSource(UPDATED_FILTER_VALUE_SOURCE)
+                        .uiHint(UPDATED_FILTER_UI_HINT),
+                    new ReportFilterDefinition()
+                        .label(UPDATED_SECOND_FILTER_LABEL)
+                        .queryParameterKey(UPDATED_SECOND_FILTER_QUERY_KEY)
+                        .valueSource(UPDATED_SECOND_FILTER_VALUE_SOURCE)
+                        .uiHint(UPDATED_SECOND_FILTER_UI_HINT)
+                )
+            )
+        );
         return reportMetadata;
     }
 
@@ -172,10 +210,18 @@ class ReportMetadataResourceIT {
         assertThat(testReportMetadata.getPagePath()).isEqualTo(DEFAULT_PAGE_PATH);
         assertThat(testReportMetadata.getBackendApi()).isEqualTo(DEFAULT_BACKEND_API);
         assertThat(testReportMetadata.getActive()).isEqualTo(DEFAULT_ACTIVE);
-        assertThat(testReportMetadata.getDisplayLeasePeriod()).isEqualTo(DEFAULT_DISPLAY_LEASE_PERIOD);
-        assertThat(testReportMetadata.getDisplayLeaseContract()).isEqualTo(DEFAULT_DISPLAY_LEASE_CONTRACT);
-        assertThat(testReportMetadata.getLeasePeriodQueryParam()).isEqualTo(DEFAULT_LEASE_PERIOD_QUERY_PARAM);
-        assertThat(testReportMetadata.getLeaseContractQueryParam()).isEqualTo(DEFAULT_LEASE_CONTRACT_QUERY_PARAM);
+        List<ReportFilterDefinition> savedFilters = testReportMetadata.getFilters();
+        assertThat(savedFilters).hasSize(2);
+        ReportFilterDefinition primaryFilter = savedFilters.get(0);
+        assertThat(primaryFilter.getLabel()).isEqualTo(DEFAULT_FILTER_LABEL);
+        assertThat(primaryFilter.getQueryParameterKey()).isEqualTo(DEFAULT_FILTER_QUERY_KEY);
+        assertThat(primaryFilter.getValueSource()).isEqualTo(DEFAULT_FILTER_VALUE_SOURCE);
+        assertThat(primaryFilter.getUiHint()).isEqualTo(DEFAULT_FILTER_UI_HINT);
+        ReportFilterDefinition secondaryFilter = savedFilters.get(1);
+        assertThat(secondaryFilter.getLabel()).isEqualTo(DEFAULT_SECOND_FILTER_LABEL);
+        assertThat(secondaryFilter.getQueryParameterKey()).isEqualTo(DEFAULT_SECOND_FILTER_QUERY_KEY);
+        assertThat(secondaryFilter.getValueSource()).isEqualTo(DEFAULT_SECOND_FILTER_VALUE_SOURCE);
+        assertThat(secondaryFilter.getUiHint()).isEqualTo(DEFAULT_SECOND_FILTER_UI_HINT);
 
         // Validate the ReportMetadata in Elasticsearch
         verify(mockReportMetadataSearchRepository, times(1)).save(testReportMetadata);
@@ -220,10 +266,12 @@ class ReportMetadataResourceIT {
             .andExpect(jsonPath("$.[*].pagePath").value(hasItem(DEFAULT_PAGE_PATH)))
             .andExpect(jsonPath("$.[*].backendApi").value(hasItem(DEFAULT_BACKEND_API)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].displayLeasePeriod").value(hasItem(DEFAULT_DISPLAY_LEASE_PERIOD.booleanValue())))
-            .andExpect(jsonPath("$.[*].displayLeaseContract").value(hasItem(DEFAULT_DISPLAY_LEASE_CONTRACT.booleanValue())))
-            .andExpect(jsonPath("$.[*].leasePeriodQueryParam").value(hasItem(DEFAULT_LEASE_PERIOD_QUERY_PARAM)))
-            .andExpect(jsonPath("$.[*].leaseContractQueryParam").value(hasItem(DEFAULT_LEASE_CONTRACT_QUERY_PARAM)));
+            .andExpect(jsonPath("$.[*].filters[*].label").value(hasItem(DEFAULT_FILTER_LABEL)))
+            .andExpect(jsonPath("$.[*].filters[*].label").value(hasItem(DEFAULT_SECOND_FILTER_LABEL)))
+            .andExpect(jsonPath("$.[*].filters[*].queryParameterKey").value(hasItem(DEFAULT_FILTER_QUERY_KEY)))
+            .andExpect(jsonPath("$.[*].filters[*].queryParameterKey").value(hasItem(DEFAULT_SECOND_FILTER_QUERY_KEY)))
+            .andExpect(jsonPath("$.[*].filters[*].valueSource").value(hasItem(DEFAULT_FILTER_VALUE_SOURCE)))
+            .andExpect(jsonPath("$.[*].filters[*].valueSource").value(hasItem(DEFAULT_SECOND_FILTER_VALUE_SOURCE)));
     }
 
     @Test
@@ -243,10 +291,14 @@ class ReportMetadataResourceIT {
             .andExpect(jsonPath("$.pagePath").value(DEFAULT_PAGE_PATH))
             .andExpect(jsonPath("$.backendApi").value(DEFAULT_BACKEND_API))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
-            .andExpect(jsonPath("$.displayLeasePeriod").value(DEFAULT_DISPLAY_LEASE_PERIOD.booleanValue()))
-            .andExpect(jsonPath("$.displayLeaseContract").value(DEFAULT_DISPLAY_LEASE_CONTRACT.booleanValue()))
-            .andExpect(jsonPath("$.leasePeriodQueryParam").value(DEFAULT_LEASE_PERIOD_QUERY_PARAM))
-            .andExpect(jsonPath("$.leaseContractQueryParam").value(DEFAULT_LEASE_CONTRACT_QUERY_PARAM));
+            .andExpect(jsonPath("$.filters[0].label").value(DEFAULT_FILTER_LABEL))
+            .andExpect(jsonPath("$.filters[0].queryParameterKey").value(DEFAULT_FILTER_QUERY_KEY))
+            .andExpect(jsonPath("$.filters[0].valueSource").value(DEFAULT_FILTER_VALUE_SOURCE))
+            .andExpect(jsonPath("$.filters[0].uiHint").value(DEFAULT_FILTER_UI_HINT))
+            .andExpect(jsonPath("$.filters[1].label").value(DEFAULT_SECOND_FILTER_LABEL))
+            .andExpect(jsonPath("$.filters[1].queryParameterKey").value(DEFAULT_SECOND_FILTER_QUERY_KEY))
+            .andExpect(jsonPath("$.filters[1].valueSource").value(DEFAULT_SECOND_FILTER_VALUE_SOURCE))
+            .andExpect(jsonPath("$.filters[1].uiHint").value(DEFAULT_SECOND_FILTER_UI_HINT));
     }
 
     @Test
@@ -272,11 +324,23 @@ class ReportMetadataResourceIT {
             .module(UPDATED_MODULE)
             .pagePath(UPDATED_PAGE_PATH)
             .backendApi(UPDATED_BACKEND_API)
-            .active(UPDATED_ACTIVE)
-            .displayLeasePeriod(UPDATED_DISPLAY_LEASE_PERIOD)
-            .displayLeaseContract(UPDATED_DISPLAY_LEASE_CONTRACT)
-            .leasePeriodQueryParam(UPDATED_LEASE_PERIOD_QUERY_PARAM)
-            .leaseContractQueryParam(UPDATED_LEASE_CONTRACT_QUERY_PARAM);
+            .active(UPDATED_ACTIVE);
+        updatedReportMetadata.setFilters(
+            new ArrayList<>(
+                List.of(
+                    new ReportFilterDefinition()
+                        .label(UPDATED_FILTER_LABEL)
+                        .queryParameterKey(UPDATED_FILTER_QUERY_KEY)
+                        .valueSource(UPDATED_FILTER_VALUE_SOURCE)
+                        .uiHint(UPDATED_FILTER_UI_HINT),
+                    new ReportFilterDefinition()
+                        .label(UPDATED_SECOND_FILTER_LABEL)
+                        .queryParameterKey(UPDATED_SECOND_FILTER_QUERY_KEY)
+                        .valueSource(UPDATED_SECOND_FILTER_VALUE_SOURCE)
+                        .uiHint(UPDATED_SECOND_FILTER_UI_HINT)
+                )
+            )
+        );
         ReportMetadataDTO reportMetadataDTO = reportMetadataMapper.toDto(updatedReportMetadata);
 
         restReportMetadataMockMvc
@@ -297,10 +361,18 @@ class ReportMetadataResourceIT {
         assertThat(testReportMetadata.getPagePath()).isEqualTo(UPDATED_PAGE_PATH);
         assertThat(testReportMetadata.getBackendApi()).isEqualTo(UPDATED_BACKEND_API);
         assertThat(testReportMetadata.getActive()).isEqualTo(UPDATED_ACTIVE);
-        assertThat(testReportMetadata.getDisplayLeasePeriod()).isEqualTo(UPDATED_DISPLAY_LEASE_PERIOD);
-        assertThat(testReportMetadata.getDisplayLeaseContract()).isEqualTo(UPDATED_DISPLAY_LEASE_CONTRACT);
-        assertThat(testReportMetadata.getLeasePeriodQueryParam()).isEqualTo(UPDATED_LEASE_PERIOD_QUERY_PARAM);
-        assertThat(testReportMetadata.getLeaseContractQueryParam()).isEqualTo(UPDATED_LEASE_CONTRACT_QUERY_PARAM);
+        List<ReportFilterDefinition> updatedFilters = testReportMetadata.getFilters();
+        assertThat(updatedFilters).hasSize(2);
+        ReportFilterDefinition updatedPrimaryFilter = updatedFilters.get(0);
+        assertThat(updatedPrimaryFilter.getLabel()).isEqualTo(UPDATED_FILTER_LABEL);
+        assertThat(updatedPrimaryFilter.getQueryParameterKey()).isEqualTo(UPDATED_FILTER_QUERY_KEY);
+        assertThat(updatedPrimaryFilter.getValueSource()).isEqualTo(UPDATED_FILTER_VALUE_SOURCE);
+        assertThat(updatedPrimaryFilter.getUiHint()).isEqualTo(UPDATED_FILTER_UI_HINT);
+        ReportFilterDefinition updatedSecondaryFilter = updatedFilters.get(1);
+        assertThat(updatedSecondaryFilter.getLabel()).isEqualTo(UPDATED_SECOND_FILTER_LABEL);
+        assertThat(updatedSecondaryFilter.getQueryParameterKey()).isEqualTo(UPDATED_SECOND_FILTER_QUERY_KEY);
+        assertThat(updatedSecondaryFilter.getValueSource()).isEqualTo(UPDATED_SECOND_FILTER_VALUE_SOURCE);
+        assertThat(updatedSecondaryFilter.getUiHint()).isEqualTo(UPDATED_SECOND_FILTER_UI_HINT);
 
         // Validate the ReportMetadata in Elasticsearch
         verify(mockReportMetadataSearchRepository).save(testReportMetadata);
@@ -382,9 +454,23 @@ class ReportMetadataResourceIT {
 
         partialUpdatedReportMetadata
             .description(UPDATED_DESCRIPTION)
-            .module(UPDATED_MODULE)
-            .displayLeaseContract(UPDATED_DISPLAY_LEASE_CONTRACT)
-            .leaseContractQueryParam(UPDATED_LEASE_CONTRACT_QUERY_PARAM);
+            .module(UPDATED_MODULE);
+        partialUpdatedReportMetadata.setFilters(
+            new ArrayList<>(
+                List.of(
+                    new ReportFilterDefinition()
+                        .label(DEFAULT_FILTER_LABEL)
+                        .queryParameterKey(DEFAULT_FILTER_QUERY_KEY)
+                        .valueSource(DEFAULT_FILTER_VALUE_SOURCE)
+                        .uiHint(DEFAULT_FILTER_UI_HINT),
+                    new ReportFilterDefinition()
+                        .label(UPDATED_SECOND_FILTER_LABEL)
+                        .queryParameterKey(UPDATED_SECOND_FILTER_QUERY_KEY)
+                        .valueSource(UPDATED_SECOND_FILTER_VALUE_SOURCE)
+                        .uiHint(UPDATED_SECOND_FILTER_UI_HINT)
+                )
+            )
+        );
 
         restReportMetadataMockMvc
             .perform(
@@ -403,10 +489,18 @@ class ReportMetadataResourceIT {
         assertThat(testReportMetadata.getPagePath()).isEqualTo(DEFAULT_PAGE_PATH);
         assertThat(testReportMetadata.getBackendApi()).isEqualTo(DEFAULT_BACKEND_API);
         assertThat(testReportMetadata.getActive()).isEqualTo(DEFAULT_ACTIVE);
-        assertThat(testReportMetadata.getDisplayLeasePeriod()).isEqualTo(DEFAULT_DISPLAY_LEASE_PERIOD);
-        assertThat(testReportMetadata.getDisplayLeaseContract()).isEqualTo(UPDATED_DISPLAY_LEASE_CONTRACT);
-        assertThat(testReportMetadata.getLeasePeriodQueryParam()).isEqualTo(DEFAULT_LEASE_PERIOD_QUERY_PARAM);
-        assertThat(testReportMetadata.getLeaseContractQueryParam()).isEqualTo(UPDATED_LEASE_CONTRACT_QUERY_PARAM);
+        List<ReportFilterDefinition> patchedFilters = testReportMetadata.getFilters();
+        assertThat(patchedFilters).hasSize(2);
+        ReportFilterDefinition patchedPrimaryFilter = patchedFilters.get(0);
+        assertThat(patchedPrimaryFilter.getLabel()).isEqualTo(DEFAULT_FILTER_LABEL);
+        assertThat(patchedPrimaryFilter.getQueryParameterKey()).isEqualTo(DEFAULT_FILTER_QUERY_KEY);
+        assertThat(patchedPrimaryFilter.getValueSource()).isEqualTo(DEFAULT_FILTER_VALUE_SOURCE);
+        assertThat(patchedPrimaryFilter.getUiHint()).isEqualTo(DEFAULT_FILTER_UI_HINT);
+        ReportFilterDefinition patchedSecondaryFilter = patchedFilters.get(1);
+        assertThat(patchedSecondaryFilter.getLabel()).isEqualTo(UPDATED_SECOND_FILTER_LABEL);
+        assertThat(patchedSecondaryFilter.getQueryParameterKey()).isEqualTo(UPDATED_SECOND_FILTER_QUERY_KEY);
+        assertThat(patchedSecondaryFilter.getValueSource()).isEqualTo(UPDATED_SECOND_FILTER_VALUE_SOURCE);
+        assertThat(patchedSecondaryFilter.getUiHint()).isEqualTo(UPDATED_SECOND_FILTER_UI_HINT);
     }
 
     @Test
@@ -426,11 +520,23 @@ class ReportMetadataResourceIT {
             .module(UPDATED_MODULE)
             .pagePath(UPDATED_PAGE_PATH)
             .backendApi(UPDATED_BACKEND_API)
-            .active(UPDATED_ACTIVE)
-            .displayLeasePeriod(UPDATED_DISPLAY_LEASE_PERIOD)
-            .displayLeaseContract(UPDATED_DISPLAY_LEASE_CONTRACT)
-            .leasePeriodQueryParam(UPDATED_LEASE_PERIOD_QUERY_PARAM)
-            .leaseContractQueryParam(UPDATED_LEASE_CONTRACT_QUERY_PARAM);
+            .active(UPDATED_ACTIVE);
+        partialUpdatedReportMetadata.setFilters(
+            new ArrayList<>(
+                List.of(
+                    new ReportFilterDefinition()
+                        .label(UPDATED_FILTER_LABEL)
+                        .queryParameterKey(UPDATED_FILTER_QUERY_KEY)
+                        .valueSource(UPDATED_FILTER_VALUE_SOURCE)
+                        .uiHint(UPDATED_FILTER_UI_HINT),
+                    new ReportFilterDefinition()
+                        .label(UPDATED_SECOND_FILTER_LABEL)
+                        .queryParameterKey(UPDATED_SECOND_FILTER_QUERY_KEY)
+                        .valueSource(UPDATED_SECOND_FILTER_VALUE_SOURCE)
+                        .uiHint(UPDATED_SECOND_FILTER_UI_HINT)
+                )
+            )
+        );
 
         restReportMetadataMockMvc
             .perform(
@@ -449,10 +555,18 @@ class ReportMetadataResourceIT {
         assertThat(testReportMetadata.getPagePath()).isEqualTo(UPDATED_PAGE_PATH);
         assertThat(testReportMetadata.getBackendApi()).isEqualTo(UPDATED_BACKEND_API);
         assertThat(testReportMetadata.getActive()).isEqualTo(UPDATED_ACTIVE);
-        assertThat(testReportMetadata.getDisplayLeasePeriod()).isEqualTo(UPDATED_DISPLAY_LEASE_PERIOD);
-        assertThat(testReportMetadata.getDisplayLeaseContract()).isEqualTo(UPDATED_DISPLAY_LEASE_CONTRACT);
-        assertThat(testReportMetadata.getLeasePeriodQueryParam()).isEqualTo(UPDATED_LEASE_PERIOD_QUERY_PARAM);
-        assertThat(testReportMetadata.getLeaseContractQueryParam()).isEqualTo(UPDATED_LEASE_CONTRACT_QUERY_PARAM);
+        List<ReportFilterDefinition> fullyUpdatedFilters = testReportMetadata.getFilters();
+        assertThat(fullyUpdatedFilters).hasSize(2);
+        ReportFilterDefinition fullyUpdatedPrimary = fullyUpdatedFilters.get(0);
+        assertThat(fullyUpdatedPrimary.getLabel()).isEqualTo(UPDATED_FILTER_LABEL);
+        assertThat(fullyUpdatedPrimary.getQueryParameterKey()).isEqualTo(UPDATED_FILTER_QUERY_KEY);
+        assertThat(fullyUpdatedPrimary.getValueSource()).isEqualTo(UPDATED_FILTER_VALUE_SOURCE);
+        assertThat(fullyUpdatedPrimary.getUiHint()).isEqualTo(UPDATED_FILTER_UI_HINT);
+        ReportFilterDefinition fullyUpdatedSecondary = fullyUpdatedFilters.get(1);
+        assertThat(fullyUpdatedSecondary.getLabel()).isEqualTo(UPDATED_SECOND_FILTER_LABEL);
+        assertThat(fullyUpdatedSecondary.getQueryParameterKey()).isEqualTo(UPDATED_SECOND_FILTER_QUERY_KEY);
+        assertThat(fullyUpdatedSecondary.getValueSource()).isEqualTo(UPDATED_SECOND_FILTER_VALUE_SOURCE);
+        assertThat(fullyUpdatedSecondary.getUiHint()).isEqualTo(UPDATED_SECOND_FILTER_UI_HINT);
     }
 
     @Test
@@ -559,6 +673,8 @@ class ReportMetadataResourceIT {
             .andExpect(jsonPath("$.[*].module").value(hasItem(DEFAULT_MODULE)))
             .andExpect(jsonPath("$.[*].pagePath").value(hasItem(DEFAULT_PAGE_PATH)))
             .andExpect(jsonPath("$.[*].backendApi").value(hasItem(DEFAULT_BACKEND_API)))
-            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].filters[*].label").value(hasItem(DEFAULT_FILTER_LABEL)))
+            .andExpect(jsonPath("$.[*].filters[*].label").value(hasItem(DEFAULT_SECOND_FILTER_LABEL)));
     }
 }
