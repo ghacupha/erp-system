@@ -49,46 +49,31 @@
 
   <div class="alert alert-danger mt-2" *ngIf="exportErrorMessage">{{ exportErrorMessage }}</div>
 
-  <div class="report-summary__filters" *ngIf="metadata?.displayLeasePeriod || metadata?.displayLeaseContract">
-    <div class="report-summary__filter" *ngIf="metadata?.displayLeasePeriod">
-      <label class="form-label" for="lease-period-select">Lease period</label>
+  <div class="report-summary__filters" *ngIf="filters.length">
+    <div class="report-summary__filter" *ngFor="let filter of filters; trackBy: trackFilterByQueryKey">
+      <label class="form-label" [attr.for]="buildFilterControlId(filter)">{{ filter.definition.label }}</label>
       <ng-select
-        id="lease-period-select"
-        [items]="leasePeriods"
-        bindLabel="periodCode"
-        [loading]="loadingLeasePeriods"
-        placeholder="Select lease period"
-        [(ngModel)]="selectedLeasePeriod"
-        (change)="onLeasePeriodChange()"
-        (search)="onLeasePeriodSearch($event.term)"
-        name="leasePeriod"
+        [id]="buildFilterControlId(filter)"
+        [items]="filter.options"
+        bindLabel="label"
+        [loading]="filter.loading"
+        [placeholder]="filter.definition.label"
+        [(ngModel)]="filter.selected"
+        (change)="onFilterSelectionChange(filter, filter.selected)"
+        (search)="onFilterSearch(filter, $event.term)"
+        [clearable]="true"
+        [ngModelOptions]="{ standalone: true }"
+        [searchable]="true"
+        [closeOnSelect]="true"
+        [trackByFn]="trackFilterOptionByValue"
+        [attr.name]="filter.definition.queryParameterKey"
       >
         <ng-template ng-option-tmp let-item="item">
-          <div class="option-primary">{{ item.periodCode || ('#' + item.id) }}</div>
-          <small class="option-secondary" *ngIf="item.startDate && item.endDate">
-            {{ item.startDate.format('YYYY-MM-DD') }} → {{ item.endDate.format('YYYY-MM-DD') }}
-          </small>
+          <div class="option-primary">{{ item.label }}</div>
+          <small class="option-secondary" *ngIf="item.description">{{ item.description }}</small>
         </ng-template>
       </ng-select>
-    </div>
-
-    <div class="report-summary__filter" *ngIf="metadata?.displayLeaseContract">
-      <label class="form-label" for="lease-liability-select">Lease liability</label>
-      <ng-select
-        id="lease-liability-select"
-        [items]="leaseLiabilities"
-        bindLabel="leaseId"
-        [loading]="loadingLeaseLiabilities"
-        placeholder="Select lease liability"
-        [(ngModel)]="selectedLeaseLiability"
-        (change)="onLeaseLiabilityChange()"
-        name="leaseLiability"
-      >
-        <ng-template ng-option-tmp let-item="item">
-          <div class="option-primary">{{ item.leaseId || ('Liability #' + item.id) }}</div>
-          <small class="option-secondary" *ngIf="item.leaseContract?.leaseTitle">{{ item.leaseContract?.leaseTitle }}</small>
-        </ng-template>
-      </ng-select>
+      <div class="text-danger small mt-1" *ngIf="filter.error">{{ filter.error }}</div>
     </div>
   </div>
 
