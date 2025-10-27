@@ -18,7 +18,6 @@ package io.github.erp.service;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.domain.*;
 import io.github.erp.domain.ReportMetadata;
 import io.github.erp.repository.ReportMetadataRepository;
 import io.github.erp.repository.search.ReportMetadataSearchRepository;
@@ -26,6 +25,7 @@ import io.github.erp.service.criteria.ReportMetadataCriteria;
 import io.github.erp.service.dto.ReportMetadataDTO;
 import io.github.erp.service.mapper.ReportMetadataMapper;
 import java.util.List;
+import javax.persistence.criteria.JoinType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -130,24 +130,36 @@ public class ReportMetadataQueryService extends QueryService<ReportMetadata> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), ReportMetadata_.active));
             }
-            if (criteria.getDisplayLeasePeriod() != null) {
+            if (criteria.getFilterLabel() != null) {
                 specification = specification.and(
-                    buildSpecification(criteria.getDisplayLeasePeriod(), ReportMetadata_.displayLeasePeriod)
+                    buildStringSpecification(
+                        criteria.getFilterLabel(),
+                        root -> root.join(ReportMetadata_.filters, JoinType.LEFT).get("label")
+                    )
                 );
             }
-            if (criteria.getDisplayLeaseContract() != null) {
+            if (criteria.getFilterQueryParameterKey() != null) {
                 specification = specification.and(
-                    buildSpecification(criteria.getDisplayLeaseContract(), ReportMetadata_.displayLeaseContract)
+                    buildStringSpecification(
+                        criteria.getFilterQueryParameterKey(),
+                        root -> root.join(ReportMetadata_.filters, JoinType.LEFT).get("queryParameterKey")
+                    )
                 );
             }
-            if (criteria.getLeasePeriodQueryParam() != null) {
+            if (criteria.getFilterValueSource() != null) {
                 specification = specification.and(
-                    buildStringSpecification(criteria.getLeasePeriodQueryParam(), ReportMetadata_.leasePeriodQueryParam)
+                    buildStringSpecification(
+                        criteria.getFilterValueSource(),
+                        root -> root.join(ReportMetadata_.filters, JoinType.LEFT).get("valueSource")
+                    )
                 );
             }
-            if (criteria.getLeaseContractQueryParam() != null) {
+            if (criteria.getFilterUiHint() != null) {
                 specification = specification.and(
-                    buildStringSpecification(criteria.getLeaseContractQueryParam(), ReportMetadata_.leaseContractQueryParam)
+                    buildStringSpecification(
+                        criteria.getFilterUiHint(),
+                        root -> root.join(ReportMetadata_.filters, JoinType.LEFT).get("uiHint")
+                    )
                 );
             }
         }

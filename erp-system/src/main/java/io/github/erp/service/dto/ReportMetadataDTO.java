@@ -19,6 +19,8 @@ package io.github.erp.service.dto;
  */
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -47,15 +49,7 @@ public class ReportMetadataDTO implements Serializable {
     @NotNull
     private Boolean active;
 
-    @NotNull
-    private Boolean displayLeasePeriod;
-
-    @NotNull
-    private Boolean displayLeaseContract;
-
-    private String leasePeriodQueryParam;
-
-    private String leaseContractQueryParam;
+    private List<ReportFilterDefinitionDTO> filters = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -113,36 +107,12 @@ public class ReportMetadataDTO implements Serializable {
         this.active = active;
     }
 
-    public Boolean getDisplayLeasePeriod() {
-        return displayLeasePeriod;
+    public List<ReportFilterDefinitionDTO> getFilters() {
+        return filters;
     }
 
-    public void setDisplayLeasePeriod(Boolean displayLeasePeriod) {
-        this.displayLeasePeriod = displayLeasePeriod;
-    }
-
-    public Boolean getDisplayLeaseContract() {
-        return displayLeaseContract;
-    }
-
-    public void setDisplayLeaseContract(Boolean displayLeaseContract) {
-        this.displayLeaseContract = displayLeaseContract;
-    }
-
-    public String getLeasePeriodQueryParam() {
-        return leasePeriodQueryParam;
-    }
-
-    public void setLeasePeriodQueryParam(String leasePeriodQueryParam) {
-        this.leasePeriodQueryParam = leasePeriodQueryParam;
-    }
-
-    public String getLeaseContractQueryParam() {
-        return leaseContractQueryParam;
-    }
-
-    public void setLeaseContractQueryParam(String leaseContractQueryParam) {
-        this.leaseContractQueryParam = leaseContractQueryParam;
+    public void setFilters(List<ReportFilterDefinitionDTO> filters) {
+        this.filters = filters != null ? new ArrayList<>(filters) : new ArrayList<>();
     }
 
     @Override
@@ -177,10 +147,7 @@ public class ReportMetadataDTO implements Serializable {
             ", pagePath='" + getPagePath() + "'" +
             ", backendApi='" + getBackendApi() + "'" +
             ", active=" + getActive() +
-            ", displayLeasePeriod=" + getDisplayLeasePeriod() +
-            ", displayLeaseContract=" + getDisplayLeaseContract() +
-            ", leasePeriodQueryParam='" + getLeasePeriodQueryParam() + "'" +
-            ", leaseContractQueryParam='" + getLeaseContractQueryParam() + "'" +
+            ", filters=" + getFilters() +
             "}";
     }
 }

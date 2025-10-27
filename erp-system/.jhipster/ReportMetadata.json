@@ -31,23 +31,8 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "displayLeasePeriod",
-      "fieldType": "Boolean",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "displayLeaseContract",
-      "fieldType": "Boolean",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "leasePeriodQueryParam",
-      "fieldType": "String",
-      "fieldValidateRules": []
-    },
-    {
-      "fieldName": "leaseContractQueryParam",
-      "fieldType": "String",
+      "fieldName": "filters",
+      "fieldType": "List<ReportFilterDefinition>",
       "fieldValidateRules": []
     }
   ],
