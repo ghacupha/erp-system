@@ -18,8 +18,12 @@ package io.github.erp.internal.repository;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.LeaseLiabilityScheduleReportItem;
+import io.github.erp.internal.model.LeaseLiabilityInterestExpenseSummaryInternal;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -28,4 +32,62 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface InternalLeaseLiabilityScheduleReportItemRepository
-    extends JpaRepository<LeaseLiabilityScheduleReportItem, Long>, JpaSpecificationExecutor<LeaseLiabilityScheduleReportItem> {}
+    extends JpaRepository<LeaseLiabilityScheduleReportItem, Long>, JpaSpecificationExecutor<LeaseLiabilityScheduleReportItem> {
+
+    @Query(
+        value =
+            "WITH target_period AS (\n" +
+            "    SELECT lp.id AS target_period_id,\n" +
+            "           lp.period_code AS target_period_code,\n" +
+            "           CAST(NULLIF(lp.period_code, '') AS bigint) AS target_period_numeric,\n" +
+            "           SUBSTRING(lp.period_code, 1, 4) AS target_year,\n" +
+            "           lp.end_date AS target_end_date,\n" +
+            "           fm.month_number AS target_month_number,\n" +
+            "           fm.fiscal_year_id AS target_fiscal_year_id\n" +
+            "    FROM lease_repayment_period lp\n" +
+            "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id\n" +
+            "    WHERE lp.id = :leasePeriodId\n" +
+            "), period_interest AS (\n" +
+            "    SELECT llsi.lease_liability_id,\n" +
+            "           llsi.lease_contract_id,\n" +
+            "           SUM(COALESCE(llsi.interest_accrued, 0)) AS period_interest\n" +
+            "    FROM lease_liability_schedule_item llsi\n" +
+            "    WHERE llsi.lease_period_id = :leasePeriodId\n" +
+            "    GROUP BY llsi.lease_liability_id, llsi.lease_contract_id\n" +
+            "), annual_interest AS (\n" +
+            "    SELECT llsi.lease_liability_id,\n" +
+            "           llsi.lease_contract_id,\n" +
+            "           SUM(COALESCE(llsi.interest_accrued, 0)) AS cumulative_interest\n" +
+            "    FROM lease_liability_schedule_item llsi\n" +
+            "    JOIN lease_repayment_period lp ON llsi.lease_period_id = lp.id\n" +
+            "    LEFT JOIN fiscal_month fm ON lp.fiscal_month_id = fm.id\n" +
+            "    CROSS JOIN target_period tp\n" +
+            "    WHERE (\n" +
+            "            (tp.target_fiscal_year_id IS NOT NULL AND fm.fiscal_year_id = tp.target_fiscal_year_id AND fm.month_number <= tp.target_month_number)\n" +
+            "         OR (tp.target_fiscal_year_id IS NULL AND SUBSTRING(lp.period_code, 1, 4) = tp.target_year AND CAST(NULLIF(lp.period_code, '') AS bigint) <= tp.target_period_numeric)\n" +
+            "    )\n" +
+            "    GROUP BY llsi.lease_liability_id, llsi.lease_contract_id\n" +
+            ")\n" +
+            "SELECT ll.lease_id AS leaseNumber,\n" +
+            "       d.dealer_name AS dealerName,\n" +
+            "       COALESCE(contract.booking_id, '') || ' ' || COALESCE(contract.lease_title, '') AS narration,\n" +
+            "       credit.account_number AS creditAccount,\n" +
+            "       debit.account_number AS debitAccount,\n" +
+            "       COALESCE(pi.period_interest, 0) AS interestExpense,\n" +
+            "       COALESCE(ai.cumulative_interest, 0) AS cumulativeAnnual,\n" +
+            "       (COALESCE(ai.cumulative_interest, 0) - COALESCE(pi.period_interest, 0)) AS cumulativeLastMonth\n" +
+            "FROM period_interest pi\n" +
+            "JOIN annual_interest ai ON ai.lease_liability_id = pi.lease_liability_id AND ai.lease_contract_id = pi.lease_contract_id\n" +
+            "JOIN lease_liability ll ON ll.id = pi.lease_liability_id\n" +
+            "JOIN ifrs16lease_contract contract ON contract.id = pi.lease_contract_id\n" +
+            "LEFT JOIN dealer d ON contract.main_dealer_id = d.id\n" +
+            "LEFT JOIN talease_interest_accrual_rule rule ON rule.lease_contract_id = contract.id\n" +
+            "LEFT JOIN transaction_account debit ON debit.id = rule.debit_id\n" +
+            "LEFT JOIN transaction_account credit ON credit.id = rule.credit_id\n" +
+            "ORDER BY ll.lease_id",
+        nativeQuery = true
+    )
+    List<LeaseLiabilityInterestExpenseSummaryInternal> getLeaseLiabilityInterestExpenseSummary(
+        @Param("leasePeriodId") long leasePeriodId
+    );
+}
