@@ -23,18 +23,20 @@ import { map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 
 import { IReportFilterDefinition } from '../report-metadata/report-metadata.model';
-import { LeaseRepaymentPeriodService } from 'app/entities/leases/lease-repayment-period/service/lease-repayment-period.service';
-import { ILeaseRepaymentPeriod } from 'app/entities/leases/lease-repayment-period/lease-repayment-period.model';
-import { LeasePeriodService } from 'app/entities/leases/lease-period/service/lease-period.service';
-import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
-import { LeaseLiabilityService } from 'app/entities/leases/lease-liability/service/lease-liability.service';
-import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
-import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
-import { PrepaymentAccountService } from 'app/entities/prepayments/prepayment-account/service/prepayment-account.service';
-import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/prepayment-account.model';
-import { TAAmortizationRuleService } from 'app/entities/accounting/ta-amortization-rule/service/ta-amortization-rule.service';
-import { ITAAmortizationRule } from 'app/entities/accounting/ta-amortization-rule/ta-amortization-rule.model';
+import { LeaseRepaymentPeriodService } from 'app/erp/erp-leases/lease-repayment-period/service/lease-repayment-period.service';
+import { LeasePeriodService } from '../../erp-leases/lease-period/service/lease-period.service';
+import { LeaseLiabilityService } from '../../erp-leases/lease-liability/service/lease-liability.service';
+import { FiscalMonthService } from '../../erp-pages/fiscal-month/service/fiscal-month.service';
+import { PrepaymentAccountService } from '../../erp-prepayments/prepayment-account/service/prepayment-account.service';
+import {
+  TAAmortizationRuleService
+} from '../../erp-accounts/ta-amortization-rule/service/ta-amortization-rule.service';
+import { ILeaseRepaymentPeriod } from '../../erp-leases/lease-repayment-period/lease-repayment-period.model';
+import { ILeasePeriod } from '../../erp-leases/lease-period/lease-period.model';
+import { ILeaseLiability } from '../../erp-leases/lease-liability/lease-liability.model';
+import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
+import { IPrepaymentAccount } from '../../erp-prepayments/prepayment-account/prepayment-account.model';
+import { ITAAmortizationRule } from '../../erp-accounts/ta-amortization-rule/ta-amortization-rule.model';
 
 export interface ReportFilterOption<T = unknown> {
   value: unknown;
