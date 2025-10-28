@@ -46,6 +46,12 @@ Engineering teams can expose focused reports to track how schedule items evolve 
 - **Data points** – Opening/closing balances, interest accrued, interest/principal payment split, cash payment, interest payable opening/closing.
 - **Implementation hint** – Query `LeaseLiabilityScheduleItem` entities joined on `leasePeriod.id` and `leaseLiability.id`, sorted by compilation execution time, and compute deltas across runs.
 
+**Note** There is some nuance to what the leasePeriod field in the `LeaseLiabilityScheduleItem` stands for. At glance one might assume this represents the related value from the `leasePeriod` entity
+ and that would be a grievous mistake, since the `leasePeriod.id` does not refer to the `leasePeriod` instance but to the `leaseRepaymentPeriod`. This other table exists to bring flexibility in how
+ we configure the schedule for reporting purposes and to allow for difference between contract dates and actual calendar repayment dates. For practicality when we report we do need to refer to calendar
+ periods and that's what the `leaseRepaymentPeriod` represents, but for office processes we use `leasePeriod` because contract dates do not always fall on dates it would be expedient to allow for officers sufficient time to
+ process and compile data for end period reporting.
+
 ### Lease-period payment variance audit
 - **Objective** – Validate that schedule cash payments align with expected lease payments for the period.
 - **Suggested inputs** – Lease contract booking ID, repayment period boundaries, payment date, compilation status.

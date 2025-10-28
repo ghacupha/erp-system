@@ -1,5 +1,3 @@
----
-
 # Documentation: Period Segmentation in Depreciation Module
 
 ## Table of Contents
