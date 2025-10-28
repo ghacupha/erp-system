@@ -21,6 +21,7 @@ import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleReportIte
 import io.github.erp.internal.service.leases.InternalLeaseLiabilityScheduleReportItemService;
 import io.github.erp.service.LeaseLiabilityScheduleReportItemQueryService;
 import io.github.erp.service.criteria.LeaseLiabilityScheduleReportItemCriteria;
+import io.github.erp.service.dto.LeaseInterestPaidTransferSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityInterestExpenseSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleReportItemDTO;
 import org.slf4j.Logger;
@@ -93,6 +94,24 @@ public class LeaseLiabilityScheduleReportItemResourceProd {
     ) {
         log.debug("REST request for lease liability interest expense summary for lease period id: {}", leasePeriodId);
         List<LeaseLiabilityInterestExpenseSummaryDTO> reportItems = leaseLiabilityScheduleReportItemService.getLeaseLiabilityInterestExpenseSummary(
+            leasePeriodId
+        );
+        return ResponseEntity.ok(reportItems);
+    }
+
+    /**
+     * {@code GET  /lease-liability-schedule-report-items/interest-paid-transfer-summary/:leasePeriodId} :
+     * get the interest paid transfer summary for the supplied lease period.
+     *
+     * @param leasePeriodId the lease period identifier guiding the report window.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of report rows in body.
+     */
+    @GetMapping("/lease-liability-schedule-report-items/interest-paid-transfer-summary/{leasePeriodId}")
+    public ResponseEntity<List<LeaseInterestPaidTransferSummaryDTO>> getLeaseInterestPaidTransferSummary(
+        @PathVariable long leasePeriodId
+    ) {
+        log.debug("REST request for lease interest paid transfer summary for lease period id: {}", leasePeriodId);
+        List<LeaseInterestPaidTransferSummaryDTO> reportItems = leaseLiabilityScheduleReportItemService.getLeaseInterestPaidTransferSummary(
             leasePeriodId
         );
         return ResponseEntity.ok(reportItems);
