@@ -25,8 +25,6 @@ import * as dayjs from 'dayjs';
 import { IReportFilterDefinition } from '../report-metadata/report-metadata.model';
 import { LeaseRepaymentPeriodService } from 'app/entities/leases/lease-repayment-period/service/lease-repayment-period.service';
 import { ILeaseRepaymentPeriod } from 'app/entities/leases/lease-repayment-period/lease-repayment-period.model';
-import { LeasePeriodService } from 'app/entities/leases/lease-period/service/lease-period.service';
-import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
 import { LeaseLiabilityService } from 'app/entities/leases/lease-liability/service/lease-liability.service';
 import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
 import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
@@ -49,7 +47,6 @@ export class ReportFilterOptionService {
 
   constructor(
     private readonly leaseRepaymentPeriodService: LeaseRepaymentPeriodService,
-    private readonly leasePeriodService: LeasePeriodService,
     private readonly leaseLiabilityService: LeaseLiabilityService,
     private readonly fiscalMonthService: FiscalMonthService,
     private readonly prepaymentAccountService: PrepaymentAccountService,
@@ -61,7 +58,7 @@ export class ReportFilterOptionService {
     const source = definition.valueSource;
     switch (source) {
       case 'leasePeriods':
-        return this.loadLeasePeriods(trimmedTerm);
+        return this.loadLeaseRepaymentPeriods(trimmedTerm);
       case 'leaseRepaymentPeriods':
         return this.loadLeaseRepaymentPeriods(trimmedTerm);
       case 'leaseContracts':
@@ -85,16 +82,6 @@ export class ReportFilterOptionService {
     return this.leaseRepaymentPeriodService
       .query(request)
       .pipe(map((res: HttpResponse<ILeaseRepaymentPeriod[]>) => this.mapPeriodOptions(res.body ?? [])));
-  }
-
-  private loadLeasePeriods(term?: string): Observable<ReportFilterOption<ILeasePeriod>[]> {
-    const request: Record<string, unknown> = { size: this.defaultPageSize, sort: ['id,desc'] };
-    if (term) {
-      request['periodCode.contains'] = term;
-    }
-    return this.leasePeriodService
-      .query(request)
-      .pipe(map((res: HttpResponse<ILeasePeriod[]>) => this.mapPeriodOptions(res.body ?? [])));
   }
 
   private loadLeaseContracts(term?: string): Observable<ReportFilterOption<ILeaseLiability>[]> {
