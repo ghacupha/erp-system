@@ -17,6 +17,7 @@ package io.github.erp.internal.service.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.service.dto.LeaseInterestPaidTransferSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityInterestExpenseSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleReportItemDTO;
 import org.springframework.data.domain.Page;
@@ -60,6 +61,14 @@ public interface InternalLeaseLiabilityScheduleReportItemService {
      * @return a fully mapped list of report rows.
      */
     List<LeaseLiabilityInterestExpenseSummaryDTO> getLeaseLiabilityInterestExpenseSummary(long leasePeriodId);
+
+    /**
+     * Get the lease interest paid transfer summary for the supplied lease period.
+     *
+     * @param leasePeriodId the lease period identifier guiding the aggregation.
+     * @return a fully mapped list of report rows.
+     */
+    List<LeaseInterestPaidTransferSummaryDTO> getLeaseInterestPaidTransferSummary(long leasePeriodId);
 
     /**
      * Get the "id" leaseLiabilityScheduleReportItem.
