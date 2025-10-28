@@ -5,6 +5,7 @@ import { ReportSummaryDataService } from './report-summary-data.service';
 import * as ExportUtil from './report-summary-export.util';
 import { IReportFilterDefinition, IReportMetadata } from '../report-metadata/report-metadata.model';
 import { ReportFilterOptionService } from './report-filter-option.service';
+import { ILeaseRepaymentPeriod } from 'app/entities/leases/lease-repayment-period/lease-repayment-period.model';
 
 describe('ReportSummaryViewComponent (export behaviour)', () => {
   let component: ReportSummaryViewComponent;
@@ -48,8 +49,9 @@ describe('ReportSummaryViewComponent (export behaviour)', () => {
 
     component.metadata = metadata;
     summaryDataService.fetchSummary.and.returnValue(of([]));
+    const repaymentPeriods: ILeaseRepaymentPeriod[] = [{ id: 101, periodCode: '2024-01' }];
     filterOptionService.loadOptions.and.returnValues(
-      of([{ value: 101, label: 'Period 101' }]),
+      of([{ value: repaymentPeriods[0].id, label: 'Period 101', raw: repaymentPeriods[0] }]),
       of([{ value: 202, label: 'Contract 202' }])
     );
 
