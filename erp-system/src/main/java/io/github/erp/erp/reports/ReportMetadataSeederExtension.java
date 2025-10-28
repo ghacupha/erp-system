@@ -110,6 +110,15 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             List.of(filter("Lease Period", "leasePeriodId", "leaseRepaymentPeriods", "dropdown"))
         ),
         new ReportMetadataSeed(
+            "Lease Interest Paid Transfer",
+            "Summary of reversing entries when lease interest payments are transferred between liabilities.",
+            "Leases",
+            "reports/view/lease-interest-paid-transfer",
+            "api/leases/lease-liability-schedule-report-items/interest-paid-transfer-summary/{leasePeriodId}",
+            true,
+            List.of(filter("Lease Period", "leasePeriodId", "leaseRepaymentPeriods", "dropdown"))
+        ),
+        new ReportMetadataSeed(
             "Lease Interest Payments by Liability",
             "Cash interest settlements grouped by lease liability and transaction account for a chosen period.",
             "Leases",
