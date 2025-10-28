@@ -23,8 +23,8 @@ import { map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 
 import { IReportFilterDefinition } from '../report-metadata/report-metadata.model';
-import { LeasePeriodService } from 'app/entities/leases/lease-period/service/lease-period.service';
-import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
+import { LeaseRepaymentPeriodService } from 'app/entities/leases/lease-repayment-period/service/lease-repayment-period.service';
+import { ILeaseRepaymentPeriod } from 'app/entities/leases/lease-repayment-period/lease-repayment-period.model';
 import { LeaseLiabilityService } from 'app/entities/leases/lease-liability/service/lease-liability.service';
 import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
 import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
@@ -46,7 +46,7 @@ export class ReportFilterOptionService {
   private readonly defaultPageSize = 100;
 
   constructor(
-    private readonly leasePeriodService: LeasePeriodService,
+    private readonly leaseRepaymentPeriodService: LeaseRepaymentPeriodService,
     private readonly leaseLiabilityService: LeaseLiabilityService,
     private readonly fiscalMonthService: FiscalMonthService,
     private readonly prepaymentAccountService: PrepaymentAccountService,
@@ -72,17 +72,17 @@ export class ReportFilterOptionService {
     }
   }
 
-  private loadLeasePeriods(term?: string): Observable<ReportFilterOption<ILeasePeriod>[]> {
+  private loadLeasePeriods(term?: string): Observable<ReportFilterOption<ILeaseRepaymentPeriod>[]> {
     const request: Record<string, unknown> = { size: this.defaultPageSize, sort: ['id,desc'] };
     if (term) {
       request['periodCode.contains'] = term;
     }
-    return this.leasePeriodService
+    return this.leaseRepaymentPeriodService
       .query(request)
-      .pipe(map((res: HttpResponse<ILeasePeriod[]>) => this.mapLeasePeriods(res.body ?? [])));
+      .pipe(map((res: HttpResponse<ILeaseRepaymentPeriod[]>) => this.mapLeasePeriods(res.body ?? [])));
   }
 
-  private mapLeasePeriods(periods: ILeasePeriod[]): ReportFilterOption<ILeasePeriod>[] {
+  private mapLeasePeriods(periods: ILeaseRepaymentPeriod[]): ReportFilterOption<ILeaseRepaymentPeriod>[] {
     return periods.map(period => {
       const label = period.periodCode ?? (period.id ? `Period #${period.id}` : 'Lease period');
       const dateRange = this.buildDateRange(period.startDate, period.endDate);
