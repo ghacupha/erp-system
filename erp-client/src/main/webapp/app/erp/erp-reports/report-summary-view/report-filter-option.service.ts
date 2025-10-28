@@ -25,6 +25,8 @@ import * as dayjs from 'dayjs';
 import { IReportFilterDefinition } from '../report-metadata/report-metadata.model';
 import { LeaseRepaymentPeriodService } from 'app/entities/leases/lease-repayment-period/service/lease-repayment-period.service';
 import { ILeaseRepaymentPeriod } from 'app/entities/leases/lease-repayment-period/lease-repayment-period.model';
+import { LeasePeriodService } from 'app/entities/leases/lease-period/service/lease-period.service';
+import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
 import { LeaseLiabilityService } from 'app/entities/leases/lease-liability/service/lease-liability.service';
 import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
 import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
@@ -47,6 +49,7 @@ export class ReportFilterOptionService {
 
   constructor(
     private readonly leaseRepaymentPeriodService: LeaseRepaymentPeriodService,
+    private readonly leasePeriodService: LeasePeriodService,
     private readonly leaseLiabilityService: LeaseLiabilityService,
     private readonly fiscalMonthService: FiscalMonthService,
     private readonly prepaymentAccountService: PrepaymentAccountService,
@@ -59,6 +62,8 @@ export class ReportFilterOptionService {
     switch (source) {
       case 'leasePeriods':
         return this.loadLeasePeriods(trimmedTerm);
+      case 'leaseRepaymentPeriods':
+        return this.loadLeaseRepaymentPeriods(trimmedTerm);
       case 'leaseContracts':
         return this.loadLeaseContracts(trimmedTerm);
       case 'fiscalMonths':
@@ -72,27 +77,24 @@ export class ReportFilterOptionService {
     }
   }
 
-  private loadLeasePeriods(term?: string): Observable<ReportFilterOption<ILeaseRepaymentPeriod>[]> {
+  private loadLeaseRepaymentPeriods(term?: string): Observable<ReportFilterOption<ILeaseRepaymentPeriod>[]> {
     const request: Record<string, unknown> = { size: this.defaultPageSize, sort: ['id,desc'] };
     if (term) {
       request['periodCode.contains'] = term;
     }
     return this.leaseRepaymentPeriodService
       .query(request)
-      .pipe(map((res: HttpResponse<ILeaseRepaymentPeriod[]>) => this.mapLeasePeriods(res.body ?? [])));
+      .pipe(map((res: HttpResponse<ILeaseRepaymentPeriod[]>) => this.mapPeriodOptions(res.body ?? [])));
   }
 
-  private mapLeasePeriods(periods: ILeaseRepaymentPeriod[]): ReportFilterOption<ILeaseRepaymentPeriod>[] {
-    return periods.map(period => {
-      const label = period.periodCode ?? (period.id ? `Period #${period.id}` : 'Lease period');
-      const dateRange = this.buildDateRange(period.startDate, period.endDate);
-      return {
-        value: period.id ?? period.periodCode ?? label,
-        label,
-        description: dateRange ?? undefined,
-        raw: period,
-      };
-    });
+  private loadLeasePeriods(term?: string): Observable<ReportFilterOption<ILeasePeriod>[]> {
+    const request: Record<string, unknown> = { size: this.defaultPageSize, sort: ['id,desc'] };
+    if (term) {
+      request['periodCode.contains'] = term;
+    }
+    return this.leasePeriodService
+      .query(request)
+      .pipe(map((res: HttpResponse<ILeasePeriod[]>) => this.mapPeriodOptions(res.body ?? [])));
   }
 
   private loadLeaseContracts(term?: string): Observable<ReportFilterOption<ILeaseLiability>[]> {
@@ -184,6 +186,21 @@ export class ReportFilterOptionService {
         label,
         description,
         raw: rule,
+      };
+    });
+  }
+
+  private mapPeriodOptions<T extends { id?: unknown; periodCode?: string | null; startDate?: dayjs.Dayjs; endDate?: dayjs.Dayjs }>(
+    periods: T[]
+  ): ReportFilterOption<T>[] {
+    return periods.map(period => {
+      const label = period.periodCode ?? (period.id ? `Period #${period.id}` : 'Lease period');
+      const dateRange = this.buildDateRange(period.startDate, period.endDate);
+      return {
+        value: period.id ?? period.periodCode ?? label,
+        label,
+        description: dateRange ?? undefined,
+        raw: period,
       };
     });
   }
