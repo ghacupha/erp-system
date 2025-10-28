@@ -107,7 +107,7 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             "reports/view/lease-interest-accrued",
             "api/leases/lease-liability-schedule-report-items/interest-expense-summary/{leasePeriodId}",
             true,
-            List.of(filter("Lease Period", "leasePeriodId", "leasePeriods", "dropdown"))
+            List.of(filter("Lease Period", "leasePeriodId", "leaseRepaymentPeriods", "dropdown"))
         ),
         new ReportMetadataSeed(
             "Lease Interest Payments by Liability",
