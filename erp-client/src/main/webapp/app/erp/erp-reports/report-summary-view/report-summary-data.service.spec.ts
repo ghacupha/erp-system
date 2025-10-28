@@ -25,17 +25,17 @@ describe('ReportSummaryDataService', () => {
   });
 
   it('should resolve endpoint placeholders and omit path params from query string', () => {
-    const endpoint = '/api/leases/rou-account-balance-report-items/reports/{leasePeriodId}';
+    const endpoint = '/api/leases/interest-expense-summary/{leasePeriodId}';
     jest.spyOn(applicationConfigService, 'getEndpointFor').mockReturnValue(endpoint);
 
     service
-      .fetchSummary('api/leases/rou-account-balance-report-items/reports/{leasePeriodId}', {
+      .fetchSummary('api/leases/interest-expense-summary/{leasePeriodId}', {
         leasePeriodId: 42,
         extra: 'value',
       })
       .subscribe();
 
-    const req = httpMock.expectOne(request => request.url === '/api/leases/rou-account-balance-report-items/reports/42');
+    const req = httpMock.expectOne(request => request.url === '/api/leases/interest-expense-summary/42');
     expect(req.request.method).toBe('GET');
     expect(req.request.params.get('leasePeriodId')).toBeNull();
     expect(req.request.params.get('extra')).toBe('value');
