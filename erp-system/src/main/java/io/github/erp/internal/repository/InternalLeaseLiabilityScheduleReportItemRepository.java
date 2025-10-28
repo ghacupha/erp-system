@@ -18,6 +18,7 @@ package io.github.erp.internal.repository;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.LeaseLiabilityScheduleReportItem;
+import io.github.erp.internal.model.LeaseInterestPaidTransferSummaryInternal;
 import io.github.erp.internal.model.LeaseLiabilityInterestExpenseSummaryInternal;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -88,6 +89,30 @@ public interface InternalLeaseLiabilityScheduleReportItemRepository
         nativeQuery = true
     )
     List<LeaseLiabilityInterestExpenseSummaryInternal> getLeaseLiabilityInterestExpenseSummary(
+        @Param("leasePeriodId") long leasePeriodId
+    );
+
+    @Query(
+        value =
+            "SELECT COALESCE(contract.booking_id, '') AS leaseId,\n" +
+            "       COALESCE(d.dealer_name, '') AS dealerName,\n" +
+            "       TRIM(BOTH ' ' FROM COALESCE(contract.booking_id, '') || ' ' || COALESCE(contract.lease_title, '')) AS narration,\n" +
+            "       credit.account_number AS creditAccount,\n" +
+            "       debit.account_number AS debitAccount,\n" +
+            "       SUM(COALESCE(llsi.interest_payment, 0)) AS interestAmount\n" +
+            "FROM lease_liability_schedule_item llsi\n" +
+            "JOIN ifrs16lease_contract contract ON contract.id = llsi.lease_contract_id\n" +
+            "LEFT JOIN dealer d ON contract.main_dealer_id = d.id\n" +
+            "LEFT JOIN tainterest_paid_transfer_rule rule ON rule.lease_contract_id = contract.id\n" +
+            "LEFT JOIN transaction_account debit ON debit.id = rule.debit_id\n" +
+            "LEFT JOIN transaction_account credit ON credit.id = rule.credit_id\n" +
+            "WHERE llsi.lease_period_id = :leasePeriodId\n" +
+            "GROUP BY contract.booking_id, contract.lease_title, d.dealer_name, credit.account_number, debit.account_number\n" +
+            "HAVING SUM(COALESCE(llsi.interest_payment, 0)) <> 0\n" +
+            "ORDER BY contract.booking_id",
+        nativeQuery = true
+    )
+    List<LeaseInterestPaidTransferSummaryInternal> getLeaseInterestPaidTransferSummary(
         @Param("leasePeriodId") long leasePeriodId
     );
 }
