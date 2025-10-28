@@ -105,9 +105,9 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             "Interest accrued on lease liabilities with drill-down by contra account for reconciliation.",
             "Leases",
             "reports/view/lease-interest-accrued",
-            "api/leases/lease-liability-schedule-report-items",
-            false,
-            List.of(filter("Lease Period", "leasePeriodId.equals", "leasePeriods", "dropdown"))
+            "api/leases/lease-liability-schedule-report-items/interest-expense-summary/{leasePeriodId}",
+            true,
+            List.of(filter("Lease Period", "leasePeriodId", "leasePeriods", "dropdown"))
         ),
         new ReportMetadataSeed(
             "Lease Interest Payments by Liability",
