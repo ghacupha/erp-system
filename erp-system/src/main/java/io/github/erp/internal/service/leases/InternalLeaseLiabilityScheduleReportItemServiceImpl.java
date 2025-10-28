@@ -19,11 +19,13 @@ package io.github.erp.internal.service.leases;
  */
 import io.github.erp.domain.LeaseLiabilityScheduleReportItem;
 import io.github.erp.internal.framework.Mapping;
+import io.github.erp.internal.model.LeaseInterestPaidTransferSummaryInternal;
 import io.github.erp.internal.model.LeaseLiabilityInterestExpenseSummaryInternal;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleReportItemRepository;
 import io.github.erp.repository.LeaseLiabilityScheduleReportItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityScheduleReportItemSearchRepository;
 import io.github.erp.service.LeaseLiabilityScheduleReportItemService;
+import io.github.erp.service.dto.LeaseInterestPaidTransferSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityInterestExpenseSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleReportItemDTO;
 import io.github.erp.service.mapper.LeaseLiabilityScheduleReportItemMapper;
@@ -34,6 +36,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -56,16 +59,21 @@ public class InternalLeaseLiabilityScheduleReportItemServiceImpl implements Inte
     private final Mapping<LeaseLiabilityInterestExpenseSummaryInternal, LeaseLiabilityInterestExpenseSummaryDTO>
         leaseLiabilityInterestExpenseSummaryMapping;
 
+    private final Mapping<LeaseInterestPaidTransferSummaryInternal, LeaseInterestPaidTransferSummaryDTO>
+        leaseInterestPaidTransferSummaryMapping;
+
     public InternalLeaseLiabilityScheduleReportItemServiceImpl(
         InternalLeaseLiabilityScheduleReportItemRepository leaseLiabilityScheduleReportItemRepository,
         LeaseLiabilityScheduleReportItemMapper leaseLiabilityScheduleReportItemMapper,
         LeaseLiabilityScheduleReportItemSearchRepository leaseLiabilityScheduleReportItemSearchRepository,
-        Mapping<LeaseLiabilityInterestExpenseSummaryInternal, LeaseLiabilityInterestExpenseSummaryDTO> leaseLiabilityInterestExpenseSummaryMapping
+        Mapping<LeaseLiabilityInterestExpenseSummaryInternal, LeaseLiabilityInterestExpenseSummaryDTO> leaseLiabilityInterestExpenseSummaryMapping,
+        Mapping<LeaseInterestPaidTransferSummaryInternal, LeaseInterestPaidTransferSummaryDTO> leaseInterestPaidTransferSummaryMapping
     ) {
         this.leaseLiabilityScheduleReportItemRepository = leaseLiabilityScheduleReportItemRepository;
         this.leaseLiabilityScheduleReportItemMapper = leaseLiabilityScheduleReportItemMapper;
         this.leaseLiabilityScheduleReportItemSearchRepository = leaseLiabilityScheduleReportItemSearchRepository;
         this.leaseLiabilityInterestExpenseSummaryMapping = leaseLiabilityInterestExpenseSummaryMapping;
+        this.leaseInterestPaidTransferSummaryMapping = leaseInterestPaidTransferSummaryMapping;
     }
 
     @Override
@@ -121,6 +129,19 @@ public class InternalLeaseLiabilityScheduleReportItemServiceImpl implements Inte
             .getLeaseLiabilityInterestExpenseSummary(leasePeriodId)
             .stream()
             .map(leaseLiabilityInterestExpenseSummaryMapping::toValue2)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<LeaseInterestPaidTransferSummaryDTO> getLeaseInterestPaidTransferSummary(long leasePeriodId) {
+        log.debug("Request for lease interest paid transfer summary for lease period id: {}", leasePeriodId);
+
+        return leaseLiabilityScheduleReportItemRepository
+            .getLeaseInterestPaidTransferSummary(leasePeriodId)
+            .stream()
+            .map(leaseInterestPaidTransferSummaryMapping::toValue2)
+            .filter(dto -> dto.getInterestAmount() != null && dto.getInterestAmount().compareTo(BigDecimal.ZERO) != 0)
             .collect(Collectors.toList());
     }
 
