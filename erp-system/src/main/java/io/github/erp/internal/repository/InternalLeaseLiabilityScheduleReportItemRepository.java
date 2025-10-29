@@ -20,6 +20,7 @@ package io.github.erp.internal.repository;
 import io.github.erp.domain.LeaseLiabilityScheduleReportItem;
 import io.github.erp.internal.model.LeaseInterestPaidTransferSummaryInternal;
 import io.github.erp.internal.model.LeaseLiabilityInterestExpenseSummaryInternal;
+import io.github.erp.internal.model.LeaseLiabilityOutstandingSummaryInternal;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -113,6 +114,32 @@ public interface InternalLeaseLiabilityScheduleReportItemRepository
         nativeQuery = true
     )
     List<LeaseInterestPaidTransferSummaryInternal> getLeaseInterestPaidTransferSummary(
+        @Param("leasePeriodId") long leasePeriodId
+    );
+
+    @Query(
+        value =
+            "SELECT COALESCE(contract.booking_id, '') AS leaseId,\n" +
+            "       COALESCE(d.dealer_name, '') AS dealerName,\n" +
+            "       liability_account.account_number AS liabilityAccount,\n" +
+            "       interest_account.account_number AS interestPayableAccount,\n" +
+            "       SUM(COALESCE(llsi.outstanding_balance, 0)) AS leasePrincipal,\n" +
+            "       SUM(COALESCE(llsi.interest_payable_closing, 0)) AS interestPayable\n" +
+            "FROM lease_liability_schedule_item llsi\n" +
+            "JOIN ifrs16lease_contract contract ON contract.id = llsi.lease_contract_id\n" +
+            "LEFT JOIN dealer d ON contract.main_dealer_id = d.id\n" +
+            "LEFT JOIN talease_recognition_rule recognition_rule ON recognition_rule.lease_contract_id = contract.id\n" +
+            "LEFT JOIN transaction_account liability_account ON liability_account.id = recognition_rule.credit_id\n" +
+            "LEFT JOIN talease_interest_accrual_rule accrual_rule ON accrual_rule.lease_contract_id = contract.id\n" +
+            "LEFT JOIN transaction_account interest_account ON interest_account.id = accrual_rule.credit_id\n" +
+            "WHERE llsi.lease_period_id = :leasePeriodId\n" +
+            "GROUP BY contract.booking_id, d.dealer_name, liability_account.account_number, interest_account.account_number\n" +
+            "HAVING SUM(COALESCE(llsi.outstanding_balance, 0)) <> 0\n" +
+            "    OR SUM(COALESCE(llsi.interest_payable_closing, 0)) <> 0\n" +
+            "ORDER BY contract.booking_id",
+        nativeQuery = true
+    )
+    List<LeaseLiabilityOutstandingSummaryInternal> getLeaseLiabilityOutstandingSummary(
         @Param("leasePeriodId") long leasePeriodId
     );
 }
