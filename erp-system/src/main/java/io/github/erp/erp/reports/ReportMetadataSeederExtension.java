@@ -128,6 +128,15 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             List.of(filter("Lease Period", "leasePeriodId", "leaseRepaymentPeriods", "dropdown"))
         ),
         new ReportMetadataSeed(
+            "Lease Liability Maturity",
+            "Bucketed maturity profile of outstanding lease principal and interest payable for the reporting period.",
+            "Leases",
+            "reports/view/lease-liability-maturity",
+            "api/leases/lease-liability-schedule-report-items/liability-maturity-summary/{leasePeriodId}",
+            true,
+            List.of(filter("Lease Period", "leasePeriodId", "leaseRepaymentPeriods", "dropdown"))
+        ),
+        new ReportMetadataSeed(
             "Lease Interest Payments by Liability",
             "Cash interest settlements grouped by lease liability and transaction account for a chosen period.",
             "Leases",
