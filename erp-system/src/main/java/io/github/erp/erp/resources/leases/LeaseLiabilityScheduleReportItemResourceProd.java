@@ -23,6 +23,7 @@ import io.github.erp.service.LeaseLiabilityScheduleReportItemQueryService;
 import io.github.erp.service.criteria.LeaseLiabilityScheduleReportItemCriteria;
 import io.github.erp.service.dto.LeaseInterestPaidTransferSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityInterestExpenseSummaryDTO;
+import io.github.erp.service.dto.LeaseLiabilityMaturitySummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityOutstandingSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleReportItemDTO;
 import org.slf4j.Logger;
@@ -131,6 +132,24 @@ public class LeaseLiabilityScheduleReportItemResourceProd {
     ) {
         log.debug("REST request for lease liability outstanding summary for lease period id: {}", leasePeriodId);
         List<LeaseLiabilityOutstandingSummaryDTO> reportItems = leaseLiabilityScheduleReportItemService.getLeaseLiabilityOutstandingSummary(
+            leasePeriodId
+        );
+        return ResponseEntity.ok(reportItems);
+    }
+
+    /**
+     * {@code GET  /lease-liability-schedule-report-items/liability-maturity-summary/:leasePeriodId} :
+     * get the liability maturity summary for the supplied lease period.
+     *
+     * @param leasePeriodId the lease period identifier guiding the report window.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of report rows in body.
+     */
+    @GetMapping("/lease-liability-schedule-report-items/liability-maturity-summary/{leasePeriodId}")
+    public ResponseEntity<List<LeaseLiabilityMaturitySummaryDTO>> getLeaseLiabilityMaturitySummary(
+        @PathVariable long leasePeriodId
+    ) {
+        log.debug("REST request for lease liability maturity summary for lease period id: {}", leasePeriodId);
+        List<LeaseLiabilityMaturitySummaryDTO> reportItems = leaseLiabilityScheduleReportItemService.getLeaseLiabilityMaturitySummary(
             leasePeriodId
         );
         return ResponseEntity.ok(reportItems);
