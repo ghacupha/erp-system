@@ -84,7 +84,7 @@ public interface InternalLeaseLiabilityScheduleReportItemService {
      * Get the lease liability maturity summary for the supplied lease period.
      *
      * @param leasePeriodId the lease period identifier guiding the aggregation.
-     * @return a fully mapped list of report rows.
+     * @return a fully mapped list of report rows grouped by maturity bucket.
      */
     List<LeaseLiabilityMaturitySummaryDTO> getLeaseLiabilityMaturitySummary(long leasePeriodId);
 

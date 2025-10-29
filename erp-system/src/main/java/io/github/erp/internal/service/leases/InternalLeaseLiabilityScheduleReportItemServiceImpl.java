@@ -184,6 +184,15 @@ public class InternalLeaseLiabilityScheduleReportItemServiceImpl implements Inte
             .getLeaseLiabilityMaturitySummary(leasePeriodId)
             .stream()
             .map(leaseLiabilityMaturitySummaryMapping::toValue2)
+            .map(dto -> {
+                if (dto.getTotal() == null) {
+                    BigDecimal principal = dto.getLeasePrincipal() == null ? BigDecimal.ZERO : dto.getLeasePrincipal();
+                    BigDecimal interest = dto.getInterestPayable() == null ? BigDecimal.ZERO : dto.getInterestPayable();
+                    dto.setTotal(principal.add(interest));
+                }
+                return dto;
+            })
+            .filter(dto -> dto.getTotal() != null && dto.getTotal().compareTo(BigDecimal.ZERO) != 0)
             .collect(Collectors.toList());
     }
 
