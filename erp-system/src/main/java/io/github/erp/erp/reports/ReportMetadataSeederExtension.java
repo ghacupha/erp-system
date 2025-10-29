@@ -119,6 +119,15 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             List.of(filter("Lease Period", "leasePeriodId", "leaseRepaymentPeriods", "dropdown"))
         ),
         new ReportMetadataSeed(
+            "Lease Liability Outstanding",
+            "Outstanding lease liability and interest payable balances grouped by contract for the selected period.",
+            "Leases",
+            "reports/view/lease-liability-outstanding",
+            "api/leases/lease-liability-schedule-report-items/liability-outstanding-summary/{leasePeriodId}",
+            true,
+            List.of(filter("Lease Period", "leasePeriodId", "leaseRepaymentPeriods", "dropdown"))
+        ),
+        new ReportMetadataSeed(
             "Lease Interest Payments by Liability",
             "Cash interest settlements grouped by lease liability and transaction account for a chosen period.",
             "Leases",

@@ -19,6 +19,7 @@ package io.github.erp.internal.service.leases;
  */
 import io.github.erp.service.dto.LeaseInterestPaidTransferSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityInterestExpenseSummaryDTO;
+import io.github.erp.service.dto.LeaseLiabilityOutstandingSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleReportItemDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -69,6 +70,14 @@ public interface InternalLeaseLiabilityScheduleReportItemService {
      * @return a fully mapped list of report rows.
      */
     List<LeaseInterestPaidTransferSummaryDTO> getLeaseInterestPaidTransferSummary(long leasePeriodId);
+
+    /**
+     * Get the lease liability outstanding summary for the supplied lease period.
+     *
+     * @param leasePeriodId the lease period identifier guiding the aggregation.
+     * @return a fully mapped list of report rows.
+     */
+    List<LeaseLiabilityOutstandingSummaryDTO> getLeaseLiabilityOutstandingSummary(long leasePeriodId);
 
     /**
      * Get the "id" leaseLiabilityScheduleReportItem.

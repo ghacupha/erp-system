@@ -21,12 +21,14 @@ import io.github.erp.domain.LeaseLiabilityScheduleReportItem;
 import io.github.erp.internal.framework.Mapping;
 import io.github.erp.internal.model.LeaseInterestPaidTransferSummaryInternal;
 import io.github.erp.internal.model.LeaseLiabilityInterestExpenseSummaryInternal;
+import io.github.erp.internal.model.LeaseLiabilityOutstandingSummaryInternal;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleReportItemRepository;
 import io.github.erp.repository.LeaseLiabilityScheduleReportItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityScheduleReportItemSearchRepository;
 import io.github.erp.service.LeaseLiabilityScheduleReportItemService;
 import io.github.erp.service.dto.LeaseInterestPaidTransferSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityInterestExpenseSummaryDTO;
+import io.github.erp.service.dto.LeaseLiabilityOutstandingSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleReportItemDTO;
 import io.github.erp.service.mapper.LeaseLiabilityScheduleReportItemMapper;
 import org.slf4j.Logger;
@@ -62,18 +64,23 @@ public class InternalLeaseLiabilityScheduleReportItemServiceImpl implements Inte
     private final Mapping<LeaseInterestPaidTransferSummaryInternal, LeaseInterestPaidTransferSummaryDTO>
         leaseInterestPaidTransferSummaryMapping;
 
+    private final Mapping<LeaseLiabilityOutstandingSummaryInternal, LeaseLiabilityOutstandingSummaryDTO>
+        leaseLiabilityOutstandingSummaryMapping;
+
     public InternalLeaseLiabilityScheduleReportItemServiceImpl(
         InternalLeaseLiabilityScheduleReportItemRepository leaseLiabilityScheduleReportItemRepository,
         LeaseLiabilityScheduleReportItemMapper leaseLiabilityScheduleReportItemMapper,
         LeaseLiabilityScheduleReportItemSearchRepository leaseLiabilityScheduleReportItemSearchRepository,
         Mapping<LeaseLiabilityInterestExpenseSummaryInternal, LeaseLiabilityInterestExpenseSummaryDTO> leaseLiabilityInterestExpenseSummaryMapping,
-        Mapping<LeaseInterestPaidTransferSummaryInternal, LeaseInterestPaidTransferSummaryDTO> leaseInterestPaidTransferSummaryMapping
+        Mapping<LeaseInterestPaidTransferSummaryInternal, LeaseInterestPaidTransferSummaryDTO> leaseInterestPaidTransferSummaryMapping,
+        Mapping<LeaseLiabilityOutstandingSummaryInternal, LeaseLiabilityOutstandingSummaryDTO> leaseLiabilityOutstandingSummaryMapping
     ) {
         this.leaseLiabilityScheduleReportItemRepository = leaseLiabilityScheduleReportItemRepository;
         this.leaseLiabilityScheduleReportItemMapper = leaseLiabilityScheduleReportItemMapper;
         this.leaseLiabilityScheduleReportItemSearchRepository = leaseLiabilityScheduleReportItemSearchRepository;
         this.leaseLiabilityInterestExpenseSummaryMapping = leaseLiabilityInterestExpenseSummaryMapping;
         this.leaseInterestPaidTransferSummaryMapping = leaseInterestPaidTransferSummaryMapping;
+        this.leaseLiabilityOutstandingSummaryMapping = leaseLiabilityOutstandingSummaryMapping;
     }
 
     @Override
@@ -142,6 +149,22 @@ public class InternalLeaseLiabilityScheduleReportItemServiceImpl implements Inte
             .stream()
             .map(leaseInterestPaidTransferSummaryMapping::toValue2)
             .filter(dto -> dto.getInterestAmount() != null && dto.getInterestAmount().compareTo(BigDecimal.ZERO) != 0)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<LeaseLiabilityOutstandingSummaryDTO> getLeaseLiabilityOutstandingSummary(long leasePeriodId) {
+        log.debug("Request for lease liability outstanding summary for lease period id: {}", leasePeriodId);
+
+        return leaseLiabilityScheduleReportItemRepository
+            .getLeaseLiabilityOutstandingSummary(leasePeriodId)
+            .stream()
+            .map(leaseLiabilityOutstandingSummaryMapping::toValue2)
+            .filter(dto ->
+                (dto.getLeasePrincipal() != null && dto.getLeasePrincipal().compareTo(BigDecimal.ZERO) != 0) ||
+                (dto.getInterestPayable() != null && dto.getInterestPayable().compareTo(BigDecimal.ZERO) != 0)
+            )
             .collect(Collectors.toList());
     }
 
