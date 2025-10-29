@@ -156,6 +156,24 @@ public class LeaseLiabilityScheduleReportItemResourceProd {
     }
 
     /**
+     * {@code GET  /lease-liability-schedule-report-items/liability-maturity-summary/:leasePeriodId} :
+     * get the liability maturity summary for the supplied lease period.
+     *
+     * @param leasePeriodId the lease period identifier guiding the report window.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of report rows in body.
+     */
+    @GetMapping("/lease-liability-schedule-report-items/liability-maturity-summary/{leasePeriodId}")
+    public ResponseEntity<List<LeaseLiabilityMaturitySummaryDTO>> getLeaseLiabilityMaturitySummary(
+        @PathVariable long leasePeriodId
+    ) {
+        log.debug("REST request for lease liability maturity summary for lease period id: {}", leasePeriodId);
+        List<LeaseLiabilityMaturitySummaryDTO> reportItems = leaseLiabilityScheduleReportItemService.getLeaseLiabilityMaturitySummary(
+            leasePeriodId
+        );
+        return ResponseEntity.ok(reportItems);
+    }
+
+    /**
      * {@code GET  /lease-liability-schedule-report-items/count} : count all the leaseLiabilityScheduleReportItems.
      *
      * @param criteria the criteria which the requested entities should match.

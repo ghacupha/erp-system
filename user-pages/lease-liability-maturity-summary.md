@@ -1,16 +1,17 @@
-# How to interpret the Lease Liability Maturity Summary
+# Lease Liability Maturity Summary Report
 
-## 1. Select the anchor lease period
-1. Open the **Lease Liability Maturity** report from the catalogue entry seeded at `reports/view/lease-liability-maturity`.
-2. Pick the lease period that represents the reporting month you want to analyse and run the report.
+Use this report to break down lease liabilities into near-term and long-term obligations.
 
-## 2. Read the three maturity buckets
-* **Current Period** – Shows the cash payment scheduled for the selected lease period. Use it to reconcile to the current-month
-  lease expense.
-* **Next 12 Months** – Aggregates the next twelve repayment periods, giving you the short-term undiscounted cash flow required
-  for liquidity disclosures.
-* **Beyond 12 Months** – Captures all remaining payments after the first year, enabling quick long-term liability checks.
+## Steps
+1. Navigate to **Reports → Lease Liability Maturity**.
+2. Choose the relevant Lease Period from the dropdown.
+3. Run the report.
 
-## 3. Use the total column
-The **Total** column equals the sum of the three buckets and represents the full undiscounted cash flow for each lease. Use it
-as the control total when copying figures into the IFRS 16 maturity note.
+## Output
+The table displays only the maturity buckets that have a non-zero combined balance. Each row shows:
+- **Maturity Label** (≤365 days, 366–1824 days, ≥1825 days)
+- **Lease Principal** (sum of outstanding balances)
+- **Interest Payable** (sum of accrued interest)
+- **Total** (principal + interest)
+
+Expired leases are grouped into the ≤365 days band so that historic exposures remain visible.

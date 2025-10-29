@@ -23,68 +23,48 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * Projection DTO representing the lease liability maturity summary report row.
+ * DTO representing the aggregated lease liability maturity bucket.
  */
 public class LeaseLiabilityMaturitySummaryDTO implements Serializable {
 
-    private String leaseId;
+    private String maturityLabel;
 
-    private String dealerName;
+    private BigDecimal leasePrincipal;
 
-    private BigDecimal currentPeriod;
+    private BigDecimal interestPayable;
 
-    private BigDecimal nextTwelveMonths;
+    private BigDecimal total;
 
-    private BigDecimal beyondTwelveMonths;
-
-    private BigDecimal totalUndiscounted;
-
-    public String getLeaseId() {
-        return leaseId;
+    public String getMaturityLabel() {
+        return maturityLabel;
     }
 
-    public void setLeaseId(String leaseId) {
-        this.leaseId = leaseId;
+    public void setMaturityLabel(String maturityLabel) {
+        this.maturityLabel = maturityLabel;
     }
 
-    public String getDealerName() {
-        return dealerName;
+    public BigDecimal getLeasePrincipal() {
+        return leasePrincipal;
     }
 
-    public void setDealerName(String dealerName) {
-        this.dealerName = dealerName;
+    public void setLeasePrincipal(BigDecimal leasePrincipal) {
+        this.leasePrincipal = leasePrincipal;
     }
 
-    public BigDecimal getCurrentPeriod() {
-        return currentPeriod;
+    public BigDecimal getInterestPayable() {
+        return interestPayable;
     }
 
-    public void setCurrentPeriod(BigDecimal currentPeriod) {
-        this.currentPeriod = currentPeriod;
+    public void setInterestPayable(BigDecimal interestPayable) {
+        this.interestPayable = interestPayable;
     }
 
-    public BigDecimal getNextTwelveMonths() {
-        return nextTwelveMonths;
+    public BigDecimal getTotal() {
+        return total;
     }
 
-    public void setNextTwelveMonths(BigDecimal nextTwelveMonths) {
-        this.nextTwelveMonths = nextTwelveMonths;
-    }
-
-    public BigDecimal getBeyondTwelveMonths() {
-        return beyondTwelveMonths;
-    }
-
-    public void setBeyondTwelveMonths(BigDecimal beyondTwelveMonths) {
-        this.beyondTwelveMonths = beyondTwelveMonths;
-    }
-
-    public BigDecimal getTotalUndiscounted() {
-        return totalUndiscounted;
-    }
-
-    public void setTotalUndiscounted(BigDecimal totalUndiscounted) {
-        this.totalUndiscounted = totalUndiscounted;
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 
     @Override
@@ -96,23 +76,21 @@ public class LeaseLiabilityMaturitySummaryDTO implements Serializable {
             return false;
         }
         LeaseLiabilityMaturitySummaryDTO that = (LeaseLiabilityMaturitySummaryDTO) o;
-        return Objects.equals(leaseId, that.leaseId) && Objects.equals(dealerName, that.dealerName);
+        return Objects.equals(maturityLabel, that.maturityLabel);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(leaseId, dealerName);
+        return Objects.hash(maturityLabel);
     }
 
     @Override
     public String toString() {
         return "LeaseLiabilityMaturitySummaryDTO{" +
-            "leaseId='" + getLeaseId() + '\'' +
-            ", dealerName='" + getDealerName() + '\'' +
-            ", currentPeriod=" + getCurrentPeriod() +
-            ", nextTwelveMonths=" + getNextTwelveMonths() +
-            ", beyondTwelveMonths=" + getBeyondTwelveMonths() +
-            ", totalUndiscounted=" + getTotalUndiscounted() +
+            "maturityLabel='" + getMaturityLabel() + '\'' +
+            ", leasePrincipal=" + getLeasePrincipal() +
+            ", interestPayable=" + getInterestPayable() +
+            ", total=" + getTotal() +
             '}';
     }
 }

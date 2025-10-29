@@ -21,19 +21,15 @@ package io.github.erp.internal.model;
 import java.math.BigDecimal;
 
 /**
- * Projection describing the aggregated lease liability maturity rows fetched from the native query.
+ * Projection describing the aggregated maturity buckets for lease liabilities.
  */
 public interface LeaseLiabilityMaturitySummaryInternal {
 
-    String getLeaseId();
+    String getMaturityLabel();
 
-    String getDealerName();
+    BigDecimal getLeasePrincipal();
 
-    BigDecimal getCurrentPeriod();
+    BigDecimal getInterestPayable();
 
-    BigDecimal getNextTwelveMonths();
-
-    BigDecimal getBeyondTwelveMonths();
-
-    BigDecimal getTotalUndiscounted();
+    BigDecimal getTotal();
 }

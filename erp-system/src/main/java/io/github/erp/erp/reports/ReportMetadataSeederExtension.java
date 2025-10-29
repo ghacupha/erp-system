@@ -129,10 +129,10 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
         ),
         new ReportMetadataSeed(
             "Lease Liability Maturity",
-            "Undiscounted lease cash flows distributed into current, next 12 months, and beyond 12 months buckets.",
+            "Bucketed maturity profile of outstanding lease principal and interest payable for the reporting period.",
             "Leases",
             "reports/view/lease-liability-maturity",
-            "api/leases/lease-liability-schedule-report-items/maturity-summary/{leasePeriodId}",
+            "api/leases/lease-liability-schedule-report-items/liability-maturity-summary/{leasePeriodId}",
             true,
             List.of(filter("Lease Period", "leasePeriodId", "leaseRepaymentPeriods", "dropdown"))
         ),

@@ -21,10 +21,11 @@ package io.github.erp.internal.model.mapping;
 import io.github.erp.internal.framework.Mapping;
 import io.github.erp.internal.model.LeaseLiabilityMaturitySummaryInternal;
 import io.github.erp.service.dto.LeaseLiabilityMaturitySummaryDTO;
+import java.math.BigDecimal;
 import org.springframework.stereotype.Component;
 
 /**
- * Maps the native query projection for the lease liability maturity summary report to the DTO exposed via the API.
+ * Maps the lease liability maturity summary projection to its DTO counterpart.
  */
 @Component
 public class LeaseLiabilityMaturitySummaryInternalMapper
@@ -38,12 +39,18 @@ public class LeaseLiabilityMaturitySummaryInternalMapper
     @Override
     public LeaseLiabilityMaturitySummaryDTO toValue2(LeaseLiabilityMaturitySummaryInternal vs) {
         LeaseLiabilityMaturitySummaryDTO dto = new LeaseLiabilityMaturitySummaryDTO();
-        dto.setLeaseId(vs.getLeaseId());
-        dto.setDealerName(vs.getDealerName());
-        dto.setCurrentPeriod(vs.getCurrentPeriod());
-        dto.setNextTwelveMonths(vs.getNextTwelveMonths());
-        dto.setBeyondTwelveMonths(vs.getBeyondTwelveMonths());
-        dto.setTotalUndiscounted(vs.getTotalUndiscounted());
+        dto.setMaturityLabel(vs.getMaturityLabel());
+        dto.setLeasePrincipal(vs.getLeasePrincipal());
+        dto.setInterestPayable(vs.getInterestPayable());
+        BigDecimal total = vs.getTotal();
+        if (total == null && vs.getLeasePrincipal() != null && vs.getInterestPayable() != null) {
+            total = vs.getLeasePrincipal().add(vs.getInterestPayable());
+        } else if (total == null && vs.getLeasePrincipal() != null) {
+            total = vs.getLeasePrincipal();
+        } else if (total == null && vs.getInterestPayable() != null) {
+            total = vs.getInterestPayable();
+        }
+        dto.setTotal(total);
         return dto;
     }
 }
