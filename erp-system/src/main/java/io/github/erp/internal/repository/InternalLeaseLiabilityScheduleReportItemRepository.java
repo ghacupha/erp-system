@@ -96,6 +96,43 @@ public interface InternalLeaseLiabilityScheduleReportItemRepository
 
     @Query(
         value =
+            "WITH target_period AS (\n" +
+            "    SELECT id, sequence_number\n" +
+            "    FROM lease_repayment_period\n" +
+            "    WHERE id = :leasePeriodId\n" +
+            "), schedule AS (\n" +
+            "    SELECT\n" +
+            "        COALESCE(contract.booking_id, '') AS leaseId,\n" +
+            "        COALESCE(dealer.dealer_name, '') AS dealerName,\n" +
+            "        rp.sequence_number AS sequenceNumber,\n" +
+            "        tp.sequence_number AS anchorSequence,\n" +
+            "        COALESCE(llsi.cash_payment, 0) AS cashPayment\n" +
+            "    FROM lease_liability_schedule_item llsi\n" +
+            "    JOIN ifrs16lease_contract contract ON contract.id = llsi.lease_contract_id\n" +
+            "    LEFT JOIN dealer ON dealer.id = contract.main_dealer_id\n" +
+            "    JOIN lease_repayment_period rp ON rp.id = llsi.lease_period_id\n" +
+            "    CROSS JOIN target_period tp\n" +
+            "    WHERE rp.sequence_number >= tp.sequence_number\n" +
+            ")\n" +
+            "SELECT\n" +
+            "    leaseId,\n" +
+            "    dealerName,\n" +
+            "    SUM(CASE WHEN sequenceNumber = anchorSequence THEN cashPayment ELSE 0 END) AS currentPeriod,\n" +
+            "    SUM(CASE WHEN sequenceNumber > anchorSequence AND sequenceNumber <= anchorSequence + 12 THEN cashPayment ELSE 0 END) AS nextTwelveMonths,\n" +
+            "    SUM(CASE WHEN sequenceNumber > anchorSequence + 12 THEN cashPayment ELSE 0 END) AS beyondTwelveMonths,\n" +
+            "    SUM(cashPayment) AS totalUndiscounted\n" +
+            "FROM schedule\n" +
+            "GROUP BY leaseId, dealerName\n" +
+            "HAVING SUM(cashPayment) <> 0\n" +
+            "ORDER BY leaseId",
+        nativeQuery = true
+    )
+    List<LeaseLiabilityMaturitySummaryInternal> getLeaseLiabilityMaturitySummary(
+        @Param("leasePeriodId") long leasePeriodId
+    );
+
+    @Query(
+        value =
             "SELECT COALESCE(contract.booking_id, '') AS leaseId,\n" +
             "       COALESCE(d.dealer_name, '') AS dealerName,\n" +
             "       TRIM(BOTH ' ' FROM COALESCE(contract.booking_id, '') || ' ' || COALESCE(contract.lease_title, '')) AS narration,\n" +
