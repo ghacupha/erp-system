@@ -20,6 +20,7 @@ package io.github.erp.internal.repository;
 import io.github.erp.domain.LeaseLiabilityScheduleReportItem;
 import io.github.erp.internal.model.LeaseInterestPaidTransferSummaryInternal;
 import io.github.erp.internal.model.LeaseLiabilityInterestExpenseSummaryInternal;
+import io.github.erp.internal.model.LeaseLiabilityMaturitySummaryInternal;
 import io.github.erp.internal.model.LeaseLiabilityOutstandingSummaryInternal;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -140,6 +141,46 @@ public interface InternalLeaseLiabilityScheduleReportItemRepository
         nativeQuery = true
     )
     List<LeaseLiabilityOutstandingSummaryInternal> getLeaseLiabilityOutstandingSummary(
+        @Param("leasePeriodId") long leasePeriodId
+    );
+
+    @Query(
+        value =
+            "WITH target_period AS (\n" +
+            "    SELECT lp.end_date AS target_end_date\n" +
+            "    FROM lease_repayment_period lp\n" +
+            "    WHERE lp.id = :leasePeriodId\n" +
+            "), maturity_data AS (\n" +
+            "    SELECT CASE\n" +
+            "               WHEN maturity_days <= 365 THEN '≤365 days'\n" +
+            "               WHEN maturity_days BETWEEN 366 AND 1824 THEN '366–1824 days'\n" +
+            "               ELSE '≥1825 days'\n" +
+            "           END AS maturity_label,\n" +
+            "           COALESCE(llsi.outstanding_balance, 0) AS lease_principal,\n" +
+            "           COALESCE(llsi.interest_payable_closing, 0) AS interest_payable\n" +
+            "    FROM lease_liability_schedule_item llsi\n" +
+            "    JOIN lease_liability ll ON ll.id = llsi.lease_liability_id\n" +
+            "    CROSS JOIN target_period tp\n" +
+            "    CROSS JOIN LATERAL (\n" +
+            "        SELECT GREATEST(COALESCE(DATE_PART('day', ll.end_date - tp.target_end_date), 0), 0)::bigint AS maturity_days\n" +
+            "    ) maturity\n" +
+            "    WHERE llsi.lease_period_id = :leasePeriodId\n" +
+            ")\n" +
+            "SELECT maturity_label AS maturityLabel,\n" +
+            "       SUM(lease_principal) AS leasePrincipal,\n" +
+            "       SUM(interest_payable) AS interestPayable,\n" +
+            "       SUM(lease_principal + interest_payable) AS total\n" +
+            "FROM maturity_data\n" +
+            "GROUP BY maturity_label\n" +
+            "HAVING SUM(lease_principal) <> 0 OR SUM(interest_payable) <> 0\n" +
+            "ORDER BY CASE maturity_label\n" +
+            "            WHEN '≤365 days' THEN 1\n" +
+            "            WHEN '366–1824 days' THEN 2\n" +
+            "            ELSE 3\n" +
+            "         END",
+        nativeQuery = true
+    )
+    List<LeaseLiabilityMaturitySummaryInternal> getLeaseLiabilityMaturitySummary(
         @Param("leasePeriodId") long leasePeriodId
     );
 }
