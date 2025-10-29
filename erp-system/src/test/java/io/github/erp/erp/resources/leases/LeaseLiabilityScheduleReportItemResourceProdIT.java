@@ -27,7 +27,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import io.github.erp.IntegrationTest;
 import io.github.erp.erp.resources.leases.LeaseLiabilityScheduleReportItemResourceProdIT.TestLeaseInterestPaidTransferSummaryInternal;
+import io.github.erp.erp.resources.leases.LeaseLiabilityScheduleReportItemResourceProdIT.TestLeaseLiabilityMaturitySummaryInternal;
 import io.github.erp.internal.model.LeaseInterestPaidTransferSummaryInternal;
+import io.github.erp.internal.model.LeaseLiabilityMaturitySummaryInternal;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleReportItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityScheduleReportItemSearchRepository;
 import io.github.erp.service.LeaseLiabilityScheduleReportItemQueryService;
@@ -52,6 +54,9 @@ class LeaseLiabilityScheduleReportItemResourceProdIT {
 
     private static final String INTEREST_PAID_TRANSFER_SUMMARY_ENDPOINT =
         "/api/leases/lease-liability-schedule-report-items/interest-paid-transfer-summary/{leasePeriodId}";
+
+    private static final String LIABILITY_MATURITY_SUMMARY_ENDPOINT =
+        "/api/leases/lease-liability-schedule-report-items/liability-maturity-summary/{leasePeriodId}";
 
     @Autowired
     private MockMvc mockMvc;
@@ -104,6 +109,42 @@ class LeaseLiabilityScheduleReportItemResourceProdIT {
         Mockito
             .verify(internalLeaseLiabilityScheduleReportItemRepository)
             .getLeaseInterestPaidTransferSummary(leasePeriodId);
+    }
+
+    @Test
+    void getLeaseLiabilityMaturitySummary_aggregatesBucketsAndOmitsZeroTotals() throws Exception {
+        long leasePeriodId = 5252L;
+
+        LeaseLiabilityMaturitySummaryInternal shortTerm = new TestLeaseLiabilityMaturitySummaryInternal(
+            "≤365 days",
+            new BigDecimal("5000.00"),
+            new BigDecimal("250.50"),
+            null
+        );
+
+        LeaseLiabilityMaturitySummaryInternal zeroBucket = new TestLeaseLiabilityMaturitySummaryInternal(
+            "366–1824 days",
+            BigDecimal.ZERO,
+            BigDecimal.ZERO,
+            BigDecimal.ZERO
+        );
+
+        when(internalLeaseLiabilityScheduleReportItemRepository.getLeaseLiabilityMaturitySummary(leasePeriodId))
+            .thenReturn(List.of(shortTerm, zeroBucket));
+
+        mockMvc
+            .perform(get(LIABILITY_MATURITY_SUMMARY_ENDPOINT, leasePeriodId).accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$", hasSize(1)))
+            .andExpect(jsonPath("$[0].maturityLabel").value("≤365 days"))
+            .andExpect(jsonPath("$[0].leasePrincipal").value(5000.00))
+            .andExpect(jsonPath("$[0].interestPayable").value(250.50))
+            .andExpect(jsonPath("$[0].total").value(5250.50));
+
+        Mockito
+            .verify(internalLeaseLiabilityScheduleReportItemRepository)
+            .getLeaseLiabilityMaturitySummary(leasePeriodId);
     }
 
     /**
@@ -162,6 +203,46 @@ class LeaseLiabilityScheduleReportItemResourceProdIT {
         @Override
         public BigDecimal getInterestAmount() {
             return interestAmount;
+        }
+    }
+
+    static class TestLeaseLiabilityMaturitySummaryInternal implements LeaseLiabilityMaturitySummaryInternal {
+
+        private final String maturityLabel;
+        private final BigDecimal leasePrincipal;
+        private final BigDecimal interestPayable;
+        private final BigDecimal total;
+
+        TestLeaseLiabilityMaturitySummaryInternal(
+            String maturityLabel,
+            BigDecimal leasePrincipal,
+            BigDecimal interestPayable,
+            BigDecimal total
+        ) {
+            this.maturityLabel = maturityLabel;
+            this.leasePrincipal = leasePrincipal;
+            this.interestPayable = interestPayable;
+            this.total = total;
+        }
+
+        @Override
+        public String getMaturityLabel() {
+            return maturityLabel;
+        }
+
+        @Override
+        public BigDecimal getLeasePrincipal() {
+            return leasePrincipal;
+        }
+
+        @Override
+        public BigDecimal getInterestPayable() {
+            return interestPayable;
+        }
+
+        @Override
+        public BigDecimal getTotal() {
+            return total;
         }
     }
 }

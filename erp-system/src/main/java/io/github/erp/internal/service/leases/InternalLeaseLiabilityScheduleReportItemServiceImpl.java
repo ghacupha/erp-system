@@ -21,6 +21,7 @@ import io.github.erp.domain.LeaseLiabilityScheduleReportItem;
 import io.github.erp.internal.framework.Mapping;
 import io.github.erp.internal.model.LeaseInterestPaidTransferSummaryInternal;
 import io.github.erp.internal.model.LeaseLiabilityInterestExpenseSummaryInternal;
+import io.github.erp.internal.model.LeaseLiabilityMaturitySummaryInternal;
 import io.github.erp.internal.model.LeaseLiabilityOutstandingSummaryInternal;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleReportItemRepository;
 import io.github.erp.repository.LeaseLiabilityScheduleReportItemRepository;
@@ -28,6 +29,7 @@ import io.github.erp.repository.search.LeaseLiabilityScheduleReportItemSearchRep
 import io.github.erp.service.LeaseLiabilityScheduleReportItemService;
 import io.github.erp.service.dto.LeaseInterestPaidTransferSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityInterestExpenseSummaryDTO;
+import io.github.erp.service.dto.LeaseLiabilityMaturitySummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityOutstandingSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleReportItemDTO;
 import io.github.erp.service.mapper.LeaseLiabilityScheduleReportItemMapper;
@@ -67,13 +69,17 @@ public class InternalLeaseLiabilityScheduleReportItemServiceImpl implements Inte
     private final Mapping<LeaseLiabilityOutstandingSummaryInternal, LeaseLiabilityOutstandingSummaryDTO>
         leaseLiabilityOutstandingSummaryMapping;
 
+    private final Mapping<LeaseLiabilityMaturitySummaryInternal, LeaseLiabilityMaturitySummaryDTO>
+        leaseLiabilityMaturitySummaryMapping;
+
     public InternalLeaseLiabilityScheduleReportItemServiceImpl(
         InternalLeaseLiabilityScheduleReportItemRepository leaseLiabilityScheduleReportItemRepository,
         LeaseLiabilityScheduleReportItemMapper leaseLiabilityScheduleReportItemMapper,
         LeaseLiabilityScheduleReportItemSearchRepository leaseLiabilityScheduleReportItemSearchRepository,
         Mapping<LeaseLiabilityInterestExpenseSummaryInternal, LeaseLiabilityInterestExpenseSummaryDTO> leaseLiabilityInterestExpenseSummaryMapping,
         Mapping<LeaseInterestPaidTransferSummaryInternal, LeaseInterestPaidTransferSummaryDTO> leaseInterestPaidTransferSummaryMapping,
-        Mapping<LeaseLiabilityOutstandingSummaryInternal, LeaseLiabilityOutstandingSummaryDTO> leaseLiabilityOutstandingSummaryMapping
+        Mapping<LeaseLiabilityOutstandingSummaryInternal, LeaseLiabilityOutstandingSummaryDTO> leaseLiabilityOutstandingSummaryMapping,
+        Mapping<LeaseLiabilityMaturitySummaryInternal, LeaseLiabilityMaturitySummaryDTO> leaseLiabilityMaturitySummaryMapping
     ) {
         this.leaseLiabilityScheduleReportItemRepository = leaseLiabilityScheduleReportItemRepository;
         this.leaseLiabilityScheduleReportItemMapper = leaseLiabilityScheduleReportItemMapper;
@@ -81,6 +87,7 @@ public class InternalLeaseLiabilityScheduleReportItemServiceImpl implements Inte
         this.leaseLiabilityInterestExpenseSummaryMapping = leaseLiabilityInterestExpenseSummaryMapping;
         this.leaseInterestPaidTransferSummaryMapping = leaseInterestPaidTransferSummaryMapping;
         this.leaseLiabilityOutstandingSummaryMapping = leaseLiabilityOutstandingSummaryMapping;
+        this.leaseLiabilityMaturitySummaryMapping = leaseLiabilityMaturitySummaryMapping;
     }
 
     @Override
@@ -165,6 +172,27 @@ public class InternalLeaseLiabilityScheduleReportItemServiceImpl implements Inte
                 (dto.getLeasePrincipal() != null && dto.getLeasePrincipal().compareTo(BigDecimal.ZERO) != 0) ||
                 (dto.getInterestPayable() != null && dto.getInterestPayable().compareTo(BigDecimal.ZERO) != 0)
             )
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<LeaseLiabilityMaturitySummaryDTO> getLeaseLiabilityMaturitySummary(long leasePeriodId) {
+        log.debug("Request for lease liability maturity summary for lease period id: {}", leasePeriodId);
+
+        return leaseLiabilityScheduleReportItemRepository
+            .getLeaseLiabilityMaturitySummary(leasePeriodId)
+            .stream()
+            .map(leaseLiabilityMaturitySummaryMapping::toValue2)
+            .map(dto -> {
+                if (dto.getTotal() == null) {
+                    BigDecimal principal = dto.getLeasePrincipal() == null ? BigDecimal.ZERO : dto.getLeasePrincipal();
+                    BigDecimal interest = dto.getInterestPayable() == null ? BigDecimal.ZERO : dto.getInterestPayable();
+                    dto.setTotal(principal.add(interest));
+                }
+                return dto;
+            })
+            .filter(dto -> dto.getTotal() != null && dto.getTotal().compareTo(BigDecimal.ZERO) != 0)
             .collect(Collectors.toList());
     }
 
