@@ -1,16 +1,25 @@
-# How to interpret the Lease Liability Maturity Summary
+# Lease Liability Maturity Summary Report
 
-## 1. Select the anchor lease period
-1. Open the **Lease Liability Maturity** report from the catalogue entry seeded at `reports/view/lease-liability-maturity`.
-2. Pick the lease period that represents the reporting month you want to analyse and run the report.
+The Lease Liability Maturity report highlights how much principal and accrued interest is due within short-, medium-, and
+long-term windows.
 
-## 2. Read the three maturity buckets
-* **Current Period** – Shows the cash payment scheduled for the selected lease period. Use it to reconcile to the current-month
-  lease expense.
-* **Next 12 Months** – Aggregates the next twelve repayment periods, giving you the short-term undiscounted cash flow required
-  for liquidity disclosures.
-* **Beyond 12 Months** – Captures all remaining payments after the first year, enabling quick long-term liability checks.
+## Accessing the report
+1. From the main navigation, choose **Reports**.
+2. Select **Lease Liability Maturity**.
 
-## 3. Use the total column
-The **Total** column equals the sum of the three buckets and represents the full undiscounted cash flow for each lease. Use it
-as the control total when copying figures into the IFRS 16 maturity note.
+## Filtering
+* **Lease Period** – choose the repayment period whose end date should be used to calculate days to maturity. This filter
+  is required before running the report.
+
+## Reading the results
+The grid displays a row for each non-empty maturity bucket:
+
+| Column | Description |
+| --- | --- |
+| Maturity Label | One of ≤365 days, 366–1824 days, or ≥1825 days. |
+| Lease Principal | Sum of outstanding principal balances for leases within the bucket. |
+| Interest Payable | Sum of accrued interest payable balances. |
+| Total | Automatically calculated as principal plus interest for the bucket. |
+
+Buckets where both principal and interest total zero are automatically hidden. Expired leases appear in the ≤365 days
+bucket.

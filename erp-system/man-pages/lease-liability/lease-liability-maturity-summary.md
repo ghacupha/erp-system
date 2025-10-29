@@ -1,56 +1,34 @@
-# Lease Liability Maturity Summary Report
+# Lease Liability Maturity Summary
 
-## Business context
+## Overview
+The lease liability maturity summary groups outstanding lease principal and interest payable into three maturity
+buckets relative to the end date of a selected lease repayment period. The dataset enables the treasury and
+financial reporting teams to understand near-term versus long-term exposures captured in IFRS 16 schedules.
 
-Treasury and statutory reporting teams need a single snapshot that shows how undiscounted lease cash flows roll off after the
-selected repayment period. The maturity summary answers that question by grouping cash payments into three IFRS 16 monitoring
-buckets—**Current Period**, **Next 12 Months**, and **Beyond 12 Months**—for every active contract. The dataset lets accountants
-prepare liquidity tables without extracting the full schedule.
+## Data flow
+1. The client calls `GET /api/leases/lease-liability-schedule-report-items/liability-maturity-summary/{leasePeriodId}`.
+2. `LeaseLiabilityScheduleReportItemResourceProd` delegates to the internal service layer, which executes the native
+   aggregation in `InternalLeaseLiabilityScheduleReportItemRepository`.
+3. The repository computes the days between each lease's contractual end date and the chosen repayment period end date.
+4. Rows are bucketed into:
+   * **≤365 days**
+   * **366–1824 days**
+   * **≥1825 days**
+5. For each bucket the query sums the outstanding principal (`outstanding_balance`) and the closing interest payable
+   (`interest_payable_closing`). Buckets with both sums equal to zero are excluded.
+6. The internal mapper converts the projection to `LeaseLiabilityMaturitySummaryDTO`, ensuring the total column reflects
+   the sum of principal and interest.
 
-## Data sourcing
-
-* **Fact source** – `lease_liability_schedule_item` supplies the cash payment for each future repayment period.
-* **Calendar anchor** – `lease_repayment_period` provides the selected period (`:leasePeriodId`) and the forward-looking
-  sequence used to assign buckets.
-* **Contract context** – `ifrs16lease_contract` and `dealer` enrich each row with the booking identifier and dealer name.
-* **Query definition** – see [`queries/lease-liability-maturity-summary.sql`](../../queries/lease-liability-maturity-summary.sql)
-  for the exact SQL executed by the reporting service. The script projects the three buckets and totals in a single pass.
-
-## API surface
-
-```
-GET /api/leases/lease-liability-schedule-report-items/maturity-summary/{leasePeriodId}
-```
-
-The production controller resolves the lease period identifier, executes the maturity SQL, and returns one row per lease with
-pre-computed bucket values. Consumers do not need to repeat the aggregation client side.
-
-## Bucket logic
-
-The SQL assigns bucket labels by comparing each schedule item's `sequence_number` to the anchor period:
-
-* **Current Period** – `sequence_number` equals the anchor sequence; captures the cash due in the selected month.
-* **Next 12 Months** – `sequence_number` is greater than the anchor and less than or equal to `anchor + 12`.
-* **Beyond 12 Months** – `sequence_number` exceeds `anchor + 12`, representing longer-dated lease payments.
-
-The query adds all cash payments across the buckets to produce `totalUndiscounted`, ensuring the sum reconciles back to the
-undiscounted liability figure exported to statutory templates.
-
-## Response schema
-
-Each row in the response contains the following fields:
-
-| Field | Description |
+## Output columns
+| Column | Description |
 | --- | --- |
-| `leaseId` | Booking identifier sourced from `ifrs16lease_contract`. |
-| `dealerName` | Main dealer tied to the contract, for operational grouping. |
-| `currentPeriod` | Cash payment due in the selected lease period. |
-| `nextTwelveMonths` | Sum of payments scheduled for the following 12 periods. |
-| `beyondTwelveMonths` | Sum of payments that fall beyond the one-year horizon. |
-| `totalUndiscounted` | Total of the three maturity buckets. |
+| `maturityLabel` | Readable label describing the maturity band. |
+| `leasePrincipal` | Aggregated outstanding principal for the bucket. |
+| `interestPayable` | Aggregated accrued interest payable for the bucket. |
+| `total` | Convenience total of principal plus interest payable. |
 
-## Report catalogue placement
-
-The UI entry is seeded as **Lease Liability Maturity** with page path `reports/view/lease-liability-maturity` in
-[`ReportMetadataSeederExtension`](../../src/main/java/io/github/erp/erp/reports/ReportMetadataSeederExtension.java). Link your
-man-page and user documentation to this metadata key so users can navigate to the feature directly.
+## Usage notes
+* Use the **Lease Period** filter in the reporting UI to target a specific repayment period.
+* Negative day differences (expired leases) are treated as zero-day maturities and therefore fall into the **≤365 days** bucket.
+* The SQL reference is available in `queries/lease-liability-maturity-summary.sql` for analysts who want to review or execute
+  the aggregation manually.

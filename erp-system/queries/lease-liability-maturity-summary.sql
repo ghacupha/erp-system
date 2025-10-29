@@ -1,41 +1,38 @@
--- Native query backing the lease liability maturity summary endpoint.
+-- Lease Liability Maturity Summary
+-- --------------------------------
+-- Buckets the outstanding lease liability principal and interest payable into short-, medium- and long-term maturity bands
+-- relative to the selected lease repayment period. This mirrors the native query defined in
+-- InternalLeaseLiabilityScheduleReportItemRepository#getLeaseLiabilityMaturitySummary.
+
 WITH target_period AS (
-    SELECT id, sequence_number
-    FROM lease_repayment_period
-    WHERE id = :leasePeriodId
-),
-schedule AS (
-    SELECT
-        COALESCE(contract.booking_id, '') AS lease_id,
-        COALESCE(dealer.dealer_name, '') AS dealer_name,
-        rp.sequence_number,
-        tp.sequence_number AS anchor_sequence,
-        COALESCE(llsi.cash_payment, 0) AS cash_payment
+    SELECT lp.end_date AS target_end_date
+    FROM lease_repayment_period lp
+    WHERE lp.id = :leasePeriodId
+), maturity_data AS (
+    SELECT CASE
+               WHEN maturity_days <= 365 THEN '≤365 days'
+               WHEN maturity_days BETWEEN 366 AND 1824 THEN '366–1824 days'
+               ELSE '≥1825 days'
+           END AS maturity_label,
+           COALESCE(llsi.outstanding_balance, 0) AS lease_principal,
+           COALESCE(llsi.interest_payable_closing, 0) AS interest_payable
     FROM lease_liability_schedule_item llsi
-    JOIN ifrs16lease_contract contract ON contract.id = llsi.lease_contract_id
-    LEFT JOIN dealer ON dealer.id = contract.main_dealer_id
-    JOIN lease_repayment_period rp ON rp.id = llsi.lease_period_id
+    JOIN lease_liability ll ON ll.id = llsi.lease_liability_id
     CROSS JOIN target_period tp
-    WHERE rp.sequence_number >= tp.sequence_number
+    CROSS JOIN LATERAL (
+        SELECT GREATEST(COALESCE(DATE_PART('day', ll.end_date - tp.target_end_date), 0), 0)::bigint AS maturity_days
+    ) maturity
+    WHERE llsi.lease_period_id = :leasePeriodId
 )
-SELECT
-    lease_id,
-    dealer_name,
-    SUM(CASE WHEN sequence_number = anchor_sequence THEN cash_payment ELSE 0 END) AS current_period,
-    SUM(
-        CASE
-            WHEN sequence_number > anchor_sequence AND sequence_number <= anchor_sequence + 12 THEN cash_payment
-            ELSE 0
-        END
-    ) AS next_twelve_months,
-    SUM(
-        CASE
-            WHEN sequence_number > anchor_sequence + 12 THEN cash_payment
-            ELSE 0
-        END
-    ) AS beyond_twelve_months,
-    SUM(cash_payment) AS total_undiscounted
-FROM schedule
-GROUP BY lease_id, dealer_name
-HAVING SUM(cash_payment) <> 0
-ORDER BY lease_id;
+SELECT maturity_label,
+       SUM(lease_principal) AS lease_principal,
+       SUM(interest_payable) AS interest_payable,
+       SUM(lease_principal + interest_payable) AS total_amount
+FROM maturity_data
+GROUP BY maturity_label
+HAVING SUM(lease_principal) <> 0 OR SUM(interest_payable) <> 0
+ORDER BY CASE maturity_label
+            WHEN '≤365 days' THEN 1
+            WHEN '366–1824 days' THEN 2
+            ELSE 3
+         END;

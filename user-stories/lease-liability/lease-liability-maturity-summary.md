@@ -1,18 +1,16 @@
-# Story: Analyse lease liability maturity buckets
+# Story: Treasury analyst reviews lease liability maturity
 
-## Persona
-Treasury analyst responsible for IFRS 16 liquidity disclosures.
+**Persona:** Treasury analyst planning liquidity buffers.
 
-## Trigger
-The analyst selects the **Lease Liability Maturity** tile from the report catalogue and chooses a lease period to anchor the
-calculation.
+**Need:** Understand short-, medium-, and long-term lease obligations for a given repayment period.
 
-## Steps
-1. Choose the reporting month from the lease period drop-down and run the report.
-2. Review the returned table with one row per lease contract and four numeric columns: Current Period, Next 12 Months,
-   Beyond 12 Months, and Total.
-3. Export or copy the results into the statutory liquidity template used for IFRS 16 maturity analysis.
+**Scenario:**
+1. Open the **Lease Liability Maturity** report.
+2. Select the lease repayment period from the dropdown filter.
+3. Run the report.
+4. Review the resulting maturity bands (≤365, 366–1824, ≥1825 days) and note the totals where present.
 
-## Outcome
-The analyst can explain how undiscounted lease cash flows are distributed across short-, medium-, and long-term buckets for the
-selected period without recalculating totals in Excel.
+**Acceptance Criteria:**
+- Only non-zero maturity bands appear in the table.
+- The `total` column equals `leasePrincipal + interestPayable` for each row.
+- Data reflects the repayment period end date supplied in the filter.
