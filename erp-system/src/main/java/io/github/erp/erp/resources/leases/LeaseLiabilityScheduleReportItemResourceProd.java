@@ -23,6 +23,7 @@ import io.github.erp.service.LeaseLiabilityScheduleReportItemQueryService;
 import io.github.erp.service.criteria.LeaseLiabilityScheduleReportItemCriteria;
 import io.github.erp.service.dto.LeaseInterestPaidTransferSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityInterestExpenseSummaryDTO;
+import io.github.erp.service.dto.LeaseLiabilityOutstandingSummaryDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleReportItemDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,6 +113,24 @@ public class LeaseLiabilityScheduleReportItemResourceProd {
     ) {
         log.debug("REST request for lease interest paid transfer summary for lease period id: {}", leasePeriodId);
         List<LeaseInterestPaidTransferSummaryDTO> reportItems = leaseLiabilityScheduleReportItemService.getLeaseInterestPaidTransferSummary(
+            leasePeriodId
+        );
+        return ResponseEntity.ok(reportItems);
+    }
+
+    /**
+     * {@code GET  /lease-liability-schedule-report-items/liability-outstanding-summary/:leasePeriodId} :
+     * get the liability outstanding summary for the supplied lease period.
+     *
+     * @param leasePeriodId the lease period identifier guiding the report window.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of report rows in body.
+     */
+    @GetMapping("/lease-liability-schedule-report-items/liability-outstanding-summary/{leasePeriodId}")
+    public ResponseEntity<List<LeaseLiabilityOutstandingSummaryDTO>> getLeaseLiabilityOutstandingSummary(
+        @PathVariable long leasePeriodId
+    ) {
+        log.debug("REST request for lease liability outstanding summary for lease period id: {}", leasePeriodId);
+        List<LeaseLiabilityOutstandingSummaryDTO> reportItems = leaseLiabilityScheduleReportItemService.getLeaseLiabilityOutstandingSummary(
             leasePeriodId
         );
         return ResponseEntity.ok(reportItems);
