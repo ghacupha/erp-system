@@ -17,11 +17,13 @@
 ///
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
+
+import { Store } from '@ngrx/store';
 
 import { ReportMetadataService } from '../report-metadata/report-metadata.service';
 import {
@@ -33,6 +35,9 @@ import { ReportSummaryDataService } from './report-summary-data.service';
 import { ReportFilterOption, ReportFilterOptionService } from './report-filter-option.service';
 
 import { buildCsvContent, buildExcelArrayBuffer, deriveOrderedColumns } from './report-summary-export.util';
+import { State } from 'app/erp/store/global-store.definition';
+import { selectedLeaseContractIdForReport } from 'app/erp/store/selectors/ifrs16-lease-contract-report.selectors';
+import { ifrs16LeaseContractReportReset } from 'app/erp/store/actions/ifrs16-lease-contract-report.actions';
 
 interface ReportFilterState {
   definition: IReportFilterDefinition;
@@ -49,6 +54,8 @@ interface ReportFilterState {
   styleUrls: ['./report-summary-view.component.scss'],
 })
 export class ReportSummaryViewComponent implements OnInit, OnDestroy {
+  private static readonly LEASE_LIABILITY_SCHEDULE_SLUG = 'lease-liability-schedule-report';
+
   metadata?: IReportMetadata | null;
   summaryItems: ReportSummaryRecord[] = [];
   displayedColumns: string[] = [];
@@ -62,19 +69,26 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
 
   private routeSub?: Subscription;
   private pendingFilterRequests = 0;
+  private leaseContractSelectionSub?: Subscription;
+  private selectedLeaseContractId?: number;
+  private leaseContractFilterKey?: string;
+  private activeSlug?: string;
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly titleService: Title,
     private readonly reportMetadataService: ReportMetadataService,
     private readonly summaryDataService: ReportSummaryDataService,
-    private readonly filterOptionService: ReportFilterOptionService
+    private readonly filterOptionService: ReportFilterOptionService,
+    private readonly router: Router,
+    private readonly store: Store<State>
   ) {}
 
   ngOnInit(): void {
     this.routeSub = this.activatedRoute.paramMap.subscribe(params => {
       const slug = params.get('slug');
       if (slug) {
+        this.handleSlugChange(slug);
         this.fetchMetadata(slug);
       }
     });
@@ -82,6 +96,8 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.routeSub?.unsubscribe();
+    this.teardownLeaseContractSelection();
+    this.store.dispatch(ifrs16LeaseContractReportReset());
   }
 
   trackFilterByQueryKey(index: number, filter: ReportFilterState): string {
@@ -135,6 +151,76 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
     return String(value);
   }
 
+  private handleSlugChange(slug: string): void {
+    this.activeSlug = slug;
+    if (slug === ReportSummaryViewComponent.LEASE_LIABILITY_SCHEDULE_SLUG) {
+      if (!this.leaseContractSelectionSub) {
+        this.leaseContractSelectionSub = this.store
+          .select(selectedLeaseContractIdForReport)
+          .subscribe(id => {
+            if (typeof id === 'number') {
+              this.selectedLeaseContractId = id;
+              this.applyLeaseContractSelectionToFilters();
+            } else {
+              this.selectedLeaseContractId = undefined;
+              this.redirectToLeaseReportNav();
+            }
+          });
+      }
+    } else {
+      this.teardownLeaseContractSelection();
+    }
+  }
+
+  private teardownLeaseContractSelection(): void {
+    this.leaseContractSelectionSub?.unsubscribe();
+    this.leaseContractSelectionSub = undefined;
+    this.selectedLeaseContractId = undefined;
+  }
+
+  private redirectToLeaseReportNav(): void {
+    if (this.activeSlug !== ReportSummaryViewComponent.LEASE_LIABILITY_SCHEDULE_SLUG) {
+      return;
+    }
+    const currentUrl = this.router.url ?? '';
+    if (currentUrl.startsWith('/lease-liability-schedule-report/report-nav')) {
+      return;
+    }
+    if (currentUrl.startsWith('/reports/view/lease-liability-schedule-report')) {
+      this.router.navigate(['/lease-liability-schedule-report/report-nav']);
+    }
+  }
+
+  private applyLeaseContractSelectionToFilters(target?: ReportFilterState): void {
+    if (this.activeSlug !== ReportSummaryViewComponent.LEASE_LIABILITY_SCHEDULE_SLUG) {
+      return;
+    }
+    if (this.selectedLeaseContractId === undefined || this.pendingFilterRequests > 0) {
+      return;
+    }
+    const filterKey = this.leaseContractFilterKey ?? 'leaseLiabilityId.equals';
+    const filter = target ?? this.filters.find(f => f.definition.queryParameterKey === filterKey);
+    if (!filter) {
+      return;
+    }
+    if (filter.selected?.value === this.selectedLeaseContractId) {
+      return;
+    }
+    const existingOption = filter.options.find(option => option.value === this.selectedLeaseContractId);
+    if (existingOption) {
+      filter.selected = existingOption;
+      this.loadSummaryData();
+      return;
+    }
+    const placeholder: ReportFilterOption = {
+      value: this.selectedLeaseContractId,
+      label: `Lease contract #${this.selectedLeaseContractId}`,
+    };
+    filter.options = [placeholder, ...filter.options];
+    filter.selected = placeholder;
+    this.loadSummaryData();
+  }
+
   private fetchMetadata(slug: string): void {
     this.errorMessage = null;
     this.metadata = null;
@@ -142,6 +228,7 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
     this.displayedColumns = [];
     this.filters = [];
     this.pendingFilterRequests = 0;
+    this.leaseContractFilterKey = undefined;
     const pagePath = `reports/view/${slug}`;
     this.reportMetadataService.findByPagePath(pagePath).subscribe({
       next: metadata => {
@@ -181,7 +268,14 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
   }
 
   private deriveFilterDefinitions(metadata: IReportMetadata): IReportFilterDefinition[] {
+    this.leaseContractFilterKey = undefined;
     if (metadata.filters && metadata.filters.length) {
+      const contractFilter = metadata.filters.find(
+        filter => filter?.valueSource === 'leaseContracts' && !!filter.queryParameterKey
+      );
+      if (contractFilter?.queryParameterKey) {
+        this.leaseContractFilterKey = contractFilter.queryParameterKey;
+      }
       return metadata.filters.filter(
         (filter): filter is IReportFilterDefinition =>
           !!filter && !!filter.queryParameterKey && !!filter.valueSource && !!filter.label
@@ -200,6 +294,7 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
     }
 
     if (metadata.displayLeaseContract) {
+      this.leaseContractFilterKey = metadata.leaseContractQueryParam ?? 'leaseLiabilityId.equals';
       definitions.push({
         label: 'Lease liability',
         queryParameterKey: metadata.leaseContractQueryParam ?? 'leaseLiabilityId.equals',
@@ -284,6 +379,8 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
           } else {
             filter.selected = null;
           }
+
+          this.applyLeaseContractSelectionToFilters(filter);
         },
         error: () => {
           filter.options = [];

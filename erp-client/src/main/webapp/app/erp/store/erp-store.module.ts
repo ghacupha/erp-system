@@ -49,6 +49,7 @@ import * as fromRouModelMetadataUpdates from "./reducers/rou-model-metadata-work
 import * as fromLeasePeriodIdSelectionUpdates from "./reducers/lease-period-selection-workflow-status.reducer";
 import * as fromLeasePeriodReportPathUpdates from "./reducers/lease-period-report-path-selection.reducer";
 import { PrepaymentMarshallingWorkflowEffects } from './effects/prepayment-marshalling-workflow.effects';
+import * as fromIfrs16LeaseContractReport from "./reducers/ifrs16-lease-contract-report.reducer";
 
 @NgModule({
   imports: [
@@ -94,6 +95,7 @@ import { PrepaymentMarshallingWorkflowEffects } from './effects/prepayment-marsh
     StoreModule.forFeature('rouModelMetadataUpdateForm', fromRouModelMetadataUpdates.rouModelMetadataUpdateStateReducer),
     StoreModule.forFeature('leasePeriodIdSelection', fromLeasePeriodIdSelectionUpdates.leasePeriodIdSelectionStateReducer),
     StoreModule.forFeature('leasePeriodReportPath', fromLeasePeriodReportPathUpdates.leasePeriodReportPathSelectionStateReducer),
+    StoreModule.forFeature('ifrs16LeaseContractReport', fromIfrs16LeaseContractReport.ifrs16LeaseContractReportStateReducer),
   ],
   exports: [
     EffectsModule,
