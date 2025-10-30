@@ -1,4 +1,5 @@
 import { of, throwError } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 import { ReportSummaryViewComponent } from './report-summary-view.component';
 import { ReportSummaryDataService } from './report-summary-data.service';
@@ -6,23 +7,32 @@ import * as ExportUtil from './report-summary-export.util';
 import { IReportFilterDefinition, IReportMetadata } from '../report-metadata/report-metadata.model';
 import { ReportFilterOptionService } from './report-filter-option.service';
 import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
+import { ifrs16LeaseContractReportReset } from 'app/erp/store/actions/ifrs16-lease-contract-report.actions';
 
 describe('ReportSummaryViewComponent (export behaviour)', () => {
   let component: ReportSummaryViewComponent;
   let summaryDataService: jasmine.SpyObj<ReportSummaryDataService>;
   let filterOptionService: jasmine.SpyObj<ReportFilterOptionService>;
   let anchorElement: HTMLAnchorElement;
+  let router: { navigate: jasmine.Spy; url: string };
+  let store: jasmine.SpyObj<Store<unknown>>;
 
   beforeEach(() => {
     summaryDataService = jasmine.createSpyObj('ReportSummaryDataService', ['fetchSummary', 'fetchAllSummary']);
     filterOptionService = jasmine.createSpyObj('ReportFilterOptionService', ['loadOptions']);
+    router = { navigate: jasmine.createSpy('navigate'), url: '/reports/view/sample' };
+    store = jasmine.createSpyObj('Store', ['select', 'dispatch']);
+    store.select.and.returnValue(of(undefined));
+    store.dispatch.and.stub();
 
     component = new ReportSummaryViewComponent(
       { paramMap: of() } as any,
       { setTitle: () => undefined } as any,
       {} as any,
       summaryDataService,
-      filterOptionService
+      filterOptionService,
+      router as any,
+      store
     );
 
     component.metadata = {
@@ -64,6 +74,41 @@ describe('ReportSummaryViewComponent (export behaviour)', () => {
       'leasePeriodId.equals': 101,
       'leaseLiabilityId.equals': 202,
     });
+  });
+
+  it('should redirect to the parameter screen when the lease contract selection is missing', () => {
+    router.navigate.calls.reset();
+    router.url = '/reports/view/lease-liability-schedule-report';
+
+    (component as any).handleSlugChange('lease-liability-schedule-report');
+
+    expect(router.navigate).toHaveBeenCalledWith(['/lease-liability-schedule-report/report-nav']);
+  });
+
+  it('should apply a stored lease contract selection to the dashboard filters', () => {
+    router.navigate.calls.reset();
+    router.url = '/reports/view/lease-liability-schedule-report';
+    store.select.and.returnValue(of(303));
+
+    (component as any).filters = [
+      {
+        definition: { label: 'Lease', queryParameterKey: 'leaseLiabilityId.equals', valueSource: 'leaseContracts' } as any,
+        options: [{ value: 303, label: 'Lease 303' }],
+        selected: null,
+        loading: false,
+        error: null,
+        lastSearchTerm: undefined,
+      },
+    ];
+    (component as any).leaseContractFilterKey = 'leaseLiabilityId.equals';
+    (component as any).pendingFilterRequests = 0;
+    const loadSpy = spyOn<any>(component, 'loadSummaryData');
+
+    (component as any).handleSlugChange('lease-liability-schedule-report');
+
+    expect(component.filters[0].selected?.value).toBe(303);
+    expect(loadSpy).toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 
   it('should build query parameters from selected filter values', () => {
@@ -111,6 +156,12 @@ describe('ReportSummaryViewComponent (export behaviour)', () => {
   afterEach(() => {
     (URL.createObjectURL as jasmine.Spy | undefined)?.and?.callThrough?.();
     (URL.revokeObjectURL as jasmine.Spy | undefined)?.and?.callThrough?.();
+  });
+
+  it('should dispatch a reset action when destroyed', () => {
+    component.ngOnDestroy();
+
+    expect(store.dispatch).toHaveBeenCalledWith(ifrs16LeaseContractReportReset());
   });
 
   it('should export data as CSV using the export utility helpers', () => {

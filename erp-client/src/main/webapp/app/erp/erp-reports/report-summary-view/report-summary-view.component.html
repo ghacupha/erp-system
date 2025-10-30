@@ -60,7 +60,7 @@
         [placeholder]="filter.definition.label"
         [(ngModel)]="filter.selected"
         (change)="onFilterSelectionChange(filter, filter.selected)"
-        (search)="onFilterSearch(filter, $event.term)"
+        (search)="onFilterSearch(filter, $any($event).term)"
         [clearable]="true"
         [ngModelOptions]="{ standalone: true }"
         [searchable]="true"

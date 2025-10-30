@@ -1,0 +1,76 @@
+///
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+///
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License
+/// along with this program. If not, see <http://www.gnu.org/licenses/>.
+///
+
+import { Component } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+
+import { State } from '../../store/global-store.definition';
+import { ifrs16LeaseContractReportSelected } from '../../store/actions/ifrs16-lease-contract-report.actions';
+import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+
+type LeaseReportNavFormGroup = FormGroup<{
+  leaseContract: FormControl<IIFRS16LeaseContract | null>;
+}>;
+
+@Component({
+  selector: 'jhi-ifrs16-lease-report-nav',
+  templateUrl: './ifrs16-lease-report-nav.component.html',
+})
+
+export class Ifrs16LeaseReportNavComponent {
+  protected readonly reportPath = '/reports/view/lease-liability-schedule-report';
+
+  editForm: LeaseReportNavFormGroup = this.fb.group({
+    leaseContract: this.fb.control<IIFRS16LeaseContract | null>(null, {
+      validators: [Validators.required],
+    }),
+  });
+
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly store: Store<State>,
+    private readonly router: Router
+  ) {}
+
+  get leaseContractControl(): FormControl<IIFRS16LeaseContract | null> {
+    return this.editForm.controls.leaseContract;
+  }
+
+  updateLeaseContract(contract: IIFRS16LeaseContract | null | undefined): void {
+    this.leaseContractControl.patchValue(contract ?? null);
+  }
+
+  cancel(): void {
+    window.history.back();
+  }
+
+  launchReport(): void {
+    const contract: IIFRS16LeaseContract | null = this.leaseContractControl.value;
+    const contractId = contract?.id;
+
+    if (contractId === undefined || contractId === null) {
+      this.leaseContractControl.markAsTouched();
+      return;
+    }
+
+    this.store.dispatch(ifrs16LeaseContractReportSelected({ selectedLeaseContractId: contractId }));
+    this.router.navigate([this.reportPath]);
+  }
+}
