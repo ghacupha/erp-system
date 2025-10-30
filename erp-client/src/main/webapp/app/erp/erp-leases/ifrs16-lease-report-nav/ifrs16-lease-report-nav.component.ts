@@ -17,7 +17,7 @@
 ///
 
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
@@ -25,22 +25,15 @@ import { State } from '../../store/global-store.definition';
 import { ifrs16LeaseContractReportSelected } from '../../store/actions/ifrs16-lease-contract-report.actions';
 import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 
-type LeaseReportNavFormGroup = FormGroup<{
-  leaseContract: FormControl<IIFRS16LeaseContract | null>;
-}>;
-
 @Component({
   selector: 'jhi-ifrs16-lease-report-nav',
   templateUrl: './ifrs16-lease-report-nav.component.html',
 })
-
 export class Ifrs16LeaseReportNavComponent {
   protected readonly reportPath = '/reports/view/lease-liability-schedule-report';
 
-  editForm: LeaseReportNavFormGroup = this.fb.group({
-    leaseContract: this.fb.control<IIFRS16LeaseContract | null>(null, {
-      validators: [Validators.required],
-    }),
+  editForm = this.fb.group({
+    leaseContract: [null, Validators.required],
   });
 
   constructor(
@@ -49,12 +42,8 @@ export class Ifrs16LeaseReportNavComponent {
     private readonly router: Router
   ) {}
 
-  get leaseContractControl(): FormControl<IIFRS16LeaseContract | null> {
-    return this.editForm.controls.leaseContract;
-  }
-
-  updateLeaseContract(contract: IIFRS16LeaseContract | null | undefined): void {
-    this.leaseContractControl.patchValue(contract ?? null);
+  updateLeaseContract(contract: IIFRS16LeaseContract): void {
+    this.editForm.patchValue({ leaseContract: contract });
   }
 
   cancel(): void {
@@ -62,11 +51,11 @@ export class Ifrs16LeaseReportNavComponent {
   }
 
   launchReport(): void {
-    const contract: IIFRS16LeaseContract | null = this.leaseContractControl.value;
+    const contract: IIFRS16LeaseContract | null = this.editForm.get('leaseContract')!.value;
     const contractId = contract?.id;
 
     if (contractId === undefined || contractId === null) {
-      this.leaseContractControl.markAsTouched();
+      this.editForm.get('leaseContract')!.markAsTouched();
       return;
     }
 
