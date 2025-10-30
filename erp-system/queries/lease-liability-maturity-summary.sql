@@ -20,7 +20,14 @@ WITH target_period AS (
     JOIN lease_liability ll ON ll.id = llsi.lease_liability_id
     CROSS JOIN target_period tp
     CROSS JOIN LATERAL (
-        SELECT GREATEST(COALESCE(DATE_PART('day', ll.end_date - tp.target_end_date), 0), 0)::bigint AS maturity_days
+        SELECT
+            GREATEST(
+                COALESCE(
+                    DATE_PART('day', ll.end_date::timestamp - tp.target_end_date::timestamp),
+                    0
+                ),
+                0
+            )::bigint AS maturity_days
     ) maturity
     WHERE llsi.lease_period_id = :leasePeriodId
 )
