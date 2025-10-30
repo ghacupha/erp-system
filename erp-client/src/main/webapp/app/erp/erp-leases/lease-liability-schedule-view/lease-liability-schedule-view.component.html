@@ -1,0 +1,163 @@
+<div class="container-fluid lease-liability-schedule-view">
+  <ng-template #loadingTemplate>
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading…</span>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-container *ngIf="loading; else contentTemplate">
+    <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
+  </ng-container>
+
+  <ng-template #contentTemplate>
+    <div *ngIf="loadError" class="alert alert-danger" role="alert">
+      {{ loadError }}
+    </div>
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+      <div>
+        <h2 class="mb-1">Lease Liability Schedule Dashboard</h2>
+        <p class="text-muted mb-0" *ngIf="leaseContract">
+          {{ leaseContract.leaseTitle || leaseContract.bookingId }}
+        </p>
+        <p class="text-muted mb-0" *ngIf="leaseLiability">
+          Liability reference: {{ leaseLiability.leaseId || leaseLiability.id }}
+        </p>
+      </div>
+      <div class="form-group mb-0">
+        <label class="form-label me-2" for="reportingPeriod">Reporting period</label>
+        <select
+          id="reportingPeriod"
+          class="form-control"
+          (change)="onPeriodChange($event.target.value)"
+          [disabled]="reportingPeriods.length === 0"
+        >
+          <option value="" disabled [selected]="!activePeriod">Select period</option>
+          <option *ngFor="let period of reportingPeriods" [value]="period.id" [selected]="activePeriod?.id === period.id">
+            {{ period.periodCode || (period.startDate | formatMediumDate) }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-xl-3 col-md-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h6 class="card-subtitle text-muted">Initial Liability</h6>
+            <h3 class="card-title mb-0">{{ initialLiability | number: '1.2-2' }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h6 class="card-subtitle text-muted">Schedule Start</h6>
+            <h3 class="card-title mb-0">{{ startDate | formatMediumDate }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h6 class="card-subtitle text-muted">Reporting Close</h6>
+            <h3 class="card-title mb-0">{{ closeDate | formatMediumDate }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h6 class="card-subtitle text-muted">Cash Payments (Period)</h6>
+            <h3 class="card-title mb-0">{{ summary.cashTotal | number: '1.2-2' }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h6 class="card-subtitle text-muted">Principal Settled</h6>
+            <h3 class="card-title mb-0">{{ summary.principalTotal | number: '1.2-2' }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h6 class="card-subtitle text-muted">Interest Paid</h6>
+            <h3 class="card-title mb-0">{{ summary.interestTotal | number: '1.2-2' }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h6 class="card-subtitle text-muted">Outstanding Balance</h6>
+            <h3 class="card-title mb-0">{{ summary.outstandingTotal | number: '1.2-2' }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h6 class="card-subtitle text-muted">Interest Payable</h6>
+            <h3 class="card-title mb-0">{{ summary.interestPayableTotal | number: '1.2-2' }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Monthly Schedule</h5>
+        <span class="text-muted" *ngIf="activePeriod">{{ activePeriod.periodCode }} · {{ activePeriod.startDate | formatMediumDate }} - {{ activePeriod.endDate | formatMediumDate }}</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped mb-0">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Period</th>
+              <th scope="col">Start</th>
+              <th scope="col">End</th>
+              <th scope="col">Days Since Previous</th>
+              <th scope="col" class="text-right">Opening</th>
+              <th scope="col" class="text-right">Cash</th>
+              <th scope="col" class="text-right">Principal</th>
+              <th scope="col" class="text-right">Interest</th>
+              <th scope="col" class="text-right">Outstanding</th>
+              <th scope="col" class="text-right">Interest Payable</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="filteredItems.length > 0; else emptySchedule">
+            <tr *ngFor="let item of filteredItems; let i = index; trackBy: trackBySequence">
+              <th scope="row">{{ item.sequenceNumber }}</th>
+              <td>{{ item.leasePeriod?.periodCode || (item.leasePeriod?.startDate | formatMediumDate) }}</td>
+              <td>{{ item.leasePeriod?.startDate | formatMediumDate }}</td>
+              <td>{{ item.leasePeriod?.endDate | formatMediumDate }}</td>
+              <td>
+                <ng-container *ngIf="paymentDaysFromPrevious(i) as days; else firstPayment">
+                  {{ days }}
+                </ng-container>
+                <ng-template #firstPayment>—</ng-template>
+              </td>
+              <td class="text-right">{{ item.openingBalance | number: '1.2-2' }}</td>
+              <td class="text-right">{{ item.cashPayment | number: '1.2-2' }}</td>
+              <td class="text-right">{{ item.principalPayment | number: '1.2-2' }}</td>
+              <td class="text-right">{{ item.interestPayment | number: '1.2-2' }}</td>
+              <td class="text-right">{{ item.outstandingBalance | number: '1.2-2' }}</td>
+              <td class="text-right">{{ item.interestPayableClosing | number: '1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #emptySchedule>
+          <tr>
+            <td colspan="11" class="text-center py-4 text-muted">No schedule items available for the selected period.</td>
+          </tr>
+        </ng-template>
+      </div>
+    </div>
+  </ng-template>
+</div>
