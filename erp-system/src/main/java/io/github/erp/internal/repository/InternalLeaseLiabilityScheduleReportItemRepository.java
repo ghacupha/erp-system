@@ -167,10 +167,10 @@ public interface InternalLeaseLiabilityScheduleReportItemRepository
                 ") maturity\n" +
                 "    WHERE llsi.lease_period_id = :leasePeriodId \n" +
                 ")\n" +
-                "SELECT maturity_label,\n" +
-                "       SUM(lease_principal) AS lease_principal,\n" +
-                "       SUM(interest_payable) AS interest_payable,\n" +
-                "       SUM(lease_principal + interest_payable) AS total_amount\n" +
+                "SELECT maturity_label AS maturityLabel,\n" +
+                "       SUM(lease_principal) AS leasePrincipal,\n" +
+                "       SUM(interest_payable) AS interestPayable,\n" +
+                "       SUM(lease_principal + interest_payable) AS total\n" +
                 "FROM maturity_data\n" +
                 "GROUP BY maturity_label\n" +
                 "HAVING SUM(lease_principal) <> 0 OR SUM(interest_payable) <> 0\n" +
