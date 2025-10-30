@@ -48,6 +48,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
             ),
         },
         {
+          path: 'lease-liability-schedule-view',
+          data: {
+            pageTitle: 'ERP | Lease Liability Dashboard',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-liability-schedule-view/lease-liability-schedule-view.module').then(
+              m => m.LeaseLiabilityScheduleViewModule
+            ),
+        },
+        {
           path: 'lease-liability-schedule-item',
           data: {
             pageTitle: 'ERP | Schedule',

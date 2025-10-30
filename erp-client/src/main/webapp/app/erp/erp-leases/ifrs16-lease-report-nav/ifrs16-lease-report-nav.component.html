@@ -29,21 +29,21 @@
 
         <jhi-m21-ifrs16-lease-form-control
           ngDefaultControl
-          formControlName="leaseContract"
-          [inputValue]="leaseContractControl.value"
-          (valueSelected)="updateLeaseContract($any($event))"
-          inputControlLabel="IFRS16 Lease Contract (Required)"
+          formControlName='leaseContract'
+          [inputValue]="editForm.get(['leaseContract'])!.value"
+          (valueSelected)='updateLeaseContract($event)'
+          inputControlLabel='IFRS16 Lease Contract (Required)'
         >
-          <option [ngValue]="leaseContractControl.value"></option>
+          <option [ngValue]="editForm.get(['leaseContract'])!.value"></option>
         </jhi-m21-ifrs16-lease-form-control>
 
         <div
           *ngIf="
-            leaseContractControl.invalid &&
-            (leaseContractControl.dirty || leaseContractControl.touched)
+            editForm.get(['leaseContract'])!.invalid &&
+            (editForm.get(['leaseContract'])!.dirty || editForm.get(['leaseContract'])!.touched)
           "
         >
-          <small class="form-text text-danger" *ngIf="leaseContractControl.errors?.required">
+          <small class="form-text text-danger" *ngIf="editForm.get(['leaseContract'])?.errors?.required">
             This field is required.
           </small>
         </div>

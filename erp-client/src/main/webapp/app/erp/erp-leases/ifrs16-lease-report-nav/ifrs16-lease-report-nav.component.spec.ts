@@ -47,7 +47,7 @@ describe('Ifrs16LeaseReportNavComponent', () => {
   it('should mark the lease contract control when navigation is attempted without a selection', () => {
     component.launchReport();
 
-    expect(component.leaseContractControl.touched).toBeTrue();
+    expect(component.editForm.get('leaseContract')!.touched).toBeTrue();
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
