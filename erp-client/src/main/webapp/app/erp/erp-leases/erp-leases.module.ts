@@ -432,6 +432,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
             ),
         },
         {
+          path: 'lease-liability-schedule-report/report-nav',
+          data: {
+            pageTitle: 'ERP | Liability Schedule Parameters',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./ifrs16-lease-report-nav/ifrs16-lease-report-nav.module').then(
+              m => m.Ifrs16LeaseReportNavModule
+            ),
+        },
+        {
           path: 'lease-liability-schedule-report-item',
           data: {
             pageTitle: 'ERP | Liability Schedule Report Items',
