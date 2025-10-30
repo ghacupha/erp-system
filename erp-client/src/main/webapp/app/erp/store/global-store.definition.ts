@@ -39,6 +39,7 @@ import { LeasePaymentFormState } from './reducers/lease-payment.reducer';
 import { TAAmortizationRuleFormState } from './reducers/ta-amortization-rule-status.reducer';
 import { TransactionAccountFormState } from './reducers/transaction-account-update-status.reducer';
 import { TransactionAccountReportDateSelectionState } from './reducers/transaction-account-report-date-selection.reducer';
+import { IFRS16LeaseContractReportState } from './reducers/ifrs16-lease-contract-report.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -61,7 +62,8 @@ export interface State {
   leasePeriodReportPathSelectionState: LeasePeriodReportPathSelectionState,
   taAmortizationRuleFormState: TAAmortizationRuleFormState,
   transactionAccountFormState: TransactionAccountFormState,
-  transactionAccountReportDateSelectionState: TransactionAccountReportDateSelectionState
+  transactionAccountReportDateSelectionState: TransactionAccountReportDateSelectionState,
+  ifrs16LeaseContractReportState: IFRS16LeaseContractReportState
 }
 
 export const initialState: State = {
@@ -218,5 +220,8 @@ export const initialState: State = {
     transactionAccountReportPath: '',
     transactionAccountReportTitle: '',
     transactionAccountReportDate: dayjs(),
+  },
+  ifrs16LeaseContractReportState: {
+    selectedLeaseContractId: undefined,
   }
 }
