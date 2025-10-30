@@ -199,7 +199,14 @@ public interface InternalLeaseLiabilityScheduleReportItemRepository
             "    JOIN lease_liability ll ON ll.id = llsi.lease_liability_id\n" +
             "    CROSS JOIN target_period tp\n" +
             "    CROSS JOIN LATERAL (\n" +
-            "        SELECT GREATEST(COALESCE(DATE_PART('day', ll.end_date - tp.target_end_date), 0), 0)::bigint AS maturity_days\n" +
+            "        SELECT\n" +
+            "            GREATEST(\n" +
+            "                COALESCE(\n" +
+            "                    DATE_PART('day', ll.end_date::timestamp - tp.target_end_date::timestamp),\n" +
+            "                    0\n" +
+            "                ),\n" +
+            "                0\n" +
+            "            )::bigint AS maturity_days\n" +
             "    ) maturity\n" +
             "    WHERE llsi.lease_period_id = :leasePeriodId\n" +
             ")\n" +
