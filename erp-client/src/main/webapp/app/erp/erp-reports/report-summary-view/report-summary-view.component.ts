@@ -113,7 +113,7 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
     this.loadSummaryData();
   }
 
-  onFilterSearch(filter: ReportFilterState, term: string): void {
+  onFilterSearch(filter: ReportFilterState, term: string | undefined): void {
     const normalizedTerm = term?.trim();
     if (normalizedTerm === filter.lastSearchTerm) {
       return;
