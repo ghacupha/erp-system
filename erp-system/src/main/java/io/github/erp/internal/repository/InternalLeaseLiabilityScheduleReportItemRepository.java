@@ -163,14 +163,14 @@ public interface InternalLeaseLiabilityScheduleReportItemRepository
                 "    JOIN lease_liability ll ON ll.id = llsi.lease_liability_id\n" +
                 "    CROSS JOIN target_period tp\n" +
                 "    CROSS JOIN LATERAL (\n" +
-                "    SELECT GREATEST(COALESCE(EXTRACT(DAY FROM (ll.end_date - tp.target_end_date) * INTERVAL '1 day'), 0), 0)::bigint AS maturity_days\n" +
+                "    SELECT CAST(GREATEST(COALESCE(ll.end_date - tp.target_end_date, 0), 0) AS bigint) AS maturity_days\n" +
                 ") maturity\n" +
                 "    WHERE llsi.lease_period_id = :leasePeriodId \n" +
                 ")\n" +
-                "SELECT maturity_label,\n" +
-                "       SUM(lease_principal) AS lease_principal,\n" +
-                "       SUM(interest_payable) AS interest_payable,\n" +
-                "       SUM(lease_principal + interest_payable) AS total_amount\n" +
+                "SELECT maturity_label AS maturityLabel,\n" +
+                "       SUM(lease_principal) AS leasePrincipal,\n" +
+                "       SUM(interest_payable) AS interestPayable,\n" +
+                "       SUM(lease_principal + interest_payable) AS total\n" +
                 "FROM maturity_data\n" +
                 "GROUP BY maturity_label\n" +
                 "HAVING SUM(lease_principal) <> 0 OR SUM(interest_payable) <> 0\n" +
