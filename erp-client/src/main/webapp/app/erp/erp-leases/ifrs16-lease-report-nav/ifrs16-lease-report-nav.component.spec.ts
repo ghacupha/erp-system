@@ -41,7 +41,7 @@ describe('Ifrs16LeaseReportNavComponent', () => {
     expect(store.dispatch).toHaveBeenCalledWith(
       ifrs16LeaseContractReportSelected({ selectedLeaseContractId: 55 })
     );
-    expect(router.navigate).toHaveBeenCalledWith(['/reports/view/lease-liability-schedule-report']);
+    expect(router.navigate).toHaveBeenCalledWith(['/erp/lease-liability-schedule-view', 55]);
   });
 
   it('should mark the lease contract control when navigation is attempted without a selection', () => {
