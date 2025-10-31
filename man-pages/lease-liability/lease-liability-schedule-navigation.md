@@ -32,6 +32,15 @@ chosen contract applied to its filter panel.
 4. Leaving the dashboard triggers the reset action so subsequent visits start
    with a clean state.
 
+## Report Metadata
+
+* The `ReportMetadataSeederExtension` seeds a definition for
+  `reports/view/lease-liability-schedule-report` that exposes the backend API
+  `api/leases/lease-liability-schedule-items` with two filters:
+  `leaseContractId.equals` (typeahead) and `leasePeriodId.equals` (dropdown).
+  This keeps the dynamic dashboard reachable after deployments and aligns the
+  auto-applied contract selection with the available query parameters.
+
 ## Testing
 
 * Unit tests cover the reducer, selectors and the navigation component.
