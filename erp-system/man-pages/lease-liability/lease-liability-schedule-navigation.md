@@ -1,16 +1,10 @@
 # Lease Liability Schedule Metadata
 
-The IFRS16 liability dashboard relies on the dynamic report summary module. The
-backend now seeds a `ReportMetadata` entry for
-`reports/view/lease-liability-schedule-report` via
-`ReportMetadataSeederExtension`. The seed maps the page path to the REST
-endpoint `api/leases/lease-liability-schedule-items` and publishes two filters:
-
-* `leaseContractId.equals` — surfaced as a lease contract typeahead. It aligns
-  with the NgRx-stored contract id injected by
-  `ReportSummaryViewComponent` when the dashboard opens.
-* `leasePeriodId.equals` — exposed as a lease repayment period dropdown so the
-  schedule rows can be scoped to a reporting window.
-
-By baking this definition into the seed we avoid 404 responses when the client
-requests metadata for the dashboard slug after a fresh deployment.
+The IFRS16 liability dashboard now uses a bespoke Angular component rather than
+the generic report-summary view. `ReportMetadataSeederExtension` seeds the
+navigation entry `lease-liability-schedule-report/report-nav`, pointing at the
+same REST endpoint `api/leases/lease-liability-schedule-items` but only
+exposing the `leaseContractId.equals` filter. The dashboard itself handles
+period logic client-side, so no additional filter metadata is required. This
+ensures the search console still lists the launch point after deployments while
+preventing stale filters from constraining the schedule rows.
