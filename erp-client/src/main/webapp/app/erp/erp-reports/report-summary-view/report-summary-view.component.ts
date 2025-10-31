@@ -163,7 +163,7 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
               this.applyLeaseContractSelectionToFilters();
             } else {
               this.selectedLeaseContractId = undefined;
-              this.redirectToLeaseReportNav();
+              void this.redirectToLeaseReportNav();
             }
           });
       }
@@ -178,17 +178,18 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
     this.selectedLeaseContractId = undefined;
   }
 
-  private redirectToLeaseReportNav(): void {
+  private redirectToLeaseReportNav(): Promise<boolean> {
     if (this.activeSlug !== ReportSummaryViewComponent.LEASE_LIABILITY_SCHEDULE_SLUG) {
-      return;
+      return Promise.resolve(false);
     }
     const currentUrl = this.router.url ?? '';
     if (currentUrl.startsWith('/lease-liability-schedule-report/report-nav')) {
-      return;
+      return Promise.resolve(false);
     }
     if (currentUrl.startsWith('/reports/view/lease-liability-schedule-report')) {
-      this.router.navigate(['/lease-liability-schedule-report/report-nav']);
+      return this.router.navigate(['/lease-liability-schedule-report/report-nav']);
     }
+    return Promise.resolve(false);
   }
 
   private applyLeaseContractSelectionToFilters(target?: ReportFilterState): void {
@@ -222,32 +223,45 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
   }
 
   private fetchMetadata(slug: string): void {
+    const loadMetadata = () => {
+      this.errorMessage = null;
+      this.metadata = null;
+      this.summaryItems = [];
+      this.displayedColumns = [];
+      this.filters = [];
+      this.pendingFilterRequests = 0;
+      this.leaseContractFilterKey = undefined;
+      const pagePath = `reports/view/${slug}`;
+      this.reportMetadataService.findByPagePath(pagePath).subscribe({
+        next: metadata => {
+          if (!metadata) {
+            this.errorMessage = 'The requested report configuration was not found.';
+            return;
+          }
+          this.metadata = metadata;
+          this.titleService.setTitle(`ERP | ${metadata.reportTitle ?? 'Dynamic report'}`);
+          this.initializeFilters(this.deriveFilterDefinitions(metadata));
+        },
+        error: () => {
+          this.errorMessage = 'Unable to load report metadata. Please try again later.';
+        },
+      });
+    };
+
     if (slug === ReportSummaryViewComponent.LEASE_LIABILITY_SCHEDULE_SLUG) {
-      this.redirectToLeaseReportNav();
+      this.redirectToLeaseReportNav()
+        .then(navigated => {
+          if (!navigated) {
+            loadMetadata();
+          }
+        })
+        .catch(() => {
+          loadMetadata();
+        });
       return;
     }
-    this.errorMessage = null;
-    this.metadata = null;
-    this.summaryItems = [];
-    this.displayedColumns = [];
-    this.filters = [];
-    this.pendingFilterRequests = 0;
-    this.leaseContractFilterKey = undefined;
-    const pagePath = `reports/view/${slug}`;
-    this.reportMetadataService.findByPagePath(pagePath).subscribe({
-      next: metadata => {
-        if (!metadata) {
-          this.errorMessage = 'The requested report configuration was not found.';
-          return;
-        }
-        this.metadata = metadata;
-        this.titleService.setTitle(`ERP | ${metadata.reportTitle ?? 'Dynamic report'}`);
-        this.initializeFilters(this.deriveFilterDefinitions(metadata));
-      },
-      error: () => {
-        this.errorMessage = 'Unable to load report metadata. Please try again later.';
-      },
-    });
+
+    loadMetadata();
   }
 
   private initializeFilters(definitions: IReportFilterDefinition[]): void {
