@@ -138,7 +138,9 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
       : this.leaseLiability?.endDate ?? undefined;
   }
 
-  onPeriodChange(periodId: string): void {
+  onPeriodChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement | null;
+    const periodId = selectElement?.value;
     if (!periodId) {
       return;
     }
