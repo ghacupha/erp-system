@@ -31,7 +31,7 @@
         <select
           id="reportingPeriod"
           class="form-control"
-          (change)="onPeriodChange($event.target.value)"
+          (change)="onPeriodChange($event)"
           [disabled]="reportingPeriods.length === 0"
         >
           <option value="" disabled [selected]="!activePeriod">Select period</option>
