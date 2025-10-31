@@ -16,7 +16,7 @@ Quickly confirm the outstanding liability and payment mix for a reporting period
 **So that** I can see the latest balances and drill into the period-by-period movements.
 
 ### Acceptance criteria
-1. Navigating to `#/erp/lease-liability-schedule-view/{contractId}` loads the dashboard showing the contract title, the liability reference, and the latest reporting period selected by default.
+1. Navigating to `#/lease-liability-schedule-view/{contractId}` loads the dashboard showing the contract title, the liability reference, and the latest reporting period selected by default.
 2. Headline cards summarise the initial liability, schedule start, reporting close date, and the cash/principal/interest/outstanding/interest-payable totals for the active period.
 3. The monthly table lists each schedule row for the chosen period, including payment days since the previous entry and formatted amounts.
 4. Changing the reporting-period dropdown re-filters the table and recalculates the totals without reloading the page.
