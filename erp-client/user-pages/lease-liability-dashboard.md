@@ -4,7 +4,7 @@ The dashboard provides a consolidated view of the amortisation activity for a si
 
 ## Accessing the dashboard
 1. Ensure your account has the **Lease Manager** role.
-2. Navigate to the leases workspace and open `#/erp/lease-liability-schedule-view/{contractId}` (replace `{contractId}` with the numeric identifier of the contract).
+2. Navigate to the leases workspace and open `#/lease-liability-schedule-view/{contractId}` (replace `{contractId}` with the numeric identifier of the contract).
 3. The screen loads with the latest repayment period pre-selected.
 
 ## Understanding the layout

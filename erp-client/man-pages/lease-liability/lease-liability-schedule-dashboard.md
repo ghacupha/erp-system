@@ -1,7 +1,7 @@
 # Lease Liability Schedule Dashboard
 
 ## Purpose
-The lease liability schedule dashboard consolidates the headline IFRS16 balances for a single contract and exposes the detailed amortisation rows that make up the selected reporting period. It is accessible from the ERP leases area through the route `#/erp/lease-liability-schedule-view/{contractId}` and requires the **ROLE_LEASE_MANAGER** authority.
+The lease liability schedule dashboard consolidates the headline IFRS16 balances for a single contract and exposes the detailed amortisation rows that make up the selected reporting period. It is accessible from the ERP leases area through the route `#/lease-liability-schedule-view/{contractId}` and requires the **ROLE_LEASE_MANAGER** authority.
 
 ## Data flows
 - **Lease contract context** – fetched through `IFRS16LeaseContractService.find(contractId)` to display the lease title and identifiers.
