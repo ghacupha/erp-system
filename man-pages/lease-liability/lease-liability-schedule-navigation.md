@@ -4,7 +4,7 @@
 
 The IFRS16 lease liability schedule dashboard is now fronted by a lightweight
 parameter screen. Lease managers select an IFRS16 lease contract before they
-arrive at the bespoke dashboard route (`/lease-liability-schedule-view/{id}`).
+arrive at the bespoke dashboard route (`/erp/lease-liability-schedule-view/{id}`).
 The selection is persisted in the NgRx store so that follow-up workflows can
 reuse the chosen contract while the dedicated dashboard renders the full
 amortisation view.
@@ -25,7 +25,7 @@ amortisation view.
    renders a single IFRS16 lease contract selector built on
    `<jhi-m21-ifrs16-lease-form-control>`.
 2. Submitting the form dispatches the selection action and navigates directly to
-   `/lease-liability-schedule-view/{id}` where the Angular feature module
+   `/erp/lease-liability-schedule-view/{id}` where the Angular feature module
    renders the contract-specific dashboard.
 3. `ReportSummaryViewComponent` still guards the legacy slug; if someone lands
    on `/reports/view/lease-liability-schedule-report` the component immediately

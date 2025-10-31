@@ -30,7 +30,7 @@ import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-co
   templateUrl: './ifrs16-lease-report-nav.component.html',
 })
 export class Ifrs16LeaseReportNavComponent {
-  protected readonly reportPath = '/lease-liability-schedule-view';
+  protected readonly reportPath = '/erp/lease-liability-schedule-view';
 
   editForm = this.fb.group({
     leaseContract: [null, Validators.required],
