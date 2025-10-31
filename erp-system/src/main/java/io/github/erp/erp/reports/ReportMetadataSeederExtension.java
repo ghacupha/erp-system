@@ -62,6 +62,18 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             List.of(filter("Lease Period", "leasePeriodId.equals", "leasePeriods", "dropdown"))
         ),
         new ReportMetadataSeed(
+            "Lease Liability Schedule Dashboard",
+            "Detailed amortisation schedule rows for the selected IFRS16 lease contract, including cash and interest movements.",
+            "Leases",
+            "reports/view/lease-liability-schedule-report",
+            "api/leases/lease-liability-schedule-items",
+            true,
+            List.of(
+                filter("Lease contract", "leaseContractId.equals", "leaseContracts", "typeahead"),
+                filter("Lease period", "leasePeriodId.equals", "leaseRepaymentPeriods", "dropdown")
+            )
+        ),
+        new ReportMetadataSeed(
             "ROU Asset Balance by Account",
             "Right-of-use asset positions summarised by asset account including net book values per fiscal period.",
             "Leases",
