@@ -222,6 +222,10 @@ export class ReportSummaryViewComponent implements OnInit, OnDestroy {
   }
 
   private fetchMetadata(slug: string): void {
+    if (slug === ReportSummaryViewComponent.LEASE_LIABILITY_SCHEDULE_SLUG) {
+      this.redirectToLeaseReportNav();
+      return;
+    }
     this.errorMessage = null;
     this.metadata = null;
     this.summaryItems = [];
