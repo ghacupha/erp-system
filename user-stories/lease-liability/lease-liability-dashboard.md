@@ -4,7 +4,7 @@
 Lease Manager responsible for IFRS16 reporting.
 
 ## Narrative
-1. The Lease Manager opens the ERP leases workspace and navigates to `#/erp/lease-liability-schedule-view/{contractId}` for the contract under review.
+1. The Lease Manager opens the ERP leases workspace and navigates to `#/lease-liability-schedule-view/{contractId}` for the contract under review.
 2. The dashboard renders the contract title, liability identifier, and headline metrics for the most recent repayment period.
 3. The manager inspects the monthly schedule rows, noting the days since the previous payment and the split between cash, principal, and interest.
 4. The manager selects an earlier period from the dropdown to compare balances; the table and totals refresh immediately without a full page reload.

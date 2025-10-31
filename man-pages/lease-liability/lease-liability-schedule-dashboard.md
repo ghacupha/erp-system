@@ -1,7 +1,7 @@
 # Lease Liability Schedule Dashboard
 
 ## Overview
-A dedicated dashboard now surfaces the IFRS16 liability schedule for a single contract, combining high-level metrics with the detailed monthly rows that underpin them. Lease managers can reach the screen from the client route `#/erp/lease-liability-schedule-view/{contractId}`. Access is restricted to **ROLE_LEASE_MANAGER**.
+A dedicated dashboard now surfaces the IFRS16 liability schedule for a single contract, combining high-level metrics with the detailed monthly rows that underpin them. Lease managers can reach the screen from the client route `#/lease-liability-schedule-view/{contractId}`. Access is restricted to **ROLE_LEASE_MANAGER**.
 
 ## Implementation summary
 - The Angular feature module (`lease-liability-schedule-view`) coordinates four services to assemble the view: the lease contract, the linked liability, repayment periods, and the ordered schedule items.
