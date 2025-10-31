@@ -33,6 +33,8 @@ import org.springframework.stereotype.Repository;
 public interface ReportMetadataRepository extends JpaRepository<ReportMetadata, Long>, JpaSpecificationExecutor<ReportMetadata> {
     Optional<ReportMetadata> findOneByPagePath(String pagePath);
 
+    Optional<ReportMetadata> findOneByReportTitle(String reportTitle);
+
     @Query(
         "select rm from ReportMetadata rm where rm.active = true and (lower(rm.reportTitle) like lower(concat('%', :term, '%')) " +
         "or lower(rm.description) like lower(concat('%', :term, '%')) or lower(rm.module) like lower(concat('%', :term, '%')))"
