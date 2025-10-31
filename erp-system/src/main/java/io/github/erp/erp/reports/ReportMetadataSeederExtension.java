@@ -211,6 +211,15 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
 
     private void createOrUpdateMetadata(ReportMetadataSeed seed) {
         Optional<ReportMetadata> existing = reportMetadataRepository.findOneByPagePath(seed.pagePath());
+        if (existing.isEmpty()) {
+            existing = reportMetadataRepository.findOneByReportTitle(seed.reportTitle());
+            existing.ifPresent(metadata -> log.debug(
+                "Realigning report metadata '{}' from legacy path {} to {}",
+                seed.reportTitle(),
+                metadata.getPagePath(),
+                seed.pagePath()
+            ));
+        }
         if (existing.isPresent()) {
             ReportMetadata reportMetadata = existing.get();
             boolean changed = seed.apply(reportMetadata);
