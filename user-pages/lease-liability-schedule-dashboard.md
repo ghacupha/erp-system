@@ -4,7 +4,7 @@ The schedule dashboard is a targeted workspace for Lease Managers who need to re
 
 ## Launching the page
 1. Confirm that your role includes `ROLE_LEASE_MANAGER`.
-2. From the leases module navigate to the URL `#/erp/lease-liability-schedule-view/{contractId}`.
+2. From the leases module navigate to the URL `#/lease-liability-schedule-view/{contractId}`.
 3. The latest repayment period loads automatically so the top cards reflect the most current balances.
 
 ## Reading the dashboard

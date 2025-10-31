@@ -30,7 +30,7 @@ import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-co
   templateUrl: './ifrs16-lease-report-nav.component.html',
 })
 export class Ifrs16LeaseReportNavComponent {
-  protected readonly reportPath = '/reports/view/lease-liability-schedule-report';
+  protected readonly reportPath = '/lease-liability-schedule-view';
 
   editForm = this.fb.group({
     leaseContract: [null, Validators.required],
@@ -60,6 +60,6 @@ export class Ifrs16LeaseReportNavComponent {
     }
 
     this.store.dispatch(ifrs16LeaseContractReportSelected({ selectedLeaseContractId: contractId }));
-    this.router.navigate([this.reportPath]);
+    this.router.navigate([this.reportPath, contractId]);
   }
 }

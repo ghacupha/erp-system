@@ -4,9 +4,10 @@
 
 The IFRS16 lease liability schedule dashboard is now fronted by a lightweight
 parameter screen. Lease managers select an IFRS16 lease contract before they
-arrive at the dynamic dashboard (`reports/view/lease-liability-schedule-report`).
-The selection is persisted in the NgRx store so that the dashboard loads with the
-chosen contract applied to its filter panel.
+arrive at the bespoke dashboard route (`/lease-liability-schedule-view/{id}`).
+The selection is persisted in the NgRx store so that follow-up workflows can
+reuse the chosen contract while the dedicated dashboard renders the full
+amortisation view.
 
 ## Store Changes
 
@@ -23,23 +24,23 @@ chosen contract applied to its filter panel.
 1. The navigation component at `/lease-liability-schedule-report/report-nav`
    renders a single IFRS16 lease contract selector built on
    `<jhi-m21-ifrs16-lease-form-control>`.
-2. Submitting the form dispatches the selection action and navigates to the
-   dashboard route.
-3. `ReportSummaryViewComponent` watches the store when the slug is
-   `lease-liability-schedule-report`. If no contract id is available the user is
-   redirected back to the parameter screen. Otherwise the stored id is applied
-   to the dashboard filters and the summary data is refreshed.
+2. Submitting the form dispatches the selection action and navigates directly to
+   `/lease-liability-schedule-view/{id}` where the Angular feature module
+   renders the contract-specific dashboard.
+3. `ReportSummaryViewComponent` still guards the legacy slug; if someone lands
+   on `/reports/view/lease-liability-schedule-report` the component immediately
+   redirects back to the parameter screen so bookmarks remain valid.
 4. Leaving the dashboard triggers the reset action so subsequent visits start
    with a clean state.
 
 ## Report Metadata
 
-* The `ReportMetadataSeederExtension` seeds a definition for
-  `reports/view/lease-liability-schedule-report` that exposes the backend API
-  `api/leases/lease-liability-schedule-items` with two filters:
-  `leaseContractId.equals` (typeahead) and `leasePeriodId.equals` (dropdown).
-  This keeps the dynamic dashboard reachable after deployments and aligns the
-  auto-applied contract selection with the available query parameters.
+* The `ReportMetadataSeederExtension` now seeds the navigation entry at
+  `lease-liability-schedule-report/report-nav` with a single
+  `leaseContractId.equals` filter. The backend API remains
+  `api/leases/lease-liability-schedule-items`, giving the search console enough
+  information to surface the launch point while the bespoke dashboard handles
+  period logic client-side.
 
 ## Testing
 

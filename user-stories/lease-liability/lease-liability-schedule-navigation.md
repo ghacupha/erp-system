@@ -13,8 +13,8 @@ presented with an empty report.
 1. Launching "Liability Schedule Dashboard" from the Lease Reports menu opens a
    parameter page that contains a single IFRS16 lease contract typeahead field.
 2. Selecting a contract and clicking **Open Dashboard** routes to
-   `/reports/view/lease-liability-schedule-report` with the chosen contract
-   pre-filtered.
+   `/lease-liability-schedule-view/{contractId}` and displays the dedicated
+   dashboard component.
 3. Navigating directly to the dashboard without a stored contract id sends the
    user back to the parameter page.
 4. Leaving the dashboard clears the stored contract selection so the next visit
