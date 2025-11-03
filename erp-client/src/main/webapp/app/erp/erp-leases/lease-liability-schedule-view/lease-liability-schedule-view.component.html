@@ -131,8 +131,8 @@
               <th scope="col" class="text-right">Interest Payable</th>
             </tr>
           </thead>
-          <tbody *ngIf="filteredItems.length > 0; else emptySchedule">
-            <tr *ngFor="let item of filteredItems; let i = index; trackBy: trackBySequence">
+          <tbody *ngIf="visibleItems.length > 0; else emptySchedule">
+            <tr *ngFor="let item of visibleItems; let i = index; trackBy: trackBySequence">
               <th scope="row">{{ item.sequenceNumber }}</th>
               <td>{{ item.leasePeriod?.periodCode || (item.leasePeriod?.startDate | formatMediumDate) }}</td>
               <td>{{ item.leasePeriod?.startDate | formatMediumDate }}</td>
@@ -154,7 +154,7 @@
         </table>
         <ng-template #emptySchedule>
           <tr>
-            <td colspan="11" class="text-center py-4 text-muted">No schedule items available for the selected period.</td>
+            <td colspan="11" class="text-center py-4 text-muted">No schedule items available.</td>
           </tr>
         </ng-template>
       </div>

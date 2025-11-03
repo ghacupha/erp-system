@@ -50,7 +50,7 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
   reportingPeriods: ILeaseRepaymentPeriod[] = [];
   activePeriod: ILeaseRepaymentPeriod | null = null;
   scheduleItems: ILeaseLiabilityScheduleItem[] = [];
-  filteredItems: ILeaseLiabilityScheduleItem[] = [];
+  visibleItems: ILeaseLiabilityScheduleItem[] = [];
   summary: LeaseLiabilityScheduleSummary = this.createEmptySummary();
   loading = false;
   loadError?: string;
@@ -105,6 +105,7 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
           this.leaseLiability = this.extractFirst(responses.liability);
           this.reportingPeriods = this.preparePeriods(responses.periods);
           this.scheduleItems = this.prepareScheduleItems(responses.scheduleItems);
+          this.visibleItems = [...this.scheduleItems];
           this.setDefaultActivePeriod();
           this.loading = false;
         },
@@ -152,8 +153,13 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
     if (index === 0) {
       return null;
     }
-    const currentStart = this.filteredItems[index].leasePeriod?.startDate;
-    const previousEnd = this.filteredItems[index - 1].leasePeriod?.endDate ?? this.filteredItems[index - 1].leasePeriod?.startDate;
+    const current = this.visibleItems[index];
+    const previous = this.visibleItems[index - 1];
+    if (!current || !previous) {
+      return null;
+    }
+    const currentStart = current.leasePeriod?.startDate;
+    const previousEnd = previous.leasePeriod?.endDate ?? previous.leasePeriod?.startDate;
     if (!currentStart || !previousEnd) {
       return null;
     }
@@ -174,8 +180,8 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
 
   private setActivePeriod(period: ILeaseRepaymentPeriod | null): void {
     this.activePeriod = period;
-    this.filteredItems = this.filterItemsForPeriod(period);
-    this.summary = this.computeSummary(this.filteredItems);
+    const periodItems = this.filterItemsForPeriod(period);
+    this.summary = this.computeSummary(periodItems);
   }
 
   private filterItemsForPeriod(period: ILeaseRepaymentPeriod | null): ILeaseLiabilityScheduleItem[] {

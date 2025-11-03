@@ -194,7 +194,7 @@ describe('LeaseLiabilityScheduleViewComponent', () => {
     expect(component.leaseContract).toEqual(contract);
     expect(component.leaseLiability).toEqual(liability);
     expect(component.reportingPeriods).toHaveLength(2);
-    expect(component.filteredItems).toHaveLength(2);
+    expect(component.visibleItems).toHaveLength(2);
     expect(component.summary).toEqual(
       expect.objectContaining({
         cashTotal: 3250,
@@ -206,13 +206,13 @@ describe('LeaseLiabilityScheduleViewComponent', () => {
     );
   });
 
-  it('should update filtered items and summary when the period selection changes', () => {
+  it('should update summary when the period selection changes without altering visible items', () => {
     fixture.detectChanges();
 
     component.onPeriodChange(`${periodOne.id}`);
     fixture.detectChanges();
 
-    expect(component.filteredItems).toHaveLength(1);
+    expect(component.visibleItems).toHaveLength(2);
     expect(component.summary).toEqual(
       expect.objectContaining({
         cashTotal: 1500,
