@@ -21,6 +21,7 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import * as dayjs from 'dayjs';
+import * as XLSX from 'xlsx';
 
 import { SharedModule } from 'app/shared/shared.module';
 import { LeaseLiabilityService } from '../lease-liability/service/lease-liability.service';
@@ -236,5 +237,34 @@ describe('LeaseLiabilityScheduleViewComponent', () => {
     expect(tableRows[0].textContent).toContain('2024-02');
     expect(tableRows[0].textContent).toContain('01 Feb 2024');
     expect(tableRows[0].textContent).toContain('1,600.00');
+  });
+
+  it('should create a worksheet and trigger a download when exporting to Excel', () => {
+    fixture.detectChanges();
+
+    const aoaSpy = jest.spyOn(XLSX.utils, 'aoa_to_sheet');
+    const writeSpy = jest.spyOn(XLSX, 'write').mockReturnValue(new ArrayBuffer(8) as any);
+    const createObjectUrlSpy = jest.spyOn(URL, 'createObjectURL').mockReturnValue('blob:export');
+    const revokeObjectUrlSpy = jest.spyOn(URL, 'revokeObjectURL').mockImplementation(() => undefined);
+    const anchor = document.createElement('a');
+    const clickSpy = jest.spyOn(anchor, 'click').mockImplementation(() => undefined);
+    const createElementSpy = jest.spyOn(document, 'createElement').mockReturnValue(anchor);
+
+    try {
+      component.exportDashboardToExcel();
+
+      expect(aoaSpy).toHaveBeenCalled();
+      expect(writeSpy).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ bookType: 'xlsx', type: 'array' }));
+      expect(createObjectUrlSpy).toHaveBeenCalled();
+      expect(clickSpy).toHaveBeenCalled();
+      expect(revokeObjectUrlSpy).toHaveBeenCalledWith('blob:export');
+    } finally {
+      aoaSpy.mockRestore();
+      writeSpy.mockRestore();
+      createObjectUrlSpy.mockRestore();
+      revokeObjectUrlSpy.mockRestore();
+      createElementSpy.mockRestore();
+      clickSpy.mockRestore();
+    }
   });
 });
