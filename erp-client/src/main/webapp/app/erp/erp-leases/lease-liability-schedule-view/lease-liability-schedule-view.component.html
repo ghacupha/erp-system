@@ -26,19 +26,29 @@
           Liability reference: {{ leaseLiability.leaseId || leaseLiability.id }}
         </p>
       </div>
-      <div class="form-group mb-0">
-        <label class="form-label me-2" for="reportingPeriod">Reporting period</label>
-        <select
-          id="reportingPeriod"
-          class="form-control"
-          (change)="onPeriodChange($event)"
-          [disabled]="reportingPeriods.length === 0"
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <div class="form-group mb-0 me-md-3">
+          <label class="form-label me-2" for="reportingPeriod">Reporting period</label>
+          <select
+            id="reportingPeriod"
+            class="form-control"
+            (change)="onPeriodChange($event)"
+            [disabled]="reportingPeriods.length === 0"
+          >
+            <option value="" disabled [selected]="!activePeriod">Select period</option>
+            <option *ngFor="let period of reportingPeriods" [value]="period.id" [selected]="activePeriod?.id === period.id">
+              {{ period.periodCode || (period.startDate | formatMediumDate) }}
+            </option>
+          </select>
+        </div>
+        <button
+          type="button"
+          class="btn btn-outline-secondary text-muted mt-3 mt-md-0"
+          (click)="exportDashboardToExcel()"
+          [disabled]="loading || visibleItems.length === 0"
         >
-          <option value="" disabled [selected]="!activePeriod">Select period</option>
-          <option *ngFor="let period of reportingPeriods" [value]="period.id" [selected]="activePeriod?.id === period.id">
-            {{ period.periodCode || (period.startDate | formatMediumDate) }}
-          </option>
-        </select>
+          Export Excel
+        </button>
       </div>
     </div>
 
