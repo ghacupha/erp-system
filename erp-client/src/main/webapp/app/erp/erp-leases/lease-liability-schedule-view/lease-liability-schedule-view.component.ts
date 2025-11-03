@@ -22,6 +22,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Subscription, forkJoin, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
+import * as XLSX from 'xlsx';
 
 import { LeaseLiabilityService } from '../lease-liability/service/lease-liability.service';
 import { LeaseLiabilityScheduleItemService } from '../lease-liability-schedule-item/service/lease-liability-schedule-item.service';
@@ -168,6 +169,159 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
 
   trackBySequence(_index: number, item: ILeaseLiabilityScheduleItem): number | string | undefined {
     return item.id ?? item.sequenceNumber ?? undefined;
+  }
+
+  exportDashboardToExcel(): void {
+    if (this.loading || this.visibleItems.length === 0) {
+      return;
+    }
+
+    const worksheetRows: (string | number)[][] = [];
+
+    const leaseTitle = this.leaseContract?.leaseTitle ?? this.leaseContract?.bookingId ?? '';
+    const leaseReference = this.leaseLiability?.leaseId ?? (this.leaseLiability?.id ? `${this.leaseLiability.id}` : '');
+    const reportingPeriodLabel = this.buildReportingPeriodLabel();
+
+    worksheetRows.push(['Lease Liability Schedule Dashboard']);
+    worksheetRows.push([]);
+    worksheetRows.push(['Lease title', leaseTitle]);
+    worksheetRows.push(['Lease contract ID', this.leaseContract?.id ?? '']);
+    worksheetRows.push(['Lease reference', leaseReference]);
+    worksheetRows.push(['Reporting period', reportingPeriodLabel]);
+    worksheetRows.push([]);
+
+    worksheetRows.push(['Summary metrics']);
+    worksheetRows.push(['Metric', 'Value']);
+    worksheetRows.push(['Initial liability', this.formatNumberForExport(this.initialLiability)]);
+    worksheetRows.push(['Schedule start', this.formatDateForExport(this.startDate)]);
+    worksheetRows.push(['Reporting close', this.formatDateForExport(this.closeDate)]);
+    worksheetRows.push(['Cash payments (period)', this.formatNumberForExport(this.summary.cashTotal)]);
+    worksheetRows.push(['Principal settled', this.formatNumberForExport(this.summary.principalTotal)]);
+    worksheetRows.push(['Interest paid', this.formatNumberForExport(this.summary.interestTotal)]);
+    worksheetRows.push(['Outstanding balance', this.formatNumberForExport(this.summary.outstandingTotal)]);
+    worksheetRows.push(['Interest payable', this.formatNumberForExport(this.summary.interestPayableTotal)]);
+    worksheetRows.push([]);
+
+    worksheetRows.push(['Monthly schedule']);
+    worksheetRows.push([
+      '#',
+      'Period',
+      'Start',
+      'End',
+      'Days since previous',
+      'Opening',
+      'Cash',
+      'Principal',
+      'Interest',
+      'Outstanding',
+      'Interest payable',
+    ]);
+
+    this.visibleItems.forEach((item, index) => {
+      const daysSincePrevious = this.paymentDaysFromPrevious(index);
+      worksheetRows.push([
+        item.sequenceNumber ?? index + 1,
+        this.formatPeriodLabel(item.leasePeriod),
+        this.formatDateForExport(item.leasePeriod?.startDate),
+        this.formatDateForExport(item.leasePeriod?.endDate),
+        daysSincePrevious ?? '—',
+        this.formatNumberForExport(item.openingBalance),
+        this.formatNumberForExport(item.cashPayment),
+        this.formatNumberForExport(item.principalPayment),
+        this.formatNumberForExport(item.interestPayment),
+        this.formatNumberForExport(item.outstandingBalance),
+        this.formatNumberForExport(item.interestPayableClosing),
+      ]);
+    });
+
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetRows);
+    worksheet['!cols'] = [
+      { wch: 18 },
+      { wch: 28 },
+      { wch: 18 },
+      { wch: 18 },
+      { wch: 20 },
+      { wch: 18 },
+      { wch: 18 },
+      { wch: 18 },
+      { wch: 18 },
+      { wch: 20 },
+      { wch: 20 },
+    ];
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Lease Liability Schedule');
+    const excelBuffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
+
+    const blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+    this.triggerExcelDownload(blob);
+  }
+
+  private buildReportingPeriodLabel(): string {
+    if (!this.activePeriod) {
+      return 'Full schedule';
+    }
+    const code = this.activePeriod.periodCode;
+    const range = [this.formatDateForExport(this.activePeriod.startDate), this.formatDateForExport(this.activePeriod.endDate)]
+      .filter(value => !!value)
+      .join(' – ');
+    if (code && range) {
+      return `${code} (${range})`;
+    }
+    if (code) {
+      return code;
+    }
+    return range || 'Selected period';
+  }
+
+  private formatNumberForExport(value: number | null | undefined): string {
+    if (value === null || value === undefined) {
+      return '';
+    }
+    return value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  private formatDateForExport(value: dayjs.Dayjs | undefined): string {
+    if (!value) {
+      return '';
+    }
+    return value.format('DD MMM YYYY');
+  }
+
+  private formatPeriodLabel(period: ILeaseRepaymentPeriod | undefined): string {
+    if (!period) {
+      return '';
+    }
+    return period.periodCode ?? this.formatDateForExport(period.startDate);
+  }
+
+  private triggerExcelDownload(blob: Blob): void {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = this.buildExportFileName();
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  private buildExportFileName(): string {
+    const leaseRef = this.leaseLiability?.leaseId ?? (this.leaseLiability?.id ? `lease-${this.leaseLiability.id}` : 'lease');
+    const periodPart = this.activePeriod?.periodCode
+      ?? this.activePeriod?.startDate?.format('YYYYMM')
+      ?? 'full-schedule';
+    const sanitize = (value: string): string =>
+      value
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .replace(/-{2,}/g, '-');
+
+    const safeLease = sanitize(String(leaseRef || 'lease')) || 'lease';
+    const safePeriod = sanitize(String(periodPart || 'period')) || 'period';
+    const timestamp = dayjs().format('YYYYMMDD-HHmmss');
+    return `lease-liability-schedule-${safeLease}-${safePeriod}-${timestamp}.xlsx`;
   }
 
   private setDefaultActivePeriod(): void {
