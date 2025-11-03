@@ -26,8 +26,8 @@
           Liability reference: {{ leaseLiability.leaseId || leaseLiability.id }}
         </p>
       </div>
-      <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-end gap-2 gap-md-3">
-        <div class="form-group mb-0">
+      <div class="d-flex flex-column flex-md-row align-items-md-center">
+        <div class="form-group mb-0 me-md-3">
           <label class="form-label me-2" for="reportingPeriod">Reporting period</label>
           <select
             id="reportingPeriod"
@@ -43,7 +43,7 @@
         </div>
         <button
           type="button"
-          class="btn btn-outline-secondary text-muted w-100 w-md-auto align-self-stretch align-self-md-end"
+          class="btn btn-outline-secondary text-muted mt-3 mt-md-0"
           (click)="exportDashboardToExcel()"
           [disabled]="loading || visibleItems.length === 0"
         >
