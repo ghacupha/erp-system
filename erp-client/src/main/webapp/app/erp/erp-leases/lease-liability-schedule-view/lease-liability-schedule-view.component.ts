@@ -401,6 +401,24 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
       this.setActivePeriod(null);
       return;
     }
+    const today = dayjs().startOf('day');
+    const matchingPeriod = this.reportingPeriods.find(period => {
+      const periodStart = period.startDate ? period.startDate.startOf('day') : undefined;
+      const periodEndSource = period.endDate ?? period.startDate;
+      const periodEnd = periodEndSource ? periodEndSource.endOf('day') : undefined;
+      if (!periodStart || !periodEnd) {
+        return false;
+      }
+      const startsOnOrBeforeToday = periodStart.isSame(today, 'day') || periodStart.isBefore(today, 'day');
+      const endsOnOrAfterToday = periodEnd.isSame(today, 'day') || periodEnd.isAfter(today, 'day');
+      return startsOnOrBeforeToday && endsOnOrAfterToday;
+    });
+
+    if (matchingPeriod) {
+      this.setActivePeriod(matchingPeriod);
+      return;
+    }
+
     this.setActivePeriod(this.reportingPeriods[this.reportingPeriods.length - 1]);
   }
 
