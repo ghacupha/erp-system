@@ -19,6 +19,14 @@ For the active reporting period the component filters the schedule array by `lea
 
 The headline cards display these totals alongside the liability’s start date, the selected period’s end date, and the original liability amount. The table view also surfaces a derived “days since previous payment” metric by computing the dayjs diff between consecutive period boundaries.
 
+## Excel export structure
+- The `exportDashboardToExcel` helper now assembles a 12-column matrix so three logical panels (Lease, Stats, Reporting) can be rendered across the top of the worksheet via merged ranges.
+- Panel data sources:
+  - **Lease** – lease title, contract identifier, and liability reference for quick context.
+  - **Stats** – formatted totals for the initial liability and the cash, principal, and interest payments within the active period.
+  - **Reporting** – the reporting period label, schedule start and close, plus the closing outstanding and interest payable balances.
+- After the panels a merged "Monthly schedule" heading precedes the familiar 11-column amortisation table. The component reuses the date/number formatters so the export matches the dashboard presentation.
+
 ## Period filtering rules
 - The dropdown lists every repayment period associated with the contract.
 - Selecting a period resets the grid to only those schedule rows where `leasePeriod.id` matches the chosen identifier.

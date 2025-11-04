@@ -176,34 +176,102 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
       return;
     }
 
+    const totalColumns = 12;
+    type RowCell = { column: number; value: string | number };
+
+    const createEmptyRow = (): (string | number)[] => Array(totalColumns).fill('');
     const worksheetRows: (string | number)[][] = [];
+    const merges: XLSX.Range[] = [];
+
+    const addRow = (cells: RowCell[] = []): number => {
+      const row = createEmptyRow();
+      cells.forEach(cell => {
+        if (cell.column >= 0 && cell.column < totalColumns) {
+          row[cell.column] = cell.value;
+        }
+      });
+      worksheetRows.push(row);
+      return worksheetRows.length - 1;
+    };
 
     const leaseTitle = this.leaseContract?.leaseTitle ?? this.leaseContract?.bookingId ?? '';
     const leaseReference = this.leaseLiability?.leaseId ?? (this.leaseLiability?.id ? `${this.leaseLiability.id}` : '');
+    const leaseContractId = this.leaseContract?.id != null ? `${this.leaseContract.id}` : '';
     const reportingPeriodLabel = this.buildReportingPeriodLabel();
 
-    worksheetRows.push(['Lease Liability Schedule Dashboard']);
-    worksheetRows.push([]);
-    worksheetRows.push(['Lease title', leaseTitle]);
-    worksheetRows.push(['Lease contract ID', this.leaseContract?.id ?? '']);
-    worksheetRows.push(['Lease reference', leaseReference]);
-    worksheetRows.push(['Reporting period', reportingPeriodLabel]);
-    worksheetRows.push([]);
+    const panelWidth = 4;
+    const panelStarts = [0, panelWidth, panelWidth * 2];
+    const panels = [
+      {
+        heading: 'Lease',
+        start: panelStarts[0],
+        rows: [
+          ['Lease title', leaseTitle],
+          ['Lease contract ID', leaseContractId],
+          ['Lease reference', leaseReference],
+        ],
+      },
+      {
+        heading: 'Stats',
+        start: panelStarts[1],
+        rows: [
+          ['Initial liability', this.formatNumberForExport(this.initialLiability)],
+          ['Cash payments (period)', this.formatNumberForExport(this.summary.cashTotal)],
+          ['Principal settled', this.formatNumberForExport(this.summary.principalTotal)],
+          ['Interest paid', this.formatNumberForExport(this.summary.interestTotal)],
+        ],
+      },
+      {
+        heading: 'Reporting',
+        start: panelStarts[2],
+        rows: [
+          ['Reporting period', reportingPeriodLabel],
+          ['Schedule start', this.formatDateForExport(this.startDate)],
+          ['Reporting close', this.formatDateForExport(this.closeDate)],
+          ['Outstanding balance', this.formatNumberForExport(this.summary.outstandingTotal)],
+          ['Interest payable', this.formatNumberForExport(this.summary.interestPayableTotal)],
+        ],
+      },
+    ];
 
-    worksheetRows.push(['Summary metrics']);
-    worksheetRows.push(['Metric', 'Value']);
-    worksheetRows.push(['Initial liability', this.formatNumberForExport(this.initialLiability)]);
-    worksheetRows.push(['Schedule start', this.formatDateForExport(this.startDate)]);
-    worksheetRows.push(['Reporting close', this.formatDateForExport(this.closeDate)]);
-    worksheetRows.push(['Cash payments (period)', this.formatNumberForExport(this.summary.cashTotal)]);
-    worksheetRows.push(['Principal settled', this.formatNumberForExport(this.summary.principalTotal)]);
-    worksheetRows.push(['Interest paid', this.formatNumberForExport(this.summary.interestTotal)]);
-    worksheetRows.push(['Outstanding balance', this.formatNumberForExport(this.summary.outstandingTotal)]);
-    worksheetRows.push(['Interest payable', this.formatNumberForExport(this.summary.interestPayableTotal)]);
-    worksheetRows.push([]);
+    const titleRowIndex = addRow([{ column: 0, value: 'Lease Liability Schedule Dashboard' }]);
+    merges.push({ s: { r: titleRowIndex, c: 0 }, e: { r: titleRowIndex, c: totalColumns - 1 } });
 
-    worksheetRows.push(['Monthly schedule']);
-    worksheetRows.push([
+    addRow();
+
+    const headingsRowIndex = addRow(
+      panels.map(panel => ({ column: panel.start, value: panel.heading }))
+    );
+    panels.forEach(panel =>
+      merges.push({ s: { r: headingsRowIndex, c: panel.start }, e: { r: headingsRowIndex, c: panel.start + panelWidth - 1 } })
+    );
+
+    const maxPanelRows = Math.max(...panels.map(panel => panel.rows.length));
+    for (let rowIndex = 0; rowIndex < maxPanelRows; rowIndex++) {
+      const cells: RowCell[] = [];
+      const panelsWithValues: Array<(typeof panels)[number]> = [];
+      panels.forEach(panel => {
+        const entry = panel.rows[rowIndex];
+        if (entry) {
+          const [label, value] = entry;
+          cells.push({ column: panel.start, value: label });
+          cells.push({ column: panel.start + 1, value });
+          panelsWithValues.push(panel);
+        }
+      });
+      const currentRowIndex = addRow(cells);
+      panelsWithValues.forEach(panel =>
+        merges.push({ s: { r: currentRowIndex, c: panel.start + 1 }, e: { r: currentRowIndex, c: panel.start + panelWidth - 1 } })
+      );
+    }
+
+    addRow();
+
+    const scheduleHeadingRowIndex = addRow([{ column: 0, value: 'Monthly schedule' }]);
+    const scheduleColumnCount = 11;
+    merges.push({ s: { r: scheduleHeadingRowIndex, c: 0 }, e: { r: scheduleHeadingRowIndex, c: scheduleColumnCount - 1 } });
+
+    const scheduleHeaders = [
       '#',
       'Period',
       'Start',
@@ -215,11 +283,12 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
       'Interest',
       'Outstanding',
       'Interest payable',
-    ]);
+    ];
+    addRow(scheduleHeaders.map((header, index) => ({ column: index, value: header })));
 
     this.visibleItems.forEach((item, index) => {
       const daysSincePrevious = this.paymentDaysFromPrevious(index);
-      worksheetRows.push([
+      const rowValues: (string | number)[] = [
         item.sequenceNumber ?? index + 1,
         this.formatPeriodLabel(item.leasePeriod),
         this.formatDateForExport(item.leasePeriod?.startDate),
@@ -231,10 +300,12 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
         this.formatNumberForExport(item.interestPayment),
         this.formatNumberForExport(item.outstandingBalance),
         this.formatNumberForExport(item.interestPayableClosing),
-      ]);
+      ];
+      addRow(rowValues.map((value, column) => ({ column, value })));
     });
 
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetRows);
+    worksheet['!merges'] = merges;
     worksheet['!cols'] = [
       { wch: 18 },
       { wch: 28 },
@@ -247,6 +318,7 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
       { wch: 18 },
       { wch: 20 },
       { wch: 20 },
+      { wch: 18 },
     ];
 
     const workbook = XLSX.utils.book_new();
