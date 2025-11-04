@@ -21,3 +21,11 @@ The dashboard provides a consolidated view of the amortisation activity for a si
 ## Troubleshooting
 - If data fails to load, an alert appears at the top of the page. Refresh the browser once the underlying services are available.
 - When the selector is disabled, the contract does not yet have repayment periods—capture them first before revisiting the dashboard.
+
+## Exporting to Excel
+- Click **Export Excel** to download a workbook that mirrors the on-screen layout.
+- The top of the sheet is divided into three panels:
+  - **Lease** – title, contract ID, and liability reference so the recipient can identify the contract immediately.
+  - **Stats** – the initial liability and the cash, principal, and interest totals for the selected reporting window.
+  - **Reporting** – the reporting period label, start and close dates, and the closing outstanding and interest-payable balances.
+- The monthly schedule table appears beneath the panels using the same column order as the dashboard for easy reconciliation.
