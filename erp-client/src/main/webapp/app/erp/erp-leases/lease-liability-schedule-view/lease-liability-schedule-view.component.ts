@@ -151,20 +151,35 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
   }
 
   paymentDaysFromPrevious(index: number): number | null {
+    if (index < 0 || index >= this.visibleItems.length) {
+      return null;
+    }
     if (index === 0) {
-      return null;
+      return 0;
     }
+
     const current = this.visibleItems[index];
-    const previous = this.visibleItems[index - 1];
-    if (!current || !previous) {
+    const currentStart = current?.leasePeriod?.startDate;
+    if (!currentStart) {
       return null;
     }
-    const currentStart = current.leasePeriod?.startDate;
-    const previousEnd = previous.leasePeriod?.endDate ?? previous.leasePeriod?.startDate;
-    if (!currentStart || !previousEnd) {
-      return null;
+
+    for (let previousIndex = index - 1; previousIndex >= 0; previousIndex--) {
+      const candidate = this.visibleItems[previousIndex];
+      if (!candidate) {
+        continue;
+      }
+      const cashPayment = candidate.cashPayment ?? 0;
+      if (cashPayment > 0) {
+        const priorStart = candidate.leasePeriod?.startDate;
+        if (!priorStart) {
+          continue;
+        }
+        return currentStart.diff(priorStart, 'day');
+      }
     }
-    return currentStart.diff(previousEnd, 'day');
+
+    return null;
   }
 
   trackBySequence(_index: number, item: ILeaseLiabilityScheduleItem): number | string | undefined {
