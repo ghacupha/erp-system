@@ -9,6 +9,12 @@ A dedicated dashboard now surfaces the IFRS16 liability schedule for a single co
 - Period information is normalised to dayjs instances so that existing `formatMediumDate` pipes can be reused for display.
 - The default reporting window is the most recent repayment period, but the dropdown allows users to revisit any earlier period.
 
+## Excel export layout
+- The export workflow now builds the spreadsheet using a fixed 12-column grid to support three header panels that mirror the legacy Excel model.
+- Each panel spans four columns and is merged so the headings "Lease", "Stats", and "Reporting" render as distinct blocks across the sheet’s first rows.
+- The respective panels populate context (title, contract, reference), aggregated totals (initial liability, cash, principal, interest), and reporting metadata (period label, start/end dates, outstanding and interest-payable closing balances).
+- Below the panels, the component appends the monthly schedule with the same 11-column structure used on screen, preserving number formatting via the existing helper functions.
+
 ## Reporting behaviour
 - Headline cards display the original liability amount, the liability start, the selected period end date, and total cash/principal/interest/outstanding/interest-payable amounts calculated via array reductions across the filtered schedule rows.
 - The table presents each month’s balances (opening, cash, principal, interest, outstanding, interest payable) and annotates “days since previous payment” by comparing consecutive period boundaries.
