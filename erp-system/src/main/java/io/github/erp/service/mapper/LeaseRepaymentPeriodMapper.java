@@ -34,5 +34,8 @@ public interface LeaseRepaymentPeriodMapper extends EntityMapper<LeaseRepaymentP
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "periodCode", source = "periodCode")
+    @Mapping(target = "startDate", source = "startDate")
+    @Mapping(target = "endDate", source = "endDate")
+    @Mapping(target = "sequenceNumber", source = "sequenceNumber")
     LeaseRepaymentPeriodDTO toDtoPeriodCode(LeaseRepaymentPeriod leaseRepaymentPeriod);
 }
