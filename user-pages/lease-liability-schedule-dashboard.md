@@ -17,3 +17,8 @@ The schedule dashboard is a targeted workspace for Lease Managers who need to re
 - Use the selector to compare historical periods; the view always keeps the most recent period available for quick return.
 - If a period has no data you will see an empty-state message in the table. Review your amortisation compilation before retrying.
 - Error banners appear if the underlying services are unavailable—retry once the connection stabilises.
+
+## Export output
+- Use the **Export Excel** button to capture a workbook of the current view.
+- The export arranges the header information into three adjacent panels (Lease, Stats, Reporting) so recipients can read the contract context, key totals, and reporting window at a glance.
+- The detailed monthly schedule is appended beneath the panels with the same columns and ordering as the dashboard table.
