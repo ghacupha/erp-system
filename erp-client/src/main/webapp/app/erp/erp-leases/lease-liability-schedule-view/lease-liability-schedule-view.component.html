@@ -148,8 +148,10 @@
               <td>{{ item.leasePeriod?.startDate | formatMediumDate }}</td>
               <td>{{ item.leasePeriod?.endDate | formatMediumDate }}</td>
               <td>
-                <ng-container *ngIf="paymentDaysFromPrevious(i) as days; else firstPayment">
-                  {{ days }}
+                <ng-container *ngIf="{ value: paymentDaysFromPrevious(i) } as calculation">
+                  <ng-container *ngIf="calculation.value !== null; else firstPayment">
+                    {{ calculation.value }}
+                  </ng-container>
                 </ng-container>
                 <ng-template #firstPayment>—</ng-template>
               </td>

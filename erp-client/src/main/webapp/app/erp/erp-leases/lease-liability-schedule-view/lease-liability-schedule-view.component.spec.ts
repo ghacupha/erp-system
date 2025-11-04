@@ -225,6 +225,30 @@ describe('LeaseLiabilityScheduleViewComponent', () => {
     );
   });
 
+  it('should calculate payment day gaps based on prior cash settlements', () => {
+    fixture.detectChanges();
+
+    const customPeriods: ILeaseRepaymentPeriod[] = [
+      { id: 21, sequenceNumber: 1, startDate: dayjs('2024-01-01') },
+      { id: 22, sequenceNumber: 2 },
+      { id: 23, sequenceNumber: 3, startDate: dayjs('2024-02-10') },
+      { id: 24, sequenceNumber: 4, startDate: dayjs('2024-03-05') },
+    ];
+    const customItems: ILeaseLiabilityScheduleItem[] = [
+      { sequenceNumber: 1, cashPayment: 500, leasePeriod: customPeriods[0] },
+      { sequenceNumber: 2, cashPayment: 450, leasePeriod: customPeriods[1] },
+      { sequenceNumber: 3, cashPayment: 0, leasePeriod: customPeriods[2] },
+      { sequenceNumber: 4, cashPayment: 700, leasePeriod: customPeriods[3] },
+    ];
+
+    component.visibleItems = customItems;
+
+    expect(component.paymentDaysFromPrevious(0)).toBe(0);
+    expect(component.paymentDaysFromPrevious(1)).toBeNull();
+    expect(component.paymentDaysFromPrevious(2)).toBe(40);
+    expect(component.paymentDaysFromPrevious(3)).toBe(64);
+  });
+
   it('should render the schedule table with formatted values', () => {
     fixture.detectChanges();
 
@@ -237,6 +261,9 @@ describe('LeaseLiabilityScheduleViewComponent', () => {
     expect(tableRows[0].textContent).toContain('2024-02');
     expect(tableRows[0].textContent).toContain('01 Feb 2024');
     expect(tableRows[0].textContent).toContain('1,600.00');
+    const dayCells = tableRows.map(row => row.querySelectorAll('td')[3]?.textContent?.trim());
+    expect(dayCells[0]).toBe('0');
+    expect(dayCells[1]).toBe('0');
   });
 
   it('should create a worksheet and trigger a download when exporting to Excel', () => {
@@ -258,6 +285,12 @@ describe('LeaseLiabilityScheduleViewComponent', () => {
       expect(createObjectUrlSpy).toHaveBeenCalled();
       expect(clickSpy).toHaveBeenCalled();
       expect(revokeObjectUrlSpy).toHaveBeenCalledWith('blob:export');
+
+      const worksheetRows = aoaSpy.mock.calls[0][0] as (string | number)[][];
+      const scheduleRow = worksheetRows.find(row => row[0] === component.visibleItems[0].sequenceNumber);
+      const nextScheduleRow = worksheetRows.find(row => row[0] === component.visibleItems[1].sequenceNumber);
+      expect(scheduleRow?.[4]).toBe(0);
+      expect(nextScheduleRow?.[4]).toBe(0);
     } finally {
       aoaSpy.mockRestore();
       writeSpy.mockRestore();
