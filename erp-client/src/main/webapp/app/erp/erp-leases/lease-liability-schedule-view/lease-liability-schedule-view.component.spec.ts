@@ -82,6 +82,7 @@ describe('LeaseLiabilityScheduleViewComponent', () => {
       outstandingBalance: 123900,
       interestPayableClosing: 275,
       leasePeriod: periodOne,
+      active: true,
     },
     {
       id: 11,
@@ -93,6 +94,7 @@ describe('LeaseLiabilityScheduleViewComponent', () => {
       outstandingBalance: 122750,
       interestPayableClosing: 250,
       leasePeriod: periodTwo,
+      active: true,
     },
     {
       id: 12,
@@ -104,6 +106,7 @@ describe('LeaseLiabilityScheduleViewComponent', () => {
       outstandingBalance: 121550,
       interestPayableClosing: 225,
       leasePeriod: periodTwo,
+      active: true,
     },
   ];
 
@@ -183,6 +186,7 @@ describe('LeaseLiabilityScheduleViewComponent', () => {
     expect(leaseLiabilityService.query).toHaveBeenCalledWith({ 'leaseContractId.equals': contractId, size: 1 });
     expect(scheduleItemService.query).toHaveBeenCalledWith({
       'leaseContractId.equals': contractId,
+      'active.equals': true,
       sort: ['sequenceNumber,asc'],
       size: 1000,
     });
@@ -205,6 +209,23 @@ describe('LeaseLiabilityScheduleViewComponent', () => {
         interestPayableTotal: 475,
       })
     );
+  });
+
+  it('should drop inactive schedule rows from the prepared dataset', () => {
+    fixture.detectChanges();
+
+    const response = new HttpResponse<ILeaseLiabilityScheduleItem[]>({
+      body: [
+        { id: 1, sequenceNumber: 1, active: true },
+        { id: 2, sequenceNumber: 2, active: false },
+      ],
+    });
+
+    const prepared: ILeaseLiabilityScheduleItem[] = (component as any).prepareScheduleItems(response);
+
+    expect(prepared).toHaveLength(1);
+    expect(prepared[0].id).toBe(1);
+    expect(prepared[0].active).toBe(true);
   });
 
   it('should update summary when the period selection changes without altering visible items', () => {

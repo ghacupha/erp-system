@@ -90,6 +90,7 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
             }),
             scheduleItems: this.leaseLiabilityScheduleItemService.query({
               'leaseContractId.equals': contractId,
+              'active.equals': true,
               sort: ['sequenceNumber,asc'],
               size: 1000,
             }),
@@ -490,16 +491,19 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
   }
 
   private prepareScheduleItems(response: HttpResponse<ILeaseLiabilityScheduleItem[]>): ILeaseLiabilityScheduleItem[] {
-    const items = (response.body ?? []).map(item => ({
-      ...item,
-      leasePeriod: item.leasePeriod
-        ? {
-            ...item.leasePeriod,
-            startDate: item.leasePeriod.startDate ? dayjs(item.leasePeriod.startDate) : undefined,
-            endDate: item.leasePeriod.endDate ? dayjs(item.leasePeriod.endDate) : undefined,
-          }
-        : undefined,
-    }));
+    const items = (response.body ?? [])
+      .filter(item => item.active !== false)
+      .map(item => ({
+        ...item,
+        active: item.active !== false,
+        leasePeriod: item.leasePeriod
+          ? {
+              ...item.leasePeriod,
+              startDate: item.leasePeriod.startDate ? dayjs(item.leasePeriod.startDate) : undefined,
+              endDate: item.leasePeriod.endDate ? dayjs(item.leasePeriod.endDate) : undefined,
+            }
+          : undefined,
+      }));
     return items.sort((left, right) => {
       const leftSeq = left.sequenceNumber ?? 0;
       const rightSeq = right.sequenceNumber ?? 0;

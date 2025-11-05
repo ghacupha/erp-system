@@ -117,6 +117,19 @@
             }}</a>
           </div>
         </dd>
+        <dt><span>Active</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleItem.active ? 'Yes' : 'No' }}</span>
+        </dd>
+        <dt><span>Compilation Request</span></dt>
+        <dd>
+          <div *ngIf="leaseLiabilityScheduleItem.compilation">
+            <a [routerLink]="['/lease-liability-compilation', leaseLiabilityScheduleItem.compilation?.id, 'view']">{{
+              leaseLiabilityScheduleItem.compilation?.requestId
+            }}</a>
+          </div>
+          <span *ngIf="!leaseLiabilityScheduleItem.compilation">—</span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
