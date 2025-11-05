@@ -20,6 +20,9 @@ package io.github.erp.service.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.github.erp.domain.LeaseLiabilityCompilation;
+import io.github.erp.domain.LeaseLiabilityScheduleItem;
+import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,5 +33,20 @@ class LeaseLiabilityScheduleItemMapperTest {
     @BeforeEach
     public void setUp() {
         leaseLiabilityScheduleItemMapper = new LeaseLiabilityScheduleItemMapperImpl();
+    }
+
+    @Test
+    void shouldMapActiveFlagAndCompilationReference() {
+        LeaseLiabilityCompilation compilation = new LeaseLiabilityCompilation();
+        compilation.setId(5L);
+
+        LeaseLiabilityScheduleItem entity = new LeaseLiabilityScheduleItem().id(1L).active(true);
+        entity.setLeaseLiabilityCompilation(compilation);
+
+        LeaseLiabilityScheduleItemDTO dto = leaseLiabilityScheduleItemMapper.toDto(entity);
+
+        assertThat(dto.getActive()).isTrue();
+        assertThat(dto.getLeaseLiabilityCompilation()).isNotNull();
+        assertThat(dto.getLeaseLiabilityCompilation().getId()).isEqualTo(5L);
     }
 }

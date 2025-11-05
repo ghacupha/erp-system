@@ -29,4 +29,9 @@ import org.mapstruct.*;
 public interface LeaseLiabilityCompilationMapper extends EntityMapper<LeaseLiabilityCompilationDTO, LeaseLiabilityCompilation> {
     @Mapping(target = "requestedBy", source = "requestedBy", qualifiedByName = "applicationIdentity")
     LeaseLiabilityCompilationDTO toDto(LeaseLiabilityCompilation s);
+
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    LeaseLiabilityCompilationDTO toDtoId(LeaseLiabilityCompilation leaseLiabilityCompilation);
 }
