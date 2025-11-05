@@ -12,11 +12,13 @@ The dashboard provides a consolidated view of the amortisation activity for a si
 - **Period selector** – a dropdown listing all repayment periods for the contract. The most recent period is selected automatically.
 - **Headline cards** – display the initial liability, schedule start date, reporting close date, and the totals for cash payments, principal, interest, outstanding balance, and interest payable for the active period. All amounts are formatted with the shared numeric pipes.
 - **Monthly schedule table** – lists every amortisation row for the selected period, including payment days since the previous row and the opening/cash/principal/interest/outstanding/interest-payable values.
+- **Monthly schedule table** – lists every **active** amortisation row for the selected period, including payment days since the previous row and the opening/cash/principal/interest/outstanding/interest-payable values. Inactive rows are hidden from the dashboard so that only approved postings appear in the totals.
 
 ## Working with reporting periods
 1. Use the dropdown to switch to a different period. The totals and table update instantly without reloading the page.
 2. If a period has no schedule rows, the table shows an informative empty-state message; the headline cards continue to show the last computed totals.
 3. Switch back to the latest period at any time to return to the default view.
+4. If you need to exclude a row, untick **Active** on the schedule-item form; it disappears from the dashboard the next time data loads. Use the **Compilation Request** selector on the same form to record which lease-liability compilation produced the row.
 
 ## Troubleshooting
 - If data fails to load, an alert appears at the top of the page. Refresh the browser once the underlying services are available.

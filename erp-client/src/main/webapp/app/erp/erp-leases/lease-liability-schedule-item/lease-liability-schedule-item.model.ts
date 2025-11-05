@@ -22,6 +22,7 @@ import { ILeaseRepaymentPeriod } from '../lease-repayment-period/lease-repayment
 import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { ILeaseAmortizationSchedule } from '../lease-amortization-schedule/lease-amortization-schedule.model';
+import { ILeaseLiabilityCompilation } from '../lease-liability-compilation/lease-liability-compilation.model';
 
 export interface ILeaseLiabilityScheduleItem {
   id?: number;
@@ -40,6 +41,8 @@ export interface ILeaseLiabilityScheduleItem {
   leaseContract?: IIFRS16LeaseContract;
   leaseLiability?: ILeaseLiability;
   leasePeriod?: ILeaseRepaymentPeriod;
+  active?: boolean | null;
+  compilation?: ILeaseLiabilityCompilation | null;
 }
 
 export class LeaseLiabilityScheduleItem implements ILeaseLiabilityScheduleItem {
@@ -59,7 +62,9 @@ export class LeaseLiabilityScheduleItem implements ILeaseLiabilityScheduleItem {
     public leaseAmortizationSchedule?: ILeaseAmortizationSchedule | null,
     public leaseContract?: IIFRS16LeaseContract,
     public leaseLiability?: ILeaseLiability,
-    public leasePeriod?: ILeaseRepaymentPeriod
+    public leasePeriod?: ILeaseRepaymentPeriod,
+    public active?: boolean | null,
+    public compilation?: ILeaseLiabilityCompilation | null
   ) {}
 }
 

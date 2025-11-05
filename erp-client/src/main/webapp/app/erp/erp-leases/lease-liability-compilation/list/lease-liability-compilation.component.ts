@@ -42,6 +42,8 @@ export class LeaseLiabilityCompilationComponent implements OnInit {
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
+  rowActionLoading: Record<number, boolean> = {};
+  rowActionError: Record<number, string | undefined> = {};
 
   constructor(
     protected leaseLiabilityCompilationService: LeaseLiabilityCompilationService,
@@ -123,6 +125,30 @@ export class LeaseLiabilityCompilationComponent implements OnInit {
     });
   }
 
+  activateCompilation(leaseLiabilityCompilation: ILeaseLiabilityCompilation): void {
+    const id = leaseLiabilityCompilation.id;
+    if (id === undefined) {
+      return;
+    }
+    this.setRowActionState(id, true, undefined);
+    this.leaseLiabilityCompilationService.activate(id).subscribe({
+      next: response => this.onRowActionSuccess(id, response.body),
+      error: () => this.onRowActionError(id, 'Unable to activate compilation. Please retry.'),
+    });
+  }
+
+  deactivateCompilation(leaseLiabilityCompilation: ILeaseLiabilityCompilation): void {
+    const id = leaseLiabilityCompilation.id;
+    if (id === undefined) {
+      return;
+    }
+    this.setRowActionState(id, true, undefined);
+    this.leaseLiabilityCompilationService.deactivate(id).subscribe({
+      next: response => this.onRowActionSuccess(id, response.body),
+      error: () => this.onRowActionError(id, 'Unable to deactivate compilation. Please retry.'),
+    });
+  }
+
   protected sort(): string[] {
     const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
     if (this.predicate !== 'id') {
@@ -161,10 +187,29 @@ export class LeaseLiabilityCompilationComponent implements OnInit {
       });
     }
     this.leaseLiabilityCompilations = data ?? [];
+    this.rowActionLoading = {};
+    this.rowActionError = {};
     this.ngbPaginationPage = this.page;
   }
 
   protected onError(): void {
     this.ngbPaginationPage = this.page ?? 1;
+  }
+
+  private setRowActionState(id: number, loading: boolean, error: string | undefined): void {
+    this.rowActionLoading = { ...this.rowActionLoading, [id]: loading };
+    this.rowActionError = { ...this.rowActionError, [id]: error };
+  }
+
+  private onRowActionSuccess(id: number, updated: ILeaseLiabilityCompilation | null | undefined): void {
+    this.setRowActionState(id, false, undefined);
+    if (!updated || !this.leaseLiabilityCompilations) {
+      return;
+    }
+    this.leaseLiabilityCompilations = this.leaseLiabilityCompilations.map(item => (item.id === updated.id ? { ...item, ...updated } : item));
+  }
+
+  private onRowActionError(id: number, message: string): void {
+    this.setRowActionState(id, false, message);
   }
 }

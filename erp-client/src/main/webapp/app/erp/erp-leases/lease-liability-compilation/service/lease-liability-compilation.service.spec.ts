@@ -45,6 +45,7 @@ describe('LeaseLiabilityCompilation Service', () => {
       id: 0,
       requestId: 'AAAAAAA',
       timeOfRequest: currentDate,
+      active: true,
     };
   });
 
@@ -136,6 +137,7 @@ describe('LeaseLiabilityCompilation Service', () => {
           id: 1,
           requestId: 'BBBBBB',
           timeOfRequest: currentDate.format(DATE_TIME_FORMAT),
+          active: false,
         },
         elemDefault
       );
@@ -153,6 +155,54 @@ describe('LeaseLiabilityCompilation Service', () => {
       req.flush([returnedFromService]);
       httpMock.verify();
       expect(expectedResult).toContainEqual(expected);
+    });
+
+    it('should activate a LeaseLiabilityCompilation', () => {
+      const returnedFromService = Object.assign(
+        {
+          active: true,
+          timeOfRequest: currentDate.format(DATE_TIME_FORMAT),
+        },
+        elemDefault
+      );
+
+      const expected = Object.assign(
+        {
+          timeOfRequest: currentDate,
+        },
+        returnedFromService
+      );
+
+      service.activate(123).subscribe(resp => (expectedResult = resp.body));
+
+      const req = httpMock.expectOne(`${service['resourceUrl']}/123/activate`);
+      expect(req.request.method).toBe('POST');
+      req.flush(returnedFromService);
+      expect(expectedResult).toMatchObject(expected);
+    });
+
+    it('should deactivate a LeaseLiabilityCompilation', () => {
+      const returnedFromService = Object.assign(
+        {
+          active: false,
+          timeOfRequest: currentDate.format(DATE_TIME_FORMAT),
+        },
+        elemDefault
+      );
+
+      const expected = Object.assign(
+        {
+          timeOfRequest: currentDate,
+        },
+        returnedFromService
+      );
+
+      service.deactivate(123).subscribe(resp => (expectedResult = resp.body));
+
+      const req = httpMock.expectOne(`${service['resourceUrl']}/123/deactivate`);
+      expect(req.request.method).toBe('POST');
+      req.flush(returnedFromService);
+      expect(expectedResult).toMatchObject(expected);
     });
 
     it('should delete a LeaseLiabilityCompilation', () => {
