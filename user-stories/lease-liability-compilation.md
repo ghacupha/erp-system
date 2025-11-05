@@ -77,3 +77,14 @@ This collection of user stories documents how finance and accounting stakeholder
 - A “Lease-period schedule delta” report compares opening/closing balances, principal, interest, and cash payments between any two compilation runs for the same lease period.
 - A payment variance view flags when the scheduled cash payment diverges from the expected lease payment captured in `LeasePaymentDTO`.
 - Dashboards trend recompilations and exception counts per lease period so accounting teams can prioritize remediation.
+
+## Story 8 – Control which compilation is active for reporting
+**As an** Accounting Specialist
+**I want** to activate or deactivate an entire compilation’s schedule items through dedicated API endpoints
+**So that** I can decide which compilation feeds downstream reports without deleting historical results.
+
+### Acceptance Criteria
+- The system exposes `POST /api/leases/lease-liability-compilations/{id}/activate` and `/deactivate` endpoints restricted to authorised lease management roles.
+- When I activate a compilation, every linked schedule item flips its `active` flag to `true` and the response headers confirm the action.
+- Deactivation sets `active=false` for the compilation so archived runs can be excluded from analytics while remaining queryable for audits.
+- Newly generated schedule items already arrive tagged with the compilation ID and `active=true`, making activation a quick confirmation rather than a data fix.

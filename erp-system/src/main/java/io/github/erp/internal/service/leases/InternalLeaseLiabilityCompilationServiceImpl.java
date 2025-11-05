@@ -19,6 +19,7 @@ package io.github.erp.internal.service.leases;
  */
 import io.github.erp.domain.LeaseLiabilityCompilation;
 import io.github.erp.internal.service.applicationUser.CurrentUserContext;
+import io.github.erp.internal.service.leases.InternalLeaseLiabilityScheduleItemService;
 import io.github.erp.repository.LeaseLiabilityCompilationRepository;
 import io.github.erp.repository.search.LeaseLiabilityCompilationSearchRepository;
 import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
@@ -47,14 +48,18 @@ public class InternalLeaseLiabilityCompilationServiceImpl implements InternalLea
 
     private final LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository;
 
+    private final InternalLeaseLiabilityScheduleItemService leaseLiabilityScheduleItemService;
+
     public InternalLeaseLiabilityCompilationServiceImpl(
         LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository,
         LeaseLiabilityCompilationMapper leaseLiabilityCompilationMapper,
-        LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository
+        LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository,
+        InternalLeaseLiabilityScheduleItemService leaseLiabilityScheduleItemService
     ) {
         this.leaseLiabilityCompilationRepository = leaseLiabilityCompilationRepository;
         this.leaseLiabilityCompilationMapper = leaseLiabilityCompilationMapper;
         this.leaseLiabilityCompilationSearchRepository = leaseLiabilityCompilationSearchRepository;
+        this.leaseLiabilityScheduleItemService = leaseLiabilityScheduleItemService;
     }
 
     @Override
@@ -117,5 +122,11 @@ public class InternalLeaseLiabilityCompilationServiceImpl implements InternalLea
     public Page<LeaseLiabilityCompilationDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of LeaseLiabilityCompilations for query {}", query);
         return leaseLiabilityCompilationSearchRepository.search(query, pageable).map(leaseLiabilityCompilationMapper::toDto);
+    }
+
+    @Override
+    public int updateScheduleItemActivation(Long compilationId, boolean active) {
+        log.debug("Request to update activation flag for compilation {} to {}", compilationId, active);
+        return leaseLiabilityScheduleItemService.updateActivationByCompilation(compilationId, active);
     }
 }

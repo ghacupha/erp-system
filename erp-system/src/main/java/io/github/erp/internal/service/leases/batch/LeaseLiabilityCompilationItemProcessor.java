@@ -29,9 +29,15 @@ public class LeaseLiabilityCompilationItemProcessor implements ItemProcessor<Lea
 
     private final String batchJobIdentifier;
     private final LeaseAmortizationCompilationService leaseAmortizationCompilationService;
+    private final long leaseLiabilityCompilationId;
 
-    public LeaseLiabilityCompilationItemProcessor(String batchJobIdentifier, LeaseAmortizationCompilationService leaseAmortizationCompilationService) {
+    public LeaseLiabilityCompilationItemProcessor(
+        String batchJobIdentifier,
+        long leaseLiabilityCompilationId,
+        LeaseAmortizationCompilationService leaseAmortizationCompilationService
+    ) {
         this.batchJobIdentifier = batchJobIdentifier;
+        this.leaseLiabilityCompilationId = leaseLiabilityCompilationId;
         this.leaseAmortizationCompilationService = leaseAmortizationCompilationService;
     }
 
@@ -39,6 +45,6 @@ public class LeaseLiabilityCompilationItemProcessor implements ItemProcessor<Lea
     public List<LeaseLiabilityScheduleItemDTO> process(@NotNull LeaseLiabilityDTO model) {
 
         // TODO Use previous/current job-identifiers to identify processed
-        return leaseAmortizationCompilationService.generateAmortizationSchedule(model.getId());
+        return leaseAmortizationCompilationService.generateAmortizationSchedule(model.getId(), leaseLiabilityCompilationId);
     }
 }

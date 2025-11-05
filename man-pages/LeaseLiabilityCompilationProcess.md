@@ -23,20 +23,25 @@ This guide describes how lease data travels through the ERP System to produce IF
 - The job runs a single step named `leaseLiabilityCompilationStep` with chunk size 24.
 - Components:
   - **Reader** – `LeaseLiabilityCompilationItemReader` fetches liabilities adjacent to the compilation request using `InternalLeaseLiabilityService`.
-  - **Processor** – `LeaseLiabilityCompilationItemProcessor` delegates to the amortization service to produce schedule items per liability.
-  - **Writer** – `LeaseLiabilityCompilationItemWriter` persists each list of schedule items through `InternalLeaseLiabilityScheduleItemService`.
+  - **Processor** – `LeaseLiabilityCompilationItemProcessor` delegates to the amortization service to produce schedule items per liability and forwards the compilation identifier so downstream DTOs are tagged correctly.
+  - **Writer** – `LeaseLiabilityCompilationItemWriter` persists each list of schedule items through `InternalLeaseLiabilityScheduleItemService`, forcing the `active` flag to `true` and back-filling the compilation metadata when absent.
 
 ## Step 4 – Amortization schedule creation
 - `LeaseAmortizationService` implements `LeaseAmortizationCompilationService` and drives the calculation pipeline.
-- `generateAmortizationSchedule(Long leaseLiabilityId)` performs:
+- `generateAmortizationSchedule(Long leaseLiabilityId, Long compilationId)` performs:
   1. Retrieves the lease liability, associated IFRS16 contract, amortization calculation parameters, and amortization schedule metadata.
   2. Loads repayment periods and lease payments. Missing data triggers descriptive exceptions.
   3. Iterates through sorted periods, calculating interest accrual, interest payment, principal reduction, and outstanding balance.
-  4. Builds `LeaseLiabilityScheduleItemDTO` records with balances, payment splits, and lease period references.
+  4. Builds `LeaseLiabilityScheduleItemDTO` records with balances, payment splits, lease period references, the supplied compilation identifier, and `active=true` defaults.
 
 ## Step 5 – Persisting results
-- The batch writer stores each list of schedule items, linking them to the lease liability, contract, and amortization schedule.
+- The batch writer stores each list of schedule items, linking them to the lease liability, contract, amortization schedule, and current compilation. Every row is pre-marked as active so reporting filters immediately recognise the new run.
 - Once persisted, schedule items can be queried through existing reporting endpoints or exported for IFRS16 disclosures.
+
+## Step 6 – Activate or deactivate compiled schedules
+- Endpoints `POST /api/leases/lease-liability-compilations/{id}/activate` and `/deactivate` call `InternalLeaseLiabilityCompilationService.updateScheduleItemActivation`.
+- The service executes a bulk `UPDATE` (`updateActiveStateByCompilation`) to flip the `active` flag for every schedule item linked to the compilation, emitting standard JHipster alert headers that include the compilation identifier and affected row count payload.
+- Use these toggles to promote a compilation to production reporting or to freeze a historical run without deleting data.
 
 ## Reporting recommendations for lease-period monitoring
 To detect movement in a lease’s liability schedule for a specific repayment period, implement purpose-built reports that lean on
@@ -73,3 +78,4 @@ To detect movement in a lease’s liability schedule for a specific repayment pe
 - The batch job runs asynchronously and can be monitored via Spring Batch monitoring tools.
 - Chunk size and parallelism can be tuned in `LeaseLiabilityCompilationBatchConfig` to accommodate larger portfolios.
 - Ensure the asynchronous executor is sized to handle concurrent compilation requests without exhausting resources.
+- Activation toggles operate independently of the batch job, enabling finance teams to switch between compilations quickly while keeping historical schedules intact for audit comparisons.

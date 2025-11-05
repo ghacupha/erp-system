@@ -18,6 +18,7 @@ package io.github.erp.internal.service.leases.batch;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.internal.service.leases.InternalLeaseLiabilityScheduleItemService;
+import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import org.springframework.batch.item.ItemWriter;
 
@@ -26,10 +27,14 @@ import java.util.List;
 public class LeaseLiabilityCompilationItemWriter implements ItemWriter<List<LeaseLiabilityScheduleItemDTO>> {
 
     private final InternalLeaseLiabilityScheduleItemService internalLeaseLiabilityScheduleItemService;
+    private final long leaseLiabilityCompilationId;
 
-
-    public LeaseLiabilityCompilationItemWriter(InternalLeaseLiabilityScheduleItemService internalLeaseLiabilityScheduleItemService) {
+    public LeaseLiabilityCompilationItemWriter(
+        InternalLeaseLiabilityScheduleItemService internalLeaseLiabilityScheduleItemService,
+        long leaseLiabilityCompilationId
+    ) {
         this.internalLeaseLiabilityScheduleItemService = internalLeaseLiabilityScheduleItemService;
+        this.leaseLiabilityCompilationId = leaseLiabilityCompilationId;
     }
 
     /**
@@ -42,6 +47,18 @@ public class LeaseLiabilityCompilationItemWriter implements ItemWriter<List<Leas
      */
     @Override
     public void write(List<? extends List<LeaseLiabilityScheduleItemDTO>> items) throws Exception {
-        items.forEach(internalLeaseLiabilityScheduleItemService::saveAll);
+        items.forEach(batch -> {
+            batch.forEach(item -> {
+                item.setActive(Boolean.TRUE);
+                if (item.getLeaseLiabilityCompilation() == null) {
+                    LeaseLiabilityCompilationDTO compilationDTO = new LeaseLiabilityCompilationDTO();
+                    compilationDTO.setId(leaseLiabilityCompilationId);
+                    item.setLeaseLiabilityCompilation(compilationDTO);
+                } else if (item.getLeaseLiabilityCompilation().getId() == null) {
+                    item.getLeaseLiabilityCompilation().setId(leaseLiabilityCompilationId);
+                }
+            });
+            internalLeaseLiabilityScheduleItemService.saveAll(batch);
+        });
     }
 }

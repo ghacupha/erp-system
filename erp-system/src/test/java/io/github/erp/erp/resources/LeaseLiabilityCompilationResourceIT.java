@@ -20,11 +20,14 @@ package io.github.erp.erp.resources;
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.ApplicationUser;
 import io.github.erp.domain.LeaseLiabilityCompilation;
+import io.github.erp.domain.LeaseLiabilityScheduleItem;
 import io.github.erp.repository.LeaseLiabilityCompilationRepository;
+import io.github.erp.repository.LeaseLiabilityScheduleItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityCompilationSearchRepository;
 import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
 import io.github.erp.service.mapper.LeaseLiabilityCompilationMapper;
 import io.github.erp.web.rest.TestUtil;
+import io.github.erp.web.rest.LeaseLiabilityScheduleItemResourceIT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,6 +56,7 @@ import static io.github.erp.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -84,6 +88,9 @@ class LeaseLiabilityCompilationResourceIT {
 
     @Autowired
     private LeaseLiabilityCompilationMapper leaseLiabilityCompilationMapper;
+
+    @Autowired
+    private LeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository;
 
     /**
      * This repository is mocked in the io.github.erp.repository.search test package.
@@ -259,6 +266,58 @@ class LeaseLiabilityCompilationResourceIT {
             .andExpect(jsonPath("$.id").value(leaseLiabilityCompilation.getId().intValue()))
             .andExpect(jsonPath("$.requestId").value(DEFAULT_REQUEST_ID.toString()))
             .andExpect(jsonPath("$.timeOfRequest").value(sameInstant(DEFAULT_TIME_OF_REQUEST)));
+    }
+
+    @Test
+    @Transactional
+    void activateLeaseLiabilityCompilation() throws Exception {
+        leaseLiabilityCompilationRepository.saveAndFlush(leaseLiabilityCompilation);
+
+        LeaseLiabilityScheduleItem leaseLiabilityScheduleItem = LeaseLiabilityScheduleItemResourceIT.createEntity(em);
+        leaseLiabilityScheduleItem.setActive(false);
+        leaseLiabilityScheduleItem.setLeaseLiabilityCompilation(leaseLiabilityCompilation);
+        em.persist(leaseLiabilityScheduleItem);
+        em.flush();
+
+        restLeaseLiabilityCompilationMockMvc
+            .perform(post(ENTITY_API_URL + "/" + leaseLiabilityCompilation.getId() + "/activate").with(csrf()))
+            .andExpect(status().isNoContent())
+            .andExpect(header().string("X-erpSystemApp-alert", "leaseLiabilityCompilation.activated"));
+
+        List<LeaseLiabilityScheduleItem> items =
+            leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(leaseLiabilityCompilation.getId());
+        assertThat(items).isNotEmpty();
+        assertThat(items).allMatch(item -> Boolean.TRUE.equals(item.getActive()));
+    }
+
+    @Test
+    @Transactional
+    void deactivateLeaseLiabilityCompilation() throws Exception {
+        leaseLiabilityCompilationRepository.saveAndFlush(leaseLiabilityCompilation);
+
+        LeaseLiabilityScheduleItem leaseLiabilityScheduleItem = LeaseLiabilityScheduleItemResourceIT.createEntity(em);
+        leaseLiabilityScheduleItem.setActive(true);
+        leaseLiabilityScheduleItem.setLeaseLiabilityCompilation(leaseLiabilityCompilation);
+        em.persist(leaseLiabilityScheduleItem);
+        em.flush();
+
+        restLeaseLiabilityCompilationMockMvc
+            .perform(post(ENTITY_API_URL + "/" + leaseLiabilityCompilation.getId() + "/deactivate").with(csrf()))
+            .andExpect(status().isNoContent())
+            .andExpect(header().string("X-erpSystemApp-alert", "leaseLiabilityCompilation.deactivated"));
+
+        List<LeaseLiabilityScheduleItem> items =
+            leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(leaseLiabilityCompilation.getId());
+        assertThat(items).isNotEmpty();
+        assertThat(items).allMatch(item -> Boolean.FALSE.equals(item.getActive()));
+    }
+
+    @Test
+    @Transactional
+    void activateLeaseLiabilityCompilationNotFound() throws Exception {
+        restLeaseLiabilityCompilationMockMvc
+            .perform(post(ENTITY_API_URL + "/" + Long.MAX_VALUE + "/activate").with(csrf()))
+            .andExpect(status().isBadRequest());
     }
 
     @Test
