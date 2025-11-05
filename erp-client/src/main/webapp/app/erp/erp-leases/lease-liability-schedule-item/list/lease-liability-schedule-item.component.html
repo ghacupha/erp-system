@@ -79,6 +79,8 @@
           <th scope="col" jhiSortBy="interestPayableOpening"><span>Interest Payable Opening</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="interestAccrued"><span>Interest Accrued</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="interestPayableClosing"><span>Interest Payable Closing</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="active"><span>Active</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="compilation.requestId"><span>Compilation</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="leaseAmortizationSchedule.id">
             <span>Lease Amortization Schedule</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -104,6 +106,19 @@
           <td>{{ leaseLiabilityScheduleItem.interestPayableOpening | currency }}</td>
           <td>{{ leaseLiabilityScheduleItem.interestAccrued | currency }}</td>
           <td>{{ leaseLiabilityScheduleItem.interestPayableClosing | currency }}</td>
+          <td>
+            <span class="badge" [ngClass]="leaseLiabilityScheduleItem.active ? 'badge-success' : 'badge-secondary'">
+              {{ leaseLiabilityScheduleItem.active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td>
+            <div *ngIf="leaseLiabilityScheduleItem.compilation">
+              <a [routerLink]="['/lease-liability-compilation', leaseLiabilityScheduleItem.compilation?.id, 'view']">{{
+                leaseLiabilityScheduleItem.compilation?.requestId
+              }}</a>
+            </div>
+            <span *ngIf="!leaseLiabilityScheduleItem.compilation">—</span>
+          </td>
           <td>
             <div *ngIf="leaseLiabilityScheduleItem.leaseAmortizationSchedule">
               <a [routerLink]="['/lease-amortization-schedule', leaseLiabilityScheduleItem.leaseAmortizationSchedule?.id, 'view']">{{

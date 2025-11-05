@@ -18,6 +18,7 @@ Quickly confirm the outstanding liability and payment mix for a reporting period
 ### Acceptance criteria
 1. Navigating to `#/lease-liability-schedule-view/{contractId}` loads the dashboard showing the contract title, the liability reference, and the latest reporting period selected by default.
 2. Headline cards summarise the initial liability, schedule start, reporting close date, and the cash/principal/interest/outstanding/interest-payable totals for the active period.
-3. The monthly table lists each schedule row for the chosen period, including payment days since the previous entry and formatted amounts.
+3. The monthly table lists each **active** schedule row for the chosen period, including payment days since the previous entry and formatted amounts; rows that are saved as inactive never surface here.
 4. Changing the reporting-period dropdown re-filters the table and recalculates the totals without reloading the page.
 5. If no schedule rows exist for the chosen period the table displays an empty-state message while leaving the header metrics unchanged.
+6. A schedule item can be linked back to the compilation that produced it, and toggling the Active checkbox on the item instantly removes or restores it on the dashboard after refresh.

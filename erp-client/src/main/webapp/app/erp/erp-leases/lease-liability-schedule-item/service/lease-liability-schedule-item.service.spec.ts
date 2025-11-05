@@ -48,6 +48,7 @@ describe('LeaseLiabilityScheduleItem Service', () => {
       interestPayableOpening: 0,
       interestAccrued: 0,
       interestPayableClosing: 0,
+      active: false,
     };
   });
 
@@ -92,6 +93,7 @@ describe('LeaseLiabilityScheduleItem Service', () => {
           interestPayableOpening: 1,
           interestAccrued: 1,
           interestPayableClosing: 1,
+          active: true,
         },
         elemDefault
       );

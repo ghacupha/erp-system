@@ -291,6 +291,31 @@
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['leasePeriod'])?.errors?.required"> This field is required. </small>
         </div>
+
+        <div class="form-group form-check">
+          <input type="checkbox" class="form-check-input" id="field_active" data-cy="active" formControlName="active" />
+          <label class="form-check-label" for="field_active">Active</label>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_compilation">Compilation Request</label>
+          <select class="form-control" id="field_compilation" data-cy="compilation" name="compilation" formControlName="compilation">
+            <option [ngValue]="null">No compilation linked</option>
+            <option
+              [ngValue]="
+                leaseLiabilityCompilationOption.id === editForm.get('compilation')!.value?.id
+                  ? editForm.get('compilation')!.value
+                  : leaseLiabilityCompilationOption
+              "
+              *ngFor="
+                let leaseLiabilityCompilationOption of leaseLiabilityCompilationsSharedCollection;
+                trackBy: trackLeaseLiabilityCompilationById
+              "
+            >
+              {{ leaseLiabilityCompilationOption.requestId }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

@@ -84,6 +84,18 @@ export class LeaseLiabilityCompilationService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  activate(id: number): Observable<EntityResponseType> {
+    return this.http
+      .post<ILeaseLiabilityCompilation>(`${this.resourceUrl}/${id}/activate`, {}, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  deactivate(id: number): Observable<EntityResponseType> {
+    return this.http
+      .post<ILeaseLiabilityCompilation>(`${this.resourceUrl}/${id}/deactivate`, {}, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http

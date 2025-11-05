@@ -24,6 +24,7 @@ export interface ILeaseLiabilityCompilation {
   requestId?: string;
   timeOfRequest?: dayjs.Dayjs;
   requestedBy?: IApplicationUser | null;
+  active?: boolean | null;
 }
 
 export class LeaseLiabilityCompilation implements ILeaseLiabilityCompilation {
@@ -31,7 +32,8 @@ export class LeaseLiabilityCompilation implements ILeaseLiabilityCompilation {
     public id?: number,
     public requestId?: string,
     public timeOfRequest?: dayjs.Dayjs,
-    public requestedBy?: IApplicationUser | null
+    public requestedBy?: IApplicationUser | null,
+    public active?: boolean | null
   ) {}
 }
 
