@@ -17,6 +17,12 @@
       "otherEntityName": "applicationUser",
       "relationshipType": "many-to-one",
       "otherEntityField": "applicationIdentity"
+    },
+    {
+      "relationshipName": "leaseLiabilityScheduleItem",
+      "otherEntityName": "leaseLiabilityScheduleItem",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "leaseLiabilityCompilation"
     }
   ],
   "service": "serviceImpl",

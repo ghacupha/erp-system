@@ -35,6 +35,13 @@
     {
       "fieldName": "interestPayableClosing",
       "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean",
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "relationships": [
@@ -80,6 +87,12 @@
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "periodCode"
+    },
+    {
+      "relationshipName": "leaseLiabilityCompilation",
+      "otherEntityName": "leaseLiabilityCompilation",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
     }
   ],
   "service": "serviceImpl",

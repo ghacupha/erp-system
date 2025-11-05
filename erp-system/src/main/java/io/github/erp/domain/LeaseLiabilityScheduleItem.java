@@ -26,6 +26,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A LeaseLiabilityScheduleItem.
@@ -70,6 +72,11 @@ public class LeaseLiabilityScheduleItem implements Serializable {
 
     @Column(name = "interest_payable_closing", precision = 21, scale = 2)
     private BigDecimal interestPayableClosing;
+
+    @NotNull
+    @Column(name = "active", nullable = false)
+    @Field(type = FieldType.Boolean)
+    private Boolean active = Boolean.TRUE;
 
     @ManyToMany
     @JoinTable(
@@ -120,6 +127,13 @@ public class LeaseLiabilityScheduleItem implements Serializable {
     @NotNull
     @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
     private LeaseRepaymentPeriod leasePeriod;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "leaseLiabilityScheduleItems", "requestedBy" },
+        allowSetters = true
+    )
+    private LeaseLiabilityCompilation leaseLiabilityCompilation;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -253,6 +267,19 @@ public class LeaseLiabilityScheduleItem implements Serializable {
         this.interestPayableClosing = interestPayableClosing;
     }
 
+    public Boolean getActive() {
+        return this.active;
+    }
+
+    public LeaseLiabilityScheduleItem active(Boolean active) {
+        this.setActive(active);
+        return this;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     public Set<Placeholder> getPlaceholders() {
         return this.placeholders;
     }
@@ -351,6 +378,19 @@ public class LeaseLiabilityScheduleItem implements Serializable {
         return this;
     }
 
+    public LeaseLiabilityCompilation getLeaseLiabilityCompilation() {
+        return this.leaseLiabilityCompilation;
+    }
+
+    public void setLeaseLiabilityCompilation(LeaseLiabilityCompilation leaseLiabilityCompilation) {
+        this.leaseLiabilityCompilation = leaseLiabilityCompilation;
+    }
+
+    public LeaseLiabilityScheduleItem leaseLiabilityCompilation(LeaseLiabilityCompilation leaseLiabilityCompilation) {
+        this.setLeaseLiabilityCompilation(leaseLiabilityCompilation);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -384,6 +424,7 @@ public class LeaseLiabilityScheduleItem implements Serializable {
             ", interestPayableOpening=" + getInterestPayableOpening() +
             ", interestAccrued=" + getInterestAccrued() +
             ", interestPayableClosing=" + getInterestPayableClosing() +
+            ", active=" + getActive() +
             "}";
     }
 }

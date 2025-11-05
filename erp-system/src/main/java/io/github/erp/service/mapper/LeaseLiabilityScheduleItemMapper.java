@@ -34,6 +34,7 @@ import org.mapstruct.*;
         IFRS16LeaseContractMapper.class,
         LeaseLiabilityMapper.class,
         LeaseRepaymentPeriodMapper.class,
+        LeaseLiabilityCompilationMapper.class,
     }
 )
 public interface LeaseLiabilityScheduleItemMapper extends EntityMapper<LeaseLiabilityScheduleItemDTO, LeaseLiabilityScheduleItem> {
@@ -43,6 +44,7 @@ public interface LeaseLiabilityScheduleItemMapper extends EntityMapper<LeaseLiab
     @Mapping(target = "leaseContract", source = "leaseContract", qualifiedByName = "bookingId")
     @Mapping(target = "leaseLiability", source = "leaseLiability", qualifiedByName = "id")
     @Mapping(target = "leasePeriod", source = "leasePeriod", qualifiedByName = "periodCode")
+    @Mapping(target = "leaseLiabilityCompilation", source = "leaseLiabilityCompilation", qualifiedByName = "id")
     LeaseLiabilityScheduleItemDTO toDto(LeaseLiabilityScheduleItem s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
