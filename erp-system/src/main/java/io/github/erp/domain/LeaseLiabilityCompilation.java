@@ -21,6 +21,8 @@ package io.github.erp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -58,6 +60,22 @@ public class LeaseLiabilityCompilation implements Serializable {
         allowSetters = true
     )
     private ApplicationUser requestedBy;
+
+    @OneToMany(mappedBy = "leaseLiabilityCompilation")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "placeholders",
+            "universallyUniqueMappings",
+            "leaseAmortizationSchedule",
+            "leaseContract",
+            "leaseLiability",
+            "leasePeriod",
+            "leaseLiabilityCompilation",
+        },
+        allowSetters = true
+    )
+    private Set<LeaseLiabilityScheduleItem> leaseLiabilityScheduleItems = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -110,6 +128,37 @@ public class LeaseLiabilityCompilation implements Serializable {
 
     public LeaseLiabilityCompilation requestedBy(ApplicationUser applicationUser) {
         this.setRequestedBy(applicationUser);
+        return this;
+    }
+
+    public Set<LeaseLiabilityScheduleItem> getLeaseLiabilityScheduleItems() {
+        return this.leaseLiabilityScheduleItems;
+    }
+
+    public void setLeaseLiabilityScheduleItems(Set<LeaseLiabilityScheduleItem> leaseLiabilityScheduleItems) {
+        if (this.leaseLiabilityScheduleItems != null) {
+            this.leaseLiabilityScheduleItems.forEach(i -> i.setLeaseLiabilityCompilation(null));
+        }
+        if (leaseLiabilityScheduleItems != null) {
+            leaseLiabilityScheduleItems.forEach(i -> i.setLeaseLiabilityCompilation(this));
+        }
+        this.leaseLiabilityScheduleItems = leaseLiabilityScheduleItems;
+    }
+
+    public LeaseLiabilityCompilation leaseLiabilityScheduleItems(Set<LeaseLiabilityScheduleItem> leaseLiabilityScheduleItems) {
+        this.setLeaseLiabilityScheduleItems(leaseLiabilityScheduleItems);
+        return this;
+    }
+
+    public LeaseLiabilityCompilation addLeaseLiabilityScheduleItem(LeaseLiabilityScheduleItem leaseLiabilityScheduleItem) {
+        this.leaseLiabilityScheduleItems.add(leaseLiabilityScheduleItem);
+        leaseLiabilityScheduleItem.setLeaseLiabilityCompilation(this);
+        return this;
+    }
+
+    public LeaseLiabilityCompilation removeLeaseLiabilityScheduleItem(LeaseLiabilityScheduleItem leaseLiabilityScheduleItem) {
+        this.leaseLiabilityScheduleItems.remove(leaseLiabilityScheduleItem);
+        leaseLiabilityScheduleItem.setLeaseLiabilityCompilation(null);
         return this;
     }
 

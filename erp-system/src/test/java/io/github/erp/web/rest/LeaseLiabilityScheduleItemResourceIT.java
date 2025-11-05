@@ -29,6 +29,7 @@ import io.github.erp.IntegrationTest;
 import io.github.erp.domain.IFRS16LeaseContract;
 import io.github.erp.domain.LeaseAmortizationSchedule;
 import io.github.erp.domain.LeaseLiability;
+import io.github.erp.domain.LeaseLiabilityCompilation;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
 import io.github.erp.domain.LeaseRepaymentPeriod;
 import io.github.erp.domain.Placeholder;
@@ -105,6 +106,9 @@ class LeaseLiabilityScheduleItemResourceIT {
     private static final BigDecimal UPDATED_INTEREST_PAYABLE_CLOSING = new BigDecimal(2);
     private static final BigDecimal SMALLER_INTEREST_PAYABLE_CLOSING = new BigDecimal(1 - 1);
 
+    private static final Boolean DEFAULT_ACTIVE = true;
+    private static final Boolean UPDATED_ACTIVE = false;
+
     private static final String ENTITY_API_URL = "/api/lease-liability-schedule-items";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/lease-liability-schedule-items";
@@ -156,7 +160,8 @@ class LeaseLiabilityScheduleItemResourceIT {
             .outstandingBalance(DEFAULT_OUTSTANDING_BALANCE)
             .interestPayableOpening(DEFAULT_INTEREST_PAYABLE_OPENING)
             .interestAccrued(DEFAULT_INTEREST_ACCRUED)
-            .interestPayableClosing(DEFAULT_INTEREST_PAYABLE_CLOSING);
+            .interestPayableClosing(DEFAULT_INTEREST_PAYABLE_CLOSING)
+            .active(DEFAULT_ACTIVE);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -206,7 +211,8 @@ class LeaseLiabilityScheduleItemResourceIT {
             .outstandingBalance(UPDATED_OUTSTANDING_BALANCE)
             .interestPayableOpening(UPDATED_INTEREST_PAYABLE_OPENING)
             .interestAccrued(UPDATED_INTEREST_ACCRUED)
-            .interestPayableClosing(UPDATED_INTEREST_PAYABLE_CLOSING);
+            .interestPayableClosing(UPDATED_INTEREST_PAYABLE_CLOSING)
+            .active(UPDATED_ACTIVE);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -274,6 +280,7 @@ class LeaseLiabilityScheduleItemResourceIT {
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayableOpening()).isEqualByComparingTo(DEFAULT_INTEREST_PAYABLE_OPENING);
         assertThat(testLeaseLiabilityScheduleItem.getInterestAccrued()).isEqualByComparingTo(DEFAULT_INTEREST_ACCRUED);
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayableClosing()).isEqualByComparingTo(DEFAULT_INTEREST_PAYABLE_CLOSING);
+        assertThat(testLeaseLiabilityScheduleItem.getActive()).isEqualTo(DEFAULT_ACTIVE);
 
         // Validate the LeaseLiabilityScheduleItem in Elasticsearch
         verify(mockLeaseLiabilityScheduleItemSearchRepository, times(1)).save(testLeaseLiabilityScheduleItem);
@@ -307,6 +314,26 @@ class LeaseLiabilityScheduleItemResourceIT {
 
     @Test
     @Transactional
+    void checkActiveIsRequired() throws Exception {
+        int databaseSizeBeforeTest = leaseLiabilityScheduleItemRepository.findAll().size();
+        leaseLiabilityScheduleItem.setActive(null);
+
+        LeaseLiabilityScheduleItemDTO leaseLiabilityScheduleItemDTO = leaseLiabilityScheduleItemMapper.toDto(leaseLiabilityScheduleItem);
+
+        restLeaseLiabilityScheduleItemMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(leaseLiabilityScheduleItemDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<LeaseLiabilityScheduleItem> leaseLiabilityScheduleItemList = leaseLiabilityScheduleItemRepository.findAll();
+        assertThat(leaseLiabilityScheduleItemList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllLeaseLiabilityScheduleItems() throws Exception {
         // Initialize the database
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
@@ -325,7 +352,8 @@ class LeaseLiabilityScheduleItemResourceIT {
             .andExpect(jsonPath("$.[*].outstandingBalance").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_BALANCE))))
             .andExpect(jsonPath("$.[*].interestPayableOpening").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_OPENING))))
             .andExpect(jsonPath("$.[*].interestAccrued").value(hasItem(sameNumber(DEFAULT_INTEREST_ACCRUED))))
-            .andExpect(jsonPath("$.[*].interestPayableClosing").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_CLOSING))));
+            .andExpect(jsonPath("$.[*].interestPayableClosing").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_CLOSING))))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -366,7 +394,8 @@ class LeaseLiabilityScheduleItemResourceIT {
             .andExpect(jsonPath("$.outstandingBalance").value(sameNumber(DEFAULT_OUTSTANDING_BALANCE)))
             .andExpect(jsonPath("$.interestPayableOpening").value(sameNumber(DEFAULT_INTEREST_PAYABLE_OPENING)))
             .andExpect(jsonPath("$.interestAccrued").value(sameNumber(DEFAULT_INTEREST_ACCRUED)))
-            .andExpect(jsonPath("$.interestPayableClosing").value(sameNumber(DEFAULT_INTEREST_PAYABLE_CLOSING)));
+            .andExpect(jsonPath("$.interestPayableClosing").value(sameNumber(DEFAULT_INTEREST_PAYABLE_CLOSING)))
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
     @Test
@@ -1333,6 +1362,69 @@ class LeaseLiabilityScheduleItemResourceIT {
 
     @Test
     @Transactional
+    void getAllLeaseLiabilityScheduleItemsByActiveIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+
+        // Get all the leaseLiabilityScheduleItemList where active equals to DEFAULT_ACTIVE
+        defaultLeaseLiabilityScheduleItemShouldBeFound("active.equals=" + DEFAULT_ACTIVE);
+
+        // Get all the leaseLiabilityScheduleItemList where active equals to UPDATED_ACTIVE
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByActiveIsInShouldWork() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+
+        // Get all the leaseLiabilityScheduleItemList where active in DEFAULT_ACTIVE or UPDATED_ACTIVE
+        defaultLeaseLiabilityScheduleItemShouldBeFound("active.in=" + DEFAULT_ACTIVE + "," + UPDATED_ACTIVE);
+
+        // Get all the leaseLiabilityScheduleItemList where active equals to UPDATED_ACTIVE
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("active.in=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByActiveIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+
+        // Get all the leaseLiabilityScheduleItemList where active is not null
+        defaultLeaseLiabilityScheduleItemShouldBeFound("active.specified=true");
+
+        // Get all the leaseLiabilityScheduleItemList where active is null
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("active.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityScheduleItemsByLeaseLiabilityCompilationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        LeaseLiabilityCompilation leaseLiabilityCompilation;
+        if (TestUtil.findAll(em, LeaseLiabilityCompilation.class).isEmpty()) {
+            leaseLiabilityCompilation = LeaseLiabilityCompilationResourceIT.createEntity(em);
+            em.persist(leaseLiabilityCompilation);
+            em.flush();
+        } else {
+            leaseLiabilityCompilation = TestUtil.findAll(em, LeaseLiabilityCompilation.class).get(0);
+        }
+        leaseLiabilityScheduleItem.setLeaseLiabilityCompilation(leaseLiabilityCompilation);
+        leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
+        Long leaseLiabilityCompilationId = leaseLiabilityCompilation.getId();
+
+        // Get all the leaseLiabilityScheduleItemList where leaseLiabilityCompilation equals to leaseLiabilityCompilationId
+        defaultLeaseLiabilityScheduleItemShouldBeFound("leaseLiabilityCompilationId.equals=" + leaseLiabilityCompilationId);
+
+        // Get all the leaseLiabilityScheduleItemList where leaseLiabilityCompilation equals to leaseLiabilityCompilationId + 1
+        defaultLeaseLiabilityScheduleItemShouldNotBeFound("leaseLiabilityCompilationId.equals=" + (leaseLiabilityCompilationId + 1));
+    }
+
+    @Test
+    @Transactional
     void getAllLeaseLiabilityScheduleItemsByPlaceholderIsEqualToSomething() throws Exception {
         // Initialize the database
         leaseLiabilityScheduleItemRepository.saveAndFlush(leaseLiabilityScheduleItem);
@@ -1504,7 +1596,8 @@ class LeaseLiabilityScheduleItemResourceIT {
             .andExpect(jsonPath("$.[*].outstandingBalance").value(hasItem(sameNumber(DEFAULT_OUTSTANDING_BALANCE))))
             .andExpect(jsonPath("$.[*].interestPayableOpening").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_OPENING))))
             .andExpect(jsonPath("$.[*].interestAccrued").value(hasItem(sameNumber(DEFAULT_INTEREST_ACCRUED))))
-            .andExpect(jsonPath("$.[*].interestPayableClosing").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_CLOSING))));
+            .andExpect(jsonPath("$.[*].interestPayableClosing").value(hasItem(sameNumber(DEFAULT_INTEREST_PAYABLE_CLOSING))))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
         restLeaseLiabilityScheduleItemMockMvc
@@ -1563,7 +1656,8 @@ class LeaseLiabilityScheduleItemResourceIT {
             .outstandingBalance(UPDATED_OUTSTANDING_BALANCE)
             .interestPayableOpening(UPDATED_INTEREST_PAYABLE_OPENING)
             .interestAccrued(UPDATED_INTEREST_ACCRUED)
-            .interestPayableClosing(UPDATED_INTEREST_PAYABLE_CLOSING);
+            .interestPayableClosing(UPDATED_INTEREST_PAYABLE_CLOSING)
+            .active(UPDATED_ACTIVE);
         LeaseLiabilityScheduleItemDTO leaseLiabilityScheduleItemDTO = leaseLiabilityScheduleItemMapper.toDto(
             updatedLeaseLiabilityScheduleItem
         );
@@ -1591,6 +1685,7 @@ class LeaseLiabilityScheduleItemResourceIT {
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayableOpening()).isEqualTo(UPDATED_INTEREST_PAYABLE_OPENING);
         assertThat(testLeaseLiabilityScheduleItem.getInterestAccrued()).isEqualTo(UPDATED_INTEREST_ACCRUED);
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayableClosing()).isEqualTo(UPDATED_INTEREST_PAYABLE_CLOSING);
+        assertThat(testLeaseLiabilityScheduleItem.getActive()).isEqualTo(UPDATED_ACTIVE);
 
         // Validate the LeaseLiabilityScheduleItem in Elasticsearch
         verify(mockLeaseLiabilityScheduleItemSearchRepository).save(testLeaseLiabilityScheduleItem);
@@ -1715,6 +1810,7 @@ class LeaseLiabilityScheduleItemResourceIT {
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayableOpening()).isEqualByComparingTo(DEFAULT_INTEREST_PAYABLE_OPENING);
         assertThat(testLeaseLiabilityScheduleItem.getInterestAccrued()).isEqualByComparingTo(DEFAULT_INTEREST_ACCRUED);
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayableClosing()).isEqualByComparingTo(DEFAULT_INTEREST_PAYABLE_CLOSING);
+        assertThat(testLeaseLiabilityScheduleItem.getActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
     @Test
@@ -1738,7 +1834,8 @@ class LeaseLiabilityScheduleItemResourceIT {
             .outstandingBalance(UPDATED_OUTSTANDING_BALANCE)
             .interestPayableOpening(UPDATED_INTEREST_PAYABLE_OPENING)
             .interestAccrued(UPDATED_INTEREST_ACCRUED)
-            .interestPayableClosing(UPDATED_INTEREST_PAYABLE_CLOSING);
+            .interestPayableClosing(UPDATED_INTEREST_PAYABLE_CLOSING)
+            .active(UPDATED_ACTIVE);
 
         restLeaseLiabilityScheduleItemMockMvc
             .perform(
@@ -1763,6 +1860,7 @@ class LeaseLiabilityScheduleItemResourceIT {
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayableOpening()).isEqualByComparingTo(UPDATED_INTEREST_PAYABLE_OPENING);
         assertThat(testLeaseLiabilityScheduleItem.getInterestAccrued()).isEqualByComparingTo(UPDATED_INTEREST_ACCRUED);
         assertThat(testLeaseLiabilityScheduleItem.getInterestPayableClosing()).isEqualByComparingTo(UPDATED_INTEREST_PAYABLE_CLOSING);
+        assertThat(testLeaseLiabilityScheduleItem.getActive()).isEqualTo(UPDATED_ACTIVE);
     }
 
     @Test

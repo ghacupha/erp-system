@@ -63,6 +63,8 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
 
     private BigDecimalFilter interestPayableClosing;
 
+    private BooleanFilter active;
+
     private LongFilter placeholderId;
 
     private LongFilter universallyUniqueMappingId;
@@ -74,6 +76,8 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
     private LongFilter leaseLiabilityId;
 
     private LongFilter leasePeriodId;
+
+    private LongFilter leaseLiabilityCompilationId;
 
     private Boolean distinct;
 
@@ -90,12 +94,14 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
         this.interestPayableOpening = other.interestPayableOpening == null ? null : other.interestPayableOpening.copy();
         this.interestAccrued = other.interestAccrued == null ? null : other.interestAccrued.copy();
         this.interestPayableClosing = other.interestPayableClosing == null ? null : other.interestPayableClosing.copy();
+        this.active = other.active == null ? null : other.active.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
         this.universallyUniqueMappingId = other.universallyUniqueMappingId == null ? null : other.universallyUniqueMappingId.copy();
         this.leaseAmortizationScheduleId = other.leaseAmortizationScheduleId == null ? null : other.leaseAmortizationScheduleId.copy();
         this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
         this.leaseLiabilityId = other.leaseLiabilityId == null ? null : other.leaseLiabilityId.copy();
         this.leasePeriodId = other.leasePeriodId == null ? null : other.leasePeriodId.copy();
+        this.leaseLiabilityCompilationId = other.leaseLiabilityCompilationId == null ? null : other.leaseLiabilityCompilationId.copy();
         this.distinct = other.distinct;
     }
 
@@ -254,6 +260,21 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
         this.interestPayableClosing = interestPayableClosing;
     }
 
+    public BooleanFilter getActive() {
+        return active;
+    }
+
+    public BooleanFilter active() {
+        if (active == null) {
+            active = new BooleanFilter();
+        }
+        return active;
+    }
+
+    public void setActive(BooleanFilter active) {
+        this.active = active;
+    }
+
     public LongFilter getPlaceholderId() {
         return placeholderId;
     }
@@ -344,6 +365,21 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
         this.leasePeriodId = leasePeriodId;
     }
 
+    public LongFilter getLeaseLiabilityCompilationId() {
+        return leaseLiabilityCompilationId;
+    }
+
+    public LongFilter leaseLiabilityCompilationId() {
+        if (leaseLiabilityCompilationId == null) {
+            leaseLiabilityCompilationId = new LongFilter();
+        }
+        return leaseLiabilityCompilationId;
+    }
+
+    public void setLeaseLiabilityCompilationId(LongFilter leaseLiabilityCompilationId) {
+        this.leaseLiabilityCompilationId = leaseLiabilityCompilationId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -372,12 +408,14 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             Objects.equals(interestPayableOpening, that.interestPayableOpening) &&
             Objects.equals(interestAccrued, that.interestAccrued) &&
             Objects.equals(interestPayableClosing, that.interestPayableClosing) &&
+            Objects.equals(active, that.active) &&
             Objects.equals(placeholderId, that.placeholderId) &&
             Objects.equals(universallyUniqueMappingId, that.universallyUniqueMappingId) &&
             Objects.equals(leaseAmortizationScheduleId, that.leaseAmortizationScheduleId) &&
             Objects.equals(leaseContractId, that.leaseContractId) &&
             Objects.equals(leaseLiabilityId, that.leaseLiabilityId) &&
             Objects.equals(leasePeriodId, that.leasePeriodId) &&
+            Objects.equals(leaseLiabilityCompilationId, that.leaseLiabilityCompilationId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -395,12 +433,14 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             interestPayableOpening,
             interestAccrued,
             interestPayableClosing,
+            active,
             placeholderId,
             universallyUniqueMappingId,
             leaseAmortizationScheduleId,
             leaseContractId,
             leaseLiabilityId,
             leasePeriodId,
+            leaseLiabilityCompilationId,
             distinct
         );
     }
@@ -419,12 +459,14 @@ public class LeaseLiabilityScheduleItemCriteria implements Serializable, Criteri
             (interestPayableOpening != null ? "interestPayableOpening=" + interestPayableOpening + ", " : "") +
             (interestAccrued != null ? "interestAccrued=" + interestAccrued + ", " : "") +
             (interestPayableClosing != null ? "interestPayableClosing=" + interestPayableClosing + ", " : "") +
+            (active != null ? "active=" + active + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
             (universallyUniqueMappingId != null ? "universallyUniqueMappingId=" + universallyUniqueMappingId + ", " : "") +
             (leaseAmortizationScheduleId != null ? "leaseAmortizationScheduleId=" + leaseAmortizationScheduleId + ", " : "") +
             (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
             (leaseLiabilityId != null ? "leaseLiabilityId=" + leaseLiabilityId + ", " : "") +
             (leasePeriodId != null ? "leasePeriodId=" + leasePeriodId + ", " : "") +
+            (leaseLiabilityCompilationId != null ? "leaseLiabilityCompilationId=" + leaseLiabilityCompilationId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

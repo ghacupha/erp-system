@@ -42,6 +42,17 @@ amortisation view.
   information to surface the launch point while the bespoke dashboard handles
   period logic client-side.
 
+## Schedule Data Controls
+
+* `LeaseLiabilityScheduleItem` rows now include an `active` flag that defaults
+  to `true`. The REST resource exposes `active.equals` and
+  `active.specified` filters, allowing the dashboard to hide suppressed rows
+  without losing the audit trail for prior compilations.
+* Each schedule item can reference the `leaseLiabilityCompilationId` that
+  produced it. Providing this filter scopes the API response to a single
+  compilation request so finance teams can review the exact batch that was
+  handed off for approval.
+
 ## Testing
 
 * Unit tests cover the reducer, selectors and the navigation component.

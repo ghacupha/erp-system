@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20250205121500-1" author="ai">
+        <addColumn tableName="lease_liability_schedule_item">
+            <column name="active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lease_liability_compilation_id" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250205121500-2" author="ai">
+        <createIndex indexName="idx_lease_schedule_item_compilation" tableName="lease_liability_schedule_item">
+            <column name="lease_liability_compilation_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20250205121500-3" author="ai">
+        <addForeignKeyConstraint
+            baseTableName="lease_liability_schedule_item"
+            baseColumnNames="lease_liability_compilation_id"
+            constraintName="fk_lease_schedule_item_compilation"
+            referencedTableName="lease_liability_compilation"
+            referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
