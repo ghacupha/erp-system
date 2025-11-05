@@ -160,6 +160,11 @@ public class LeaseLiabilityScheduleItemQueryService extends QueryService<LeaseLi
                         buildRangeSpecification(criteria.getInterestPayableClosing(), LeaseLiabilityScheduleItem_.interestPayableClosing)
                     );
             }
+            if (criteria.getActive() != null) {
+                specification = specification.and(
+                    buildSpecification(criteria.getActive(), LeaseLiabilityScheduleItem_.active)
+                );
+            }
             if (criteria.getPlaceholderId() != null) {
                 specification =
                     specification.and(
@@ -217,6 +222,18 @@ public class LeaseLiabilityScheduleItemQueryService extends QueryService<LeaseLi
                         buildSpecification(
                             criteria.getLeasePeriodId(),
                             root -> root.join(LeaseLiabilityScheduleItem_.leasePeriod, JoinType.LEFT).get(LeaseRepaymentPeriod_.id)
+                        )
+                    );
+            }
+            if (criteria.getLeaseLiabilityCompilationId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeaseLiabilityCompilationId(),
+                            root ->
+                                root
+                                    .join(LeaseLiabilityScheduleItem_.leaseLiabilityCompilation, JoinType.LEFT)
+                                    .get(LeaseLiabilityCompilation_.id)
                         )
                     );
             }

@@ -50,6 +50,8 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
 
     private BigDecimal interestPayableClosing;
 
+    private Boolean active;
+
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
 
     private Set<UniversallyUniqueMappingDTO> universallyUniqueMappings = new HashSet<>();
@@ -61,6 +63,8 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
     private LeaseLiabilityDTO leaseLiability;
 
     private LeaseRepaymentPeriodDTO leasePeriod;
+
+    private LeaseLiabilityCompilationDTO leaseLiabilityCompilation;
 
     public Long getId() {
         return id;
@@ -142,6 +146,14 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
         this.interestPayableClosing = interestPayableClosing;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     public Set<PlaceholderDTO> getPlaceholders() {
         return placeholders;
     }
@@ -190,6 +202,14 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
         this.leasePeriod = leasePeriod;
     }
 
+    public LeaseLiabilityCompilationDTO getLeaseLiabilityCompilation() {
+        return leaseLiabilityCompilation;
+    }
+
+    public void setLeaseLiabilityCompilation(LeaseLiabilityCompilationDTO leaseLiabilityCompilation) {
+        this.leaseLiabilityCompilation = leaseLiabilityCompilation;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -231,6 +251,8 @@ public class LeaseLiabilityScheduleItemDTO implements Serializable {
             ", leaseContract=" + getLeaseContract() +
             ", leaseLiability=" + getLeaseLiability() +
             ", leasePeriod=" + getLeasePeriod() +
+            ", active=" + getActive() +
+            ", leaseLiabilityCompilation=" + getLeaseLiabilityCompilation() +
             "}";
     }
 }
