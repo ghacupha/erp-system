@@ -108,10 +108,12 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
     ) {
 
         List<LeaseLiabilityScheduleItemDTO> scheduleItems = new ArrayList<>();
-        LeaseLiabilityCompilationDTO leaseLiabilityCompilationDTO = null;
+        LeaseLiabilityCompilationDTO leaseLiabilityCompilationDTO;
         if (compilationId != null) {
             leaseLiabilityCompilationDTO = new LeaseLiabilityCompilationDTO();
             leaseLiabilityCompilationDTO.setId(compilationId);
+        } else {
+            leaseLiabilityCompilationDTO = null;
         }
         BigDecimal monthlyRate = calculation.getInterestRate().divide(BigDecimal.valueOf(12), ROUND_HALF_EVEN);
         var openingBalanceRef = new Object() {
