@@ -75,4 +75,6 @@ public interface InternalLeaseLiabilityCompilationService {
      * @return the list of entities.
      */
     Page<LeaseLiabilityCompilationDTO> search(String query, Pageable pageable);
+
+    int updateScheduleItemActivation(Long compilationId, boolean active);
 }

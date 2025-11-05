@@ -9,12 +9,14 @@ This manual documents the backend workflow that produces IFRS16 lease amortizati
 3. **Batch job kick-off** – `LeaseLiabilityCompilationJobImpl` constructs Spring Batch `JobParameters` (job token, batch identifier, request ID) and launches the `leaseLiabilityCompilationJob`.
 4. **Chunk-oriented processing** – `LeaseLiabilityCompilationBatchConfig` wires the reader, processor, and writer beans that handle liabilities in chunks of 24.
 5. **Schedule calculation** – `LeaseAmortizationService` aggregates liability, contract, calculation, repayment period, and payment data to build `LeaseLiabilityScheduleItemDTO` results.
-6. **Persistence** – `LeaseLiabilityCompilationItemWriter` commits the generated schedule items using `InternalLeaseLiabilityScheduleItemService.saveAll`.
+6. **Persistence** – `LeaseLiabilityCompilationItemWriter` commits the generated schedule items using `InternalLeaseLiabilityScheduleItemService.saveAll` while forcing `active=true` and stamping the current compilation identifier.
+7. **Activation toggle** – `/api/leases/lease-liability-compilations/{id}/activate` and `/deactivate` delegate to `InternalLeaseLiabilityCompilationService.updateScheduleItemActivation` so downstream reports can switch between historical and promoted compilations without rewriting data.
 
 ## Detailed Components
 ### REST Resource
 - Validates that incoming DTOs do not carry an ID and delegates persistence to `InternalLeaseLiabilityCompilationService`.
 - Exposes the POST route under `/api/leases/lease-liability-compilations`.
+- Provides secured activation toggles under `/api/leases/lease-liability-compilations/{id}/activate` and `/deactivate`. These routes check the compilation’s existence and emit JHipster alert headers containing the affected row count identifier payload.
 - Other CRUD endpoints remain available for querying compilations after processing.
 
 ### Interceptor
@@ -24,11 +26,11 @@ This manual documents the backend workflow that produces IFRS16 lease amortizati
 
 ### Batch Infrastructure
 - `LeaseLiabilityCompilationItemReader` pulls liabilities tied to the compilation request and batch identifier.
-- `LeaseLiabilityCompilationItemProcessor` transforms each liability into a list of schedule items by calling the amortization service.
-- `LeaseLiabilityCompilationItemWriter` iterates over each list and saves it in bulk.
+- `LeaseLiabilityCompilationItemProcessor` transforms each liability into a list of schedule items by calling the amortization service and forwarding the compilation ID.
+- `LeaseLiabilityCompilationItemWriter` iterates over each list, forces every DTO to be active, back-fills missing compilation metadata, and saves it in bulk.
 
 ### Amortization Logic
-- `generateAmortizationSchedule` checks for the existence of the liability, contract, calculation, payments, and amortization schedule records.
+- `generateAmortizationSchedule` checks for the existence of the liability, contract, calculation, payments, and amortization schedule records and attaches the compilation identifier supplied by the processor.
 - It derives a monthly rate from the calculation’s interest rate, aligns payments with repayment periods, and maintains running balances for interest and principal.
 - Each `LeaseLiabilityScheduleItemDTO` captures opening balance, cash payment, split between interest and principal, outstanding balance, and links to the lease period and amortization schedule metadata.
 
@@ -36,6 +38,7 @@ This manual documents the backend workflow that produces IFRS16 lease amortizati
 - Monitor job executions via Spring Batch tooling; job parameters include the batch identifier for correlation.
 - Missing prerequisite data surfaces as `IllegalArgumentException`s—capture these in logs or monitoring dashboards to inform data stewards.
 - Adjust chunk size or introduce parallel steps in `LeaseLiabilityCompilationBatchConfig` when scaling to larger portfolios.
+- Use the activation/deactivation endpoints when promoting a compilation to production reporting or when freezing a run for audit review. The service performs a bulk `UPDATE` via `updateActiveStateByCompilation` so large compilations can switch state without reprocessing schedules.
 
 ## Reporting recommendations for lease-period monitoring
 Engineering teams can expose focused reports to track how schedule items evolve for a specific lease period and compilation run.

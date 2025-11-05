@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -50,4 +51,12 @@ public interface InternalLeaseLiabilityScheduleItemRepository
         "select leaseLiabilityScheduleItem from LeaseLiabilityScheduleItem leaseLiabilityScheduleItem left join fetch leaseLiabilityScheduleItem.placeholders left join fetch leaseLiabilityScheduleItem.universallyUniqueMappings where leaseLiabilityScheduleItem.id =:id"
     )
     Optional<LeaseLiabilityScheduleItem> findOneWithEagerRelationships(@Param("id") Long id);
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+        "update LeaseLiabilityScheduleItem item set item.active = :active where item.leaseLiabilityCompilation.id = :compilationId"
+    )
+    int updateActiveStateByCompilation(@Param("compilationId") Long compilationId, @Param("active") boolean active);
+
+    List<LeaseLiabilityScheduleItem> findByLeaseLiabilityCompilationId(Long compilationId);
 }
