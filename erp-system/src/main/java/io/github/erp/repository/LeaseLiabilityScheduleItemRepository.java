@@ -48,4 +48,12 @@ public interface LeaseLiabilityScheduleItemRepository
         "select leaseLiabilityScheduleItem from LeaseLiabilityScheduleItem leaseLiabilityScheduleItem left join fetch leaseLiabilityScheduleItem.placeholders left join fetch leaseLiabilityScheduleItem.universallyUniqueMappings where leaseLiabilityScheduleItem.id =:id"
     )
     Optional<LeaseLiabilityScheduleItem> findOneWithEagerRelationships(@Param("id") Long id);
+
+    @Modifying(clearAutomatically = true)
+    @Query(
+        "update LeaseLiabilityScheduleItem item set item.active = :active where item.leaseLiabilityCompilation.id = :compilationId"
+    )
+    int updateActiveStateByCompilation(@Param("compilationId") Long compilationId, @Param("active") boolean active);
+
+    List<LeaseLiabilityScheduleItem> findByLeaseLiabilityCompilationId(Long compilationId);
 }

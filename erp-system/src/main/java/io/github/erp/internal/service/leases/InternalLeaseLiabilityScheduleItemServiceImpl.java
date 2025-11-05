@@ -127,4 +127,16 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
 
         leaseLiabilityScheduleItemSearchRepository.saveAll(leaseLiabilityScheduleItemMapper.toEntity(scheduleItems));
     }
+
+    @Override
+    public int updateActivationByCompilation(Long compilationId, boolean active) {
+        log.debug("Request to update activation state for compilation {} to {}", compilationId, active);
+        int affected = leaseLiabilityScheduleItemRepository.updateActiveStateByCompilation(compilationId, active);
+        if (affected > 0) {
+            leaseLiabilityScheduleItemSearchRepository.saveAll(
+                leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilationId)
+            );
+        }
+        return affected;
+    }
 }

@@ -81,8 +81,8 @@ public class LeaseLiabilityCompilationBatchConfig {
         return stepBuilderFactory.get(STEP_NAME)
             .<LeaseLiabilityDTO, List<LeaseLiabilityScheduleItemDTO>>chunk(24) // Assuming processing of 2 years at a time
             .reader(leaseLiabilityCompilationReader(batchJobIdentifier, leaseLiabilityCompilationRequestId))
-            .processor(leaseLiabilityCompilationProcessor(batchJobIdentifier))
-            .writer(leaseLiabilityCompilationWriterName())
+            .processor(leaseLiabilityCompilationProcessor(batchJobIdentifier, leaseLiabilityCompilationRequestId))
+            .writer(leaseLiabilityCompilationWriterName(leaseLiabilityCompilationRequestId))
             .build();
     }
 
@@ -94,12 +94,18 @@ public class LeaseLiabilityCompilationBatchConfig {
 
     @Bean(PROCESSOR_NAME)
     @StepScope
-    public ItemProcessor<LeaseLiabilityDTO, List<LeaseLiabilityScheduleItemDTO>> leaseLiabilityCompilationProcessor(@Value("#{jobParameters['batchJobIdentifier']}") String batchJobIdentifier) {
-        return new LeaseLiabilityCompilationItemProcessor(batchJobIdentifier, leaseAmortizationCompilationService);
+    public ItemProcessor<LeaseLiabilityDTO, List<LeaseLiabilityScheduleItemDTO>> leaseLiabilityCompilationProcessor(
+        @Value("#{jobParameters['batchJobIdentifier']}") String batchJobIdentifier,
+        @Value("#{jobParameters['leaseLiabilityCompilationRequestId']}") long leaseLiabilityCompilationRequestId
+    ) {
+        return new LeaseLiabilityCompilationItemProcessor(batchJobIdentifier, leaseLiabilityCompilationRequestId, leaseAmortizationCompilationService);
     }
 
     @Bean(WRITE_NAME)
-    public ItemWriter<List<LeaseLiabilityScheduleItemDTO>> leaseLiabilityCompilationWriterName() {
-        return new LeaseLiabilityCompilationItemWriter(internalLeaseLiabilityScheduleItemService);
+    @StepScope
+    public ItemWriter<List<LeaseLiabilityScheduleItemDTO>> leaseLiabilityCompilationWriterName(
+        @Value("#{jobParameters['leaseLiabilityCompilationRequestId']}") long leaseLiabilityCompilationRequestId
+    ) {
+        return new LeaseLiabilityCompilationItemWriter(internalLeaseLiabilityScheduleItemService, leaseLiabilityCompilationRequestId);
     }
 }

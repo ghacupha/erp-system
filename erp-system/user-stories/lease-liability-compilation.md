@@ -71,3 +71,14 @@ These user stories interpret the lease liability compilation workflow from the p
 - Provide a reporting endpoint (or database view) that compares schedule item balances across compilation timestamps for the same `leaseLiabilityId` and `leasePeriod.id`.
 - Join schedule items to `LeasePayment` records to calculate payment variance metrics and expose tolerance breach indicators.
 - Persist batch job execution metadata necessary to trend recompilations and exception counts per lease period for dashboard consumption.
+
+## Story H – Toggle active compilations for reporting
+**As a** backend maintainer
+**I want** REST endpoints that bulk-activate or bulk-deactivate schedule items belonging to a compilation
+**So that** finance teams can promote a specific compilation to production reporting or freeze it for audit review without reprocessing schedules.
+
+### Acceptance Criteria
+- `LeaseLiabilityCompilationResourceProd` exposes `POST /api/leases/lease-liability-compilations/{id}/activate` and `/deactivate` guarded by lease roles.
+- Each call validates that the compilation exists and delegates to `InternalLeaseLiabilityCompilationService.updateScheduleItemActivation`.
+- The service executes `updateActiveStateByCompilation` on the repository, emits JHipster alert headers that include the compilation identifier, and reindexes affected schedule items for Elasticsearch parity.
+- Batch-generated schedule items arrive with `active=true` and the compilation identifier already populated, so toggling only flips the boolean flag.
