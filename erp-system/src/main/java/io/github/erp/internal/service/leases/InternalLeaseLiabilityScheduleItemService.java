@@ -86,4 +86,6 @@ public interface InternalLeaseLiabilityScheduleItemService {
     Page<LeaseLiabilityScheduleItemDTO> search(String query, Pageable pageable);
 
     void saveAll(List<LeaseLiabilityScheduleItemDTO> scheduleItems);
+
+    int updateActivationByCompilation(Long compilationId, boolean active);
 }

@@ -28,5 +28,5 @@ public interface LeaseAmortizationCompilationService {
      * @param leaseLiabilityId id of the lease-liability instance
      * @return Schedule items
      */
-    List<LeaseLiabilityScheduleItemDTO> generateAmortizationSchedule(Long leaseLiabilityId);
+    List<LeaseLiabilityScheduleItemDTO> generateAmortizationSchedule(Long leaseLiabilityId, Long compilationId);
 }

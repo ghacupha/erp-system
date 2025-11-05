@@ -212,6 +212,32 @@ public class LeaseLiabilityCompilationResourceProd {
         return ResponseUtil.wrapOrNotFound(leaseLiabilityCompilationDTO);
     }
 
+    @PostMapping("/lease-liability-compilations/{id}/activate")
+    public ResponseEntity<Void> activateLeaseLiabilityCompilation(@PathVariable Long id) {
+        log.debug("REST request to activate LeaseLiabilityCompilation schedules : {}", id);
+        if (!leaseLiabilityCompilationRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+        int affected = leaseLiabilityCompilationService.updateScheduleItemActivation(id, true);
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createAlert(applicationName, "leaseLiabilityCompilation.activated", id + ":" + affected))
+            .build();
+    }
+
+    @PostMapping("/lease-liability-compilations/{id}/deactivate")
+    public ResponseEntity<Void> deactivateLeaseLiabilityCompilation(@PathVariable Long id) {
+        log.debug("REST request to deactivate LeaseLiabilityCompilation schedules : {}", id);
+        if (!leaseLiabilityCompilationRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+        int affected = leaseLiabilityCompilationService.updateScheduleItemActivation(id, false);
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createAlert(applicationName, "leaseLiabilityCompilation.deactivated", id + ":" + affected))
+            .build();
+    }
+
     /**
      * {@code DELETE  /lease-liability-compilations/:id} : delete the "id" leaseLiabilityCompilation.
      *

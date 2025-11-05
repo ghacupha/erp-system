@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import io.github.erp.service.dto.IFRS16LeaseContractDTO;
 import io.github.erp.service.dto.LeaseAmortizationCalculationDTO;
 import io.github.erp.service.dto.LeaseAmortizationScheduleDTO;
+import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
 import io.github.erp.service.dto.LeaseLiabilityDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import io.github.erp.service.dto.LeasePaymentDTO;
@@ -61,7 +62,7 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
         this.leaseContractService = leaseContractService;
     }
 
-    public List<LeaseLiabilityScheduleItemDTO> generateAmortizationSchedule(Long leaseLiabilityId) {
+    public List<LeaseLiabilityScheduleItemDTO> generateAmortizationSchedule(Long leaseLiabilityId, Long compilationId) {
         Optional<LeaseLiabilityDTO> leaseLiabilityOpt = leaseLiabilityService.findOne(leaseLiabilityId);
 
         if (leaseLiabilityOpt.isEmpty()) {
@@ -95,13 +96,23 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
 
         LeaseAmortizationScheduleDTO leaseAmortizationSchedule = scheduleOpt.get();
 
-        return calculateAmortizationSchedule(calculation, leaseLiability, ifrs16LeaseContract, leaseAmortizationSchedule);
+        return calculateAmortizationSchedule(calculation, leaseLiability, ifrs16LeaseContract, leaseAmortizationSchedule, compilationId);
     }
 
     private List<LeaseLiabilityScheduleItemDTO> calculateAmortizationSchedule(
-        LeaseAmortizationCalculationDTO calculation, LeaseLiabilityDTO leaseLiability, IFRS16LeaseContractDTO ifrs16LeaseContract, LeaseAmortizationScheduleDTO leaseAmortizationSchedule) {
+        LeaseAmortizationCalculationDTO calculation,
+        LeaseLiabilityDTO leaseLiability,
+        IFRS16LeaseContractDTO ifrs16LeaseContract,
+        LeaseAmortizationScheduleDTO leaseAmortizationSchedule,
+        Long compilationId
+    ) {
 
         List<LeaseLiabilityScheduleItemDTO> scheduleItems = new ArrayList<>();
+        LeaseLiabilityCompilationDTO leaseLiabilityCompilationDTO = null;
+        if (compilationId != null) {
+            leaseLiabilityCompilationDTO = new LeaseLiabilityCompilationDTO();
+            leaseLiabilityCompilationDTO.setId(compilationId);
+        }
         BigDecimal monthlyRate = calculation.getInterestRate().divide(BigDecimal.valueOf(12), ROUND_HALF_EVEN);
         var openingBalanceRef = new Object() {
             BigDecimal openingBalance = leaseLiability.getLiabilityAmount();
@@ -148,6 +159,8 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
                 item.setLeaseLiability(leaseLiability);
                 item.setLeaseContract(ifrs16LeaseContract);
                 item.setLeaseAmortizationSchedule(leaseAmortizationSchedule);
+                item.setActive(Boolean.TRUE);
+                item.setLeaseLiabilityCompilation(leaseLiabilityCompilationDTO);
 
                 // TODO CHANGE TO LEASE REPAYMENT PERIOD
                 item.setLeasePeriod(sortedPeriods.get(period));
