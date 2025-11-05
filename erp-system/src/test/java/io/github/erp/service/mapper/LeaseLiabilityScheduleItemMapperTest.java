@@ -22,7 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.erp.domain.LeaseLiabilityCompilation;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
+import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +35,9 @@ class LeaseLiabilityScheduleItemMapperTest {
 
     @BeforeEach
     public void setUp() {
-        leaseLiabilityScheduleItemMapper = new LeaseLiabilityScheduleItemMapperImpl();
+        LeaseLiabilityScheduleItemMapperImpl mapper = new LeaseLiabilityScheduleItemMapperImpl();
+        mapper.setLeaseLiabilityCompilationMapper(new LeaseLiabilityCompilationMapperStub());
+        leaseLiabilityScheduleItemMapper = mapper;
     }
 
     @Test
@@ -48,5 +53,67 @@ class LeaseLiabilityScheduleItemMapperTest {
         assertThat(dto.getActive()).isTrue();
         assertThat(dto.getLeaseLiabilityCompilation()).isNotNull();
         assertThat(dto.getLeaseLiabilityCompilation().getId()).isEqualTo(5L);
+    }
+
+    private static class LeaseLiabilityCompilationMapperStub implements LeaseLiabilityCompilationMapper {
+
+        @Override
+        public LeaseLiabilityCompilation toEntity(LeaseLiabilityCompilationDTO dto) {
+            if (dto == null) {
+                return null;
+            }
+            LeaseLiabilityCompilation entity = new LeaseLiabilityCompilation();
+            entity.setId(dto.getId());
+            return entity;
+        }
+
+        @Override
+        public LeaseLiabilityCompilationDTO toDto(LeaseLiabilityCompilation entity) {
+            if (entity == null) {
+                return null;
+            }
+            LeaseLiabilityCompilationDTO dto = new LeaseLiabilityCompilationDTO();
+            dto.setId(entity.getId());
+            return dto;
+        }
+
+        @Override
+        public List<LeaseLiabilityCompilation> toEntity(List<LeaseLiabilityCompilationDTO> dtoList) {
+            if (dtoList == null) {
+                return null;
+            }
+            List<LeaseLiabilityCompilation> entities = new ArrayList<>(dtoList.size());
+            for (LeaseLiabilityCompilationDTO dto : dtoList) {
+                entities.add(toEntity(dto));
+            }
+            return entities;
+        }
+
+        @Override
+        public List<LeaseLiabilityCompilationDTO> toDto(List<LeaseLiabilityCompilation> entityList) {
+            if (entityList == null) {
+                return null;
+            }
+            List<LeaseLiabilityCompilationDTO> dtos = new ArrayList<>(entityList.size());
+            for (LeaseLiabilityCompilation entity : entityList) {
+                dtos.add(toDto(entity));
+            }
+            return dtos;
+        }
+
+        @Override
+        public void partialUpdate(LeaseLiabilityCompilation entity, LeaseLiabilityCompilationDTO dto) {
+            if (entity == null || dto == null) {
+                return;
+            }
+            if (dto.getId() != null) {
+                entity.setId(dto.getId());
+            }
+        }
+
+        @Override
+        public LeaseLiabilityCompilationDTO toDtoId(LeaseLiabilityCompilation leaseLiabilityCompilation) {
+            return toDto(leaseLiabilityCompilation);
+        }
     }
 }
