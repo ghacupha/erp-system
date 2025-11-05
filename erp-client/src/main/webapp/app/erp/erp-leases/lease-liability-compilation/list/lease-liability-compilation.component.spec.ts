@@ -22,9 +22,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { LeaseLiabilityCompilationService } from '../service/lease-liability-compilation.service';
+import { ILeaseLiabilityCompilation } from '../lease-liability-compilation.model';
 
 import { LeaseLiabilityCompilationComponent } from './lease-liability-compilation.component';
 
@@ -113,5 +114,43 @@ describe('LeaseLiabilityCompilation Management Component', () => {
 
     // THEN
     expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['name,desc', 'id'] }));
+  });
+
+  it('should activate a compilation and update the local state', () => {
+    const compilation: ILeaseLiabilityCompilation = { id: 321, active: false };
+    comp.leaseLiabilityCompilations = [compilation];
+    jest.spyOn(service, 'activate').mockReturnValue(of(new HttpResponse({ body: { id: 321, active: true } })));
+
+    comp.activateCompilation(compilation);
+
+    expect(service.activate).toHaveBeenCalledWith(321);
+    expect(comp.rowActionLoading[321]).toBe(false);
+    expect(comp.leaseLiabilityCompilations?.[0].active).toBe(true);
+    expect(comp.rowActionError[321]).toBeUndefined();
+  });
+
+  it('should flag an error when activation fails', () => {
+    const compilation: ILeaseLiabilityCompilation = { id: 654, active: false };
+    comp.leaseLiabilityCompilations = [compilation];
+    jest.spyOn(service, 'activate').mockReturnValue(throwError(() => new Error('failure')));
+
+    comp.activateCompilation(compilation);
+
+    expect(service.activate).toHaveBeenCalledWith(654);
+    expect(comp.rowActionLoading[654]).toBe(false);
+    expect(comp.rowActionError[654]).toBeDefined();
+  });
+
+  it('should deactivate a compilation and update the local state', () => {
+    const compilation: ILeaseLiabilityCompilation = { id: 777, active: true };
+    comp.leaseLiabilityCompilations = [compilation];
+    jest.spyOn(service, 'deactivate').mockReturnValue(of(new HttpResponse({ body: { id: 777, active: false } })));
+
+    comp.deactivateCompilation(compilation);
+
+    expect(service.deactivate).toHaveBeenCalledWith(777);
+    expect(comp.rowActionLoading[777]).toBe(false);
+    expect(comp.leaseLiabilityCompilations?.[0].active).toBe(false);
+    expect(comp.rowActionError[777]).toBeUndefined();
   });
 });

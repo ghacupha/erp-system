@@ -42,6 +42,8 @@ import { IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { LeaseRepaymentPeriodService } from '../../lease-repayment-period/service/lease-repayment-period.service';
 import { ILeaseAmortizationSchedule } from '../../lease-amortization-schedule/lease-amortization-schedule.model';
+import { LeaseLiabilityCompilationService } from '../../lease-liability-compilation/service/lease-liability-compilation.service';
+import { ILeaseLiabilityCompilation } from '../../lease-liability-compilation/lease-liability-compilation.model';
 
 describe('LeaseLiabilityScheduleItem Management Update Component', () => {
   let comp: LeaseLiabilityScheduleItemUpdateComponent;
@@ -54,6 +56,7 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
   let iFRS16LeaseContractService: IFRS16LeaseContractService;
   let leaseLiabilityService: LeaseLiabilityService;
   let leaseRepaymentPeriodService: LeaseRepaymentPeriodService;
+  let leaseLiabilityCompilationService: LeaseLiabilityCompilationService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -73,6 +76,7 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
     iFRS16LeaseContractService = TestBed.inject(IFRS16LeaseContractService);
     leaseLiabilityService = TestBed.inject(LeaseLiabilityService);
     leaseRepaymentPeriodService = TestBed.inject(LeaseRepaymentPeriodService);
+    leaseLiabilityCompilationService = TestBed.inject(LeaseLiabilityCompilationService);
 
     comp = fixture.componentInstance;
   });
@@ -217,6 +221,30 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       expect(comp.leaseRepaymentPeriodsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call LeaseLiabilityCompilation query and add missing value', () => {
+      const leaseLiabilityScheduleItem: ILeaseLiabilityScheduleItem = { id: 456 };
+      const compilation: ILeaseLiabilityCompilation = { id: 99887 };
+      leaseLiabilityScheduleItem.compilation = compilation;
+
+      const compilationCollection: ILeaseLiabilityCompilation[] = [{ id: 11223 }];
+      jest.spyOn(leaseLiabilityCompilationService, 'query').mockReturnValue(of(new HttpResponse({ body: compilationCollection })));
+      const additionalCompilations = [compilation];
+      const expectedCollection: ILeaseLiabilityCompilation[] = [...additionalCompilations, ...compilationCollection];
+      jest
+        .spyOn(leaseLiabilityCompilationService, 'addLeaseLiabilityCompilationToCollectionIfMissing')
+        .mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ leaseLiabilityScheduleItem });
+      comp.ngOnInit();
+
+      expect(leaseLiabilityCompilationService.query).toHaveBeenCalled();
+      expect(leaseLiabilityCompilationService.addLeaseLiabilityCompilationToCollectionIfMissing).toHaveBeenCalledWith(
+        compilationCollection,
+        ...additionalCompilations
+      );
+      expect(comp.leaseLiabilityCompilationsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const leaseLiabilityScheduleItem: ILeaseLiabilityScheduleItem = { id: 456 };
       const placeholders: IPlaceholder = { id: 79718 };
@@ -231,6 +259,9 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       leaseLiabilityScheduleItem.leaseLiability = leaseLiability;
       const leasePeriod: ILeaseRepaymentPeriod = { id: 36966 };
       leaseLiabilityScheduleItem.leasePeriod = leasePeriod;
+      const compilation: ILeaseLiabilityCompilation = { id: 887766 };
+      leaseLiabilityScheduleItem.compilation = compilation;
+      leaseLiabilityScheduleItem.active = true;
 
       activatedRoute.data = of({ leaseLiabilityScheduleItem });
       comp.ngOnInit();
@@ -242,6 +273,7 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       expect(comp.iFRS16LeaseContractsSharedCollection).toContain(leaseContract);
       expect(comp.leaseLiabilitiesSharedCollection).toContain(leaseLiability);
       expect(comp.leaseRepaymentPeriodsSharedCollection).toContain(leasePeriod);
+      expect(comp.leaseLiabilityCompilationsSharedCollection).toContain(compilation);
     });
   });
 

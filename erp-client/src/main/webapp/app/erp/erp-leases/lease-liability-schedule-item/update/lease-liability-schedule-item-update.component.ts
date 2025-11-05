@@ -37,6 +37,8 @@ import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { ILeaseAmortizationSchedule } from '../../lease-amortization-schedule/lease-amortization-schedule.model';
 import { LeaseRepaymentPeriodService } from '../../lease-repayment-period/service/lease-repayment-period.service';
+import { LeaseLiabilityCompilationService } from '../../lease-liability-compilation/service/lease-liability-compilation.service';
+import { ILeaseLiabilityCompilation } from '../../lease-liability-compilation/lease-liability-compilation.model';
 
 @Component({
   selector: 'jhi-lease-liability-schedule-item-update',
@@ -51,6 +53,7 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
   iFRS16LeaseContractsSharedCollection: IIFRS16LeaseContract[] = [];
   leaseLiabilitiesSharedCollection: ILeaseLiability[] = [];
   leaseRepaymentPeriodsSharedCollection: ILeaseRepaymentPeriod[] = [];
+  leaseLiabilityCompilationsSharedCollection: ILeaseLiabilityCompilation[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -69,6 +72,8 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
     leaseContract: [null, Validators.required],
     leaseLiability: [null, Validators.required],
     leasePeriod: [null, Validators.required],
+    active: [true],
+    compilation: [],
   });
 
   constructor(
@@ -79,6 +84,7 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
     protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected leaseLiabilityService: LeaseLiabilityService,
     protected leaseRepaymentPeriodService: LeaseRepaymentPeriodService,
+    protected leaseLiabilityCompilationService: LeaseLiabilityCompilationService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -138,6 +144,10 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
   }
 
   trackLeaseRepaymentPeriodById(index: number, item: ILeaseRepaymentPeriod): number {
+    return item.id!;
+  }
+
+  trackLeaseLiabilityCompilationById(index: number, item: ILeaseLiabilityCompilation): number {
     return item.id!;
   }
 
@@ -203,6 +213,8 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
       leaseContract: leaseLiabilityScheduleItem.leaseContract,
       leaseLiability: leaseLiabilityScheduleItem.leaseLiability,
       leasePeriod: leaseLiabilityScheduleItem.leasePeriod,
+      active: leaseLiabilityScheduleItem.active ?? true,
+      compilation: leaseLiabilityScheduleItem.compilation,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -230,6 +242,11 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
       this.leaseRepaymentPeriodsSharedCollection,
       leaseLiabilityScheduleItem.leasePeriod
     );
+    this.leaseLiabilityCompilationsSharedCollection =
+      this.leaseLiabilityCompilationService.addLeaseLiabilityCompilationToCollectionIfMissing(
+        this.leaseLiabilityCompilationsSharedCollection,
+        leaseLiabilityScheduleItem.compilation
+      );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -310,6 +327,22 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
         )
       )
       .subscribe((leaseRepaymentPeriods: ILeaseRepaymentPeriod[]) => (this.leaseRepaymentPeriodsSharedCollection = leaseRepaymentPeriods));
+
+    this.leaseLiabilityCompilationService
+      .query({ sort: ['requestId,asc'], size: 100 })
+      .pipe(map((res: HttpResponse<ILeaseLiabilityCompilation[]>) => res.body ?? []))
+      .pipe(
+        map((leaseLiabilityCompilations: ILeaseLiabilityCompilation[]) =>
+          this.leaseLiabilityCompilationService.addLeaseLiabilityCompilationToCollectionIfMissing(
+            leaseLiabilityCompilations,
+            this.editForm.get('compilation')!.value
+          )
+        )
+      )
+      .subscribe(
+        (leaseLiabilityCompilations: ILeaseLiabilityCompilation[]) =>
+          (this.leaseLiabilityCompilationsSharedCollection = leaseLiabilityCompilations)
+      );
   }
 
   protected createFromForm(): ILeaseLiabilityScheduleItem {
@@ -331,6 +364,8 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
       leaseContract: this.editForm.get(['leaseContract'])!.value,
       leaseLiability: this.editForm.get(['leaseLiability'])!.value,
       leasePeriod: this.editForm.get(['leasePeriod'])!.value,
+      active: this.editForm.get(['active'])!.value,
+      compilation: this.editForm.get(['compilation'])!.value,
     };
   }
 }

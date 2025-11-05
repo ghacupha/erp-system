@@ -73,6 +73,7 @@
           <th scope="col" jhiSortBy="requestId"><span>Request Id</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="timeOfRequest"><span>Time Of Request</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="requestedBy.applicationIdentity"><span>Requested By</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="active"><span>Status</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -89,6 +90,15 @@
                 leaseLiabilityCompilation.requestedBy?.applicationIdentity
               }}</a>
             </div>
+          </td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="leaseLiabilityCompilation.active ? 'badge-success' : 'badge-secondary'"
+              data-cy="compilationStatus"
+            >
+              {{ leaseLiabilityCompilation.active ? 'Active' : 'Inactive' }}
+            </span>
           </td>
           <td class="text-right">
             <div class="btn-group">
@@ -112,10 +122,37 @@
                 <span class="d-none d-md-inline">Edit</span>
               </button>
 
+              <button
+                type="button"
+                class="btn btn-success btn-sm"
+                data-cy="entityActivateButton"
+                (click)="activateCompilation(leaseLiabilityCompilation)"
+                [disabled]="leaseLiabilityCompilation.active || rowActionLoading[leaseLiabilityCompilation.id!]"
+              >
+                <fa-icon *ngIf="!rowActionLoading[leaseLiabilityCompilation.id!]" icon="check"></fa-icon>
+                <fa-icon *ngIf="rowActionLoading[leaseLiabilityCompilation.id!]" icon="spinner" [spin]="true"></fa-icon>
+                <span class="d-none d-md-inline">Activate</span>
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-warning btn-sm"
+                data-cy="entityDeactivateButton"
+                (click)="deactivateCompilation(leaseLiabilityCompilation)"
+                [disabled]="!leaseLiabilityCompilation.active || rowActionLoading[leaseLiabilityCompilation.id!]"
+              >
+                <fa-icon *ngIf="!rowActionLoading[leaseLiabilityCompilation.id!]" icon="ban"></fa-icon>
+                <fa-icon *ngIf="rowActionLoading[leaseLiabilityCompilation.id!]" icon="spinner" [spin]="true"></fa-icon>
+                <span class="d-none d-md-inline">Deactivate</span>
+              </button>
+
               <button type="submit" (click)="delete(leaseLiabilityCompilation)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline">Delete</span>
               </button>
+            </div>
+            <div class="text-danger small mt-1" *ngIf="rowActionError[leaseLiabilityCompilation.id!]">
+              {{ rowActionError[leaseLiabilityCompilation.id!] }}
             </div>
           </td>
         </tr>
