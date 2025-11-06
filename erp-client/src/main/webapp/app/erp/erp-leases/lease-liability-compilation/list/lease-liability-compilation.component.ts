@@ -132,7 +132,11 @@ export class LeaseLiabilityCompilationComponent implements OnInit {
     }
     this.setRowActionState(id, true, undefined);
     this.leaseLiabilityCompilationService.activate(id).subscribe({
-      next: response => this.onRowActionSuccess(id, response.body),
+      next: response =>
+        this.onRowActionSuccess(id, response.body, existing => ({
+          ...existing,
+          active: true,
+        })),
       error: () => this.onRowActionError(id, 'Unable to activate compilation. Please retry.'),
     });
   }
@@ -144,7 +148,11 @@ export class LeaseLiabilityCompilationComponent implements OnInit {
     }
     this.setRowActionState(id, true, undefined);
     this.leaseLiabilityCompilationService.deactivate(id).subscribe({
-      next: response => this.onRowActionSuccess(id, response.body),
+      next: response =>
+        this.onRowActionSuccess(id, response.body, existing => ({
+          ...existing,
+          active: false,
+        })),
       error: () => this.onRowActionError(id, 'Unable to deactivate compilation. Please retry.'),
     });
   }
@@ -201,12 +209,26 @@ export class LeaseLiabilityCompilationComponent implements OnInit {
     this.rowActionError = { ...this.rowActionError, [id]: error };
   }
 
-  private onRowActionSuccess(id: number, updated: ILeaseLiabilityCompilation | null | undefined): void {
+  private onRowActionSuccess(
+    id: number,
+    updated: ILeaseLiabilityCompilation | null | undefined,
+    fallbackUpdater?: (existing: ILeaseLiabilityCompilation) => ILeaseLiabilityCompilation
+  ): void {
     this.setRowActionState(id, false, undefined);
-    if (!updated || !this.leaseLiabilityCompilations) {
+    if (!this.leaseLiabilityCompilations) {
       return;
     }
-    this.leaseLiabilityCompilations = this.leaseLiabilityCompilations.map(item => (item.id === updated.id ? { ...item, ...updated } : item));
+    if (updated) {
+      this.leaseLiabilityCompilations = this.leaseLiabilityCompilations.map(item =>
+        item.id === updated.id ? { ...item, ...updated } : item
+      );
+      return;
+    }
+    if (fallbackUpdater) {
+      this.leaseLiabilityCompilations = this.leaseLiabilityCompilations.map(item =>
+        item.id === id ? fallbackUpdater(item) : item
+      );
+    }
   }
 
   private onRowActionError(id: number, message: string): void {
