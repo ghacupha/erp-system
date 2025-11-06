@@ -52,6 +52,8 @@ public class LeaseLiabilityCompilationCriteria implements Serializable, Criteria
 
     private LongFilter requestedById;
 
+    private BooleanFilter active;
+
     private Boolean distinct;
 
     public LeaseLiabilityCompilationCriteria() {}
@@ -61,6 +63,7 @@ public class LeaseLiabilityCompilationCriteria implements Serializable, Criteria
         this.requestId = other.requestId == null ? null : other.requestId.copy();
         this.timeOfRequest = other.timeOfRequest == null ? null : other.timeOfRequest.copy();
         this.requestedById = other.requestedById == null ? null : other.requestedById.copy();
+        this.active = other.active == null ? null : other.active.copy();
         this.distinct = other.distinct;
     }
 
@@ -129,6 +132,21 @@ public class LeaseLiabilityCompilationCriteria implements Serializable, Criteria
         this.requestedById = requestedById;
     }
 
+    public BooleanFilter getActive() {
+        return active;
+    }
+
+    public BooleanFilter active() {
+        if (active == null) {
+            active = new BooleanFilter();
+        }
+        return active;
+    }
+
+    public void setActive(BooleanFilter active) {
+        this.active = active;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -151,13 +169,14 @@ public class LeaseLiabilityCompilationCriteria implements Serializable, Criteria
             Objects.equals(requestId, that.requestId) &&
             Objects.equals(timeOfRequest, that.timeOfRequest) &&
             Objects.equals(requestedById, that.requestedById) &&
+            Objects.equals(active, that.active) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, requestId, timeOfRequest, requestedById, distinct);
+        return Objects.hash(id, requestId, timeOfRequest, requestedById, active, distinct);
     }
 
     // prettier-ignore
@@ -168,6 +187,7 @@ public class LeaseLiabilityCompilationCriteria implements Serializable, Criteria
             (requestId != null ? "requestId=" + requestId + ", " : "") +
             (timeOfRequest != null ? "timeOfRequest=" + timeOfRequest + ", " : "") +
             (requestedById != null ? "requestedById=" + requestedById + ", " : "") +
+            (active != null ? "active=" + active + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
