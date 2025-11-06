@@ -76,6 +76,9 @@ class LeaseLiabilityCompilationResourceIT {
     private static final ZonedDateTime UPDATED_TIME_OF_REQUEST = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     private static final ZonedDateTime SMALLER_TIME_OF_REQUEST = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
+    private static final Boolean DEFAULT_ACTIVE = false;
+    private static final Boolean UPDATED_ACTIVE = true;
+
     private static final String ENTITY_API_URL = "/api/leases/lease-liability-compilations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/leases/_search/lease-liability-compilations";
@@ -117,7 +120,8 @@ class LeaseLiabilityCompilationResourceIT {
     public static LeaseLiabilityCompilation createEntity(EntityManager em) {
         LeaseLiabilityCompilation leaseLiabilityCompilation = new LeaseLiabilityCompilation()
             .requestId(DEFAULT_REQUEST_ID)
-            .timeOfRequest(DEFAULT_TIME_OF_REQUEST);
+            .timeOfRequest(DEFAULT_TIME_OF_REQUEST)
+            .active(DEFAULT_ACTIVE);
         return leaseLiabilityCompilation;
     }
 
@@ -130,7 +134,8 @@ class LeaseLiabilityCompilationResourceIT {
     public static LeaseLiabilityCompilation createUpdatedEntity(EntityManager em) {
         LeaseLiabilityCompilation leaseLiabilityCompilation = new LeaseLiabilityCompilation()
             .requestId(UPDATED_REQUEST_ID)
-            .timeOfRequest(UPDATED_TIME_OF_REQUEST);
+            .timeOfRequest(UPDATED_TIME_OF_REQUEST)
+            .active(UPDATED_ACTIVE);
         return leaseLiabilityCompilation;
     }
 
@@ -161,6 +166,7 @@ class LeaseLiabilityCompilationResourceIT {
         );
         assertThat(testLeaseLiabilityCompilation.getRequestId()).isEqualTo(DEFAULT_REQUEST_ID);
         assertThat(testLeaseLiabilityCompilation.getTimeOfRequest()).isEqualTo(DEFAULT_TIME_OF_REQUEST);
+        assertThat(testLeaseLiabilityCompilation.getActive()).isEqualTo(DEFAULT_ACTIVE);
 
         // Validate the LeaseLiabilityCompilation in Elasticsearch
         verify(mockLeaseLiabilityCompilationSearchRepository, times(1)).save(testLeaseLiabilityCompilation);
@@ -249,7 +255,8 @@ class LeaseLiabilityCompilationResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leaseLiabilityCompilation.getId().intValue())))
             .andExpect(jsonPath("$.[*].requestId").value(hasItem(DEFAULT_REQUEST_ID.toString())))
-            .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUEST))));
+            .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUEST))))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
 
     @Test
@@ -265,7 +272,8 @@ class LeaseLiabilityCompilationResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(leaseLiabilityCompilation.getId().intValue()))
             .andExpect(jsonPath("$.requestId").value(DEFAULT_REQUEST_ID.toString()))
-            .andExpect(jsonPath("$.timeOfRequest").value(sameInstant(DEFAULT_TIME_OF_REQUEST)));
+            .andExpect(jsonPath("$.timeOfRequest").value(sameInstant(DEFAULT_TIME_OF_REQUEST)))
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
     @Test
@@ -288,11 +296,16 @@ class LeaseLiabilityCompilationResourceIT {
             leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(leaseLiabilityCompilation.getId());
         assertThat(items).isNotEmpty();
         assertThat(items).allMatch(item -> Boolean.TRUE.equals(item.getActive()));
+        LeaseLiabilityCompilation refreshedCompilation = leaseLiabilityCompilationRepository
+            .findById(leaseLiabilityCompilation.getId())
+            .orElseThrow();
+        assertThat(refreshedCompilation.getActive()).isTrue();
     }
 
     @Test
     @Transactional
     void deactivateLeaseLiabilityCompilation() throws Exception {
+        leaseLiabilityCompilation.setActive(true);
         leaseLiabilityCompilationRepository.saveAndFlush(leaseLiabilityCompilation);
 
         LeaseLiabilityScheduleItem leaseLiabilityScheduleItem = LeaseLiabilityScheduleItemResourceIT.createEntity(em);
@@ -310,6 +323,10 @@ class LeaseLiabilityCompilationResourceIT {
             leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(leaseLiabilityCompilation.getId());
         assertThat(items).isNotEmpty();
         assertThat(items).allMatch(item -> Boolean.FALSE.equals(item.getActive()));
+        LeaseLiabilityCompilation refreshedCompilation = leaseLiabilityCompilationRepository
+            .findById(leaseLiabilityCompilation.getId())
+            .orElseThrow();
+        assertThat(refreshedCompilation.getActive()).isFalse();
     }
 
     @Test
@@ -444,6 +461,36 @@ class LeaseLiabilityCompilationResourceIT {
 
     @Test
     @Transactional
+    void getAllLeaseLiabilityCompilationsByActiveIsEqualToSomething() throws Exception {
+        leaseLiabilityCompilationRepository.saveAndFlush(leaseLiabilityCompilation);
+
+        defaultLeaseLiabilityCompilationShouldBeFound("active.equals=" + DEFAULT_ACTIVE);
+
+        defaultLeaseLiabilityCompilationShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityCompilationsByActiveIsInShouldWork() throws Exception {
+        leaseLiabilityCompilationRepository.saveAndFlush(leaseLiabilityCompilation);
+
+        defaultLeaseLiabilityCompilationShouldBeFound("active.in=" + DEFAULT_ACTIVE + "," + UPDATED_ACTIVE);
+
+        defaultLeaseLiabilityCompilationShouldNotBeFound("active.in=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilityCompilationsByActiveIsNullOrNotNull() throws Exception {
+        leaseLiabilityCompilationRepository.saveAndFlush(leaseLiabilityCompilation);
+
+        defaultLeaseLiabilityCompilationShouldBeFound("active.specified=true");
+
+        defaultLeaseLiabilityCompilationShouldNotBeFound("active.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllLeaseLiabilityCompilationsByTimeOfRequestIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         leaseLiabilityCompilationRepository.saveAndFlush(leaseLiabilityCompilation);
@@ -530,7 +577,8 @@ class LeaseLiabilityCompilationResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leaseLiabilityCompilation.getId().intValue())))
             .andExpect(jsonPath("$.[*].requestId").value(hasItem(DEFAULT_REQUEST_ID.toString())))
-            .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUEST))));
+            .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUEST))))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
         restLeaseLiabilityCompilationMockMvc
@@ -580,7 +628,7 @@ class LeaseLiabilityCompilationResourceIT {
             .get();
         // Disconnect from session so that the updates on updatedLeaseLiabilityCompilation are not directly saved in db
         em.detach(updatedLeaseLiabilityCompilation);
-        updatedLeaseLiabilityCompilation.requestId(UPDATED_REQUEST_ID).timeOfRequest(UPDATED_TIME_OF_REQUEST);
+        updatedLeaseLiabilityCompilation.requestId(UPDATED_REQUEST_ID).timeOfRequest(UPDATED_TIME_OF_REQUEST).active(UPDATED_ACTIVE);
         LeaseLiabilityCompilationDTO leaseLiabilityCompilationDTO = leaseLiabilityCompilationMapper.toDto(updatedLeaseLiabilityCompilation);
 
         restLeaseLiabilityCompilationMockMvc
@@ -599,6 +647,7 @@ class LeaseLiabilityCompilationResourceIT {
         );
         assertThat(testLeaseLiabilityCompilation.getRequestId()).isEqualTo(UPDATED_REQUEST_ID);
         assertThat(testLeaseLiabilityCompilation.getTimeOfRequest()).isEqualTo(UPDATED_TIME_OF_REQUEST);
+        assertThat(testLeaseLiabilityCompilation.getActive()).isEqualTo(UPDATED_ACTIVE);
 
         // Validate the LeaseLiabilityCompilation in Elasticsearch
         verify(mockLeaseLiabilityCompilationSearchRepository).save(testLeaseLiabilityCompilation);
@@ -712,6 +761,7 @@ class LeaseLiabilityCompilationResourceIT {
         );
         assertThat(testLeaseLiabilityCompilation.getRequestId()).isEqualTo(UPDATED_REQUEST_ID);
         assertThat(testLeaseLiabilityCompilation.getTimeOfRequest()).isEqualTo(DEFAULT_TIME_OF_REQUEST);
+        assertThat(testLeaseLiabilityCompilation.getActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
     @Test
@@ -726,7 +776,7 @@ class LeaseLiabilityCompilationResourceIT {
         LeaseLiabilityCompilation partialUpdatedLeaseLiabilityCompilation = new LeaseLiabilityCompilation();
         partialUpdatedLeaseLiabilityCompilation.setId(leaseLiabilityCompilation.getId());
 
-        partialUpdatedLeaseLiabilityCompilation.requestId(UPDATED_REQUEST_ID).timeOfRequest(UPDATED_TIME_OF_REQUEST);
+        partialUpdatedLeaseLiabilityCompilation.requestId(UPDATED_REQUEST_ID).timeOfRequest(UPDATED_TIME_OF_REQUEST).active(UPDATED_ACTIVE);
 
         restLeaseLiabilityCompilationMockMvc
             .perform(
@@ -744,6 +794,7 @@ class LeaseLiabilityCompilationResourceIT {
         );
         assertThat(testLeaseLiabilityCompilation.getRequestId()).isEqualTo(UPDATED_REQUEST_ID);
         assertThat(testLeaseLiabilityCompilation.getTimeOfRequest()).isEqualTo(UPDATED_TIME_OF_REQUEST);
+        assertThat(testLeaseLiabilityCompilation.getActive()).isEqualTo(UPDATED_ACTIVE);
     }
 
     @Test
@@ -861,6 +912,7 @@ class LeaseLiabilityCompilationResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leaseLiabilityCompilation.getId().intValue())))
             .andExpect(jsonPath("$.[*].requestId").value(hasItem(DEFAULT_REQUEST_ID.toString())))
-            .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUEST))));
+            .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUEST))))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
 }

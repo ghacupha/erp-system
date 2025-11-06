@@ -80,5 +80,5 @@ These user stories interpret the lease liability compilation workflow from the p
 ### Acceptance Criteria
 - `LeaseLiabilityCompilationResourceProd` exposes `POST /api/leases/lease-liability-compilations/{id}/activate` and `/deactivate` guarded by lease roles.
 - Each call validates that the compilation exists and delegates to `InternalLeaseLiabilityCompilationService.updateScheduleItemActivation`.
-- The service executes `updateActiveStateByCompilation` on the repository, emits JHipster alert headers that include the compilation identifier, and reindexes affected schedule items for Elasticsearch parity.
+- The service executes `updateActiveStateByCompilation` on the repository, toggles the compilation's own `active` status, emits JHipster alert headers that include the compilation identifier, and reindexes affected schedule items for Elasticsearch parity using paged batches to avoid stack overflows.
 - Batch-generated schedule items arrive with `active=true` and the compilation identifier already populated, so toggling only flips the boolean flag.
