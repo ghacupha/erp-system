@@ -21,6 +21,7 @@ import io.github.erp.domain.LeaseLiabilityScheduleItem;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityScheduleItemSearchRepository;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
+import io.github.erp.service.impl.LeaseLiabilityCompilationServiceImpl;
 import io.github.erp.service.mapper.LeaseLiabilityScheduleItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,15 +48,17 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
     private final LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper;
 
     private final LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository;
+    private final InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService;
 
     public InternalLeaseLiabilityScheduleItemServiceImpl(
         InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository,
         LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper,
-        LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository
-    ) {
+        LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository,
+        InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService) {
         this.leaseLiabilityScheduleItemRepository = leaseLiabilityScheduleItemRepository;
         this.leaseLiabilityScheduleItemMapper = leaseLiabilityScheduleItemMapper;
         this.leaseLiabilityScheduleItemSearchRepository = leaseLiabilityScheduleItemSearchRepository;
+        this.leaseLiabilityCompilationService = leaseLiabilityCompilationService;
     }
 
     @Override
@@ -133,11 +136,13 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
         log.debug("Request to update activation state for compilation {} to {}", compilationId, active);
         int affected = leaseLiabilityScheduleItemRepository.updateActiveStateByCompilation(compilationId, active);
         // TODO update with queue
-        /*if (affected > 0) {
+        if (affected > 0) {
+            // TODO leaseLiabilityCompilationService.updateActiveStateByCompilation(compilationId, active)
             leaseLiabilityScheduleItemSearchRepository.saveAll(
+                // TODO this is causing issues with stackoverflow. Update by smaller batches
                 leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilationId)
             );
-        }*/
+        }
         return affected;
     }
 }
