@@ -72,6 +72,8 @@ class InternalLeaseLiabilityScheduleItemServiceIT {
 
         assertThat(affected).isEqualTo(2);
         em.clear();
+        LeaseLiabilityCompilation refreshedCompilation = em.find(LeaseLiabilityCompilation.class, leaseLiabilityCompilation.getId());
+        assertThat(refreshedCompilation.getActive()).isTrue();
         List<LeaseLiabilityScheduleItem> refreshed = leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(leaseLiabilityCompilation.getId());
         assertThat(refreshed).hasSize(2);
         assertThat(refreshed).allMatch(item -> Boolean.TRUE.equals(item.getActive()));
@@ -80,6 +82,10 @@ class InternalLeaseLiabilityScheduleItemServiceIT {
     @Test
     @Transactional
     void updateActivationByCompilationDeactivatesRows() {
+        leaseLiabilityCompilation.setActive(true);
+        leaseLiabilityCompilation = em.merge(leaseLiabilityCompilation);
+        em.flush();
+
         LeaseLiabilityScheduleItem firstItem = LeaseLiabilityScheduleItemResourceIT.createEntity(em);
         firstItem.setActive(true);
         firstItem.setLeaseLiabilityCompilation(leaseLiabilityCompilation);
@@ -95,6 +101,8 @@ class InternalLeaseLiabilityScheduleItemServiceIT {
 
         assertThat(affected).isEqualTo(2);
         em.clear();
+        LeaseLiabilityCompilation refreshedCompilation = em.find(LeaseLiabilityCompilation.class, leaseLiabilityCompilation.getId());
+        assertThat(refreshedCompilation.getActive()).isFalse();
         List<LeaseLiabilityScheduleItem> refreshed = leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(leaseLiabilityCompilation.getId());
         assertThat(refreshed).hasSize(2);
         assertThat(refreshed).allMatch(item -> Boolean.FALSE.equals(item.getActive()));

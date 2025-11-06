@@ -63,6 +63,10 @@ public class LeaseLiabilityCompilation implements Serializable {
     )
     private ApplicationUser requestedBy;
 
+    @NotNull
+    @Column(name = "active", nullable = false)
+    private Boolean active = false;
+
     @OneToMany(mappedBy = "leaseLiabilityCompilation")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
@@ -134,6 +138,19 @@ public class LeaseLiabilityCompilation implements Serializable {
         return this;
     }
 
+    public Boolean getActive() {
+        return this.active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public LeaseLiabilityCompilation active(Boolean active) {
+        this.setActive(active);
+        return this;
+    }
+
     public Set<LeaseLiabilityScheduleItem> getLeaseLiabilityScheduleItems() {
         return this.leaseLiabilityScheduleItems;
     }
@@ -191,6 +208,7 @@ public class LeaseLiabilityCompilation implements Serializable {
             "id=" + getId() +
             ", requestId='" + getRequestId() + "'" +
             ", timeOfRequest='" + getTimeOfRequest() + "'" +
+            ", active='" + getActive() + "'" +
             "}";
     }
 }

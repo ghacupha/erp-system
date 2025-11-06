@@ -132,6 +132,9 @@ public class LeaseLiabilityCompilationQueryService extends QueryService<LeaseLia
                         )
                     );
             }
+            if (criteria.getActive() != null) {
+                specification = specification.and(buildSpecification(criteria.getActive(), LeaseLiabilityCompilation_.active));
+            }
         }
         return specification;
     }

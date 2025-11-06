@@ -18,14 +18,16 @@ package io.github.erp.internal.service.leases;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
+import io.github.erp.repository.LeaseLiabilityCompilationRepository;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityScheduleItemSearchRepository;
+import io.github.erp.repository.search.LeaseLiabilityCompilationSearchRepository;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
-import io.github.erp.service.impl.LeaseLiabilityCompilationServiceImpl;
 import io.github.erp.service.mapper.LeaseLiabilityScheduleItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +43,8 @@ import java.util.Optional;
 @Transactional
 public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLeaseLiabilityScheduleItemService {
 
+    private static final int SEARCH_INDEX_BATCH_SIZE = 200;
+
     private final Logger log = LoggerFactory.getLogger(InternalLeaseLiabilityScheduleItemServiceImpl.class);
 
     private final InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository;
@@ -48,17 +52,20 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
     private final LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper;
 
     private final LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository;
-    private final InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService;
+    private final LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository;
+    private final LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository;
 
     public InternalLeaseLiabilityScheduleItemServiceImpl(
         InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository,
         LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper,
         LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository,
-        InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService) {
+        LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository,
+        LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository) {
         this.leaseLiabilityScheduleItemRepository = leaseLiabilityScheduleItemRepository;
         this.leaseLiabilityScheduleItemMapper = leaseLiabilityScheduleItemMapper;
         this.leaseLiabilityScheduleItemSearchRepository = leaseLiabilityScheduleItemSearchRepository;
-        this.leaseLiabilityCompilationService = leaseLiabilityCompilationService;
+        this.leaseLiabilityCompilationRepository = leaseLiabilityCompilationRepository;
+        this.leaseLiabilityCompilationSearchRepository = leaseLiabilityCompilationSearchRepository;
     }
 
     @Override
@@ -137,12 +144,28 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
         int affected = leaseLiabilityScheduleItemRepository.updateActiveStateByCompilation(compilationId, active);
         // TODO update with queue
         if (affected > 0) {
-            // TODO leaseLiabilityCompilationService.updateActiveStateByCompilation(compilationId, active)
-            leaseLiabilityScheduleItemSearchRepository.saveAll(
-                // TODO this is causing issues with stackoverflow. Update by smaller batches
-                leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilationId)
-            );
+            updateCompilationActiveFlag(compilationId, active);
+            Pageable pageable = PageRequest.of(0, SEARCH_INDEX_BATCH_SIZE);
+            Page<LeaseLiabilityScheduleItem> page =
+                leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilationId, pageable);
+            while (!page.isEmpty()) {
+                leaseLiabilityScheduleItemSearchRepository.saveAll(page.getContent());
+                if (!page.hasNext()) {
+                    break;
+                }
+                pageable = page.nextPageable();
+                page = leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilationId, pageable);
+            }
         }
         return affected;
+    }
+
+    private void updateCompilationActiveFlag(Long compilationId, boolean active) {
+        int updated = leaseLiabilityCompilationRepository.updateActiveStateById(compilationId, active);
+        if (updated > 0) {
+            leaseLiabilityCompilationRepository
+                .findById(compilationId)
+                .ifPresent(leaseLiabilityCompilationSearchRepository::save);
+        }
     }
 }

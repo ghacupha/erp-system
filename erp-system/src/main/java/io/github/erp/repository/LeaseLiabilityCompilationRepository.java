@@ -20,6 +20,7 @@ package io.github.erp.repository;
 
 import io.github.erp.domain.LeaseLiabilityCompilation;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -28,4 +29,8 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface LeaseLiabilityCompilationRepository
-    extends JpaRepository<LeaseLiabilityCompilation, Long>, JpaSpecificationExecutor<LeaseLiabilityCompilation> {}
+    extends JpaRepository<LeaseLiabilityCompilation, Long>, JpaSpecificationExecutor<LeaseLiabilityCompilation> {
+    @Modifying(clearAutomatically = true)
+    @Query("update LeaseLiabilityCompilation compilation set compilation.active = :active where compilation.id = :compilationId")
+    int updateActiveStateById(@Param("compilationId") Long compilationId, @Param("active") boolean active);
+}
