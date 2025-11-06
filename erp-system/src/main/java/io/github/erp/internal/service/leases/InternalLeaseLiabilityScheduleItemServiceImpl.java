@@ -144,7 +144,7 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
         int affected = leaseLiabilityScheduleItemRepository.updateActiveStateByCompilation(compilationId, active);
         // TODO update with queue
         if (affected > 0) {
-            updateCompilationActiveFlag(compilationId, active);
+            leaseLiabilityCompilationService.updateActiveStateByCompilation(compilationId, active);
             Pageable pageable = PageRequest.of(0, SEARCH_INDEX_BATCH_SIZE);
             Page<LeaseLiabilityScheduleItem> page =
                 leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilationId, pageable);
