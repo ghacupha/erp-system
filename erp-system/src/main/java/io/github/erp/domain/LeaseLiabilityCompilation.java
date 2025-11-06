@@ -28,6 +28,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A LeaseLiabilityCompilation.
@@ -75,6 +77,7 @@ public class LeaseLiabilityCompilation implements Serializable {
         },
         allowSetters = true
     )
+    @Field(type = FieldType.Nested, ignoreFields = "leaseLiabilityCompilation")
     private Set<LeaseLiabilityScheduleItem> leaseLiabilityScheduleItems = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

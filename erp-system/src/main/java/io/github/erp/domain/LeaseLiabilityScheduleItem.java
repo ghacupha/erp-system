@@ -133,6 +133,7 @@ public class LeaseLiabilityScheduleItem implements Serializable {
         value = { "leaseLiabilityScheduleItems", "requestedBy" },
         allowSetters = true
     )
+    @Field(type = FieldType.Object, ignoreFields = "leaseLiabilityScheduleItems")
     private LeaseLiabilityCompilation leaseLiabilityCompilation;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
