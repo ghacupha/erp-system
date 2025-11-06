@@ -18,10 +18,11 @@ package io.github.erp.internal.service.leases;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
+import io.github.erp.repository.LeaseLiabilityCompilationRepository;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityScheduleItemSearchRepository;
+import io.github.erp.repository.search.LeaseLiabilityCompilationSearchRepository;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
-import io.github.erp.service.impl.LeaseLiabilityCompilationServiceImpl;
 import io.github.erp.service.mapper.LeaseLiabilityScheduleItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,17 +52,20 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
     private final LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper;
 
     private final LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository;
-    private final InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService;
+    private final LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository;
+    private final LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository;
 
     public InternalLeaseLiabilityScheduleItemServiceImpl(
         InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository,
         LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper,
         LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository,
-        InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService) {
+        LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository,
+        LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository) {
         this.leaseLiabilityScheduleItemRepository = leaseLiabilityScheduleItemRepository;
         this.leaseLiabilityScheduleItemMapper = leaseLiabilityScheduleItemMapper;
         this.leaseLiabilityScheduleItemSearchRepository = leaseLiabilityScheduleItemSearchRepository;
-        this.leaseLiabilityCompilationService = leaseLiabilityCompilationService;
+        this.leaseLiabilityCompilationRepository = leaseLiabilityCompilationRepository;
+        this.leaseLiabilityCompilationSearchRepository = leaseLiabilityCompilationSearchRepository;
     }
 
     @Override
@@ -154,5 +158,14 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
             }
         }
         return affected;
+    }
+
+    private void updateCompilationActiveFlag(Long compilationId, boolean active) {
+        int updated = leaseLiabilityCompilationRepository.updateActiveStateById(compilationId, active);
+        if (updated > 0) {
+            leaseLiabilityCompilationRepository
+                .findById(compilationId)
+                .ifPresent(leaseLiabilityCompilationSearchRepository::save);
+        }
     }
 }
