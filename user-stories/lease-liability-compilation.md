@@ -85,6 +85,6 @@ This collection of user stories documents how finance and accounting stakeholder
 
 ### Acceptance Criteria
 - The system exposes `POST /api/leases/lease-liability-compilations/{id}/activate` and `/deactivate` endpoints restricted to authorised lease management roles.
-- When I activate a compilation, every linked schedule item flips its `active` flag to `true` and the response headers confirm the action.
-- Deactivation sets `active=false` for the compilation so archived runs can be excluded from analytics while remaining queryable for audits.
+- When I activate a compilation, every linked schedule item flips its `active` flag to `true`, the compilation record itself moves to `active=true`, and the response headers confirm the action while the search index is refreshed in batches.
+- Deactivation sets `active=false` for both the compilation and its schedules so archived runs can be excluded from analytics while remaining queryable for audits.
 - Newly generated schedule items already arrive tagged with the compilation ID and `active=true`, making activation a quick confirmation rather than a data fix.

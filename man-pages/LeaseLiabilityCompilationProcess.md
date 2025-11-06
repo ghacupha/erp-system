@@ -40,7 +40,7 @@ This guide describes how lease data travels through the ERP System to produce IF
 
 ## Step 6 – Activate or deactivate compiled schedules
 - Endpoints `POST /api/leases/lease-liability-compilations/{id}/activate` and `/deactivate` call `InternalLeaseLiabilityCompilationService.updateScheduleItemActivation`.
-- The service executes a bulk `UPDATE` (`updateActiveStateByCompilation`) to flip the `active` flag for every schedule item linked to the compilation, emitting standard JHipster alert headers that include the compilation identifier and affected row count payload.
+- The service executes a bulk `UPDATE` (`updateActiveStateByCompilation`) to flip the `active` flag for every schedule item linked to the compilation **and** updates the compilation’s own `active` flag. A fresh copy of the compilation is pushed to Elasticsearch while the related schedule items are reindexed in 200-item pages to avoid recursion limits, and JHipster alert headers include the compilation identifier plus affected row count payload.
 - Use these toggles to promote a compilation to production reporting or to freeze a historical run without deleting data.
 
 ## Reporting recommendations for lease-period monitoring

@@ -39,6 +39,9 @@ public class LeaseLiabilityCompilationDTO implements Serializable {
 
     private ApplicationUserDTO requestedBy;
 
+    @NotNull
+    private Boolean active;
+
     public Long getId() {
         return id;
     }
@@ -71,6 +74,14 @@ public class LeaseLiabilityCompilationDTO implements Serializable {
         this.requestedBy = requestedBy;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -100,6 +111,7 @@ public class LeaseLiabilityCompilationDTO implements Serializable {
             ", requestId='" + getRequestId() + "'" +
             ", timeOfRequest='" + getTimeOfRequest() + "'" +
             ", requestedBy=" + getRequestedBy() +
+            ", active=" + getActive() +
             "}";
     }
 }
