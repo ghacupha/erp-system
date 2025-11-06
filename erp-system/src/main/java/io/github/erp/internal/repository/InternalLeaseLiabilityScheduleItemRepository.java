@@ -59,4 +59,6 @@ public interface InternalLeaseLiabilityScheduleItemRepository
     int updateActiveStateByCompilation(@Param("compilationId") Long compilationId, @Param("active") boolean active);
 
     List<LeaseLiabilityScheduleItem> findByLeaseLiabilityCompilationId(Long compilationId);
+
+    Page<LeaseLiabilityScheduleItem> findByLeaseLiabilityCompilationId(Long compilationId, Pageable pageable);
 }

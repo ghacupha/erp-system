@@ -597,5 +597,6 @@
     <include file="config/liquibase/changelog/20240801090000_update_report_metadata_filters.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <include file="config/liquibase/changelog/20250205121500_update_lease_liability_schedule_item_compilation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250206120000_add_active_to_lease_liability_compilation.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

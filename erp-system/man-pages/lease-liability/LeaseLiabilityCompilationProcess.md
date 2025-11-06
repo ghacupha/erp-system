@@ -10,7 +10,7 @@ This manual documents the backend workflow that produces IFRS16 lease amortizati
 4. **Chunk-oriented processing** – `LeaseLiabilityCompilationBatchConfig` wires the reader, processor, and writer beans that handle liabilities in chunks of 24.
 5. **Schedule calculation** – `LeaseAmortizationService` aggregates liability, contract, calculation, repayment period, and payment data to build `LeaseLiabilityScheduleItemDTO` results.
 6. **Persistence** – `LeaseLiabilityCompilationItemWriter` commits the generated schedule items using `InternalLeaseLiabilityScheduleItemService.saveAll` while forcing `active=true` and stamping the current compilation identifier.
-7. **Activation toggle** – `/api/leases/lease-liability-compilations/{id}/activate` and `/deactivate` delegate to `InternalLeaseLiabilityCompilationService.updateScheduleItemActivation` so downstream reports can switch between historical and promoted compilations without rewriting data.
+7. **Activation toggle** – `/api/leases/lease-liability-compilations/{id}/activate` and `/deactivate` delegate to `InternalLeaseLiabilityCompilationService.updateScheduleItemActivation` so downstream reports can switch between historical and promoted compilations without rewriting data. The service now flips both the compilation-level `active` flag and the schedule item rows.
 
 ## Detailed Components
 ### REST Resource
@@ -38,7 +38,7 @@ This manual documents the backend workflow that produces IFRS16 lease amortizati
 - Monitor job executions via Spring Batch tooling; job parameters include the batch identifier for correlation.
 - Missing prerequisite data surfaces as `IllegalArgumentException`s—capture these in logs or monitoring dashboards to inform data stewards.
 - Adjust chunk size or introduce parallel steps in `LeaseLiabilityCompilationBatchConfig` when scaling to larger portfolios.
-- Use the activation/deactivation endpoints when promoting a compilation to production reporting or when freezing a run for audit review. The service performs a bulk `UPDATE` via `updateActiveStateByCompilation` so large compilations can switch state without reprocessing schedules.
+- Use the activation/deactivation endpoints when promoting a compilation to production reporting or when freezing a run for audit review. The service performs a bulk `UPDATE` via `updateActiveStateByCompilation`, updates the compilation record itself, and reindexes schedule items in Elasticsearch-sized batches (200 per page) to avoid recursion limits while keeping search results in sync.
 
 ## Reporting recommendations for lease-period monitoring
 Engineering teams can expose focused reports to track how schedule items evolve for a specific lease period and compilation run.

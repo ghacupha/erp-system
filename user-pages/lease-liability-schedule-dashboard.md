@@ -18,6 +18,11 @@ The schedule dashboard is a targeted workspace for Lease Managers who need to re
 - If a period has no data you will see an empty-state message in the table. Review your amortisation compilation before retrying.
 - Error banners appear if the underlying services are unavailable—retry once the connection stabilises.
 
+## Toggling compilation visibility
+- When a fresh compilation completes, ask an authorised backend operator to call **Activate Compilation** in the admin console or through the `/api/leases/lease-liability-compilations/{id}/activate` endpoint.
+- Activation now switches on both the schedule item rows and the compilation record itself, which keeps the dashboard filters aligned with the latest “active” compilation.
+- Deactivation (`/deactivate`) flips the same switches off and reindexes the schedules in small batches, so previously published runs stay searchable while you prepare the next release.
+
 ## Export output
 - Use the **Export Excel** button to capture a workbook of the current view.
 - The export arranges the header information into three adjacent panels (Lease, Stats, Reporting) so recipients can read the contract context, key totals, and reporting window at a glance.

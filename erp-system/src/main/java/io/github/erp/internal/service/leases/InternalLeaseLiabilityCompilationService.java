@@ -77,4 +77,6 @@ public interface InternalLeaseLiabilityCompilationService {
     Page<LeaseLiabilityCompilationDTO> search(String query, Pageable pageable);
 
     int updateScheduleItemActivation(Long compilationId, boolean active);
+
+    void updateActiveStateByCompilation(Long compilationId, boolean active);
 }

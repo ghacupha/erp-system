@@ -26,6 +26,7 @@ import io.github.erp.service.mapper.LeaseLiabilityScheduleItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,8 @@ import java.util.Optional;
 @Service
 @Transactional
 public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLeaseLiabilityScheduleItemService {
+
+    private static final int SEARCH_INDEX_BATCH_SIZE = 200;
 
     private final Logger log = LoggerFactory.getLogger(InternalLeaseLiabilityScheduleItemServiceImpl.class);
 
@@ -137,11 +140,18 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
         int affected = leaseLiabilityScheduleItemRepository.updateActiveStateByCompilation(compilationId, active);
         // TODO update with queue
         if (affected > 0) {
-            // TODO leaseLiabilityCompilationService.updateActiveStateByCompilation(compilationId, active)
-            leaseLiabilityScheduleItemSearchRepository.saveAll(
-                // TODO this is causing issues with stackoverflow. Update by smaller batches
-                leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilationId)
-            );
+            leaseLiabilityCompilationService.updateActiveStateByCompilation(compilationId, active);
+            Pageable pageable = PageRequest.of(0, SEARCH_INDEX_BATCH_SIZE);
+            Page<LeaseLiabilityScheduleItem> page =
+                leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilationId, pageable);
+            while (!page.isEmpty()) {
+                leaseLiabilityScheduleItemSearchRepository.saveAll(page.getContent());
+                if (!page.hasNext()) {
+                    break;
+                }
+                pageable = page.nextPageable();
+                page = leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilationId, pageable);
+            }
         }
         return affected;
     }
