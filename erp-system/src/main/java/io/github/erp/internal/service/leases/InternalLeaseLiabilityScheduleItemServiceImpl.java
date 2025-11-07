@@ -50,19 +50,20 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
     private final InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository;
 
     private final LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper;
-
+    private final InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService;
     private final LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository;
     private final LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository;
     private final LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository;
 
     public InternalLeaseLiabilityScheduleItemServiceImpl(
         InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository,
-        LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper,
+        LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper, InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService,
         LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository,
         LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository,
         LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository) {
         this.leaseLiabilityScheduleItemRepository = leaseLiabilityScheduleItemRepository;
         this.leaseLiabilityScheduleItemMapper = leaseLiabilityScheduleItemMapper;
+        this.leaseLiabilityCompilationService = leaseLiabilityCompilationService;
         this.leaseLiabilityScheduleItemSearchRepository = leaseLiabilityScheduleItemSearchRepository;
         this.leaseLiabilityCompilationRepository = leaseLiabilityCompilationRepository;
         this.leaseLiabilityCompilationSearchRepository = leaseLiabilityCompilationSearchRepository;
