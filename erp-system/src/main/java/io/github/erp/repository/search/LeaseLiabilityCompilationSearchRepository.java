@@ -20,10 +20,9 @@ package io.github.erp.repository.search;
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
-import io.github.erp.domain.LeaseLiabilityCompilation;
+import io.github.erp.repository.search.document.LeaseLiabilityCompilationSearchDocument;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -33,13 +32,15 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
- * Spring Data Elasticsearch repository for the {@link LeaseLiabilityCompilation} entity.
+ * Spring Data Elasticsearch repository for the {@link LeaseLiabilityCompilationSearchDocument} projection.
  */
 public interface LeaseLiabilityCompilationSearchRepository
-    extends ElasticsearchRepository<LeaseLiabilityCompilation, Long>, LeaseLiabilityCompilationSearchRepositoryInternal {}
+    extends
+        ElasticsearchRepository<LeaseLiabilityCompilationSearchDocument, Long>,
+        LeaseLiabilityCompilationSearchRepositoryInternal {}
 
 interface LeaseLiabilityCompilationSearchRepositoryInternal {
-    Page<LeaseLiabilityCompilation> search(String query, Pageable pageable);
+    Page<LeaseLiabilityCompilationSearchDocument> search(String query, Pageable pageable);
 }
 
 class LeaseLiabilityCompilationSearchRepositoryInternalImpl implements LeaseLiabilityCompilationSearchRepositoryInternal {
@@ -51,11 +52,11 @@ class LeaseLiabilityCompilationSearchRepositoryInternalImpl implements LeaseLiab
     }
 
     @Override
-    public Page<LeaseLiabilityCompilation> search(String query, Pageable pageable) {
+    public Page<LeaseLiabilityCompilationSearchDocument> search(String query, Pageable pageable) {
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
         nativeSearchQuery.setPageable(pageable);
-        List<LeaseLiabilityCompilation> hits = elasticsearchTemplate
-            .search(nativeSearchQuery, LeaseLiabilityCompilation.class)
+        List<LeaseLiabilityCompilationSearchDocument> hits = elasticsearchTemplate
+            .search(nativeSearchQuery, LeaseLiabilityCompilationSearchDocument.class)
             .map(SearchHit::getContent)
             .stream()
             .collect(Collectors.toList());
