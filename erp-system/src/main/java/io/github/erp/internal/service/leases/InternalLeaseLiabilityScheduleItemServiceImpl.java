@@ -22,6 +22,7 @@ import io.github.erp.repository.LeaseLiabilityCompilationRepository;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityScheduleItemSearchRepository;
 import io.github.erp.repository.search.LeaseLiabilityCompilationSearchRepository;
+import io.github.erp.repository.search.mapper.LeaseLiabilityCompilationSearchMapper;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import io.github.erp.service.mapper.LeaseLiabilityScheduleItemMapper;
 import org.slf4j.Logger;
@@ -53,18 +54,21 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
     private final LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository;
     private final LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository;
     private final LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository;
+    private final LeaseLiabilityCompilationSearchMapper leaseLiabilityCompilationSearchMapper;
 
     public InternalLeaseLiabilityScheduleItemServiceImpl(
         InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository,
         LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper,
         LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository,
         LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository,
-        LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository) {
+        LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository,
+        LeaseLiabilityCompilationSearchMapper leaseLiabilityCompilationSearchMapper) {
         this.leaseLiabilityScheduleItemRepository = leaseLiabilityScheduleItemRepository;
         this.leaseLiabilityScheduleItemMapper = leaseLiabilityScheduleItemMapper;
         this.leaseLiabilityScheduleItemSearchRepository = leaseLiabilityScheduleItemSearchRepository;
         this.leaseLiabilityCompilationRepository = leaseLiabilityCompilationRepository;
         this.leaseLiabilityCompilationSearchRepository = leaseLiabilityCompilationSearchRepository;
+        this.leaseLiabilityCompilationSearchMapper = leaseLiabilityCompilationSearchMapper;
     }
 
     @Override
@@ -164,6 +168,7 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
         if (updated > 0) {
             leaseLiabilityCompilationRepository
                 .findById(compilationId)
+                .map(leaseLiabilityCompilationSearchMapper::toDocument)
                 .ifPresent(leaseLiabilityCompilationSearchRepository::save);
         }
     }
