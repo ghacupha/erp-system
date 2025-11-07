@@ -30,6 +30,7 @@ import io.github.erp.domain.ApplicationUser;
 import io.github.erp.domain.LeaseLiabilityCompilation;
 import io.github.erp.repository.LeaseLiabilityCompilationRepository;
 import io.github.erp.repository.search.LeaseLiabilityCompilationSearchRepository;
+import io.github.erp.repository.search.document.LeaseLiabilityCompilationSearchDocument;
 import io.github.erp.service.criteria.LeaseLiabilityCompilationCriteria;
 import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
 import io.github.erp.service.mapper.LeaseLiabilityCompilationMapper;
@@ -157,7 +158,8 @@ class LeaseLiabilityCompilationResourceIT {
         assertThat(testLeaseLiabilityCompilation.getTimeOfRequest()).isEqualTo(DEFAULT_TIME_OF_REQUEST);
 
         // Validate the LeaseLiabilityCompilation in Elasticsearch
-        verify(mockLeaseLiabilityCompilationSearchRepository, times(1)).save(testLeaseLiabilityCompilation);
+        verify(mockLeaseLiabilityCompilationSearchRepository, times(1))
+            .save(any(LeaseLiabilityCompilationSearchDocument.class));
     }
 
     @Test
@@ -183,7 +185,8 @@ class LeaseLiabilityCompilationResourceIT {
         assertThat(leaseLiabilityCompilationList).hasSize(databaseSizeBeforeCreate);
 
         // Validate the LeaseLiabilityCompilation in Elasticsearch
-        verify(mockLeaseLiabilityCompilationSearchRepository, times(0)).save(leaseLiabilityCompilation);
+        verify(mockLeaseLiabilityCompilationSearchRepository, times(0))
+            .save(any(LeaseLiabilityCompilationSearchDocument.class));
     }
 
     @Test
@@ -543,7 +546,7 @@ class LeaseLiabilityCompilationResourceIT {
         assertThat(testLeaseLiabilityCompilation.getTimeOfRequest()).isEqualTo(UPDATED_TIME_OF_REQUEST);
 
         // Validate the LeaseLiabilityCompilation in Elasticsearch
-        verify(mockLeaseLiabilityCompilationSearchRepository).save(testLeaseLiabilityCompilation);
+        verify(mockLeaseLiabilityCompilationSearchRepository).save(any(LeaseLiabilityCompilationSearchDocument.class));
     }
 
     @Test
@@ -569,7 +572,8 @@ class LeaseLiabilityCompilationResourceIT {
         assertThat(leaseLiabilityCompilationList).hasSize(databaseSizeBeforeUpdate);
 
         // Validate the LeaseLiabilityCompilation in Elasticsearch
-        verify(mockLeaseLiabilityCompilationSearchRepository, times(0)).save(leaseLiabilityCompilation);
+        verify(mockLeaseLiabilityCompilationSearchRepository, times(0))
+            .save(any(LeaseLiabilityCompilationSearchDocument.class));
     }
 
     @Test
@@ -595,7 +599,8 @@ class LeaseLiabilityCompilationResourceIT {
         assertThat(leaseLiabilityCompilationList).hasSize(databaseSizeBeforeUpdate);
 
         // Validate the LeaseLiabilityCompilation in Elasticsearch
-        verify(mockLeaseLiabilityCompilationSearchRepository, times(0)).save(leaseLiabilityCompilation);
+        verify(mockLeaseLiabilityCompilationSearchRepository, times(0))
+            .save(any(LeaseLiabilityCompilationSearchDocument.class));
     }
 
     @Test
@@ -621,7 +626,8 @@ class LeaseLiabilityCompilationResourceIT {
         assertThat(leaseLiabilityCompilationList).hasSize(databaseSizeBeforeUpdate);
 
         // Validate the LeaseLiabilityCompilation in Elasticsearch
-        verify(mockLeaseLiabilityCompilationSearchRepository, times(0)).save(leaseLiabilityCompilation);
+        verify(mockLeaseLiabilityCompilationSearchRepository, times(0))
+            .save(any(LeaseLiabilityCompilationSearchDocument.class));
     }
 
     @Test
@@ -711,7 +717,8 @@ class LeaseLiabilityCompilationResourceIT {
         assertThat(leaseLiabilityCompilationList).hasSize(databaseSizeBeforeUpdate);
 
         // Validate the LeaseLiabilityCompilation in Elasticsearch
-        verify(mockLeaseLiabilityCompilationSearchRepository, times(0)).save(leaseLiabilityCompilation);
+        verify(mockLeaseLiabilityCompilationSearchRepository, times(0))
+            .save(any(LeaseLiabilityCompilationSearchDocument.class));
     }
 
     @Test
@@ -737,7 +744,8 @@ class LeaseLiabilityCompilationResourceIT {
         assertThat(leaseLiabilityCompilationList).hasSize(databaseSizeBeforeUpdate);
 
         // Validate the LeaseLiabilityCompilation in Elasticsearch
-        verify(mockLeaseLiabilityCompilationSearchRepository, times(0)).save(leaseLiabilityCompilation);
+        verify(mockLeaseLiabilityCompilationSearchRepository, times(0))
+            .save(any(LeaseLiabilityCompilationSearchDocument.class));
     }
 
     @Test
@@ -763,7 +771,8 @@ class LeaseLiabilityCompilationResourceIT {
         assertThat(leaseLiabilityCompilationList).hasSize(databaseSizeBeforeUpdate);
 
         // Validate the LeaseLiabilityCompilation in Elasticsearch
-        verify(mockLeaseLiabilityCompilationSearchRepository, times(0)).save(leaseLiabilityCompilation);
+        verify(mockLeaseLiabilityCompilationSearchRepository, times(0))
+            .save(any(LeaseLiabilityCompilationSearchDocument.class));
     }
 
     @Test
@@ -793,8 +802,13 @@ class LeaseLiabilityCompilationResourceIT {
         // Configure the mock search repository
         // Initialize the database
         leaseLiabilityCompilationRepository.saveAndFlush(leaseLiabilityCompilation);
+        LeaseLiabilityCompilationSearchDocument document = new LeaseLiabilityCompilationSearchDocument();
+        document.setId(leaseLiabilityCompilation.getId());
+        document.setRequestId(leaseLiabilityCompilation.getRequestId());
+        document.setTimeOfRequest(leaseLiabilityCompilation.getTimeOfRequest());
+        document.setActive(leaseLiabilityCompilation.getActive());
         when(mockLeaseLiabilityCompilationSearchRepository.search("id:" + leaseLiabilityCompilation.getId(), PageRequest.of(0, 20)))
-            .thenReturn(new PageImpl<>(Collections.singletonList(leaseLiabilityCompilation), PageRequest.of(0, 1), 1));
+            .thenReturn(new PageImpl<>(Collections.singletonList(document), PageRequest.of(0, 1), 1));
 
         // Search the leaseLiabilityCompilation
         restLeaseLiabilityCompilationMockMvc

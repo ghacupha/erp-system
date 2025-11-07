@@ -18,11 +18,10 @@ package io.github.erp.service.impl;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
-
 import io.github.erp.domain.LeaseLiabilityCompilation;
 import io.github.erp.repository.LeaseLiabilityCompilationRepository;
 import io.github.erp.repository.search.LeaseLiabilityCompilationSearchRepository;
+import io.github.erp.repository.search.mapper.LeaseLiabilityCompilationSearchMapper;
 import io.github.erp.service.LeaseLiabilityCompilationService;
 import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
 import io.github.erp.service.mapper.LeaseLiabilityCompilationMapper;
@@ -48,15 +47,18 @@ public class LeaseLiabilityCompilationServiceImpl implements LeaseLiabilityCompi
     private final LeaseLiabilityCompilationMapper leaseLiabilityCompilationMapper;
 
     private final LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository;
+    private final LeaseLiabilityCompilationSearchMapper leaseLiabilityCompilationSearchMapper;
 
     public LeaseLiabilityCompilationServiceImpl(
         LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository,
         LeaseLiabilityCompilationMapper leaseLiabilityCompilationMapper,
-        LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository
+        LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository,
+        LeaseLiabilityCompilationSearchMapper leaseLiabilityCompilationSearchMapper
     ) {
         this.leaseLiabilityCompilationRepository = leaseLiabilityCompilationRepository;
         this.leaseLiabilityCompilationMapper = leaseLiabilityCompilationMapper;
         this.leaseLiabilityCompilationSearchRepository = leaseLiabilityCompilationSearchRepository;
+        this.leaseLiabilityCompilationSearchMapper = leaseLiabilityCompilationSearchMapper;
     }
 
     @Override
@@ -65,7 +67,7 @@ public class LeaseLiabilityCompilationServiceImpl implements LeaseLiabilityCompi
         LeaseLiabilityCompilation leaseLiabilityCompilation = leaseLiabilityCompilationMapper.toEntity(leaseLiabilityCompilationDTO);
         leaseLiabilityCompilation = leaseLiabilityCompilationRepository.save(leaseLiabilityCompilation);
         LeaseLiabilityCompilationDTO result = leaseLiabilityCompilationMapper.toDto(leaseLiabilityCompilation);
-        leaseLiabilityCompilationSearchRepository.save(leaseLiabilityCompilation);
+        leaseLiabilityCompilationSearchRepository.save(leaseLiabilityCompilationSearchMapper.toDocument(leaseLiabilityCompilation));
         return result;
     }
 
@@ -82,7 +84,9 @@ public class LeaseLiabilityCompilationServiceImpl implements LeaseLiabilityCompi
             })
             .map(leaseLiabilityCompilationRepository::save)
             .map(savedLeaseLiabilityCompilation -> {
-                leaseLiabilityCompilationSearchRepository.save(savedLeaseLiabilityCompilation);
+                leaseLiabilityCompilationSearchRepository.save(
+                    leaseLiabilityCompilationSearchMapper.toDocument(savedLeaseLiabilityCompilation)
+                );
 
                 return savedLeaseLiabilityCompilation;
             })
@@ -114,6 +118,6 @@ public class LeaseLiabilityCompilationServiceImpl implements LeaseLiabilityCompi
     @Transactional(readOnly = true)
     public Page<LeaseLiabilityCompilationDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of LeaseLiabilityCompilations for query {}", query);
-        return leaseLiabilityCompilationSearchRepository.search(query, pageable).map(leaseLiabilityCompilationMapper::toDto);
+        return leaseLiabilityCompilationSearchRepository.search(query, pageable).map(leaseLiabilityCompilationSearchMapper::toDto);
     }
 }
