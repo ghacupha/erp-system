@@ -50,20 +50,18 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
     private final InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository;
 
     private final LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper;
-    private final InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService;
     private final LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository;
     private final LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository;
     private final LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository;
 
     public InternalLeaseLiabilityScheduleItemServiceImpl(
         InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository,
-        LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper, InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService,
+        LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper,
         LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository,
         LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository,
         LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository) {
         this.leaseLiabilityScheduleItemRepository = leaseLiabilityScheduleItemRepository;
         this.leaseLiabilityScheduleItemMapper = leaseLiabilityScheduleItemMapper;
-        this.leaseLiabilityCompilationService = leaseLiabilityCompilationService;
         this.leaseLiabilityScheduleItemSearchRepository = leaseLiabilityScheduleItemSearchRepository;
         this.leaseLiabilityCompilationRepository = leaseLiabilityCompilationRepository;
         this.leaseLiabilityCompilationSearchRepository = leaseLiabilityCompilationSearchRepository;
@@ -145,7 +143,7 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
         int affected = leaseLiabilityScheduleItemRepository.updateActiveStateByCompilation(compilationId, active);
         // TODO update with queue
         if (affected > 0) {
-            leaseLiabilityCompilationService.updateActiveStateByCompilation(compilationId, active);
+            updateCompilationActiveFlag(compilationId, active);
             Pageable pageable = PageRequest.of(0, SEARCH_INDEX_BATCH_SIZE);
             Page<LeaseLiabilityScheduleItem> page =
                 leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilationId, pageable);
