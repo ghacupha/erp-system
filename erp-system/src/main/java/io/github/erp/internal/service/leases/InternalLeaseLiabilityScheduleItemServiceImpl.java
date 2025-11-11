@@ -21,14 +21,11 @@ import io.github.erp.domain.LeaseLiabilityScheduleItem;
 import io.github.erp.repository.LeaseLiabilityCompilationRepository;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityScheduleItemSearchRepository;
-import io.github.erp.repository.search.LeaseLiabilityCompilationSearchRepository;
-import io.github.erp.repository.search.mapper.LeaseLiabilityCompilationSearchMapper;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import io.github.erp.service.mapper.LeaseLiabilityScheduleItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,8 +41,6 @@ import java.util.Optional;
 @Transactional
 public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLeaseLiabilityScheduleItemService {
 
-    private static final int SEARCH_INDEX_BATCH_SIZE = 200;
-
     private final Logger log = LoggerFactory.getLogger(InternalLeaseLiabilityScheduleItemServiceImpl.class);
 
     private final InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository;
@@ -53,22 +48,16 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
     private final LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper;
     private final LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository;
     private final LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository;
-    private final LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository;
-    private final LeaseLiabilityCompilationSearchMapper leaseLiabilityCompilationSearchMapper;
 
     public InternalLeaseLiabilityScheduleItemServiceImpl(
         InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository,
         LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper,
         LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository,
-        LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository,
-        LeaseLiabilityCompilationSearchRepository leaseLiabilityCompilationSearchRepository,
-        LeaseLiabilityCompilationSearchMapper leaseLiabilityCompilationSearchMapper) {
+        LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository) {
         this.leaseLiabilityScheduleItemRepository = leaseLiabilityScheduleItemRepository;
         this.leaseLiabilityScheduleItemMapper = leaseLiabilityScheduleItemMapper;
         this.leaseLiabilityScheduleItemSearchRepository = leaseLiabilityScheduleItemSearchRepository;
         this.leaseLiabilityCompilationRepository = leaseLiabilityCompilationRepository;
-        this.leaseLiabilityCompilationSearchRepository = leaseLiabilityCompilationSearchRepository;
-        this.leaseLiabilityCompilationSearchMapper = leaseLiabilityCompilationSearchMapper;
     }
 
     @Override

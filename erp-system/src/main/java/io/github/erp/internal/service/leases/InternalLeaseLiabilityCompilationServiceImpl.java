@@ -135,16 +135,4 @@ public class InternalLeaseLiabilityCompilationServiceImpl implements InternalLea
         log.debug("Request to update activation flag for compilation {} to {}", compilationId, active);
         return leaseLiabilityScheduleItemService.updateActivationByCompilation(compilationId, active);
     }
-
-    @Override
-    public void updateActiveStateByCompilation(Long compilationId, boolean active) {
-        log.debug("Request to update compilation {} active flag to {}", compilationId, active);
-        int updated = leaseLiabilityCompilationRepository.updateActiveStateById(compilationId, active);
-        if (updated > 0) {
-            leaseLiabilityCompilationRepository
-                .findById(compilationId)
-                .map(leaseLiabilityCompilationSearchMapper::toDocument)
-                .ifPresent(leaseLiabilityCompilationSearchRepository::save);
-        }
-    }
 }

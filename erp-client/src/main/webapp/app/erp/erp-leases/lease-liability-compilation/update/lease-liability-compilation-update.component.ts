@@ -79,6 +79,7 @@ export class LeaseLiabilityCompilationUpdateComponent implements OnInit {
     if (leaseLiabilityCompilation.id !== undefined) {
       this.subscribeToSaveResponse(this.leaseLiabilityCompilationService.update(leaseLiabilityCompilation));
     } else {
+      leaseLiabilityCompilation.active = true;
       this.subscribeToSaveResponse(this.leaseLiabilityCompilationService.create(leaseLiabilityCompilation));
     }
   }
