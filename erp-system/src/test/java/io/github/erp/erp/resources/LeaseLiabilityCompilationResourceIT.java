@@ -68,7 +68,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"LEASE_MANAGER"})
-class LeaseLiabilityCompilationResourceIT {
+public class LeaseLiabilityCompilationResourceIT {
 
     private static final UUID DEFAULT_REQUEST_ID = UUID.randomUUID();
     private static final UUID UPDATED_REQUEST_ID = UUID.randomUUID();

@@ -68,7 +68,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
-class LeaseLiabilityScheduleItemResourceIT {
+public class LeaseLiabilityScheduleItemResourceIT {
 
     private static final Integer DEFAULT_SEQUENCE_NUMBER = 1;
     private static final Integer UPDATED_SEQUENCE_NUMBER = 2;
