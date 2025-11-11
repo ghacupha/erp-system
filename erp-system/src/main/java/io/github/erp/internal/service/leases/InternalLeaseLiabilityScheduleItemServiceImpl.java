@@ -145,31 +145,13 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
     public int updateActivationByCompilation(Long compilationId, boolean active) {
         log.debug("Request to update activation state for compilation {} to {}", compilationId, active);
         int affected = leaseLiabilityScheduleItemRepository.updateActiveStateByCompilation(compilationId, active);
-        // TODO update with queue
         if (affected > 0) {
-            updateCompilationActiveFlag(compilationId, active);
-            Pageable pageable = PageRequest.of(0, SEARCH_INDEX_BATCH_SIZE);
-            Page<LeaseLiabilityScheduleItem> page =
-                leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilationId, pageable);
-            while (!page.isEmpty()) {
-                leaseLiabilityScheduleItemSearchRepository.saveAll(page.getContent());
-                if (!page.hasNext()) {
-                    break;
-                }
-                pageable = page.nextPageable();
-                page = leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilationId, pageable);
-            }
+            affected += updateCompilationActiveFlag(compilationId, active);
         }
         return affected;
     }
 
-    private void updateCompilationActiveFlag(Long compilationId, boolean active) {
-        int updated = leaseLiabilityCompilationRepository.updateActiveStateById(compilationId, active);
-        if (updated > 0) {
-            leaseLiabilityCompilationRepository
-                .findById(compilationId)
-                .map(leaseLiabilityCompilationSearchMapper::toDocument)
-                .ifPresent(leaseLiabilityCompilationSearchRepository::save);
-        }
+    private int updateCompilationActiveFlag(Long compilationId, boolean active) {
+        return leaseLiabilityCompilationRepository.updateActiveStateById(compilationId, active);
     }
 }

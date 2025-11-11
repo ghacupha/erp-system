@@ -139,7 +139,6 @@
                 class="btn btn-warning btn-sm"
                 data-cy="entityDeactivateButton"
                 (click)="deactivateCompilation(leaseLiabilityCompilation)"
-                [disabled]="!leaseLiabilityCompilation.active || rowActionLoading[leaseLiabilityCompilation.id!]"
               >
                 <fa-icon *ngIf="!rowActionLoading[leaseLiabilityCompilation.id!]" icon="ban"></fa-icon>
                 <fa-icon *ngIf="rowActionLoading[leaseLiabilityCompilation.id!]" icon="spinner" [spin]="true"></fa-icon>
