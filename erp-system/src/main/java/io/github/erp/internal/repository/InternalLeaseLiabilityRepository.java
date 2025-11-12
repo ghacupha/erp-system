@@ -22,9 +22,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Spring Data SQL repository for the LeaseLiability entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface InternalLeaseLiabilityRepository extends JpaRepository<LeaseLiability, Long>, JpaSpecificationExecutor<LeaseLiability> {}
+public interface InternalLeaseLiabilityRepository extends JpaRepository<LeaseLiability, Long>, JpaSpecificationExecutor<LeaseLiability> {
+    List<LeaseLiability> findByIdNotIn(Collection<Long> ids);
+}
