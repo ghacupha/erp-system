@@ -25,6 +25,7 @@ import static io.github.erp.domain.enumeration.NVBCompilationStatus.STARTED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -110,6 +111,15 @@ class NBVJobSequenceServiceImplTest {
                 statusSnapshots.add(capturedJob.getCompilationStatus());
                 return capturedJob;
             });
+
+        List<NVBCompilationStatus> savedStatuses = new ArrayList<>();
+        doAnswer(invocation -> {
+            NbvCompilationJobDTO savedJob = invocation.getArgument(0);
+            savedStatuses.add(savedJob.getCompilationStatus());
+            return savedJob;
+        })
+            .when(nbvCompilationJobService)
+            .save(any(NbvCompilationJobDTO.class));
 
         service.triggerJobStart(job);
 
