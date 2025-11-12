@@ -28,6 +28,7 @@ public class LeaseLiabilityCompilationItemWriter implements ItemWriter<List<Leas
 
     private final InternalLeaseLiabilityScheduleItemService internalLeaseLiabilityScheduleItemService;
     private final long leaseLiabilityCompilationId;
+    private boolean activationUpdated;
 
     public LeaseLiabilityCompilationItemWriter(
         InternalLeaseLiabilityScheduleItemService internalLeaseLiabilityScheduleItemService,
@@ -47,7 +48,14 @@ public class LeaseLiabilityCompilationItemWriter implements ItemWriter<List<Leas
      */
     @Override
     public void write(List<? extends List<LeaseLiabilityScheduleItemDTO>> items) throws Exception {
+        if (!activationUpdated && items != null && items.stream().anyMatch(batch -> batch != null && !batch.isEmpty())) {
+            internalLeaseLiabilityScheduleItemService.updateActivationByCompilation(leaseLiabilityCompilationId, false);
+            activationUpdated = true;
+        }
         items.forEach(batch -> {
+            if (batch == null || batch.isEmpty()) {
+                return;
+            }
             batch.forEach(item -> {
                 item.setActive(Boolean.TRUE);
                 if (item.getLeaseLiabilityCompilation() == null) {
