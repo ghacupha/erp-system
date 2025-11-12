@@ -25,6 +25,7 @@ import static io.github.erp.domain.enumeration.NVBCompilationStatus.STARTED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -33,6 +34,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import io.github.erp.domain.NetBookValueEntry;
+import io.github.erp.domain.enumeration.NVBCompilationStatus;
 import io.github.erp.erp.assets.nbv.buffer.BufferedSinkProcessor;
 import io.github.erp.erp.assets.nbv.model.NBVBatchMessage;
 import io.github.erp.erp.assets.nbv.queue.NBVBatchProducer;
@@ -45,6 +47,7 @@ import io.github.erp.service.dto.NbvCompilationBatchDTO;
 import io.github.erp.service.dto.NbvCompilationJobDTO;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -102,17 +105,23 @@ class NBVJobSequenceServiceImplTest {
                 return batch;
             });
 
+        List<NVBCompilationStatus> savedStatuses = new ArrayList<>();
+        doAnswer(invocation -> {
+            NbvCompilationJobDTO savedJob = invocation.getArgument(0);
+            savedStatuses.add(savedJob.getCompilationStatus());
+            return savedJob;
+        })
+            .when(nbvCompilationJobService)
+            .save(any(NbvCompilationJobDTO.class));
+
         service.triggerJobStart(job);
 
         InOrder sinkOrder = inOrder(netBookValueEntryBufferedSinkProcessor);
         sinkOrder.verify(netBookValueEntryBufferedSinkProcessor).startup();
         verify(netBookValueEntryBufferedSinkProcessor, never()).shutdown();
 
-        ArgumentCaptor<NbvCompilationJobDTO> jobCaptor = ArgumentCaptor.forClass(NbvCompilationJobDTO.class);
-        verify(nbvCompilationJobService, times(2)).save(jobCaptor.capture());
-        assertThat(jobCaptor.getAllValues())
-            .extracting(NbvCompilationJobDTO::getCompilationStatus)
-            .containsExactly(RUNNING, ENQUEUED);
+        verify(nbvCompilationJobService, times(2)).save(any(NbvCompilationJobDTO.class));
+        assertThat(savedStatuses).containsExactly(RUNNING, ENQUEUED);
 
         ArgumentCaptor<NbvCompilationBatchDTO> batchCaptor = ArgumentCaptor.forClass(NbvCompilationBatchDTO.class);
         verify(nbvCompilationBatchService).save(batchCaptor.capture());
