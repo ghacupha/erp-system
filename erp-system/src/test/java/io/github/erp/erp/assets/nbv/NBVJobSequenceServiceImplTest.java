@@ -95,6 +95,7 @@ class NBVJobSequenceServiceImplTest {
     void triggerJobStart_enqueuesBatchesAndUpdatesStatus() {
         NbvCompilationJobDTO job = createJob(STARTED);
         List<Long> assetIds = Arrays.asList(10L, 11L, 12L);
+        List<NVBCompilationStatus> statusSnapshots = new ArrayList<>();
 
         when(internalAssetRegistrationRepository.getAssetIdsByCapitalizationDateBefore(eq(job.getActivePeriod().getEndDate())))
             .thenReturn(assetIds);
@@ -103,6 +104,12 @@ class NBVJobSequenceServiceImplTest {
                 NbvCompilationBatchDTO batch = invocation.getArgument(0);
                 batch.setId(25L);
                 return batch;
+            });
+        when(nbvCompilationJobService.save(any(NbvCompilationJobDTO.class)))
+            .thenAnswer(invocation -> {
+                NbvCompilationJobDTO capturedJob = invocation.getArgument(0);
+                statusSnapshots.add(capturedJob.getCompilationStatus());
+                return capturedJob;
             });
 
         List<NVBCompilationStatus> savedStatuses = new ArrayList<>();
@@ -121,7 +128,7 @@ class NBVJobSequenceServiceImplTest {
         verify(netBookValueEntryBufferedSinkProcessor, never()).shutdown();
 
         verify(nbvCompilationJobService, times(2)).save(any(NbvCompilationJobDTO.class));
-        assertThat(savedStatuses).containsExactly(RUNNING, ENQUEUED);
+        assertThat(statusSnapshots).containsExactly(RUNNING, ENQUEUED);
 
         ArgumentCaptor<NbvCompilationBatchDTO> batchCaptor = ArgumentCaptor.forClass(NbvCompilationBatchDTO.class);
         verify(nbvCompilationBatchService).save(batchCaptor.capture());
