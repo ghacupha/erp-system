@@ -18,7 +18,9 @@ package io.github.erp.internal.service.leases;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.LeaseLiability;
+import io.github.erp.domain.LeaseLiabilityScheduleItem;
 import io.github.erp.internal.repository.InternalLeaseLiabilityRepository;
+import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleItemRepository;
 import io.github.erp.repository.search.LeaseLiabilitySearchRepository;
 import io.github.erp.service.dto.LeaseLiabilityDTO;
 import io.github.erp.service.mapper.LeaseLiabilityMapper;
@@ -29,8 +31,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link LeaseLiability}.
@@ -47,14 +52,18 @@ public class InternalLeaseLiabilityServiceImpl implements InternalLeaseLiability
 
     private final LeaseLiabilitySearchRepository leaseLiabilitySearchRepository;
 
+    private final InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository;
+
     public InternalLeaseLiabilityServiceImpl(
         InternalLeaseLiabilityRepository leaseLiabilityRepository,
         LeaseLiabilityMapper leaseLiabilityMapper,
-        LeaseLiabilitySearchRepository leaseLiabilitySearchRepository
+        LeaseLiabilitySearchRepository leaseLiabilitySearchRepository,
+        InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository
     ) {
         this.leaseLiabilityRepository = leaseLiabilityRepository;
         this.leaseLiabilityMapper = leaseLiabilityMapper;
         this.leaseLiabilitySearchRepository = leaseLiabilitySearchRepository;
+        this.leaseLiabilityScheduleItemRepository = leaseLiabilityScheduleItemRepository;
     }
 
     @Override
@@ -133,7 +142,26 @@ public class InternalLeaseLiabilityServiceImpl implements InternalLeaseLiability
     @Override
     public Optional<List<LeaseLiabilityDTO>> getCompilationAdjacentMetadataItems(long leaseLiabilityCompilationRequestId, String batchJobIdentifier) {
 
-        return Optional.of(leaseLiabilityRepository.findAll())
-            .map(leaseLiabilityMapper::toDto);
+        Set<Long> processedLiabilityIds = leaseLiabilityScheduleItemRepository
+            .findByLeaseLiabilityCompilationId(leaseLiabilityCompilationRequestId)
+            .stream()
+            .map(LeaseLiabilityScheduleItem::getLeaseLiability)
+            .filter(liability -> liability != null && liability.getId() != null)
+            .map(LeaseLiability::getId)
+            .collect(Collectors.toSet());
+
+        List<LeaseLiability> pendingLiabilities = processedLiabilityIds.isEmpty()
+            ? leaseLiabilityRepository.findAll()
+            : leaseLiabilityRepository.findByIdNotIn(processedLiabilityIds);
+
+        List<LeaseLiability> safePendingLiabilities =
+            pendingLiabilities == null ? Collections.emptyList() : pendingLiabilities;
+
+        List<LeaseLiabilityDTO> pendingDtos = safePendingLiabilities
+            .stream()
+            .map(leaseLiabilityMapper::toDto)
+            .collect(Collectors.toList());
+
+        return Optional.of(pendingDtos);
     }
 }
