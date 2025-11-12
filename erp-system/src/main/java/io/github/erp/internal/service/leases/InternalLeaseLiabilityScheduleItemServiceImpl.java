@@ -17,11 +17,16 @@ package io.github.erp.internal.service.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
+import io.github.erp.domain.LeaseRepaymentPeriod;
 import io.github.erp.repository.LeaseLiabilityCompilationRepository;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityScheduleItemSearchRepository;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
+import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
+import io.github.erp.service.dto.LeaseLiabilityDTO;
+import io.github.erp.service.dto.LeaseRepaymentPeriodDTO;
 import io.github.erp.service.mapper.LeaseLiabilityScheduleItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +36,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link LeaseLiabilityScheduleItem}.
@@ -124,10 +133,75 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
 
     @Override
     public void saveAll(List<LeaseLiabilityScheduleItemDTO> scheduleItems) {
+        if (scheduleItems == null || scheduleItems.isEmpty()) {
+            return;
+        }
 
-        leaseLiabilityScheduleItemRepository.saveAll(new ArrayList<>(leaseLiabilityScheduleItemMapper.toEntity(scheduleItems)));
+        List<LeaseLiabilityScheduleItemDTO> items = scheduleItems.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        if (items.isEmpty()) {
+            return;
+        }
 
-        leaseLiabilityScheduleItemSearchRepository.saveAll(leaseLiabilityScheduleItemMapper.toEntity(scheduleItems));
+        Map<Long, List<LeaseLiabilityScheduleItemDTO>> itemsByCompilation = new HashMap<>();
+        for (LeaseLiabilityScheduleItemDTO item : items) {
+            Long compilationId = extractCompilationId(item);
+            itemsByCompilation.computeIfAbsent(compilationId, key -> new ArrayList<>()).add(item);
+        }
+
+        List<LeaseLiabilityScheduleItem> entitiesToPersist = new ArrayList<>();
+        for (Map.Entry<Long, List<LeaseLiabilityScheduleItemDTO>> entry : itemsByCompilation.entrySet()) {
+            Long compilationId = entry.getKey();
+            Map<String, LeaseLiabilityScheduleItem> existingByKey = new HashMap<>();
+            for (LeaseLiabilityScheduleItem existing : leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilationId)) {
+                buildBusinessKey(existing).ifPresent(key -> existingByKey.putIfAbsent(key, existing));
+            }
+
+            for (LeaseLiabilityScheduleItemDTO dto : entry.getValue()) {
+                LeaseLiabilityScheduleItem entity = leaseLiabilityScheduleItemMapper.toEntity(dto);
+                buildBusinessKey(dto)
+                    .map(existingByKey::get)
+                    .ifPresent(existing -> entity.setId(existing.getId()));
+                entitiesToPersist.add(entity);
+            }
+        }
+
+        if (entitiesToPersist.isEmpty()) {
+            return;
+        }
+
+        List<LeaseLiabilityScheduleItem> persisted = leaseLiabilityScheduleItemRepository.saveAll(entitiesToPersist);
+        leaseLiabilityScheduleItemSearchRepository.saveAll(persisted);
+    }
+
+    private Long extractCompilationId(LeaseLiabilityScheduleItemDTO item) {
+        LeaseLiabilityCompilationDTO compilation = item.getLeaseLiabilityCompilation();
+        if (compilation == null || compilation.getId() == null) {
+            throw new IllegalArgumentException("Lease liability compilation id is required for schedule item persistence");
+        }
+        return compilation.getId();
+    }
+
+    private Optional<String> buildBusinessKey(LeaseLiabilityScheduleItemDTO dto) {
+        LeaseLiabilityDTO liability = dto.getLeaseLiability();
+        LeaseRepaymentPeriodDTO period = dto.getLeasePeriod();
+        Long liabilityId = liability != null ? liability.getId() : null;
+        Long periodId = period != null ? period.getId() : null;
+        return buildBusinessKey(liabilityId, periodId);
+    }
+
+    private Optional<String> buildBusinessKey(LeaseLiabilityScheduleItem entity) {
+        LeaseLiability liability = entity.getLeaseLiability();
+        LeaseRepaymentPeriod period = entity.getLeasePeriod();
+        Long liabilityId = liability != null ? liability.getId() : null;
+        Long periodId = period != null ? period.getId() : null;
+        return buildBusinessKey(liabilityId, periodId);
+    }
+
+    private Optional<String> buildBusinessKey(Long liabilityId, Long periodId) {
+        if (liabilityId == null || periodId == null) {
+            return Optional.empty();
+        }
+        return Optional.of(liabilityId + ":" + periodId);
     }
 
     @Override
