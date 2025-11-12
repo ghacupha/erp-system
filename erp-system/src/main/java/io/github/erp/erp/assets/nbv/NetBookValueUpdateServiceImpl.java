@@ -92,7 +92,7 @@ public class NetBookValueUpdateServiceImpl implements NetBookValueUpdateService 
             // Handling the case where previousNetBookValueAmount is null
             // This is when an asset has been purchased in the same depreciation-period
             // Alt check capitalization-date > depreciation-period.startDate
-            dto.setPreviousNetBookValueAmount(assetRegistration.getAssetCost()); // We default to asset-cost
+            dto.setPreviousNetBookValueAmount(assetRegistration.getAssetCost().setScale(2, RoundingMode.HALF_EVEN)); // We default to asset-cost
         }
 
 
