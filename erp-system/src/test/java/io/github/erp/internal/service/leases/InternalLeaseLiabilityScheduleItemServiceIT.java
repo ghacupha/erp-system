@@ -23,10 +23,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.github.erp.IntegrationTest;
 import io.github.erp.domain.LeaseLiabilityCompilation;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
+import io.github.erp.domain.LeaseRepaymentPeriod;
 import io.github.erp.erp.resources.LeaseLiabilityCompilationResourceIT;
 import io.github.erp.repository.LeaseLiabilityScheduleItemRepository;
 import io.github.erp.web.rest.LeaseLiabilityScheduleItemResourceIT;
+import io.github.erp.web.rest.LeaseRepaymentPeriodResourceIT;
+import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
+import io.github.erp.service.mapper.LeaseLiabilityScheduleItemMapper;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +48,9 @@ class InternalLeaseLiabilityScheduleItemServiceIT {
 
     @Autowired
     private LeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository;
+
+    @Autowired
+    private LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper;
 
     @Autowired
     private EntityManager em;
@@ -106,5 +116,74 @@ class InternalLeaseLiabilityScheduleItemServiceIT {
         List<LeaseLiabilityScheduleItem> refreshed = leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(leaseLiabilityCompilation.getId());
         assertThat(refreshed).hasSize(2);
         assertThat(refreshed).allMatch(item -> Boolean.FALSE.equals(item.getActive()));
+    }
+
+    @Test
+    @Transactional
+    void saveAllReusesExistingRowsForCompilation() {
+        LeaseLiabilityScheduleItem firstItem = LeaseLiabilityScheduleItemResourceIT.createEntity(em);
+        firstItem.setLeaseLiabilityCompilation(leaseLiabilityCompilation);
+
+        LeaseLiabilityScheduleItem secondItem = LeaseLiabilityScheduleItemResourceIT.createEntity(em);
+        secondItem.setLeaseLiabilityCompilation(leaseLiabilityCompilation);
+        LeaseRepaymentPeriod nextPeriod = LeaseRepaymentPeriodResourceIT.createUpdatedEntity(em);
+        em.persist(nextPeriod);
+        em.flush();
+        secondItem.setLeasePeriod(nextPeriod);
+        secondItem.setSequenceNumber(2);
+
+        List<LeaseLiabilityScheduleItemDTO> initialDtos = List.of(
+            leaseLiabilityScheduleItemMapper.toDto(firstItem),
+            leaseLiabilityScheduleItemMapper.toDto(secondItem)
+        );
+
+        internalLeaseLiabilityScheduleItemService.saveAll(initialDtos);
+        em.flush();
+        em.clear();
+
+        List<LeaseLiabilityScheduleItem> persisted = leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(
+            leaseLiabilityCompilation.getId()
+        );
+        assertThat(persisted).hasSize(initialDtos.size());
+        Map<String, BigDecimal> previousCashByKey = persisted
+            .stream()
+            .collect(Collectors.toMap(this::businessKey, LeaseLiabilityScheduleItem::getCashPayment));
+
+        List<LeaseLiabilityScheduleItemDTO> rerunDtos = persisted
+            .stream()
+            .map(leaseLiabilityScheduleItemMapper::toDto)
+            .collect(Collectors.toList());
+        rerunDtos.forEach(dto -> {
+            dto.setId(null);
+            BigDecimal currentCash = dto.getCashPayment() != null ? dto.getCashPayment() : BigDecimal.ZERO;
+            dto.setCashPayment(currentCash.add(BigDecimal.ONE));
+        });
+
+        internalLeaseLiabilityScheduleItemService.saveAll(rerunDtos);
+        em.flush();
+        em.clear();
+
+        List<LeaseLiabilityScheduleItem> refreshed = leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(
+            leaseLiabilityCompilation.getId()
+        );
+        assertThat(refreshed).hasSize(persisted.size());
+        Map<String, BigDecimal> refreshedCashByKey = refreshed
+            .stream()
+            .collect(Collectors.toMap(this::businessKey, LeaseLiabilityScheduleItem::getCashPayment));
+
+        refreshedCashByKey.forEach((key, amount) -> {
+            BigDecimal previous = previousCashByKey.get(key);
+            assertThat(previous).isNotNull();
+            assertThat(amount).isEqualByComparingTo(previous.add(BigDecimal.ONE));
+        });
+    }
+
+    private String businessKey(LeaseLiabilityScheduleItem item) {
+        Long liabilityId = item.getLeaseLiability() != null ? item.getLeaseLiability().getId() : null;
+        Long periodId = item.getLeasePeriod() != null ? item.getLeasePeriod().getId() : null;
+        if (liabilityId == null || periodId == null) {
+            throw new IllegalStateException("Lease liability schedule item is missing a liability or period");
+        }
+        return liabilityId + ":" + periodId;
     }
 }
