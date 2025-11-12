@@ -1,6 +1,7 @@
 package io.github.erp.erp.reports;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -126,7 +127,7 @@ class ReportMetadataResourceExtensionTest {
             .perform(get("/api/app/report-metadata/active").param("page", "1").param("size", "10"))
             .andExpect(status().isOk())
             .andExpect(header().string("X-Total-Count", "12"))
-            .andExpect(header().string(HttpHeaders.LINK, containsString("page=1")))
+            .andExpect(header().stringValues(HttpHeaders.LINK, hasItem(containsString("page=1"))))
             .andExpect(jsonPath("$[0].id").value(dto.getId()))
             .andExpect(jsonPath("$[0].reportTitle").value(dto.getReportTitle()))
             .andExpect(jsonPath("$[0].module").value(dto.getModule()));
