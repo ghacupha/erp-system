@@ -21,6 +21,8 @@ package io.github.erp.internal.service.leases.batch;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -29,10 +31,12 @@ import io.github.erp.domain.LeaseLiabilityCompilation;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
 import io.github.erp.internal.service.leases.InternalLeaseLiabilityScheduleItemService;
 import io.github.erp.repository.LeaseLiabilityScheduleItemRepository;
+import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import io.github.erp.service.mapper.LeaseLiabilityScheduleItemMapper;
 import io.github.erp.web.rest.LeaseLiabilityScheduleItemResourceIT;
 import io.github.erp.erp.resources.LeaseLiabilityCompilationResourceIT;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
@@ -109,6 +113,84 @@ class LeaseLiabilityCompilationItemWriterIT {
             .filteredOn(item -> !item.getId().equals(existingFirstId) && !item.getId().equals(existingSecondId))
             .hasSize(2)
             .allMatch(item -> Boolean.TRUE.equals(item.getActive()));
+    }
+
+    @Test
+    @Transactional
+    void writeBackfillsCompilationWhenMissingAndActivatesNewRows() throws Exception {
+        LeaseLiabilityCompilation compilation = LeaseLiabilityCompilationResourceIT.createEntity(em);
+        compilation.setActive(false);
+        em.persist(compilation);
+        em.flush();
+
+        LeaseLiabilityCompilationItemWriter writer =
+            new LeaseLiabilityCompilationItemWriter(internalLeaseLiabilityScheduleItemService, compilation.getId());
+
+        LeaseLiabilityScheduleItemDTO dto = buildScheduleItemDto();
+        dto.setLeaseLiabilityCompilation(null);
+        dto.setActive(Boolean.FALSE);
+
+        writer.write(List.of(List.of(dto)));
+
+        em.flush();
+        em.clear();
+
+        List<LeaseLiabilityScheduleItem> persisted =
+            leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilation.getId());
+
+        assertThat(persisted).hasSize(1);
+        LeaseLiabilityScheduleItem saved = persisted.get(0);
+        assertThat(saved.getActive()).isTrue();
+        assertThat(saved.getLeaseLiabilityCompilation()).isNotNull();
+        assertThat(saved.getLeaseLiabilityCompilation().getId()).isEqualTo(compilation.getId());
+    }
+
+    @Test
+    @Transactional
+    void writeBackfillsMissingCompilationIdentifierOnExistingContainer() throws Exception {
+        LeaseLiabilityCompilation compilation = LeaseLiabilityCompilationResourceIT.createEntity(em);
+        em.persist(compilation);
+        em.flush();
+
+        LeaseLiabilityCompilationItemWriter writer =
+            new LeaseLiabilityCompilationItemWriter(internalLeaseLiabilityScheduleItemService, compilation.getId());
+
+        LeaseLiabilityScheduleItemDTO dto = buildScheduleItemDto();
+        dto.setLeaseLiabilityCompilation(new LeaseLiabilityCompilationDTO());
+        dto.setActive(Boolean.FALSE);
+
+        writer.write(List.of(List.of(dto)));
+
+        em.flush();
+        em.clear();
+
+        List<LeaseLiabilityScheduleItem> persisted =
+            leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(compilation.getId());
+
+        assertThat(persisted).hasSize(1);
+        LeaseLiabilityScheduleItem saved = persisted.get(0);
+        assertThat(saved.getLeaseLiabilityCompilation()).isNotNull();
+        assertThat(saved.getLeaseLiabilityCompilation().getId()).isEqualTo(compilation.getId());
+    }
+
+    @Test
+    @Transactional
+    void writeDoesNotDeactivateCompilationWhenNoItemsAreProcessed() throws Exception {
+        LeaseLiabilityCompilation compilation = LeaseLiabilityCompilationResourceIT.createEntity(em);
+        em.persist(compilation);
+        em.flush();
+
+        reset(internalLeaseLiabilityScheduleItemService);
+
+        LeaseLiabilityCompilationItemWriter writer =
+            new LeaseLiabilityCompilationItemWriter(internalLeaseLiabilityScheduleItemService, compilation.getId());
+
+        writer.write(List.of(Collections.<LeaseLiabilityScheduleItemDTO>emptyList()));
+        writer.write(Collections.emptyList());
+
+        verify(internalLeaseLiabilityScheduleItemService, never())
+            .updateActivationByCompilation(compilation.getId(), false);
+        verify(internalLeaseLiabilityScheduleItemService, never()).saveAll(anyList());
     }
 
     private LeaseLiabilityScheduleItemDTO buildScheduleItemDto() {
