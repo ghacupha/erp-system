@@ -1,7 +1,7 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
+ * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -61,7 +61,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"LEASE_MANAGER"})
-class LeaseLiabilityScheduleItemResourceIT {
+public class LeaseLiabilityScheduleItemResourceIT {
 
     private static final Integer DEFAULT_SEQUENCE_NUMBER = 1;
     private static final Integer UPDATED_SEQUENCE_NUMBER = 2;

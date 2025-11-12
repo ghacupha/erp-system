@@ -1,7 +1,7 @@
 package io.github.erp.repository;
 
 /*-
- * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
+ * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,6 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.RouAssetNBVReportItem;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;

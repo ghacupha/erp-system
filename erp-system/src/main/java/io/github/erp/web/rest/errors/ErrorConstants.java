@@ -1,7 +1,7 @@
 package io.github.erp.web.rest.errors;
 
 /*-
- * Erp System - Mark X No 10 (Jehoiada Series) Server ver 1.8.2
+ * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
  * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify

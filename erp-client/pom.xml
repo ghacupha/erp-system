@@ -9,7 +9,7 @@
     <artifactId>erp-client</artifactId>
     <version>1.7.8</version>
     <name>Erp System</name>
-    <description>Mark X No 10 (Jehoiada Series) Client 1.7.8</description>
+    <description>Mark X No 11 (Jehoiada Series) Client 1.7.8</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->

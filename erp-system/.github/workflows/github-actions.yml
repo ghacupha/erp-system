@@ -64,4 +64,4 @@ jobs:
         run: ./mvnw -ntp package jib:dockerBuild -Pprod -DskipTests
 
       - name: Publish image
-        run: docker push ghacupha/erp-system:1.8.2
+        run: docker push ghacupha/erp-system:1.8.3

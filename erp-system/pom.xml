@@ -7,7 +7,7 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-system</artifactId>
-    <version>1.8.2</version>
+    <version>1.8.3</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
     <description>${ERP_SYSTEM_DEPLOYMENT_TITLE}</description>
@@ -25,7 +25,7 @@
     <properties>
         <!-- Build properties -->
         <ERP_SYSTEM_DEPLOYMENT_SERIES>Jehoiada Series</ERP_SYSTEM_DEPLOYMENT_SERIES>
-        <ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>Mark X No 10 </ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>
+        <ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>Mark X No 11 </ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER>
         <ERP_SYSTEM_DEPLOYMENT_VERSION>${project.version}</ERP_SYSTEM_DEPLOYMENT_VERSION>
         <ERP_SYSTEM_DEPLOYMENT_TITLE>${ERP_SYSTEM_DEPLOYMENT_SERIES_NUMBER} (${ERP_SYSTEM_DEPLOYMENT_SERIES}) Server ver ${ERP_SYSTEM_DEPLOYMENT_VERSION}</ERP_SYSTEM_DEPLOYMENT_TITLE>
         <maven.version>3.3.9</maven.version>
