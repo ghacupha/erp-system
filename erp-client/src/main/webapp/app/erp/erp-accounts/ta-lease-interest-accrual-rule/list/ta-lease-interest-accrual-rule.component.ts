@@ -27,6 +27,13 @@ import { ITALeaseInterestAccrualRule } from '../ta-lease-interest-accrual-rule.m
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { TALeaseInterestAccrualRuleService } from '../service/ta-lease-interest-accrual-rule.service';
 import { TALeaseInterestAccrualRuleDeleteDialogComponent } from '../delete/ta-lease-interest-accrual-rule-delete-dialog.component';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  taLeaseInterestAccrualRuleCopyWorkflowInitiatedFromList,
+  taLeaseInterestAccrualRuleCreationInitiatedFromList,
+  taLeaseInterestAccrualRuleEditWorkflowInitiatedFromList
+} from '../../../store/actions/ta-lease-interest-accrual-rule-update-status.actions';
 
 @Component({
   selector: 'jhi-ta-lease-interest-accrual-rule',
@@ -47,7 +54,8 @@ export class TALeaseInterestAccrualRuleComponent implements OnInit {
     protected tALeaseInterestAccrualRuleService: TALeaseInterestAccrualRuleService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -102,6 +110,18 @@ export class TALeaseInterestAccrualRuleComponent implements OnInit {
     }
     this.currentSearch = query;
     this.loadPage(1);
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(taLeaseInterestAccrualRuleCreationInitiatedFromList());
+  }
+
+  editButtonEvent(instance: ITALeaseInterestAccrualRule): void {
+    this.store.dispatch(taLeaseInterestAccrualRuleEditWorkflowInitiatedFromList({ editedInstance: instance }));
+  }
+
+  copyButtonEvent(instance: ITALeaseInterestAccrualRule): void {
+    this.store.dispatch(taLeaseInterestAccrualRuleCopyWorkflowInitiatedFromList({ copiedInstance: instance }));
   }
 
   ngOnInit(): void {

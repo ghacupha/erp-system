@@ -27,6 +27,13 @@ import { ITAInterestPaidTransferRule } from '../ta-interest-paid-transfer-rule.m
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { TAInterestPaidTransferRuleService } from '../service/ta-interest-paid-transfer-rule.service';
 import { TAInterestPaidTransferRuleDeleteDialogComponent } from '../delete/ta-interest-paid-transfer-rule-delete-dialog.component';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  taInterestPaidTransferRuleCopyWorkflowInitiatedFromList,
+  taInterestPaidTransferRuleCreationInitiatedFromList,
+  taInterestPaidTransferRuleEditWorkflowInitiatedFromList
+} from '../../../store/actions/ta-interest-paid-transfer-rule-update-status.actions';
 
 @Component({
   selector: 'jhi-ta-interest-paid-transfer-rule',
@@ -47,7 +54,8 @@ export class TAInterestPaidTransferRuleComponent implements OnInit {
     protected tAInterestPaidTransferRuleService: TAInterestPaidTransferRuleService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -102,6 +110,18 @@ export class TAInterestPaidTransferRuleComponent implements OnInit {
     }
     this.currentSearch = query;
     this.loadPage(1);
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(taInterestPaidTransferRuleCreationInitiatedFromList());
+  }
+
+  editButtonEvent(instance: ITAInterestPaidTransferRule): void {
+    this.store.dispatch(taInterestPaidTransferRuleEditWorkflowInitiatedFromList({ editedInstance: instance }));
+  }
+
+  copyButtonEvent(instance: ITAInterestPaidTransferRule): void {
+    this.store.dispatch(taInterestPaidTransferRuleCopyWorkflowInitiatedFromList({ copiedInstance: instance }));
   }
 
   ngOnInit(): void {
