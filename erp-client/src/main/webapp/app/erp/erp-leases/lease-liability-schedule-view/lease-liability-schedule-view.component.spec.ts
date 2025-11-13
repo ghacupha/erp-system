@@ -18,6 +18,7 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import * as dayjs from 'dayjs';
@@ -112,7 +113,7 @@ describe('LeaseLiabilityScheduleViewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule],
+      imports: [SharedModule, RouterTestingModule],
       declarations: [LeaseLiabilityScheduleViewComponent],
       providers: [
         {
