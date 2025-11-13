@@ -19,11 +19,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'app/shared/shared.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 import { LeaseLiabilityScheduleViewComponent } from './lease-liability-schedule-view.component';
 import { leaseLiabilityScheduleViewRoute } from './lease-liability-schedule-view.route';
 
 @NgModule({
-  imports: [SharedModule, RouterModule.forChild(leaseLiabilityScheduleViewRoute)],
+  imports: [SharedModule, RouterModule.forChild(leaseLiabilityScheduleViewRoute), ErpCommonModule],
   declarations: [LeaseLiabilityScheduleViewComponent],
 })
 export class LeaseLiabilityScheduleViewModule {}

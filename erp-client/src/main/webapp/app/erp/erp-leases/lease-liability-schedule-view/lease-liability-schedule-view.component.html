@@ -45,14 +45,24 @@
           Liability reference: {{ leaseLiability.leaseId || leaseLiability.id }}
         </p>
       </div>
-      <div class="d-flex align-items-baseline gap-3 flex-wrap mt-2 mt-md-0">
+      <div class="d-flex align-items-baseline gap-3 flex-wrap mt-2 mt-md-0" [formGroup]="leaseSelectionForm">
+        <jhi-m21-ifrs16-lease-form-control
+          ngDefaultControl
+          formControlName="leaseContract"
+          [inputValue]="leaseSelectionForm.get('leaseContract')?.value"
+          (valueSelected)="onLeaseContractSelected($event)"
+          inputControlLabel="IFRS16 Lease Contract"
+          [disabledInput]="loading"
+        >
+          <option [ngValue]="leaseSelectionForm.get('leaseContract')?.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
         <div class="form-group mb-0">
           <!--<label class="form-label me-2" for="reportingPeriod">Reporting period</label>-->
           <select
             id="reportingPeriod"
             class="form-control"
             (change)="onPeriodChange($event)"
-            [disabled]="reportingPeriods.length === 0"
+            [disabled]="loading || reportingPeriods.length === 0"
           >
             <option value="" disabled [selected]="!activePeriod">Select period</option>
             <option *ngFor="let period of reportingPeriods" [value]="period.id" [selected]="activePeriod?.id === period.id">
