@@ -37,6 +37,11 @@ import { PlaceholderService } from '../../../erp-pages/placeholder/service/place
 import { uuidv7 } from 'uuidv7';
 import { select, Store } from '@ngrx/store';
 import {
+  taAmortizationRuleCopyWorkflowInitiatedEnRoute,
+  taAmortizationRuleCreationInitiatedEnRoute,
+  taAmortizationRuleEditWorkflowInitiatedEnRoute,
+} from '../../../store/actions/ta-amortization-update-status.actions';
+import {
   copyingTAAmortizationStatus,
   creatingTAAmortizationStatus,
   editingTAAmortizationStatus,
@@ -87,27 +92,58 @@ export class TAAmortizationRuleUpdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
     }
 
     if (this.weAreCopying) {
       this.updateForm(this.selectedItem);
-
       this.editForm.patchValue({
         identifier: uuidv7(),
-      })
+      });
     }
 
     if (this.weAreCreating) {
-
       this.editForm.patchValue({
         identifier: uuidv7(),
-      })
+      });
+    }
+
+    if (this.weAreCopying || this.weAreEditing || this.weAreCreating) {
+      this.loadRelationshipsOptions();
+      return;
+    }
+
+    const routePath = this.activatedRoute.snapshot.routeConfig?.path ?? '';
+
+    this.activatedRoute.data.subscribe(({ tAAmortizationRule }) => {
+      if (routePath === 'new' || !tAAmortizationRule.id) {
+        this.store.dispatch(taAmortizationRuleCreationInitiatedEnRoute());
+        this.weAreCreating = true;
+        this.editForm.patchValue({
+          identifier: uuidv7(),
+        });
+      } else if (routePath === ':id/copy') {
+        this.store.dispatch(
+          taAmortizationRuleCopyWorkflowInitiatedEnRoute({ copiedInstance: tAAmortizationRule })
+        );
+        this.weAreCopying = true;
+        this.selectedItem = tAAmortizationRule;
+        this.updateForm(tAAmortizationRule);
+        this.editForm.patchValue({
+          identifier: uuidv7(),
+        });
+      } else {
+        this.store.dispatch(
+          taAmortizationRuleEditWorkflowInitiatedEnRoute({ editedInstance: tAAmortizationRule })
+        );
+        this.weAreEditing = true;
+        this.selectedItem = tAAmortizationRule;
+        this.updateForm(tAAmortizationRule);
+      }
 
       this.loadRelationshipsOptions();
-    }
+    });
   }
 
   save(): void {
@@ -151,6 +187,20 @@ export class TAAmortizationRuleUpdateComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  onSubmit(): void {
+    if (this.weAreEditing) {
+      this.edit();
+      return;
+    }
+
+    if (this.weAreCopying) {
+      this.copy();
+      return;
+    }
+
+    this.save();
   }
 
   trackIFRS16LeaseContractById(index: number, item: IIFRS16LeaseContract): number {
