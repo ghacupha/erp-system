@@ -47,6 +47,8 @@ public class LeaseLiabilityDTO implements Serializable {
     @DecimalMin(value = "0")
     private BigDecimal interestRate;
 
+    private Boolean hasBeenFullyAmortised;
+
     private LeaseAmortizationCalculationDTO leaseAmortizationCalculation;
 
     private IFRS16LeaseContractDTO leaseContract;
@@ -99,6 +101,14 @@ public class LeaseLiabilityDTO implements Serializable {
         this.interestRate = interestRate;
     }
 
+    public Boolean getHasBeenFullyAmortised() {
+        return hasBeenFullyAmortised;
+    }
+
+    public void setHasBeenFullyAmortised(Boolean hasBeenFullyAmortised) {
+        this.hasBeenFullyAmortised = hasBeenFullyAmortised;
+    }
+
     public LeaseAmortizationCalculationDTO getLeaseAmortizationCalculation() {
         return leaseAmortizationCalculation;
     }
@@ -146,6 +156,7 @@ public class LeaseLiabilityDTO implements Serializable {
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
             ", interestRate=" + getInterestRate() +
+            ", hasBeenFullyAmortised='" + getHasBeenFullyAmortised() + "'" +
             ", leaseAmortizationCalculation=" + getLeaseAmortizationCalculation() +
             ", leaseContract=" + getLeaseContract() +
             "}";

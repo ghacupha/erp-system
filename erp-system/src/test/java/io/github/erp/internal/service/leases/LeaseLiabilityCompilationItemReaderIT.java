@@ -65,6 +65,8 @@ class LeaseLiabilityCompilationItemReaderIT {
 
         LeaseLiability thirdLiability = LeaseLiabilityResourceIT.createEntity(em);
         em.persist(thirdLiability);
+        thirdLiability.setHasBeenFullyAmortised(true);
+        em.merge(thirdLiability);
         em.flush();
 
         LeaseLiabilityScheduleItem scheduledItem = LeaseLiabilityScheduleItemResourceIT.createEntity(em);
@@ -91,7 +93,9 @@ class LeaseLiabilityCompilationItemReaderIT {
             results.add(nextItem);
         }
 
-        assertThat(results).extracting(LeaseLiabilityDTO::getId).containsExactlyInAnyOrder(expectedSecondId, expectedThirdId);
-        assertThat(results).extracting(LeaseLiabilityDTO::getId).doesNotContain(scheduledLiabilityId);
+        assertThat(results).extracting(LeaseLiabilityDTO::getId).containsExactly(expectedSecondId);
+        assertThat(results)
+            .extracting(LeaseLiabilityDTO::getId)
+            .doesNotContain(scheduledLiabilityId, expectedThirdId);
     }
 }
