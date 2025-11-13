@@ -124,7 +124,7 @@ services:
       - erp-system-network
 
   erp-system-server:
-    image: ghacupha/erp-system:1.8.2
+    image: ghacupha/erp-system:1.8.3
     volumes:
       - ./logs/:/logs/
       - ./reports-directory/:/reports-directory/
@@ -181,7 +181,7 @@ services:
       - kafka
 
   erp-client-web:
-    image: ghacupha/erp-client:1.7.8
+    image: ghacupha/erp-client:1.7.9
     environment:
       - SERVER_API_URL=${SERVER_API_URL}
       - SERVER_API_URL_URL=${SERVER_API_URL_URL}
