@@ -148,6 +148,35 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
     window.history.back();
   }
 
+  onSubmit(action?: 'save' | 'edit' | 'copy'): void {
+    if (this.isSaving) {
+      return;
+    }
+
+    if (action === 'edit') {
+      this.edit();
+      return;
+    }
+
+    if (action === 'copy') {
+      this.copy();
+      return;
+    }
+
+    if (action === 'save') {
+      this.save();
+      return;
+    }
+
+    if (this.weAreEditing) {
+      this.edit();
+    } else if (this.weAreCopying) {
+      this.copy();
+    } else {
+      this.save();
+    }
+  }
+
   save(): void {
     this.isSaving = true;
     this.subscribeToSaveResponse(this.tALeaseInterestAccrualRuleService.create(this.createFromForm()));
