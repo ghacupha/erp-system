@@ -151,8 +151,8 @@ public class InternalLeaseLiabilityServiceImpl implements InternalLeaseLiability
             .collect(Collectors.toSet());
 
         List<LeaseLiability> pendingLiabilities = processedLiabilityIds.isEmpty()
-            ? leaseLiabilityRepository.findAll()
-            : leaseLiabilityRepository.findByIdNotIn(processedLiabilityIds);
+            ? leaseLiabilityRepository.findByHasBeenFullyAmortisedFalse()
+            : leaseLiabilityRepository.findByIdNotInAndHasBeenFullyAmortisedFalse(processedLiabilityIds);
 
         List<LeaseLiability> safePendingLiabilities =
             pendingLiabilities == null ? Collections.emptyList() : pendingLiabilities;

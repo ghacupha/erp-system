@@ -18,6 +18,8 @@ package io.github.erp.repository;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.LeaseLiability;
+import java.util.Collection;
+import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -26,4 +28,10 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface LeaseLiabilityRepository extends JpaRepository<LeaseLiability, Long>, JpaSpecificationExecutor<LeaseLiability> {}
+public interface LeaseLiabilityRepository extends JpaRepository<LeaseLiability, Long>, JpaSpecificationExecutor<LeaseLiability> {
+    List<LeaseLiability> findByHasBeenFullyAmortisedFalse();
+
+    List<LeaseLiability> findByIdNotIn(Collection<Long> ids);
+
+    List<LeaseLiability> findByIdNotInAndHasBeenFullyAmortisedFalse(Collection<Long> ids);
+}

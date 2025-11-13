@@ -26,9 +26,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.LeaseLiabilityCompilation;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
 import io.github.erp.internal.service.leases.InternalLeaseLiabilityScheduleItemService;
+import io.github.erp.repository.LeaseLiabilityRepository;
 import io.github.erp.repository.LeaseLiabilityScheduleItemRepository;
 import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
@@ -52,6 +54,9 @@ class LeaseLiabilityCompilationItemWriterIT {
 
     @Autowired
     private LeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository;
+
+    @Autowired
+    private LeaseLiabilityRepository leaseLiabilityRepository;
 
     @Autowired
     private LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper;
@@ -112,6 +117,15 @@ class LeaseLiabilityCompilationItemWriterIT {
             .filteredOn(item -> !item.getId().equals(existingFirstId) && !item.getId().equals(existingSecondId))
             .hasSize(2)
             .allMatch(item -> Boolean.TRUE.equals(item.getActive()));
+
+        List<LeaseLiability> flaggedLiabilities = leaseLiabilityRepository.findAllById(
+            List.of(
+                firstReplacement.getLeaseLiability().getId(),
+                secondReplacement.getLeaseLiability().getId()
+            )
+        );
+        assertThat(flaggedLiabilities).hasSize(2);
+        assertThat(flaggedLiabilities).allMatch(liability -> Boolean.TRUE.equals(liability.getHasBeenFullyAmortised()));
     }
 
     @Test
@@ -142,6 +156,12 @@ class LeaseLiabilityCompilationItemWriterIT {
         assertThat(saved.getActive()).isTrue();
         assertThat(saved.getLeaseLiabilityCompilation()).isNotNull();
         assertThat(saved.getLeaseLiabilityCompilation().getId()).isEqualTo(compilation.getId());
+
+        List<LeaseLiability> flaggedLiabilities = leaseLiabilityRepository.findAllById(
+            List.of(dto.getLeaseLiability().getId())
+        );
+        assertThat(flaggedLiabilities).hasSize(1);
+        assertThat(flaggedLiabilities.get(0).getHasBeenFullyAmortised()).isTrue();
     }
 
     @Test
@@ -170,6 +190,12 @@ class LeaseLiabilityCompilationItemWriterIT {
         LeaseLiabilityScheduleItem saved = persisted.get(0);
         assertThat(saved.getLeaseLiabilityCompilation()).isNotNull();
         assertThat(saved.getLeaseLiabilityCompilation().getId()).isEqualTo(compilation.getId());
+
+        List<LeaseLiability> flaggedLiabilities = leaseLiabilityRepository.findAllById(
+            List.of(dto.getLeaseLiability().getId())
+        );
+        assertThat(flaggedLiabilities).hasSize(1);
+        assertThat(flaggedLiabilities.get(0).getHasBeenFullyAmortised()).isTrue();
     }
 
     @Test

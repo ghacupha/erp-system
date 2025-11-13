@@ -20,18 +20,23 @@ package io.github.erp.internal.service.leases;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.erp.IntegrationTest;
+import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.LeaseLiabilityCompilation;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
 import io.github.erp.domain.LeaseRepaymentPeriod;
 import io.github.erp.erp.resources.LeaseLiabilityCompilationResourceIT;
 import io.github.erp.repository.LeaseLiabilityScheduleItemRepository;
+import io.github.erp.repository.LeaseLiabilityRepository;
 import io.github.erp.web.rest.LeaseLiabilityScheduleItemResourceIT;
 import io.github.erp.web.rest.LeaseRepaymentPeriodResourceIT;
+import io.github.erp.service.dto.LeaseLiabilityDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import io.github.erp.service.mapper.LeaseLiabilityScheduleItemMapper;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +52,9 @@ class InternalLeaseLiabilityScheduleItemServiceIT {
 
     @Autowired
     private LeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository;
+
+    @Autowired
+    private LeaseLiabilityRepository leaseLiabilityRepository;
 
     @Autowired
     private LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper;
@@ -137,8 +145,19 @@ class InternalLeaseLiabilityScheduleItemServiceIT {
         );
 
         internalLeaseLiabilityScheduleItemService.saveAll(initialDtos);
+        Set<Long> processedLiabilityIds = initialDtos
+            .stream()
+            .map(LeaseLiabilityScheduleItemDTO::getLeaseLiability)
+            .filter(Objects::nonNull)
+            .map(LeaseLiabilityDTO::getId)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
         em.flush();
         em.clear();
+
+        List<LeaseLiability> flaggedLiabilities = leaseLiabilityRepository.findAllById(processedLiabilityIds);
+        assertThat(flaggedLiabilities).hasSize(processedLiabilityIds.size());
+        assertThat(flaggedLiabilities).allMatch(liability -> Boolean.TRUE.equals(liability.getHasBeenFullyAmortised()));
 
         List<LeaseLiabilityScheduleItem> persisted = leaseLiabilityScheduleItemRepository.findByLeaseLiabilityCompilationId(
             leaseLiabilityCompilation.getId()
@@ -175,6 +194,9 @@ class InternalLeaseLiabilityScheduleItemServiceIT {
             assertThat(previous).isNotNull();
             assertThat(amount).isEqualByComparingTo(previous.add(BigDecimal.ONE));
         });
+
+        List<LeaseLiability> refreshedLiabilities = leaseLiabilityRepository.findAllById(processedLiabilityIds);
+        assertThat(refreshedLiabilities).allMatch(liability -> Boolean.TRUE.equals(liability.getHasBeenFullyAmortised()));
     }
 
     private String businessKey(LeaseLiabilityScheduleItem item) {

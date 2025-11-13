@@ -73,6 +73,11 @@ public class LeaseLiability implements Serializable {
     @Field(type = FieldType.Double)
     private BigDecimal interestRate;
 
+    @NotNull
+    @Column(name = "has_been_fully_amortised", nullable = false)
+    @Field(type = FieldType.Boolean)
+    private Boolean hasBeenFullyAmortised = Boolean.FALSE;
+
     @JsonIgnoreProperties(value = { "leaseLiability", "leaseContract" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
@@ -175,6 +180,19 @@ public class LeaseLiability implements Serializable {
         this.interestRate = interestRate;
     }
 
+    public Boolean getHasBeenFullyAmortised() {
+        return this.hasBeenFullyAmortised;
+    }
+
+    public LeaseLiability hasBeenFullyAmortised(Boolean hasBeenFullyAmortised) {
+        this.setHasBeenFullyAmortised(hasBeenFullyAmortised);
+        return this;
+    }
+
+    public void setHasBeenFullyAmortised(Boolean hasBeenFullyAmortised) {
+        this.hasBeenFullyAmortised = hasBeenFullyAmortised;
+    }
+
     public LeaseAmortizationCalculation getLeaseAmortizationCalculation() {
         return this.leaseAmortizationCalculation;
     }
@@ -230,6 +248,7 @@ public class LeaseLiability implements Serializable {
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
             ", interestRate=" + getInterestRate() +
+            ", hasBeenFullyAmortised='" + getHasBeenFullyAmortised() + "'" +
             "}";
     }
 }
