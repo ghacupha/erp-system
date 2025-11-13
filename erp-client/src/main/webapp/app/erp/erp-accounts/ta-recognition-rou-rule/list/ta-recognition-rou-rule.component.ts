@@ -27,6 +27,13 @@ import { ITARecognitionROURule } from '../ta-recognition-rou-rule.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { TARecognitionROURuleService } from '../service/ta-recognition-rou-rule.service';
 import { TARecognitionROURuleDeleteDialogComponent } from '../delete/ta-recognition-rou-rule-delete-dialog.component';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  taRecognitionRouRuleCopyWorkflowInitiatedFromList,
+  taRecognitionRouRuleCreationInitiatedFromList,
+  taRecognitionRouRuleEditWorkflowInitiatedFromList
+} from '../../../store/actions/ta-recognition-rou-rule-update-status.actions';
 
 @Component({
   selector: 'jhi-ta-recognition-rou-rule',
@@ -47,7 +54,8 @@ export class TARecognitionROURuleComponent implements OnInit {
     protected tARecognitionROURuleService: TARecognitionROURuleService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -102,6 +110,18 @@ export class TARecognitionROURuleComponent implements OnInit {
     }
     this.currentSearch = query;
     this.loadPage(1);
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(taRecognitionRouRuleCreationInitiatedFromList());
+  }
+
+  editButtonEvent(instance: ITARecognitionROURule): void {
+    this.store.dispatch(taRecognitionRouRuleEditWorkflowInitiatedFromList({ editedInstance: instance }));
+  }
+
+  copyButtonEvent(instance: ITARecognitionROURule): void {
+    this.store.dispatch(taRecognitionRouRuleCopyWorkflowInitiatedFromList({ copiedInstance: instance }));
   }
 
   ngOnInit(): void {

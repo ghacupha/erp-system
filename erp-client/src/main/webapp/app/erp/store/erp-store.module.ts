@@ -40,6 +40,11 @@ import { Ifrs16LeaseModelWorkflowEffects } from './effects/ifrs16-lease-model-wo
 import { RouModelMetadataWorkflowEffects } from './effects/rou-model-metadata-workflow.effects';
 import * as fromIfrs16LeaseModelUpdates from "./reducers/ifrs16-lease-model-workflow-status.reducer";
 import * as fromTAAmortizationUpdates from "./reducers/ta-amortization-rule-status.reducer";
+import * as fromTAInterestPaidTransferRuleUpdates from "./reducers/ta-interest-paid-transfer-rule-status.reducer";
+import * as fromTALeaseInterestAccrualRuleUpdates from "./reducers/ta-lease-interest-accrual-rule-status.reducer";
+import * as fromTALeaseRecognitionRuleUpdates from "./reducers/ta-lease-recognition-rule-status.reducer";
+import * as fromTALeaseRepaymentRuleUpdates from "./reducers/ta-lease-repayment-rule-status.reducer";
+import * as fromTARecognitionRouRuleUpdates from "./reducers/ta-recognition-rou-rule-status.reducer";
 import * as fromTransactionAccountUpdates from "./reducers/transaction-account-update-status.reducer";
 import * as fromTransactionAccountReportDateUpdates from "./reducers/transaction-account-report-date-selection.reducer";
 import * as fromLeaseAmortizationCalculationState from "./reducers/lease-amortization-calculation.reducer";
@@ -87,6 +92,11 @@ import * as fromIfrs16LeaseContractReport from "./reducers/ifrs16-lease-contract
     StoreModule.forFeature('prepaymentMarshallingUpdateForm', fromPrepaymentMarshallingUpdates.prepaymentMarshallingUpdateStateReducer),
     StoreModule.forFeature('ifrs16LeaseModelUpdateForm', fromIfrs16LeaseModelUpdates.ifrs16LeaseModelUpdateStateReducer),
     StoreModule.forFeature('taAmortizationRuleUpdateForm', fromTAAmortizationUpdates.taAmortizationRuleUpdateStateReducer),
+    StoreModule.forFeature('taInterestPaidTransferRuleUpdateForm', fromTAInterestPaidTransferRuleUpdates.taInterestPaidTransferRuleUpdateStateReducer),
+    StoreModule.forFeature('taLeaseInterestAccrualRuleUpdateForm', fromTALeaseInterestAccrualRuleUpdates.taLeaseInterestAccrualRuleUpdateStateReducer),
+    StoreModule.forFeature('taLeaseRecognitionRuleUpdateForm', fromTALeaseRecognitionRuleUpdates.taLeaseRecognitionRuleUpdateStateReducer),
+    StoreModule.forFeature('taLeaseRepaymentRuleUpdateForm', fromTALeaseRepaymentRuleUpdates.taLeaseRepaymentRuleUpdateStateReducer),
+    StoreModule.forFeature('taRecognitionRouRuleUpdateForm', fromTARecognitionRouRuleUpdates.taRecognitionRouRuleUpdateStateReducer),
     StoreModule.forFeature('transactionAccountUpdateForm', fromTransactionAccountUpdates.transactionAccountUpdateStateReducer),
     StoreModule.forFeature('transactionAccountReportDateSelection', fromTransactionAccountReportDateUpdates.transactionAccountReportPathSelectionStateReducer),
     StoreModule.forFeature('leaseAmortizationCalculationForm', fromLeaseAmortizationCalculationState.leaseAmortizationCalculationStateReducer),

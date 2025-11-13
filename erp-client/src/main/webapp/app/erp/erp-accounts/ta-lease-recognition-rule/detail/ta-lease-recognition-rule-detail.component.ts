@@ -20,6 +20,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ITALeaseRecognitionRule } from '../ta-lease-recognition-rule.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  taLeaseRecognitionRuleCopyWorkflowInitiatedFromView,
+  taLeaseRecognitionRuleEditWorkflowInitiatedFromView
+} from '../../../store/actions/ta-lease-recognition-rule-update-status.actions';
 
 @Component({
   selector: 'jhi-ta-lease-recognition-rule-detail',
@@ -28,12 +34,20 @@ import { ITALeaseRecognitionRule } from '../ta-lease-recognition-rule.model';
 export class TALeaseRecognitionRuleDetailComponent implements OnInit {
   tALeaseRecognitionRule: ITALeaseRecognitionRule | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tALeaseRecognitionRule }) => {
       this.tALeaseRecognitionRule = tALeaseRecognitionRule;
     });
+  }
+
+  editButtonEvent(instance: ITALeaseRecognitionRule): void {
+    this.store.dispatch(taLeaseRecognitionRuleEditWorkflowInitiatedFromView({ editedInstance: instance }));
+  }
+
+  copyButtonEvent(instance: ITALeaseRecognitionRule): void {
+    this.store.dispatch(taLeaseRecognitionRuleCopyWorkflowInitiatedFromView({ copiedInstance: instance }));
   }
 
   previousState(): void {

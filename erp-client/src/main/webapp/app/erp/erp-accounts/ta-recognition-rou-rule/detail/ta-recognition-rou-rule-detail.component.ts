@@ -20,6 +20,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ITARecognitionROURule } from '../ta-recognition-rou-rule.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  taRecognitionRouRuleCopyWorkflowInitiatedFromView,
+  taRecognitionRouRuleEditWorkflowInitiatedFromView
+} from '../../../store/actions/ta-recognition-rou-rule-update-status.actions';
 
 @Component({
   selector: 'jhi-ta-recognition-rou-rule-detail',
@@ -28,12 +34,20 @@ import { ITARecognitionROURule } from '../ta-recognition-rou-rule.model';
 export class TARecognitionROURuleDetailComponent implements OnInit {
   tARecognitionROURule: ITARecognitionROURule | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tARecognitionROURule }) => {
       this.tARecognitionROURule = tARecognitionROURule;
     });
+  }
+
+  editButtonEvent(instance: ITARecognitionROURule): void {
+    this.store.dispatch(taRecognitionRouRuleEditWorkflowInitiatedFromView({ editedInstance: instance }));
+  }
+
+  copyButtonEvent(instance: ITARecognitionROURule): void {
+    this.store.dispatch(taRecognitionRouRuleCopyWorkflowInitiatedFromView({ copiedInstance: instance }));
   }
 
   previousState(): void {

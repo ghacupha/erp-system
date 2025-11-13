@@ -24,9 +24,10 @@ import { TALeaseInterestAccrualRuleUpdateComponent } from './update/ta-lease-int
 import { TALeaseInterestAccrualRuleDeleteDialogComponent } from './delete/ta-lease-interest-accrual-rule-delete-dialog.component';
 import { TALeaseInterestAccrualRuleRoutingModule } from './route/ta-lease-interest-accrual-rule-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { TALeaseInterestAccrualRuleRoutingCustomModule } from './route/ta-lease-interest-accrual-rule-routing-custom.module';
 
 @NgModule({
-  imports: [SharedModule, TALeaseInterestAccrualRuleRoutingModule, ErpCommonModule],
+  imports: [SharedModule, TALeaseInterestAccrualRuleRoutingModule, TALeaseInterestAccrualRuleRoutingCustomModule, ErpCommonModule],
   declarations: [
     TALeaseInterestAccrualRuleComponent,
     TALeaseInterestAccrualRuleDetailComponent,

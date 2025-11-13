@@ -27,6 +27,13 @@ import { ITALeaseRepaymentRule } from '../ta-lease-repayment-rule.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { TALeaseRepaymentRuleService } from '../service/ta-lease-repayment-rule.service';
 import { TALeaseRepaymentRuleDeleteDialogComponent } from '../delete/ta-lease-repayment-rule-delete-dialog.component';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  taLeaseRepaymentRuleCopyWorkflowInitiatedFromList,
+  taLeaseRepaymentRuleCreationInitiatedFromList,
+  taLeaseRepaymentRuleEditWorkflowInitiatedFromList
+} from '../../../store/actions/ta-lease-repayment-rule-update-status.actions';
 
 @Component({
   selector: 'jhi-ta-lease-repayment-rule',
@@ -47,7 +54,8 @@ export class TALeaseRepaymentRuleComponent implements OnInit {
     protected tALeaseRepaymentRuleService: TALeaseRepaymentRuleService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -102,6 +110,18 @@ export class TALeaseRepaymentRuleComponent implements OnInit {
     }
     this.currentSearch = query;
     this.loadPage(1);
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(taLeaseRepaymentRuleCreationInitiatedFromList());
+  }
+
+  editButtonEvent(instance: ITALeaseRepaymentRule): void {
+    this.store.dispatch(taLeaseRepaymentRuleEditWorkflowInitiatedFromList({ editedInstance: instance }));
+  }
+
+  copyButtonEvent(instance: ITALeaseRepaymentRule): void {
+    this.store.dispatch(taLeaseRepaymentRuleCopyWorkflowInitiatedFromList({ copiedInstance: instance }));
   }
 
   ngOnInit(): void {

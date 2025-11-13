@@ -32,6 +32,14 @@ import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { uuidv7 } from 'uuidv7';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  copyingTALeaseInterestAccrualRuleStatus,
+  creatingTALeaseInterestAccrualRuleStatus,
+  editingTALeaseInterestAccrualRuleStatus,
+  taLeaseInterestAccrualRuleSelectedInstance
+} from '../../../store/selectors/ta-lease-interest-accrual-rule-status.selectors';
 
 @Component({
   selector: 'jhi-ta-lease-interest-accrual-rule-update',
@@ -39,6 +47,11 @@ import { uuidv7 } from 'uuidv7';
 })
 export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
   isSaving = false;
+
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = { ...new TALeaseInterestAccrualRule() };
 
   leaseContractsCollection: IIFRS16LeaseContract[] = [];
   transactionAccountsSharedCollection: ITransactionAccount[] = [];
@@ -60,18 +73,51 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
     protected transactionAccountService: TransactionAccountService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+    protected fb: FormBuilder,
+    protected store: Store<State>,
+  ) {
+    this.store.pipe(select(copyingTALeaseInterestAccrualRuleStatus)).subscribe(status => (this.weAreCopying = status));
+    this.store.pipe(select(editingTALeaseInterestAccrualRuleStatus)).subscribe(status => (this.weAreEditing = status));
+    this.store.pipe(select(creatingTALeaseInterestAccrualRuleStatus)).subscribe(status => (this.weAreCreating = status));
+    this.store.pipe(select(taLeaseInterestAccrualRuleSelectedInstance)).subscribe(selected => (this.selectedItem = selected));
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ tALeaseInterestAccrualRule }) => {
-
-      tALeaseInterestAccrualRule.identifier = uuidv7();
-
-      this.updateForm(tALeaseInterestAccrualRule);
-
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
       this.loadRelationshipsOptions();
-    });
+    }
+
+    if (this.weAreCopying) {
+      this.updateForm(this.selectedItem);
+      this.editForm.patchValue({
+        identifier: uuidv7(),
+      });
+      this.loadRelationshipsOptions();
+    }
+
+    if (this.weAreCreating) {
+      this.editForm.patchValue({
+        identifier: uuidv7(),
+      });
+      this.loadRelationshipsOptions();
+    }
+
+    if (!this.weAreCopying && !this.weAreEditing && !this.weAreCreating) {
+      this.activatedRoute.data.subscribe(({ tALeaseInterestAccrualRule }) => {
+        if (tALeaseInterestAccrualRule.id) {
+          this.updateForm(tALeaseInterestAccrualRule);
+        }
+
+        if (!tALeaseInterestAccrualRule.id) {
+          this.editForm.patchValue({
+            identifier: uuidv7(),
+          });
+        }
+
+        this.loadRelationshipsOptions();
+      });
+    }
   }
 
   updateDebitAccount($event: ITransactionAccount): void {
@@ -88,7 +134,7 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
 
   updateLeaseContract($event: IIFRS16LeaseContract): void {
     this.editForm.patchValue({
-      leasContract: $event
+      leaseContract: $event
     })
   }
 
@@ -104,12 +150,17 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const tALeaseInterestAccrualRule = this.createFromForm();
-    if (tALeaseInterestAccrualRule.id !== undefined) {
-      this.subscribeToSaveResponse(this.tALeaseInterestAccrualRuleService.update(tALeaseInterestAccrualRule));
-    } else {
-      this.subscribeToSaveResponse(this.tALeaseInterestAccrualRuleService.create(tALeaseInterestAccrualRule));
-    }
+    this.subscribeToSaveResponse(this.tALeaseInterestAccrualRuleService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.tALeaseInterestAccrualRuleService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.tALeaseInterestAccrualRuleService.create(this.copyFromForm()));
   }
 
   trackIFRS16LeaseContractById(index: number, item: IIFRS16LeaseContract): number {
@@ -223,6 +274,18 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
     return {
       ...new TALeaseInterestAccrualRule(),
       id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      identifier: this.editForm.get(['identifier'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
+      debit: this.editForm.get(['debit'])!.value,
+      credit: this.editForm.get(['credit'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
+    };
+  }
+
+  protected copyFromForm(): ITALeaseInterestAccrualRule {
+    return {
+      ...new TALeaseInterestAccrualRule(),
       name: this.editForm.get(['name'])!.value,
       identifier: this.editForm.get(['identifier'])!.value,
       leaseContract: this.editForm.get(['leaseContract'])!.value,
