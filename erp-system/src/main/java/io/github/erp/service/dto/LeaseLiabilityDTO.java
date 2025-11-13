@@ -47,7 +47,8 @@ public class LeaseLiabilityDTO implements Serializable {
     @DecimalMin(value = "0")
     private BigDecimal interestRate;
 
-    private Boolean hasBeenFullyAmortised;
+    @NotNull
+    private Boolean hasBeenFullyAmortised = Boolean.FALSE;
 
     private LeaseAmortizationCalculationDTO leaseAmortizationCalculation;
 
