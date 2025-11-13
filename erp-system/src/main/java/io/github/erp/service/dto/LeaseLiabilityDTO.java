@@ -17,6 +17,7 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -49,6 +50,9 @@ public class LeaseLiabilityDTO implements Serializable {
 
     @NotNull
     private Boolean hasBeenFullyAmortised = Boolean.FALSE;
+
+    @JsonIgnore
+    private transient boolean hasBeenFullyAmortisedSpecified;
 
     private LeaseAmortizationCalculationDTO leaseAmortizationCalculation;
 
@@ -108,6 +112,11 @@ public class LeaseLiabilityDTO implements Serializable {
 
     public void setHasBeenFullyAmortised(Boolean hasBeenFullyAmortised) {
         this.hasBeenFullyAmortised = hasBeenFullyAmortised;
+        this.hasBeenFullyAmortisedSpecified = true;
+    }
+
+    public boolean isHasBeenFullyAmortisedSpecified() {
+        return hasBeenFullyAmortisedSpecified;
     }
 
     public LeaseAmortizationCalculationDTO getLeaseAmortizationCalculation() {

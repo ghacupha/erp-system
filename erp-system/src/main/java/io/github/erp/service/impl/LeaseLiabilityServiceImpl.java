@@ -75,7 +75,11 @@ public class LeaseLiabilityServiceImpl implements LeaseLiabilityService {
         return leaseLiabilityRepository
             .findById(leaseLiabilityDTO.getId())
             .map(existingLeaseLiability -> {
+                Boolean existingHasBeenFullyAmortised = existingLeaseLiability.getHasBeenFullyAmortised();
                 leaseLiabilityMapper.partialUpdate(existingLeaseLiability, leaseLiabilityDTO);
+                if (!leaseLiabilityDTO.isHasBeenFullyAmortisedSpecified()) {
+                    existingLeaseLiability.setHasBeenFullyAmortised(existingHasBeenFullyAmortised);
+                }
 
                 return existingLeaseLiability;
             })
