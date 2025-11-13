@@ -1,5 +1,5 @@
 @REM
-@REM Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.8
+@REM Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
 @REM Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 @REM
 @REM This program is free software: you can redistribute it and/or modify
@@ -16,4 +16,4 @@
 @REM along with this program. If not, see <http://www.gnu.org/licenses/>.
 @REM
 
-docker build . -t ghacupha/erp-client:1.7.8
+docker build . -t ghacupha/erp-client:1.7.9
