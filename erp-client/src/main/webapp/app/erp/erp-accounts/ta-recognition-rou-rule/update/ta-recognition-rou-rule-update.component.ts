@@ -35,6 +35,11 @@ import { uuidv7 } from 'uuidv7';
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
 import {
+  taRecognitionRouRuleCopyWorkflowInitiatedEnRoute,
+  taRecognitionRouRuleCreationInitiatedEnRoute,
+  taRecognitionRouRuleEditWorkflowInitiatedEnRoute,
+} from '../../../store/actions/ta-recognition-rou-rule-update-status.actions';
+import {
   copyingTARecognitionRouRuleStatus,
   creatingTARecognitionRouRuleStatus,
   editingTARecognitionRouRuleStatus,
@@ -85,7 +90,6 @@ export class TARecognitionROURuleUpdateComponent implements OnInit {
   ngOnInit(): void {
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
-      this.loadRelationshipsOptions();
     }
 
     if (this.weAreCopying) {
@@ -93,31 +97,49 @@ export class TARecognitionROURuleUpdateComponent implements OnInit {
       this.editForm.patchValue({
         identifier: uuidv7(),
       });
-      this.loadRelationshipsOptions();
     }
 
     if (this.weAreCreating) {
       this.editForm.patchValue({
         identifier: uuidv7(),
       });
+    }
+
+    if (this.weAreCopying || this.weAreEditing || this.weAreCreating) {
       this.loadRelationshipsOptions();
+      return;
     }
 
-    if (!this.weAreCopying && !this.weAreEditing && !this.weAreCreating) {
-      this.activatedRoute.data.subscribe(({ tARecognitionROURule }) => {
-        if (tARecognitionROURule.id) {
-          this.updateForm(tARecognitionROURule);
-        }
+    const routePath = this.activatedRoute.snapshot.routeConfig?.path ?? '';
 
-        if (!tARecognitionROURule.id) {
-          this.editForm.patchValue({
-            identifier: uuidv7(),
-          });
-        }
+    this.activatedRoute.data.subscribe(({ tARecognitionROURule }) => {
+      if (routePath === 'new' || !tARecognitionROURule.id) {
+        this.store.dispatch(taRecognitionRouRuleCreationInitiatedEnRoute());
+        this.weAreCreating = true;
+        this.editForm.patchValue({
+          identifier: uuidv7(),
+        });
+      } else if (routePath === ':id/copy') {
+        this.store.dispatch(
+          taRecognitionRouRuleCopyWorkflowInitiatedEnRoute({ copiedInstance: tARecognitionROURule })
+        );
+        this.weAreCopying = true;
+        this.selectedItem = tARecognitionROURule;
+        this.updateForm(tARecognitionROURule);
+        this.editForm.patchValue({
+          identifier: uuidv7(),
+        });
+      } else {
+        this.store.dispatch(
+          taRecognitionRouRuleEditWorkflowInitiatedEnRoute({ editedInstance: tARecognitionROURule })
+        );
+        this.weAreEditing = true;
+        this.selectedItem = tARecognitionROURule;
+        this.updateForm(tARecognitionROURule);
+      }
 
-        this.loadRelationshipsOptions();
-      });
-    }
+      this.loadRelationshipsOptions();
+    });
   }
 
   updateDebitAccount($event: ITransactionAccount): void {
@@ -146,6 +168,20 @@ export class TARecognitionROURuleUpdateComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  onSubmit(): void {
+    if (this.weAreEditing) {
+      this.edit();
+      return;
+    }
+
+    if (this.weAreCopying) {
+      this.copy();
+      return;
+    }
+
+    this.save();
   }
 
   save(): void {

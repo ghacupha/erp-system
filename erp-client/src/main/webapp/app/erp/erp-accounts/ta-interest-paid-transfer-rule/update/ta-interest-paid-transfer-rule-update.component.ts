@@ -35,6 +35,11 @@ import { uuidv7 } from 'uuidv7';
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
 import {
+  taInterestPaidTransferRuleCopyWorkflowInitiatedEnRoute,
+  taInterestPaidTransferRuleCreationInitiatedEnRoute,
+  taInterestPaidTransferRuleEditWorkflowInitiatedEnRoute,
+} from '../../../store/actions/ta-interest-paid-transfer-rule-update-status.actions';
+import {
   copyingTAInterestPaidTransferRuleStatus,
   creatingTAInterestPaidTransferRuleStatus,
   editingTAInterestPaidTransferRuleStatus,
@@ -85,7 +90,6 @@ export class TAInterestPaidTransferRuleUpdateComponent implements OnInit {
   ngOnInit(): void {
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
-      this.loadRelationshipsOptions();
     }
 
     if (this.weAreCopying) {
@@ -93,31 +97,49 @@ export class TAInterestPaidTransferRuleUpdateComponent implements OnInit {
       this.editForm.patchValue({
         identifier: uuidv7(),
       });
-      this.loadRelationshipsOptions();
     }
 
     if (this.weAreCreating) {
       this.editForm.patchValue({
         identifier: uuidv7(),
       });
+    }
+
+    if (this.weAreCopying || this.weAreEditing || this.weAreCreating) {
       this.loadRelationshipsOptions();
+      return;
     }
 
-    if (!this.weAreCopying && !this.weAreEditing && !this.weAreCreating) {
-      this.activatedRoute.data.subscribe(({ tAInterestPaidTransferRule }) => {
-        if (tAInterestPaidTransferRule.id) {
-          this.updateForm(tAInterestPaidTransferRule);
-        }
+    const routePath = this.activatedRoute.snapshot.routeConfig?.path ?? '';
 
-        if (!tAInterestPaidTransferRule.id) {
-          this.editForm.patchValue({
-            identifier: uuidv7(),
-          });
-        }
+    this.activatedRoute.data.subscribe(({ tAInterestPaidTransferRule }) => {
+      if (routePath === 'new' || !tAInterestPaidTransferRule.id) {
+        this.store.dispatch(taInterestPaidTransferRuleCreationInitiatedEnRoute());
+        this.weAreCreating = true;
+        this.editForm.patchValue({
+          identifier: uuidv7(),
+        });
+      } else if (routePath === ':id/copy') {
+        this.store.dispatch(
+          taInterestPaidTransferRuleCopyWorkflowInitiatedEnRoute({ copiedInstance: tAInterestPaidTransferRule })
+        );
+        this.weAreCopying = true;
+        this.selectedItem = tAInterestPaidTransferRule;
+        this.updateForm(tAInterestPaidTransferRule);
+        this.editForm.patchValue({
+          identifier: uuidv7(),
+        });
+      } else {
+        this.store.dispatch(
+          taInterestPaidTransferRuleEditWorkflowInitiatedEnRoute({ editedInstance: tAInterestPaidTransferRule })
+        );
+        this.weAreEditing = true;
+        this.selectedItem = tAInterestPaidTransferRule;
+        this.updateForm(tAInterestPaidTransferRule);
+      }
 
-        this.loadRelationshipsOptions();
-      });
-    }
+      this.loadRelationshipsOptions();
+    });
   }
 
   updateDebitAccount($event: ITransactionAccount): void {
@@ -146,6 +168,20 @@ export class TAInterestPaidTransferRuleUpdateComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  onSubmit(): void {
+    if (this.weAreEditing) {
+      this.edit();
+      return;
+    }
+
+    if (this.weAreCopying) {
+      this.copy();
+      return;
+    }
+
+    this.save();
   }
 
   save(): void {

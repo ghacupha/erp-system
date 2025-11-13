@@ -35,6 +35,11 @@ import { uuidv7 } from 'uuidv7';
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
 import {
+  taLeaseRepaymentRuleCopyWorkflowInitiatedEnRoute,
+  taLeaseRepaymentRuleCreationInitiatedEnRoute,
+  taLeaseRepaymentRuleEditWorkflowInitiatedEnRoute,
+} from '../../../store/actions/ta-lease-repayment-rule-update-status.actions';
+import {
   copyingTALeaseRepaymentRuleStatus,
   creatingTALeaseRepaymentRuleStatus,
   editingTALeaseRepaymentRuleStatus,
@@ -85,7 +90,6 @@ export class TALeaseRepaymentRuleUpdateComponent implements OnInit {
   ngOnInit(): void {
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
-      this.loadRelationshipsOptions();
     }
 
     if (this.weAreCopying) {
@@ -93,31 +97,49 @@ export class TALeaseRepaymentRuleUpdateComponent implements OnInit {
       this.editForm.patchValue({
         identifier: uuidv7(),
       });
-      this.loadRelationshipsOptions();
     }
 
     if (this.weAreCreating) {
       this.editForm.patchValue({
         identifier: uuidv7(),
       });
+    }
+
+    if (this.weAreCopying || this.weAreEditing || this.weAreCreating) {
       this.loadRelationshipsOptions();
+      return;
     }
 
-    if (!this.weAreCopying && !this.weAreEditing && !this.weAreCreating) {
-      this.activatedRoute.data.subscribe(({ tALeaseRepaymentRule }) => {
-        if (tALeaseRepaymentRule.id) {
-          this.updateForm(tALeaseRepaymentRule);
-        }
+    const routePath = this.activatedRoute.snapshot.routeConfig?.path ?? '';
 
-        if (!tALeaseRepaymentRule.id) {
-          this.editForm.patchValue({
-            identifier: uuidv7(),
-          });
-        }
+    this.activatedRoute.data.subscribe(({ tALeaseRepaymentRule }) => {
+      if (routePath === 'new' || !tALeaseRepaymentRule.id) {
+        this.store.dispatch(taLeaseRepaymentRuleCreationInitiatedEnRoute());
+        this.weAreCreating = true;
+        this.editForm.patchValue({
+          identifier: uuidv7(),
+        });
+      } else if (routePath === ':id/copy') {
+        this.store.dispatch(
+          taLeaseRepaymentRuleCopyWorkflowInitiatedEnRoute({ copiedInstance: tALeaseRepaymentRule })
+        );
+        this.weAreCopying = true;
+        this.selectedItem = tALeaseRepaymentRule;
+        this.updateForm(tALeaseRepaymentRule);
+        this.editForm.patchValue({
+          identifier: uuidv7(),
+        });
+      } else {
+        this.store.dispatch(
+          taLeaseRepaymentRuleEditWorkflowInitiatedEnRoute({ editedInstance: tALeaseRepaymentRule })
+        );
+        this.weAreEditing = true;
+        this.selectedItem = tALeaseRepaymentRule;
+        this.updateForm(tALeaseRepaymentRule);
+      }
 
-        this.loadRelationshipsOptions();
-      });
-    }
+      this.loadRelationshipsOptions();
+    });
   }
   updateDebitAccount($event: ITransactionAccount): void {
     this.editForm.patchValue({
@@ -145,6 +167,20 @@ export class TALeaseRepaymentRuleUpdateComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  onSubmit(): void {
+    if (this.weAreEditing) {
+      this.edit();
+      return;
+    }
+
+    if (this.weAreCopying) {
+      this.copy();
+      return;
+    }
+
+    this.save();
   }
 
   save(): void {

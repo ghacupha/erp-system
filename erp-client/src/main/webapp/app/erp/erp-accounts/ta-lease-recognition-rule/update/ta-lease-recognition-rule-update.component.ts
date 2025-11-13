@@ -35,6 +35,11 @@ import { uuidv7 } from 'uuidv7';
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
 import {
+  taLeaseRecognitionRuleCopyWorkflowInitiatedEnRoute,
+  taLeaseRecognitionRuleCreationInitiatedEnRoute,
+  taLeaseRecognitionRuleEditWorkflowInitiatedEnRoute,
+} from '../../../store/actions/ta-lease-recognition-rule-update-status.actions';
+import {
   copyingTALeaseRecognitionRuleStatus,
   creatingTALeaseRecognitionRuleStatus,
   editingTALeaseRecognitionRuleStatus,
@@ -85,7 +90,6 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
   ngOnInit(): void {
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
-      this.loadRelationshipsOptions();
     }
 
     if (this.weAreCopying) {
@@ -93,31 +97,49 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
       this.editForm.patchValue({
         identifier: uuidv7(),
       });
-      this.loadRelationshipsOptions();
     }
 
     if (this.weAreCreating) {
       this.editForm.patchValue({
         identifier: uuidv7(),
       });
+    }
+
+    if (this.weAreCopying || this.weAreEditing || this.weAreCreating) {
       this.loadRelationshipsOptions();
+      return;
     }
 
-    if (!this.weAreCopying && !this.weAreEditing && !this.weAreCreating) {
-      this.activatedRoute.data.subscribe(({ tALeaseRecognitionRule }) => {
-        if (tALeaseRecognitionRule.id) {
-          this.updateForm(tALeaseRecognitionRule);
-        }
+    const routePath = this.activatedRoute.snapshot.routeConfig?.path ?? '';
 
-        if (!tALeaseRecognitionRule.id) {
-          this.editForm.patchValue({
-            identifier: uuidv7(),
-          });
-        }
+    this.activatedRoute.data.subscribe(({ tALeaseRecognitionRule }) => {
+      if (routePath === 'new' || !tALeaseRecognitionRule.id) {
+        this.store.dispatch(taLeaseRecognitionRuleCreationInitiatedEnRoute());
+        this.weAreCreating = true;
+        this.editForm.patchValue({
+          identifier: uuidv7(),
+        });
+      } else if (routePath === ':id/copy') {
+        this.store.dispatch(
+          taLeaseRecognitionRuleCopyWorkflowInitiatedEnRoute({ copiedInstance: tALeaseRecognitionRule })
+        );
+        this.weAreCopying = true;
+        this.selectedItem = tALeaseRecognitionRule;
+        this.updateForm(tALeaseRecognitionRule);
+        this.editForm.patchValue({
+          identifier: uuidv7(),
+        });
+      } else {
+        this.store.dispatch(
+          taLeaseRecognitionRuleEditWorkflowInitiatedEnRoute({ editedInstance: tALeaseRecognitionRule })
+        );
+        this.weAreEditing = true;
+        this.selectedItem = tALeaseRecognitionRule;
+        this.updateForm(tALeaseRecognitionRule);
+      }
 
-        this.loadRelationshipsOptions();
-      });
-    }
+      this.loadRelationshipsOptions();
+    });
   }
 
   updateDebitAccount($event: ITransactionAccount): void {
@@ -146,6 +168,20 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  onSubmit(): void {
+    if (this.weAreEditing) {
+      this.edit();
+      return;
+    }
+
+    if (this.weAreCopying) {
+      this.copy();
+      return;
+    }
+
+    this.save();
   }
 
   save(): void {

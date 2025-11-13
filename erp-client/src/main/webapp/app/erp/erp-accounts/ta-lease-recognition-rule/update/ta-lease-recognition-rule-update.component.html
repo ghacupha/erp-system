@@ -19,7 +19,7 @@
 -->
 <div class="row justify-content-center">
   <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+    <form name="editForm" role="form" novalidate (ngSubmit)="onSubmit()" [formGroup]="editForm">
 
       <h2
         id="jhi-ta-lease-recognition-rule-heading-new"
@@ -126,7 +126,6 @@
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
           [hidden]='!weAreCreating'
-          (click)='save()'
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
         </button>
@@ -138,7 +137,6 @@
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
           [hidden]='!weAreEditing'
-          (click)='edit()'
         >
           <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
         </button>
@@ -150,7 +148,6 @@
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
           [hidden]='!weAreCopying'
-          (click)='copy()'
         >
           <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
         </button>

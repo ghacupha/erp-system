@@ -35,6 +35,11 @@ import { uuidv7 } from 'uuidv7';
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
 import {
+  taLeaseInterestAccrualRuleCopyWorkflowInitiatedEnRoute,
+  taLeaseInterestAccrualRuleCreationInitiatedEnRoute,
+  taLeaseInterestAccrualRuleEditWorkflowInitiatedEnRoute,
+} from '../../../store/actions/ta-lease-interest-accrual-rule-update-status.actions';
+import {
   copyingTALeaseInterestAccrualRuleStatus,
   creatingTALeaseInterestAccrualRuleStatus,
   editingTALeaseInterestAccrualRuleStatus,
@@ -85,7 +90,6 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
   ngOnInit(): void {
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
-      this.loadRelationshipsOptions();
     }
 
     if (this.weAreCopying) {
@@ -93,31 +97,49 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
       this.editForm.patchValue({
         identifier: uuidv7(),
       });
-      this.loadRelationshipsOptions();
     }
 
     if (this.weAreCreating) {
       this.editForm.patchValue({
         identifier: uuidv7(),
       });
+    }
+
+    if (this.weAreCopying || this.weAreEditing || this.weAreCreating) {
       this.loadRelationshipsOptions();
+      return;
     }
 
-    if (!this.weAreCopying && !this.weAreEditing && !this.weAreCreating) {
-      this.activatedRoute.data.subscribe(({ tALeaseInterestAccrualRule }) => {
-        if (tALeaseInterestAccrualRule.id) {
-          this.updateForm(tALeaseInterestAccrualRule);
-        }
+    const routePath = this.activatedRoute.snapshot.routeConfig?.path ?? '';
 
-        if (!tALeaseInterestAccrualRule.id) {
-          this.editForm.patchValue({
-            identifier: uuidv7(),
-          });
-        }
+    this.activatedRoute.data.subscribe(({ tALeaseInterestAccrualRule }) => {
+      if (routePath === 'new' || !tALeaseInterestAccrualRule.id) {
+        this.store.dispatch(taLeaseInterestAccrualRuleCreationInitiatedEnRoute());
+        this.weAreCreating = true;
+        this.editForm.patchValue({
+          identifier: uuidv7(),
+        });
+      } else if (routePath === ':id/copy') {
+        this.store.dispatch(
+          taLeaseInterestAccrualRuleCopyWorkflowInitiatedEnRoute({ copiedInstance: tALeaseInterestAccrualRule })
+        );
+        this.weAreCopying = true;
+        this.selectedItem = tALeaseInterestAccrualRule;
+        this.updateForm(tALeaseInterestAccrualRule);
+        this.editForm.patchValue({
+          identifier: uuidv7(),
+        });
+      } else {
+        this.store.dispatch(
+          taLeaseInterestAccrualRuleEditWorkflowInitiatedEnRoute({ editedInstance: tALeaseInterestAccrualRule })
+        );
+        this.weAreEditing = true;
+        this.selectedItem = tALeaseInterestAccrualRule;
+        this.updateForm(tALeaseInterestAccrualRule);
+      }
 
-        this.loadRelationshipsOptions();
-      });
-    }
+      this.loadRelationshipsOptions();
+    });
   }
 
   updateDebitAccount($event: ITransactionAccount): void {
@@ -146,6 +168,20 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  onSubmit(): void {
+    if (this.weAreEditing) {
+      this.edit();
+      return;
+    }
+
+    if (this.weAreCopying) {
+      this.copy();
+      return;
+    }
+
+    this.save();
   }
 
   save(): void {
