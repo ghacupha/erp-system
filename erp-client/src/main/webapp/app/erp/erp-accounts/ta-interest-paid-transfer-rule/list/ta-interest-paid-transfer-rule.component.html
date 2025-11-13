@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-ta-interest-paid-transfer-rule"
         [routerLink]="['/ta-interest-paid-transfer-rule/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new TA Interest Paid Transfer Rule </span>
@@ -122,12 +123,24 @@
 
               <button
                 type="submit"
+                (click)='editButtonEvent(tAInterestPaidTransferRule)'
                 [routerLink]="['/ta-interest-paid-transfer-rule', tAInterestPaidTransferRule.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button
+                type="submit"
+                (click)='copyButtonEvent(tAInterestPaidTransferRule)'
+                [routerLink]="['/ta-interest-paid-transfer-rule', tAInterestPaidTransferRule.id, 'copy']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityCopyButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
+                <span class="d-none d-md-inline">Copy</span>
               </button>
 
               <button type="submit" (click)="delete(tAInterestPaidTransferRule)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">

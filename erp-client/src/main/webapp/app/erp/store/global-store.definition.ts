@@ -37,6 +37,11 @@ import { LeaseAmortizationCalculationFormState } from './reducers/lease-amortiza
 import { LeaseLiabilityFormState } from './reducers/lease-liability.reducer';
 import { LeasePaymentFormState } from './reducers/lease-payment.reducer';
 import { TAAmortizationRuleFormState } from './reducers/ta-amortization-rule-status.reducer';
+import { TAInterestPaidTransferRuleFormState } from './reducers/ta-interest-paid-transfer-rule-status.reducer';
+import { TALeaseInterestAccrualRuleFormState } from './reducers/ta-lease-interest-accrual-rule-status.reducer';
+import { TALeaseRecognitionRuleFormState } from './reducers/ta-lease-recognition-rule-status.reducer';
+import { TALeaseRepaymentRuleFormState } from './reducers/ta-lease-repayment-rule-status.reducer';
+import { TARecognitionROURuleFormState } from './reducers/ta-recognition-rou-rule-status.reducer';
 import { TransactionAccountFormState } from './reducers/transaction-account-update-status.reducer';
 import { TransactionAccountReportDateSelectionState } from './reducers/transaction-account-report-date-selection.reducer';
 import { IFRS16LeaseContractReportState } from './reducers/ifrs16-lease-contract-report.reducer';
@@ -61,6 +66,11 @@ export interface State {
   leasePeriodSelectionIdFormState: LeasePeriodSelectionFormState,
   leasePeriodReportPathSelectionState: LeasePeriodReportPathSelectionState,
   taAmortizationRuleFormState: TAAmortizationRuleFormState,
+  taInterestPaidTransferRuleFormState: TAInterestPaidTransferRuleFormState,
+  taLeaseInterestAccrualRuleFormState: TALeaseInterestAccrualRuleFormState,
+  taLeaseRecognitionRuleFormState: TALeaseRecognitionRuleFormState,
+  taLeaseRepaymentRuleFormState: TALeaseRepaymentRuleFormState,
+  taRecognitionRouRuleFormState: TARecognitionROURuleFormState,
   transactionAccountFormState: TransactionAccountFormState,
   transactionAccountReportDateSelectionState: TransactionAccountReportDateSelectionState,
   ifrs16LeaseContractReportState: IFRS16LeaseContractReportState
@@ -122,6 +132,46 @@ export const initialState: State = {
     weAreCreating: false,
   },
   taAmortizationRuleFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  taInterestPaidTransferRuleFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  taLeaseInterestAccrualRuleFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  taLeaseRecognitionRuleFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  taLeaseRepaymentRuleFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  taRecognitionRouRuleFormState: {
     selectedInstance: {},
     browserHasBeenRefreshed: false,
     backEndFetchComplete: false,

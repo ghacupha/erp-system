@@ -20,6 +20,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ITALeaseRepaymentRule } from '../ta-lease-repayment-rule.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  taLeaseRepaymentRuleCopyWorkflowInitiatedFromView,
+  taLeaseRepaymentRuleEditWorkflowInitiatedFromView
+} from '../../../store/actions/ta-lease-repayment-rule-update-status.actions';
 
 @Component({
   selector: 'jhi-ta-lease-repayment-rule-detail',
@@ -28,12 +34,20 @@ import { ITALeaseRepaymentRule } from '../ta-lease-repayment-rule.model';
 export class TALeaseRepaymentRuleDetailComponent implements OnInit {
   tALeaseRepaymentRule: ITALeaseRepaymentRule | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tALeaseRepaymentRule }) => {
       this.tALeaseRepaymentRule = tALeaseRepaymentRule;
     });
+  }
+
+  editButtonEvent(instance: ITALeaseRepaymentRule): void {
+    this.store.dispatch(taLeaseRepaymentRuleEditWorkflowInitiatedFromView({ editedInstance: instance }));
+  }
+
+  copyButtonEvent(instance: ITALeaseRepaymentRule): void {
+    this.store.dispatch(taLeaseRepaymentRuleCopyWorkflowInitiatedFromView({ copiedInstance: instance }));
   }
 
   previousState(): void {

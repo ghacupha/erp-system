@@ -20,6 +20,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ITALeaseInterestAccrualRule } from '../ta-lease-interest-accrual-rule.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  taLeaseInterestAccrualRuleCopyWorkflowInitiatedFromView,
+  taLeaseInterestAccrualRuleEditWorkflowInitiatedFromView
+} from '../../../store/actions/ta-lease-interest-accrual-rule-update-status.actions';
 
 @Component({
   selector: 'jhi-ta-lease-interest-accrual-rule-detail',
@@ -28,12 +34,20 @@ import { ITALeaseInterestAccrualRule } from '../ta-lease-interest-accrual-rule.m
 export class TALeaseInterestAccrualRuleDetailComponent implements OnInit {
   tALeaseInterestAccrualRule: ITALeaseInterestAccrualRule | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tALeaseInterestAccrualRule }) => {
       this.tALeaseInterestAccrualRule = tALeaseInterestAccrualRule;
     });
+  }
+
+  editButtonEvent(instance: ITALeaseInterestAccrualRule): void {
+    this.store.dispatch(taLeaseInterestAccrualRuleEditWorkflowInitiatedFromView({ editedInstance: instance }));
+  }
+
+  copyButtonEvent(instance: ITALeaseInterestAccrualRule): void {
+    this.store.dispatch(taLeaseInterestAccrualRuleCopyWorkflowInitiatedFromView({ copiedInstance: instance }));
   }
 
   previousState(): void {
