@@ -17,8 +17,9 @@
 ///
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription, forkJoin, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
@@ -56,15 +57,23 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
   loading = false;
   loadError?: string;
 
+  leaseSelectionForm: FormGroup;
+
   private paramSubscription?: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private formBuilder: FormBuilder,
     private leaseLiabilityService: LeaseLiabilityService,
     private leaseLiabilityScheduleItemService: LeaseLiabilityScheduleItemService,
     private leaseRepaymentPeriodService: LeaseRepaymentPeriodService,
     private leaseContractService: IFRS16LeaseContractService
-  ) {}
+  ) {
+    this.leaseSelectionForm = this.formBuilder.group({
+      leaseContract: [null],
+    });
+  }
 
   ngOnInit(): void {
     this.paramSubscription = this.activatedRoute.paramMap
@@ -101,9 +110,12 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
         next: responses => {
           if (!responses) {
             this.loading = false;
+            this.leaseContract = null;
+            this.leaseSelectionForm.patchValue({ leaseContract: null });
             return;
           }
           this.leaseContract = responses.contract.body ?? null;
+          this.leaseSelectionForm.patchValue({ leaseContract: this.leaseContract });
           this.leaseLiability = this.extractFirst(responses.liability);
           this.reportingPeriods = this.preparePeriods(responses.periods);
           this.scheduleItems = this.prepareScheduleItems(responses.scheduleItems);
@@ -116,6 +128,13 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
           this.loadError = 'Unable to load lease liability dashboard data.';
         },
       });
+  }
+
+  onLeaseContractSelected(contract: IIFRS16LeaseContract | null): void {
+    if (!contract?.id || contract.id === this.leaseContract?.id) {
+      return;
+    }
+    void this.router.navigate(['/erp/lease-liability-schedule-view', contract.id]);
   }
 
   ngOnDestroy(): void {
