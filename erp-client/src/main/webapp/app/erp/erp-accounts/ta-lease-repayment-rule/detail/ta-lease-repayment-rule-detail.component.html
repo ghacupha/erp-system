@@ -78,8 +78,24 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/ta-lease-repayment-rule', tALeaseRepaymentRule.id, 'edit']" class="btn btn-primary">
+      <button
+        type="button"
+        (click)='editButtonEvent(tALeaseRepaymentRule)'
+        [routerLink]="['/ta-lease-repayment-rule', tALeaseRepaymentRule.id, 'edit']"
+        class="btn btn-primary"
+      >
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+
+      &nbsp;
+
+      <button
+        type="button"
+        (click)='copyButtonEvent(tALeaseRepaymentRule)'
+        [routerLink]="['/ta-lease-repayment-rule', tALeaseRepaymentRule.id, 'copy']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
       </button>
     </div>
   </div>

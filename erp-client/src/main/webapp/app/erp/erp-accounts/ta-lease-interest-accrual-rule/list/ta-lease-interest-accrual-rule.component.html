@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-ta-lease-interest-accrual-rule"
         [routerLink]="['/ta-lease-interest-accrual-rule/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new TA Lease Interest Accrual Rule </span>
@@ -122,12 +123,24 @@
 
               <button
                 type="submit"
+                (click)='editButtonEvent(tALeaseInterestAccrualRule)'
                 [routerLink]="['/ta-lease-interest-accrual-rule', tALeaseInterestAccrualRule.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button
+                type="submit"
+                (click)='copyButtonEvent(tALeaseInterestAccrualRule)'
+                [routerLink]="['/ta-lease-interest-accrual-rule', tALeaseInterestAccrualRule.id, 'copy']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityCopyButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
+                <span class="d-none d-md-inline">Copy</span>
               </button>
 
               <button type="submit" (click)="delete(tALeaseInterestAccrualRule)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">

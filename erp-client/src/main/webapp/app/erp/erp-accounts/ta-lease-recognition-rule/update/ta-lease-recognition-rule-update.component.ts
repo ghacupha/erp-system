@@ -32,6 +32,14 @@ import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { uuidv7 } from 'uuidv7';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  copyingTALeaseRecognitionRuleStatus,
+  creatingTALeaseRecognitionRuleStatus,
+  editingTALeaseRecognitionRuleStatus,
+  taLeaseRecognitionRuleSelectedInstance
+} from '../../../store/selectors/ta-lease-recognition-rule-status.selectors';
 
 @Component({
   selector: 'jhi-ta-lease-recognition-rule-update',
@@ -39,6 +47,11 @@ import { uuidv7 } from 'uuidv7';
 })
 export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
   isSaving = false;
+
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = { ...new TALeaseRecognitionRule() };
 
   leaseContractsCollection: IIFRS16LeaseContract[] = [];
   transactionAccountsSharedCollection: ITransactionAccount[] = [];
@@ -60,19 +73,51 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
     protected transactionAccountService: TransactionAccountService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected store: Store<State>,
   ) {
+    this.store.pipe(select(copyingTALeaseRecognitionRuleStatus)).subscribe(status => (this.weAreCopying = status));
+    this.store.pipe(select(editingTALeaseRecognitionRuleStatus)).subscribe(status => (this.weAreEditing = status));
+    this.store.pipe(select(creatingTALeaseRecognitionRuleStatus)).subscribe(status => (this.weAreCreating = status));
+    this.store.pipe(select(taLeaseRecognitionRuleSelectedInstance)).subscribe(selected => (this.selectedItem = selected));
   }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ tALeaseRecognitionRule }) => {
-
-      tALeaseRecognitionRule.identifier = uuidv7();
-
-      this.updateForm(tALeaseRecognitionRule);
-
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
       this.loadRelationshipsOptions();
-    });
+    }
+
+    if (this.weAreCopying) {
+      this.updateForm(this.selectedItem);
+      this.editForm.patchValue({
+        identifier: uuidv7(),
+      });
+      this.loadRelationshipsOptions();
+    }
+
+    if (this.weAreCreating) {
+      this.editForm.patchValue({
+        identifier: uuidv7(),
+      });
+      this.loadRelationshipsOptions();
+    }
+
+    if (!this.weAreCopying && !this.weAreEditing && !this.weAreCreating) {
+      this.activatedRoute.data.subscribe(({ tALeaseRecognitionRule }) => {
+        if (tALeaseRecognitionRule.id) {
+          this.updateForm(tALeaseRecognitionRule);
+        }
+
+        if (!tALeaseRecognitionRule.id) {
+          this.editForm.patchValue({
+            identifier: uuidv7(),
+          });
+        }
+
+        this.loadRelationshipsOptions();
+      });
+    }
   }
 
   updateDebitAccount($event: ITransactionAccount): void {
@@ -89,7 +134,7 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
 
   updateLeaseContract($event: IIFRS16LeaseContract): void {
     this.editForm.patchValue({
-      leasContract: $event
+      leaseContract: $event
     });
   }
 
@@ -105,12 +150,17 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const tALeaseRecognitionRule = this.createFromForm();
-    if (tALeaseRecognitionRule.id !== undefined) {
-      this.subscribeToSaveResponse(this.tALeaseRecognitionRuleService.update(tALeaseRecognitionRule));
-    } else {
-      this.subscribeToSaveResponse(this.tALeaseRecognitionRuleService.create(tALeaseRecognitionRule));
-    }
+    this.subscribeToSaveResponse(this.tALeaseRecognitionRuleService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.tALeaseRecognitionRuleService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.tALeaseRecognitionRuleService.create(this.copyFromForm()));
   }
 
   trackIFRS16LeaseContractById(index: number, item: IIFRS16LeaseContract): number {
@@ -224,6 +274,18 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
     return {
       ...new TALeaseRecognitionRule(),
       id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      identifier: this.editForm.get(['identifier'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
+      debit: this.editForm.get(['debit'])!.value,
+      credit: this.editForm.get(['credit'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value
+    };
+  }
+
+  protected copyFromForm(): ITALeaseRecognitionRule {
+    return {
+      ...new TALeaseRecognitionRule(),
       name: this.editForm.get(['name'])!.value,
       identifier: this.editForm.get(['identifier'])!.value,
       leaseContract: this.editForm.get(['leaseContract'])!.value,

@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-ta-lease-recognition-rule"
         [routerLink]="['/ta-lease-recognition-rule/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new TA Lease Recognition Rule </span>
@@ -120,12 +121,24 @@
 
               <button
                 type="submit"
+                (click)='editButtonEvent(tALeaseRecognitionRule)'
                 [routerLink]="['/ta-lease-recognition-rule', tALeaseRecognitionRule.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button
+                type="submit"
+                (click)='copyButtonEvent(tALeaseRecognitionRule)'
+                [routerLink]="['/ta-lease-recognition-rule', tALeaseRecognitionRule.id, 'copy']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityCopyButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
+                <span class="d-none d-md-inline">Copy</span>
               </button>
 
               <button type="submit" (click)="delete(tALeaseRecognitionRule)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
