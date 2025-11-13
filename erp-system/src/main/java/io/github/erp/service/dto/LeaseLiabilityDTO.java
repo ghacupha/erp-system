@@ -107,7 +107,7 @@ public class LeaseLiabilityDTO implements Serializable {
     }
 
     public void setHasBeenFullyAmortised(Boolean hasBeenFullyAmortised) {
-        this.hasBeenFullyAmortised = hasBeenFullyAmortised;
+        this.hasBeenFullyAmortised = hasBeenFullyAmortised != null ? hasBeenFullyAmortised : Boolean.FALSE;
     }
 
     public LeaseAmortizationCalculationDTO getLeaseAmortizationCalculation() {
