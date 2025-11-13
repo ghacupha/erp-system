@@ -27,6 +27,13 @@ import { ITALeaseRecognitionRule } from '../ta-lease-recognition-rule.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { TALeaseRecognitionRuleService } from '../service/ta-lease-recognition-rule.service';
 import { TALeaseRecognitionRuleDeleteDialogComponent } from '../delete/ta-lease-recognition-rule-delete-dialog.component';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  taLeaseRecognitionRuleCopyWorkflowInitiatedFromList,
+  taLeaseRecognitionRuleCreationInitiatedFromList,
+  taLeaseRecognitionRuleEditWorkflowInitiatedFromList
+} from '../../../store/actions/ta-lease-recognition-rule-update-status.actions';
 
 @Component({
   selector: 'jhi-ta-lease-recognition-rule',
@@ -47,7 +54,8 @@ export class TALeaseRecognitionRuleComponent implements OnInit {
     protected tALeaseRecognitionRuleService: TALeaseRecognitionRuleService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -102,6 +110,18 @@ export class TALeaseRecognitionRuleComponent implements OnInit {
     }
     this.currentSearch = query;
     this.loadPage(1);
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(taLeaseRecognitionRuleCreationInitiatedFromList());
+  }
+
+  editButtonEvent(instance: ITALeaseRecognitionRule): void {
+    this.store.dispatch(taLeaseRecognitionRuleEditWorkflowInitiatedFromList({ editedInstance: instance }));
+  }
+
+  copyButtonEvent(instance: ITALeaseRecognitionRule): void {
+    this.store.dispatch(taLeaseRecognitionRuleCopyWorkflowInitiatedFromList({ copiedInstance: instance }));
   }
 
   ngOnInit(): void {
