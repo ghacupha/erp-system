@@ -83,6 +83,9 @@ class LeaseLiabilityResourceIT {
     private static final BigDecimal UPDATED_INTEREST_RATE = new BigDecimal(1);
     private static final BigDecimal SMALLER_INTEREST_RATE = new BigDecimal(0 - 1);
 
+    private static final Boolean DEFAULT_HAS_BEEN_FULLY_AMORTISED = false;
+    private static final Boolean UPDATED_HAS_BEEN_FULLY_AMORTISED = true;
+
     private static final String ENTITY_API_URL = "/api/lease-liabilities";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/lease-liabilities";
@@ -124,7 +127,8 @@ class LeaseLiabilityResourceIT {
             .liabilityAmount(DEFAULT_LIABILITY_AMOUNT)
             .startDate(DEFAULT_START_DATE)
             .endDate(DEFAULT_END_DATE)
-            .interestRate(DEFAULT_INTEREST_RATE);
+            .interestRate(DEFAULT_INTEREST_RATE)
+            .hasBeenFullyAmortised(DEFAULT_HAS_BEEN_FULLY_AMORTISED);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -150,7 +154,8 @@ class LeaseLiabilityResourceIT {
             .liabilityAmount(UPDATED_LIABILITY_AMOUNT)
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
-            .interestRate(UPDATED_INTEREST_RATE);
+            .interestRate(UPDATED_INTEREST_RATE)
+            .hasBeenFullyAmortised(UPDATED_HAS_BEEN_FULLY_AMORTISED);
         // Add required entity
         IFRS16LeaseContract iFRS16LeaseContract;
         if (TestUtil.findAll(em, IFRS16LeaseContract.class).isEmpty()) {
@@ -190,6 +195,7 @@ class LeaseLiabilityResourceIT {
         assertThat(testLeaseLiability.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testLeaseLiability.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testLeaseLiability.getInterestRate()).isEqualByComparingTo(DEFAULT_INTEREST_RATE);
+        assertThat(testLeaseLiability.getHasBeenFullyAmortised()).isEqualTo(DEFAULT_HAS_BEEN_FULLY_AMORTISED);
 
         // Validate the LeaseLiability in Elasticsearch
         verify(mockLeaseLiabilitySearchRepository, times(1)).save(testLeaseLiability);
@@ -335,7 +341,10 @@ class LeaseLiabilityResourceIT {
             .andExpect(jsonPath("$.[*].liabilityAmount").value(hasItem(sameNumber(DEFAULT_LIABILITY_AMOUNT))))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
-            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(sameNumber(DEFAULT_INTEREST_RATE))));
+            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(sameNumber(DEFAULT_INTEREST_RATE))))
+            .andExpect(
+                jsonPath("$.[*].hasBeenFullyAmortised").value(hasItem(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue()))
+            );
     }
 
     @Test
@@ -354,7 +363,8 @@ class LeaseLiabilityResourceIT {
             .andExpect(jsonPath("$.liabilityAmount").value(sameNumber(DEFAULT_LIABILITY_AMOUNT)))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
             .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
-            .andExpect(jsonPath("$.interestRate").value(sameNumber(DEFAULT_INTEREST_RATE)));
+            .andExpect(jsonPath("$.interestRate").value(sameNumber(DEFAULT_INTEREST_RATE)))
+            .andExpect(jsonPath("$.hasBeenFullyAmortised").value(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue()));
     }
 
     @Test
@@ -871,6 +881,44 @@ class LeaseLiabilityResourceIT {
 
     @Test
     @Transactional
+    void getAllLeaseLiabilitiesByHasBeenFullyAmortisedIsEqualToSomething() throws Exception {
+        leaseLiabilityRepository.saveAndFlush(leaseLiability);
+
+        defaultLeaseLiabilityShouldBeFound("hasBeenFullyAmortised.equals=" + DEFAULT_HAS_BEEN_FULLY_AMORTISED);
+        defaultLeaseLiabilityShouldNotBeFound("hasBeenFullyAmortised.equals=" + UPDATED_HAS_BEEN_FULLY_AMORTISED);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilitiesByHasBeenFullyAmortisedIsNotEqualToSomething() throws Exception {
+        leaseLiabilityRepository.saveAndFlush(leaseLiability);
+
+        defaultLeaseLiabilityShouldNotBeFound("hasBeenFullyAmortised.notEquals=" + DEFAULT_HAS_BEEN_FULLY_AMORTISED);
+        defaultLeaseLiabilityShouldBeFound("hasBeenFullyAmortised.notEquals=" + UPDATED_HAS_BEEN_FULLY_AMORTISED);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilitiesByHasBeenFullyAmortisedIsInShouldWork() throws Exception {
+        leaseLiabilityRepository.saveAndFlush(leaseLiability);
+
+        defaultLeaseLiabilityShouldBeFound(
+            "hasBeenFullyAmortised.in=" + DEFAULT_HAS_BEEN_FULLY_AMORTISED + "," + UPDATED_HAS_BEEN_FULLY_AMORTISED
+        );
+        defaultLeaseLiabilityShouldNotBeFound("hasBeenFullyAmortised.in=" + UPDATED_HAS_BEEN_FULLY_AMORTISED);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseLiabilitiesByHasBeenFullyAmortisedIsNullOrNotNull() throws Exception {
+        leaseLiabilityRepository.saveAndFlush(leaseLiability);
+
+        defaultLeaseLiabilityShouldBeFound("hasBeenFullyAmortised.specified=true");
+        defaultLeaseLiabilityShouldNotBeFound("hasBeenFullyAmortised.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllLeaseLiabilitiesByLeaseAmortizationCalculationIsEqualToSomething() throws Exception {
         // Initialize the database
         leaseLiabilityRepository.saveAndFlush(leaseLiability);
@@ -923,7 +971,10 @@ class LeaseLiabilityResourceIT {
             .andExpect(jsonPath("$.[*].liabilityAmount").value(hasItem(sameNumber(DEFAULT_LIABILITY_AMOUNT))))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
-            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(sameNumber(DEFAULT_INTEREST_RATE))));
+            .andExpect(jsonPath("$.[*].interestRate").value(hasItem(sameNumber(DEFAULT_INTEREST_RATE))))
+            .andExpect(
+                jsonPath("$.[*].hasBeenFullyAmortised").value(hasItem(DEFAULT_HAS_BEEN_FULLY_AMORTISED.booleanValue()))
+            );
 
         // Check, that the count call also returns 1
         restLeaseLiabilityMockMvc
@@ -976,7 +1027,8 @@ class LeaseLiabilityResourceIT {
             .liabilityAmount(UPDATED_LIABILITY_AMOUNT)
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
-            .interestRate(UPDATED_INTEREST_RATE);
+            .interestRate(UPDATED_INTEREST_RATE)
+            .hasBeenFullyAmortised(UPDATED_HAS_BEEN_FULLY_AMORTISED);
         LeaseLiabilityDTO leaseLiabilityDTO = leaseLiabilityMapper.toDto(updatedLeaseLiability);
 
         restLeaseLiabilityMockMvc
@@ -996,6 +1048,7 @@ class LeaseLiabilityResourceIT {
         assertThat(testLeaseLiability.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testLeaseLiability.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testLeaseLiability.getInterestRate()).isEqualTo(UPDATED_INTEREST_RATE);
+        assertThat(testLeaseLiability.getHasBeenFullyAmortised()).isEqualTo(UPDATED_HAS_BEEN_FULLY_AMORTISED);
 
         // Validate the LeaseLiability in Elasticsearch
         verify(mockLeaseLiabilitySearchRepository).save(testLeaseLiability);
@@ -1108,6 +1161,7 @@ class LeaseLiabilityResourceIT {
         assertThat(testLeaseLiability.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testLeaseLiability.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testLeaseLiability.getInterestRate()).isEqualByComparingTo(DEFAULT_INTEREST_RATE);
+        assertThat(testLeaseLiability.getHasBeenFullyAmortised()).isEqualTo(DEFAULT_HAS_BEEN_FULLY_AMORTISED);
     }
 
     @Test
@@ -1127,7 +1181,8 @@ class LeaseLiabilityResourceIT {
             .liabilityAmount(UPDATED_LIABILITY_AMOUNT)
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
-            .interestRate(UPDATED_INTEREST_RATE);
+            .interestRate(UPDATED_INTEREST_RATE)
+            .hasBeenFullyAmortised(UPDATED_HAS_BEEN_FULLY_AMORTISED);
 
         restLeaseLiabilityMockMvc
             .perform(
@@ -1146,6 +1201,7 @@ class LeaseLiabilityResourceIT {
         assertThat(testLeaseLiability.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testLeaseLiability.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testLeaseLiability.getInterestRate()).isEqualByComparingTo(UPDATED_INTEREST_RATE);
+        assertThat(testLeaseLiability.getHasBeenFullyAmortised()).isEqualTo(UPDATED_HAS_BEEN_FULLY_AMORTISED);
     }
 
     @Test

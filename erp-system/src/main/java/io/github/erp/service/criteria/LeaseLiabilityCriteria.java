@@ -55,6 +55,8 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter interestRate;
 
+    private BooleanFilter hasBeenFullyAmortised;
+
     private LongFilter leaseAmortizationCalculationId;
 
     private LongFilter leaseContractId;
@@ -70,6 +72,7 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
         this.startDate = other.startDate == null ? null : other.startDate.copy();
         this.endDate = other.endDate == null ? null : other.endDate.copy();
         this.interestRate = other.interestRate == null ? null : other.interestRate.copy();
+        this.hasBeenFullyAmortised = other.hasBeenFullyAmortised == null ? null : other.hasBeenFullyAmortised.copy();
         this.leaseAmortizationCalculationId =
             other.leaseAmortizationCalculationId == null ? null : other.leaseAmortizationCalculationId.copy();
         this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
@@ -171,6 +174,21 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
         this.interestRate = interestRate;
     }
 
+    public BooleanFilter getHasBeenFullyAmortised() {
+        return hasBeenFullyAmortised;
+    }
+
+    public BooleanFilter hasBeenFullyAmortised() {
+        if (hasBeenFullyAmortised == null) {
+            hasBeenFullyAmortised = new BooleanFilter();
+        }
+        return hasBeenFullyAmortised;
+    }
+
+    public void setHasBeenFullyAmortised(BooleanFilter hasBeenFullyAmortised) {
+        this.hasBeenFullyAmortised = hasBeenFullyAmortised;
+    }
+
     public LongFilter getLeaseAmortizationCalculationId() {
         return leaseAmortizationCalculationId;
     }
@@ -225,6 +243,7 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             Objects.equals(startDate, that.startDate) &&
             Objects.equals(endDate, that.endDate) &&
             Objects.equals(interestRate, that.interestRate) &&
+            Objects.equals(hasBeenFullyAmortised, that.hasBeenFullyAmortised) &&
             Objects.equals(leaseAmortizationCalculationId, that.leaseAmortizationCalculationId) &&
             Objects.equals(leaseContractId, that.leaseContractId) &&
             Objects.equals(distinct, that.distinct)
@@ -240,6 +259,7 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             startDate,
             endDate,
             interestRate,
+            hasBeenFullyAmortised,
             leaseAmortizationCalculationId,
             leaseContractId,
             distinct
@@ -256,6 +276,7 @@ public class LeaseLiabilityCriteria implements Serializable, Criteria {
             (startDate != null ? "startDate=" + startDate + ", " : "") +
             (endDate != null ? "endDate=" + endDate + ", " : "") +
             (interestRate != null ? "interestRate=" + interestRate + ", " : "") +
+            (hasBeenFullyAmortised != null ? "hasBeenFullyAmortised=" + hasBeenFullyAmortised + ", " : "") +
             (leaseAmortizationCalculationId != null ? "leaseAmortizationCalculationId=" + leaseAmortizationCalculationId + ", " : "") +
             (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +

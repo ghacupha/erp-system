@@ -21,8 +21,10 @@ import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
 import io.github.erp.domain.LeaseRepaymentPeriod;
 import io.github.erp.repository.LeaseLiabilityCompilationRepository;
+import io.github.erp.internal.repository.InternalLeaseLiabilityRepository;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityScheduleItemSearchRepository;
+import io.github.erp.repository.search.LeaseLiabilitySearchRepository;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
 import io.github.erp.service.dto.LeaseLiabilityDTO;
@@ -42,6 +44,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * Service Implementation for managing {@link LeaseLiabilityScheduleItem}.
@@ -57,16 +60,22 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
     private final LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper;
     private final LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository;
     private final LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository;
+    private final InternalLeaseLiabilityRepository leaseLiabilityRepository;
+    private final LeaseLiabilitySearchRepository leaseLiabilitySearchRepository;
 
     public InternalLeaseLiabilityScheduleItemServiceImpl(
         InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository,
         LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper,
         LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository,
-        LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository) {
+        LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository,
+        InternalLeaseLiabilityRepository leaseLiabilityRepository,
+        LeaseLiabilitySearchRepository leaseLiabilitySearchRepository) {
         this.leaseLiabilityScheduleItemRepository = leaseLiabilityScheduleItemRepository;
         this.leaseLiabilityScheduleItemMapper = leaseLiabilityScheduleItemMapper;
         this.leaseLiabilityScheduleItemSearchRepository = leaseLiabilityScheduleItemSearchRepository;
         this.leaseLiabilityCompilationRepository = leaseLiabilityCompilationRepository;
+        this.leaseLiabilityRepository = leaseLiabilityRepository;
+        this.leaseLiabilitySearchRepository = leaseLiabilitySearchRepository;
     }
 
     @Override
@@ -171,6 +180,28 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
 
         List<LeaseLiabilityScheduleItem> persisted = leaseLiabilityScheduleItemRepository.saveAll(entitiesToPersist);
         leaseLiabilityScheduleItemSearchRepository.saveAll(persisted);
+
+        Set<Long> processedLiabilityIds = persisted
+            .stream()
+            .map(LeaseLiabilityScheduleItem::getLeaseLiability)
+            .filter(Objects::nonNull)
+            .map(LeaseLiability::getId)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
+
+        if (!processedLiabilityIds.isEmpty()) {
+            List<LeaseLiability> liabilities = leaseLiabilityRepository.findAllById(processedLiabilityIds);
+            List<LeaseLiability> changedLiabilities = liabilities
+                .stream()
+                .filter(liability -> !Boolean.TRUE.equals(liability.getHasBeenFullyAmortised()))
+                .peek(liability -> liability.setHasBeenFullyAmortised(Boolean.TRUE))
+                .collect(Collectors.toList());
+
+            if (!changedLiabilities.isEmpty()) {
+                List<LeaseLiability> savedLiabilities = leaseLiabilityRepository.saveAll(changedLiabilities);
+                leaseLiabilitySearchRepository.saveAll(savedLiabilities);
+            }
+        }
     }
 
     private Long extractCompilationId(LeaseLiabilityScheduleItemDTO item) {

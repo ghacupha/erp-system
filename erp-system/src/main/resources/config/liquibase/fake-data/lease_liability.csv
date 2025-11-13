@@ -1,11 +1,11 @@
-id;lease_id;liability_amount;start_date;end_date;interest_rate;lease_contract_id
-1;system Franc;39925;2024-06-17;2024-06-17;89443;1
-2;Analyst Granite online;52448;2024-06-17;2024-06-17;41634;2
-3;Bedfordshire;8837;2024-06-18;2024-06-18;17616;3
-4;Assurance;90454;2024-06-17;2024-06-17;25706;4
-5;Buckinghamshire primary architectures;15831;2024-06-17;2024-06-17;47682;5
-6;Fantastic;94069;2024-06-17;2024-06-17;12824;6
-7;Wisconsin open-source Oregon;2378;2024-06-18;2024-06-17;44358;7
-8;interfaces Human;82396;2024-06-17;2024-06-18;75329;8
-9;override;59262;2024-06-17;2024-06-17;74901;9
-10;Industrial robust;21901;2024-06-17;2024-06-18;68313;10
+id;lease_id;liability_amount;start_date;end_date;interest_rate;lease_contract_id;has_been_fully_amortised
+1;system Franc;39925;2024-06-17;2024-06-17;89443;1;false
+2;Analyst Granite online;52448;2024-06-17;2024-06-17;41634;2;false
+3;Bedfordshire;8837;2024-06-18;2024-06-18;17616;3;false
+4;Assurance;90454;2024-06-17;2024-06-17;25706;4;false
+5;Buckinghamshire primary architectures;15831;2024-06-17;2024-06-17;47682;5;false
+6;Fantastic;94069;2024-06-17;2024-06-17;12824;6;false
+7;Wisconsin open-source Oregon;2378;2024-06-18;2024-06-17;44358;7;false
+8;interfaces Human;82396;2024-06-17;2024-06-18;75329;8;false
+9;override;59262;2024-06-17;2024-06-17;74901;9;false
+10;Industrial robust;21901;2024-06-17;2024-06-18;68313;10;false

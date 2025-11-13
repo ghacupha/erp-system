@@ -18,12 +18,11 @@ package io.github.erp.internal.repository;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.LeaseLiability;
+import java.util.Collection;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Spring Data SQL repository for the LeaseLiability entity.
@@ -32,4 +31,8 @@ import java.util.List;
 @Repository
 public interface InternalLeaseLiabilityRepository extends JpaRepository<LeaseLiability, Long>, JpaSpecificationExecutor<LeaseLiability> {
     List<LeaseLiability> findByIdNotIn(Collection<Long> ids);
+
+    List<LeaseLiability> findByHasBeenFullyAmortisedFalse();
+
+    List<LeaseLiability> findByIdNotInAndHasBeenFullyAmortisedFalse(Collection<Long> ids);
 }
