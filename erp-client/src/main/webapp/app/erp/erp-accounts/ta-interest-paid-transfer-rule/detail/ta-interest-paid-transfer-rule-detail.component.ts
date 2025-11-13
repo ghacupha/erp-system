@@ -20,6 +20,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ITAInterestPaidTransferRule } from '../ta-interest-paid-transfer-rule.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  taInterestPaidTransferRuleCopyWorkflowInitiatedFromView,
+  taInterestPaidTransferRuleEditWorkflowInitiatedFromView
+} from '../../../store/actions/ta-interest-paid-transfer-rule-update-status.actions';
 
 @Component({
   selector: 'jhi-ta-interest-paid-transfer-rule-detail',
@@ -28,12 +34,20 @@ import { ITAInterestPaidTransferRule } from '../ta-interest-paid-transfer-rule.m
 export class TAInterestPaidTransferRuleDetailComponent implements OnInit {
   tAInterestPaidTransferRule: ITAInterestPaidTransferRule | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tAInterestPaidTransferRule }) => {
       this.tAInterestPaidTransferRule = tAInterestPaidTransferRule;
     });
+  }
+
+  editButtonEvent(instance: ITAInterestPaidTransferRule): void {
+    this.store.dispatch(taInterestPaidTransferRuleEditWorkflowInitiatedFromView({ editedInstance: instance }));
+  }
+
+  copyButtonEvent(instance: ITAInterestPaidTransferRule): void {
+    this.store.dispatch(taInterestPaidTransferRuleCopyWorkflowInitiatedFromView({ copiedInstance: instance }));
   }
 
   previousState(): void {

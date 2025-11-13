@@ -80,10 +80,22 @@
 
       <button
         type="button"
+        (click)='editButtonEvent(tALeaseInterestAccrualRule)'
         [routerLink]="['/ta-lease-interest-accrual-rule', tALeaseInterestAccrualRule.id, 'edit']"
         class="btn btn-primary"
       >
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+
+      &nbsp;
+
+      <button
+        type="button"
+        (click)='copyButtonEvent(tALeaseInterestAccrualRule)'
+        [routerLink]="['/ta-lease-interest-accrual-rule', tALeaseInterestAccrualRule.id, 'copy']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
       </button>
     </div>
   </div>

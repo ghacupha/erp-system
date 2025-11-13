@@ -24,9 +24,10 @@ import { TARecognitionROURuleUpdateComponent } from './update/ta-recognition-rou
 import { TARecognitionROURuleDeleteDialogComponent } from './delete/ta-recognition-rou-rule-delete-dialog.component';
 import { TARecognitionROURuleRoutingModule } from './route/ta-recognition-rou-rule-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { TARecognitionROURuleRoutingCustomModule } from './route/ta-recognition-rou-rule-routing-custom.module';
 
 @NgModule({
-  imports: [SharedModule, TARecognitionROURuleRoutingModule, ErpCommonModule],
+  imports: [SharedModule, TARecognitionROURuleRoutingModule, TARecognitionROURuleRoutingCustomModule, ErpCommonModule],
   declarations: [
     TARecognitionROURuleComponent,
     TARecognitionROURuleDetailComponent,

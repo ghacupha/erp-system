@@ -20,8 +20,25 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-ta-recognition-rou-rule-heading" data-cy="TARecognitionROURuleCreateUpdateHeading">
-        Create or edit a TA Recognition ROU Rule
+      <h2
+        id="jhi-ta-recognition-rou-rule-heading-new"
+        data-cy="TARecognitionROURuleCreateUpdateHeading"
+        [hidden]='!weAreCreating'>
+        New ROU Recognition Rule
+      </h2>
+
+      <h2
+        id="jhi-ta-recognition-rou-rule-heading-copy"
+        data-cy="TARecognitionROURuleCreateUpdateHeading"
+        [hidden]='!weAreCopying'>
+        Copying Rule {{ selectedItem.name }}
+      </h2>
+
+      <h2
+        id="jhi-ta-recognition-rou-rule-heading-edit"
+        data-cy="TARecognitionROURuleCreateUpdateHeading"
+        [hidden]='!weAreEditing'>
+        Editing Rule {{ selectedItem.name }}
       </h2>
 
       <div>
@@ -107,8 +124,34 @@
           data-cy="entityCreateSaveButton"
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
         </button>
       </div>
     </form>

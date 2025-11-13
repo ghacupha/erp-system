@@ -24,9 +24,10 @@ import { TALeaseRepaymentRuleUpdateComponent } from './update/ta-lease-repayment
 import { TALeaseRepaymentRuleDeleteDialogComponent } from './delete/ta-lease-repayment-rule-delete-dialog.component';
 import { TALeaseRepaymentRuleRoutingModule } from './route/ta-lease-repayment-rule-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { TALeaseRepaymentRuleRoutingCustomModule } from './route/ta-lease-repayment-rule-routing-custom.module';
 
 @NgModule({
-  imports: [SharedModule, TALeaseRepaymentRuleRoutingModule, ErpCommonModule],
+  imports: [SharedModule, TALeaseRepaymentRuleRoutingModule, TALeaseRepaymentRuleRoutingCustomModule, ErpCommonModule],
   declarations: [
     TALeaseRepaymentRuleComponent,
     TALeaseRepaymentRuleDetailComponent,

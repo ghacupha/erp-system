@@ -24,9 +24,10 @@ import { TAInterestPaidTransferRuleUpdateComponent } from './update/ta-interest-
 import { TAInterestPaidTransferRuleDeleteDialogComponent } from './delete/ta-interest-paid-transfer-rule-delete-dialog.component';
 import { TAInterestPaidTransferRuleRoutingModule } from './route/ta-interest-paid-transfer-rule-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { TAInterestPaidTransferRuleRoutingCustomModule } from './route/ta-interest-paid-transfer-rule-routing-custom.module';
 
 @NgModule({
-  imports: [SharedModule, TAInterestPaidTransferRuleRoutingModule, ErpCommonModule],
+  imports: [SharedModule, TAInterestPaidTransferRuleRoutingModule, TAInterestPaidTransferRuleRoutingCustomModule, ErpCommonModule],
   declarations: [
     TAInterestPaidTransferRuleComponent,
     TAInterestPaidTransferRuleDetailComponent,
