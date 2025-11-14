@@ -17,7 +17,7 @@ package io.github.erp.internal.service.leases.batch;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.service.leases.LeaseAmortizationCompilationService;
+import io.github.erp.internal.service.leases.schedule.LeaseAmortizationCompilationService;
 import io.github.erp.service.dto.LeaseLiabilityDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import org.jetbrains.annotations.NotNull;

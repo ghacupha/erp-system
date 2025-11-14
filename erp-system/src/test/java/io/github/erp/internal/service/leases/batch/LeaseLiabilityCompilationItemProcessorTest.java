@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.github.erp.internal.service.leases.LeaseAmortizationCompilationService;
+import io.github.erp.internal.service.leases.schedule.LeaseAmortizationCompilationService;
 import io.github.erp.service.dto.LeaseLiabilityDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import java.util.List;

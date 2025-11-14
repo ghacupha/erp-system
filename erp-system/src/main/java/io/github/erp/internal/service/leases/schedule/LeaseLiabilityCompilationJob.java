@@ -1,4 +1,4 @@
-package io.github.erp.internal.service.leases;
+package io.github.erp.internal.service.leases.schedule;
 
 /*-
  * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
@@ -17,16 +17,9 @@ package io.github.erp.internal.service.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
+import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
 
-import java.util.List;
+public interface LeaseLiabilityCompilationJob {
 
-public interface LeaseAmortizationCompilationService {
-
-    /**
-     * Generates schedule items for a given lease liability
-     * @param leaseLiabilityId id of the lease-liability instance
-     * @return Schedule items
-     */
-    List<LeaseLiabilityScheduleItemDTO> generateAmortizationSchedule(Long leaseLiabilityId, Long compilationId);
+    void compileLeaseLiabilitySchedule(LeaseLiabilityCompilationDTO requestDTO);
 }

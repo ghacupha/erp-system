@@ -1,4 +1,4 @@
-package io.github.erp.internal.service.leases;
+package io.github.erp.internal.service.leases.schedule;
 
 /*-
  * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import io.github.erp.internal.service.leases.*;
 import io.github.erp.service.dto.IFRS16LeaseContractDTO;
 import io.github.erp.service.dto.LeaseAmortizationCalculationDTO;
 import io.github.erp.service.dto.LeaseAmortizationScheduleDTO;
@@ -32,7 +33,6 @@ import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import io.github.erp.service.dto.LeasePaymentDTO;
 import io.github.erp.service.dto.LeaseRepaymentPeriodDTO;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 // @Transactional // this might mess up with the transaction manager used by the batch
@@ -70,6 +70,11 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
         }
 
         LeaseLiabilityDTO leaseLiability = leaseLiabilityOpt.get();
+
+        // We'll check just in case the reader did not check the flags
+        if (leaseLiability.getHasBeenFullyAmortised()){
+            throw new IllegalArgumentException("Lease Liability id # " + leaseLiabilityId + " is already fully amortised");
+        }
 
         Optional<IFRS16LeaseContractDTO> ifrs16LeaseContractOpt = leaseContractService.findOne(leaseLiability.getLeaseContract().getId());
 

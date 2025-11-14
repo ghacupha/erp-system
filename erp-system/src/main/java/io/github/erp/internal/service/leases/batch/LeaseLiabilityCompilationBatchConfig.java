@@ -19,7 +19,7 @@ package io.github.erp.internal.service.leases.batch;
  */
 import io.github.erp.internal.service.leases.InternalLeaseLiabilityScheduleItemService;
 import io.github.erp.internal.service.leases.InternalLeaseLiabilityService;
-import io.github.erp.internal.service.leases.LeaseAmortizationCompilationService;
+import io.github.erp.internal.service.leases.schedule.LeaseAmortizationCompilationService;
 import io.github.erp.service.dto.LeaseLiabilityDTO;
 import io.github.erp.service.dto.LeaseLiabilityScheduleItemDTO;
 import org.springframework.batch.core.Job;
