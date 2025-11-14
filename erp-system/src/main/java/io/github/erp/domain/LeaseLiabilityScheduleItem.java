@@ -35,7 +35,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Entity
 @Table(name = "lease_liability_schedule_item")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseliabilityscheduleitem")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "leaseliabilityscheduleitem-" + "#{ T(java.time.LocalDate).now().format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM')) }")
 public class LeaseLiabilityScheduleItem implements Serializable {
 
     private static final long serialVersionUID = 1L;

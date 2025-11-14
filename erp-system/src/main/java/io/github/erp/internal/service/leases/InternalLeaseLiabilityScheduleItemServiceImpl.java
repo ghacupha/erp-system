@@ -179,7 +179,7 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
         }
 
         List<LeaseLiabilityScheduleItem> persisted = leaseLiabilityScheduleItemRepository.saveAll(entitiesToPersist);
-        leaseLiabilityScheduleItemSearchRepository.saveAll(persisted);
+        // leaseLiabilityScheduleItemSearchRepository.saveAll(persisted);
 
         Set<Long> processedLiabilityIds = persisted
             .stream()
@@ -199,7 +199,7 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
 
             if (!changedLiabilities.isEmpty()) {
                 List<LeaseLiability> savedLiabilities = leaseLiabilityRepository.saveAll(changedLiabilities);
-                leaseLiabilitySearchRepository.saveAll(savedLiabilities);
+                // leaseLiabilitySearchRepository.saveAll(savedLiabilities);
             }
         }
     }
