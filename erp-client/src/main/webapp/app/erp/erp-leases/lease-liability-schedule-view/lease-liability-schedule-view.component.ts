@@ -134,7 +134,7 @@ export class LeaseLiabilityScheduleViewComponent implements OnInit, OnDestroy {
     if (!contract?.id || contract.id === this.leaseContract?.id) {
       return;
     }
-    void this.router.navigate(['/erp/lease-liability-schedule-view', contract.id]);
+    void this.router.navigate(['/lease-liability-schedule-view', contract.id]);
   }
 
   ngOnDestroy(): void {
