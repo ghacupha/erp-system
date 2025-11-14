@@ -134,6 +134,7 @@ public class InternalLeaseLiabilityServiceImpl implements InternalLeaseLiability
 
     /**
      * Lease liability items due for lease liability amortization
+     * Items marked as fully amortised are going to be skipped
      *
      * @param leaseLiabilityCompilationRequestId id of the requisition entity instance
      * @param batchJobIdentifier                 id of the current compilation spring batch job

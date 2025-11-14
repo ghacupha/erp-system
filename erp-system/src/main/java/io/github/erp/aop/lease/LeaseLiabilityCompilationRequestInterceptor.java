@@ -17,7 +17,7 @@ package io.github.erp.aop.lease;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.service.leases.LeaseLiabilityCompilationJob;
+import io.github.erp.internal.service.leases.schedule.LeaseLiabilityCompilationJob;
 import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;

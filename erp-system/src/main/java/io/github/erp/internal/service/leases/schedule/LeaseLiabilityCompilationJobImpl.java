@@ -1,4 +1,4 @@
-package io.github.erp.internal.service.leases;
+package io.github.erp.internal.service.leases.schedule;
 
 /*-
  * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
@@ -17,6 +17,7 @@ package io.github.erp.internal.service.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.leases.InternalLeaseLiabilityService;
 import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;

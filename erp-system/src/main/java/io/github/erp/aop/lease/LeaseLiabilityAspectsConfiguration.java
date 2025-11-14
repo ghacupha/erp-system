@@ -17,7 +17,7 @@ package io.github.erp.aop.lease;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.internal.service.leases.LeaseLiabilityCompilationJob;
+import io.github.erp.internal.service.leases.schedule.LeaseLiabilityCompilationJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
