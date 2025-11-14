@@ -110,6 +110,16 @@ spring:
     locator:
       discovery:
         enabled: true
+  kafka:
+    topics:
+      lease-liability-schedule:
+        topic:
+          name: "lease-liability-schedule-items"
+        producer:
+          client-id: erp-system-dev-lease-liability-schedule-producer
+        consumer:
+          group.id: erp-system-dev-lease-liability-schedule
+          concurrency: 1
 
 server:
   port: ${ERP_SYSTEM_DEV_PORT}
@@ -171,3 +181,7 @@ app:
   ReIndexer:
     #      interval: PT3600S
     interval: ${ERP_REINDEXER_INTERVAL_DEV}
+
+erp:
+  csv-upload:
+    storage-path: ${CSV_UPLOAD_STORAGE_PATH:${java.io.tmpdir}/erp/csv-uploads/dev}

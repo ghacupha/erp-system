@@ -1,0 +1,62 @@
+{
+  "name": "CsvFileUpload",
+  "fields": [
+    {
+      "fieldName": "originalFileName",
+      "fieldType": "String",
+      "fieldValidate": true,
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "storedFileName",
+      "fieldType": "String",
+      "fieldValidate": true,
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "filePath",
+      "fieldType": "String",
+      "fieldValidate": true,
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fileSize",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "contentType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "uploadedAt",
+      "fieldType": "Instant",
+      "fieldValidate": true,
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "processed",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "checksum",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "relationshipName": "leaseLiabilityScheduleFileUpload",
+      "otherEntityName": "LeaseLiabilityScheduleFileUpload",
+      "otherEntityRelationshipName": "csvFileUpload",
+      "ownerSide": false
+    }
+  ],
+  "changelogDate": "20240704120000",
+  "entityTableName": "csv_file_upload",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "skipClient": true,
+  "skipServer": false
+}

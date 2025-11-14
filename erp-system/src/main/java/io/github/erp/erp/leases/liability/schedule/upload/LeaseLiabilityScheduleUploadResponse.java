@@ -1,0 +1,64 @@
+package io.github.erp.erp.leases.liability.schedule.upload;
+
+/*-
+ * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Response returned to the caller after a lease liability schedule CSV upload has
+ * been accepted.
+ */
+public class LeaseLiabilityScheduleUploadResponse {
+
+    private Long uploadId;
+    private Long csvFileId;
+    private String storedFileName;
+    private String uploadStatus;
+
+    public Long getUploadId() {
+        return uploadId;
+    }
+
+    public void setUploadId(Long uploadId) {
+        this.uploadId = uploadId;
+    }
+
+    public Long getCsvFileId() {
+        return csvFileId;
+    }
+
+    public void setCsvFileId(Long csvFileId) {
+        this.csvFileId = csvFileId;
+    }
+
+    public String getStoredFileName() {
+        return storedFileName;
+    }
+
+    public void setStoredFileName(String storedFileName) {
+        this.storedFileName = storedFileName;
+    }
+
+    public String getUploadStatus() {
+        return uploadStatus;
+    }
+
+    public void setUploadStatus(String uploadStatus) {
+        this.uploadStatus = uploadStatus;
+    }
+}
+
