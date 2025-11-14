@@ -99,6 +99,19 @@ spring:
           key.serializer: org.apache.kafka.common.serialization.StringSerializer
           properties:
             replication.factor: ${KAFKA_REPLICATION_FACTOR};
+      lease-liability-schedule:
+        topic:
+          name: "lease-liability-schedule-items"
+        producer:
+          client-id: erp-system-prod-lease-liability-schedule-producer
+          properties:
+            replication.factor: ${KAFKA_REPLICATION_FACTOR}
+        consumer:
+          group.id: erp-system-prod-lease-liability-schedule
+          concurrency: ${LEASE_LIABILITY_SCHEDULE_CONSUMER_CONCURRENCY:1}
+          properties:
+            spring.json.trusted.packages: "*"
+            replication.factor: ${KAFKA_REPLICATION_FACTOR}
   elasticsearch:
     rest:
       # uris: http://localhost:9200
@@ -229,3 +242,7 @@ app:
     interval: ${ERP_REINDEXER_INTERVAL_PROD}
 
 
+
+erp:
+  csv-upload:
+    storage-path: ${CSV_UPLOAD_STORAGE_PATH:${java.io.tmpdir}/erp/csv-uploads/prod}
