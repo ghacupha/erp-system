@@ -78,6 +78,8 @@
     <include file="config/liquibase/changelog/20220701133235_added_entity_ApplicationUser.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220701140751_added_entity_ReportDesign.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220701141203_added_entity_SystemModule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240704120000_added_entity_CsvFileUpload.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240704120100_added_entity_LeaseLiabilityScheduleFileUpload.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220726145438_added_entity_PrepaymentMapping.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220802070433_added_entity_AmortizationRecurrence.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220802080530_added_entity_AmortizationSequence.xml" relativeToChangelogFile="false"/>
