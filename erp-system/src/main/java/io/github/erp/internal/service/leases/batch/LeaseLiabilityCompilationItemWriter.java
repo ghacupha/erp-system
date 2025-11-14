@@ -49,7 +49,7 @@ public class LeaseLiabilityCompilationItemWriter implements ItemWriter<List<Leas
     @Override
     public void write(List<? extends List<LeaseLiabilityScheduleItemDTO>> items) throws Exception {
         if (!activationUpdated && items != null && items.stream().anyMatch(batch -> batch != null && !batch.isEmpty())) {
-            internalLeaseLiabilityScheduleItemService.updateActivationByCompilation(leaseLiabilityCompilationId, false);
+            internalLeaseLiabilityScheduleItemService.updateActivationByCompilation(leaseLiabilityCompilationId, true);
             activationUpdated = true;
         }
         items.forEach(batch -> {
