@@ -1,0 +1,48 @@
+{
+  "name": "LeaseLiabilityScheduleFileUpload",
+  "fields": [
+    {
+      "fieldName": "leaseLiabilityId",
+      "fieldType": "Long",
+      "fieldValidate": true,
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "leaseAmortizationScheduleId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "leaseLiabilityCompilationId",
+      "fieldType": "Long",
+      "fieldValidate": true,
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "uploadStatus",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant",
+      "fieldValidate": true,
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "relationshipName": "csvFileUpload",
+      "otherEntityName": "CsvFileUpload",
+      "otherEntityRelationshipName": "leaseLiabilityScheduleFileUpload",
+      "ownerSide": true
+    }
+  ],
+  "changelogDate": "20240704120100",
+  "entityTableName": "lease_liability_schedule_file_upload",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "skipClient": true,
+  "skipServer": false
+}
