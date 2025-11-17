@@ -6,12 +6,12 @@
 
 <!-- The FILE and ASYNC appenders are here as examples for a production configuration -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_DIR}/erpSystem.log</file>
+        <file>${LOG_DIR}/${springApplicationName}.log</file>
         <encoder>
             <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/archive/%d{yyyy/MM}/erpSystem-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/archive/%d{yyyy/MM}/${springApplicationName}-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <maxFileSize>${LOG_MAX_FILE_SIZE:-10MB}</maxFileSize>
             <maxHistory>${LOG_MAX_HISTORY:-30}</maxHistory>
             <totalSizeCap>${LOG_TOTAL_SIZE_CAP:-10GB}</totalSizeCap>
@@ -26,7 +26,7 @@
     </appender>
 
     <root level="${logging.level.root}">
-        <appender-ref ref="ASYNC"/>
+        <appender-ref ref="ASYNC_FILE"/>
     </root>
 
     <logger name="javax.activation" level="WARN"/>
