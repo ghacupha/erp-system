@@ -76,9 +76,7 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
         "outstandingBalance",
         "interestPayableOpening",
         "interestAccrued",
-        "interestPayableClosing",
-        "leasePeriodId",
-        "active"
+        "interestPayableClosing"
     };
 
     public static final String JOB_NAME = "leaseLiabilityScheduleUploadJob";
@@ -90,6 +88,10 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
     public static final String COMPOSITE_PROCESSOR = "leaseLiabilityScheduleCompositeProcessor";
     public static final String KAFKA_ITEM_WRITER = "leaseLiabilityScheduleKafkaItemWriter";
     public static final String SKIP_LISTENER = "leaseLiabilityScheduleSkipListener";
+    public static final Integer SKIP_LIMIT = 12;
+    public static final Integer CHUNK_SIZE = 12;
+    public static final String UPLOAD_JOB_LISTENER = "leaseLiabilityScheduleUploadJobListener";
+    public static final String PERSISTENCE_JOB_LISTENER = "persistenceJobListener";
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
@@ -215,7 +217,8 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
         CompositeItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> processor =
             new CompositeItemProcessor<>();
         processor.setDelegates(
-            Arrays.asList(validationProcessor, leasePeriodResolutionProcessor, RowItem::getItem, metadataProcessor)
+            // Arrays.asList(validationProcessor, leasePeriodResolutionProcessor, RowItem::getItem, metadataProcessor)
+            Arrays.asList(validationProcessor, leasePeriodResolutionProcessor, metadataProcessor)
         );
         return processor;
     }
@@ -263,13 +266,13 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
         SkipListener<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> skipListener
     ) {
         return new StepBuilder(STEP_NAME, jobRepository)
-            .<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem>chunk(100, transactionManager)
+            .<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem>chunk(CHUNK_SIZE, transactionManager)
             .reader(reader)
             .processor(processor)
             .writer(writer)
             .faultTolerant()
             .skip(Exception.class)
-            .skipLimit(200)
+            .skipLimit(SKIP_LIMIT)
             .listener(skipListener)
             .build();
     }
@@ -277,8 +280,8 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
     @Bean(JOB_NAME)
     public Job leaseLiabilityScheduleUploadJob(
         @Qualifier(STEP_NAME) Step step,
-        @Qualifier("persistenceJobListener") org.springframework.batch.core.JobExecutionListener persistenceJobListener,
-        @Qualifier("leaseLiabilityScheduleUploadJobListener") org.springframework.batch.core.JobExecutionListener uploadListener
+        @Qualifier(PERSISTENCE_JOB_LISTENER) org.springframework.batch.core.JobExecutionListener persistenceJobListener,
+        @Qualifier(UPLOAD_JOB_LISTENER) org.springframework.batch.core.JobExecutionListener uploadListener
     ) {
         return new JobBuilder(JOB_NAME, jobRepository)
             .start(step)
