@@ -147,35 +147,35 @@ spring:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     # show-sql: true
-  kafka:
-    bootstrap-servers: localhost:9092
-    admin:
-      properties:
-        replication.factor: 8
-    topics:
-      depreciation-batch:
-        topic:
-          name: "depreciation_batch_topic"
-        consumer:
-          group.id: erp-system-depreciation
-      lease-liability-schedule:
-        topic:
-          name: "lease-liability-schedule-items"
-        producer:
-          client-id: erp-system-lease-liability-schedule-producer
+    kafka:
+      bootstrap-servers: localhost:9092
+      admin:
+        properties:
+          replication.factor: 8
+      topics:
+        depreciation-batch:
+          topic:
+            name: "depreciation_batch_topic"
+          consumer:
+            group.id: erp-system-depreciation
+        nbv:
+          topic:
+            name: "nbv_batch_topic"
+          consumer:
+            group.id: erp-system-nbv
+            auto.offset.reset: earliest
+        lease-liability-schedule:
+          topic:
+            name: "lease-liability-schedule-items"
+          producer:
+            client-id: erp-system-lease-liability-schedule-producer
         consumer:
           group.id: erp-system-lease-liability-schedule
           concurrency: 1
 
-erp:
-  csv-upload:
-    storage-path: ${CSV_UPLOAD_STORAGE_PATH:${java.io.tmpdir}/erp/csv-uploads}
-      nbv:
-        topic:
-          name: "nbv_batch_topic"
-        consumer:
-          group.id: erp-system-nbv
-          auto.offset.reset: earliest
+  erp:
+    csv-upload:
+      storage-path: ${CSV_UPLOAD_STORAGE_PATH:${java.io.tmpdir}/erp/csv-uploads}
   messages:
     basename: i18n/messages
   main:
