@@ -7,4 +7,6 @@ The ERP back-end now supports uploading lease liability schedules from CSV files
 3. `LeaseLiabilityScheduleItemKafkaConsumer` consumes the messages, resolves the referenced aggregates (lease liability, amortisation schedule, compilation, repayment period), and saves `LeaseLiabilityScheduleItem` entities.
 4. Upload status is tracked on the `LeaseLiabilityScheduleFileUpload` record (`PENDING` → `PROCESSING` → `COMPLETED`/`FAILED`).
 
+The CSV header now includes a `paymentDate` column. When the lease repayment period id is not supplied, the batch configuration queries `InternalLeaseRepaymentPeriodRepository` to find the period containing the payment date and injects the matching id before publishing the message.
+
 Liquibase changelog files `20240704120000_added_entity_CsvFileUpload.xml` and `20240704120100_added_entity_LeaseLiabilityScheduleFileUpload.xml` create the supporting tables and enforce the one-to-one relationship between upload metadata and the CSV descriptor.

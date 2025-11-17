@@ -16,7 +16,7 @@ The lease liability schedule upload feature decouples raw CSV files from the dat
 ## Batch Job
 `LeaseLiabilityScheduleBatchJobConfiguration` wires the processing pipeline:
 - **Reader:** `FlatFileItemReader<RowItem<LeaseLiabilityScheduleItemQueueItem>>` maps each CSV row to a queue item and keeps the original row number for diagnostics.
-- **Processors:** validation checks for mandatory fields and enrichment with metadata (liability, compilation, upload identifiers).
+- **Processors:** validation checks for the sequence number and ensures either a repayment-period id or a payment date is supplied. A dedicated resolver then looks up the repayment period whose date range contains the payment date (via `InternalLeaseRepaymentPeriodRepository`) before the metadata processor enriches the item with liability, compilation, and upload identifiers.
 - **Writer:** publishes each enriched item to the Kafka topic `lease-liability-schedule-items` using the `leaseLiabilityScheduleKafkaTemplate`.
 - **Listeners:**
   - `LeaseLiabilityScheduleUploadJobListener` updates the upload status (`PENDING` → `PROCESSING` → `COMPLETED`/`FAILED`).
@@ -36,5 +36,5 @@ Liquibase changelog files create two new tables:
 
 ## Operational Notes
 - The upload status defaults to `PENDING`, moves to `PROCESSING` when the batch starts, and is marked `COMPLETED` if the job exits successfully, `FAILED` otherwise.
-- CSV parsing strips thousands separators and supports ISO or `dd/MM/yyyy` dates for future extensions.
+- CSV parsing strips thousands separators and supports ISO or `dd/MM/yyyy` dates. The CSV header now includes `paymentDate` so a row can be matched to the correct repayment period even when the numeric identifier is not known.
 - Errors during batch processing are logged via the skip listener; problematic rows are skipped without halting the entire job.
