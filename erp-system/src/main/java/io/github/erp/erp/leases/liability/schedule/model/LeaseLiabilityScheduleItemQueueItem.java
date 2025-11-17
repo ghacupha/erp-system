@@ -20,6 +20,7 @@ package io.github.erp.erp.leases.liability.schedule.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 /**
@@ -31,6 +32,7 @@ public class LeaseLiabilityScheduleItemQueueItem implements Serializable {
 
     private UUID uuid = UUID.randomUUID();
     private Integer sequenceNumber;
+    private LocalDate paymentDate;
     private BigDecimal openingBalance;
     private BigDecimal cashPayment;
     private BigDecimal principalPayment;
@@ -60,6 +62,14 @@ public class LeaseLiabilityScheduleItemQueueItem implements Serializable {
 
     public void setSequenceNumber(Integer sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
+    }
+
+    public LocalDate getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(LocalDate paymentDate) {
+        this.paymentDate = paymentDate;
     }
 
     public BigDecimal getOpeningBalance() {

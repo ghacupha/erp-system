@@ -37,6 +37,9 @@ import java.util.Optional;
 public interface InternalLeaseRepaymentPeriodRepository
     extends JpaRepository<LeaseRepaymentPeriod, Long>, JpaSpecificationExecutor<LeaseRepaymentPeriod> {
 
+    @Query("SELECT period FROM LeaseRepaymentPeriod period WHERE :paymentDate BETWEEN period.startDate AND period.endDate")
+    Optional<LeaseRepaymentPeriod> findByPaymentDate(@Param("paymentDate") LocalDate paymentDate);
+
     @Query(
         nativeQuery = true,
         value = "" +
