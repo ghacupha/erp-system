@@ -6,19 +6,23 @@
 
 <!-- The FILE and ASYNC appenders are here as examples for a production configuration -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./logs/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>90</maxHistory>
-        </rollingPolicy>
+        <file>${LOG_DIR}/erpSystem.log</file>
         <encoder>
-            <charset>utf-8</charset>
-            <Pattern>%d %-5level [%thread] %logger{0}: %msg%n</Pattern>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/archive/%d{yyyy/MM}/erpSystem-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>${LOG_MAX_FILE_SIZE:-10MB}</maxFileSize>
+            <maxHistory>${LOG_MAX_HISTORY:-30}</maxHistory>
+            <totalSizeCap>${LOG_TOTAL_SIZE_CAP:-10GB}</totalSizeCap>
+            <cleanHistoryOnStart>${LOG_CLEAN_HISTORY_ON_START:-true}</cleanHistoryOnStart>
+        </rollingPolicy>
     </appender>
 
-    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
-        <queueSize>512</queueSize>
-        <appender-ref ref="FILE"/>
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>${LOG_ASYNC_QUEUE_SIZE:-512}</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="FILE" />
     </appender>
 
     <root level="${logging.level.root}">

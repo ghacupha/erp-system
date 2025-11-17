@@ -60,6 +60,10 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
 
     private static final Logger log = LoggerFactory.getLogger(LeaseLiabilityScheduleBatchJobConfiguration.class);
 
+    /**
+     * These are fields as they appear on the CSV file
+     * TODO fetch the appropriate lease-repayment-period-id based on the payment-date on the worksheet, during the processing step. Create a query to fetch the instance whose start and end date contain the payment date.
+     */
     public static final String[] CSV_FIELDS = new String[] {
         "sequenceNumber",
         "openingBalance",
@@ -70,7 +74,7 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
         "interestPayableOpening",
         "interestAccrued",
         "interestPayableClosing",
-        "leasePeriodId",
+        "leasePeriodId", /* // TODO Represent this with payment dates and get related  lease-repayment-period id from repo*/
         "active"
     };
 
