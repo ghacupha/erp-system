@@ -309,3 +309,6 @@ business-documents/
 # Work in Progress Documents
 man-pages/GDI-Proposal-writeup.md
 man-pages/GDI-Staging-Proposal.md
+
+logs
+LOG_DIR_IS_UNDEFINED

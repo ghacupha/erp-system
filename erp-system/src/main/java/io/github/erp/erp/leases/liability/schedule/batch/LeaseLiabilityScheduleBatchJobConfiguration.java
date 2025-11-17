@@ -63,8 +63,7 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
     private static final Logger log = LoggerFactory.getLogger(LeaseLiabilityScheduleBatchJobConfiguration.class);
 
     /**
-     * These are fields as they appear on the CSV file. The paymentDate column is used to
-     * resolve the leaseRepaymentPeriod when an explicit identifier is not supplied.
+     * These are fields as they actually appear on the CSV file.
      */
     public static final String[] CSV_FIELDS = new String[] {
         "sequenceNumber",
@@ -265,8 +264,8 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
         @Qualifier(SKIP_LISTENER)
         SkipListener<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> skipListener
     ) {
-        return new StepBuilder(STEP_NAME, jobRepository)
-            .<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem>chunk(CHUNK_SIZE, transactionManager)
+        return new StepBuilder(STEP_NAME)
+            .<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem>chunk(CHUNK_SIZE)
             .reader(reader)
             .processor(processor)
             .writer(writer)
@@ -283,7 +282,7 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
         @Qualifier(PERSISTENCE_JOB_LISTENER) org.springframework.batch.core.JobExecutionListener persistenceJobListener,
         @Qualifier(UPLOAD_JOB_LISTENER) org.springframework.batch.core.JobExecutionListener uploadListener
     ) {
-        return new JobBuilder(JOB_NAME, jobRepository)
+        return new JobBuilder(JOB_NAME)
             .start(step)
             .listener(persistenceJobListener)
             .listener(uploadListener)
