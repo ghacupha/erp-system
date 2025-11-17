@@ -264,11 +264,12 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
         @Qualifier(SKIP_LISTENER)
         SkipListener<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> skipListener
     ) {
-        return new StepBuilder(STEP_NAME)
+        return new StepBuilder(STEP_NAME, jobRepository)
             .<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem>chunk(CHUNK_SIZE)
             .reader(reader)
             .processor(processor)
             .writer(writer)
+            .transactionManager(transactionManager)
             .faultTolerant()
             .skip(Exception.class)
             .skipLimit(SKIP_LIMIT)
@@ -282,7 +283,7 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
         @Qualifier(PERSISTENCE_JOB_LISTENER) org.springframework.batch.core.JobExecutionListener persistenceJobListener,
         @Qualifier(UPLOAD_JOB_LISTENER) org.springframework.batch.core.JobExecutionListener uploadListener
     ) {
-        return new JobBuilder(JOB_NAME)
+        return new JobBuilder(JOB_NAME, jobRepository)
             .start(step)
             .listener(persistenceJobListener)
             .listener(uploadListener)
