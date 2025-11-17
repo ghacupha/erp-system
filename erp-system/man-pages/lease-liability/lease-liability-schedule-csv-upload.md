@@ -38,3 +38,4 @@ Liquibase changelog files create two new tables:
 - The upload status defaults to `PENDING`, moves to `PROCESSING` when the batch starts, and is marked `COMPLETED` if the job exits successfully, `FAILED` otherwise.
 - CSV parsing strips thousands separators and supports ISO or `dd/MM/yyyy` dates. The CSV header now includes `paymentDate` so a row can be matched to the correct repayment period even when the numeric identifier is not known.
 - Errors during batch processing are logged via the skip listener; problematic rows are skipped without halting the entire job.
+- When running on Spring Batch 4.x, `StepBuilder` and `JobBuilder` must be given the `JobRepository` explicitly via `.repository(...)`; otherwise the job fails fast with `JobRepository is mandatory` during context startup.
