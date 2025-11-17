@@ -23,6 +23,7 @@ import io.github.erp.erp.leases.liability.schedule.batch.support.LocalDateProper
 import io.github.erp.erp.leases.liability.schedule.batch.support.RowItem;
 import io.github.erp.erp.leases.liability.schedule.batch.support.RowItemLineMapper;
 import io.github.erp.erp.leases.liability.schedule.model.LeaseLiabilityScheduleItemQueueItem;
+import io.github.erp.internal.repository.InternalLeaseRepaymentPeriodRepository;
 import java.beans.PropertyEditor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -33,6 +34,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.SkipListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -61,11 +63,12 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
     private static final Logger log = LoggerFactory.getLogger(LeaseLiabilityScheduleBatchJobConfiguration.class);
 
     /**
-     * These are fields as they appear on the CSV file
-     * TODO fetch the appropriate lease-repayment-period-id based on the payment-date on the worksheet, during the processing step. Create a query to fetch the instance whose start and end date contain the payment date.
+     * These are fields as they appear on the CSV file. The paymentDate column is used to
+     * resolve the leaseRepaymentPeriod when an explicit identifier is not supplied.
      */
     public static final String[] CSV_FIELDS = new String[] {
         "sequenceNumber",
+        "paymentDate",
         "openingBalance",
         "cashPayment",
         "principalPayment",
@@ -74,7 +77,7 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
         "interestPayableOpening",
         "interestAccrued",
         "interestPayableClosing",
-        "leasePeriodId", /* // TODO Represent this with payment dates and get related  lease-repayment-period id from repo*/
+        "leasePeriodId",
         "active"
     };
 
@@ -82,6 +85,7 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
     public static final String STEP_NAME = "leaseLiabilityScheduleUploadStep";
     public static final String ITEM_READER_NAME = "leaseLiabilityScheduleCsvItemReader";
     public static final String VALIDATION_PROCESSOR = "leaseLiabilityScheduleValidationProcessor";
+    public static final String LEASE_PERIOD_RESOLUTION_PROCESSOR = "leaseLiabilityScheduleLeasePeriodResolutionProcessor";
     public static final String METADATA_PROCESSOR = "leaseLiabilityScheduleMetadataProcessor";
     public static final String COMPOSITE_PROCESSOR = "leaseLiabilityScheduleCompositeProcessor";
     public static final String KAFKA_ITEM_WRITER = "leaseLiabilityScheduleKafkaItemWriter";
@@ -89,13 +93,16 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
+    private final InternalLeaseRepaymentPeriodRepository internalLeaseRepaymentPeriodRepository;
 
     public LeaseLiabilityScheduleBatchJobConfiguration(
         JobRepository jobRepository,
-        PlatformTransactionManager transactionManager
+        PlatformTransactionManager transactionManager,
+        InternalLeaseRepaymentPeriodRepository internalLeaseRepaymentPeriodRepository
     ) {
         this.jobRepository = jobRepository;
         this.transactionManager = transactionManager != null ? transactionManager : new ResourcelessTransactionManager();
+        this.internalLeaseRepaymentPeriodRepository = internalLeaseRepaymentPeriodRepository;
     }
 
     @Bean(ITEM_READER_NAME)
@@ -129,9 +136,44 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
             if (item.getSequenceNumber() == null) {
                 throw new IllegalArgumentException("Missing sequence number at row " + rowItem.getRowNumber());
             }
-            if (item.getLeasePeriodId() == null) {
-                throw new IllegalArgumentException("Missing lease period identifier at row " + rowItem.getRowNumber());
+            if (item.getLeasePeriodId() == null && item.getPaymentDate() == null) {
+                throw new IllegalArgumentException(
+                    "Missing lease period identifier or payment date at row " + rowItem.getRowNumber()
+                );
             }
+            return rowItem;
+        };
+    }
+
+    @Bean(LEASE_PERIOD_RESOLUTION_PROCESSOR)
+    @StepScope
+    public ItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, RowItem<LeaseLiabilityScheduleItemQueueItem>> leasePeriodResolutionProcessor() {
+        return rowItem -> {
+            LeaseLiabilityScheduleItemQueueItem item = rowItem.getItem();
+            if (item.getLeasePeriodId() != null) {
+                return rowItem;
+            }
+            if (item.getPaymentDate() == null) {
+                throw new IllegalArgumentException(
+                    "Missing payment date for lease period resolution at row " + rowItem.getRowNumber()
+                );
+            }
+
+            Long leasePeriodId =
+                internalLeaseRepaymentPeriodRepository
+                    .findByPaymentDate(item.getPaymentDate())
+                    .map(period -> period.getId())
+                    .orElseThrow(
+                        () ->
+                            new IllegalArgumentException(
+                                "No lease repayment period found for payment date " +
+                                item.getPaymentDate() +
+                                " at row " +
+                                rowItem.getRowNumber()
+                            )
+                    );
+
+            item.setLeasePeriodId(leasePeriodId);
             return rowItem;
         };
     }
@@ -165,12 +207,16 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
     public CompositeItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> compositeProcessor(
         @Qualifier(VALIDATION_PROCESSOR)
         ItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, RowItem<LeaseLiabilityScheduleItemQueueItem>> validationProcessor,
+        @Qualifier(LEASE_PERIOD_RESOLUTION_PROCESSOR)
+        ItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, RowItem<LeaseLiabilityScheduleItemQueueItem>> leasePeriodResolutionProcessor,
         @Qualifier(METADATA_PROCESSOR)
         ItemProcessor<LeaseLiabilityScheduleItemQueueItem, LeaseLiabilityScheduleItemQueueItem> metadataProcessor
     ) {
         CompositeItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> processor =
             new CompositeItemProcessor<>();
-        processor.setDelegates(Arrays.asList(validationProcessor, RowItem::getItem, metadataProcessor));
+        processor.setDelegates(
+            Arrays.asList(validationProcessor, leasePeriodResolutionProcessor, RowItem::getItem, metadataProcessor)
+        );
         return processor;
     }
 
@@ -188,8 +234,8 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
     }
 
     @Bean(SKIP_LISTENER)
-    public org.springframework.batch.core.listener.SkipListener<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> skipListener() {
-        return new org.springframework.batch.core.listener.SkipListener<>() {
+    public SkipListener<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> skipListener() {
+        return new SkipListener<>() {
             @Override
             public void onSkipInRead(Throwable t) {
                 log.warn("Skipping row during read: {}", t.getMessage());
@@ -214,7 +260,7 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
         CompositeItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> processor,
         @Qualifier(KAFKA_ITEM_WRITER) ItemWriter<LeaseLiabilityScheduleItemQueueItem> writer,
         @Qualifier(SKIP_LISTENER)
-        org.springframework.batch.core.listener.SkipListener<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> skipListener
+        SkipListener<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> skipListener
     ) {
         return new StepBuilder(STEP_NAME, jobRepository)
             .<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem>chunk(100, transactionManager)
