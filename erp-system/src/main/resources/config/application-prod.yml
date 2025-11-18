@@ -68,7 +68,7 @@ spring:
     show-sql: false
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAPSERVERS}
+    bootstrap-servers: ${KAFKA_BOOTSTRAPSERVERS:10.60.27.22:9092}
     admin:
       properties:
         replication.factor: ${KAFKA_REPLICATION_FACTOR}
