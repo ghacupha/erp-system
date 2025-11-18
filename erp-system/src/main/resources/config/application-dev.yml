@@ -24,7 +24,7 @@ eureka:
   client:
     enabled: true # By default, the JHipster Registry is not used in the "dev" profile
     service-url:
-      defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
+      defaultZone: http://admin:${jhipster.registry.password}@localhost:8771/eureka/
 
 logging:
   level:
@@ -53,7 +53,7 @@ spring:
       indent-output: true
   cloud:
     config:
-      uri: http://admin:${jhipster.registry.password}@localhost:8761/config
+      uri: http://admin:${jhipster.registry.password}@localhost:8771/config
       # name of the config server's property source (file.yml) that we want to use
       name: erpSystem
       profile: dev
@@ -93,7 +93,7 @@ spring:
       hibernate.use_sql_comments: true
   elasticsearch:
     rest:
-      uris: ${SPRING_DATA_JEST_URI}
+      uris: http://localhost:8840
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev #, faker
