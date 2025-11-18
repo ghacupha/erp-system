@@ -215,8 +215,11 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
     ) {
         CompositeItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> processor =
             new CompositeItemProcessor<>();
+        ItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> unwrapProcessor =
+            RowItem::getItem;
+
         processor.setDelegates(
-            Arrays.asList(validationProcessor, leasePeriodResolutionProcessor, RowItem::getItem, metadataProcessor)
+            Arrays.asList(validationProcessor, leasePeriodResolutionProcessor, unwrapProcessor, metadataProcessor)
         );
         return processor;
     }
