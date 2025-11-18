@@ -31,7 +31,6 @@ import org.springframework.stereotype.Component;
  * progresses.
  */
 @Component("leaseLiabilityScheduleUploadJobListener")
-@Scope("job")
 public class LeaseLiabilityScheduleUploadJobListener implements JobExecutionListener {
 
     private final LeaseLiabilityScheduleFileUploadRepository repository;
