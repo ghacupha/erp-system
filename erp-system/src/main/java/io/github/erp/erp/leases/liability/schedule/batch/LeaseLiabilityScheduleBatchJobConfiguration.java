@@ -62,14 +62,6 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
 
     private static final Logger log = LoggerFactory.getLogger(LeaseLiabilityScheduleBatchJobConfiguration.class);
 
-    @SuppressWarnings("SpringElStaticFieldInjectionInspection")
-    @Value("#{jobParameters['leaseLiabilityId']}") public static Long leaseLiabilityId;
-    @SuppressWarnings("SpringElStaticFieldInjectionInspection")
-    @Value("#{jobParameters['leaseAmortizationScheduleId']}") public static Long leaseAmortizationScheduleId;
-    @SuppressWarnings("SpringElStaticFieldInjectionInspection")
-    @Value("#{jobParameters['leaseLiabilityCompilationId']}") public static Long leaseLiabilityCompilationId;
-    @SuppressWarnings("SpringElStaticFieldInjectionInspection")
-    @Value("#{jobParameters['uploadId']}") public static Long uploadId;
     /**
      * These are fields as they actually appear on the CSV file.
      */
@@ -217,19 +209,17 @@ public class LeaseLiabilityScheduleBatchJobConfiguration {
         @Qualifier(VALIDATION_PROCESSOR)
         ItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, RowItem<LeaseLiabilityScheduleItemQueueItem>> validationProcessor,
         @Qualifier(LEASE_PERIOD_RESOLUTION_PROCESSOR)
-        ItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, RowItem<LeaseLiabilityScheduleItemQueueItem>> leasePeriodResolutionProcessor
-//        @Qualifier(METADATA_PROCESSOR)
-//        ItemProcessor<LeaseLiabilityScheduleItemQueueItem, LeaseLiabilityScheduleItemQueueItem> metadataProcessor
+        ItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, RowItem<LeaseLiabilityScheduleItemQueueItem>> leasePeriodResolutionProcessor,
+        @Qualifier(METADATA_PROCESSOR)
+        ItemProcessor<LeaseLiabilityScheduleItemQueueItem, LeaseLiabilityScheduleItemQueueItem> metadataProcessor
     ) {
         CompositeItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> processor =
             new CompositeItemProcessor<>();
+        ItemProcessor<RowItem<LeaseLiabilityScheduleItemQueueItem>, LeaseLiabilityScheduleItemQueueItem> unwrapProcessor =
+            RowItem::getItem;
+
         processor.setDelegates(
-            // Arrays.asList(validationProcessor, leasePeriodResolutionProcessor, RowItem::getItem, metadataProcessor)
-            Arrays.asList(
-                validationProcessor,
-                leasePeriodResolutionProcessor,
-                metadataProcessor(leaseLiabilityId,leaseAmortizationScheduleId,leaseLiabilityCompilationId, uploadId)
-            )
+            Arrays.asList(validationProcessor, leasePeriodResolutionProcessor, unwrapProcessor, metadataProcessor)
         );
         return processor;
     }
