@@ -39,6 +39,7 @@ services:
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
       #- SPRING_ELASTICSEARCH_REST_URIS=http://erpsystem-elasticsearch:9200
       - SPRING_ELASTICSEARCH_REST_URIS=${SPRING_DATA_JEST_URI}
+      - KAFKA_BOOTSTRAPSERVERS=${KAFKA_BOOTSTRAPSERVERS:-10.60.27.22:9092}
       - ERP_SYSTEM_PROD_DB=${ERP_SYSTEM_PROD_DB}
       - ERP_SYSTEM_DEV_DB=${ERP_SYSTEM_DEV_DB}
       - ERP_SYSTEM_PORT=${ERP_SYSTEM_PORT}
