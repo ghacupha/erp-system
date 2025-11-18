@@ -33,11 +33,11 @@ jhipster:
 eureka:
   client:
     service-url:
-      defaultZone: http://admin:admin@localhost:8761/eureka/
+      defaultZone: http://admin:admin@localhost:8771/eureka/
 
 spring:
    kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:9870
     admin:
       properties:
         replication.factor: 8

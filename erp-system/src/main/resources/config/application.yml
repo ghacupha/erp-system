@@ -148,7 +148,7 @@ spring:
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
     # show-sql: true
     kafka:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: localhost:9870
       admin:
         properties:
           replication.factor: 8

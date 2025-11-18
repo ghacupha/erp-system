@@ -21,49 +21,47 @@
 version: '3.3'
 
 networks:
-  erp-system-network:
+  erp-system-dev-network:
     driver: bridge
 
 services:
-  zookeeper:
+  zookeeper-dev:
     image: confluentinc/cp-zookeeper:5.5.5
     volumes:
-      - ./zookeeper-data:/var/lib/zookeeper/data
-      - ./zookeeper-logs:/var/lib/zookeeper/log
+      - ./zookeeper-dev-data:/var/lib/zookeeper/data
+      - ./zookeeper-dev-logs:/var/lib/zookeeper/log
     environment:
       - ZOOKEEPER_CLIENT_PORT=2181
       - ZOOKEEPER_TICK_TIME=2000
+    ports:
+      - 2182:2181
     networks:
-      - erp-system-network
+      - erp-system-dev-network
 
-  kafka:
+  kafka-dev:
     image: confluentinc/cp-kafka:5.5.5
     ports:
-      - 9092:9092
-      - 29092:29092
+      - 9870:9092
+      - 29093:29092
     environment:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER_INTERNAL:PLAINTEXT,DOCKER_EXTERNAL:PLAINTEXT
-      KAFKA_LISTENERS: DOCKER_INTERNAL://:29092,DOCKER_EXTERNAL://:9092
-      KAFKA_ADVERTISED_LISTENERS: DOCKER_INTERNAL://kafka:29092,DOCKER_EXTERNAL://${DOCKER_HOST_IP:-localhost}:9092
+      KAFKA_LISTENERS: DOCKER_INTERNAL://:29092,DOCKER_EXTERNAL://:9092  # Use standard internal port 29092
+      KAFKA_ADVERTISED_LISTENERS: DOCKER_INTERNAL://kafka-dev:29092,DOCKER_EXTERNAL://${DOCKER_HOST_IP:-localhost}:9870  # CHANGED: Use kafka-dev instead of kafka
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER_INTERNAL
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper-dev:2181"
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
-      - zookeeper
+      - zookeeper-dev
     volumes:
-      - ./kafka-queue:/var/lib/kafka/data
+      - ./kafka-dev-queue:/var/lib/kafka/data
     networks:
-      - erp-system-network
+      - erp-system-dev-network
 
-  jhipster-registry:
+  jhipster-registry-dev:
     image: jhipster/jhipster-registry:v7.3.0
     volumes:
       - ./central-server-config:/central-config
-    # When run with the "dev" Spring profile, the JHipster Registry will
-    # read the config from the local filesystem (central-server-config directory)
-    # When run with the "prod" Spring profile, it will read the configuration from a Git repository
-    # See https://www.jhipster.tech/jhipster-registry/#spring-cloud-config
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=dev,api-docs
@@ -71,28 +69,20 @@ services:
       - JHIPSTER_REGISTRY_PASSWORD=admin
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config/localhost-config/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_URI=https://github.com/jhipster/jhipster-registry/
-      # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_PATHS=central-config
-    # If you want to expose these ports outside your dev PC,
-    # remove the "127.0.0.1:" prefix
     ports:
-      - 8761:8761
+      - 8771:8761
     networks:
-      - erp-system-network
+      - erp-system-dev-network
 
-  erpsystem-elasticsearch:
+  erpsystem-elasticsearch-dev:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
     volumes:
-      - ./search-index-directory:/usr/share/elasticsearch/data
+      - ./search-index-dev-directory:/usr/share/elasticsearch/data
     ports:
-      #- 127.0.0.1:9200:9200
-      - 9200:9200
-      #- 127.0.0.1:9300:9300
-      - 9300:9300
+      - 8840:9200
+      - 8841:9300
     environment:
       - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
-      # - "index.mapping.total_fields.limit=2000"
     networks:
-      - erp-system-network
+      - erp-system-dev-network
