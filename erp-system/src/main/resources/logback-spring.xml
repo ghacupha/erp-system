@@ -49,12 +49,12 @@
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
     <logger name="org.apache" level="WARN"/>
-    <logger name="org.apache.kafka.clients" level="WARN"/>
-    <logger name="org.apache.kafka.clients.producer" level="WARN"/>
-    <logger name="org.apache.kafka.common" level="OFF"/>
+    <logger name="org.apache.kafka.clients" level="DEBUG"/>
+    <logger name="org.apache.kafka.clients.producer" level="DEBUG"/>
+    <logger name="org.apache.kafka.common" level="DEBUG"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/>
-    <logger name="org.elasticsearch" level="OFF"/>
+    <logger name="org.elasticsearch" level="INFO"/>
     <logger name="com.netflix" level="WARN"/>
     <!-- <logger name="org.hibernate.validator" level="WARN"/> -->
     <logger name="org.hibernate" level="WARN"/>

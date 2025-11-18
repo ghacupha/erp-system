@@ -110,16 +110,6 @@ spring:
     locator:
       discovery:
         enabled: true
-  kafka:
-    topics:
-      lease-liability-schedule:
-        topic:
-          name: "lease-liability-schedule-items"
-        producer:
-          client-id: erp-system-dev-lease-liability-schedule-producer
-        consumer:
-          group.id: erp-system-dev-lease-liability-schedule
-          concurrency: 1
 
 server:
   port: ${ERP_SYSTEM_DEV_PORT}

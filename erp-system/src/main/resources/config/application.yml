@@ -169,9 +169,9 @@ spring:
             name: "lease-liability-schedule-items"
           producer:
             client-id: erp-system-lease-liability-schedule-producer
-        consumer:
-          group.id: erp-system-lease-liability-schedule
-          concurrency: 1
+          consumer:
+            group.id: erp-system-lease-liability-schedule
+            concurrency: 1
 
   erp:
     csv-upload:
