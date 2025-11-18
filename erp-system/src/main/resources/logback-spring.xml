@@ -6,12 +6,12 @@
 
 <!-- The FILE and ASYNC appenders are here as examples for a production configuration -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_DIR}/${springApplicationName}.log</file>
+        <file>logs/erp_system.log</file>
         <encoder>
             <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/archive/%d{yyyy/MM}/${springApplicationName}-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/archive/%d{yyyy/MM}/ERP-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <maxFileSize>${LOG_MAX_FILE_SIZE:-10MB}</maxFileSize>
             <maxHistory>${LOG_MAX_HISTORY:-30}</maxHistory>
             <totalSizeCap>${LOG_TOTAL_SIZE_CAP:-10GB}</totalSizeCap>
@@ -51,10 +51,10 @@
     <logger name="org.apache" level="WARN"/>
     <logger name="org.apache.kafka.clients" level="DEBUG"/>
     <logger name="org.apache.kafka.clients.producer" level="DEBUG"/>
-    <logger name="org.apache.kafka.common" level="DEBUG"/>
+    <logger name="org.apache.kafka.common" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/>
-    <logger name="org.elasticsearch" level="INFO"/>
+    <logger name="org.elasticsearch" level="OFF"/>
     <logger name="com.netflix" level="WARN"/>
     <!-- <logger name="org.hibernate.validator" level="WARN"/> -->
     <logger name="org.hibernate" level="WARN"/>
@@ -64,7 +64,7 @@
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.data" level="ERROR"/>
     <logger name="org.springframework.security" level="WARN"/>
-    <logger name="org.springframework.cache" level="OFF"/>
+    <logger name="org.springframework.cache" level="WARN"/>
     <logger name="org.springframework.boot.actuate.mail" level="OFF"/>
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
