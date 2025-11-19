@@ -22,6 +22,8 @@ import java.beans.PropertyEditorSupport;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.Locale;
 
 /**
  * Parses {@link LocalDate} values from a number of common ISO compliant string
@@ -32,7 +34,11 @@ public class LocalDatePropertyEditor extends PropertyEditorSupport {
     private static final DateTimeFormatter[] SUPPORTED_FORMATS = new DateTimeFormatter[] {
         DateTimeFormatter.ISO_LOCAL_DATE,
         DateTimeFormatter.ofPattern("dd/MM/yyyy"),
-        DateTimeFormatter.ofPattern("d/M/yyyy")
+        DateTimeFormatter.ofPattern("d/M/yyyy"),
+        new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern("dd-MMM-yy").toFormatter(Locale.ENGLISH),
+        new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern("d-MMM-yy").toFormatter(Locale.ENGLISH),
+        new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern("dd-MMM-yyyy").toFormatter(Locale.ENGLISH),
+        new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern("d-MMM-yyyy").toFormatter(Locale.ENGLISH)
     };
 
     @Override

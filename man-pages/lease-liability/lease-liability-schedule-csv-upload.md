@@ -11,4 +11,7 @@ The CSV header now includes a `paymentDate` column. When the lease repayment per
 
 Liquibase changelog files `20240704120000_added_entity_CsvFileUpload.xml` and `20240704120100_added_entity_LeaseLiabilityScheduleFileUpload.xml` create the supporting tables and enforce the one-to-one relationship between upload metadata and the CSV descriptor.
 
+### Supported date formats
+The CSV reader now accepts a mix of ISO (`2023-01-31`), slash-delimited (`31/01/2023` or `1/1/2023`), and abbreviated month formats (`31-Dec-22`, `1-Jan-2023`). The additional `dd-MMM-yy` and `dd-MMM-yyyy` patterns match the export format used in the finance workbook so uploads like the sample in `1019-schedule.csv` no longer fail validation.
+
 When running the batch pipeline on Spring Batch 4.x, remember that `StepBuilder` and `JobBuilder` require the `JobRepository` to be supplied via `.repository(...)`; otherwise the application fails fast at startup with a `JobRepository is mandatory` exception.
