@@ -28,12 +28,7 @@ describe('LeaseLiabilityScheduleUploadComponent', () => {
 
   it('should call upload service when form is valid and file selected', () => {
     const leaseLiability = { id: 10 } as any;
-    const compilation = { id: 20 } as any;
-    component.editForm.patchValue({
-      leaseLiability,
-      leaseLiabilityCompilation: compilation,
-      leaseContract: { id: 99 },
-    });
+    component.editForm.patchValue({ leaseLiability });
     component.selectedFile = new File(['id,amount'], 'schedule.csv', { type: 'text/csv' });
 
     service.upload.and.returnValue(of(new HttpResponse({ body: { uploadId: 1 } })));
@@ -43,6 +38,5 @@ describe('LeaseLiabilityScheduleUploadComponent', () => {
     expect(service.upload).toHaveBeenCalled();
     const args = service.upload.calls.mostRecent().args[0];
     expect(args.leaseLiabilityId).toBe(leaseLiability.id);
-    expect(args.leaseLiabilityCompilationId).toBe(compilation.id);
   });
 });

@@ -42,47 +42,6 @@
         <option [ngValue]="editForm.get('leaseLiability')!.value"></option>
       </jhi-m21-lease-liability-form-control>
 
-      <jhi-m21-lease-amortization-schedule-form-control
-        ngDefaultControl
-        formControlName="leaseAmortizationSchedule"
-        inputControlLabel="Lease Amortization Schedule"
-        [inputValue]="editForm.get('leaseAmortizationSchedule')!.value"
-        (valueSelected)="onLeaseAmortizationScheduleSelected($event)"
-      >
-        <option [ngValue]="editForm.get('leaseAmortizationSchedule')!.value"></option>
-      </jhi-m21-lease-amortization-schedule-form-control>
-
-      <jhi-m21-lease-liability-compilation-form-control
-        ngDefaultControl
-        formControlName="leaseLiabilityCompilation"
-        inputControlLabel="Lease Liability Compilation"
-        [inputValue]="editForm.get('leaseLiabilityCompilation')!.value"
-        (valueSelected)="onLeaseLiabilityCompilationSelected($event)"
-      >
-        <option [ngValue]="editForm.get('leaseLiabilityCompilation')!.value"></option>
-      </jhi-m21-lease-liability-compilation-form-control>
-
-      <jhi-m21-ifrs16-lease-form-control
-        ngDefaultControl
-        formControlName="leaseContract"
-        inputControlLabel="IFRS16 Lease Contract"
-        [inputValue]="editForm.get('leaseContract')!.value"
-        (valueSelected)="onLeaseContractSelected($event)"
-      >
-        <option [ngValue]="editForm.get('leaseContract')!.value"></option>
-      </jhi-m21-ifrs16-lease-form-control>
-
-      <jhi-m21-csv-file-upload-form-control
-        ngDefaultControl
-        formControlName="csvFileUpload"
-        inputControlLabel="CSV File Upload"
-        [inputValue]="editForm.get('csvFileUpload')!.value"
-        (valueSelected)="onCsvFileUploadSelected($event)"
-        [disabledInput]="true"
-      >
-        <option [ngValue]="editForm.get('csvFileUpload')!.value"></option>
-      </jhi-m21-csv-file-upload-form-control>
-
       <div class="form-group">
         <label class="form-control-label" for="field_csv_file">Upload CSV File</label>
         <input

@@ -4,7 +4,7 @@
 
 ## Scenario
 1. I open the lease liability schedule workspace and choose **Upload CSV**.
-2. Using the m21 selectors I pick the lease liability, the automatically suggested IFRS16 contract, the compilation request and—when needed—the amortisation schedule that should own the rows.
+2. I use the lease liability selector to choose the contract I am working on; the backend now infers the matching amortisation schedule and compilation context from that one choice.
 3. I attach the CSV exported from Excel, leave the *Launch batch immediately* checkbox enabled, and submit.
 
 ## Acceptance Criteria
