@@ -29,9 +29,10 @@ public class LeaseLiabilityScheduleUploadRequest {
     @NotNull
     private Long leaseLiabilityId;
 
+    // TODO update with new instance in the service
     private Long leaseAmortizationScheduleId;
 
-    @NotNull
+    // TODO update with new instance in the service
     private Long leaseLiabilityCompilationId;
 
     private boolean launchBatchImmediately = true;
