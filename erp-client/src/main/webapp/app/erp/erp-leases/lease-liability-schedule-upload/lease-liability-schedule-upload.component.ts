@@ -21,10 +21,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 
 import { ILeaseLiability } from '../lease-liability/lease-liability.model';
-import { ILeaseAmortizationSchedule } from '../lease-amortization-schedule/lease-amortization-schedule.model';
-import { ILeaseLiabilityCompilation } from '../lease-liability-compilation/lease-liability-compilation.model';
-import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
-import { ICsvFileUpload } from '../../erp-files/csv-file-upload/csv-file-upload.model';
 import {
   ILeaseLiabilityScheduleUploadRequest,
   ILeaseLiabilityScheduleUploadResponse,
@@ -44,36 +40,13 @@ export class LeaseLiabilityScheduleUploadComponent {
 
   editForm = this.fb.group({
     leaseLiability: [null, Validators.required],
-    leaseAmortizationSchedule: [],
-    leaseLiabilityCompilation: [null, Validators.required],
-    leaseContract: [null, Validators.required],
-    csvFileUpload: [],
     launchBatchImmediately: [true],
   });
 
   constructor(private fb: FormBuilder, private uploadService: LeaseLiabilityScheduleUploadService) {}
 
   onLeaseLiabilitySelected(leaseLiability: ILeaseLiability | null): void {
-    this.editForm.patchValue({
-      leaseLiability,
-      leaseContract: leaseLiability?.leaseContract ?? null,
-    });
-  }
-
-  onLeaseAmortizationScheduleSelected(schedule: ILeaseAmortizationSchedule | null): void {
-    this.editForm.patchValue({ leaseAmortizationSchedule: schedule });
-  }
-
-  onLeaseLiabilityCompilationSelected(compilation: ILeaseLiabilityCompilation | null): void {
-    this.editForm.patchValue({ leaseLiabilityCompilation: compilation });
-  }
-
-  onLeaseContractSelected(contract: IIFRS16LeaseContract | null): void {
-    this.editForm.patchValue({ leaseContract: contract });
-  }
-
-  onCsvFileUploadSelected(csvFileUpload: ICsvFileUpload | null): void {
-    this.editForm.patchValue({ csvFileUpload });
+    this.editForm.patchValue({ leaseLiability });
   }
 
   onFileSelected(event: Event): void {
@@ -97,7 +70,7 @@ export class LeaseLiabilityScheduleUploadComponent {
 
     const request = this.buildRequest();
     if (!request) {
-      this.uploadError = 'Lease liability and compilation are required.';
+      this.uploadError = 'A lease liability selection is required.';
       return;
     }
 
@@ -108,14 +81,6 @@ export class LeaseLiabilityScheduleUploadComponent {
       .subscribe({
         next: response => {
           this.uploadResponse = response.body ?? null;
-          if (this.uploadResponse) {
-            const csvSnapshot: ICsvFileUpload = {
-              id: this.uploadResponse.csvFileId,
-              storedFileName: this.uploadResponse.storedFileName,
-              originalFileName: this.selectedFileName ?? undefined,
-            };
-            this.editForm.patchValue({ csvFileUpload: csvSnapshot });
-          }
         },
         error: err => {
           this.uploadError = err?.error?.message ?? 'The CSV upload failed. Please try again.';
@@ -130,16 +95,12 @@ export class LeaseLiabilityScheduleUploadComponent {
 
   private buildRequest(): ILeaseLiabilityScheduleUploadRequest | null {
     const leaseLiability: ILeaseLiability | null = this.editForm.get('leaseLiability')!.value;
-    const leaseLiabilityCompilation: ILeaseLiabilityCompilation | null = this.editForm.get('leaseLiabilityCompilation')!.value;
-    const leaseAmortizationSchedule: ILeaseAmortizationSchedule | null = this.editForm.get('leaseAmortizationSchedule')!.value;
-    if (!leaseLiability?.id || !leaseLiabilityCompilation?.id) {
+    if (!leaseLiability?.id) {
       return null;
     }
 
     return {
       leaseLiabilityId: leaseLiability.id,
-      leaseAmortizationScheduleId: leaseAmortizationSchedule?.id ?? null,
-      leaseLiabilityCompilationId: leaseLiabilityCompilation.id,
       launchBatchImmediately: this.editForm.get('launchBatchImmediately')!.value ?? true,
     };
   }

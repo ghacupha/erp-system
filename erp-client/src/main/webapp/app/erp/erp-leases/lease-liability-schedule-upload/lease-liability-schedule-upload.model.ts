@@ -18,8 +18,6 @@
 
 export interface ILeaseLiabilityScheduleUploadRequest {
   leaseLiabilityId: number;
-  leaseAmortizationScheduleId?: number | null;
-  leaseLiabilityCompilationId: number;
   launchBatchImmediately?: boolean;
 }
 
