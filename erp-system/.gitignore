@@ -312,3 +312,5 @@ man-pages/GDI-Staging-Proposal.md
 
 logs
 LOG_DIR_IS_UNDEFINED
+
+csv_processing/
