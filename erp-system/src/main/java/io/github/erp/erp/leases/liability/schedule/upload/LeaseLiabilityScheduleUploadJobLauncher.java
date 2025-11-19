@@ -30,6 +30,8 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class LeaseLiabilityScheduleUploadJobLauncher {
@@ -47,6 +49,7 @@ public class LeaseLiabilityScheduleUploadJobLauncher {
         this.job = leaseLiabilityScheduleUploadJob;
     }
 
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public void launch(LeaseLiabilityScheduleFileUpload upload) {
         try {
             JobParameters parameters = new JobParametersBuilder()
