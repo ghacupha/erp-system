@@ -79,9 +79,8 @@ public class LeaseAmortizationSchedule implements Serializable {
         },
         allowSetters = true
     )
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @NotNull
-    @JoinColumn(unique = true)
     private IFRS16LeaseContract leaseContract;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

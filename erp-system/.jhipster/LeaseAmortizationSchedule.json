@@ -23,12 +23,9 @@
     {
       "relationshipName": "leaseContract",
       "otherEntityName": "iFRS16LeaseContract",
-      "relationshipType": "one-to-one",
+      "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
-      "otherEntityField": "bookingId",
-      "ownerSide": true,
-      "id": false,
-      "otherEntityRelationshipName": "leaseAmortizationSchedule"
+      "otherEntityField": "bookingId"
     }
   ],
   "service": "serviceImpl",
