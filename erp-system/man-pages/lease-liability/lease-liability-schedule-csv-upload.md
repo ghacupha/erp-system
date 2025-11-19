@@ -5,12 +5,13 @@ The lease liability schedule upload feature decouples raw CSV files from the dat
 
 ## Storage and Metadata
 1. The REST endpoint `/api/leases/lease-liability-schedule-file-uploads` accepts a multipart form request containing:
-   - A JSON payload with the lease liability identifiers (`leaseLiabilityId`, `leaseAmortizationScheduleId`, `leaseLiabilityCompilationId`).
+   - A JSON payload with the lease liability identifiers. Only `leaseLiabilityId` is mandatory; the service now creates the amortisation schedule and compilation records when their ids are omitted.
    - The CSV file itself.
 2. `CsvUploadFSStorageService` writes the CSV to `${erp.csv-upload.storage-path}`. The default location is `${java.io.tmpdir}/erp/csv-uploads` and can be overridden through environment variables.
 3. The controller delegates to `LeaseLiabilityScheduleUploadService` which persists two entities:
    - `CsvFileUpload`: stores the file path, checksum, and metadata needed for traceability.
    - `LeaseLiabilityScheduleFileUpload`: links the CSV metadata to the lease liability context and tracks processing status.
+   Before the upload metadata is saved the service fetches the selected `LeaseLiability`, refreshes its IFRS16 contract reference, builds a new `LeaseLiabilityCompilation`, and persists a `LeaseAmortizationSchedule` tied to those aggregates so that downstream batch processors always receive valid identifiers.
 4. The service immediately launches the Spring Batch job (unless explicitly disabled in the request).
 
 ## Batch Job

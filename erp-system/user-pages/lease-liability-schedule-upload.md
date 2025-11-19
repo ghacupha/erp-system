@@ -1,8 +1,8 @@
 # Lease Liability Schedule Upload Guide
 
 1. Navigate to **Lease Liabilities → Schedules** and click **Upload CSV**.
-2. Select the lease liability and, if applicable, the amortisation schedule that matches the upload.
-3. Confirm the automatically created compilation batch identifier.
+2. Select the lease liability. The backend now looks up the IFRS16 contract, spins up a fresh amortisation schedule, and prepares a compilation context, so no additional drop-downs are required.
+3. Review the automatically populated compilation identifier for traceability.
 4. Click **Choose File**, select the CSV generated from your spreadsheet, and submit the form.
 5. Monitor the upload record:
    - `PENDING` indicates the batch job has been queued.

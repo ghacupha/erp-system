@@ -19,13 +19,23 @@ package io.github.erp.erp.leases.liability.schedule.upload;
  */
 
 import io.github.erp.domain.CsvFileUpload;
+import io.github.erp.domain.IFRS16LeaseContract;
+import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.LeaseLiabilityScheduleFileUpload;
+import io.github.erp.internal.service.leases.InternalLeaseAmortizationScheduleService;
+import io.github.erp.internal.service.leases.InternalLeaseLiabilityCompilationService;
 import io.github.erp.repository.CsvFileUploadRepository;
+import io.github.erp.repository.LeaseLiabilityRepository;
 import io.github.erp.repository.LeaseLiabilityScheduleFileUploadRepository;
+import io.github.erp.service.dto.LeaseAmortizationScheduleDTO;
+import io.github.erp.service.dto.LeaseLiabilityCompilationDTO;
+import io.github.erp.service.mapper.IFRS16LeaseContractMapper;
+import io.github.erp.service.mapper.LeaseLiabilityMapper;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +59,11 @@ public class LeaseLiabilityScheduleUploadService {
     private final FileStorageService storageService;
     private final CsvFileUploadRepository csvFileUploadRepository;
     private final LeaseLiabilityScheduleFileUploadRepository leaseLiabilityScheduleFileUploadRepository;
+    private final LeaseLiabilityRepository leaseLiabilityRepository;
+    private final InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService;
+    private final InternalLeaseAmortizationScheduleService leaseAmortizationScheduleService;
+    private final LeaseLiabilityMapper leaseLiabilityMapper;
+    private final IFRS16LeaseContractMapper ifrs16LeaseContractMapper;
     private final LeaseLiabilityScheduleUploadJobLauncher jobLauncher;
     private final Path storageRoot;
 
@@ -56,12 +71,22 @@ public class LeaseLiabilityScheduleUploadService {
         @Qualifier("csvUploadFSStorageService") FileStorageService storageService,
         CsvFileUploadRepository csvFileUploadRepository,
         LeaseLiabilityScheduleFileUploadRepository leaseLiabilityScheduleFileUploadRepository,
+        LeaseLiabilityRepository leaseLiabilityRepository,
+        InternalLeaseLiabilityCompilationService leaseLiabilityCompilationService,
+        InternalLeaseAmortizationScheduleService leaseAmortizationScheduleService,
+        LeaseLiabilityMapper leaseLiabilityMapper,
+        IFRS16LeaseContractMapper ifrs16LeaseContractMapper,
         LeaseLiabilityScheduleUploadJobLauncher jobLauncher,
         @Value("${erp.csv-upload.storage-path:${java.io.tmpdir}/erp/csv-uploads}") String storagePath
     ) {
         this.storageService = storageService;
         this.csvFileUploadRepository = csvFileUploadRepository;
         this.leaseLiabilityScheduleFileUploadRepository = leaseLiabilityScheduleFileUploadRepository;
+        this.leaseLiabilityRepository = leaseLiabilityRepository;
+        this.leaseLiabilityCompilationService = leaseLiabilityCompilationService;
+        this.leaseAmortizationScheduleService = leaseAmortizationScheduleService;
+        this.leaseLiabilityMapper = leaseLiabilityMapper;
+        this.ifrs16LeaseContractMapper = ifrs16LeaseContractMapper;
         this.jobLauncher = jobLauncher;
         this.storageRoot = Paths.get(storagePath);
     }
@@ -78,10 +103,19 @@ public class LeaseLiabilityScheduleUploadService {
             storageService.save(fileContent, storedFileName);
             CsvFileUpload csvFileUpload = persistCsvMetadata(file, storedFileName, fileContent);
 
+            LeaseLiability leaseLiability = resolveLeaseLiability(request.getLeaseLiabilityId());
+            IFRS16LeaseContract leaseContract = resolveLeaseContract(leaseLiability);
+            Long leaseLiabilityCompilationId = ensureLeaseLiabilityCompilationId(request.getLeaseLiabilityCompilationId());
+            Long leaseAmortizationScheduleId = ensureLeaseAmortizationScheduleId(
+                request.getLeaseAmortizationScheduleId(),
+                leaseLiability,
+                leaseContract
+            );
+
             LeaseLiabilityScheduleFileUpload upload = new LeaseLiabilityScheduleFileUpload()
-                .leaseLiabilityId(request.getLeaseLiabilityId())
-                .leaseAmortizationScheduleId(request.getLeaseAmortizationScheduleId())
-                .leaseLiabilityCompilationId(request.getLeaseLiabilityCompilationId())
+                .leaseLiabilityId(leaseLiability.getId())
+                .leaseAmortizationScheduleId(leaseAmortizationScheduleId)
+                .leaseLiabilityCompilationId(leaseLiabilityCompilationId)
                 .uploadStatus("PENDING")
                 .csvFileUpload(csvFileUpload);
             csvFileUpload.setLeaseLiabilityScheduleFileUpload(upload);
@@ -138,5 +172,46 @@ public class LeaseLiabilityScheduleUploadService {
         jobLauncher.launch(upload);
     }
 
-}
 
+
+    private LeaseLiability resolveLeaseLiability(Long leaseLiabilityId) {
+        return leaseLiabilityRepository
+            .findById(leaseLiabilityId)
+            .orElseThrow(() -> new IllegalArgumentException("Lease liability id #" + leaseLiabilityId + " not found"));
+    }
+
+    private IFRS16LeaseContract resolveLeaseContract(LeaseLiability leaseLiability) {
+        IFRS16LeaseContract contract = leaseLiability.getLeaseContract();
+        if (contract == null) {
+            throw new IllegalArgumentException("IFRS16 lease contract not linked to lease liability id #" + leaseLiability.getId());
+        }
+        return contract;
+    }
+
+    private Long ensureLeaseLiabilityCompilationId(Long compilationId) {
+        if (compilationId != null) {
+            return compilationId;
+        }
+        LeaseLiabilityCompilationDTO compilationDTO = new LeaseLiabilityCompilationDTO();
+        compilationDTO.setRequestId(UUID.randomUUID());
+        compilationDTO.setTimeOfRequest(ZonedDateTime.now());
+        compilationDTO.setActive(Boolean.FALSE);
+        return leaseLiabilityCompilationService.save(compilationDTO).getId();
+    }
+
+    private Long ensureLeaseAmortizationScheduleId(
+        Long scheduleId,
+        LeaseLiability leaseLiability,
+        IFRS16LeaseContract leaseContract
+    ) {
+        if (scheduleId != null) {
+            return scheduleId;
+        }
+        LeaseAmortizationScheduleDTO scheduleDTO = new LeaseAmortizationScheduleDTO();
+        scheduleDTO.setIdentifier(UUID.randomUUID());
+        scheduleDTO.setLeaseLiability(leaseLiabilityMapper.toDto(leaseLiability));
+        scheduleDTO.setLeaseContract(ifrs16LeaseContractMapper.toDto(leaseContract));
+        return leaseAmortizationScheduleService.save(scheduleDTO).getId();
+    }
+
+}
