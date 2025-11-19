@@ -96,7 +96,19 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
 
         LeaseAmortizationScheduleDTO leaseAmortizationSchedule = createLeaseAmortizationSchedule(leaseLiability, ifrs16LeaseContract);
 
-        return calculateAmortizationSchedule(calculation, leaseLiability, ifrs16LeaseContract, leaseAmortizationSchedule, compilationId);
+        List<LeaseLiabilityScheduleItemDTO> scheduleItems = calculateAmortizationSchedule(
+            calculation,
+            leaseLiability,
+            ifrs16LeaseContract,
+            leaseAmortizationSchedule,
+            compilationId
+        );
+
+        LeaseAmortizationScheduleDTO persistedSchedule = internalLeaseAmortizationScheduleService.save(leaseAmortizationSchedule);
+
+        scheduleItems.forEach(item -> item.setLeaseAmortizationSchedule(persistedSchedule));
+
+        return scheduleItems;
     }
 
     private List<LeaseLiabilityScheduleItemDTO> calculateAmortizationSchedule(
@@ -186,7 +198,7 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
         scheduleDTO.setIdentifier(UUID.randomUUID());
         scheduleDTO.setLeaseLiability(leaseLiability);
         scheduleDTO.setLeaseContract(ifrs16LeaseContract);
-        return internalLeaseAmortizationScheduleService.save(scheduleDTO);
+        return scheduleDTO;
     }
 
     private BigDecimal calculateMonthlyPayment(List<LeasePaymentDTO> leasePayments, LeaseRepaymentPeriodDTO currentPeriod) {
