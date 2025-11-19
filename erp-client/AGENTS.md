@@ -55,6 +55,8 @@ Keep your code changes scoped to the appropriate module (server, client or deplo
 
 In general custom code resides in the erp package: io.github.erp.erp for the backend and for the client it's the erp subfolder under app.
 
+Do not modify generated code unless it is absolutely necessary. This is includes the package-lock.json file, which is used to ensure that the same versions of dependencies are used across all modules.
+
 ##### Quality Assurance
 
 Create unit tests locally before creating a pull request. Ensure that formatting and linting checks pass. Integration tests should cover the main workflows described in your user stories. If there are limitations that prevent full test coverage (e.g. complex UI interactions), document these limitations alongside the user stories so reviewers understand what has been verified manually.
