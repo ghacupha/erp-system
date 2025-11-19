@@ -601,5 +601,6 @@
     <include file="config/liquibase/changelog/20250205121500_update_lease_liability_schedule_item_compilation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250206120000_add_active_to_lease_liability_compilation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250207121500_add_has_been_fully_amortised_to_lease_liability.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250207140000_update_lease_amortization_schedule_contract_fk.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
