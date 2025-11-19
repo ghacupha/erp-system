@@ -20,12 +20,7 @@ package io.github.erp.internal.repository;
 import io.github.erp.domain.LeaseAmortizationSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.security.config.web.servlet.PortMapperDsl;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the LeaseAmortizationSchedule entity.
@@ -33,21 +28,4 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 @Repository
 public interface InternalLeaseAmortizationScheduleRepository
-    extends JpaRepository<LeaseAmortizationSchedule, Long>, JpaSpecificationExecutor<LeaseAmortizationSchedule> {
-
-    /**
-     * Extract adjacent schedule based on the bookingId provided
-     *
-     * @param bookingId value of the IFRS16-lease-contract
-     * @return Schedule instance
-     */
-    @Query(
-        nativeQuery = true,
-        value = "" +
-            "SELECT lam.id, identifier, lease_liability_id, lease_contract_id " +
-            " FROM public.lease_amortization_schedule lam " +
-            " LEFT JOIN ifrs16lease_contract contract on contract.id = lam.lease_contract_id " +
-            " WHERE contract.booking_id = :bookingId"
-    )
-    Optional<LeaseAmortizationSchedule> findAdjacentScheduleByBookingId(@Param("bookingId") String bookingId);
-}
+    extends JpaRepository<LeaseAmortizationSchedule, Long>, JpaSpecificationExecutor<LeaseAmortizationSchedule> {}

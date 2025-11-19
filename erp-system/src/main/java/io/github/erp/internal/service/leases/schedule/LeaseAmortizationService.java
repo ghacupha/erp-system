@@ -94,13 +94,7 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
 
         LeaseAmortizationCalculationDTO calculation = leaseAmortizationCalculationOpt.get();
 
-        Optional<LeaseAmortizationScheduleDTO> scheduleOpt = internalLeaseAmortizationScheduleService.findOneByBookingId(ifrs16LeaseContract.getBookingId());
-
-        if (scheduleOpt.isEmpty()) {
-            throw new IllegalArgumentException("Lease Amortization Schedule for Lease Booking id # " + ifrs16LeaseContract.getBookingId() + "not found");
-        }
-
-        LeaseAmortizationScheduleDTO leaseAmortizationSchedule = scheduleOpt.get();
+        LeaseAmortizationScheduleDTO leaseAmortizationSchedule = createLeaseAmortizationSchedule(leaseLiability, ifrs16LeaseContract);
 
         return calculateAmortizationSchedule(calculation, leaseLiability, ifrs16LeaseContract, leaseAmortizationSchedule, compilationId);
     }
@@ -182,6 +176,17 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
         });
 
         return scheduleItems;
+    }
+
+    private LeaseAmortizationScheduleDTO createLeaseAmortizationSchedule(
+        LeaseLiabilityDTO leaseLiability,
+        IFRS16LeaseContractDTO ifrs16LeaseContract
+    ) {
+        LeaseAmortizationScheduleDTO scheduleDTO = new LeaseAmortizationScheduleDTO();
+        scheduleDTO.setIdentifier(UUID.randomUUID());
+        scheduleDTO.setLeaseLiability(leaseLiability);
+        scheduleDTO.setLeaseContract(ifrs16LeaseContract);
+        return internalLeaseAmortizationScheduleService.save(scheduleDTO);
     }
 
     private BigDecimal calculateMonthlyPayment(List<LeasePaymentDTO> leasePayments, LeaseRepaymentPeriodDTO currentPeriod) {
