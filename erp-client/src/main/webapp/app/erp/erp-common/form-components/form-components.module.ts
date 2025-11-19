@@ -73,6 +73,9 @@ import { UserComponentsModule } from './user-form-components/user-components.mod
 import { LeasePeriodFormComponentsModule } from './lease-period-components/lease-period-form-components.module';
 import { LeaseLiabilityFormComponentsModule } from './lease-liability-components/lease-liability-form-components.module';
 import { LeaseAmortizationCalculationFormComponentsModule } from './lease-amortization-calculation-components/lease-amortization-calculation-form-components.module';
+import { LeaseAmortizationScheduleFormComponentsModule } from './lease-amortization-schedule-components/lease-amortization-schedule-form-components.module';
+import { LeaseLiabilityCompilationFormComponentsModule } from './lease-liability-compilation-components/lease-liability-compilation-form-components.module';
+import { CsvFileUploadFormComponentsModule } from './csv-file-upload-components/csv-file-upload-form-components.module';
 import { ServiceOutletFormComponentsModule } from './service-outlet-form-components/service-outlet-form-components.module';
 import { TransactionAccountFormComponentsModule } from './transaction-account-form-components/transaction-account-form-components.module';
 import { PrepaymentAccountFormControlsModule } from './prepayment-account-form-components/prepayment-account-form-controls.module';
@@ -188,6 +191,9 @@ import { AccountCategoryFormControlsModule } from './account-category-form-compo
     LeasePeriodFormComponentsModule,
     LeaseLiabilityFormComponentsModule,
     LeaseAmortizationCalculationFormComponentsModule,
+    LeaseAmortizationScheduleFormComponentsModule,
+    LeaseLiabilityCompilationFormComponentsModule,
+    CsvFileUploadFormComponentsModule,
     ServiceOutletFormComponentsModule,
     TransactionAccountFormComponentsModule,
     PrepaymentAccountFormControlsModule,
