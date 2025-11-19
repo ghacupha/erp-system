@@ -100,19 +100,6 @@ public class InternalLeaseAmortizationScheduleServiceImpl implements InternalLea
         return leaseAmortizationScheduleRepository.findById(id).map(leaseAmortizationScheduleMapper::toDto);
     }
 
-    /**
-     * Returns the amortization-schedule that is adjacent to the IFRS16 booking id
-     *
-     * @param bookingId value in the IFRS16 lease contract instance
-     * @return Schedule instance
-     */
-    @Override
-    public Optional<LeaseAmortizationScheduleDTO> findOneByBookingId(String bookingId) {
-        log.debug("Request to get LeaseAmortizationSchedule for booking id : {}", bookingId);
-
-        return leaseAmortizationScheduleRepository.findAdjacentScheduleByBookingId(bookingId).map(leaseAmortizationScheduleMapper::toDto);
-    }
-
     @Override
     public void delete(Long id) {
         log.debug("Request to delete LeaseAmortizationSchedule : {}", id);
