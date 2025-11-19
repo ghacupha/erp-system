@@ -60,6 +60,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
             ),
         },
         {
+          path: 'lease-liability-schedule-upload',
+          data: {
+            pageTitle: 'ERP | Lease Liability Schedule Upload',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-liability-schedule-upload/lease-liability-schedule-upload.module').then(
+              m => m.LeaseLiabilityScheduleUploadModule
+            ),
+        },
+        {
           path: 'lease-liability-schedule-item',
           data: {
             pageTitle: 'ERP | Schedule',

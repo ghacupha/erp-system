@@ -1,0 +1,112 @@
+<!--
+
+    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-10">
+    <form [formGroup]="editForm" (ngSubmit)="submitUpload()" novalidate>
+      <h2 id="jhi-lease-liability-schedule-upload-heading">Lease Liability Schedule Upload</h2>
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <div class="alert alert-danger" *ngIf="uploadError">{{ uploadError }}</div>
+      <div class="alert alert-success" *ngIf="uploadResponse">
+        <div>Upload ID: {{ uploadResponse?.uploadId }}</div>
+        <div>CSV File ID: {{ uploadResponse?.csvFileId }}</div>
+        <div>Status: {{ uploadResponse?.uploadStatus }}</div>
+        <button class="btn btn-link p-0" type="button" (click)="clearUploadResponse()">Clear</button>
+      </div>
+
+      <jhi-m21-lease-liability-form-control
+        ngDefaultControl
+        formControlName="leaseLiability"
+        inputControlLabel="Lease Liability"
+        [inputValue]="editForm.get('leaseLiability')!.value"
+        (valueSelected)="onLeaseLiabilitySelected($event)"
+      >
+        <option [ngValue]="editForm.get('leaseLiability')!.value"></option>
+      </jhi-m21-lease-liability-form-control>
+
+      <jhi-m21-lease-amortization-schedule-form-control
+        ngDefaultControl
+        formControlName="leaseAmortizationSchedule"
+        inputControlLabel="Lease Amortization Schedule"
+        [inputValue]="editForm.get('leaseAmortizationSchedule')!.value"
+        (valueSelected)="onLeaseAmortizationScheduleSelected($event)"
+      >
+        <option [ngValue]="editForm.get('leaseAmortizationSchedule')!.value"></option>
+      </jhi-m21-lease-amortization-schedule-form-control>
+
+      <jhi-m21-lease-liability-compilation-form-control
+        ngDefaultControl
+        formControlName="leaseLiabilityCompilation"
+        inputControlLabel="Lease Liability Compilation"
+        [inputValue]="editForm.get('leaseLiabilityCompilation')!.value"
+        (valueSelected)="onLeaseLiabilityCompilationSelected($event)"
+      >
+        <option [ngValue]="editForm.get('leaseLiabilityCompilation')!.value"></option>
+      </jhi-m21-lease-liability-compilation-form-control>
+
+      <jhi-m21-ifrs16-lease-form-control
+        ngDefaultControl
+        formControlName="leaseContract"
+        inputControlLabel="IFRS16 Lease Contract"
+        [inputValue]="editForm.get('leaseContract')!.value"
+        (valueSelected)="onLeaseContractSelected($event)"
+      >
+        <option [ngValue]="editForm.get('leaseContract')!.value"></option>
+      </jhi-m21-ifrs16-lease-form-control>
+
+      <jhi-m21-csv-file-upload-form-control
+        ngDefaultControl
+        formControlName="csvFileUpload"
+        inputControlLabel="CSV File Upload"
+        [inputValue]="editForm.get('csvFileUpload')!.value"
+        (valueSelected)="onCsvFileUploadSelected($event)"
+        [disabledInput]="true"
+      >
+        <option [ngValue]="editForm.get('csvFileUpload')!.value"></option>
+      </jhi-m21-csv-file-upload-form-control>
+
+      <div class="form-group">
+        <label class="form-control-label" for="field_csv_file">Upload CSV File</label>
+        <input
+          type="file"
+          class="form-control-file"
+          id="field_csv_file"
+          accept=".csv,text/csv"
+          (change)="onFileSelected($event)"
+        />
+        <small class="form-text text-muted" *ngIf="selectedFileName">
+          Selected file: {{ selectedFileName }}
+        </small>
+      </div>
+
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="field_launch_batch" formControlName="launchBatchImmediately" />
+        <label class="form-check-label" for="field_launch_batch">Launch batch immediately</label>
+      </div>
+
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || isUploading">
+          <fa-icon icon="upload"></fa-icon>&nbsp;Submit Upload
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
