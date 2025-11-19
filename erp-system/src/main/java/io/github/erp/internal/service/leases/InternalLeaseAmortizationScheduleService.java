@@ -76,11 +76,4 @@ public interface InternalLeaseAmortizationScheduleService {
      */
     Page<LeaseAmortizationScheduleDTO> search(String query, Pageable pageable);
 
-    /**
-     * Returns the amortization-schedule that is adjacent to the IFRS16 booking id
-     *
-     * @param bookingId value in the IFRS16 lease contract instance
-     * @return Schedule instance
-     */
-    Optional<LeaseAmortizationScheduleDTO> findOneByBookingId(String bookingId);
 }
