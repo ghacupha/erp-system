@@ -95,6 +95,18 @@
         <li>
           <a
             class='dropdown-item'
+            routerLink='lease-liability-schedule-upload'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Lease Schedule Upload</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
             routerLink='lease-liability-compilation'
             routerLinkActive='active'
             [routerLinkActiveOptions]='{ exact: true }'
