@@ -21,6 +21,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CsvFileUploadService } from '../../../erp-files/csv-file-upload/service/csv-file-upload.service';
 import { ICsvFileUpload } from '../../../erp-files/csv-file-upload/csv-file-upload.model';
+import { ASC, DESC } from '../../../../config/pagination.constants';
 
 @Injectable({ providedIn: 'root' })
 export class CsvFileUploadSuggestionService {
@@ -32,7 +33,20 @@ export class CsvFileUploadSuggestionService {
     }
 
     return this.csvFileUploadService
-      .search({ query: searchText, page: 0, size: 10 })
+      .search({ query: searchText, page: 0, size: 10, sort: this.sort() })
       .pipe(map(response => response.body ?? []));
+  }
+
+  sort(): string[] {
+    const predicate = 'id';
+    const ascending = true;
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    const result = [predicate + ',' + (ascending ? ASC : DESC)];
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (predicate !== 'id') {
+      result.push('id');
+    }
+    return result;
   }
 }
