@@ -33,6 +33,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -87,7 +89,7 @@ public class LeaseLiabilityScheduleUploadService {
             upload = leaseLiabilityScheduleFileUploadRepository.save(upload);
 
             if (request.isLaunchBatchImmediately()) {
-                jobLauncher.launch(upload);
+                launchJobAfterCommit(upload);
             }
 
             LeaseLiabilityScheduleUploadResponse response = new LeaseLiabilityScheduleUploadResponse();
@@ -119,6 +121,21 @@ public class LeaseLiabilityScheduleUploadService {
     private String buildStoredFileName(String originalFilename) {
         String cleanName = originalFilename == null ? "upload.csv" : originalFilename.replaceAll("\\s+", "-");
         return UUID.randomUUID() + "-" + cleanName;
+    }
+
+    private void launchJobAfterCommit(LeaseLiabilityScheduleFileUpload upload) {
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            LeaseLiabilityScheduleFileUpload jobUpload = upload;
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    jobLauncher.launch(jobUpload);
+                }
+            });
+            return;
+        }
+
+        jobLauncher.launch(upload);
     }
 
 }
