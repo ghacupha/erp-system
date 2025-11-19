@@ -29,10 +29,10 @@ public class LeaseLiabilityScheduleUploadRequest {
     @NotNull
     private Long leaseLiabilityId;
 
-    // TODO update with new instance in the service
+    // Optional: a new schedule will be created for the selected liability when omitted
     private Long leaseAmortizationScheduleId;
 
-    // TODO update with new instance in the service
+    // Optional: a fresh compilation is generated server-side when not supplied
     private Long leaseLiabilityCompilationId;
 
     private boolean launchBatchImmediately = true;

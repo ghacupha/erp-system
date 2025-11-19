@@ -6,7 +6,7 @@
 
 ## Steps
 1. Navigate to the lease liability schedules section and click **Upload CSV**.
-2. Select the lease liability and (optionally) the amortisation schedule using the drop-down selectors.
+2. Select the lease liability; the backend now locates the IFRS16 contract, creates the amortisation schedule, and prepares the compilation without additional input.
 3. Confirm the automatically generated compilation batch and attach the CSV file exported from Excel.
 4. Submit the upload request.
 
