@@ -21,6 +21,7 @@ import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
 import io.github.erp.domain.LeaseRepaymentPeriod;
 import io.github.erp.repository.LeaseLiabilityCompilationRepository;
+import io.github.erp.repository.LeaseAmortizationScheduleRepository;
 import io.github.erp.internal.repository.InternalLeaseLiabilityRepository;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleItemRepository;
 import io.github.erp.repository.search.LeaseLiabilityScheduleItemSearchRepository;
@@ -60,6 +61,7 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
     private final LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper;
     private final LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository;
     private final LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository;
+    private final LeaseAmortizationScheduleRepository leaseAmortizationScheduleRepository;
     private final InternalLeaseLiabilityRepository leaseLiabilityRepository;
     private final LeaseLiabilitySearchRepository leaseLiabilitySearchRepository;
 
@@ -68,12 +70,14 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
         LeaseLiabilityScheduleItemMapper leaseLiabilityScheduleItemMapper,
         LeaseLiabilityScheduleItemSearchRepository leaseLiabilityScheduleItemSearchRepository,
         LeaseLiabilityCompilationRepository leaseLiabilityCompilationRepository,
+        LeaseAmortizationScheduleRepository leaseAmortizationScheduleRepository,
         InternalLeaseLiabilityRepository leaseLiabilityRepository,
         LeaseLiabilitySearchRepository leaseLiabilitySearchRepository) {
         this.leaseLiabilityScheduleItemRepository = leaseLiabilityScheduleItemRepository;
         this.leaseLiabilityScheduleItemMapper = leaseLiabilityScheduleItemMapper;
         this.leaseLiabilityScheduleItemSearchRepository = leaseLiabilityScheduleItemSearchRepository;
         this.leaseLiabilityCompilationRepository = leaseLiabilityCompilationRepository;
+        this.leaseAmortizationScheduleRepository = leaseAmortizationScheduleRepository;
         this.leaseLiabilityRepository = leaseLiabilityRepository;
         this.leaseLiabilitySearchRepository = leaseLiabilitySearchRepository;
     }
@@ -247,5 +251,15 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
 
     private int updateCompilationActiveFlag(Long compilationId, boolean active) {
         return leaseLiabilityCompilationRepository.updateActiveStateById(compilationId, active);
+    }
+
+    @Override
+    public int updateActivationByAmortizationSchedule(Long scheduleId, boolean active) {
+        log.debug("Request to update activation state for amortization schedule {} to {}", scheduleId, active);
+        int affected = leaseLiabilityScheduleItemRepository.updateActiveStateByAmortizationSchedule(scheduleId, active);
+        if (affected > 0) {
+            affected += leaseAmortizationScheduleRepository.updateActiveStateById(scheduleId, active);
+        }
+        return affected;
     }
 }

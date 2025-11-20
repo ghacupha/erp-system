@@ -42,6 +42,7 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     identifier: [null, [Validators.required]],
+    active: [true, [Validators.required]],
     leaseLiability: [null, Validators.required],
     leaseContract: [null, Validators.required],
   });
@@ -58,6 +59,7 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
 
       if (leaseAmortizationSchedule.id === undefined) {
         leaseAmortizationSchedule.identifier = uuidv7();
+        leaseAmortizationSchedule.active = true;
       }
 
       this.updateForm(leaseAmortizationSchedule);
@@ -118,6 +120,7 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: leaseAmortizationSchedule.id,
       identifier: leaseAmortizationSchedule.identifier,
+      active: leaseAmortizationSchedule.active,
       leaseLiability: leaseAmortizationSchedule.leaseLiability,
       leaseContract: leaseAmortizationSchedule.leaseContract,
     });
@@ -129,6 +132,7 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
       ...new LeaseAmortizationSchedule(),
       id: this.editForm.get(['id'])!.value,
       identifier: this.editForm.get(['identifier'])!.value,
+      active: this.editForm.get(['active'])!.value,
       leaseLiability: this.editForm.get(['leaseLiability'])!.value,
       leaseContract: this.editForm.get(['leaseContract'])!.value,
     };

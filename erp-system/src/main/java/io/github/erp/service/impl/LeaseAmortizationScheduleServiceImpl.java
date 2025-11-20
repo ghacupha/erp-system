@@ -62,6 +62,9 @@ public class LeaseAmortizationScheduleServiceImpl implements LeaseAmortizationSc
     public LeaseAmortizationScheduleDTO save(LeaseAmortizationScheduleDTO leaseAmortizationScheduleDTO) {
         log.debug("Request to save LeaseAmortizationSchedule : {}", leaseAmortizationScheduleDTO);
         LeaseAmortizationSchedule leaseAmortizationSchedule = leaseAmortizationScheduleMapper.toEntity(leaseAmortizationScheduleDTO);
+        if (leaseAmortizationSchedule.getActive() == null) {
+            leaseAmortizationSchedule.setActive(Boolean.TRUE);
+        }
         leaseAmortizationSchedule = leaseAmortizationScheduleRepository.save(leaseAmortizationSchedule);
         LeaseAmortizationScheduleDTO result = leaseAmortizationScheduleMapper.toDto(leaseAmortizationSchedule);
         leaseAmortizationScheduleSearchRepository.save(leaseAmortizationSchedule);

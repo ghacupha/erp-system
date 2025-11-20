@@ -76,4 +76,6 @@ public interface InternalLeaseAmortizationScheduleService {
      */
     Page<LeaseAmortizationScheduleDTO> search(String query, Pageable pageable);
 
+    int updateScheduleItemActivation(Long scheduleId, boolean active);
+
 }

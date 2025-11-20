@@ -17,9 +17,9 @@ package io.github.erp.erp.resources.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.leases.InternalLeaseAmortizationScheduleService;
 import io.github.erp.repository.LeaseAmortizationScheduleRepository;
 import io.github.erp.service.LeaseAmortizationScheduleQueryService;
-import io.github.erp.service.LeaseAmortizationScheduleService;
 import io.github.erp.service.criteria.LeaseAmortizationScheduleCriteria;
 import io.github.erp.service.dto.LeaseAmortizationScheduleDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
@@ -58,14 +58,14 @@ public class LeaseAmortizationScheduleResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final LeaseAmortizationScheduleService leaseAmortizationScheduleService;
+    private final InternalLeaseAmortizationScheduleService leaseAmortizationScheduleService;
 
     private final LeaseAmortizationScheduleRepository leaseAmortizationScheduleRepository;
 
     private final LeaseAmortizationScheduleQueryService leaseAmortizationScheduleQueryService;
 
     public LeaseAmortizationScheduleResourceProd(
-        LeaseAmortizationScheduleService leaseAmortizationScheduleService,
+        InternalLeaseAmortizationScheduleService leaseAmortizationScheduleService,
         LeaseAmortizationScheduleRepository leaseAmortizationScheduleRepository,
         LeaseAmortizationScheduleQueryService leaseAmortizationScheduleQueryService
     ) {
@@ -209,6 +209,32 @@ public class LeaseAmortizationScheduleResourceProd {
         log.debug("REST request to get LeaseAmortizationSchedule : {}", id);
         Optional<LeaseAmortizationScheduleDTO> leaseAmortizationScheduleDTO = leaseAmortizationScheduleService.findOne(id);
         return ResponseUtil.wrapOrNotFound(leaseAmortizationScheduleDTO);
+    }
+
+    @PostMapping("/lease-amortization-schedules/{id}/activate")
+    public ResponseEntity<Void> activateLeaseAmortizationSchedule(@PathVariable Long id) {
+        log.debug("REST request to activate LeaseAmortizationSchedule : {}", id);
+        if (!leaseAmortizationScheduleRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+        int affected = leaseAmortizationScheduleService.updateScheduleItemActivation(id, true);
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createAlert(applicationName, "leaseAmortizationSchedule.activated", id + ":" + affected))
+            .build();
+    }
+
+    @PostMapping("/lease-amortization-schedules/{id}/deactivate")
+    public ResponseEntity<Void> deactivateLeaseAmortizationSchedule(@PathVariable Long id) {
+        log.debug("REST request to deactivate LeaseAmortizationSchedule : {}", id);
+        if (!leaseAmortizationScheduleRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+        int affected = leaseAmortizationScheduleService.updateScheduleItemActivation(id, false);
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createAlert(applicationName, "leaseAmortizationSchedule.deactivated", id + ":" + affected))
+            .build();
     }
 
     /**
