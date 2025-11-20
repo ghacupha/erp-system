@@ -40,6 +40,7 @@ describe('LeaseAmortizationSchedule Service', () => {
     elemDefault = {
       id: 0,
       identifier: 'AAAAAAA',
+      active: true,
     };
   });
 

@@ -543,6 +543,7 @@
     <include file="config/liquibase/changelog/20240618060237_added_entity_constraints_LeaseLiability.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240618055255_added_entity_constraints_LeasePayment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240618060855_added_entity_constraints_LeaseAmortizationSchedule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241118120000_added_active_to_LeaseAmortizationSchedule.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240618084439_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240618104247_added_entity_constraints_LeaseLiabilityCompilation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240619094336_changelog.xml" relativeToChangelogFile="false"/>
