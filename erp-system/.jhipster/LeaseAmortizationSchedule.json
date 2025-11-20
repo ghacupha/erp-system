@@ -4,6 +4,13 @@
       "fieldName": "identifier",
       "fieldType": "UUID",
       "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"],
+      "fieldValidateRulesMax": null,
+      "fieldValidateRulesMin": null
     }
   ],
   "relationships": [
