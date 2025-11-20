@@ -37,6 +37,11 @@
         <dd>
           <span>{{ leaseAmortizationSchedule.identifier }}</span>
         </dd>
+        <dt><span>Status</span></dt>
+        <dd>
+          <span *ngIf="leaseAmortizationSchedule.active" class="badge badge-success">Active</span>
+          <span *ngIf="!leaseAmortizationSchedule.active" class="badge badge-warning">Inactive</span>
+        </dd>
         <dt><span>Lease Liability</span></dt>
         <dd>
           <div *ngIf="leaseAmortizationSchedule.leaseLiability">

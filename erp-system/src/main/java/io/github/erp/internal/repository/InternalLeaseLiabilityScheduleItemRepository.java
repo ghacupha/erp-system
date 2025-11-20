@@ -58,6 +58,10 @@ public interface InternalLeaseLiabilityScheduleItemRepository
     )
     int updateActiveStateByCompilation(@Param("compilationId") Long compilationId, @Param("active") boolean active);
 
+    @Modifying(clearAutomatically = true)
+    @Query("update LeaseLiabilityScheduleItem item set item.active = :active where item.leaseAmortizationSchedule.id = :scheduleId")
+    int updateActiveStateByAmortizationSchedule(@Param("scheduleId") Long scheduleId, @Param("active") boolean active);
+
     List<LeaseLiabilityScheduleItem> findByLeaseLiabilityCompilationId(Long compilationId);
 
     Page<LeaseLiabilityScheduleItem> findByLeaseLiabilityCompilationId(Long compilationId, Pageable pageable);

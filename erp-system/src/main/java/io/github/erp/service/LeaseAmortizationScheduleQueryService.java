@@ -118,6 +118,9 @@ public class LeaseAmortizationScheduleQueryService extends QueryService<LeaseAmo
             if (criteria.getIdentifier() != null) {
                 specification = specification.and(buildSpecification(criteria.getIdentifier(), LeaseAmortizationSchedule_.identifier));
             }
+            if (criteria.getActive() != null) {
+                specification = specification.and(buildSpecification(criteria.getActive(), LeaseAmortizationSchedule_.active));
+            }
             if (criteria.getLeaseLiabilityId() != null) {
                 specification =
                     specification.and(
