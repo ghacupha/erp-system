@@ -88,4 +88,6 @@ public interface InternalLeaseLiabilityScheduleItemService {
     void saveAll(List<LeaseLiabilityScheduleItemDTO> scheduleItems);
 
     int updateActivationByCompilation(Long compilationId, boolean active);
+
+    int updateActivationByAmortizationSchedule(Long scheduleId, boolean active);
 }
