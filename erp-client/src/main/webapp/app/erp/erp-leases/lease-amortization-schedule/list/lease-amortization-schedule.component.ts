@@ -132,7 +132,7 @@ export class LeaseAmortizationScheduleComponent implements OnInit {
     }
     this.setRowActionState(id, true, undefined);
     this.leaseAmortizationScheduleService.activate(id).subscribe({
-      next: response => this.onRowActionSuccess(id, response.body),
+      next: response => this.onRowActionSuccess(id, response.body, true),
       error: () => this.onRowActionError(id, 'Unable to activate schedule. Please retry.'),
     });
   }
@@ -144,7 +144,7 @@ export class LeaseAmortizationScheduleComponent implements OnInit {
     }
     this.setRowActionState(id, true, undefined);
     this.leaseAmortizationScheduleService.deactivate(id).subscribe({
-      next: response => this.onRowActionSuccess(id, response.body),
+      next: response => this.onRowActionSuccess(id, response.body, false),
       error: () => this.onRowActionError(id, 'Unable to deactivate schedule. Please retry.'),
     });
   }
@@ -201,9 +201,25 @@ export class LeaseAmortizationScheduleComponent implements OnInit {
     this.rowActionError = { ...this.rowActionError, [id]: error };
   }
 
-  private onRowActionSuccess(id: number, updated: ILeaseAmortizationSchedule | null | undefined): void {
+  private onRowActionSuccess(
+    id: number,
+    updated: ILeaseAmortizationSchedule | null | undefined,
+    desiredActiveState?: boolean
+  ): void {
     this.setRowActionState(id, false, undefined);
-    if (!updated || !this.leaseAmortizationSchedules) {
+    if (!this.leaseAmortizationSchedules) {
+      return;
+    }
+
+    if (!updated && desiredActiveState !== undefined) {
+      const existing = this.leaseAmortizationSchedules.find(item => item.id === id);
+      if (!existing) {
+        return;
+      }
+      updated = { ...existing, active: desiredActiveState };
+    }
+
+    if (!updated) {
       return;
     }
     this.leaseAmortizationSchedules = this.leaseAmortizationSchedules.map(item => (item.id === updated.id ? { ...item, ...updated } : item));
