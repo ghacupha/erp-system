@@ -69,6 +69,14 @@ export class LeaseAmortizationScheduleService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  activate(id: number): Observable<EntityResponseType> {
+    return this.http.post<ILeaseAmortizationSchedule>(`${this.resourceUrl}/${id}/activate`, {}, { observe: 'response' });
+  }
+
+  deactivate(id: number): Observable<EntityResponseType> {
+    return this.http.post<ILeaseAmortizationSchedule>(`${this.resourceUrl}/${id}/deactivate`, {}, { observe: 'response' });
+  }
+
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<ILeaseAmortizationSchedule[]>(this.resourceSearchUrl, { params: options, observe: 'response' });

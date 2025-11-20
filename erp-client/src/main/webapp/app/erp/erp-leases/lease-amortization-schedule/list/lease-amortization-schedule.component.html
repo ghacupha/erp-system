@@ -71,6 +71,7 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="identifier"><span>Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="active"><span>Status</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="leaseLiability.leaseId"><span>Lease Liability</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="leaseContract.bookingId"><span>Lease Contract</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
@@ -88,6 +89,10 @@
                 leaseAmortizationSchedule.leaseLiability?.leaseId
               }}</a>
             </div>
+          </td>
+          <td>
+            <span *ngIf="leaseAmortizationSchedule.active" class="badge badge-success">Active</span>
+            <span *ngIf="!leaseAmortizationSchedule.active" class="badge badge-warning">Inactive</span>
           </td>
           <td>
             <div *ngIf="leaseAmortizationSchedule.leaseContract">
@@ -118,10 +123,36 @@
                 <span class="d-none d-md-inline">Edit</span>
               </button>
 
+              <button
+                type="button"
+                class="btn btn-success btn-sm"
+                data-cy="entityActivateButton"
+                (click)="activateSchedule(leaseAmortizationSchedule)"
+                [disabled]="leaseAmortizationSchedule.active || rowActionLoading[leaseAmortizationSchedule.id!]"
+              >
+                <fa-icon *ngIf="!rowActionLoading[leaseAmortizationSchedule.id!]" icon="check"></fa-icon>
+                <fa-icon *ngIf="rowActionLoading[leaseAmortizationSchedule.id!]" icon="spinner" [spin]="true"></fa-icon>
+                <span class="d-none d-md-inline">Activate</span>
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-warning btn-sm"
+                data-cy="entityDeactivateButton"
+                (click)="deactivateSchedule(leaseAmortizationSchedule)"
+              >
+                <fa-icon *ngIf="!rowActionLoading[leaseAmortizationSchedule.id!]" icon="ban"></fa-icon>
+                <fa-icon *ngIf="rowActionLoading[leaseAmortizationSchedule.id!]" icon="spinner" [spin]="true"></fa-icon>
+                <span class="d-none d-md-inline">Deactivate</span>
+              </button>
+
               <button type="submit" (click)="delete(leaseAmortizationSchedule)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline">Delete</span>
               </button>
+            </div>
+            <div class="text-danger small mt-1" *ngIf="rowActionError[leaseAmortizationSchedule.id!]">
+              {{ rowActionError[leaseAmortizationSchedule.id!] }}
             </div>
           </td>
         </tr>

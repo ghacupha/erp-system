@@ -32,6 +32,9 @@ public class LeaseAmortizationScheduleDTO implements Serializable {
     @NotNull
     private UUID identifier;
 
+    @NotNull
+    private Boolean active;
+
     private LeaseLiabilityDTO leaseLiability;
 
     private IFRS16LeaseContractDTO leaseContract;
@@ -54,6 +57,14 @@ public class LeaseAmortizationScheduleDTO implements Serializable {
 
     public LeaseLiabilityDTO getLeaseLiability() {
         return leaseLiability;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public void setLeaseLiability(LeaseLiabilityDTO leaseLiability) {
@@ -95,6 +106,7 @@ public class LeaseAmortizationScheduleDTO implements Serializable {
         return "LeaseAmortizationScheduleDTO{" +
             "id=" + getId() +
             ", identifier='" + getIdentifier() + "'" +
+            ", active='" + getActive() + "'" +
             ", leaseLiability=" + getLeaseLiability() +
             ", leaseContract=" + getLeaseContract() +
             "}";

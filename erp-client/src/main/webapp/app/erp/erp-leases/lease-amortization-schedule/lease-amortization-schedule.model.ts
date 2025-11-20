@@ -23,6 +23,7 @@ import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-co
 export interface ILeaseAmortizationSchedule {
   id?: number;
   identifier?: string;
+  active?: boolean;
   leaseLiability?: ILeaseLiability;
   leaseLiabilityScheduleItems?: ILeaseLiabilityScheduleItem[] | null;
   leaseContract?: IIFRS16LeaseContract;
@@ -32,6 +33,7 @@ export class LeaseAmortizationSchedule implements ILeaseAmortizationSchedule {
   constructor(
     public id?: number,
     public identifier?: string,
+    public active: boolean = true,
     public leaseLiability?: ILeaseLiability,
     public leaseLiabilityScheduleItems?: ILeaseLiabilityScheduleItem[] | null,
     public leaseContract?: IIFRS16LeaseContract
