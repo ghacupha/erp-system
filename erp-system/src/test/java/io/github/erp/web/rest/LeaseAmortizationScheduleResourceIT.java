@@ -65,6 +65,9 @@ class LeaseAmortizationScheduleResourceIT {
     private static final UUID DEFAULT_IDENTIFIER = UUID.randomUUID();
     private static final UUID UPDATED_IDENTIFIER = UUID.randomUUID();
 
+    private static final Boolean DEFAULT_ACTIVE = true;
+    private static final Boolean UPDATED_ACTIVE = false;
+
     private static final String ENTITY_API_URL = "/api/lease-amortization-schedules";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/_search/lease-amortization-schedules";
@@ -122,6 +125,7 @@ class LeaseAmortizationScheduleResourceIT {
             iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
         }
         leaseAmortizationSchedule.setLeaseContract(iFRS16LeaseContract);
+        leaseAmortizationSchedule.active(DEFAULT_ACTIVE);
         return leaseAmortizationSchedule;
     }
 
@@ -153,6 +157,7 @@ class LeaseAmortizationScheduleResourceIT {
             iFRS16LeaseContract = TestUtil.findAll(em, IFRS16LeaseContract.class).get(0);
         }
         leaseAmortizationSchedule.setLeaseContract(iFRS16LeaseContract);
+        leaseAmortizationSchedule.active(UPDATED_ACTIVE);
         return leaseAmortizationSchedule;
     }
 
@@ -182,6 +187,8 @@ class LeaseAmortizationScheduleResourceIT {
             leaseAmortizationScheduleList.size() - 1
         );
         assertThat(testLeaseAmortizationSchedule.getIdentifier()).isEqualTo(DEFAULT_IDENTIFIER);
+        assertThat(testLeaseAmortizationSchedule.getActive()).isEqualTo(DEFAULT_ACTIVE);
+        assertThat(testLeaseAmortizationSchedule.getActive()).isEqualTo(DEFAULT_ACTIVE);
 
         // Validate the LeaseAmortizationSchedule in Elasticsearch
         verify(mockLeaseAmortizationScheduleSearchRepository, times(1)).save(testLeaseAmortizationSchedule);
@@ -247,7 +254,8 @@ class LeaseAmortizationScheduleResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(leaseAmortizationSchedule.getId().intValue())))
-            .andExpect(jsonPath("$.[*].identifier").value(hasItem(DEFAULT_IDENTIFIER.toString())));
+            .andExpect(jsonPath("$.[*].identifier").value(hasItem(DEFAULT_IDENTIFIER.toString())))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
 
     @Test
@@ -262,7 +270,8 @@ class LeaseAmortizationScheduleResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(leaseAmortizationSchedule.getId().intValue()))
-            .andExpect(jsonPath("$.identifier").value(DEFAULT_IDENTIFIER.toString()));
+            .andExpect(jsonPath("$.identifier").value(DEFAULT_IDENTIFIER.toString()))
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
     @Test
@@ -320,6 +329,19 @@ class LeaseAmortizationScheduleResourceIT {
 
         // Get all the leaseAmortizationScheduleList where identifier equals to UPDATED_IDENTIFIER
         defaultLeaseAmortizationScheduleShouldNotBeFound("identifier.in=" + UPDATED_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    void getAllLeaseAmortizationSchedulesByActiveIsEqualToSomething() throws Exception {
+        // Initialize the database
+        leaseAmortizationScheduleRepository.saveAndFlush(leaseAmortizationSchedule);
+
+        // Get all the leaseAmortizationScheduleList where active equals to DEFAULT_ACTIVE
+        defaultLeaseAmortizationScheduleShouldBeFound("active.equals=" + DEFAULT_ACTIVE);
+
+        // Get all the leaseAmortizationScheduleList where active equals to UPDATED_ACTIVE
+        defaultLeaseAmortizationScheduleShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
     }
 
     @Test
@@ -461,7 +483,7 @@ class LeaseAmortizationScheduleResourceIT {
             .get();
         // Disconnect from session so that the updates on updatedLeaseAmortizationSchedule are not directly saved in db
         em.detach(updatedLeaseAmortizationSchedule);
-        updatedLeaseAmortizationSchedule.identifier(UPDATED_IDENTIFIER);
+        updatedLeaseAmortizationSchedule.identifier(UPDATED_IDENTIFIER).active(UPDATED_ACTIVE);
         LeaseAmortizationScheduleDTO leaseAmortizationScheduleDTO = leaseAmortizationScheduleMapper.toDto(updatedLeaseAmortizationSchedule);
 
         restLeaseAmortizationScheduleMockMvc
@@ -479,6 +501,7 @@ class LeaseAmortizationScheduleResourceIT {
             leaseAmortizationScheduleList.size() - 1
         );
         assertThat(testLeaseAmortizationSchedule.getIdentifier()).isEqualTo(UPDATED_IDENTIFIER);
+        assertThat(testLeaseAmortizationSchedule.getActive()).isEqualTo(UPDATED_ACTIVE);
 
         // Validate the LeaseAmortizationSchedule in Elasticsearch
         verify(mockLeaseAmortizationScheduleSearchRepository).save(testLeaseAmortizationSchedule);
@@ -603,7 +626,7 @@ class LeaseAmortizationScheduleResourceIT {
         LeaseAmortizationSchedule partialUpdatedLeaseAmortizationSchedule = new LeaseAmortizationSchedule();
         partialUpdatedLeaseAmortizationSchedule.setId(leaseAmortizationSchedule.getId());
 
-        partialUpdatedLeaseAmortizationSchedule.identifier(UPDATED_IDENTIFIER);
+        partialUpdatedLeaseAmortizationSchedule.identifier(UPDATED_IDENTIFIER).active(UPDATED_ACTIVE);
 
         restLeaseAmortizationScheduleMockMvc
             .perform(
@@ -620,6 +643,7 @@ class LeaseAmortizationScheduleResourceIT {
             leaseAmortizationScheduleList.size() - 1
         );
         assertThat(testLeaseAmortizationSchedule.getIdentifier()).isEqualTo(UPDATED_IDENTIFIER);
+        assertThat(testLeaseAmortizationSchedule.getActive()).isEqualTo(UPDATED_ACTIVE);
     }
 
     @Test
