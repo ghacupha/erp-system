@@ -59,7 +59,7 @@ describe('LeaseAmortizationSchedule Management Update Component', () => {
 
   describe('ngOnInit', () => {
     it('Should call LeaseLiability query and add missing value', () => {
-      const leaseAmortizationSchedule: ILeaseAmortizationSchedule = { id: 456 };
+      const leaseAmortizationSchedule: ILeaseAmortizationSchedule = { id: 456, active: true };
       const leaseLiability: ILeaseLiability = { id: 36475 };
       leaseAmortizationSchedule.leaseLiability = leaseLiability;
 
@@ -81,7 +81,7 @@ describe('LeaseAmortizationSchedule Management Update Component', () => {
     });
 
     it('Should update editForm', () => {
-      const leaseAmortizationSchedule: ILeaseAmortizationSchedule = { id: 456 };
+      const leaseAmortizationSchedule: ILeaseAmortizationSchedule = { id: 456, active: true };
       const leaseLiability: ILeaseLiability = { id: 94172 };
       leaseAmortizationSchedule.leaseLiability = leaseLiability;
 
@@ -97,7 +97,7 @@ describe('LeaseAmortizationSchedule Management Update Component', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<LeaseAmortizationSchedule>>();
-      const leaseAmortizationSchedule = { id: 123 };
+      const leaseAmortizationSchedule = { id: 123, active: true };
       jest.spyOn(leaseAmortizationScheduleService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ leaseAmortizationSchedule });

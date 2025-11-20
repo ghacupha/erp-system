@@ -18,6 +18,7 @@ package io.github.erp.internal.service.leases;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.domain.LeaseAmortizationSchedule;
+import io.github.erp.internal.service.leases.InternalLeaseLiabilityScheduleItemService;
 import io.github.erp.internal.repository.InternalLeaseAmortizationScheduleRepository;
 import io.github.erp.repository.search.LeaseAmortizationScheduleSearchRepository;
 import io.github.erp.service.dto.LeaseAmortizationScheduleDTO;
@@ -46,20 +47,27 @@ public class InternalLeaseAmortizationScheduleServiceImpl implements InternalLea
 
     private final LeaseAmortizationScheduleSearchRepository leaseAmortizationScheduleSearchRepository;
 
+    private final InternalLeaseLiabilityScheduleItemService leaseLiabilityScheduleItemService;
+
     public InternalLeaseAmortizationScheduleServiceImpl(
         InternalLeaseAmortizationScheduleRepository leaseAmortizationScheduleRepository,
         LeaseAmortizationScheduleMapper leaseAmortizationScheduleMapper,
-        LeaseAmortizationScheduleSearchRepository leaseAmortizationScheduleSearchRepository
+        LeaseAmortizationScheduleSearchRepository leaseAmortizationScheduleSearchRepository,
+        InternalLeaseLiabilityScheduleItemService leaseLiabilityScheduleItemService
     ) {
         this.leaseAmortizationScheduleRepository = leaseAmortizationScheduleRepository;
         this.leaseAmortizationScheduleMapper = leaseAmortizationScheduleMapper;
         this.leaseAmortizationScheduleSearchRepository = leaseAmortizationScheduleSearchRepository;
+        this.leaseLiabilityScheduleItemService = leaseLiabilityScheduleItemService;
     }
 
     @Override
     public LeaseAmortizationScheduleDTO save(LeaseAmortizationScheduleDTO leaseAmortizationScheduleDTO) {
         log.debug("Request to save LeaseAmortizationSchedule : {}", leaseAmortizationScheduleDTO);
         LeaseAmortizationSchedule leaseAmortizationSchedule = leaseAmortizationScheduleMapper.toEntity(leaseAmortizationScheduleDTO);
+        if (leaseAmortizationSchedule.getActive() == null) {
+            leaseAmortizationSchedule.setActive(Boolean.TRUE);
+        }
         leaseAmortizationSchedule = leaseAmortizationScheduleRepository.save(leaseAmortizationSchedule);
         LeaseAmortizationScheduleDTO result = leaseAmortizationScheduleMapper.toDto(leaseAmortizationSchedule);
         leaseAmortizationScheduleSearchRepository.save(leaseAmortizationSchedule);
@@ -112,5 +120,11 @@ public class InternalLeaseAmortizationScheduleServiceImpl implements InternalLea
     public Page<LeaseAmortizationScheduleDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of LeaseAmortizationSchedules for query {}", query);
         return leaseAmortizationScheduleSearchRepository.search(query, pageable).map(leaseAmortizationScheduleMapper::toDto);
+    }
+
+    @Override
+    public int updateScheduleItemActivation(Long scheduleId, boolean active) {
+        log.debug("Request to update activation flag for amortization schedule {} to {}", scheduleId, active);
+        return leaseLiabilityScheduleItemService.updateActivationByAmortizationSchedule(scheduleId, active);
     }
 }

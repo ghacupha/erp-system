@@ -46,6 +46,8 @@ public class LeaseAmortizationScheduleCriteria implements Serializable, Criteria
 
     private UUIDFilter identifier;
 
+    private BooleanFilter active;
+
     private LongFilter leaseLiabilityId;
 
     private LongFilter leaseLiabilityScheduleItemId;
@@ -59,6 +61,7 @@ public class LeaseAmortizationScheduleCriteria implements Serializable, Criteria
     public LeaseAmortizationScheduleCriteria(LeaseAmortizationScheduleCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.identifier = other.identifier == null ? null : other.identifier.copy();
+        this.active = other.active == null ? null : other.active.copy();
         this.leaseLiabilityId = other.leaseLiabilityId == null ? null : other.leaseLiabilityId.copy();
         this.leaseLiabilityScheduleItemId = other.leaseLiabilityScheduleItemId == null ? null : other.leaseLiabilityScheduleItemId.copy();
         this.leaseContractId = other.leaseContractId == null ? null : other.leaseContractId.copy();
@@ -98,6 +101,21 @@ public class LeaseAmortizationScheduleCriteria implements Serializable, Criteria
 
     public void setIdentifier(UUIDFilter identifier) {
         this.identifier = identifier;
+    }
+
+    public BooleanFilter getActive() {
+        return active;
+    }
+
+    public BooleanFilter active() {
+        if (active == null) {
+            active = new BooleanFilter();
+        }
+        return active;
+    }
+
+    public void setActive(BooleanFilter active) {
+        this.active = active;
     }
 
     public LongFilter getLeaseLiabilityId() {
@@ -165,6 +183,7 @@ public class LeaseAmortizationScheduleCriteria implements Serializable, Criteria
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(identifier, that.identifier) &&
+            Objects.equals(active, that.active) &&
             Objects.equals(leaseLiabilityId, that.leaseLiabilityId) &&
             Objects.equals(leaseLiabilityScheduleItemId, that.leaseLiabilityScheduleItemId) &&
             Objects.equals(leaseContractId, that.leaseContractId) &&
@@ -174,7 +193,7 @@ public class LeaseAmortizationScheduleCriteria implements Serializable, Criteria
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, identifier, leaseLiabilityId, leaseLiabilityScheduleItemId, leaseContractId, distinct);
+        return Objects.hash(id, identifier, active, leaseLiabilityId, leaseLiabilityScheduleItemId, leaseContractId, distinct);
     }
 
     // prettier-ignore
@@ -183,6 +202,7 @@ public class LeaseAmortizationScheduleCriteria implements Serializable, Criteria
         return "LeaseAmortizationScheduleCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (identifier != null ? "identifier=" + identifier + ", " : "") +
+            (active != null ? "active=" + active + ", " : "") +
             (leaseLiabilityId != null ? "leaseLiabilityId=" + leaseLiabilityId + ", " : "") +
             (leaseLiabilityScheduleItemId != null ? "leaseLiabilityScheduleItemId=" + leaseLiabilityScheduleItemId + ", " : "") +
             (leaseContractId != null ? "leaseContractId=" + leaseContractId + ", " : "") +
