@@ -17,7 +17,7 @@
           *ngFor="let contract of leaseContracts; trackBy: trackContractById"
           [value]="contract.id"
         >
-          {{ contract.bookingId ?? contract.id }} — {{ contract.leaseTitle || contract.leaseContractTitle || 'Lease contract' }}
+          {{ contract.bookingId ?? contract.id }} — {{ contract.leaseTitle || contract.bookingId || 'Lease contract' }}
         </option>
       </select>
     </div>

@@ -20,6 +20,9 @@ package io.github.erp.internal.repository;
 import io.github.erp.domain.LeaseAmortizationSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -28,4 +31,9 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface InternalLeaseAmortizationScheduleRepository
-    extends JpaRepository<LeaseAmortizationSchedule, Long>, JpaSpecificationExecutor<LeaseAmortizationSchedule> {}
+    extends JpaRepository<LeaseAmortizationSchedule, Long>, JpaSpecificationExecutor<LeaseAmortizationSchedule> {
+
+    @Modifying(clearAutomatically = true)
+    @Query("update LeaseAmortizationSchedule schedule set schedule.active = :active where schedule.id = :scheduleId")
+    int updateActiveStateById(@Param("scheduleId") Long scheduleId, @Param("active") boolean active);
+}
