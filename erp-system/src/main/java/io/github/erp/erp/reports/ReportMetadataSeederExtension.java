@@ -88,6 +88,15 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             List.of(filter("Lease Period", "leasePeriodId.equals", "leasePeriods", "dropdown"))
         ),
         new ReportMetadataSeed(
+            "ROU Depreciation Schedule",
+            "Period-by-period amortisation of the right-of-use asset for a selected lease contract.",
+            "Leases",
+            "erp/rou-depreciation-schedule-view",
+            "api/leases/rou-depreciation-schedule-view/{leaseContractId}",
+            true,
+            List.of(filter("Lease Contract", "leaseContractId.equals", "leaseContracts", "typeahead"))
+        ),
+        new ReportMetadataSeed(
             "Lease Liability by Service Outlet",
             "Lease liability schedule totals grouped by service outlet for detailed operational analysis.",
             "Leases",

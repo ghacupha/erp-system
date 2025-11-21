@@ -60,6 +60,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
             ),
         },
         {
+          path: 'rou-depreciation-schedule-view',
+          data: {
+            pageTitle: 'ERP | ROU Depreciation Schedule',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-depreciation-schedule-view/rou-depreciation-schedule-view.module').then(
+              m => m.RouDepreciationScheduleViewModule
+            ),
+        },
+        {
           path: 'lease-liability-schedule-upload',
           data: {
             pageTitle: 'ERP | Lease Liability Schedule Upload',
