@@ -76,6 +76,16 @@ public interface InternalLeaseAmortizationScheduleService {
      */
     Page<LeaseAmortizationScheduleDTO> search(String query, Pageable pageable);
 
+    /**
+     * This method changes the status of the leaseAmortizationSchedule instance whose id
+     * is the scheduleId to the boolean value provided, IF there are leaseLiabilityScheduleItem
+     * instances that have a many-to-one relationship with the former and also their active status
+     * is successfully updated to the value on the parameter
+     *
+     * @param scheduleId Id of the leaseAmortizationSchedule
+     * @param active Status to which we are updating the active field
+     * @return number of updated items
+     */
     int updateScheduleItemActivation(Long scheduleId, boolean active);
 
 }
