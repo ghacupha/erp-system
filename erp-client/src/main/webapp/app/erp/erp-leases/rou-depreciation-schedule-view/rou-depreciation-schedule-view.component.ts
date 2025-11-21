@@ -88,7 +88,7 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
     const select = event.target as HTMLSelectElement | null;
     const id = select?.value ? Number(select.value) : NaN;
     if (!Number.isNaN(id)) {
-      void this.router.navigate(['/erp/rou-depreciation-schedule-view', id]);
+      void this.router.navigate(['/rou-depreciation-schedule-view', id]);
     }
   }
 
