@@ -33,6 +33,12 @@
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "bookingId"
+    },
+    {
+      "relationshipName": "leaseLiabilityCompilation",
+      "otherEntityName": "leaseLiabilityCompilation",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
     }
   ],
   "service": "serviceImpl",

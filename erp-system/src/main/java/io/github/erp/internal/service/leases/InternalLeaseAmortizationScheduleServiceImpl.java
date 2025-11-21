@@ -125,6 +125,19 @@ public class InternalLeaseAmortizationScheduleServiceImpl implements InternalLea
     @Override
     public int updateScheduleItemActivation(Long scheduleId, boolean active) {
         log.debug("Request to update activation flag for amortization schedule {} to {}", scheduleId, active);
-        return leaseLiabilityScheduleItemService.updateActivationByAmortizationSchedule(scheduleId, active);
+        Optional<LeaseAmortizationScheduleDTO> scheduleOpt = findOne(scheduleId);
+
+        int affected = leaseAmortizationScheduleRepository.updateActiveStateById(scheduleId, active);
+
+        if (scheduleOpt.isPresent() && scheduleOpt.get().getLeaseLiabilityCompilation() != null) {
+            affected += leaseLiabilityScheduleItemService.updateActivationByCompilation(
+                scheduleOpt.get().getLeaseLiabilityCompilation().getId(),
+                active
+            );
+        } else {
+            affected += leaseLiabilityScheduleItemService.updateActivationByAmortizationSchedule(scheduleId, active);
+        }
+
+        return affected;
     }
 }

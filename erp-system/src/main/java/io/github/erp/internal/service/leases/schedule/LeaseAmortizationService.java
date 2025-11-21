@@ -94,7 +94,8 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
 
         LeaseAmortizationCalculationDTO calculation = leaseAmortizationCalculationOpt.get();
 
-        LeaseAmortizationScheduleDTO leaseAmortizationSchedule = createLeaseAmortizationSchedule(leaseLiability, ifrs16LeaseContract);
+        LeaseAmortizationScheduleDTO leaseAmortizationSchedule =
+            createLeaseAmortizationSchedule(leaseLiability, ifrs16LeaseContract, compilationId);
 
         return calculateAmortizationSchedule(calculation, leaseLiability, ifrs16LeaseContract, leaseAmortizationSchedule, compilationId);
     }
@@ -180,12 +181,19 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
 
     private LeaseAmortizationScheduleDTO createLeaseAmortizationSchedule(
         LeaseLiabilityDTO leaseLiability,
-        IFRS16LeaseContractDTO ifrs16LeaseContract
+        IFRS16LeaseContractDTO ifrs16LeaseContract,
+        Long compilationId
     ) {
         LeaseAmortizationScheduleDTO scheduleDTO = new LeaseAmortizationScheduleDTO();
         scheduleDTO.setIdentifier(UUID.randomUUID());
         scheduleDTO.setLeaseLiability(leaseLiability);
         scheduleDTO.setLeaseContract(ifrs16LeaseContract);
+        scheduleDTO.setActive(Boolean.TRUE);
+        if (compilationId != null) {
+            LeaseLiabilityCompilationDTO compilationDTO = new LeaseLiabilityCompilationDTO();
+            compilationDTO.setId(compilationId);
+            scheduleDTO.setLeaseLiabilityCompilation(compilationDTO);
+        }
         return internalLeaseAmortizationScheduleService.save(scheduleDTO);
     }
 
