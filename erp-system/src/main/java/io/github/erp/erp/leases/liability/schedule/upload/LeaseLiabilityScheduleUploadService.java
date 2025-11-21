@@ -196,7 +196,7 @@ public class LeaseLiabilityScheduleUploadService {
         LeaseLiabilityCompilationDTO compilationDTO = new LeaseLiabilityCompilationDTO();
         compilationDTO.setRequestId(UUID.randomUUID());
         compilationDTO.setTimeOfRequest(ZonedDateTime.now());
-        compilationDTO.setActive(Boolean.FALSE);
+        compilationDTO.setActive(Boolean.TRUE);
         return leaseLiabilityCompilationService.save(compilationDTO).getId();
     }
 
