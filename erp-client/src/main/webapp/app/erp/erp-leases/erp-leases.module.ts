@@ -60,18 +60,6 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
             ),
         },
         {
-          path: 'rou-depreciation-schedule-view',
-          data: {
-            pageTitle: 'ERP | ROU Depreciation Schedule',
-            authorities: ['ROLE_LEASE_MANAGER'],
-          },
-          canActivate: [UserRouteAccessService],
-          loadChildren: () =>
-            import('./rou-depreciation-schedule-view/rou-depreciation-schedule-view.module').then(
-              m => m.RouDepreciationScheduleViewModule
-            ),
-        },
-        {
           path: 'rou-depreciation-schedule-view/report-nav',
           data: {
             pageTitle: 'ERP | ROU Depreciation Schedule',
@@ -81,6 +69,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           loadChildren: () =>
             import('./rou-depreciation-schedule-nav/rou-depreciation-schedule-nav.module').then(
               m => m.RouDepreciationScheduleNavModule
+            ),
+        },
+        {
+          path: 'rou-depreciation-schedule-view',
+          data: {
+            pageTitle: 'ERP | ROU Depreciation Schedule',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-depreciation-schedule-view/rou-depreciation-schedule-view.module').then(
+              m => m.RouDepreciationScheduleViewModule
             ),
         },
         {
