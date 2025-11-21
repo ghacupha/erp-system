@@ -62,6 +62,10 @@ public class LeaseAmortizationSchedule implements Serializable {
     @Field(type = FieldType.Boolean)
     private Boolean active = Boolean.TRUE;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "requestedBy", "leaseLiabilityScheduleItems" }, allowSetters = true)
+    private LeaseLiabilityCompilation leaseLiabilityCompilation;
+
     @OneToMany(mappedBy = "leaseAmortizationSchedule")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
@@ -142,6 +146,19 @@ public class LeaseAmortizationSchedule implements Serializable {
         return this;
     }
 
+    public LeaseLiabilityCompilation getLeaseLiabilityCompilation() {
+        return this.leaseLiabilityCompilation;
+    }
+
+    public void setLeaseLiabilityCompilation(LeaseLiabilityCompilation leaseLiabilityCompilation) {
+        this.leaseLiabilityCompilation = leaseLiabilityCompilation;
+    }
+
+    public LeaseAmortizationSchedule leaseLiabilityCompilation(LeaseLiabilityCompilation leaseLiabilityCompilation) {
+        this.setLeaseLiabilityCompilation(leaseLiabilityCompilation);
+        return this;
+    }
+
     public Set<LeaseLiabilityScheduleItem> getLeaseLiabilityScheduleItems() {
         return this.leaseLiabilityScheduleItems;
     }
@@ -212,6 +229,7 @@ public class LeaseAmortizationSchedule implements Serializable {
             "id=" + getId() +
             ", identifier='" + getIdentifier() + "'" +
             ", active='" + getActive() + "'" +
+            ", leaseLiabilityCompilation=" + (getLeaseLiabilityCompilation() != null ? getLeaseLiabilityCompilation().getId() : null) +
             "}";
     }
 }

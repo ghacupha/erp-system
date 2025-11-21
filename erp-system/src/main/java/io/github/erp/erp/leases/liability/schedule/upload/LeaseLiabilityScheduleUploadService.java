@@ -109,7 +109,8 @@ public class LeaseLiabilityScheduleUploadService {
             Long leaseAmortizationScheduleId = ensureLeaseAmortizationScheduleId(
                 request.getLeaseAmortizationScheduleId(),
                 leaseLiability,
-                leaseContract
+                leaseContract,
+                leaseLiabilityCompilationId
             );
 
             LeaseLiabilityScheduleFileUpload upload = new LeaseLiabilityScheduleFileUpload()
@@ -202,7 +203,8 @@ public class LeaseLiabilityScheduleUploadService {
     private Long ensureLeaseAmortizationScheduleId(
         Long scheduleId,
         LeaseLiability leaseLiability,
-        IFRS16LeaseContract leaseContract
+        IFRS16LeaseContract leaseContract,
+        Long leaseLiabilityCompilationId
     ) {
         if (scheduleId != null) {
             return scheduleId;
@@ -211,6 +213,12 @@ public class LeaseLiabilityScheduleUploadService {
         scheduleDTO.setIdentifier(UUID.randomUUID());
         scheduleDTO.setLeaseLiability(leaseLiabilityMapper.toDto(leaseLiability));
         scheduleDTO.setLeaseContract(ifrs16LeaseContractMapper.toDto(leaseContract));
+        scheduleDTO.setActive(Boolean.TRUE);
+        if (leaseLiabilityCompilationId != null) {
+            LeaseLiabilityCompilationDTO compilationDTO = new LeaseLiabilityCompilationDTO();
+            compilationDTO.setId(leaseLiabilityCompilationId);
+            scheduleDTO.setLeaseLiabilityCompilation(compilationDTO);
+        }
         return leaseAmortizationScheduleService.save(scheduleDTO).getId();
     }
 

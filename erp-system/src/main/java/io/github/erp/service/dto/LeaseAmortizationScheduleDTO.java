@@ -33,11 +33,13 @@ public class LeaseAmortizationScheduleDTO implements Serializable {
     private UUID identifier;
 
     @NotNull
-    private Boolean active;
+    private Boolean active = Boolean.TRUE;
 
     private LeaseLiabilityDTO leaseLiability;
 
     private IFRS16LeaseContractDTO leaseContract;
+
+    private LeaseLiabilityCompilationDTO leaseLiabilityCompilation;
 
     public Long getId() {
         return id;
@@ -79,6 +81,14 @@ public class LeaseAmortizationScheduleDTO implements Serializable {
         this.leaseContract = leaseContract;
     }
 
+    public LeaseLiabilityCompilationDTO getLeaseLiabilityCompilation() {
+        return leaseLiabilityCompilation;
+    }
+
+    public void setLeaseLiabilityCompilation(LeaseLiabilityCompilationDTO leaseLiabilityCompilation) {
+        this.leaseLiabilityCompilation = leaseLiabilityCompilation;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -109,6 +119,7 @@ public class LeaseAmortizationScheduleDTO implements Serializable {
             ", active='" + getActive() + "'" +
             ", leaseLiability=" + getLeaseLiability() +
             ", leaseContract=" + getLeaseContract() +
+            ", leaseLiabilityCompilation=" + getLeaseLiabilityCompilation() +
             "}";
     }
 }
