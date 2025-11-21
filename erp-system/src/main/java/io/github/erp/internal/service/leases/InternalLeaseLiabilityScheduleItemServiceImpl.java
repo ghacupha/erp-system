@@ -17,7 +17,9 @@ package io.github.erp.internal.service.leases;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.domain.LeaseAmortizationSchedule;
 import io.github.erp.domain.LeaseLiability;
+import io.github.erp.domain.LeaseLiabilityCompilation;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
 import io.github.erp.domain.LeaseRepaymentPeriod;
 import io.github.erp.repository.LeaseLiabilityCompilationRepository;
@@ -257,9 +259,14 @@ public class InternalLeaseLiabilityScheduleItemServiceImpl implements InternalLe
     public int updateActivationByAmortizationSchedule(Long scheduleId, boolean active) {
         log.debug("Request to update activation state for amortization schedule {} to {}", scheduleId, active);
         int affected = leaseLiabilityScheduleItemRepository.updateActiveStateByAmortizationSchedule(scheduleId, active);
-        if (affected > 0) {
-            affected += leaseAmortizationScheduleRepository.updateActiveStateById(scheduleId, active);
-        }
+        affected += leaseAmortizationScheduleRepository.updateActiveStateById(scheduleId, active);
+
+        leaseAmortizationScheduleRepository
+            .findById(scheduleId)
+            .map(LeaseAmortizationSchedule::getLeaseLiabilityCompilation)
+            .map(LeaseLiabilityCompilation::getId)
+            .ifPresent(compilationId -> leaseLiabilityCompilationRepository.updateActiveStateById(compilationId, active));
+
         return affected;
     }
 }

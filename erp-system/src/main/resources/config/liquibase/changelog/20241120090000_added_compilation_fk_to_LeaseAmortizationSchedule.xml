@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="20241120090000-add-compilation-fk-lease-amortization-schedule" author="agent">
+        <addColumn tableName="lease_amortization_schedule">
+            <column name="lease_liability_compilation_id" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint
+            baseColumnNames="lease_liability_compilation_id"
+            baseTableName="lease_amortization_schedule"
+            constraintName="fk_lease_amortization_schedule_compilation"
+            referencedColumnNames="id"
+            referencedTableName="lease_liability_compilation"/>
+    </changeSet>
+</databaseChangeLog>

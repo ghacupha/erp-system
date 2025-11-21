@@ -151,6 +151,18 @@ public class LeaseAmortizationScheduleQueryService extends QueryService<LeaseAmo
                         )
                     );
             }
+            if (criteria.getLeaseLiabilityCompilationId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeaseLiabilityCompilationId(),
+                            root ->
+                                root.join(LeaseAmortizationSchedule_.leaseLiabilityCompilation, JoinType.LEFT).get(
+                                    LeaseLiabilityCompilation_.id
+                                )
+                        )
+                    );
+            }
         }
         return specification;
     }
