@@ -1,0 +1,89 @@
+<div class="container-fluid py-3">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h3 class="mb-0">ROU Depreciation Schedule</h3>
+      <small class="text-muted">Amortisation by lease period for the selected contract</small>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <label class="mb-0 me-2" for="leaseContractSelect">Lease contract</label>
+      <select
+        id="leaseContractSelect"
+        class="form-select form-select-sm"
+        [value]="selectedContractId ?? ''"
+        (change)="onContractChange($event)"
+      >
+        <option value="">Select contract</option>
+        <option
+          *ngFor="let contract of leaseContracts; trackBy: trackContractById"
+          [value]="contract.id"
+        >
+          {{ contract.bookingId ?? contract.id }} — {{ contract.leaseTitle || contract.leaseContractTitle || 'Lease contract' }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loadError" class="alert alert-danger" role="alert">
+    {{ loadError }}
+  </div>
+
+  <div *ngIf="loading" class="alert alert-info" role="status">Loading depreciation schedule…</div>
+
+  <div *ngIf="!loading && scheduleRows.length === 0" class="alert alert-secondary" role="alert">
+    Select a lease contract to view its depreciation schedule.
+  </div>
+
+  <div *ngIf="scheduleRows.length > 0" class="row g-3 mb-3">
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted text-uppercase small">Initial ROU amount</div>
+          <div class="display-6">{{ initialAmount | number: '1.2-2' }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted text-uppercase small">Total depreciation</div>
+          <div class="display-6">{{ totalDepreciation | number: '1.2-2' }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted text-uppercase small">Closing net book value</div>
+          <div class="display-6">{{ closingBalance | number: '1.2-2' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive" *ngIf="scheduleRows.length > 0">
+    <table class="table table-sm align-middle table-striped">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Period</th>
+          <th scope="col">Start date</th>
+          <th scope="col">End date</th>
+          <th scope="col" class="text-end">Initial amount</th>
+          <th scope="col" class="text-end">Depreciation</th>
+          <th scope="col" class="text-end">Outstanding</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of scheduleRows; trackBy: trackRowById">
+          <td>{{ row.sequenceNumber ?? '-' }}</td>
+          <td>{{ row.periodCode || '—' }}</td>
+          <td>{{ formatDate(row.periodStartDate) }}</td>
+          <td>{{ formatDate(row.periodEndDate) }}</td>
+          <td class="text-end">{{ row.initialAmount | number: '1.2-2' }}</td>
+          <td class="text-end">{{ row.depreciationAmount | number: '1.2-2' }}</td>
+          <td class="text-end">{{ row.outstandingAmount | number: '1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
