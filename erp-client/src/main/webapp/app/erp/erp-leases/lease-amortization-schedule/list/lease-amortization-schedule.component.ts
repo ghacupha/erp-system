@@ -222,7 +222,13 @@ export class LeaseAmortizationScheduleComponent implements OnInit {
     if (!updated) {
       return;
     }
-    this.leaseAmortizationSchedules = this.leaseAmortizationSchedules.map(item => (item.id === updated.id ? { ...item, ...updated } : item));
+    this.leaseAmortizationSchedules = this.leaseAmortizationSchedules.map(item =>{
+      if (updated) {
+        return (item.id === updated.id ? { ...item, ...updated } : item);
+      } else {
+        return {};
+      }
+    });
   }
 
   private onRowActionError(id: number, message: string): void {
