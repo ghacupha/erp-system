@@ -1,7 +1,7 @@
 # ROU depreciation schedule dashboard (client)
 
-1. From any page, use the report search and select **ROU depreciation schedule** to open the dashboard.
-2. Choose the lease contract from the dropdown at the top right. The page reloads the ROU depreciation schedule for that contract.
+1. Open **Lease Reports → ROU Depreciation Schedule** to load the navigation form at `/rou-depreciation-schedule-view/report-nav`.
+2. Search for the IFRS16 lease contract in the M21 selector, submit the form, and land on `/erp/rou-depreciation-schedule-view/{contractId}`.
 3. Confirm the summary cards showing the initial ROU amount, cumulative depreciation and closing net book value.
 4. Review the table of lease periods with start/end dates, depreciation amounts and outstanding balance.
 5. Switch to another contract using the dropdown to compare results without leaving the view.

@@ -100,6 +100,19 @@
         <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
           <a
             class="dropdown-item"
+            [routerLink]="['/rou-depreciation-schedule-view/report-nav']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>ROU Depreciation Schedule</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
             [routerLink]="['/rou-depreciation-entry-report']"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
