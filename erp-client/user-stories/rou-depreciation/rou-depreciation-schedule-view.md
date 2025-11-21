@@ -4,8 +4,8 @@
 - **Role:** Lease accountant comparing right-of-use amortisation across contracts.
 
 ## Steps
-1. Starts typing "ROU depreciation schedule" into the report search bar and chooses the suggested dashboard.
-2. Arrives at `/erp/rou-depreciation-schedule-view` and selects a lease contract from the dropdown.
+1. Opens the "ROU Depreciation Schedule" item under Lease Reports, which loads the navigation form at `/rou-depreciation-schedule-view/report-nav`.
+2. Uses the IFRS16 lease contract search control to find the correct contract, submits the form, and lands on `/erp/rou-depreciation-schedule-view/{contractId}`.
 3. Confirms the initial ROU amount, total depreciation and closing NBV shown above the table.
 4. Scans the period rows to confirm each depreciation charge aligns with the lease period dates.
 5. Picks another lease contract from the dropdown to repeat the check without leaving the page.
