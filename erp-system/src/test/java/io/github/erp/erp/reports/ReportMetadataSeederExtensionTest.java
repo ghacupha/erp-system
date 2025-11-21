@@ -180,6 +180,17 @@ class ReportMetadataSeederExtensionTest {
             )
         ),
         Map.entry(
+            "erp/rou-depreciation-schedule-view",
+            new SeedDefinition(
+                "ROU Depreciation Schedule",
+                "Period-by-period amortisation of the right-of-use asset for a selected lease contract.",
+                "Leases",
+                "api/leases/rou-depreciation-schedule-view/{leaseContractId}",
+                true,
+                List.of(new FilterDefinition("Lease Contract", "leaseContractId.equals", "leaseContracts", "typeahead"))
+            )
+        ),
+        Map.entry(
             "reports/view/lease-liability-by-outlet",
             new SeedDefinition(
                 "Lease Liability by Service Outlet",
