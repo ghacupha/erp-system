@@ -91,7 +91,7 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             "ROU Depreciation Schedule",
             "Period-by-period amortisation of the right-of-use asset for a selected lease contract.",
             "Leases",
-            "erp/rou-depreciation-schedule-view",
+            "rou-depreciation-schedule-view",
             "api/leases/rou-depreciation-schedule-view/{leaseContractId}",
             true,
             List.of(filter("Lease Contract", "leaseContractId.equals", "leaseContracts", "typeahead"))

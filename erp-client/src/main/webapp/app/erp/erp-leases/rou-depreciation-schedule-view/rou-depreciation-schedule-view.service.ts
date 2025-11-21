@@ -18,7 +18,8 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import * as dayjs from 'dayjs';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
@@ -49,7 +50,7 @@ export class RouDepreciationScheduleViewService {
   loadSchedule(leaseContractId: number): Observable<RouDepreciationScheduleRow[]> {
     return this.http
       .get<RestRouDepreciationScheduleRow[]>(`${this.resourceUrl}/${leaseContractId}`)
-      .pipe(map(rows => rows.map(row => this.convertDateFromServer(row))));
+      .pipe(map((rows: any[]) => rows.map(row => this.convertDateFromServer(row))));
   }
 
   private convertDateFromServer(row: RestRouDepreciationScheduleRow): RouDepreciationScheduleRow {
