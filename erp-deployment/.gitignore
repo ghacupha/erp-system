@@ -7,11 +7,11 @@ business-documents/
 env.txt
 reports-directory/
 kafka-queue/
-search-index-directory/
-zookeeper-data/
-zookeeper-logs/
-postgresql-data/
-search-index-dev-directory/
 kafka-dev-queue/
+search-index-directory/
+search-index-dev-directory/
+zookeeper-data/
 zookeeper-dev-data/
 zookeeper-dev-logs/
+zookeeper-logs/
+postgresql-data/
