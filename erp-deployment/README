@@ -3,11 +3,3 @@ This is the client, system and elasticsearch servers deployment
 Simply run
 
 " docker-compose pull && docker-compose up -d && docker system prune "
-
-" docker-compose pull && docker-compose up -d && docker system prune "
-
-Local development services (Kafka/ZooKeeper/Elasticsearch) can be started separately to avoid clashing with the production stack:
-
-" docker-compose -f services-dev.yml up -d 
-
-The development services use ports 2182 (ZooKeeper), 9870/29093 (Kafka), 9771 (JHipster Registry), and 8840/8841 (Elasticsearch) so they can run alongside the production configuration.
