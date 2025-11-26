@@ -12,3 +12,4 @@
 ## Expected outcome
 - The schedule table shows the lease periods in order with depreciation and outstanding NBV values that match the backend calculation for the chosen contract.
 - The totals update automatically when the controller changes the selected contract.
+- Figures remain visible even if the backend responds with snake-case column names because the client normalises the payload before rendering.
