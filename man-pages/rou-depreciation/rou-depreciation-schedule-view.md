@@ -17,3 +17,7 @@ The depreciation run for right-of-use assets now exposes a schedule view that mi
 - Users can switch contracts via a dropdown, see headline totals (initial ROU, cumulative depreciation and closing NBV) and review the detailed per-period rows.
 
 This alignment keeps ROU depreciation insight discoverable from the reports search while providing a focused dashboard for auditors and controllers.
+
+### November 2025 regression fix
+
+Some environments send the depreciation schedule with snake-case column aliases (for example `period_start_date` and `depreciation_amount`). The Angular service now normalises those responses into camelCase before rendering, ensuring the headline totals and table cells populate even when the API returns tuple-backed maps.

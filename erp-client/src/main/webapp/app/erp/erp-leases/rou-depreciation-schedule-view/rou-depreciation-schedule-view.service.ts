@@ -36,10 +36,22 @@ export interface RouDepreciationScheduleRow {
   outstandingAmount?: number;
 }
 
-interface RestRouDepreciationScheduleRow extends Omit<RouDepreciationScheduleRow, 'periodStartDate' | 'periodEndDate'> {
-  periodStartDate?: string | null;
-  periodEndDate?: string | null;
-}
+type RestRouDepreciationScheduleRow =
+  | (Omit<RouDepreciationScheduleRow, 'periodStartDate' | 'periodEndDate'> & {
+      periodStartDate?: string | null;
+      periodEndDate?: string | null;
+    })
+  | {
+      entry_id?: number;
+      sequence_number?: number;
+      lease_number?: string;
+      period_code?: string;
+      period_start_date?: string | null;
+      period_end_date?: string | null;
+      initial_amount?: number;
+      depreciation_amount?: number;
+      outstanding_amount?: number;
+    };
 
 @Injectable({ providedIn: 'root' })
 export class RouDepreciationScheduleViewService {
@@ -50,14 +62,32 @@ export class RouDepreciationScheduleViewService {
   loadSchedule(leaseContractId: number): Observable<RouDepreciationScheduleRow[]> {
     return this.http
       .get<RestRouDepreciationScheduleRow[]>(`${this.resourceUrl}/${leaseContractId}`)
-      .pipe(map((rows: any[]) => rows.map(row => this.convertDateFromServer(row))));
+      .pipe(map(rows => rows.map(row => this.convertFromServer(row))));
   }
 
-  private convertDateFromServer(row: RestRouDepreciationScheduleRow): RouDepreciationScheduleRow {
+  private convertFromServer(row: RestRouDepreciationScheduleRow): RouDepreciationScheduleRow {
+    if ('entry_id' in row || 'sequence_number' in row) {
+      return {
+        entryId: row.entry_id,
+        sequenceNumber: row.sequence_number,
+        leaseNumber: row.lease_number,
+        periodCode: row.period_code,
+        periodStartDate: this.convertDate(row.period_start_date),
+        periodEndDate: this.convertDate(row.period_end_date),
+        initialAmount: row.initial_amount,
+        depreciationAmount: row.depreciation_amount,
+        outstandingAmount: row.outstanding_amount,
+      };
+    }
+
     return {
       ...row,
-      periodStartDate: row.periodStartDate ? dayjs(row.periodStartDate) : undefined,
-      periodEndDate: row.periodEndDate ? dayjs(row.periodEndDate) : undefined,
+      periodStartDate: this.convertDate(row.periodStartDate),
+      periodEndDate: this.convertDate(row.periodEndDate),
     };
+  }
+
+  private convertDate(value?: string | null): dayjs.Dayjs | undefined {
+    return value ? dayjs(value) : undefined;
   }
 }

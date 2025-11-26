@@ -20,3 +20,7 @@ Finance users can now open a dedicated dashboard for the right-of-use depreciati
 ## Data access
 
 The view calls `GET /api/leases/rou-depreciation-schedule-view/{leaseContractId}` through `RouDepreciationScheduleViewService`, which converts date strings to `dayjs` objects for display.
+
+### Recent fix: snake-case responses
+
+Some gateways return the schedule rows with snake-case keys (for example, `period_start_date` and `depreciation_amount`). The client now normalises both camelCase and snake-case payloads before rendering so that dates, charges and balances always appear in the summary cards and table.
