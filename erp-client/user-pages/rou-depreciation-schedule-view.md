@@ -6,4 +6,6 @@
 4. Review the table of lease periods with start/end dates, depreciation amounts and outstanding balance.
 5. Switch to another contract using the dropdown to compare results without leaving the view.
 
-If the page shows an error banner, reselect the contract or retry once the backend schedule API is available.
+If the page shows an error banner, reselect the contract or retry once the backend schedule API is available. If the table loads
+but amounts look blank, refresh the page—the client now normalises snake-case responses so the figures should render after
+reload.

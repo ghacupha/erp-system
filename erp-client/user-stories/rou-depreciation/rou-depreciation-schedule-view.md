@@ -13,3 +13,4 @@
 ## Expected outcome
 - The schedule table reloads for each selection, preserving the ordering by lease period and reflecting the backend depreciation results.
 - The summary figures refresh immediately when the selected contract changes.
+- Amounts populate even when the backend returns snake-case column names because the client normalises the payload before rendering.

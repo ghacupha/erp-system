@@ -12,3 +12,4 @@ Use this page to review the period-by-period depreciation of a right-of-use asse
 ## Notes
 - The table follows lease periods (not repayment periods) and is sorted in the same order as the depreciation run.
 - If the schedule fails to load, an alert appears so you can retry after verifying the contract selection.
+- If the schedule loads without amounts, refresh the page; the client now converts snake-case API responses so the figures populate after reload.
