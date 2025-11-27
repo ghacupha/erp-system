@@ -39,6 +39,7 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
   selectedContract?: IIFRS16LeaseContract;
   selectedContractId?: number;
   scheduleRows: RouDepreciationScheduleRow[] = [];
+  asAtDate: dayjs.Dayjs = dayjs();
   loading = false;
   loadError?: string;
   exportingCsv = false;
@@ -95,7 +96,6 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
     this.selectedContract = contract;
     if (this.selectedContractId !== id) {
       void this.router.navigate(['/rou-depreciation-schedule-view', id]);
-    }
   }
 
   get initialAmount(): number {
@@ -143,8 +143,9 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.loadError = undefined;
     this.exportError = undefined;
+    const asAtDate = this.asAtDate;
     this.scheduleService
-      .loadSchedule(contractId)
+      .loadSchedule(contractId, asAtDate)
       .pipe(
         catchError(() => {
           this.loadError = 'Unable to load depreciation schedule for the selected lease contract.';
@@ -153,7 +154,7 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(rows => {
-        this.scheduleRows = rows;
+        this.scheduleRows = this.filterRowsByAsAtDate(rows, asAtDate);
         this.loading = false;
       });
   }
@@ -238,5 +239,20 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
     const contractSegment = this.selectedContractId ? `-${this.selectedContractId}` : '';
     const timestamp = dayjs().format('YYYYMMDD');
     return `rou-depreciation-schedule${contractSegment}-${timestamp}.${extension}`;
+  }
+
+  private filterRowsByAsAtDate(rows: RouDepreciationScheduleRow[], asAtDate?: dayjs.Dayjs): RouDepreciationScheduleRow[] {
+    if (!asAtDate) {
+      return rows;
+    }
+
+    const asAtBoundary = asAtDate.endOf('day').valueOf();
+    return rows.filter(row => {
+      const comparisonDate = row.periodEndDate ?? row.periodStartDate;
+      if (!comparisonDate) {
+        return true;
+      }
+      return comparisonDate.endOf('day').valueOf() <= asAtBoundary;
+    });
   }
 }
