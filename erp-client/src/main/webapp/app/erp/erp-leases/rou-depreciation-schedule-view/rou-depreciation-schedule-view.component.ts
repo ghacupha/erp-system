@@ -36,7 +36,7 @@ import { ReportSummaryRecord } from 'app/erp/erp-reports/report-metadata/report-
   templateUrl: './rou-depreciation-schedule-view.component.html',
 })
 export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
-  leaseContracts: IIFRS16LeaseContract[] = [];
+  selectedContract?: IIFRS16LeaseContract;
   selectedContractId?: number;
   scheduleRows: RouDepreciationScheduleRow[] = [];
   loading = false;
@@ -55,23 +55,25 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loadLeaseContracts();
     this.routeSubscription = this.activatedRoute.paramMap.subscribe(params => {
       const idParam = params.get('leaseContractId');
       if (!idParam) {
         this.selectedContractId = undefined;
+        this.selectedContract = undefined;
         this.scheduleRows = [];
         return;
       }
       const parsedId = Number(idParam);
       if (Number.isNaN(parsedId)) {
         this.selectedContractId = undefined;
+        this.selectedContract = undefined;
         this.scheduleRows = [];
         this.loadError = 'The provided lease contract identifier is invalid.';
         return;
       }
       if (this.selectedContractId !== parsedId) {
         this.selectedContractId = parsedId;
+        this.ensureSelectedContractLoaded(parsedId);
         this.fetchSchedule(parsedId);
       }
     });
@@ -81,18 +83,17 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
     this.routeSubscription?.unsubscribe();
   }
 
-  trackContractById(_index: number, contract: IIFRS16LeaseContract): number | undefined {
-    return contract.id;
-  }
-
   trackRowById(_index: number, row: RouDepreciationScheduleRow): number | string | undefined {
     return row.entryId ?? row.sequenceNumber ?? row.periodCode;
   }
 
-  onContractChange(event: Event): void {
-    const select = event.target as HTMLSelectElement | null;
-    const id = select?.value ? Number(select.value) : NaN;
-    if (!Number.isNaN(id)) {
+  onContractSelected(contract: IIFRS16LeaseContract | null): void {
+    const id = contract?.id;
+    if (id === undefined || id === null) {
+      return;
+    }
+    this.selectedContract = contract;
+    if (this.selectedContractId !== id) {
       void this.router.navigate(['/rou-depreciation-schedule-view', id]);
     }
   }
@@ -124,29 +125,16 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
     this.exportSchedule('xlsx');
   }
 
-  private loadLeaseContracts(): void {
-    this.leaseContractService
-      .query({ sort: ['bookingId,asc'], size: 50 })
-      .pipe(catchError(() => of({ body: [] })))
-      .subscribe(response => {
-        this.leaseContracts = response.body ?? [];
-        if (this.selectedContractId) {
-          const exists = this.leaseContracts.some(contract => contract.id === this.selectedContractId);
-          if (!exists) {
-            this.loadLeaseContractPlaceholder(this.selectedContractId);
-          }
-        }
-      });
-  }
-
-  private loadLeaseContractPlaceholder(contractId: number): void {
+  private ensureSelectedContractLoaded(contractId: number): void {
+    if (this.selectedContract?.id === contractId) {
+      return;
+    }
     this.leaseContractService
       .find(contractId)
       .pipe(catchError(() => of({ body: undefined })))
       .subscribe(contractResponse => {
-        const contract = contractResponse.body;
-        if (contract) {
-          this.leaseContracts = [...this.leaseContracts, contract];
+        if (contractResponse.body) {
+          this.selectedContract = contractResponse.body;
         }
       });
   }
