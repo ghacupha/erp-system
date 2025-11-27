@@ -24,10 +24,7 @@ import * as dayjs from 'dayjs';
 
 import { IFRS16LeaseContractService } from '../ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
-import {
-  RouDepreciationScheduleRow,
-  RouDepreciationScheduleViewService,
-} from './rou-depreciation-schedule-view.service';
+import { RouDepreciationScheduleRow, RouDepreciationScheduleViewService } from './rou-depreciation-schedule-view.service';
 import { buildCsvContent, buildExcelArrayBuffer } from 'app/erp/erp-reports/report-summary-view/report-summary-export.util';
 import { ReportSummaryRecord } from 'app/erp/erp-reports/report-metadata/report-metadata.model';
 
@@ -36,7 +33,7 @@ import { ReportSummaryRecord } from 'app/erp/erp-reports/report-metadata/report-
   templateUrl: './rou-depreciation-schedule-view.component.html',
 })
 export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
-  selectedContract?: IIFRS16LeaseContract;
+  selectedContract: IIFRS16LeaseContract = {};
   selectedContractId?: number;
   scheduleRows: RouDepreciationScheduleRow[] = [];
   asAtDate: dayjs.Dayjs = dayjs();
@@ -60,14 +57,14 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
       const idParam = params.get('leaseContractId');
       if (!idParam) {
         this.selectedContractId = undefined;
-        this.selectedContract = undefined;
+        // this.selectedContract = undefined;
         this.scheduleRows = [];
         return;
       }
       const parsedId = Number(idParam);
       if (Number.isNaN(parsedId)) {
         this.selectedContractId = undefined;
-        this.selectedContract = undefined;
+        // this.selectedContract = undefined;
         this.scheduleRows = [];
         this.loadError = 'The provided lease contract identifier is invalid.';
         return;
@@ -90,12 +87,14 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
 
   onContractSelected(contract: IIFRS16LeaseContract | null): void {
     const id = contract?.id;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (id === undefined || id === null) {
       return;
     }
-    this.selectedContract = contract;
+    // this.selectedContract = contract;
     if (this.selectedContractId !== id) {
       void this.router.navigate(['/rou-depreciation-schedule-view', id]);
+    }
   }
 
   get initialAmount(): number {
@@ -126,7 +125,7 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
   }
 
   private ensureSelectedContractLoaded(contractId: number): void {
-    if (this.selectedContract?.id === contractId) {
+    if (this.selectedContract.id === contractId) {
       return;
     }
     this.leaseContractService
