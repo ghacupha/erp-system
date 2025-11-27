@@ -17,6 +17,7 @@
 ///
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject, of } from 'rxjs';
@@ -32,19 +33,6 @@ describe('RouDepreciationScheduleViewComponent', () => {
 
   const paramMap$ = new BehaviorSubject(convertToParamMap({ leaseContractId: '10' }));
   const leaseContractServiceStub = {
-    query: jasmine.createSpy('query').and.returnValue(
-      of(
-        new HttpResponse({
-          body: [
-            {
-              id: 10,
-              bookingId: 'LC-10',
-              leaseTitle: 'HQ Lease',
-            },
-          ],
-        })
-      )
-    ),
     find: jasmine.createSpy('find').and.returnValue(of(new HttpResponse({ body: { id: 10, bookingId: 'LC-10' } }))),
   } as Partial<IFRS16LeaseContractService>;
   const scheduleServiceStub = {
@@ -79,6 +67,7 @@ describe('RouDepreciationScheduleViewComponent', () => {
         { provide: IFRS16LeaseContractService, useValue: leaseContractServiceStub },
         { provide: RouDepreciationScheduleViewService, useValue: scheduleServiceStub },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RouDepreciationScheduleViewComponent);
@@ -89,6 +78,11 @@ describe('RouDepreciationScheduleViewComponent', () => {
   it('should load schedule rows from the service', () => {
     expect(scheduleServiceStub.loadSchedule).toHaveBeenCalledWith(10);
     expect(component.scheduleRows.length).toBe(2);
+  });
+
+  it('should load the selected contract for the route parameter', () => {
+    expect(leaseContractServiceStub.find).toHaveBeenCalledWith(10);
+    expect(component.selectedContract?.id).toBe(10);
   });
 
   it('should compute summary totals', () => {
