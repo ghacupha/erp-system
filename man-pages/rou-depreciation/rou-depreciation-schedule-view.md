@@ -7,6 +7,7 @@ The depreciation run for right-of-use assets now exposes a schedule view that mi
 ## Backend changes
 
 - A production endpoint at `GET /api/leases/rou-depreciation-schedule-view/{leaseContractId}` returns period-ordered rows with the initial amount, depreciation charge and outstanding net book value derived from `RouDepreciationEntry` and `LeasePeriod`.
+- The endpoint accepts an optional `asAtDate` (`YYYY-MM-DD`) query parameter so the client can request the schedule up to a specific cut-off.
 - Report metadata seeding registers the page under `erp/rou-depreciation-schedule-view`, allowing the navbar report search to surface the new view alongside other lease reports.
 - A companion navigation page at `/rou-depreciation-schedule-view/report-nav` uses the M21 IFRS16 lease control to locate the contract and forwards the user to the dashboard with the selected id.
 - The schedule data now chains each row's initial amount from the previous period's outstanding balance so the table mirrors the running net book value shown in the source depreciation entries.
@@ -15,8 +16,8 @@ The depreciation run for right-of-use assets now exposes a schedule view that mi
 
 - The new Angular component `RouDepreciationScheduleViewComponent` (path: `/erp/rou-depreciation-schedule-view/:leaseContractId?`) loads available IFRS16 lease contracts and drives the schedule API for the active selection.
 - A navigation component `RouDepreciationScheduleNavComponent` validates a contract choice, dispatches the selection to the store and routes to `/erp/rou-depreciation-schedule-view/{id}`.
-- Users can switch contracts via a dropdown, see headline totals (initial ROU, cumulative depreciation and closing NBV) and review the detailed per-period rows.
-- CSV and Excel export buttons mirror the report-summary export workflow but are scoped to the depreciation table; they generate a full extract of the visible schedule without any pagination limits.
+- Users can switch contracts via a dropdown, adjust an **As at** date picker (defaulting to today), see headline totals (initial ROU, cumulative depreciation and closing NBV) and review the detailed per-period rows through that cut-off.
+- CSV and Excel export buttons mirror the report-summary export workflow but are scoped to the depreciation table; they generate a full extract of the visible, date-filtered schedule without any pagination limits.
 
 This alignment keeps ROU depreciation insight discoverable from the reports search while providing a focused dashboard for auditors and controllers.
 

@@ -39,6 +39,7 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
   leaseContracts: IIFRS16LeaseContract[] = [];
   selectedContractId?: number;
   scheduleRows: RouDepreciationScheduleRow[] = [];
+  asAtDate: dayjs.Dayjs = dayjs();
   loading = false;
   loadError?: string;
   exportingCsv = false;
@@ -87,6 +88,21 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
 
   trackRowById(_index: number, row: RouDepreciationScheduleRow): number | string | undefined {
     return row.entryId ?? row.sequenceNumber ?? row.periodCode;
+  }
+
+  get asAtDateInput(): string {
+    return this.asAtDate ? this.asAtDate.format('YYYY-MM-DD') : '';
+  }
+
+  onAsAtDateChange(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    const value = input?.value;
+    const parsedDate = value ? dayjs(value) : dayjs();
+    this.asAtDate = parsedDate.isValid() ? parsedDate : dayjs();
+
+    if (this.selectedContractId) {
+      this.fetchSchedule(this.selectedContractId);
+    }
   }
 
   onContractChange(event: Event): void {
@@ -155,8 +171,9 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.loadError = undefined;
     this.exportError = undefined;
+    const asAtDate = this.asAtDate;
     this.scheduleService
-      .loadSchedule(contractId)
+      .loadSchedule(contractId, asAtDate)
       .pipe(
         catchError(() => {
           this.loadError = 'Unable to load depreciation schedule for the selected lease contract.';
@@ -165,7 +182,7 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(rows => {
-        this.scheduleRows = rows;
+        this.scheduleRows = this.filterRowsByAsAtDate(rows, asAtDate);
         this.loading = false;
       });
   }
@@ -250,5 +267,20 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
     const contractSegment = this.selectedContractId ? `-${this.selectedContractId}` : '';
     const timestamp = dayjs().format('YYYYMMDD');
     return `rou-depreciation-schedule${contractSegment}-${timestamp}.${extension}`;
+  }
+
+  private filterRowsByAsAtDate(rows: RouDepreciationScheduleRow[], asAtDate?: dayjs.Dayjs): RouDepreciationScheduleRow[] {
+    if (!asAtDate) {
+      return rows;
+    }
+
+    const asAtBoundary = asAtDate.endOf('day').valueOf();
+    return rows.filter(row => {
+      const comparisonDate = row.periodEndDate ?? row.periodStartDate;
+      if (!comparisonDate) {
+        return true;
+      }
+      return comparisonDate.endOf('day').valueOf() <= asAtBoundary;
+    });
   }
 }

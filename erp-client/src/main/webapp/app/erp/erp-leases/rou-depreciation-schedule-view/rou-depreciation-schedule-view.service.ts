@@ -17,7 +17,7 @@
 ///
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import * as dayjs from 'dayjs';
@@ -59,9 +59,15 @@ export class RouDepreciationScheduleViewService {
 
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
-  loadSchedule(leaseContractId: number): Observable<RouDepreciationScheduleRow[]> {
+  loadSchedule(leaseContractId: number, asAtDate?: dayjs.Dayjs): Observable<RouDepreciationScheduleRow[]> {
+    let params = new HttpParams();
+
+    if (asAtDate) {
+      params = params.set('asAtDate', asAtDate.format('YYYY-MM-DD'));
+    }
+
     return this.http
-      .get<RestRouDepreciationScheduleRow[]>(`${this.resourceUrl}/${leaseContractId}`)
+      .get<RestRouDepreciationScheduleRow[]>(`${this.resourceUrl}/${leaseContractId}`, { params })
       .pipe(map(rows => rows.map(row => this.convertFromServer(row))));
   }
 
