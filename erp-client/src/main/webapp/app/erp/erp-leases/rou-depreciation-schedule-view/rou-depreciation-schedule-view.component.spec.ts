@@ -22,6 +22,7 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject, of } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
+import * as dayjs from 'dayjs';
 
 import { IFRS16LeaseContractService } from '../ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 import { RouDepreciationScheduleViewService } from './rou-depreciation-schedule-view.service';
@@ -42,6 +43,7 @@ describe('RouDepreciationScheduleViewComponent', () => {
           entryId: 1,
           sequenceNumber: 1,
           periodCode: 'P1',
+          periodEndDate: dayjs('2023-01-31'),
           initialAmount: 100,
           depreciationAmount: 20,
           outstandingAmount: 80,
@@ -50,6 +52,7 @@ describe('RouDepreciationScheduleViewComponent', () => {
           entryId: 2,
           sequenceNumber: 2,
           periodCode: 'P2',
+          periodEndDate: dayjs('2023-02-28'),
           initialAmount: 100,
           depreciationAmount: 30,
           outstandingAmount: 50,
@@ -76,7 +79,9 @@ describe('RouDepreciationScheduleViewComponent', () => {
   });
 
   it('should load schedule rows from the service', () => {
-    expect(scheduleServiceStub.loadSchedule).toHaveBeenCalledWith(10);
+    expect(scheduleServiceStub.loadSchedule).toHaveBeenCalledWith(10, jasmine.anything());
+    const loadArgs = (scheduleServiceStub.loadSchedule as jasmine.Spy).calls.mostRecent().args;
+    expect(dayjs.isDayjs(loadArgs[1])).toBeTrue();
     expect(component.scheduleRows.length).toBe(2);
   });
 
@@ -89,5 +94,15 @@ describe('RouDepreciationScheduleViewComponent', () => {
     expect(component.initialAmount).toBe(100);
     expect(component.totalDepreciation).toBe(50);
     expect(component.closingBalance).toBe(50);
+  });
+
+  it('should filter rows and totals by the selected as-at date', () => {
+    component.asAtDate = dayjs('2023-01-31');
+    (component as any).fetchSchedule(10);
+
+    expect(component.scheduleRows.length).toBe(1);
+    expect(component.totalDepreciation).toBe(20);
+    expect(component.closingBalance).toBe(80);
+    expect(scheduleServiceStub.loadSchedule).toHaveBeenCalledWith(10, jasmine.anything());
   });
 });
