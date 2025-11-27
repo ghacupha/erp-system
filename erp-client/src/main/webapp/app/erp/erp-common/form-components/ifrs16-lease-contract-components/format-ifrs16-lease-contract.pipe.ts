@@ -26,6 +26,6 @@ export class FormatIfrs16LeaseContractPipe implements PipeTransform {
 
   transform(value: IIFRS16LeaseContract): string {
 
-    return `Id: ${value.id} | Booking #: ${value.bookingId} | Designation: ${value.shortTitle} | Serial ${value.serialNumber}`;
+    return `Id: ${value.id} | Booking #: ${value.bookingId} | Designation: ${value.shortTitle}`;
   }
 }
