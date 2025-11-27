@@ -28,6 +28,8 @@ import {
   RouDepreciationScheduleRow,
   RouDepreciationScheduleViewService,
 } from './rou-depreciation-schedule-view.service';
+import { buildCsvContent, buildExcelArrayBuffer } from 'app/erp/erp-reports/report-summary-view/report-summary-export.util';
+import { ReportSummaryRecord } from 'app/erp/erp-reports/report-metadata/report-metadata.model';
 
 @Component({
   selector: 'jhi-rou-depreciation-schedule-view',
@@ -39,6 +41,9 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
   scheduleRows: RouDepreciationScheduleRow[] = [];
   loading = false;
   loadError?: string;
+  exportingCsv = false;
+  exportingExcel = false;
+  exportError?: string;
 
   private routeSubscription?: Subscription;
 
@@ -111,6 +116,14 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
     return value ? value.format('DD MMM YYYY') : '';
   }
 
+  exportToCsv(): void {
+    this.exportSchedule('csv');
+  }
+
+  exportToExcel(): void {
+    this.exportSchedule('xlsx');
+  }
+
   private loadLeaseContracts(): void {
     this.leaseContractService
       .query({ sort: ['bookingId,asc'], size: 50 })
@@ -141,6 +154,7 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
   private fetchSchedule(contractId: number): void {
     this.loading = true;
     this.loadError = undefined;
+    this.exportError = undefined;
     this.scheduleService
       .loadSchedule(contractId)
       .pipe(
@@ -154,5 +168,87 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
         this.scheduleRows = rows;
         this.loading = false;
       });
+  }
+
+  private exportSchedule(format: 'csv' | 'xlsx'): void {
+    if (!this.scheduleRows.length) {
+      this.exportError = 'No depreciation schedule data is available to export.';
+      return;
+    }
+
+    if (this.exportingCsv || this.exportingExcel) {
+      return;
+    }
+
+    this.exportError = undefined;
+    if (format === 'csv') {
+      this.exportingCsv = true;
+    } else {
+      this.exportingExcel = true;
+    }
+
+    try {
+      const columns = ['Period', 'Start date', 'End date', 'Initial amount', 'Depreciation', 'Outstanding'];
+      const rows = this.buildExportRows();
+
+      if (format === 'csv') {
+        const csvContent = buildCsvContent(rows, columns, value => this.formatExportValue(value));
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        this.triggerDownload(blob, 'csv');
+      } else {
+        const excelBuffer = buildExcelArrayBuffer(rows, columns, value => this.formatExportValue(value));
+        const blob = new Blob([excelBuffer], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+        this.triggerDownload(blob, 'xlsx');
+      }
+    } catch (error) {
+      this.exportError = 'Unable to export the depreciation schedule right now.';
+    } finally {
+      if (format === 'csv') {
+        this.exportingCsv = false;
+      } else {
+        this.exportingExcel = false;
+      }
+    }
+  }
+
+  private buildExportRows(): ReportSummaryRecord[] {
+    return this.scheduleRows.map(row => ({
+      Period: row.periodCode ?? '',
+      'Start date': row.periodStartDate ? row.periodStartDate.format('YYYY-MM-DD') : '',
+      'End date': row.periodEndDate ? row.periodEndDate.format('YYYY-MM-DD') : '',
+      'Initial amount': row.initialAmount ?? 0,
+      Depreciation: row.depreciationAmount ?? 0,
+      Outstanding: row.outstandingAmount ?? 0,
+    }));
+  }
+
+  private formatExportValue(value: unknown): string {
+    if (value === null || value === undefined) {
+      return '';
+    }
+    if (typeof value === 'number') {
+      return value.toFixed(2);
+    }
+    if (dayjs.isDayjs(value)) {
+      return value.format('YYYY-MM-DD');
+    }
+    return String(value);
+  }
+
+  private triggerDownload(blob: Blob, extension: 'csv' | 'xlsx'): void {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = this.buildExportFileName(extension);
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  private buildExportFileName(extension: string): string {
+    const contractSegment = this.selectedContractId ? `-${this.selectedContractId}` : '';
+    const timestamp = dayjs().format('YYYYMMDD');
+    return `rou-depreciation-schedule${contractSegment}-${timestamp}.${extension}`;
   }
 }
