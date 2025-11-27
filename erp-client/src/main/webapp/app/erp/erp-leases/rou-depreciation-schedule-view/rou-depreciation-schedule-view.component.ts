@@ -36,7 +36,7 @@ import { ReportSummaryRecord } from 'app/erp/erp-reports/report-metadata/report-
   templateUrl: './rou-depreciation-schedule-view.component.html',
 })
 export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
-  selectedContract?: IIFRS16LeaseContract;
+  selectedContract: IIFRS16LeaseContract = {};
   selectedContractId?: number;
   scheduleRows: RouDepreciationScheduleRow[] = [];
   loading = false;
@@ -59,14 +59,14 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
       const idParam = params.get('leaseContractId');
       if (!idParam) {
         this.selectedContractId = undefined;
-        this.selectedContract = undefined;
+        this.selectedContract = {};
         this.scheduleRows = [];
         return;
       }
       const parsedId = Number(idParam);
       if (Number.isNaN(parsedId)) {
         this.selectedContractId = undefined;
-        this.selectedContract = undefined;
+        this.selectedContract = {};
         this.scheduleRows = [];
         this.loadError = 'The provided lease contract identifier is invalid.';
         return;
