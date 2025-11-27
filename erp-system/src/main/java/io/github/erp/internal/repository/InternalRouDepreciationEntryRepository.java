@@ -69,15 +69,15 @@ public interface InternalRouDepreciationEntryRepository
     @Query(
         nativeQuery = true,
         value =
-            "SELECT rde.id AS entry_id,\n" +
-            "       rde.sequence_number AS sequence_number,\n" +
-            "       COALESCE(contract.booking_id, '') AS lease_number,\n" +
-            "       lp.period_code AS period_code,\n" +
-            "       lp.start_date AS period_start_date,\n" +
-            "       lp.end_date AS period_end_date,\n" +
-            "       COALESCE(rmm.lease_amount, 0) AS initial_amount,\n" +
-            "       COALESCE(rde.depreciation_amount, 0) AS depreciation_amount,\n" +
-            "       COALESCE(rde.outstanding_amount, 0) AS outstanding_amount\n" +
+            "SELECT rde.id AS entryId,\n" +
+            "       rde.sequence_number AS sequenceNumber,\n" +
+            "       COALESCE(contract.booking_id, '') AS leaseNumber,\n" +
+            "       lp.period_code AS periodCode,\n" +
+            "       lp.start_date AS periodStartDate,\n" +
+            "       lp.end_date AS periodEndDate,\n" +
+            "       COALESCE(rmm.lease_amount, 0) AS initialAmount,\n" +
+            "       COALESCE(rde.depreciation_amount, 0) AS depreciationAmount,\n" +
+            "       COALESCE(rde.outstanding_amount, 0) AS outstandingAmount\n" +
             "FROM rou_depreciation_entry rde\n" +
             "JOIN lease_period lp ON lp.id = rde.lease_period_id\n" +
             "JOIN ifrs16lease_contract contract ON contract.id = rde.lease_contract_id\n" +
