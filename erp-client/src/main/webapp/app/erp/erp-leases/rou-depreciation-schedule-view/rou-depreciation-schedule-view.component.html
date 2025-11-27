@@ -4,34 +4,14 @@
       <h3 class="mb-0">ROU Depreciation Schedule</h3>
       <small class="text-muted">Amortisation by lease period for the selected contract</small>
     </div>
-    <div class="d-flex align-items-center gap-3 flex-wrap justify-content-end">
-      <div class="d-flex align-items-center gap-2">
-        <label class="mb-0 me-2" for="leaseContractSelect">Lease contract</label>
-        <select
-          id="leaseContractSelect"
-          class="form-select form-select-sm"
-          [value]="selectedContractId ?? ''"
-          (change)="onContractChange($event)"
-        >
-          <option value="">Select contract</option>
-          <option
-            *ngFor="let contract of leaseContracts; trackBy: trackContractById"
-            [value]="contract.id"
-          >
-            {{ contract.bookingId ?? contract.id }} — {{ contract.leaseTitle || contract.bookingId || 'Lease contract' }}
-          </option>
-        </select>
-      </div>
-      <div class="d-flex align-items-center gap-2">
-        <label class="mb-0 me-2" for="asAtDateInput">As at</label>
-        <input
-          id="asAtDateInput"
-          type="date"
-          class="form-control form-control-sm"
-          [value]="asAtDateInput"
-          (change)="onAsAtDateChange($event)"
-        />
-      </div>
+    <div class="flex-grow-1" style="min-width: 280px; max-width: 420px;">
+      <jhi-m21-ifrs16-lease-form-control
+        inputControlLabel="Lease contract (search to select)"
+        [inputValue]="selectedContract"
+        (valueSelected)="onContractSelected($event)"
+      >
+        <option [ngValue]="selectedContract"></option>
+      </jhi-m21-ifrs16-lease-form-control>
     </div>
   </div>
 
