@@ -47,6 +47,7 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
   exportError?: string;
 
   private routeSubscription?: Subscription;
+  private scheduleSubscription?: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -82,6 +83,7 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
+    this.scheduleSubscription?.unsubscribe();
   }
 
   trackRowById(_index: number, row: RouDepreciationScheduleRow): number | string | undefined {
@@ -140,11 +142,13 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
   }
 
   private fetchSchedule(contractId: number): void {
+    this.scheduleSubscription?.unsubscribe();
+
     this.loading = true;
     this.loadError = undefined;
     this.exportError = undefined;
     const asAtDate = this.asAtDate;
-    this.scheduleService
+    this.scheduleSubscription = this.scheduleService
       .loadSchedule(contractId, asAtDate)
       .pipe(
         catchError(() => {
