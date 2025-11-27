@@ -20,6 +20,9 @@ package io.github.erp.internal.service.rou;
 
 import io.github.erp.internal.model.RouDepreciationScheduleViewInternal;
 import io.github.erp.internal.repository.InternalRouDepreciationEntryRepository;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +44,121 @@ public class RouDepreciationScheduleViewServiceImpl implements RouDepreciationSc
     @Override
     public List<RouDepreciationScheduleViewInternal> getScheduleView(Long leaseContractId) {
         log.debug("Request to get ROU depreciation schedule view for lease contract: {}", leaseContractId);
-        return rouDepreciationEntryRepository.getRouDepreciationScheduleView(leaseContractId);
+        List<RouDepreciationScheduleViewInternal> schedule = rouDepreciationEntryRepository.getRouDepreciationScheduleView(leaseContractId);
+
+        if (schedule.isEmpty()) {
+            return schedule;
+        }
+
+        List<RouDepreciationScheduleViewInternal> adjustedSchedule = new ArrayList<>(schedule.size());
+        BigDecimal previousOutstanding = null;
+
+        for (int index = 0; index < schedule.size(); index++) {
+            RouDepreciationScheduleViewInternal row = schedule.get(index);
+            BigDecimal initialAmount;
+            if (index == 0) {
+                initialAmount = row.getInitialAmount();
+            } else {
+                initialAmount = previousOutstanding != null ? previousOutstanding : row.getInitialAmount();
+            }
+
+            adjustedSchedule.add(
+                new BasicRouDepreciationScheduleView(
+                    row.getEntryId(),
+                    row.getSequenceNumber(),
+                    row.getLeaseNumber(),
+                    row.getPeriodCode(),
+                    row.getPeriodStartDate(),
+                    row.getPeriodEndDate(),
+                    initialAmount,
+                    row.getDepreciationAmount(),
+                    row.getOutstandingAmount()
+                )
+            );
+
+            previousOutstanding = row.getOutstandingAmount();
+        }
+
+        return adjustedSchedule;
+    }
+
+    private static final class BasicRouDepreciationScheduleView implements RouDepreciationScheduleViewInternal {
+
+        private final Long entryId;
+        private final Integer sequenceNumber;
+        private final String leaseNumber;
+        private final String periodCode;
+        private final LocalDate periodStartDate;
+        private final LocalDate periodEndDate;
+        private final BigDecimal initialAmount;
+        private final BigDecimal depreciationAmount;
+        private final BigDecimal outstandingAmount;
+
+        private BasicRouDepreciationScheduleView(
+            Long entryId,
+            Integer sequenceNumber,
+            String leaseNumber,
+            String periodCode,
+            LocalDate periodStartDate,
+            LocalDate periodEndDate,
+            BigDecimal initialAmount,
+            BigDecimal depreciationAmount,
+            BigDecimal outstandingAmount
+        ) {
+            this.entryId = entryId;
+            this.sequenceNumber = sequenceNumber;
+            this.leaseNumber = leaseNumber;
+            this.periodCode = periodCode;
+            this.periodStartDate = periodStartDate;
+            this.periodEndDate = periodEndDate;
+            this.initialAmount = initialAmount;
+            this.depreciationAmount = depreciationAmount;
+            this.outstandingAmount = outstandingAmount;
+        }
+
+        @Override
+        public Long getEntryId() {
+            return entryId;
+        }
+
+        @Override
+        public Integer getSequenceNumber() {
+            return sequenceNumber;
+        }
+
+        @Override
+        public String getLeaseNumber() {
+            return leaseNumber;
+        }
+
+        @Override
+        public String getPeriodCode() {
+            return periodCode;
+        }
+
+        @Override
+        public LocalDate getPeriodStartDate() {
+            return periodStartDate;
+        }
+
+        @Override
+        public LocalDate getPeriodEndDate() {
+            return periodEndDate;
+        }
+
+        @Override
+        public BigDecimal getInitialAmount() {
+            return initialAmount;
+        }
+
+        @Override
+        public BigDecimal getDepreciationAmount() {
+            return depreciationAmount;
+        }
+
+        @Override
+        public BigDecimal getOutstandingAmount() {
+            return outstandingAmount;
+        }
     }
 }
