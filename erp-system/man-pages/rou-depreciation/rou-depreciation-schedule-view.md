@@ -23,6 +23,7 @@ A new production resource exposes the schedule in a read-only projection:
 - `InternalRouDepreciationEntryRepository` now publishes a native query that joins depreciation entries to their lease period, lease contract and ROU metadata. The query aliases columns so they hydrate the `RouDepreciationScheduleViewInternal` projection.
 - `RouDepreciationScheduleViewServiceImpl` wraps the repository call to keep scheduling logic out of the controller.
 - `RouDepreciationScheduleViewResourceProd` provides the REST entry point and logs the requested lease contract identifier for traceability.
+- The service now reapplies the running balance logic before returning the projection so that every row after the first reports the previous period's outstanding balance as its initial amount, matching the ledger chain shown in the depreciation entries.
 
 ### Front-end availability
 

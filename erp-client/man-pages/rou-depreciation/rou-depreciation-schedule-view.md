@@ -15,7 +15,8 @@ Finance users can now open a dedicated dashboard for the right-of-use depreciati
 - The navigation form validates that a lease contract has been selected, dispatches the `ifrs16LeaseContractReportSelected` action, and routes to `/erp/rou-depreciation-schedule-view/{id}`.
 - The dropdown at the top of the dashboard lists IFRS16 lease contracts (booking ID and title). Choosing a contract triggers a navigation that reloads the schedule for the new contract id, so the table can still be switched without returning to the launcher.
 - Totals at the top show the initial ROU amount, cumulative depreciation and closing net book value derived from the loaded schedule.
-- The table lists each lease period with start/end dates, the amortisation charge and the remaining net book value. Periods are shown in the order returned by the API to reflect the depreciation run.
+- The table lists each lease period with start/end dates, the amortisation charge and the remaining net book value. The "Initial amount" column uses the previous period's outstanding balance after the first row so the running NBV chain is visible directly in the grid. Periods are shown in the order returned by the API to reflect the depreciation run.
+- Export buttons generate CSV or Excel downloads of the visible table using the shared report-summary export helpers.
 
 ## Data access
 
