@@ -36,6 +36,7 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
   selectedContract: IIFRS16LeaseContract = {};
   selectedContractId?: number;
   scheduleRows: RouDepreciationScheduleRow[] = [];
+  asAtScheduleRows: RouDepreciationScheduleRow[] = [];
   asAtDate: dayjs.Dayjs = dayjs();
   loading = false;
   loadError?: string;
@@ -98,18 +99,20 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
   }
 
   get initialAmount(): number {
-    return this.scheduleRows.length > 0 ? this.scheduleRows[0].initialAmount ?? 0 : 0;
+    const rows = this.rowsForSummary;
+    return rows.length > 0 ? rows[0].initialAmount ?? 0 : 0;
   }
 
   get totalDepreciation(): number {
-    return this.scheduleRows.reduce((sum, row) => sum + (row.depreciationAmount ?? 0), 0);
+    return this.rowsForSummary.reduce((sum, row) => sum + (row.depreciationAmount ?? 0), 0);
   }
 
   get closingBalance(): number {
-    if (this.scheduleRows.length === 0) {
+    const rows = this.rowsForSummary;
+    if (rows.length === 0) {
       return 0;
     }
-    return this.scheduleRows[this.scheduleRows.length - 1].outstandingAmount ?? 0;
+    return rows[rows.length - 1].outstandingAmount ?? 0;
   }
 
   formatDate(value?: dayjs.Dayjs): string {
@@ -153,7 +156,8 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(rows => {
-        this.scheduleRows = this.filterRowsByAsAtDate(rows, asAtDate);
+        this.scheduleRows = rows;
+        this.asAtScheduleRows = this.filterRowsByAsAtDate(rows, asAtDate);
         this.loading = false;
       });
   }
@@ -238,6 +242,10 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
     const contractSegment = this.selectedContractId ? `-${this.selectedContractId}` : '';
     const timestamp = dayjs().format('YYYYMMDD');
     return `rou-depreciation-schedule${contractSegment}-${timestamp}.${extension}`;
+  }
+
+  private get rowsForSummary(): RouDepreciationScheduleRow[] {
+    return this.asAtScheduleRows.length > 0 ? this.asAtScheduleRows : this.scheduleRows;
   }
 
   private filterRowsByAsAtDate(rows: RouDepreciationScheduleRow[], asAtDate?: dayjs.Dayjs): RouDepreciationScheduleRow[] {

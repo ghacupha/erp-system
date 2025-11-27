@@ -83,6 +83,7 @@ describe('RouDepreciationScheduleViewComponent', () => {
     const loadArgs = (scheduleServiceStub.loadSchedule as jasmine.Spy).calls.mostRecent().args;
     expect(dayjs.isDayjs(loadArgs[1])).toBeTrue();
     expect(component.scheduleRows.length).toBe(2);
+    expect(component.asAtScheduleRows.length).toBe(2);
   });
 
   it('should load the selected contract for the route parameter', () => {
@@ -100,7 +101,8 @@ describe('RouDepreciationScheduleViewComponent', () => {
     component.asAtDate = dayjs('2023-01-31');
     (component as any).fetchSchedule(10);
 
-    expect(component.scheduleRows.length).toBe(1);
+    expect(component.scheduleRows.length).toBe(2);
+    expect(component.asAtScheduleRows.length).toBe(1);
     expect(component.totalDepreciation).toBe(20);
     expect(component.closingBalance).toBe(80);
     expect(scheduleServiceStub.loadSchedule).toHaveBeenCalledWith(10, jasmine.anything());
