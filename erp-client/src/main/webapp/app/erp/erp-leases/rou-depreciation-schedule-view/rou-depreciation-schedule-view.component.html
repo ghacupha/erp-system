@@ -60,6 +60,22 @@
     </div>
   </div>
 
+  <div *ngIf="scheduleRows.length > 0" class="d-flex align-items-center justify-content-between mb-2">
+    <div class="text-muted small">Export depreciation rows</div>
+    <div class="btn-group" role="group" aria-label="Export depreciation schedule">
+      <button type="button" class="btn btn-outline-primary btn-sm" (click)="exportToCsv()" [disabled]="exportingCsv || exportingExcel">
+        <span *ngIf="exportingCsv" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        Export CSV
+      </button>
+      <button type="button" class="btn btn-outline-success btn-sm" (click)="exportToExcel()" [disabled]="exportingCsv || exportingExcel">
+        <span *ngIf="exportingExcel" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        Export Excel
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="exportError" class="alert alert-warning" role="alert">{{ exportError }}</div>
+
   <div class="table-responsive" *ngIf="scheduleRows.length > 0">
     <table class="table table-sm align-middle table-striped">
       <thead class="table-light">
