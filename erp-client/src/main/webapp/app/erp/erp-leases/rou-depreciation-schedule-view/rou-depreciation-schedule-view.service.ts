@@ -53,6 +53,23 @@ type RestRouDepreciationScheduleRow =
       outstanding_amount?: number;
     };
 
+type RestCamelRouDepreciationScheduleRow = Omit<RouDepreciationScheduleRow, 'periodStartDate' | 'periodEndDate'> & {
+  periodStartDate?: string | null;
+  periodEndDate?: string | null;
+};
+
+type RestSnakeRouDepreciationScheduleRow = {
+  entry_id?: number;
+  sequence_number?: number;
+  lease_number?: string;
+  period_code?: string;
+  period_start_date?: string | null;
+  period_end_date?: string | null;
+  initial_amount?: number;
+  depreciation_amount?: number;
+  outstanding_amount?: number;
+};
+
 @Injectable({ providedIn: 'root' })
 export class RouDepreciationScheduleViewService {
   private readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/leases/rou-depreciation-schedule-view');
@@ -72,7 +89,7 @@ export class RouDepreciationScheduleViewService {
   }
 
   private convertFromServer(row: RestRouDepreciationScheduleRow): RouDepreciationScheduleRow {
-    if ('entry_id' in row || 'sequence_number' in row) {
+    if (this.isSnakeCaseRow(row)) {
       return {
         entryId: row.entry_id,
         sequenceNumber: row.sequence_number,
@@ -86,11 +103,17 @@ export class RouDepreciationScheduleViewService {
       };
     }
 
+    const camelCaseRow = row as RestCamelRouDepreciationScheduleRow;
+
     return {
-      ...row,
-      periodStartDate: this.convertDate(row.periodStartDate),
-      periodEndDate: this.convertDate(row.periodEndDate),
+      ...camelCaseRow,
+      periodStartDate: this.convertDate(camelCaseRow.periodStartDate),
+      periodEndDate: this.convertDate(camelCaseRow.periodEndDate),
     };
+  }
+
+  private isSnakeCaseRow(row: RestRouDepreciationScheduleRow): row is RestSnakeRouDepreciationScheduleRow {
+    return 'entry_id' in row || 'sequence_number' in row;
   }
 
   private convertDate(value?: string | null): dayjs.Dayjs | undefined {
