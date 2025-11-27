@@ -20,11 +20,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { SharedModule } from 'app/shared/shared.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 import { RouDepreciationScheduleViewComponent } from './rou-depreciation-schedule-view.component';
 import { rouDepreciationScheduleViewRoute } from './rou-depreciation-schedule-view.route';
 
 @NgModule({
-  imports: [SharedModule, RouterModule.forChild(rouDepreciationScheduleViewRoute)],
+  imports: [SharedModule, ErpCommonModule, RouterModule.forChild(rouDepreciationScheduleViewRoute)],
   declarations: [RouDepreciationScheduleViewComponent],
 })
 export class RouDepreciationScheduleViewModule {}
