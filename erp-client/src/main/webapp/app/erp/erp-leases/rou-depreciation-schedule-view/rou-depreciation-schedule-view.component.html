@@ -1,25 +1,37 @@
 <div class="container-fluid py-3">
-  <div class="d-flex align-items-center justify-content-between mb-3">
+  <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-3">
     <div>
       <h3 class="mb-0">ROU Depreciation Schedule</h3>
       <small class="text-muted">Amortisation by lease period for the selected contract</small>
     </div>
-    <div class="d-flex align-items-center gap-2">
-      <label class="mb-0 me-2" for="leaseContractSelect">Lease contract</label>
-      <select
-        id="leaseContractSelect"
-        class="form-select form-select-sm"
-        [value]="selectedContractId ?? ''"
-        (change)="onContractChange($event)"
-      >
-        <option value="">Select contract</option>
-        <option
-          *ngFor="let contract of leaseContracts; trackBy: trackContractById"
-          [value]="contract.id"
+    <div class="d-flex align-items-center gap-3 flex-wrap justify-content-end">
+      <div class="d-flex align-items-center gap-2">
+        <label class="mb-0 me-2" for="leaseContractSelect">Lease contract</label>
+        <select
+          id="leaseContractSelect"
+          class="form-select form-select-sm"
+          [value]="selectedContractId ?? ''"
+          (change)="onContractChange($event)"
         >
-          {{ contract.bookingId ?? contract.id }} — {{ contract.leaseTitle || contract.bookingId || 'Lease contract' }}
-        </option>
-      </select>
+          <option value="">Select contract</option>
+          <option
+            *ngFor="let contract of leaseContracts; trackBy: trackContractById"
+            [value]="contract.id"
+          >
+            {{ contract.bookingId ?? contract.id }} — {{ contract.leaseTitle || contract.bookingId || 'Lease contract' }}
+          </option>
+        </select>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <label class="mb-0 me-2" for="asAtDateInput">As at</label>
+        <input
+          id="asAtDateInput"
+          type="date"
+          class="form-control form-control-sm"
+          [value]="asAtDateInput"
+          (change)="onAsAtDateChange($event)"
+        />
+      </div>
     </div>
   </div>
 
