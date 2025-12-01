@@ -1,4 +1,4 @@
-package io.github.erp.repository;
+package io.github.erp.erp.leases.payments.upload.queue;
 
 /*-
  * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
@@ -17,21 +17,29 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.LeasePayment;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import org.springframework.data.jpa.repository.*;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
-/**
- * Spring Data SQL repository for the LeasePayment entity.
- */
-@SuppressWarnings("unused")
-@Repository
-public interface LeasePaymentRepository extends JpaRepository<LeasePayment, Long>, JpaSpecificationExecutor<LeasePayment> {
-    @Modifying
-    @Query("update LeasePayment lp set lp.active = :active where lp.leasePaymentUpload.id = :uploadId")
-    void updateActiveFlagForUpload(@Param("active") Boolean active, @Param("uploadId") Long uploadId);
+public class LeasePaymentReindexMessage implements Serializable {
 
-    List<LeasePayment> findAllByLeasePaymentUploadId(Long uploadId);
+    private List<Long> paymentIds = new ArrayList<>();
+    private Boolean active;
+
+    public List<Long> getPaymentIds() {
+        return paymentIds;
+    }
+
+    public void setPaymentIds(List<Long> paymentIds) {
+        this.paymentIds = paymentIds;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
