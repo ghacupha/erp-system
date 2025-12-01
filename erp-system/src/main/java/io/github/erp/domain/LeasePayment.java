@@ -49,6 +49,13 @@ public class LeasePayment implements Serializable {
     @Column(name = "payment_date")
     private LocalDate paymentDate;
 
+    @Column(name = "active")
+    private Boolean active = Boolean.TRUE;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "leaseContract", "csvFileUpload", "leasePayments" }, allowSetters = true)
+    private LeasePaymentUpload leasePaymentUpload;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
@@ -106,6 +113,32 @@ public class LeasePayment implements Serializable {
         this.paymentDate = paymentDate;
     }
 
+    public Boolean getActive() {
+        return this.active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public LeasePayment active(Boolean active) {
+        this.setActive(active);
+        return this;
+    }
+
+    public LeasePaymentUpload getLeasePaymentUpload() {
+        return this.leasePaymentUpload;
+    }
+
+    public void setLeasePaymentUpload(LeasePaymentUpload leasePaymentUpload) {
+        this.leasePaymentUpload = leasePaymentUpload;
+    }
+
+    public LeasePayment leasePaymentUpload(LeasePaymentUpload leasePaymentUpload) {
+        this.setLeasePaymentUpload(leasePaymentUpload);
+        return this;
+    }
+
     public IFRS16LeaseContract getLeaseContract() {
         return this.leaseContract;
     }
@@ -145,6 +178,7 @@ public class LeasePayment implements Serializable {
             "id=" + getId() +
             ", paymentAmount=" + getPaymentAmount() +
             ", paymentDate='" + getPaymentDate() + "'" +
+            ", active=" + getActive() +
             "}";
     }
 }

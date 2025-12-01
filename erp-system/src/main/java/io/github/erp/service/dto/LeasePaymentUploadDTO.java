@@ -17,26 +17,24 @@ package io.github.erp.service.dto;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Objects;
-import javax.validation.constraints.*;
 
-/**
- * A DTO for the {@link io.github.erp.domain.LeasePayment} entity.
- */
-public class LeasePaymentDTO implements Serializable {
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.Objects;
+import javax.validation.constraints.NotNull;
+
+public class LeasePaymentUploadDTO implements Serializable {
 
     private Long id;
 
-    private BigDecimal paymentAmount;
+    private String uploadStatus;
 
-    private LocalDate paymentDate;
+    @NotNull
+    private Instant createdAt;
 
     private Boolean active;
 
-    private LeasePaymentUploadDTO leasePaymentUpload;
+    private CsvFileUploadDTO csvFileUpload;
 
     private IFRS16LeaseContractDTO leaseContract;
 
@@ -48,20 +46,20 @@ public class LeasePaymentDTO implements Serializable {
         this.id = id;
     }
 
-    public BigDecimal getPaymentAmount() {
-        return paymentAmount;
+    public String getUploadStatus() {
+        return uploadStatus;
     }
 
-    public void setPaymentAmount(BigDecimal paymentAmount) {
-        this.paymentAmount = paymentAmount;
+    public void setUploadStatus(String uploadStatus) {
+        this.uploadStatus = uploadStatus;
     }
 
-    public LocalDate getPaymentDate() {
-        return paymentDate;
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 
-    public void setPaymentDate(LocalDate paymentDate) {
-        this.paymentDate = paymentDate;
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Boolean getActive() {
@@ -72,12 +70,12 @@ public class LeasePaymentDTO implements Serializable {
         this.active = active;
     }
 
-    public LeasePaymentUploadDTO getLeasePaymentUpload() {
-        return leasePaymentUpload;
+    public CsvFileUploadDTO getCsvFileUpload() {
+        return csvFileUpload;
     }
 
-    public void setLeasePaymentUpload(LeasePaymentUploadDTO leasePaymentUpload) {
-        this.leasePaymentUpload = leasePaymentUpload;
+    public void setCsvFileUpload(CsvFileUploadDTO csvFileUpload) {
+        this.csvFileUpload = csvFileUpload;
     }
 
     public IFRS16LeaseContractDTO getLeaseContract() {
@@ -93,15 +91,15 @@ public class LeasePaymentDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof LeasePaymentDTO)) {
+        if (!(o instanceof LeasePaymentUploadDTO)) {
             return false;
         }
 
-        LeasePaymentDTO leasePaymentDTO = (LeasePaymentDTO) o;
+        LeasePaymentUploadDTO leasePaymentUploadDTO = (LeasePaymentUploadDTO) o;
         if (this.id == null) {
             return false;
         }
-        return Objects.equals(this.id, leasePaymentDTO.id);
+        return Objects.equals(this.id, leasePaymentUploadDTO.id);
     }
 
     @Override
@@ -109,16 +107,13 @@ public class LeasePaymentDTO implements Serializable {
         return Objects.hash(this.id);
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "LeasePaymentDTO{" +
+        return "LeasePaymentUploadDTO{" +
             "id=" + getId() +
-            ", paymentAmount=" + getPaymentAmount() +
-            ", paymentDate='" + getPaymentDate() + "'" +
+            ", uploadStatus='" + getUploadStatus() + '\'' +
+            ", createdAt=" + getCreatedAt() +
             ", active=" + getActive() +
-            ", leasePaymentUpload=" + getLeasePaymentUpload() +
-            ", leaseContract=" + getLeaseContract() +
             "}";
     }
 }

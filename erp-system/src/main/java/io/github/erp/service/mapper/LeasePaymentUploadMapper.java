@@ -1,4 +1,4 @@
-package io.github.erp.repository;
+package io.github.erp.service.mapper;
 
 /*-
  * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
@@ -17,18 +17,19 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.LeasePayment;
-import org.springframework.data.jpa.repository.*;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
-/**
- * Spring Data SQL repository for the LeasePayment entity.
- */
-@SuppressWarnings("unused")
-@Repository
-public interface LeasePaymentRepository extends JpaRepository<LeasePayment, Long>, JpaSpecificationExecutor<LeasePayment> {
-    @Modifying
-    @Query("update LeasePayment lp set lp.active = :active where lp.leasePaymentUpload.id = :uploadId")
-    void updateActiveFlagForUpload(@Param("active") Boolean active, @Param("uploadId") Long uploadId);
+import io.github.erp.domain.LeasePaymentUpload;
+import io.github.erp.service.dto.LeasePaymentUploadDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+@Mapper(componentModel = "spring", uses = { CsvFileUploadMapper.class, IFRS16LeaseContractMapper.class })
+public interface LeasePaymentUploadMapper extends EntityMapper<LeasePaymentUploadDTO, LeasePaymentUpload> {
+    @Mapping(target = "leaseContract", source = "leaseContract", qualifiedByName = "bookingId")
+    LeasePaymentUploadDTO toDto(LeasePaymentUpload s);
+
+    @Named("id")
+    @Mapping(target = "id", source = "id")
+    LeasePaymentUploadDTO toDtoId(LeasePaymentUpload leasePaymentUpload);
 }

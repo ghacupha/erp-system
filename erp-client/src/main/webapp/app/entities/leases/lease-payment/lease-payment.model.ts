@@ -18,11 +18,14 @@
 
 import * as dayjs from 'dayjs';
 import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { ILeasePaymentUploadRecord } from '../../../erp/erp-leases/lease-payment-upload/lease-payment-upload.model';
 
 export interface ILeasePayment {
   id?: number;
   paymentDate?: dayjs.Dayjs | null;
   paymentAmount?: number | null;
+  active?: boolean | null;
+  leasePaymentUpload?: ILeasePaymentUploadRecord | null;
   leaseContract?: IIFRS16LeaseContract;
 }
 
@@ -31,6 +34,8 @@ export class LeasePayment implements ILeasePayment {
     public id?: number,
     public paymentDate?: dayjs.Dayjs | null,
     public paymentAmount?: number | null,
+    public active?: boolean | null,
+    public leasePaymentUpload?: ILeasePaymentUploadRecord | null,
     public leaseContract?: IIFRS16LeaseContract
   ) {}
 }

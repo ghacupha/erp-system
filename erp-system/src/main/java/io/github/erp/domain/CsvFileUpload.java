@@ -71,6 +71,9 @@ public class CsvFileUpload implements Serializable {
     @OneToOne(mappedBy = "csvFileUpload")
     private LeaseLiabilityScheduleFileUpload leaseLiabilityScheduleFileUpload;
 
+    @OneToOne(mappedBy = "csvFileUpload")
+    private LeasePaymentUpload leasePaymentUpload;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -196,6 +199,14 @@ public class CsvFileUpload implements Serializable {
 
     public void setLeaseLiabilityScheduleFileUpload(LeaseLiabilityScheduleFileUpload leaseLiabilityScheduleFileUpload) {
         this.leaseLiabilityScheduleFileUpload = leaseLiabilityScheduleFileUpload;
+    }
+
+    public LeasePaymentUpload getLeasePaymentUpload() {
+        return leasePaymentUpload;
+    }
+
+    public void setLeasePaymentUpload(LeasePaymentUpload leasePaymentUpload) {
+        this.leasePaymentUpload = leasePaymentUpload;
     }
 
     @Override

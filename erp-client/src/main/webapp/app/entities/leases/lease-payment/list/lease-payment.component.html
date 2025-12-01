@@ -72,6 +72,8 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentDate"><span>Payment Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentAmount"><span>Payment Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="active"><span>Active</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"><span>Upload</span></th>
           <th scope="col" jhiSortBy="leaseContract.bookingId"><span>Lease Contract</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -84,10 +86,16 @@
           <td>{{ leasePayment.paymentDate | formatMediumDate }}</td>
           <td>{{ leasePayment.paymentAmount }}</td>
           <td>
+            <span class="badge" [ngClass]="leasePayment.active ? 'bg-success' : 'bg-secondary'">
+              {{ leasePayment.active ? 'Yes' : 'No' }}
+            </span>
+          </td>
+          <td>
+            <span *ngIf="leasePayment.leasePaymentUpload">{{ leasePayment.leasePaymentUpload?.id }}</span>
+          </td>
+          <td>
             <div *ngIf="leasePayment.leaseContract">
-              <a [routerLink]="['/ifrs-16-lease-contract', leasePayment.leaseContract?.id, 'view']">{{
-                leasePayment.leaseContract?.bookingId
-              }}</a>
+              <a [routerLink]="['/ifrs-16-lease-contract', leasePayment.leaseContract?.id, 'view']">{{ leasePayment.leaseContract?.bookingId }}</a>
             </div>
           </td>
           <td class="text-right">

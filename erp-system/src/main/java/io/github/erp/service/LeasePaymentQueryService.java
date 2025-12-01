@@ -121,6 +121,18 @@ public class LeasePaymentQueryService extends QueryService<LeasePayment> {
             if (criteria.getPaymentDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPaymentDate(), LeasePayment_.paymentDate));
             }
+            if (criteria.getActive() != null) {
+                specification = specification.and(buildSpecification(criteria.getActive(), LeasePayment_.active));
+            }
+            if (criteria.getLeasePaymentUploadId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeasePaymentUploadId(),
+                            root -> root.join(LeasePayment_.leasePaymentUpload, JoinType.LEFT).get(LeasePaymentUpload_.id)
+                        )
+                    );
+            }
             if (criteria.getLeaseContractId() != null) {
                 specification =
                     specification.and(
