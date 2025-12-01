@@ -1,0 +1,114 @@
+<!--
+
+    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-10">
+    <form [formGroup]="editForm" (ngSubmit)="submitUpload()" novalidate>
+      <h2 id="jhi-lease-payment-upload-heading">Lease Payment Upload</h2>
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <div class="alert alert-danger" *ngIf="uploadError">{{ uploadError }}</div>
+      <div class="alert alert-success" *ngIf="uploadResponse">
+        <div>Upload ID: {{ uploadResponse?.uploadId }}</div>
+        <div>CSV File ID: {{ uploadResponse?.csvFileId }}</div>
+        <div>File name: {{ uploadResponse?.storedFileName }}</div>
+        <div>Status: {{ uploadResponse?.uploadStatus }}</div>
+        <button class="btn btn-link p-0" type="button" (click)="clearUploadResponse()">Clear</button>
+      </div>
+
+      <jhi-m21-ifrs16-lease-form-control
+        ngDefaultControl
+        formControlName="leaseContract"
+        inputControlLabel="IFRS16 Lease Contract"
+        [inputValue]="editForm.get('leaseContract')!.value"
+        (valueSelected)="onLeaseContractSelected($event)"
+      >
+        <option [ngValue]="editForm.get('leaseContract')!.value"></option>
+      </jhi-m21-ifrs16-lease-form-control>
+
+      <div class="form-group">
+        <label class="form-control-label" for="field_csv_file">Upload CSV File</label>
+        <input
+          type="file"
+          class="form-control-file"
+          id="field_csv_file"
+          accept=".csv,text/csv"
+          (change)="onFileSelected($event)"
+        />
+        <small class="form-text text-muted" *ngIf="selectedFileName">
+          Selected file: {{ selectedFileName }}
+        </small>
+      </div>
+
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="field_launch_batch" formControlName="launchBatchImmediately" />
+        <label class="form-check-label" for="field_launch_batch">Launch batch immediately</label>
+      </div>
+
+      <div class="mt-3">
+        <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || isUploading">
+          <fa-icon icon="upload"></fa-icon>&nbsp;Submit Upload
+        </button>
+      </div>
+    </form>
+
+    <hr />
+
+    <h3 class="mt-3">Previous uploads</h3>
+    <div class="table-responsive" *ngIf="uploads && uploads.length > 0">
+      <table class="table table-striped" aria-describedby="lease-payment-uploads">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Contract</th>
+            <th scope="col">Created</th>
+            <th scope="col">Status</th>
+            <th scope="col">Active</th>
+            <th scope="col">File</th>
+            <th scope="col" class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let upload of uploads; trackBy: trackById">
+            <td>{{ upload.id }}</td>
+            <td>{{ upload.leaseContract?.bookingId }}</td>
+            <td>{{ upload.createdAt?.format('YYYY-MM-DD HH:mm') }}</td>
+            <td>{{ upload.uploadStatus }}</td>
+            <td>
+              <span class="badge" [ngClass]="upload.active ? 'bg-success' : 'bg-secondary'">{{ upload.active ? 'Yes' : 'No' }}</span>
+            </td>
+            <td>{{ upload.csvFileUpload?.storedFileName }}</td>
+            <td class="text-end">
+              <button
+                type="button"
+                class="btn btn-warning btn-sm"
+                [disabled]="!upload.active || isLoadingUploads"
+                (click)="deactivate(upload)"
+              >
+                Deactivate
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="uploads && uploads.length === 0" class="alert alert-info">No uploads recorded yet.</div>
+  </div>
+</div>
