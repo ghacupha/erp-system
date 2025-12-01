@@ -1,0 +1,179 @@
+package io.github.erp.erp.leases.payments.upload;
+
+/*-
+ * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
+ * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import io.github.erp.domain.CsvFileUpload;
+import io.github.erp.domain.IFRS16LeaseContract;
+import io.github.erp.domain.LeasePaymentUpload;
+import io.github.erp.internal.files.FileStorageService;
+import io.github.erp.repository.CsvFileUploadRepository;
+import io.github.erp.repository.IFRS16LeaseContractRepository;
+import io.github.erp.repository.LeasePaymentRepository;
+import io.github.erp.repository.LeasePaymentUploadRepository;
+import io.github.erp.service.dto.LeasePaymentUploadDTO;
+import io.github.erp.service.mapper.LeasePaymentUploadMapper;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.util.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+@Service
+@Transactional
+public class LeasePaymentUploadService {
+
+    private static final Logger log = LoggerFactory.getLogger(LeasePaymentUploadService.class);
+
+    private final FileStorageService storageService;
+    private final CsvFileUploadRepository csvFileUploadRepository;
+    private final LeasePaymentUploadRepository leasePaymentUploadRepository;
+    private final IFRS16LeaseContractRepository leaseContractRepository;
+    private final LeasePaymentUploadMapper leasePaymentUploadMapper;
+    private final LeasePaymentUploadJobLauncher jobLauncher;
+    private final LeasePaymentRepository leasePaymentRepository;
+    private final Path storageRoot;
+
+    public LeasePaymentUploadService(
+        @Qualifier("csvUploadFSStorageService") FileStorageService storageService,
+        CsvFileUploadRepository csvFileUploadRepository,
+        LeasePaymentUploadRepository leasePaymentUploadRepository,
+        IFRS16LeaseContractRepository leaseContractRepository,
+        LeasePaymentUploadMapper leasePaymentUploadMapper,
+        LeasePaymentUploadJobLauncher jobLauncher,
+        LeasePaymentRepository leasePaymentRepository,
+        @Value("${erp.csv-upload.storage-path:${java.io.tmpdir}/erp/csv-uploads}") String storagePath
+    ) {
+        this.storageService = storageService;
+        this.csvFileUploadRepository = csvFileUploadRepository;
+        this.leasePaymentUploadRepository = leasePaymentUploadRepository;
+        this.leaseContractRepository = leaseContractRepository;
+        this.leasePaymentUploadMapper = leasePaymentUploadMapper;
+        this.jobLauncher = jobLauncher;
+        this.leasePaymentRepository = leasePaymentRepository;
+        this.storageRoot = Paths.get(storagePath);
+    }
+
+    public LeasePaymentUploadResponse handleUpload(LeasePaymentUploadRequest request, MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("A CSV file must be provided");
+        }
+
+        try {
+            log.info("Storing lease payment upload for contract {}", request.getLeaseContractId());
+            String storedFileName = buildStoredFileName(file.getOriginalFilename());
+            byte[] fileContent = file.getBytes();
+            storageService.save(fileContent, storedFileName);
+            CsvFileUpload csvFileUpload = persistCsvMetadata(file, storedFileName, fileContent);
+
+            IFRS16LeaseContract contract = resolveLeaseContract(request.getLeaseContractId());
+
+            LeasePaymentUpload upload = new LeasePaymentUpload()
+                .leaseContract(contract)
+                .csvFileUpload(csvFileUpload)
+                .uploadStatus("PENDING")
+                .active(Boolean.TRUE)
+                .createdAt(Instant.now());
+            csvFileUpload.setLeasePaymentUpload(upload);
+
+            upload = leasePaymentUploadRepository.save(upload);
+
+            if (request.isLaunchBatchImmediately()) {
+                launchJobAfterCommit(upload);
+            }
+
+            LeasePaymentUploadResponse response = new LeasePaymentUploadResponse();
+            response.setUploadId(upload.getId());
+            response.setCsvFileId(csvFileUpload.getId());
+            response.setStoredFileName(csvFileUpload.getStoredFileName());
+            response.setUploadStatus(upload.getUploadStatus());
+            return response;
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to process uploaded file", e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<LeasePaymentUploadDTO> findAll() {
+        return leasePaymentUploadMapper.toDto(leasePaymentUploadRepository.findAll());
+    }
+
+    public LeasePaymentUploadDTO deactivateUpload(Long uploadId) {
+        return leasePaymentUploadRepository
+            .findById(uploadId)
+            .map(upload -> {
+                upload.setActive(Boolean.FALSE);
+                upload.setUploadStatus("DEACTIVATED");
+                leasePaymentRepository.updateActiveFlagForUpload(Boolean.FALSE, upload.getId());
+                return leasePaymentUploadMapper.toDto(leasePaymentUploadRepository.save(upload));
+            })
+            .orElseThrow(() -> new IllegalArgumentException("Lease payment upload id #" + uploadId + " not found"));
+    }
+
+    private CsvFileUpload persistCsvMetadata(MultipartFile file, String storedFileName, byte[] fileContent) {
+        CsvFileUpload csvFileUpload = new CsvFileUpload();
+        csvFileUpload
+            .originalFileName(file.getOriginalFilename())
+            .storedFileName(storedFileName)
+            .filePath(storageRoot.resolve(storedFileName).toString())
+            .fileSize((long) fileContent.length)
+            .contentType(file.getContentType())
+            .uploadedAt(Instant.now())
+            .processed(Boolean.FALSE)
+            .checksum(DigestUtils.md5DigestAsHex(fileContent));
+
+        return csvFileUploadRepository.save(csvFileUpload);
+    }
+
+    private void launchJobAfterCommit(LeasePaymentUpload upload) {
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            LeasePaymentUpload jobUpload = upload;
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    jobLauncher.launch(jobUpload);
+                }
+            });
+            return;
+        }
+
+        jobLauncher.launch(upload);
+    }
+
+    private String buildStoredFileName(String originalFilename) {
+        String cleanName = originalFilename == null ? "lease-payments.csv" : originalFilename.replaceAll("\\s+", "-");
+        return UUID.randomUUID() + "-" + cleanName;
+    }
+
+    private IFRS16LeaseContract resolveLeaseContract(Long leaseContractId) {
+        return leaseContractRepository
+            .findById(leaseContractId)
+            .orElseThrow(() -> new IllegalArgumentException("IFRS16 lease contract id #" + leaseContractId + " not found"));
+    }
+}

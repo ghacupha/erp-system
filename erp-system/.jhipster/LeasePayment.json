@@ -7,6 +7,10 @@
     {
       "fieldName": "paymentDate",
       "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [
@@ -16,6 +20,12 @@
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "bookingId"
+    },
+    {
+      "relationshipName": "leasePaymentUpload",
+      "otherEntityName": "leasePaymentUpload",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "uploadStatus"
     }
   ],
   "service": "serviceImpl",

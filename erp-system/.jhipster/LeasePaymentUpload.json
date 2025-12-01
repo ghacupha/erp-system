@@ -1,0 +1,46 @@
+{
+  "name": "LeasePaymentUpload",
+  "fields": [
+    {
+      "fieldName": "uploadStatus",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "csvFileUpload",
+      "otherEntityName": "csvFileUpload",
+      "relationshipType": "one-to-one",
+      "otherEntityRelationshipName": "leasePaymentUpload",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "iFRS16LeaseContract",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "bookingId"
+    },
+    {
+      "relationshipName": "leasePayments",
+      "otherEntityName": "leasePayment",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "leasePaymentUpload"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "changelogDate": "20240828000000"
+}
