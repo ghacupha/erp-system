@@ -38,15 +38,18 @@ public class LeasePaymentReindexConsumer {
     private final LeasePaymentRepository leasePaymentRepository;
     private final LeasePaymentSearchRepository leasePaymentSearchRepository;
     private final String topicName;
+    private final int reindexBatchSize;
 
     public LeasePaymentReindexConsumer(
         LeasePaymentRepository leasePaymentRepository,
         LeasePaymentSearchRepository leasePaymentSearchRepository,
-        @Value("${spring.kafka.topics.lease-payment-reindex.topic.name:lease-payment-reindex}") String topicName
+        @Value("${spring.kafka.topics.lease-payment-reindex.topic.name:lease-payment-reindex}") String topicName,
+        @Value("${app.search.reindex.batch-size:250}") int reindexBatchSize
     ) {
         this.leasePaymentRepository = leasePaymentRepository;
         this.leasePaymentSearchRepository = leasePaymentSearchRepository;
         this.topicName = topicName;
+        this.reindexBatchSize = Math.max(1, reindexBatchSize);
     }
 
     @KafkaListener(
@@ -71,9 +74,15 @@ public class LeasePaymentReindexConsumer {
             return;
         }
 
-        // Not necessary as the items have already been saved in the batch writer
-        // List<LeasePayment> savedPayments = leasePaymentRepository.saveAll(paymentsToUpdate);
-        // TODO Implement batching here to prevent stackoverflow errors
-        leasePaymentSearchRepository.saveAll(paymentsToUpdate);
+        saveInBatches(paymentsToUpdate);
+    }
+
+    private void saveInBatches(List<LeasePayment> paymentsToUpdate) {
+        for (int startIndex = 0; startIndex < paymentsToUpdate.size(); startIndex += reindexBatchSize) {
+            int endIndex = Math.min(startIndex + reindexBatchSize, paymentsToUpdate.size());
+            List<LeasePayment> batch = paymentsToUpdate.subList(startIndex, endIndex);
+            leasePaymentSearchRepository.saveAll(batch);
+            log.debug("Reindexed {} lease payments in Elasticsearch", batch.size());
+        }
     }
 }
