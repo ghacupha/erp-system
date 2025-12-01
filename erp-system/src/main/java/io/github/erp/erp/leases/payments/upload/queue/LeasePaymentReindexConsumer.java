@@ -20,6 +20,7 @@ package io.github.erp.erp.leases.payments.upload.queue;
 
 import io.github.erp.domain.LeasePayment;
 import io.github.erp.repository.LeasePaymentRepository;
+import io.github.erp.repository.search.LeaseContractSearchRepository;
 import io.github.erp.repository.search.LeasePaymentSearchRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class LeasePaymentReindexConsumer {
 
     private static final Logger log = LoggerFactory.getLogger(LeasePaymentReindexConsumer.class);
+    private static final String LEASE_PAYMENT_REINDEX_TOPIC_NAME = "spring.kafka.topics.lease-payment-reindex.topic.name:lease-payment-reindex";
 
     private final LeasePaymentRepository leasePaymentRepository;
     private final LeasePaymentSearchRepository leasePaymentSearchRepository;
@@ -53,7 +55,7 @@ public class LeasePaymentReindexConsumer {
     }
 
     @KafkaListener(
-        topics = "${spring.kafka.topics.lease-payment-reindex.topic.name:lease-payment-reindex}",
+        topics = "${" + LEASE_PAYMENT_REINDEX_TOPIC_NAME + "}",
         containerFactory = "leasePaymentReindexKafkaListenerContainerFactory"
     )
     @Transactional
