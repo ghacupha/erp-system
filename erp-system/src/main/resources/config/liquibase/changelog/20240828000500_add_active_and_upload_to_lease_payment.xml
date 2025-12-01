@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+    <changeSet id="20240828000500-1" author="jhipster">
+        <addColumn tableName="lease_payment">
+            <column name="active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="true" />
+            </column>
+            <column name="lease_payment_upload_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="lease_payment_upload_id"
+                                 baseTableName="lease_payment"
+                                 constraintName="fk_lease_payment__lease_payment_upload_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_payment_upload"/>
+    </changeSet>
+</databaseChangeLog>

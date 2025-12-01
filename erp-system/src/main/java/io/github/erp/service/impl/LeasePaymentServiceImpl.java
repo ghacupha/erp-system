@@ -61,6 +61,9 @@ public class LeasePaymentServiceImpl implements LeasePaymentService {
     @Override
     public LeasePaymentDTO save(LeasePaymentDTO leasePaymentDTO) {
         log.debug("Request to save LeasePayment : {}", leasePaymentDTO);
+        if (leasePaymentDTO.getActive() == null) {
+            leasePaymentDTO.setActive(Boolean.TRUE);
+        }
         LeasePayment leasePayment = leasePaymentMapper.toEntity(leasePaymentDTO);
         leasePayment = leasePaymentRepository.save(leasePayment);
         LeasePaymentDTO result = leasePaymentMapper.toDto(leasePayment);

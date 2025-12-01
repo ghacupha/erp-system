@@ -96,6 +96,16 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
             ),
         },
         {
+          path: 'lease-payment-upload',
+          data: {
+            pageTitle: 'ERP | Lease Payment Upload',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-payment-upload/lease-payment-upload.module').then(m => m.LeasePaymentUploadModule),
+        },
+        {
           path: 'lease-liability-schedule-item',
           data: {
             pageTitle: 'ERP | Schedule',

@@ -1,4 +1,4 @@
-package io.github.erp.repository;
+package io.github.erp.erp.leases.payments.upload;
 
 /*-
  * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
@@ -17,18 +17,29 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.LeasePayment;
-import org.springframework.data.jpa.repository.*;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
-/**
- * Spring Data SQL repository for the LeasePayment entity.
- */
-@SuppressWarnings("unused")
-@Repository
-public interface LeasePaymentRepository extends JpaRepository<LeasePayment, Long>, JpaSpecificationExecutor<LeasePayment> {
-    @Modifying
-    @Query("update LeasePayment lp set lp.active = :active where lp.leasePaymentUpload.id = :uploadId")
-    void updateActiveFlagForUpload(@Param("active") Boolean active, @Param("uploadId") Long uploadId);
+import javax.validation.constraints.NotNull;
+
+public class LeasePaymentUploadRequest {
+
+    @NotNull
+    private Long leaseContractId;
+
+    private boolean launchBatchImmediately = true;
+
+    public Long getLeaseContractId() {
+        return leaseContractId;
+    }
+
+    public void setLeaseContractId(Long leaseContractId) {
+        this.leaseContractId = leaseContractId;
+    }
+
+    public boolean isLaunchBatchImmediately() {
+        return launchBatchImmediately;
+    }
+
+    public void setLaunchBatchImmediately(boolean launchBatchImmediately) {
+        this.launchBatchImmediately = launchBatchImmediately;
+    }
 }
