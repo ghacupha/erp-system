@@ -15,13 +15,13 @@ Finance users can now open a dedicated dashboard for the right-of-use depreciati
 - The navigation form validates that a lease contract has been selected, dispatches the `ifrs16LeaseContractReportSelected` action, and routes to `/erp/rou-depreciation-schedule-view/{id}`.
 - The dropdown at the top of the dashboard lists IFRS16 lease contracts (booking ID and title). Choosing a contract triggers a navigation that reloads the schedule for the new contract id, so the table can still be switched without returning to the launcher.
 - An **As at** date picker (defaulting to today) sits alongside the contract selector; changing it reloads the data and recalculates headline totals using rows up to the cut-off date while keeping the full schedule visible.
-- Totals at the top show the initial ROU amount, cumulative depreciation and closing net book value derived from the filtered-to-date schedule, even though the table lists the entire lease term.
+- Totals at the top now include four cards: the initial ROU amount, cumulative depreciation, closing net book value and the current period depreciation (year-to-date based on the selected cut-off).
 - The table lists each lease period with start/end dates, the amortisation charge and the remaining net book value. The "Initial amount" column uses the previous period's outstanding balance after the first row so the running NBV chain is visible directly in the grid. Periods are shown in the order returned by the API to reflect the depreciation run.
 - Export buttons generate CSV or Excel downloads of the visible table using the shared report-summary export helpers.
 
 ## Data access
 
-The view calls `GET /api/leases/rou-depreciation-schedule-view/{leaseContractId}` through `RouDepreciationScheduleViewService`, sending an optional `asAtDate` query param (`YYYY-MM-DD`). The client converts date strings to `dayjs` objects for display, keeps the entire schedule on screen and uses the cut-off only when calculating the headline figures.
+The view calls `GET /api/leases/rou-depreciation-schedule-view/{leaseContractId}` through `RouDepreciationScheduleViewService`, sending an optional `asAtDate` query param (`YYYY-MM-DD`). The client converts date strings to `dayjs` objects for display, keeps the entire schedule on screen and uses the cut-off only when calculating the headline figures. The "current period depreciation" card sums depreciation rows whose period falls within the selected year and on or before the chosen date, so the dashboard reflects year-to-date amortisation whenever the cut-off changes.
 
 ### Recent fix: snake-case responses
 

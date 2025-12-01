@@ -16,7 +16,7 @@ The depreciation run for right-of-use assets now exposes a schedule view that mi
 
 - The new Angular component `RouDepreciationScheduleViewComponent` (path: `/erp/rou-depreciation-schedule-view/:leaseContractId?`) loads available IFRS16 lease contracts and drives the schedule API for the active selection.
 - A navigation component `RouDepreciationScheduleNavComponent` validates a contract choice, dispatches the selection to the store and routes to `/erp/rou-depreciation-schedule-view/{id}`.
-- Users can switch contracts via a dropdown, adjust an **As at** date picker (defaulting to today) and see headline totals (initial ROU, cumulative depreciation and closing NBV) recalculated to that cut-off while still reviewing the full per-period schedule.
+- Users can switch contracts via a dropdown, adjust an **As at** date picker (defaulting to today) and see headline totals (initial ROU, cumulative depreciation, closing NBV and the **Current period depreciation** card that sums year-to-date charges for the selected year) recalculated to that cut-off while still reviewing the full per-period schedule.
 - CSV and Excel export buttons mirror the report-summary export workflow but are scoped to the depreciation table; they generate a full extract of the displayed schedule without any pagination limits.
 
 This alignment keeps ROU depreciation insight discoverable from the reports search while providing a focused dashboard for auditors and controllers.

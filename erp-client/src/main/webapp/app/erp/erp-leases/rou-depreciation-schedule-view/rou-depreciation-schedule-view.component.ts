@@ -38,6 +38,7 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
   scheduleRows: RouDepreciationScheduleRow[] = [];
   asAtScheduleRows: RouDepreciationScheduleRow[] = [];
   asAtDate: dayjs.Dayjs = dayjs();
+  asAtDateInput: string = dayjs().format('YYYY-MM-DD');
   loading = false;
   loadError?: string;
   exportingCsv = false;
@@ -115,8 +116,41 @@ export class RouDepreciationScheduleViewComponent implements OnInit, OnDestroy {
     return rows[rows.length - 1].outstandingAmount ?? 0;
   }
 
+  get currentPeriodDepreciation(): number {
+    const targetYear = this.asAtDate.year();
+    const asAtBoundary = this.asAtDate.endOf('day').valueOf();
+
+    return this.rowsForSummary.reduce((sum, row) => {
+      const comparisonDate = row.periodEndDate ?? row.periodStartDate;
+      if (!comparisonDate || comparisonDate.year() !== targetYear) {
+        return sum;
+      }
+
+      if (comparisonDate.endOf('day').valueOf() > asAtBoundary) {
+        return sum;
+      }
+
+      return sum + (row.depreciationAmount ?? 0);
+    }, 0);
+  }
+
   formatDate(value?: dayjs.Dayjs): string {
     return value ? value.format('DD MMM YYYY') : '';
+  }
+
+  onAsAtDateChange(dateValue: string): void {
+    const parsedDate = dayjs(dateValue, 'YYYY-MM-DD', true);
+    if (!parsedDate.isValid()) {
+      return;
+    }
+
+    this.asAtDate = parsedDate;
+    this.asAtDateInput = parsedDate.format('YYYY-MM-DD');
+    this.asAtScheduleRows = this.filterRowsByAsAtDate(this.scheduleRows, this.asAtDate);
+
+    if (this.selectedContractId) {
+      this.fetchSchedule(this.selectedContractId);
+    }
   }
 
   exportToCsv(): void {
