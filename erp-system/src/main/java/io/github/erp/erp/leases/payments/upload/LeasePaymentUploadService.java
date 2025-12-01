@@ -20,7 +20,9 @@ package io.github.erp.erp.leases.payments.upload;
 
 import io.github.erp.domain.CsvFileUpload;
 import io.github.erp.domain.IFRS16LeaseContract;
+import io.github.erp.domain.LeasePayment;
 import io.github.erp.domain.LeasePaymentUpload;
+import io.github.erp.erp.leases.payments.upload.queue.LeasePaymentReindexProducer;
 import io.github.erp.internal.files.FileStorageService;
 import io.github.erp.repository.CsvFileUploadRepository;
 import io.github.erp.repository.IFRS16LeaseContractRepository;
@@ -34,6 +36,7 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -58,6 +61,7 @@ public class LeasePaymentUploadService {
     private final LeasePaymentUploadMapper leasePaymentUploadMapper;
     private final LeasePaymentUploadJobLauncher jobLauncher;
     private final LeasePaymentRepository leasePaymentRepository;
+    private final LeasePaymentReindexProducer leasePaymentReindexProducer;
     private final Path storageRoot;
 
     public LeasePaymentUploadService(
@@ -68,6 +72,7 @@ public class LeasePaymentUploadService {
         LeasePaymentUploadMapper leasePaymentUploadMapper,
         LeasePaymentUploadJobLauncher jobLauncher,
         LeasePaymentRepository leasePaymentRepository,
+        LeasePaymentReindexProducer leasePaymentReindexProducer,
         @Value("${erp.csv-upload.storage-path:${java.io.tmpdir}/erp/csv-uploads}") String storagePath
     ) {
         this.storageService = storageService;
@@ -77,6 +82,7 @@ public class LeasePaymentUploadService {
         this.leasePaymentUploadMapper = leasePaymentUploadMapper;
         this.jobLauncher = jobLauncher;
         this.leasePaymentRepository = leasePaymentRepository;
+        this.leasePaymentReindexProducer = leasePaymentReindexProducer;
         this.storageRoot = Paths.get(storagePath);
     }
 
@@ -128,10 +134,14 @@ public class LeasePaymentUploadService {
         return leasePaymentUploadRepository
             .findById(uploadId)
             .map(upload -> {
+                List<LeasePayment> leasePayments = leasePaymentRepository.findAllByLeasePaymentUploadId(upload.getId());
+                leasePayments.forEach(payment -> payment.setActive(Boolean.FALSE));
+                List<LeasePayment> updatedPayments = leasePaymentRepository.saveAll(leasePayments);
                 upload.setActive(Boolean.FALSE);
                 upload.setUploadStatus("DEACTIVATED");
-                leasePaymentRepository.updateActiveFlagForUpload(Boolean.FALSE, upload.getId());
-                return leasePaymentUploadMapper.toDto(leasePaymentUploadRepository.save(upload));
+                LeasePaymentUploadDTO response = leasePaymentUploadMapper.toDto(leasePaymentUploadRepository.save(upload));
+                reindexLeasePaymentsAfterCommit(updatedPayments);
+                return response;
             })
             .orElseThrow(() -> new IllegalArgumentException("Lease payment upload id #" + uploadId + " not found"));
     }
@@ -164,6 +174,28 @@ public class LeasePaymentUploadService {
         }
 
         jobLauncher.launch(upload);
+    }
+
+    private void reindexLeasePaymentsAfterCommit(List<LeasePayment> updatedPayments) {
+        if (updatedPayments.isEmpty()) {
+            return;
+        }
+
+        List<Long> paymentIds = updatedPayments.stream().map(LeasePayment::getId).collect(Collectors.toList());
+
+        Runnable dispatch = () -> leasePaymentReindexProducer.sendReindexMessage(paymentIds, Boolean.FALSE);
+
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    dispatch.run();
+                }
+            });
+            return;
+        }
+
+        dispatch.run();
     }
 
     private String buildStoredFileName(String originalFilename) {
