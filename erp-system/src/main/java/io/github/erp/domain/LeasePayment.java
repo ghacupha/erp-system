@@ -25,6 +25,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * A LeasePayment.
@@ -70,6 +72,7 @@ public class LeasePayment implements Serializable {
         },
         allowSetters = true
     )
+    @Field(type = FieldType.Object, ignoreFields = { "leasePayments" })
     private IFRS16LeaseContract leaseContract;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
