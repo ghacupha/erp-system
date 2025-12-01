@@ -49,7 +49,6 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-@Transactional
 public class LeasePaymentUploadService {
 
     private static final Logger log = LoggerFactory.getLogger(LeasePaymentUploadService.class);
