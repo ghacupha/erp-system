@@ -45,7 +45,7 @@ public class LeasePaymentReindexConsumer {
     public LeasePaymentReindexConsumer(
         LeasePaymentRepository leasePaymentRepository,
         LeasePaymentSearchRepository leasePaymentSearchRepository,
-        @Value("${spring.kafka.topics.lease-payment-reindex.topic.name:lease-payment-reindex}") String topicName,
+        @Value("${" + LEASE_PAYMENT_REINDEX_TOPIC_NAME + "}") String topicName,
         @Value("${app.search.reindex.batch-size:250}") int reindexBatchSize
     ) {
         this.leasePaymentRepository = leasePaymentRepository;
