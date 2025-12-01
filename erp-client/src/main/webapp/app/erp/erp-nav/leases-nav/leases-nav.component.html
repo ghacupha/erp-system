@@ -126,7 +126,7 @@
         routerLinkActive='active' [routerLinkActiveOptions]='{ exact: true }'>
       <a class='nav-link dropdown-toggle' ngbDropdownToggle href='javascript:void(0);' id='registry-menu'>
           <span>
-              <fa-icon icon='book-open'></fa-icon>
+              <fa-icon icon='building'></fa-icon>
               <span>
                  ROU
               </span>
@@ -217,6 +217,46 @@
             <span>ROU Depreciation Request</span>
           </a>
         </li>
+      </ul>
+    </li>
+
+    <!--// Uploads menu-->
+    <li *ngSwitchCase='true' ngbDropdown class='nav-item dropdown pointer' display='dynamic'
+        routerLinkActive='active' [routerLinkActiveOptions]='{ exact: true }'>
+      <a class='nav-link dropdown-toggle' ngbDropdownToggle href='javascript:void(0);' id='leases-registry-menu'>
+          <span>
+              <fa-icon icon='plane-departure'></fa-icon>
+              <span>
+                 Uploads
+              </span>
+          </span>
+      </a>
+      <ul class='dropdown-menu' ngbDropdownMenu aria-labelledby='registry-menu'>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='lease-payment-upload'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Lease Payment Upload</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='lease-liability-schedule-upload'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Lease Schedule Upload</span>
+          </a>
+        </li>
+
       </ul>
     </li>
 
