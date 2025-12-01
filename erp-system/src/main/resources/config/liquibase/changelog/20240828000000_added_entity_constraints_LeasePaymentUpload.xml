@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity LeasePaymentUpload.
+    -->
+    <changeSet id="20240828000000-2" author="jhipster">
+        <addUniqueConstraint columnNames="csv_file_upload_id" constraintName="ux_lease_payment_upload_file" tableName="lease_payment_upload"/>
+        <addForeignKeyConstraint baseColumnNames="csv_file_upload_id"
+                                 baseTableName="lease_payment_upload"
+                                 constraintName="fk_lease_payment_upload__csv_file_upload_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="csv_file_upload"/>
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id"
+                                 baseTableName="lease_payment_upload"
+                                 constraintName="fk_lease_payment_upload__lease_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="i_frs_16_lease_contract"/>
+    </changeSet>
+</databaseChangeLog>

@@ -43,10 +43,10 @@ public interface InternalLeasePaymentRepository extends JpaRepository<LeasePayme
         nativeQuery = true,
         value = "" +
             "SELECT * FROM public.lease_payment " +
-            "WHERE lease_contract_id=:leaseContractId",
+            "WHERE lease_contract_id=:leaseContractId AND active = TRUE",
         countQuery = "" +
             "SELECT * FROM public.lease_payment " +
-            "WHERE lease_contract_id=:leaseContractId"
+            "WHERE lease_contract_id=:leaseContractId AND active = TRUE"
     )
     Optional<List<LeasePayment>> findLeasePaymentsForLeaseContract(@Param("leaseContractId") Long leaseContractId);
 }

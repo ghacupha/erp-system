@@ -41,6 +41,14 @@
         <dd>
           <span>{{ leasePayment.paymentAmount }}</span>
         </dd>
+        <dt><span>Active</span></dt>
+        <dd>
+          <span>{{ leasePayment.active ? 'Yes' : 'No' }}</span>
+        </dd>
+        <dt><span>Upload</span></dt>
+        <dd>
+          <span *ngIf="leasePayment.leasePaymentUpload">{{ leasePayment.leasePaymentUpload?.id }}</span>
+        </dd>
         <dt><span>Lease Contract</span></dt>
         <dd>
           <div *ngIf="leasePayment.leaseContract">
