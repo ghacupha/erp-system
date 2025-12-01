@@ -17,6 +17,6 @@
                                  baseTableName="lease_payment_upload"
                                  constraintName="fk_lease_payment_upload__lease_contract_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="i_frs_16_lease_contract"/>
+                                 referencedTableName="ifrs16lease_contract"/>
     </changeSet>
 </databaseChangeLog>

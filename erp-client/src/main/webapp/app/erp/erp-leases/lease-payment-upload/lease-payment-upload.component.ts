@@ -111,7 +111,9 @@ export class LeasePaymentUploadComponent implements OnInit {
       .pipe(finalize(() => (this.isLoadingUploads = false)))
       .subscribe({
         next: res => {
-          this.uploads = this.uploads.map(existing => (existing.id === res.body?.id ? res.body : existing));
+          if (res.body?.id) {
+            this.uploads = this.uploads.map(existing => (existing.id === res.body!.id ? res.body! : existing));
+          }
         },
         error: err => {
           this.uploadError = err?.error?.message ?? 'Failed to deactivate the upload.';
