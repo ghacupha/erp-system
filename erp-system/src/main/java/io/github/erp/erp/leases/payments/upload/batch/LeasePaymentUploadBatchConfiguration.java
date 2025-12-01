@@ -57,7 +57,7 @@ public class LeasePaymentUploadBatchConfiguration {
     public static final String STEP_NAME = "leasePaymentUploadStep";
     public static final String ITEM_READER_NAME = "leasePaymentCsvItemReader";
     public static final String ITEM_PROCESSOR_NAME = "leasePaymentProcessor";
-    public static final int CHUNK_SIZE = 24;
+    public static final int CHUNK_SIZE = 6;
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
@@ -83,7 +83,7 @@ public class LeasePaymentUploadBatchConfiguration {
         DefaultLineMapper<LeasePaymentCsvRow> lineMapper = new DefaultLineMapper<>();
         DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
         tokenizer.setDelimiter(",");
-        tokenizer.setNames("paymentDate", "paymentAmount", "active");
+        tokenizer.setNames("paymentDate", "paymentAmount");
         lineMapper.setLineTokenizer(tokenizer);
 
         BeanWrapperFieldSetMapper<LeasePaymentCsvRow> fieldSetMapper = new BeanWrapperFieldSetMapper<>() {
