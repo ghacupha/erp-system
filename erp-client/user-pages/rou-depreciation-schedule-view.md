@@ -2,7 +2,7 @@
 
 1. Open **Lease Reports → ROU Depreciation Schedule** to load the navigation form at `/rou-depreciation-schedule-view/report-nav`.
 2. Search for the IFRS16 lease contract in the M21 selector, submit the form, and land on `/erp/rou-depreciation-schedule-view/{contractId}`.
-3. Confirm the summary cards showing the initial ROU amount, cumulative depreciation and closing net book value.
+3. Confirm the summary cards showing the initial ROU amount, cumulative depreciation, closing net book value and **Current period depreciation** (year-to-date for the chosen cut-off).
 4. Use the **As at** date picker (defaulting to today) beside the contract dropdown to limit the schedule to periods ending on or before the selected date.
 5. Review the table of lease periods with start/end dates, depreciation amounts and outstanding balance for that cut-off.
 6. Download the current contract's schedule via **Export CSV** or **Export Excel** to share with colleagues.
