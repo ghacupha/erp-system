@@ -4,14 +4,26 @@
       <h3 class="mb-0">ROU Depreciation Schedule</h3>
       <small class="text-muted">Amortisation by lease period for the selected contract</small>
     </div>
-    <div class="flex-grow-1" style="min-width: 280px; max-width: 420px;">
-      <jhi-m21-ifrs16-lease-form-control
-        inputControlLabel="Lease contract (search to select)"
-        [inputValue]="selectedContract"
-        (valueSelected)="onContractSelected($event)"
-      >
-        <option [ngValue]="selectedContract"></option>
-      </jhi-m21-ifrs16-lease-form-control>
+    <div class="d-flex flex-wrap gap-3 align-items-center justify-content-end flex-grow-1" style="min-width: 280px;">
+      <div class="flex-grow-1" style="min-width: 280px; max-width: 360px;">
+        <jhi-m21-ifrs16-lease-form-control
+          inputControlLabel="Lease contract (search to select)"
+          [inputValue]="selectedContract"
+          (valueSelected)="onContractSelected($event)"
+        >
+          <option [ngValue]="selectedContract"></option>
+        </jhi-m21-ifrs16-lease-form-control>
+      </div>
+      <div class="d-flex align-items-center gap-2" style="min-width: 220px;">
+        <label for="asAtDate" class="text-muted small mb-0">As at date</label>
+        <input
+          id="asAtDate"
+          class="form-control form-control-sm"
+          type="date"
+          [ngModel]="asAtDateInput"
+          (ngModelChange)="onAsAtDateChange($event)"
+        />
+      </div>
     </div>
   </div>
 
@@ -26,7 +38,7 @@
   </div>
 
   <div *ngIf="scheduleRows.length > 0" class="row g-3 mb-3">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card h-100 shadow-sm">
         <div class="card-body">
           <div class="text-muted text-uppercase small">Initial ROU amount</div>
@@ -34,7 +46,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card h-100 shadow-sm">
         <div class="card-body">
           <div class="text-muted text-uppercase small">Total depreciation</div>
@@ -42,11 +54,19 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card h-100 shadow-sm">
         <div class="card-body">
           <div class="text-muted text-uppercase small">Closing net book value</div>
           <div class="display-6">{{ closingBalance | number: '1.2-2' }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted text-uppercase small">Current period depreciation</div>
+          <div class="display-6">{{ currentPeriodDepreciation | number: '1.2-2' }}</div>
         </div>
       </div>
     </div>

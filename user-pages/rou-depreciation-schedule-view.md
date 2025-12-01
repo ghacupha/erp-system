@@ -5,7 +5,7 @@ Use this page to review the period-by-period depreciation of a right-of-use asse
 ## Steps
 1. In **Lease Reports**, click **ROU Depreciation Schedule** to open the navigation form at `/rou-depreciation-schedule-view/report-nav`.
 2. Search for and select the IFRS16 lease contract in the M21 control, then submit to navigate to `/erp/rou-depreciation-schedule-view/{contractId}`.
-3. Review the summary cards for the initial ROU amount, total depreciation to date and the closing net book value.
+3. Review the summary cards for the initial ROU amount, total depreciation to date, closing net book value and **Current period depreciation** (year-to-date for the selected cut-off).
 4. Adjust the **As at** date picker (default today) next to the contract dropdown if you need a cut-off, and scroll through the filtered table to see each lease period, start and end dates, the depreciation charge and the outstanding amount.
 5. Use **Export CSV** or **Export Excel** to download the schedule rows exactly as shown in the table for the current contract and date selection.
 6. Choose another contract from the dashboard dropdown to compare schedules; the summary and table update automatically.
