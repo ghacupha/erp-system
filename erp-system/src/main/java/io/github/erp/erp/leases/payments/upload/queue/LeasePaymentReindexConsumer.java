@@ -71,7 +71,9 @@ public class LeasePaymentReindexConsumer {
             return;
         }
 
-        List<LeasePayment> savedPayments = leasePaymentRepository.saveAll(paymentsToUpdate);
-        leasePaymentSearchRepository.saveAll(savedPayments);
+        // Not necessary as the items have already been saved in the batch writer
+        // List<LeasePayment> savedPayments = leasePaymentRepository.saveAll(paymentsToUpdate);
+        // TODO Implement batching here to prevent stackoverflow errors
+        leasePaymentSearchRepository.saveAll(paymentsToUpdate);
     }
 }
