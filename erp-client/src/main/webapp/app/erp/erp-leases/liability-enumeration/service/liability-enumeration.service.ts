@@ -28,7 +28,6 @@ export class LiabilityEnumerationService {
     const options = { params: this.createRequestOption(req) };
     return this.http.get<ILiabilityEnumeration[]>(this.resourceUrl, { ...options, observe: 'response' });
   }
-  
   find(id: number): Observable<EntityResponseType> {
     return this.http.get<ILiabilityEnumeration>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
