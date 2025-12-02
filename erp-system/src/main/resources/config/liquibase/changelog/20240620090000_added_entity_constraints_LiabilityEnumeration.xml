@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entities LiabilityEnumeration and PresentValueEnumeration.
+    -->
+    <changeSet id="20240620090000-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="ifrs16lease_contract_id"
+                                 baseTableName="liability_enumeration"
+                                 constraintName="fk_liability_enumeration__ifrs16lease_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ifrs16lease_contract"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_payment_upload_id"
+                                 baseTableName="liability_enumeration"
+                                 constraintName="fk_liability_enumeration__lease_payment_upload_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_payment_upload"/>
+
+        <addForeignKeyConstraint baseColumnNames="ifrs16lease_contract_id"
+                                 baseTableName="present_value_enumeration"
+                                 constraintName="fk_present_value_enumeration__ifrs16lease_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ifrs16lease_contract"/>
+
+        <addForeignKeyConstraint baseColumnNames="liability_enumeration_id"
+                                 baseTableName="present_value_enumeration"
+                                 constraintName="fk_present_value_enumeration__liability_enumeration_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="liability_enumeration"/>
+    </changeSet>
+</databaseChangeLog>
