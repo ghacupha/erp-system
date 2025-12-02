@@ -16,6 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, SecurityContext, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -93,5 +94,15 @@ export class AlertService {
     if (alertIndex >= 0) {
       alerts.splice(alertIndex, 1);
     }
+  }
+
+  addHttpErrorResponse(error: HttpErrorResponse, extAlerts?: Alert[]): void {
+    const errorMessage =
+      (error.error && typeof error.error === 'object' && (error.error.detail ?? error.error.message)) ||
+      (typeof error.error === 'string' ? error.error : undefined) ||
+      error.message ||
+      'An unexpected error occurred';
+
+    this.addAlert({ type: 'danger', message: errorMessage }, extAlerts);
   }
 }
