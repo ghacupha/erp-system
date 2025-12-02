@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entities LiabilityEnumeration and PresentValueEnumeration.
+    -->
+    <changeSet id="20240620090000-1" author="jhipster">
+        <createTable tableName="liability_enumeration">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="interest_rate" type="${floatType}">
+                <constraints nullable="false" />
+            </column>
+            <column name="interest_rate_text" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="time_granularity" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="active" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="ifrs16lease_contract_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="lease_payment_upload_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+
+        <createTable tableName="present_value_enumeration">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="sequence_number" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="payment_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="payment_amount" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="discount_rate" type="${floatType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="present_value" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="ifrs16lease_contract_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="liability_enumeration_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+</databaseChangeLog>
