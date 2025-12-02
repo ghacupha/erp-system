@@ -20,6 +20,11 @@ The liability enumeration workflow converts uploaded lease payments into discoun
 4. **Lease amortization roll-up**
    - The processor sums the present values and updates or creates the `LeaseAmortizationCalculation` for the contract. Repeated enumerations overwrite the same record, allowing schedule corrections without duplicating the amortization root.
 
+## Batch execution and client visibility
+- The long-running work now executes as a Spring Batch job (`liabilityEnumerationJob`) composed of scoped processors: input validation, contract/upload lookup (with creation of the `LiabilityEnumeration` row), queue dispatch for `PresentValueEnumeration`, and a writer that upserts the amortization calculation summary.
+- Any failures in the batch bubble back through the REST call so the Angular list/update views display the errors via the shared alert service.
+- New client pages under the ERP leases area expose a list of liability enumerations, a simple form to launch a new enumeration, and a detail grid for the present value lines tied to a run, making the background processing progress visible to lease managers.
+
 ## Operational notes
 - The REST entry point is `POST /api/leases/liability-enumerations` with a JSON body matching `LiabilityEnumerationRequest`.
 - Granularity is strict: values outside `MONTHLY`, `QUARTERLY`, or `YEARLY` are rejected.
