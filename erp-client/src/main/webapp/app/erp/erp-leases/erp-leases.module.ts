@@ -334,6 +334,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
             ),
         },
         {
+          path: 'liability-enumeration',
+          data: {
+            pageTitle: 'ERP | Liability Enumeration',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./liability-enumeration/liability-enumeration.module').then(
+              m => m.LiabilityEnumerationModule
+            ),
+        },
+        {
           path: 'lease-liability-compilation',
           data: {
             pageTitle: 'ERP | Lease Compilation',
