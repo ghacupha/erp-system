@@ -6,7 +6,7 @@
     <!--
         Added the constraints for entities LiabilityEnumeration and PresentValueEnumeration.
     -->
-    <changeSet id="20240620090000-2" author="jhipster">
+    <!--<changeSet id="20240620090100-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="ifrs16lease_contract_id"
                                  baseTableName="liability_enumeration"
@@ -31,5 +31,5 @@
                                  constraintName="fk_present_value_enumeration__liability_enumeration_id"
                                  referencedColumnNames="id"
                                  referencedTableName="liability_enumeration"/>
-    </changeSet>
+    </changeSet>-->
 </databaseChangeLog>
