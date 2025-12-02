@@ -30,7 +30,7 @@ const leasePaymentRoute: Routes = [
     path: '',
     component: LeasePaymentComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

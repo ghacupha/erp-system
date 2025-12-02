@@ -59,18 +59,6 @@
         <li>
           <a
             class='dropdown-item'
-            routerLink='lease-amortization-calculation'
-            routerLinkActive='active'
-            [routerLinkActiveOptions]='{ exact: true }'
-            (click)='collapseNavbar()'
-          >
-            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
-            <span>Lease Amortization Calculation</span>
-          </a>
-        </li>
-        <li>
-          <a
-            class='dropdown-item'
             routerLink='lease-amortization-schedule'
             routerLinkActive='active'
             [routerLinkActiveOptions]='{ exact: true }'
@@ -90,30 +78,6 @@
           >
             <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
             <span>Lease Schedule Item</span>
-          </a>
-        </li>
-        <li>
-          <a
-            class='dropdown-item'
-            routerLink='lease-liability-schedule-upload'
-            routerLinkActive='active'
-            [routerLinkActiveOptions]='{ exact: true }'
-            (click)='collapseNavbar()'
-          >
-            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
-            <span>Lease Schedule Upload</span>
-          </a>
-        </li>
-        <li>
-          <a
-            class='dropdown-item'
-            routerLink='lease-liability-compilation'
-            routerLinkActive='active'
-            [routerLinkActiveOptions]='{ exact: true }'
-            (click)='collapseNavbar()'
-          >
-            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
-            <span>Lease Amortization Compilation</span>
           </a>
         </li>
       </ul>
@@ -205,18 +169,6 @@
             <span>ROU Initial Direct Costs</span>
           </a>
         </li>
-        <li>
-          <a
-            class='dropdown-item'
-            routerLink='rou-depreciation-request'
-            routerLinkActive='active'
-            [routerLinkActiveOptions]='{ exact: true }'
-            (click)='collapseNavbar()'
-          >
-            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
-            <span>ROU Depreciation Request</span>
-          </a>
-        </li>
       </ul>
     </li>
 
@@ -225,9 +177,9 @@
         routerLinkActive='active' [routerLinkActiveOptions]='{ exact: true }'>
       <a class='nav-link dropdown-toggle' ngbDropdownToggle href='javascript:void(0);' id='leases-registry-menu'>
           <span>
-              <fa-icon icon='plane-departure'></fa-icon>
+              <fa-icon icon='fire-alt'></fa-icon>
               <span>
-                 Uploads
+                 Processing
               </span>
           </span>
       </a>
@@ -254,6 +206,42 @@
           >
             <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
             <span>Lease Schedule Upload</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='lease-amortization-calculation'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Lease Amortization Calculation</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='rou-depreciation-request'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>ROU Depreciation Request</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='lease-liability-compilation'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Lease Amortization Compilation</span>
           </a>
         </li>
 
