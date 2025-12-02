@@ -20,14 +20,26 @@ package io.github.erp.erp.resources.leases;
 import io.github.erp.erp.leases.liability.enumeration.LiabilityEnumerationProcessor;
 import io.github.erp.erp.leases.liability.enumeration.LiabilityEnumerationRequest;
 import io.github.erp.erp.leases.liability.enumeration.LiabilityEnumerationResponse;
+import io.github.erp.domain.LiabilityEnumeration;
+import io.github.erp.repository.LiabilityEnumerationRepository;
+import java.util.List;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.web.util.PaginationUtil;
+import tech.jhipster.web.util.ResponseUtil;
 
 @RestController("liabilityEnumerationResourceProd")
 @RequestMapping("/api/leases")
@@ -36,9 +48,14 @@ public class LiabilityEnumerationResourceProd {
     private static final Logger log = LoggerFactory.getLogger(LiabilityEnumerationResourceProd.class);
 
     private final LiabilityEnumerationProcessor liabilityEnumerationProcessor;
+    private final LiabilityEnumerationRepository liabilityEnumerationRepository;
 
-    public LiabilityEnumerationResourceProd(LiabilityEnumerationProcessor liabilityEnumerationProcessor) {
+    public LiabilityEnumerationResourceProd(
+        LiabilityEnumerationProcessor liabilityEnumerationProcessor,
+        LiabilityEnumerationRepository liabilityEnumerationRepository
+    ) {
         this.liabilityEnumerationProcessor = liabilityEnumerationProcessor;
+        this.liabilityEnumerationRepository = liabilityEnumerationRepository;
     }
 
     @PostMapping("/liability-enumerations")
@@ -46,5 +63,17 @@ public class LiabilityEnumerationResourceProd {
         log.debug("REST request to enumerate present values for lease contract {}", request.getLeaseContractId());
         LiabilityEnumerationResponse response = liabilityEnumerationProcessor.enumerate(request);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/liability-enumerations")
+    public ResponseEntity<List<LiabilityEnumeration>> getAllLiabilityEnumerations(@PageableDefault(size = 10) Pageable pageable) {
+        Page<LiabilityEnumeration> page = liabilityEnumerationRepository.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/liability-enumerations/{id}")
+    public ResponseEntity<LiabilityEnumeration> getLiabilityEnumeration(@PathVariable Long id) {
+        return ResponseUtil.wrapOrNotFound(liabilityEnumerationRepository.findById(id));
     }
 }

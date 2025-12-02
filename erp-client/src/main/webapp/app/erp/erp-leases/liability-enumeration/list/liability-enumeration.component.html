@@ -1,0 +1,29 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Liability Enumerations</h2>
+  <button type="button" class="btn btn-primary" routerLink="./create">Run Enumeration</button>
+</div>
+
+<div *ngIf="isLoading" class="alert alert-info">Loading liability enumerations...</div>
+
+<table class="table table-striped" *ngIf="!isLoading">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Interest Rate</th>
+      <th>Granularity</th>
+      <th>Active</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let enumeration of liabilityEnumerations; trackBy: trackId">
+      <td>{{ enumeration.id }}</td>
+      <td>{{ enumeration.interestRateText ?? enumeration.interestRate }}</td>
+      <td>{{ enumeration.timeGranularity }}</td>
+      <td>{{ enumeration.active }}</td>
+      <td class="text-end">
+        <button type="button" class="btn btn-link p-0" (click)="viewPresentValues(enumeration)">Present values</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
