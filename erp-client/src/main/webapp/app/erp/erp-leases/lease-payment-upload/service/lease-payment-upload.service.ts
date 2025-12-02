@@ -23,6 +23,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import { createRequestOption } from 'app/core/request/request-util';
 import {
   ILeasePaymentUploadRecord,
   ILeasePaymentUploadRequest,
@@ -51,9 +52,16 @@ export class LeasePaymentUploadService {
       .pipe(map(res => this.convertDateFromServer(res)));
   }
 
-  query(): Observable<EntityArrayResponseType> {
+  activate(id: number): Observable<HttpResponse<ILeasePaymentUploadRecord>> {
     return this.http
-      .get<ILeasePaymentUploadRecord[]>(this.resourceUrl, { observe: 'response' })
+      .post<ILeasePaymentUploadRecord>(`${this.resourceUrl}/${id}/activate`, null, { observe: 'response' })
+      .pipe(map(res => this.convertDateFromServer(res)));
+  }
+
+  query(req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http
+      .get<ILeasePaymentUploadRecord[]>(this.resourceUrl, { params: options, observe: 'response' })
       .pipe(map(res => this.convertDateArrayFromServer(res)));
   }
 

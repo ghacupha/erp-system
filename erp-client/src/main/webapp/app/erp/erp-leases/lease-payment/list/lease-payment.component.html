@@ -74,6 +74,8 @@
           <th scope="col" jhiSortBy="leaseContract.bookingId"><span>Lease Contract</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentDate"><span>Payment Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentAmount"><span>Payment Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="active"><span>Active</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"><span>Upload</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -91,6 +93,19 @@
           </td>
           <td>{{ leasePayment.paymentDate | formatMediumDate }}</td>
           <td>{{ leasePayment.paymentAmount | currency}}</td>
+          <td>
+            <span class="badge" [ngClass]="leasePayment.active ? 'bg-success' : 'bg-secondary'">
+              {{ leasePayment.active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td>
+            <ng-container *ngIf="leasePayment.leasePaymentUpload; else noUpload">
+              #{{ leasePayment.leasePaymentUpload?.id }}<span *ngIf="leasePayment.leasePaymentUpload?.uploadStatus"> ({{
+                leasePayment.leasePaymentUpload?.uploadStatus
+                }})</span>
+            </ng-container>
+            <ng-template #noUpload>—</ng-template>
+          </td>
           <td class="text-right">
             <div class="btn-group">
 

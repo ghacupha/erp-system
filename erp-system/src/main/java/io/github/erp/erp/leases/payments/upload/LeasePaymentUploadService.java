@@ -41,6 +41,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
@@ -125,8 +127,8 @@ public class LeasePaymentUploadService {
     }
 
     @Transactional(readOnly = true)
-    public List<LeasePaymentUploadDTO> findAll() {
-        return leasePaymentUploadMapper.toDto(leasePaymentUploadRepository.findAll());
+    public Page<LeasePaymentUploadDTO> findAll(Pageable pageable) {
+        return leasePaymentUploadRepository.findAll(pageable).map(leasePaymentUploadMapper::toDto);
     }
 
     public LeasePaymentUploadDTO deactivateUpload(Long uploadId) {
@@ -139,7 +141,23 @@ public class LeasePaymentUploadService {
                 upload.setActive(Boolean.FALSE);
                 upload.setUploadStatus("DEACTIVATED");
                 LeasePaymentUploadDTO response = leasePaymentUploadMapper.toDto(leasePaymentUploadRepository.save(upload));
-                reindexLeasePaymentsAfterCommit(updatedPayments);
+                reindexLeasePaymentsAfterCommit(updatedPayments, Boolean.FALSE);
+                return response;
+            })
+            .orElseThrow(() -> new IllegalArgumentException("Lease payment upload id #" + uploadId + " not found"));
+    }
+
+    public LeasePaymentUploadDTO activateUpload(Long uploadId) {
+        return leasePaymentUploadRepository
+            .findById(uploadId)
+            .map(upload -> {
+                List<LeasePayment> leasePayments = leasePaymentRepository.findAllByLeasePaymentUploadId(upload.getId());
+                leasePayments.forEach(payment -> payment.setActive(Boolean.TRUE));
+                List<LeasePayment> updatedPayments = leasePaymentRepository.saveAll(leasePayments);
+                upload.setActive(Boolean.TRUE);
+                upload.setUploadStatus("ACTIVE");
+                LeasePaymentUploadDTO response = leasePaymentUploadMapper.toDto(leasePaymentUploadRepository.save(upload));
+                reindexLeasePaymentsAfterCommit(updatedPayments, Boolean.TRUE);
                 return response;
             })
             .orElseThrow(() -> new IllegalArgumentException("Lease payment upload id #" + uploadId + " not found"));
@@ -175,14 +193,14 @@ public class LeasePaymentUploadService {
         jobLauncher.launch(upload);
     }
 
-    private void reindexLeasePaymentsAfterCommit(List<LeasePayment> updatedPayments) {
+    private void reindexLeasePaymentsAfterCommit(List<LeasePayment> updatedPayments, boolean active) {
         if (updatedPayments.isEmpty()) {
             return;
         }
 
         List<Long> paymentIds = updatedPayments.stream().map(LeasePayment::getId).collect(Collectors.toList());
 
-        Runnable dispatch = () -> leasePaymentReindexProducer.sendReindexMessage(paymentIds, Boolean.FALSE);
+        Runnable dispatch = () -> leasePaymentReindexProducer.sendReindexMessage(paymentIds, active);
 
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
