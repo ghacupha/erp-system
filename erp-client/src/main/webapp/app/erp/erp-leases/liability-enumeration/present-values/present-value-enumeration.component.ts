@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+
 import { LiabilityEnumerationService } from '../service/liability-enumeration.service';
 import { AlertService } from 'app/core/util/alert.service';
 import { IPresentValueEnumeration } from '../liability-enumeration.model';
@@ -35,6 +36,7 @@ export class PresentValueEnumerationComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err: HttpErrorResponse) => {
+
         this.isLoading = false;
         this.alertService.addHttpErrorResponse(err);
       },
