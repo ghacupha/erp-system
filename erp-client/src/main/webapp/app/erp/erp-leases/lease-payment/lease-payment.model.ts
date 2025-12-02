@@ -23,6 +23,8 @@ export interface ILeasePayment {
   id?: number;
   paymentDate?: dayjs.Dayjs | null;
   paymentAmount?: number | null;
+  active?: boolean | null;
+  leasePaymentUpload?: ILeasePaymentUploadSummary | null;
   leaseContract?: IIFRS16LeaseContract;
 }
 
@@ -31,8 +33,15 @@ export class LeasePayment implements ILeasePayment {
     public id?: number,
     public paymentAmount?: number | null,
     public paymentDate?: dayjs.Dayjs | null,
+    public active?: boolean | null,
+    public leasePaymentUpload?: ILeasePaymentUploadSummary | null,
     public leaseContract?: IIFRS16LeaseContract
   ) {}
+}
+
+export interface ILeasePaymentUploadSummary {
+  id?: number;
+  uploadStatus?: string | null;
 }
 
 export function getLeasePaymentIdentifier(leasePayment: ILeasePayment): number | undefined {
