@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ILiabilityEnumeration } from '../liability-enumeration.model';
 import { LiabilityEnumerationService } from '../service/liability-enumeration.service';
@@ -30,7 +30,8 @@ export class LiabilityEnumerationComponent implements OnInit {
         this.isLoading = false;
         this.liabilityEnumerations = res.body ?? [];
       },
-      error: err => {
+
+      error: (err: HttpErrorResponse) => {
         this.isLoading = false;
         this.alertService.addHttpErrorResponse(err);
       },

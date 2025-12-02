@@ -24,16 +24,16 @@ export class LiabilityEnumerationService {
     return this.http.post<LiabilityEnumerationResponse>(this.resourceUrl, request, { observe: 'response' });
   }
 
-  query(req?: any): EntityArrayResponseType {
+  query(req?: any): Observable<EntityArrayResponseType> {
     const options = { params: this.createRequestOption(req) };
     return this.http.get<ILiabilityEnumeration[]>(this.resourceUrl, { ...options, observe: 'response' });
   }
-
-  find(id: number): EntityResponseType {
+  
+  find(id: number): Observable<EntityResponseType> {
     return this.http.get<ILiabilityEnumeration>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  presentValues(liabilityEnumerationId?: number, req?: any): PresentValueArrayResponseType {
+  presentValues(liabilityEnumerationId?: number, req?: any): Observable<PresentValueArrayResponseType> {
     let params = this.createRequestOption(req).set('liabilityEnumerationId', liabilityEnumerationId ?? '');
     if (!liabilityEnumerationId) {
       params = params.delete('liabilityEnumerationId');
