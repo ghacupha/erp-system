@@ -1,0 +1,27 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Present value enumeration</h2>
+  <a routerLink="../../" class="btn btn-secondary">Back to list</a>
+</div>
+
+<div *ngIf="isLoading" class="alert alert-info">Loading present value records...</div>
+
+<table class="table table-sm" *ngIf="!isLoading">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Payment date</th>
+      <th>Payment amount</th>
+      <th>Discount rate</th>
+      <th>Present value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let value of values; index as i">
+      <td>{{ value.sequenceNumber ?? i + 1 }}</td>
+      <td>{{ value.paymentDate }}</td>
+      <td>{{ value.paymentAmount }}</td>
+      <td>{{ value.discountRate }}</td>
+      <td>{{ value.presentValue }}</td>
+    </tr>
+  </tbody>
+</table>
