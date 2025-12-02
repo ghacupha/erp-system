@@ -1,0 +1,54 @@
+{
+  "fields": [
+    {
+      "fieldName": "interestRate",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": 0
+    },
+    {
+      "fieldName": "interestRateText",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "timeGranularity",
+      "fieldType": "LiabilityTimeGranularity",
+      "fieldValues": "MONTHLY,QUARTERLY,YEARLY",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "iFRS16LeaseContract",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "bookingId"
+    },
+    {
+      "relationshipName": "leasePaymentUpload",
+      "otherEntityName": "leasePaymentUpload",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "presentValueEnumeration",
+      "otherEntityName": "presentValueEnumeration",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "liabilityEnumeration"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "LiabilityEnumeration",
+  "changelogDate": "20240620090000",
+  "incrementalChangelog": false
+}
