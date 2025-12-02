@@ -97,6 +97,7 @@
             <td>{{ upload.csvFileUpload?.storedFileName }}</td>
             <td class="text-end">
               <button
+                *ngIf="upload.active"
                 type="button"
                 class="btn btn-warning btn-sm"
                 [disabled]="!upload.active || isLoadingUploads"
@@ -104,10 +105,35 @@
               >
                 Deactivate
               </button>
+              <button
+                *ngIf="!upload.active"
+                type="button"
+                class="btn btn-success btn-sm"
+                [disabled]="upload.active || isLoadingUploads"
+                (click)="activate(upload)"
+              >
+                Activate
+              </button>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+    <div *ngIf="uploads && uploads.length > 0" class="mt-3">
+      <div class="row justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+      <div class="row justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [(page)]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="loadUploads($event)"
+        ></ngb-pagination>
+      </div>
     </div>
     <div *ngIf="uploads && uploads.length === 0" class="alert alert-info">No uploads recorded yet.</div>
   </div>

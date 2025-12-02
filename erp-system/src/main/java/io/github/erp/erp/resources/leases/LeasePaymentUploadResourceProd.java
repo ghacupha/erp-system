@@ -26,6 +26,11 @@ import java.util.List;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +40,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.web.util.PaginationUtil;
 
 @RestController("leasePaymentUploadResourceProd")
 @RequestMapping("/api/leases")
@@ -59,12 +66,21 @@ public class LeasePaymentUploadResourceProd {
     }
 
     @GetMapping("/lease-payment-uploads")
-    public ResponseEntity<List<LeasePaymentUploadDTO>> getAllUploads() {
-        return ResponseEntity.ok(uploadService.findAll());
+    public ResponseEntity<List<LeasePaymentUploadDTO>> getAllUploads(
+        @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<LeasePaymentUploadDTO> page = uploadService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     @PostMapping("/lease-payment-uploads/{id}/deactivate")
     public ResponseEntity<LeasePaymentUploadDTO> deactivateUpload(@PathVariable Long id) {
         return ResponseEntity.ok(uploadService.deactivateUpload(id));
+    }
+
+    @PostMapping("/lease-payment-uploads/{id}/activate")
+    public ResponseEntity<LeasePaymentUploadDTO> activateUpload(@PathVariable Long id) {
+        return ResponseEntity.ok(uploadService.activateUpload(id));
     }
 }

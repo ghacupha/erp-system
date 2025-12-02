@@ -36,6 +36,11 @@ export class LeasePaymentUploadComponent implements OnInit {
   isUploading = false;
   isLoadingUploads = false;
   uploads: ILeasePaymentUploadRecord[] = [];
+  totalItems = 0;
+  itemsPerPage = 5;
+  page = 1;
+  predicate = 'createdAt';
+  ascending = false;
   uploadResponse?: ILeasePaymentUploadResponse | null;
   uploadError?: string | null;
   selectedFile?: File | null;
@@ -121,23 +126,54 @@ export class LeasePaymentUploadComponent implements OnInit {
       });
   }
 
+  activate(upload: ILeasePaymentUploadRecord): void {
+    if (!upload.id) {
+      return;
+    }
+    this.isLoadingUploads = true;
+    this.uploadService
+      .activate(upload.id)
+      .pipe(finalize(() => (this.isLoadingUploads = false)))
+      .subscribe({
+        next: res => {
+          if (res.body?.id) {
+            this.uploads = this.uploads.map(existing => (existing.id === res.body!.id ? res.body! : existing));
+          }
+        },
+        error: err => {
+          this.uploadError = err?.error?.message ?? 'Failed to activate the upload.';
+        },
+      });
+  }
+
   trackById(_index: number, item: ILeasePaymentUploadRecord): number | undefined {
     return item.id;
   }
 
-  private loadUploads(): void {
+  loadUploads(page?: number): void {
     this.isLoadingUploads = true;
+    const pageToLoad = page ?? this.page ?? 1;
     this.uploadService
-      .query()
+      .query({
+        page: pageToLoad - 1,
+        size: this.itemsPerPage,
+        sort: this.sort(),
+      })
       .pipe(finalize(() => (this.isLoadingUploads = false)))
       .subscribe({
         next: response => {
           this.uploads = response.body ?? [];
+          this.totalItems = Number(response.headers?.get('X-Total-Count') ?? this.uploads.length);
+          this.page = pageToLoad;
         },
         error: err => {
           this.uploadError = err?.error?.message ?? 'Failed to load existing uploads.';
         },
       });
+  }
+
+  private sort(): string[] {
+    return [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
   }
 
   private buildRequest(): ILeasePaymentUploadRequest | null {
