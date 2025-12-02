@@ -30,6 +30,7 @@ export class LiabilityEnumerationComponent implements OnInit {
         this.isLoading = false;
         this.liabilityEnumerations = res.body ?? [];
       },
+
       error: (err: HttpErrorResponse) => {
         this.isLoading = false;
         this.alertService.addHttpErrorResponse(err);
