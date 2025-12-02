@@ -245,6 +245,32 @@
           </a>
         </li>
 
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='liability-enumeration'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Liability Enumeration</span>
+          </a>
+        </li>
+
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='present-value-enumeration'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Liability Enumeration</span>
+          </a>
+        </li>
+
       </ul>
     </li>
 

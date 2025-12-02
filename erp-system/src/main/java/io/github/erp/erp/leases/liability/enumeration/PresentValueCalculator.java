@@ -52,7 +52,9 @@ public class PresentValueCalculator {
         LocalDate anchorDate = YearMonth.from(orderedPayments.get(0).getPaymentDate()).atDay(1);
         BigDecimal periodRate = annualRate.divide(BigDecimal.valueOf(granularity.getCompoundsPerYear()), MC);
 
-        int sequence = 1;
+        var context = new Object() {
+            int sequence = 1;
+        };
         return orderedPayments
             .stream()
             .map(payment -> {
@@ -67,8 +69,8 @@ public class PresentValueCalculator {
                     .setScale(2, RoundingMode.HALF_EVEN);
 
                 PresentValueLine line =
-                    new PresentValueLine(sequence, payment.getPaymentDate(), payment.getPaymentAmount(), periodRate, presentValue);
-                sequence++;
+                    new PresentValueLine(context.sequence, payment.getPaymentDate(), payment.getPaymentAmount(), periodRate, presentValue);
+                context.sequence++;
                 return line;
             })
             .collect(Collectors.toList());
