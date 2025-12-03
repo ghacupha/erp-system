@@ -33,7 +33,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.support.ResourcelessTransactionManager;
+import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 
 @Configuration
 public class LiabilityEnumerationBatchConfiguration {
