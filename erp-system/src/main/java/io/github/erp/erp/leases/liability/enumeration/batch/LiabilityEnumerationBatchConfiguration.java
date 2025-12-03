@@ -35,6 +35,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.ResourcelessTransactionManager;
 
+
 @Configuration
 public class LiabilityEnumerationBatchConfiguration {
 
