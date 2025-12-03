@@ -64,6 +64,10 @@ public class LeaseLiabilityScheduleFileUpload implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

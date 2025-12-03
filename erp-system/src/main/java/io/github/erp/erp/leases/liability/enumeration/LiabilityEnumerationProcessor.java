@@ -21,11 +21,9 @@ import io.github.erp.erp.leases.liability.enumeration.batch.LiabilityEnumeration
 import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 
-@Service
-@Transactional
+@Component
 public class LiabilityEnumerationProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(LiabilityEnumerationProcessor.class);
