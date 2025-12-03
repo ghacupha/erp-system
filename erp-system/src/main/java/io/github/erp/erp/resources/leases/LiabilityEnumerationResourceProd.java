@@ -21,11 +21,16 @@ import io.github.erp.erp.leases.liability.enumeration.LiabilityEnumerationProces
 import io.github.erp.erp.leases.liability.enumeration.LiabilityEnumerationRequest;
 import io.github.erp.erp.leases.liability.enumeration.LiabilityEnumerationResponse;
 import io.github.erp.domain.LiabilityEnumeration;
+import io.github.erp.erp.leases.liability.enumeration.batch.LiabilityEnumerationBatchConfiguration;
+import io.github.erp.erp.leases.liability.enumeration.batch.LiabilityEnumerationJobLauncher;
 import io.github.erp.repository.LiabilityEnumerationRepository;
 import java.util.List;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -51,10 +56,13 @@ public class LiabilityEnumerationResourceProd {
     private final LiabilityEnumerationRepository liabilityEnumerationRepository;
 
     public LiabilityEnumerationResourceProd(
-        LiabilityEnumerationProcessor liabilityEnumerationProcessor,
-        LiabilityEnumerationRepository liabilityEnumerationRepository
+        LiabilityEnumerationRepository liabilityEnumerationRepository,
+        JobLauncher jobLauncher,
+        @Qualifier(LiabilityEnumerationBatchConfiguration.JOB_NAME) Job liabilityEnumerationJob
     ) {
-        this.liabilityEnumerationProcessor = liabilityEnumerationProcessor;
+        this.liabilityEnumerationProcessor =
+            new LiabilityEnumerationProcessor(
+                new LiabilityEnumerationJobLauncher(jobLauncher, liabilityEnumerationJob));
         this.liabilityEnumerationRepository = liabilityEnumerationRepository;
     }
 
