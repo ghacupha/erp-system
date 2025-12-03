@@ -12,9 +12,7 @@ import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
-@Component
 public class LiabilityEnumerationJobLauncher {
 
     private static final Logger log = LoggerFactory.getLogger(LiabilityEnumerationJobLauncher.class);
