@@ -25,8 +25,4 @@ public class LiabilityEnumerationConfiguration {
         return new LiabilityEnumerationJobLauncher(jobLauncher, liabilityEnumerationJob);
     }
 
-    @Bean
-    public LiabilityEnumerationProcessor liabilityEnumerationProcessor(LiabilityEnumerationJobLauncher jobLauncher) {
-        return new LiabilityEnumerationProcessor(jobLauncher);
-    }
 }
