@@ -24,7 +24,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,29 +50,36 @@ public class PresentValueCalculator {
             .collect(Collectors.toList());
 
         LocalDate anchorDate = YearMonth.from(orderedPayments.get(0).getPaymentDate()).atDay(1);
-        BigDecimal periodRate = annualRate.divide(BigDecimal.valueOf(granularity.getCompoundsPerYear()), MC);
+        BigDecimal periodRate = annualRate.divide(BigDecimal.valueOf(LiabilityTimeGranularity.MONTHLY.getCompoundsPerYear()), MC);
 
-        var context = new Object() {
-            int sequence = 1;
-        };
-        return orderedPayments
-            .stream()
-            .map(payment -> {
-                long months = ChronoUnit.MONTHS.between(anchorDate, YearMonth.from(payment.getPaymentDate()).atDay(1));
-                long steps = months / granularity.getMonthsPerStep();
-                int periodIndex = Math.toIntExact(steps + 1);
+        List<PresentValueLine> lines = new ArrayList<>();
+        int sequence = 1;
+        YearMonth cursorMonth = YearMonth.from(anchorDate);
 
-                BigDecimal discountFactor = BigDecimal.ONE.add(periodRate).pow(periodIndex, MC);
-                BigDecimal presentValue = payment
-                    .getPaymentAmount()
-                    .divide(discountFactor, 21, RoundingMode.HALF_EVEN)
-                    .setScale(2, RoundingMode.HALF_EVEN);
+        for (LeasePayment payment : orderedPayments) {
+            YearMonth paymentMonth = YearMonth.from(payment.getPaymentDate());
+            while (cursorMonth.isBefore(paymentMonth)) {
+                lines.add(buildPresentValueLine(sequence++, cursorMonth.atDay(1), BigDecimal.ZERO, periodRate));
+                cursorMonth = cursorMonth.plusMonths(1);
+            }
 
-                PresentValueLine line =
-                    new PresentValueLine(context.sequence, payment.getPaymentDate(), payment.getPaymentAmount(), periodRate, presentValue);
-                context.sequence++;
-                return line;
-            })
-            .collect(Collectors.toList());
+            lines.add(
+                buildPresentValueLine(
+                    sequence++,
+                    payment.getPaymentDate(),
+                    payment.getPaymentAmount() == null ? BigDecimal.ZERO : payment.getPaymentAmount(),
+                    periodRate
+                )
+            );
+            cursorMonth = paymentMonth.plusMonths(1);
+        }
+
+        return lines;
+    }
+
+    private PresentValueLine buildPresentValueLine(int sequence, LocalDate date, BigDecimal amount, BigDecimal periodRate) {
+        BigDecimal discountFactor = BigDecimal.ONE.add(periodRate).pow(sequence, MC);
+        BigDecimal presentValue = amount.divide(discountFactor, 21, RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN);
+        return new PresentValueLine(sequence, date, amount, periodRate, presentValue);
     }
 }

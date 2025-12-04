@@ -4,13 +4,22 @@
       <h2>Run liability enumeration</h2>
 
       <div class="mb-3">
-        <label class="form-label" for="field_leaseContractId">Lease Contract ID</label>
-        <input type="number" class="form-control" id="field_leaseContractId" formControlName="leaseContractId" />
+        <jhi-m21-ifrs16-lease-form-control
+          [inputControlLabel]="'Lease contract'"
+          [inputValue]="selectedLeaseContract"
+          [disabledInput]="isSaving"
+          (valueSelected)="onLeaseContractSelected($event)"
+        ></jhi-m21-ifrs16-lease-form-control>
       </div>
 
       <div class="mb-3">
-        <label class="form-label" for="field_leasePaymentUploadId">Lease Payment Upload ID</label>
-        <input type="number" class="form-control" id="field_leasePaymentUploadId" formControlName="leasePaymentUploadId" />
+        <jhi-m21-lease-payment-upload-form-control
+          [inputControlLabel]="'Lease payment upload'"
+          [inputValue]="selectedLeasePaymentUpload"
+          [disabledInput]="isSaving"
+          [leaseContractId]="selectedLeaseContract?.id"
+          (valueSelected)="onLeasePaymentUploadSelected($event)"
+        ></jhi-m21-lease-payment-upload-form-control>
       </div>
 
       <div class="mb-3">
@@ -19,12 +28,14 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label" for="field_timeGranularity">Time granularity</label>
+        <label class="form-label" for="field_timeGranularity">Payment frequency</label>
         <select class="form-select" id="field_timeGranularity" formControlName="timeGranularity">
           <option value="MONTHLY">Monthly</option>
           <option value="QUARTERLY">Quarterly</option>
+          <option value="BI_ANNUAL">Bi-Annual</option>
           <option value="YEARLY">Yearly</option>
         </select>
+        <small class="form-text text-muted">Discounting is applied monthly; non-monthly payments will include zero-value months in the schedule.</small>
       </div>
 
       <div class="form-check mb-3">
