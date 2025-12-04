@@ -84,6 +84,7 @@ import { FiscalQuarterComponentsModule } from './fiscal-quarter-components/fisca
 import { LeaseRepaymentPeriodFormComponentsModule } from './lease-repayment-period-components/lease-repayment-period-form-components.module';
 import { AccountLedgerFormControlsModule } from './account_ledger/account-ledger-form-controls.module';
 import { AccountCategoryFormControlsModule } from './account-category-form-components/account-category-form-controls.module';
+import { LeasePaymentUploadFormComponentsModule } from './lease-payment-upload-components/lease-payment-upload-form-components.module';
 
 @NgModule({
   declarations: [
@@ -136,7 +137,8 @@ import { AccountCategoryFormControlsModule } from './account-category-form-compo
     CommonModule,
     SharedModule,
     ErpFormattingModule,
-    OptionViewsModule
+    OptionViewsModule,
+    LeasePaymentUploadFormComponentsModule
   ],
   exports: [
     M21DealerFormControlComponent,
@@ -194,6 +196,7 @@ import { AccountCategoryFormControlsModule } from './account-category-form-compo
     LeaseAmortizationScheduleFormComponentsModule,
     LeaseLiabilityCompilationFormComponentsModule,
     CsvFileUploadFormComponentsModule,
+    LeasePaymentUploadFormComponentsModule,
     ServiceOutletFormComponentsModule,
     TransactionAccountFormComponentsModule,
     PrepaymentAccountFormControlsModule,
