@@ -24,6 +24,7 @@ package io.github.erp.domain.enumeration;
 public enum LiabilityTimeGranularity {
     MONTHLY(12, 1),
     QUARTERLY(4, 3),
+    BI_ANNUAL(2, 6),
     YEARLY(1, 12);
 
     private final int compoundsPerYear;

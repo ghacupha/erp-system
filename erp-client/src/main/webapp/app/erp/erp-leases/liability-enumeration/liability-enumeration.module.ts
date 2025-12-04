@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from 'app/shared/shared.module';
+import { Ifrs16LeaseContractComponentsModule } from '../../erp-common/form-components/ifrs16-lease-contract-components/ifrs-16-lease-contract-components.module';
+import { LeasePaymentUploadFormComponentsModule } from '../../erp-common/form-components/lease-payment-upload-components/lease-payment-upload-form-components.module';
 import { LiabilityEnumerationComponent } from './list/liability-enumeration.component';
 import { LiabilityEnumerationUpdateComponent } from './update/liability-enumeration-update.component';
 import { LiabilityEnumerationRoutingModule } from './route/liability-enumeration-routing.module';
 import { PresentValueEnumerationComponent } from './present-values/present-value-enumeration.component';
 
 @NgModule({
-  imports: [SharedModule, LiabilityEnumerationRoutingModule],
+  imports: [SharedModule, LiabilityEnumerationRoutingModule, Ifrs16LeaseContractComponentsModule, LeasePaymentUploadFormComponentsModule],
   declarations: [LiabilityEnumerationComponent, LiabilityEnumerationUpdateComponent, PresentValueEnumerationComponent],
 })
 export class LiabilityEnumerationModule {}

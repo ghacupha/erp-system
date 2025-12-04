@@ -28,6 +28,7 @@ import io.github.erp.repository.CsvFileUploadRepository;
 import io.github.erp.repository.IFRS16LeaseContractRepository;
 import io.github.erp.repository.LeasePaymentRepository;
 import io.github.erp.repository.LeasePaymentUploadRepository;
+import io.github.erp.repository.search.LeasePaymentUploadSearchRepository;
 import io.github.erp.service.dto.LeasePaymentUploadDTO;
 import io.github.erp.service.mapper.LeasePaymentUploadMapper;
 import java.io.IOException;
@@ -60,6 +61,7 @@ public class LeasePaymentUploadService {
     private final LeasePaymentUploadRepository leasePaymentUploadRepository;
     private final IFRS16LeaseContractRepository leaseContractRepository;
     private final LeasePaymentUploadMapper leasePaymentUploadMapper;
+    private final LeasePaymentUploadSearchRepository leasePaymentUploadSearchRepository;
     private final LeasePaymentUploadJobLauncher jobLauncher;
     private final LeasePaymentRepository leasePaymentRepository;
     private final LeasePaymentReindexProducer leasePaymentReindexProducer;
@@ -71,6 +73,7 @@ public class LeasePaymentUploadService {
         LeasePaymentUploadRepository leasePaymentUploadRepository,
         IFRS16LeaseContractRepository leaseContractRepository,
         LeasePaymentUploadMapper leasePaymentUploadMapper,
+        LeasePaymentUploadSearchRepository leasePaymentUploadSearchRepository,
         LeasePaymentUploadJobLauncher jobLauncher,
         LeasePaymentRepository leasePaymentRepository,
         LeasePaymentReindexProducer leasePaymentReindexProducer,
@@ -81,6 +84,7 @@ public class LeasePaymentUploadService {
         this.leasePaymentUploadRepository = leasePaymentUploadRepository;
         this.leaseContractRepository = leaseContractRepository;
         this.leasePaymentUploadMapper = leasePaymentUploadMapper;
+        this.leasePaymentUploadSearchRepository = leasePaymentUploadSearchRepository;
         this.jobLauncher = jobLauncher;
         this.leasePaymentRepository = leasePaymentRepository;
         this.leasePaymentReindexProducer = leasePaymentReindexProducer;
@@ -110,6 +114,7 @@ public class LeasePaymentUploadService {
             csvFileUpload.setLeasePaymentUpload(upload);
 
             upload = leasePaymentUploadRepository.save(upload);
+            leasePaymentUploadSearchRepository.save(upload);
 
             if (request.isLaunchBatchImmediately()) {
                 launchJobAfterCommit(upload);
@@ -131,6 +136,11 @@ public class LeasePaymentUploadService {
         return leasePaymentUploadRepository.findAll(pageable).map(leasePaymentUploadMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
+    public Page<LeasePaymentUploadDTO> search(String query, Pageable pageable, Long leaseContractId) {
+        return leasePaymentUploadSearchRepository.search(query, leaseContractId, pageable).map(leasePaymentUploadMapper::toDto);
+    }
+
     public LeasePaymentUploadDTO deactivateUpload(Long uploadId) {
         return leasePaymentUploadRepository
             .findById(uploadId)
@@ -140,7 +150,9 @@ public class LeasePaymentUploadService {
                 List<LeasePayment> updatedPayments = leasePaymentRepository.saveAll(leasePayments);
                 upload.setActive(Boolean.FALSE);
                 upload.setUploadStatus("DEACTIVATED");
-                LeasePaymentUploadDTO response = leasePaymentUploadMapper.toDto(leasePaymentUploadRepository.save(upload));
+                LeasePaymentUpload savedUpload = leasePaymentUploadRepository.save(upload);
+                leasePaymentUploadSearchRepository.save(savedUpload);
+                LeasePaymentUploadDTO response = leasePaymentUploadMapper.toDto(savedUpload);
                 reindexLeasePaymentsAfterCommit(updatedPayments, Boolean.FALSE);
                 return response;
             })
@@ -156,7 +168,9 @@ public class LeasePaymentUploadService {
                 List<LeasePayment> updatedPayments = leasePaymentRepository.saveAll(leasePayments);
                 upload.setActive(Boolean.TRUE);
                 upload.setUploadStatus("ACTIVE");
-                LeasePaymentUploadDTO response = leasePaymentUploadMapper.toDto(leasePaymentUploadRepository.save(upload));
+                LeasePaymentUpload savedUpload = leasePaymentUploadRepository.save(upload);
+                leasePaymentUploadSearchRepository.save(savedUpload);
+                LeasePaymentUploadDTO response = leasePaymentUploadMapper.toDto(savedUpload);
                 reindexLeasePaymentsAfterCommit(updatedPayments, Boolean.TRUE);
                 return response;
             })
