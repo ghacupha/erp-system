@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  * Metadata for bulk uploads of lease payments. The record ties a CSV file to
@@ -33,6 +35,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "lease_payment_upload")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "leasepaymentupload")
 public class LeasePaymentUpload implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -71,6 +74,7 @@ public class LeasePaymentUpload implements Serializable {
         },
         allowSetters = true
     )
+    @Field(type = FieldType.Object, ignoreFields = { "leasePayments" })
     private IFRS16LeaseContract leaseContract;
 
     @OneToMany(mappedBy = "leasePaymentUpload")
