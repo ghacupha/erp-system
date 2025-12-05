@@ -6,20 +6,25 @@
       <div class="mb-3">
         <jhi-m21-ifrs16-lease-form-control
           [inputControlLabel]="'Lease contract'"
-          [inputValue]="selectedLeaseContract"
+          [inputValue]="editForm.get('leaseContractId')?.value"
           [disabledInput]="isSaving"
           (valueSelected)="onLeaseContractSelected($event)"
-        ></jhi-m21-ifrs16-lease-form-control>
+          inputControlLabel='Lease Contract Id'
+        >
+          <option [ngValue]="editForm.get('leaseContractId')!.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
       </div>
 
       <div class="mb-3">
         <jhi-m21-lease-payment-upload-form-control
           [inputControlLabel]="'Lease payment upload'"
-          [inputValue]="selectedLeasePaymentUpload"
+          [inputValue]="editForm.get('leasePaymentUploadId')?.value"
           [disabledInput]="isSaving"
           [leaseContractId]="selectedLeaseContract?.id"
           (valueSelected)="onLeasePaymentUploadSelected($event)"
-        ></jhi-m21-lease-payment-upload-form-control>
+        >
+          <option [ngValue]="editForm.get('leasePaymentUploadId')!.value"></option>
+        </jhi-m21-lease-payment-upload-form-control>
       </div>
 
       <div class="mb-3">

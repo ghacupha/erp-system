@@ -1,0 +1,74 @@
+#
+# Erp System - Caleb Series
+# Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+
+# Common configuration shared between all applications
+configserver:
+  name: Docker JHipster Registry
+  status: Connected to the JHipster Registry running in Docker
+
+jhipster:
+  security:
+    authentication:
+      jwt:
+        # secret key which should be base64 encoded and changed in production
+        base64-secret: YzIxOWIwOWEyZTQ4N2Q3ZjE5NzgyNmQ4ZTg5ZmZhMDRkNGEzYjk4YjgwZTJkOWQ3ZGMzNmZkYTlmN2JmMDMyNGY0ODE0MTRjMzBkNTE2OWNjZTBiYjVmYWRhYjU4OGI5MTU0YTcwMDZmOTFmODViMjE2ODNlZGY4YjllZDhlOWU=
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:admin@jhipster-registry:8761/eureka/
+
+spring:
+   kafka:
+    bootstrap-servers: kafka:9092
+    admin:
+      properties:
+        replication.factor: 8
+    topics:
+      depreciation-batch:
+        topic:
+          name: "depreciation_batch_topic"
+        consumer:
+          group.id: erp-system-depreciation
+      nbv:
+        topic:
+          name: "nbv_batch_topic"
+        consumer:
+          group.id: erp-system-nbv
+          auto.offset.reset: earliest
+
+# kafka:
+#   bootstrap-servers: kafka:9092
+#   admin:
+#     properties:
+#       replication.factor: 3
+#   consumer:
+#     group.id: erp-system
+#     key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#     value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#     auto.offset.reset: earliest
+#     properties:
+#       spring.json.trusted.packages: "*"
+#   producer:
+#     key.serializer: org.apache.kafka.common.serialization.StringSerializer
+#     value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#     properties:
+#       replication.factor: 3;
+#   depreciation-batch:
+#     topic:
+#       name: "depreciation_batch_topic"

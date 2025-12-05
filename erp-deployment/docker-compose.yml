@@ -108,7 +108,7 @@ services:
       - erp-system-network
 
   erpsystem-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.4
     volumes:
       - ./search-index-directory:/usr/share/elasticsearch/data
     ports:

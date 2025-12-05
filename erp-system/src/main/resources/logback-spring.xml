@@ -54,7 +54,8 @@
     <logger name="org.apache.kafka.common" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/>
-    <logger name="org.elasticsearch" level="OFF"/>
+    <logger name="org.elasticsearch" level="INFO"/>
+    <logger name="org.springframework.data.elasticsearch" level="INFO"/>
     <logger name="com.netflix" level="WARN"/>
     <!-- <logger name="org.hibernate.validator" level="WARN"/> -->
     <logger name="org.hibernate" level="WARN"/>
