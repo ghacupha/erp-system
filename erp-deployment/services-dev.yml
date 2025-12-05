@@ -84,5 +84,6 @@ services:
     environment:
       - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
+      - "cluster.max_shards_per_node=3000"
     networks:
       - erp-system-dev-network
