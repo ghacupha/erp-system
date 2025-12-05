@@ -115,7 +115,7 @@ spring:
   elasticsearch:
     rest:
       # uris: http://localhost:9200
-      uris: ${SPRING_DATA_JEST_URI}
+      uris: ${SPRING_ELASTICSEARCH_REST_URIS:${SPRING_DATA_JEST_URI}}
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod

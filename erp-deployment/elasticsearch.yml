@@ -36,6 +36,7 @@ services:
       - 'discovery.type=single-node'
       - 'bootstrap.memory_lock=true'
       - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - 'cluster.max_shards_per_node=3000'
     ulimits:
       memlock:
         soft: -1
