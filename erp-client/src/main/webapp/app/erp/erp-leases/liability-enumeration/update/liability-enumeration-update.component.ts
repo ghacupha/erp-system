@@ -46,6 +46,23 @@ export class LiabilityEnumerationUpdateComponent {
     });
   }
 
+  onLeaseContractSelected(contract?: IIFRS16LeaseContract): void {
+    this.selectedLeaseContract = contract ?? {};
+    this.editForm.get('leaseContractId')?.setValue(contract?.id ?? null);
+    if (!contract?.id || this.selectedLeasePaymentUpload?.leaseContract?.id !== contract.id) {
+      this.selectedLeasePaymentUpload = undefined;
+      this.editForm.get('leasePaymentUploadId')?.reset();
+    }
+  }
+
+  onLeasePaymentUploadSelected(upload?: ILeasePaymentUploadRecord): void {
+    this.selectedLeasePaymentUpload = upload ?? {};
+    this.editForm.get('leasePaymentUploadId')?.setValue(upload?.id ?? null);
+    if (upload?.leaseContract?.id && !this.editForm.get('leaseContractId')?.value) {
+      this.editForm.get('leaseContractId')?.setValue(upload.leaseContract.id);
+    }
+  }
+
   protected onSaveSuccess(response?: LiabilityEnumerationResponse | null): void {
     this.isSaving = false;
     if (response?.liabilityEnumerationId) {
@@ -66,22 +83,5 @@ export class LiabilityEnumerationUpdateComponent {
       timeGranularity: this.editForm.get(['timeGranularity'])!.value,
       active: this.editForm.get(['active'])!.value,
     } as LiabilityEnumerationRequest;
-  }
-
-  onLeaseContractSelected(contract?: IIFRS16LeaseContract): void {
-    this.selectedLeaseContract = contract ?? {};
-    this.editForm.get('leaseContractId')?.setValue(contract?.id ?? null);
-    if (!contract?.id || this.selectedLeasePaymentUpload?.leaseContract?.id !== contract.id) {
-      this.selectedLeasePaymentUpload = undefined;
-      this.editForm.get('leasePaymentUploadId')?.reset();
-    }
-  }
-
-  onLeasePaymentUploadSelected(upload?: ILeasePaymentUploadRecord): void {
-    this.selectedLeasePaymentUpload = upload ?? {};
-    this.editForm.get('leasePaymentUploadId')?.setValue(upload?.id ?? null);
-    if (upload?.leaseContract?.id && !this.editForm.get('leaseContractId')?.value) {
-      this.editForm.get('leaseContractId')?.setValue(upload.leaseContract.id);
-    }
   }
 }

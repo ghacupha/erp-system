@@ -93,7 +93,7 @@ spring:
       hibernate.use_sql_comments: true
   elasticsearch:
     rest:
-      uris: http://localhost:8840
+      uris: ${SPRING_DATA_JEST_URI:- http://localhost:8840}
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev #, faker
