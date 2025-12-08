@@ -62,7 +62,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"LEASE_MANAGER"})
-class LeasePaymentResourceIT {
+public class LeasePaymentResourceIT {
 
     private static final BigDecimal DEFAULT_PAYMENT_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_PAYMENT_AMOUNT = new BigDecimal(2);

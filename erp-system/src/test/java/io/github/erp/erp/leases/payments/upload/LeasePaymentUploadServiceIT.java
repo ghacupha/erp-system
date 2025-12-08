@@ -32,7 +32,7 @@ import io.github.erp.domain.IFRS16LeaseContract;
 import io.github.erp.domain.LeasePayment;
 import io.github.erp.domain.LeasePaymentUpload;
 import io.github.erp.erp.resources.LeasePaymentResourceIT;
-import io.github.erp.erp.resources.leases.IFRS16LeaseContractResourceIT;
+import io.github.erp.erp.resources.IFRS16LeaseContractResourceIT;
 import io.github.erp.repository.CsvFileUploadRepository;
 import io.github.erp.repository.LeasePaymentRepository;
 import io.github.erp.repository.LeasePaymentUploadRepository;
@@ -43,10 +43,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.StreamSupport;
 import javax.persistence.EntityManager;
-import org.apache.kafka.common.Uuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,7 +128,7 @@ class LeasePaymentUploadServiceIT {
 
         CsvFileUpload csvFileUpload = new CsvFileUpload()
             .originalFileName("payments.csv")
-            .storedFileName("payments-" + Uuid.randomUuid() + ".csv")
+            .storedFileName("payments-" + UUID.randomUUID() + ".csv")
             .filePath("/tmp/payments.csv")
             .fileSize(20L)
             .contentType("text/csv")
