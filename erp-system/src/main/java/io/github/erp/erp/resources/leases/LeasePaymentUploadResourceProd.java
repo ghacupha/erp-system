@@ -81,7 +81,7 @@ public class LeasePaymentUploadResourceProd {
         @RequestParam(name = "query", required = false, defaultValue = "") String query,
         @RequestParam(name = "leaseContractId", required = false) Long leaseContractId
     ) {
-        Page<LeasePaymentUploadDTO> page = uploadService.search(query, pageable, leaseContractId);
+        Page<LeasePaymentUploadDTO> page = uploadService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
