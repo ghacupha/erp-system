@@ -20,6 +20,8 @@ package io.github.erp.internal.framework.batch;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobScope;
+import org.springframework.batch.core.repository.ExecutionContextSerializer;
+import org.springframework.batch.core.repository.dao.Jackson2ExecutionContextStringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,5 +37,12 @@ public class BatchConfigs {
     @JobScope
     public JobExecutionListener persistenceJobListener(@Value("#{jobParameters['fileId']}") long fileId, @Value("#{jobParameters['startUpTime']}") long startUpTime) {
         return new PersistenceJobListener(fileId, startUpTime);
+    }
+
+    @Bean
+    public ExecutionContextSerializer executionContextSerializer() {
+        Jackson2ExecutionContextStringSerializer serializer = new Jackson2ExecutionContextStringSerializer();
+        serializer.setTrustedPackages("java.lang", "java.util", "io.github.erp.erp.leases.liability.enumeration");
+        return serializer;
     }
 }
