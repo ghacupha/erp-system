@@ -20,7 +20,7 @@
           [inputControlLabel]="'Lease payment upload'"
           [inputValue]="editForm.get('leasePaymentUploadId')?.value"
           [disabledInput]="isSaving"
-          [leaseContractId]="selectedLeaseContract?.id"
+          [leaseContractId]="selectedLeaseContract?.bookingId"
           (valueSelected)="onLeasePaymentUploadSelected($event)"
         >
           <option [ngValue]="editForm.get('leasePaymentUploadId')!.value"></option>

@@ -141,6 +141,11 @@ public class LeasePaymentUploadService {
         return leasePaymentUploadSearchRepository.search(query, leaseContractId, pageable).map(leasePaymentUploadMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
+    public Page<LeasePaymentUploadDTO> search(String query, Pageable pageable) {
+        return leasePaymentUploadSearchRepository.search(query, pageable).map(leasePaymentUploadMapper::toDto);
+    }
+
     public LeasePaymentUploadDTO deactivateUpload(Long uploadId) {
         return leasePaymentUploadRepository
             .findById(uploadId)
