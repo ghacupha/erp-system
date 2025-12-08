@@ -26,6 +26,7 @@
       "relationshipName": "leaseContract",
       "otherEntityName": "iFRS16LeaseContract",
       "relationshipType": "many-to-one",
+      "joinColumnName": "ifrs16lease_contract_id",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "bookingId"
     },

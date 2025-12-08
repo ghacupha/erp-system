@@ -81,6 +81,7 @@ public class LiabilityEnumeration implements Serializable {
     )
     @ManyToOne(optional = false)
     @NotNull
+    @JoinColumn(name = "ifrs16lease_contract_id", nullable = false)
     private IFRS16LeaseContract leaseContract;
 
     @ManyToOne(optional = false)
