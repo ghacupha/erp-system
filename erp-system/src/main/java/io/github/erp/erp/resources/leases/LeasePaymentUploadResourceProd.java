@@ -78,8 +78,7 @@ public class LeasePaymentUploadResourceProd {
     @GetMapping("/_search/lease-payment-uploads")
     public ResponseEntity<List<LeasePaymentUploadDTO>> searchUploads(
         @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-        @RequestParam(name = "query", required = false, defaultValue = "") String query,
-        @RequestParam(name = "leaseContractId", required = false) Long leaseContractId
+        @RequestParam(name = "query", required = false, defaultValue = "") String query
     ) {
         Page<LeasePaymentUploadDTO> page = uploadService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
