@@ -18,13 +18,19 @@
 package io.github.erp.erp.startUp.index;
 
 import com.google.common.collect.ImmutableList;
+import io.github.erp.erp.leases.payments.upload.LeasePaymentUploadService;
 import io.github.erp.erp.startUp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.startUp.index.engine_v1.IndexingServiceChainSingleton;
 import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.LeasePaymentUploadRepository;
+import io.github.erp.repository.search.LeaseLiabilitySearchRepository;
 import io.github.erp.repository.search.LeasePaymentUploadSearchRepository;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import io.github.erp.service.LeaseLiabilityService;
+import io.github.erp.service.mapper.LeaseLiabilityMapper;
+import io.github.erp.service.mapper.LeasePaymentUploadMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -39,16 +45,14 @@ public class LeasePaymentUploadIndexingService extends AbstractStartupRegistered
     private static final String TAG = "LeasePaymentUploadIndex";
     private static final Logger log = LoggerFactory.getLogger(LeasePaymentUploadIndexingService.class);
 
-    private final LeasePaymentUploadRepository repository;
+    private final LeasePaymentUploadService service;
+    private final LeasePaymentUploadMapper mapper;
     private final LeasePaymentUploadSearchRepository searchRepository;
 
-    public LeasePaymentUploadIndexingService(
-        IndexProperties indexProperties,
-        LeasePaymentUploadRepository repository,
-        LeasePaymentUploadSearchRepository searchRepository
-    ) {
+    public LeasePaymentUploadIndexingService (IndexProperties indexProperties, LeasePaymentUploadService service, LeasePaymentUploadMapper mapper, LeasePaymentUploadSearchRepository searchRepository) {
         super(indexProperties, indexProperties.getRebuild());
-        this.repository = repository;
+        this.service = service;
+        this.mapper = mapper;
         this.searchRepository = searchRepository;
     }
 
@@ -77,12 +81,11 @@ public class LeasePaymentUploadIndexingService extends AbstractStartupRegistered
         log.info("Initiating {} build sequence", TAG);
         long startup = System.currentTimeMillis();
         this.searchRepository.saveAll(
-            repository
-                .findAll(Pageable.unpaged())
+            service.findAll(Pageable.unpaged())
                 .stream()
-                .filter(entity -> entity.getId() != null && !searchRepository.existsById(entity.getId()))
-                .collect(ImmutableList.toImmutableList())
-        );
+                .map(mapper::toEntity)
+                .filter(entity -> !searchRepository.existsById(entity.getId()))
+                .collect(ImmutableList.toImmutableList()));
         log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
     }
 

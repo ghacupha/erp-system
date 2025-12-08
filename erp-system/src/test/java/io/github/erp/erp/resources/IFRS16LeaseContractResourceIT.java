@@ -60,7 +60,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"LEASE_MANAGER"})
-class IFRS16LeaseContractResourceIT {
+public class IFRS16LeaseContractResourceIT {
 
     private static final String DEFAULT_BOOKING_ID = "AAAAAAAAAA";
     private static final String UPDATED_BOOKING_ID = "BBBBBBBBBB";
