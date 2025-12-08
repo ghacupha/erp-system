@@ -26,6 +26,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import io.github.erp.erp.leases.liability.enumeration.LiabilityEnumerationResponse;
+
 /**
  * Contains general configurations for batch related entities and objects
  */
@@ -41,8 +43,6 @@ public class BatchConfigs {
 
     @Bean
     public ExecutionContextSerializer executionContextSerializer() {
-        Jackson2ExecutionContextStringSerializer serializer = new Jackson2ExecutionContextStringSerializer();
-        serializer.setTrustedPackages("java.lang", "java.util", "io.github.erp.erp.leases.liability.enumeration");
-        return serializer;
+        return new Jackson2ExecutionContextStringSerializer(LiabilityEnumerationResponse.class.getName());
     }
 }
