@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class PresentValueEnumerationResourceProd {
 
     @GetMapping("/present-value-enumerations")
     public ResponseEntity<List<PresentValueEnumeration>> getPresentValueEnumerations(
-        @PageableDefault(size = 20) Pageable pageable,
+        @PageableDefault(size = 200, sort = "sequenceNumber", direction = Sort.Direction.ASC) Pageable pageable,
         @RequestParam(value = "liabilityEnumerationId", required = false) Long liabilityEnumerationId
     ) {
         log.debug("REST request to get PresentValueEnumerations for liability {}", liabilityEnumerationId);
