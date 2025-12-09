@@ -44,7 +44,7 @@ export class LiabilityEnumerationComponent implements OnInit {
 
   viewPresentValues(item: ILiabilityEnumeration): void {
     if (item.id) {
-      this.router.navigate(['erp', 'leases', 'liability-enumeration', item.id, 'present-values']);
+      this.router.navigate(['liability-enumeration', item.id, 'present-values']);
     }
   }
 }
