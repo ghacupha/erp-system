@@ -114,7 +114,7 @@ public class LeasePaymentUploadService {
             csvFileUpload.setLeasePaymentUpload(upload);
 
             upload = leasePaymentUploadRepository.save(upload);
-            leasePaymentUploadSearchRepository.save(upload);
+            leasePaymentUploadSearchRepository.save(sanitizeForIndexing(upload));
 
             if (request.isLaunchBatchImmediately()) {
                 launchJobAfterCommit(upload);
@@ -243,5 +243,27 @@ public class LeasePaymentUploadService {
         return leaseContractRepository
             .findById(leaseContractId)
             .orElseThrow(() -> new IllegalArgumentException("IFRS16 lease contract id #" + leaseContractId + " not found"));
+    }
+
+    /**
+     * Avoid circular references between {@link LeasePaymentUpload} and {@link CsvFileUpload}
+     * when persisting to Elasticsearch by copying only the searchable fields.
+     */
+    private LeasePaymentUpload sanitizeForIndexing(LeasePaymentUpload source) {
+        LeasePaymentUpload indexUpload = new LeasePaymentUpload()
+            .id(source.getId())
+            .uploadStatus(source.getUploadStatus())
+            .createdAt(source.getCreatedAt())
+            .active(source.getActive());
+
+        IFRS16LeaseContract leaseContract = source.getLeaseContract();
+        if (leaseContract != null) {
+            IFRS16LeaseContract indexContract = new IFRS16LeaseContract();
+            indexContract.setId(leaseContract.getId());
+            indexContract.setBookingId(leaseContract.getBookingId());
+            indexUpload.setLeaseContract(indexContract);
+        }
+
+        return indexUpload;
     }
 }
