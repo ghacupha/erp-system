@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.LiabilityTimeGranularity;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -66,6 +67,11 @@ public class LiabilityEnumeration implements Serializable {
     @Column(name = "active")
     @Field(type = FieldType.Boolean)
     private Boolean active = Boolean.TRUE;
+
+    @NotNull
+    @Column(name = "request_date_time", nullable = false)
+    @Field(type = FieldType.Date)
+    private ZonedDateTime requestDateTime;
 
     @JsonIgnoreProperties(
         value = {
@@ -161,6 +167,19 @@ public class LiabilityEnumeration implements Serializable {
         return this;
     }
 
+    public ZonedDateTime getRequestDateTime() {
+        return requestDateTime;
+    }
+
+    public void setRequestDateTime(ZonedDateTime requestDateTime) {
+        this.requestDateTime = requestDateTime;
+    }
+
+    public LiabilityEnumeration requestDateTime(ZonedDateTime requestDateTime) {
+        this.setRequestDateTime(requestDateTime);
+        return this;
+    }
+
     public IFRS16LeaseContract getLeaseContract() {
         return leaseContract;
     }
@@ -241,8 +260,10 @@ public class LiabilityEnumeration implements Serializable {
         return "LiabilityEnumeration{" +
             "id=" + getId() +
             ", interestRate=" + getInterestRate() +
+            ", interestRateText='" + getInterestRateText() + "'" +
             ", timeGranularity=" + getTimeGranularity() +
             ", active=" + getActive() +
+            ", requestDateTime=" + getRequestDateTime() +
             "}";
     }
 }

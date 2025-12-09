@@ -1,10 +1,14 @@
+import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+
 export interface ILiabilityEnumeration {
   id?: number;
   interestRate?: number;
   interestRateText?: string;
   timeGranularity?: string;
   active?: boolean;
+  requestDateTime?: string;
   leaseContractId?: number;
+  leaseContract?: IIFRS16LeaseContract;
   leasePaymentUploadId?: number;
 }
 
