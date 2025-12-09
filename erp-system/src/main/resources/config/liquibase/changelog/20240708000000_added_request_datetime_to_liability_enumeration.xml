@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20240708000000-1" author="chatgpt">
+        <addColumn tableName="liability_enumeration">
+            <column name="request_date_time" type="${datetimeType}" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <dropDefaultValue tableName="liability_enumeration" columnName="request_date_time" columnDataType="${datetimeType}" />
+    </changeSet>
+</databaseChangeLog>

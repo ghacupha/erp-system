@@ -553,6 +553,7 @@
     <include file="config/liquibase/changelog/20240620115630_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240620145521_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240620090000_added_entity_LiabilityEnumeration.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240708000000_added_request_datetime_to_liability_enumeration.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240621095447_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240701130948_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240701133957_changelog.xml" relativeToChangelogFile="false"/>

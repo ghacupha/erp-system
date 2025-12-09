@@ -1,6 +1,9 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2>Liability Enumerations</h2>
-  <button type="button" class="btn btn-primary" routerLink="./create">Run Enumeration</button>
+  <div class="d-flex gap-2">
+    <button type="button" class="btn btn-outline-secondary" (click)="reset()" [disabled]="isLoading">Refresh</button>
+    <button type="button" class="btn btn-primary" routerLink="./create">Run Enumeration</button>
+  </div>
 </div>
 
 <div *ngIf="isLoading" class="alert alert-info">Loading liability enumerations...</div>
@@ -9,18 +12,22 @@
   <thead>
     <tr>
       <th>ID</th>
+      <th>Booking ID</th>
       <th>Interest Rate</th>
       <th>Granularity</th>
       <th>Active</th>
+      <th>Requested at</th>
       <th></th>
     </tr>
   </thead>
-  <tbody>
+  <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
     <tr *ngFor="let enumeration of liabilityEnumerations; trackBy: trackId">
       <td>{{ enumeration.id }}</td>
+      <td>{{ enumeration.leaseContract?.bookingId ?? enumeration.leaseContractId }}</td>
       <td>{{ enumeration.interestRateText ?? enumeration.interestRate }}</td>
       <td>{{ enumeration.timeGranularity }}</td>
       <td>{{ enumeration.active }}</td>
+      <td>{{ enumeration.requestDateTime | formatMediumDatetime }}</td>
       <td class="text-end">
         <button type="button" class="btn btn-link p-0" (click)="viewPresentValues(enumeration)">Present values</button>
       </td>

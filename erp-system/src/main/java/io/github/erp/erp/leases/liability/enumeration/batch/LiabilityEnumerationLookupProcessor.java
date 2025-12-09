@@ -25,6 +25,7 @@ import io.github.erp.repository.IFRS16LeaseContractRepository;
 import io.github.erp.repository.LeasePaymentRepository;
 import io.github.erp.repository.LeasePaymentUploadRepository;
 import io.github.erp.repository.LiabilityEnumerationRepository;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.batch.item.ItemProcessor;
@@ -63,6 +64,7 @@ public class LiabilityEnumerationLookupProcessor implements ItemProcessor<Liabil
                 .active(Boolean.TRUE.equals(item.getRequest().getActive()))
                 .interestRate(item.getAnnualRate())
                 .interestRateText(item.getRequest().getInterestRate())
+                .requestDateTime(ZonedDateTime.now())
                 .timeGranularity(item.getGranularity())
         );
 
