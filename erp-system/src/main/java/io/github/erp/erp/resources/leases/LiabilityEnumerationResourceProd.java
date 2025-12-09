@@ -32,6 +32,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
@@ -74,7 +75,9 @@ public class LiabilityEnumerationResourceProd {
     }
 
     @GetMapping("/liability-enumerations")
-    public ResponseEntity<List<LiabilityEnumeration>> getAllLiabilityEnumerations(@PageableDefault(size = 10) Pageable pageable) {
+    public ResponseEntity<List<LiabilityEnumeration>> getAllLiabilityEnumerations(
+        @PageableDefault(size = 10, sort = "requestDateTime", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
         Page<LiabilityEnumeration> page = liabilityEnumerationRepository.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());

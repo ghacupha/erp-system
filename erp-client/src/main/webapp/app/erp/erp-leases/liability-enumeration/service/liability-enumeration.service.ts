@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import { createRequestOption } from 'app/core/request/request-util';
 import {
   ILiabilityEnumeration,
   IPresentValueEnumeration,
@@ -25,8 +26,8 @@ export class LiabilityEnumerationService {
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
-    const options = { params: this.createRequestOption(req) };
-    return this.http.get<ILiabilityEnumeration[]>(this.resourceUrl, { ...options, observe: 'response' });
+    const options = createRequestOption(req);
+    return this.http.get<ILiabilityEnumeration[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
   find(id: number): Observable<EntityResponseType> {
@@ -34,22 +35,10 @@ export class LiabilityEnumerationService {
   }
 
   presentValues(liabilityEnumerationId?: number, req?: any): Observable<PresentValueArrayResponseType> {
-    let params = this.createRequestOption(req).set('liabilityEnumerationId', liabilityEnumerationId ?? '');
+    let params = createRequestOption(req).set('liabilityEnumerationId', liabilityEnumerationId ?? '');
     if (!liabilityEnumerationId) {
       params = params.delete('liabilityEnumerationId');
     }
     return this.http.get<IPresentValueEnumeration[]>(this.presentValueUrl, { params, observe: 'response' });
-  }
-
-  protected createRequestOption(req?: any): HttpParams {
-    let options: HttpParams = new HttpParams();
-    if (req) {
-      Object.keys(req).forEach(key => {
-        if (req[key] !== undefined) {
-          options = options.set(key, req[key]);
-        }
-      });
-    }
-    return options;
   }
 }

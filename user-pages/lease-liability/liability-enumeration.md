@@ -1,9 +1,6 @@
-# How to run a liability enumeration
+# Using the liability enumeration views
 
-1. Navigate to **Maintenance > Liability enumeration > Create**.
-2. In **Lease contract**, start typing the contract name or booking ID and select the match from the NgSelect list.
-3. In **Lease payment upload**, search for the upload associated with the chosen contract and pick it from the suggestions.
-4. Enter the annual **Interest rate**. Set **Payment frequency** to the settlement cadence (monthly, quarterly, bi-annual or yearly). Discounting will always occur monthly, inserting zero-value months between non-monthly payments.
-5. Leave **Active** checked if the enumeration should be processed immediately, then click **Enumerate**.
-
-> Tip: Changing the lease contract clears the upload selection to prevent mismatched data.
+1. Open **Processing > Liability Enumeration** to view existing runs. The table is sorted by the most recent requests and shows the lease booking ID plus the local date-time the enumeration was initiated.
+2. Use **Refresh** to reload the first page or scroll down to load additional pages when more results are available.
+3. Click **Present values** on a row to open its schedule. The page title lists the related contract identifier so you know which lease you are reviewing.
+4. From the present value page, use **Export CSV** or **Export XLSX** to download the current schedule for offline checks; the export respects the on-screen ordering.
