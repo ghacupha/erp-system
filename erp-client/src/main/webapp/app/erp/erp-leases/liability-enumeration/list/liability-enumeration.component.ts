@@ -6,6 +6,7 @@ import { LiabilityEnumerationService } from '../service/liability-enumeration.se
 import { AlertService } from 'app/core/util/alert.service';
 import { ITEMS_PER_PAGE, ASC, DESC } from 'app/config/pagination.constants';
 import { ParseLinks } from 'app/core/util/parse-links.service';
+import dayjs from 'dayjs/esm';
 
 @Component({
   selector: 'jhi-liability-enumeration',
@@ -85,7 +86,9 @@ export class LiabilityEnumerationComponent implements OnInit {
     const linkHeader = headers.get('link');
     this.links = linkHeader ? this.parseLinks.parse(linkHeader) : { last: 0 };
     if (data) {
-      this.liabilityEnumerations.push(...data);
+      this.liabilityEnumerations.push(
+        ...data.map(item => ({ ...item, requestDateTime: item.requestDateTime ? dayjs(item.requestDateTime) : undefined }))
+      );
     }
   }
 }
