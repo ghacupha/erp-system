@@ -1,3 +1,4 @@
+import dayjs from 'dayjs/esm';
 import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 
 export interface ILiabilityEnumeration {
@@ -6,7 +7,7 @@ export interface ILiabilityEnumeration {
   interestRateText?: string;
   timeGranularity?: string;
   active?: boolean;
-  requestDateTime?: string;
+  requestDateTime?: dayjs.Dayjs;
   leaseContractId?: number;
   leaseContract?: IIFRS16LeaseContract;
   leasePaymentUploadId?: number;
