@@ -17,9 +17,13 @@ package io.github.erp.erp.leases.liability.enumeration;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class LiabilityEnumerationResponse {
+@JsonTypeInfo(use = JsonTypeInfo. Id. CLASS)
+public class LiabilityEnumerationResponse implements Serializable {
 
     private Long liabilityEnumerationId;
     private Long leaseAmortizationCalculationId;
