@@ -10,7 +10,7 @@ const routes: Routes = [
     path: '',
     component: LiabilityEnumerationComponent,
     canActivate: [UserRouteAccessService],
-    data: { authorities: ['ROLE_LEASE_MANAGER'] },
+    data: { authorities: ['ROLE_LEASE_MANAGER'], defaultSort: 'id,desc', },
   },
   {
     path: 'create',
