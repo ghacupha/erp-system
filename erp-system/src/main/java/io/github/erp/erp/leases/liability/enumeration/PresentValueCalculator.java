@@ -45,17 +45,25 @@ public class PresentValueCalculator {
             throw new IllegalArgumentException("At least one lease payment is required to enumerate present values");
         }
 
+        LocalDate earliestPaymentDate = leasePayments
+            .stream()
+            .filter(payment -> payment.getPaymentDate() != null)
+            .map(LeasePayment::getPaymentDate)
+            .min(Comparator.naturalOrder())
+            .orElseThrow(() -> new IllegalArgumentException("At least one lease payment date is required"));
+
+        LocalDate anchorDate = earliestPaymentDate.isBefore(ANCHOR_DATE) ? ANCHOR_DATE : earliestPaymentDate;
+
         List<LeasePayment> orderedPayments = leasePayments
             .stream()
-            .filter(payment -> payment.getPaymentDate() != null && !payment.getPaymentDate().isBefore(ANCHOR_DATE))
+            .filter(payment -> payment.getPaymentDate() != null && !payment.getPaymentDate().isBefore(anchorDate))
             .sorted(Comparator.comparing(LeasePayment::getPaymentDate))
             .collect(Collectors.toList());
 
         if (orderedPayments.isEmpty()) {
-            throw new IllegalArgumentException("No lease payments on or after anchor date 2019-01-01");
+            throw new IllegalArgumentException("No lease payments on or after anchor date " + anchorDate);
         }
 
-        LocalDate anchorDate = ANCHOR_DATE;
         BigDecimal periodRate = annualRate.divide(BigDecimal.valueOf(LiabilityTimeGranularity.MONTHLY.getCompoundsPerYear()), MC);
 
         List<PresentValueLine> lines = new ArrayList<>();
