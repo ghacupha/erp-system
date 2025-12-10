@@ -34,6 +34,7 @@ import org.springframework.stereotype.Component;
 public class PresentValueCalculator {
 
     private static final MathContext MC = new MathContext(20, RoundingMode.HALF_EVEN);
+    private static final LocalDate ANCHOR_DATE = LocalDate.of(2019, 1, 1);
 
     public List<PresentValueLine> calculate(
         List<LeasePayment> leasePayments,
@@ -46,10 +47,15 @@ public class PresentValueCalculator {
 
         List<LeasePayment> orderedPayments = leasePayments
             .stream()
+            .filter(payment -> payment.getPaymentDate() != null && !payment.getPaymentDate().isBefore(ANCHOR_DATE))
             .sorted(Comparator.comparing(LeasePayment::getPaymentDate))
             .collect(Collectors.toList());
 
-        LocalDate anchorDate = YearMonth.from(orderedPayments.get(0).getPaymentDate()).atDay(1);
+        if (orderedPayments.isEmpty()) {
+            throw new IllegalArgumentException("No lease payments on or after anchor date 2019-01-01");
+        }
+
+        LocalDate anchorDate = ANCHOR_DATE;
         BigDecimal periodRate = annualRate.divide(BigDecimal.valueOf(LiabilityTimeGranularity.MONTHLY.getCompoundsPerYear()), MC);
 
         List<PresentValueLine> lines = new ArrayList<>();
