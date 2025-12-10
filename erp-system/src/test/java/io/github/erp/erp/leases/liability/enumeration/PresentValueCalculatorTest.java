@@ -35,7 +35,7 @@ class PresentValueCalculatorTest {
     private final PresentValueCalculator calculator = new PresentValueCalculator();
 
     @Test
-    void usesAnchorDateForSequencing() {
+    void usesFirstPaymentAsAnchorWhenAfterHardStop() {
         LeasePayment marchPayment = new LeasePayment().paymentAmount(new BigDecimal("300"))
             .paymentDate(LocalDate.of(2019, 3, 15));
 
@@ -45,20 +45,19 @@ class PresentValueCalculatorTest {
             LiabilityTimeGranularity.MONTHLY
         );
 
-        assertThat(lines).hasSize(3);
-        assertThat(lines.get(0).getPaymentDate()).isEqualTo(LocalDate.of(2019, 1, 1));
-        assertThat(lines.get(0).getPresentValue()).isEqualByComparingTo(BigDecimal.ZERO.setScale(2));
+        assertThat(lines).hasSize(1);
+        assertThat(lines.get(0).getPaymentDate()).isEqualTo(marchPayment.getPaymentDate());
         BigDecimal monthlyRate = new BigDecimal("0.12").divide(new BigDecimal("12"), new MathContext(20, RoundingMode.HALF_EVEN));
         BigDecimal expected = marchPayment
             .getPaymentAmount()
-            .divide(BigDecimal.ONE.add(monthlyRate).pow(3, new MathContext(20, RoundingMode.HALF_EVEN)), 21, RoundingMode.HALF_EVEN)
+            .divide(BigDecimal.ONE.add(monthlyRate).pow(1, new MathContext(20, RoundingMode.HALF_EVEN)), 21, RoundingMode.HALF_EVEN)
             .setScale(2, RoundingMode.HALF_EVEN);
-        assertThat(lines.get(2).getPresentValue()).isEqualByComparingTo(expected);
-        assertThat(lines.get(2).getSequenceNumber()).isEqualTo(3);
+        assertThat(lines.get(0).getPresentValue()).isEqualByComparingTo(expected);
+        assertThat(lines.get(0).getSequenceNumber()).isEqualTo(1);
     }
 
     @Test
-    void filtersOutPaymentsBeforeAnchorDate() {
+    void hardStopAppliedWhenEarlierPaymentsExist() {
         LeasePayment dec2018 = new LeasePayment().paymentAmount(new BigDecimal("100"))
             .paymentDate(LocalDate.of(2018, 12, 15));
         LeasePayment feb2019 = new LeasePayment().paymentAmount(new BigDecimal("150"))
