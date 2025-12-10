@@ -1,8 +1,24 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2>Present value enumeration for Contract {{ contractLabel || liabilityEnumerationId }}</h2>
   <div class="d-flex gap-2">
-    <button type="button" class="btn btn-outline-primary" (click)="exportCsv()" [disabled]="!values.length">Export CSV</button>
-    <button type="button" class="btn btn-outline-primary" (click)="exportXlsx()" [disabled]="!values.length">Export XLSX</button>
+    <button
+      type="button"
+      class="btn btn-outline-secondary btn-sm"
+      (click)="exportCsv()"
+      [disabled]="!values.length">
+      <fa-icon icon="file-csv" class="me-1"></fa-icon>
+      Export CSV
+      <span class="spinner-border spinner-border-sm" *ngIf="exportingCsv" role="status" aria-hidden="true"></span>
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-secondary btn-sm"
+      (click)="exportXlsx()"
+      [disabled]="!values.length">
+      <fa-icon icon="file-excel" class="me-1"></fa-icon>
+      Export XLSX
+      <span class="spinner-border spinner-border-sm" *ngIf="exportingExcel" role="status" aria-hidden="true"></span>
+    </button>
     <a routerLink="../../" class="btn btn-secondary">Back to list</a>
   </div>
 </div>
