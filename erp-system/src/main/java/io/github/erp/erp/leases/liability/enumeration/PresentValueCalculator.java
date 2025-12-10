@@ -39,7 +39,8 @@ public class PresentValueCalculator {
     public List<PresentValueLine> calculate(
         List<LeasePayment> leasePayments,
         BigDecimal annualRate,
-        LiabilityTimeGranularity granularity
+        LiabilityTimeGranularity granularity,
+        LocalDate presentValueDate
     ) {
         if (leasePayments == null || leasePayments.isEmpty()) {
             throw new IllegalArgumentException("At least one lease payment is required to enumerate present values");
@@ -52,7 +53,8 @@ public class PresentValueCalculator {
             .min(Comparator.naturalOrder())
             .orElseThrow(() -> new IllegalArgumentException("At least one lease payment date is required"));
 
-        LocalDate anchorDate = earliestPaymentDate.isBefore(ANCHOR_DATE) ? ANCHOR_DATE : earliestPaymentDate;
+        LocalDate valuationStartDate = presentValueDate != null ? presentValueDate : earliestPaymentDate;
+        LocalDate anchorDate = valuationStartDate.isBefore(ANCHOR_DATE) ? ANCHOR_DATE : valuationStartDate;
 
         List<LeasePayment> orderedPayments = leasePayments
             .stream()
@@ -64,11 +66,12 @@ public class PresentValueCalculator {
             throw new IllegalArgumentException("No lease payments on or after anchor date " + anchorDate);
         }
 
-        BigDecimal periodRate = annualRate.divide(BigDecimal.valueOf(LiabilityTimeGranularity.MONTHLY.getCompoundsPerYear()), MC);
+        BigDecimal periodRate = annualRate.divide(BigDecimal.valueOf(granularity.getCompoundsPerYear()), MC);
 
         List<PresentValueLine> lines = new ArrayList<>();
         int sequence = 1;
-        YearMonth cursorMonth = YearMonth.from(anchorDate);
+        lines.add(buildPresentValueLine(sequence++, anchorDate, BigDecimal.ZERO, periodRate));
+        YearMonth cursorMonth = YearMonth.from(anchorDate).plusMonths(1);
 
         for (LeasePayment payment : orderedPayments) {
             YearMonth paymentMonth = YearMonth.from(payment.getPaymentDate());

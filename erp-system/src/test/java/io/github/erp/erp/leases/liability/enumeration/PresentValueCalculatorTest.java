@@ -35,25 +35,30 @@ class PresentValueCalculatorTest {
     private final PresentValueCalculator calculator = new PresentValueCalculator();
 
     @Test
-    void usesFirstPaymentAsAnchorWhenAfterHardStop() {
+    void insertsPresentValueStartBeforePayments() {
         LeasePayment marchPayment = new LeasePayment().paymentAmount(new BigDecimal("300"))
             .paymentDate(LocalDate.of(2019, 3, 15));
+        LocalDate presentValueDate = LocalDate.of(2019, 3, 1);
 
         List<PresentValueLine> lines = calculator.calculate(
             Arrays.asList(marchPayment),
             new BigDecimal("0.12"),
-            LiabilityTimeGranularity.MONTHLY
+            LiabilityTimeGranularity.MONTHLY,
+            presentValueDate
         );
 
-        assertThat(lines).hasSize(1);
-        assertThat(lines.get(0).getPaymentDate()).isEqualTo(marchPayment.getPaymentDate());
+        assertThat(lines).hasSize(2);
+        assertThat(lines.get(0).getPaymentDate()).isEqualTo(presentValueDate);
+        assertThat(lines.get(0).getPaymentAmount()).isZero();
+        assertThat(lines.get(0).getSequenceNumber()).isEqualTo(1);
+
         BigDecimal monthlyRate = new BigDecimal("0.12").divide(new BigDecimal("12"), new MathContext(20, RoundingMode.HALF_EVEN));
         BigDecimal expected = marchPayment
             .getPaymentAmount()
-            .divide(BigDecimal.ONE.add(monthlyRate).pow(1, new MathContext(20, RoundingMode.HALF_EVEN)), 21, RoundingMode.HALF_EVEN)
+            .divide(BigDecimal.ONE.add(monthlyRate).pow(2, new MathContext(20, RoundingMode.HALF_EVEN)), 21, RoundingMode.HALF_EVEN)
             .setScale(2, RoundingMode.HALF_EVEN);
-        assertThat(lines.get(0).getPresentValue()).isEqualByComparingTo(expected);
-        assertThat(lines.get(0).getSequenceNumber()).isEqualTo(1);
+        assertThat(lines.get(1).getPresentValue()).isEqualByComparingTo(expected);
+        assertThat(lines.get(1).getSequenceNumber()).isEqualTo(2);
     }
 
     @Test
@@ -66,11 +71,13 @@ class PresentValueCalculatorTest {
         List<PresentValueLine> lines = calculator.calculate(
             Arrays.asList(dec2018, feb2019),
             new BigDecimal("0.12"),
-            LiabilityTimeGranularity.MONTHLY
+            LiabilityTimeGranularity.MONTHLY,
+            LocalDate.of(2018, 12, 1)
         );
 
         assertThat(lines).hasSize(2);
         assertThat(lines.get(0).getPaymentDate()).isEqualTo(LocalDate.of(2019, 1, 1));
+        assertThat(lines.get(0).getPaymentAmount()).isZero();
         assertThat(lines.stream().noneMatch(line -> line.getPaymentDate().isEqual(dec2018.getPaymentDate()))).isTrue();
 
         BigDecimal monthlyRate = new BigDecimal("0.12").divide(new BigDecimal("12"), new MathContext(20, RoundingMode.HALF_EVEN));
@@ -87,9 +94,53 @@ class PresentValueCalculatorTest {
             .paymentDate(LocalDate.of(2018, 5, 20));
 
         assertThatThrownBy(
-            () -> calculator.calculate(Arrays.asList(oldPayment), new BigDecimal("0.05"), LiabilityTimeGranularity.MONTHLY)
+            () ->
+                calculator.calculate(
+                    Arrays.asList(oldPayment),
+                    new BigDecimal("0.05"),
+                    LiabilityTimeGranularity.MONTHLY,
+                    LocalDate.of(2018, 5, 1)
+                )
         )
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("anchor date 2019-01-01");
+    }
+
+    @Test
+    void startsAtPresentValueDateEvenWhenFirstPaymentIsEarlier() {
+        LeasePayment novemberPayment = new LeasePayment().paymentAmount(new BigDecimal("80"))
+            .paymentDate(LocalDate.of(2019, 11, 1));
+        LeasePayment decemberPayment = new LeasePayment().paymentAmount(new BigDecimal("100"))
+            .paymentDate(LocalDate.of(2019, 12, 15));
+
+        List<PresentValueLine> lines = calculator.calculate(
+            Arrays.asList(novemberPayment, decemberPayment),
+            new BigDecimal("0.12"),
+            LiabilityTimeGranularity.MONTHLY,
+            LocalDate.of(2019, 12, 1)
+        );
+
+        assertThat(lines.get(0).getPaymentDate()).isEqualTo(LocalDate.of(2019, 12, 1));
+        assertThat(lines.get(0).getPaymentAmount()).isZero();
+        assertThat(lines.stream().noneMatch(line -> line.getPaymentDate().isEqual(novemberPayment.getPaymentDate()))).isTrue();
+        assertThat(lines.get(1).getSequenceNumber()).isEqualTo(2);
+        assertThat(lines.get(1).getPaymentDate()).isEqualTo(decemberPayment.getPaymentDate());
+    }
+
+    @Test
+    void firstSequenceStillAlignsWithPresentValueDateWhenPaymentAmountIsZero() {
+        LeasePayment januaryPayment = new LeasePayment().paymentAmount(BigDecimal.ZERO).paymentDate(LocalDate.of(2020, 1, 20));
+
+        List<PresentValueLine> lines = calculator.calculate(
+            Arrays.asList(januaryPayment),
+            new BigDecimal("0.1"),
+            LiabilityTimeGranularity.MONTHLY,
+            LocalDate.of(2020, 1, 1)
+        );
+
+        assertThat(lines.get(0).getPaymentDate()).isEqualTo(LocalDate.of(2020, 1, 1));
+        assertThat(lines.get(0).getPaymentAmount()).isZero();
+        assertThat(lines.get(1).getPaymentDate()).isEqualTo(januaryPayment.getPaymentDate());
+        assertThat(lines.get(1).getSequenceNumber()).isEqualTo(2);
     }
 }
