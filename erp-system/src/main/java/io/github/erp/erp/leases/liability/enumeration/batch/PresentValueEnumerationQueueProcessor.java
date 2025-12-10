@@ -44,7 +44,8 @@ public class PresentValueEnumerationQueueProcessor implements ItemProcessor<Liab
         List<PresentValueLine> lines = presentValueCalculator.calculate(
             item.getLeasePayments(),
             item.getAnnualRate(),
-            item.getGranularity()
+            item.getGranularity(),
+            item.getLeaseContract() != null ? item.getLeaseContract().getCommencementDate() : null
         );
 
         lines.forEach(line -> dispatchQueueItem(item, line));
