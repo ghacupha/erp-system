@@ -46,7 +46,7 @@ class PresentValueCalculatorTest {
         );
 
         assertThat(lines).hasSize(3);
-        assertThat(lines.get(0).getDate()).isEqualTo(LocalDate.of(2019, 1, 1));
+        assertThat(lines.get(0).getPaymentDate()).isEqualTo(LocalDate.of(2019, 1, 1));
         assertThat(lines.get(0).getPresentValue()).isEqualByComparingTo(BigDecimal.ZERO.setScale(2));
         BigDecimal monthlyRate = new BigDecimal("0.12").divide(new BigDecimal("12"), new MathContext(20, RoundingMode.HALF_EVEN));
         BigDecimal expected = marchPayment
@@ -71,8 +71,8 @@ class PresentValueCalculatorTest {
         );
 
         assertThat(lines).hasSize(2);
-        assertThat(lines.get(0).getDate()).isEqualTo(LocalDate.of(2019, 1, 1));
-        assertThat(lines.stream().noneMatch(line -> line.getDate().isEqual(dec2018.getPaymentDate()))).isTrue();
+        assertThat(lines.get(0).getPaymentDate()).isEqualTo(LocalDate.of(2019, 1, 1));
+        assertThat(lines.stream().noneMatch(line -> line.getPaymentDate().isEqual(dec2018.getPaymentDate()))).isTrue();
 
         BigDecimal monthlyRate = new BigDecimal("0.12").divide(new BigDecimal("12"), new MathContext(20, RoundingMode.HALF_EVEN));
         BigDecimal febPresentValue = feb2019

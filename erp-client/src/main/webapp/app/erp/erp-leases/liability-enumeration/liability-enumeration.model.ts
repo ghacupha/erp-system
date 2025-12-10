@@ -1,4 +1,5 @@
 import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import dayjs from 'dayjs';
 
 export interface ILiabilityEnumeration {
   id?: number;
@@ -6,7 +7,7 @@ export interface ILiabilityEnumeration {
   interestRateText?: string;
   timeGranularity?: string;
   active?: boolean;
-  requestDateTime?: string;
+  requestDateTime?: dayjs.Dayjs;
   leaseContractId?: number;
   leaseContract?: IIFRS16LeaseContract;
   leasePaymentUploadId?: number;

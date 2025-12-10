@@ -21,6 +21,8 @@ export class PresentValueEnumerationComponent implements OnInit, OnDestroy {
   selectedBookingId?: string | null;
   isLoading = false;
   private readonly destroy$ = new Subject<void>();
+  exportingCsv = false;
+  exportingExcel = false;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -89,19 +91,29 @@ export class PresentValueEnumerationComponent implements OnInit, OnDestroy {
     if (!this.values.length) {
       return;
     }
+    if (this.exportingCsv) {
+      return;
+    }
+    this.exportingCsv = true;
     const worksheet = this.buildWorksheet();
     const csvContent = XLSX.utils.sheet_to_csv(worksheet);
     this.downloadFile(csvContent, `${this.buildFilename()}.csv`, 'text/csv;charset=utf-8;');
+    this.exportingCsv = false;
   }
 
   exportXlsx(): void {
     if (!this.values.length) {
       return;
     }
+    if (this.exportingExcel) {
+      return;
+    }
+    this.exportingExcel = true;
     const worksheet = this.buildWorksheet();
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Present Values');
     XLSX.writeFile(workbook, `${this.buildFilename()}.xlsx`);
+    this.exportingExcel = false;
   }
 
   private buildWorksheet(): XLSX.WorkSheet {
