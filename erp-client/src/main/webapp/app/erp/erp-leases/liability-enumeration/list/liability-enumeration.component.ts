@@ -6,6 +6,8 @@ import { LiabilityEnumerationService } from '../service/liability-enumeration.se
 import { AlertService } from 'app/core/util/alert.service';
 import { ITEMS_PER_PAGE, ASC, DESC } from 'app/config/pagination.constants';
 import { ParseLinks } from 'app/core/util/parse-links.service';
+import { Store } from '@ngrx/store';
+import { setSelectedLiabilityEnumeration } from '../state/liability-enumeration.actions';
 
 @Component({
   selector: 'jhi-liability-enumeration',
@@ -24,7 +26,8 @@ export class LiabilityEnumerationComponent implements OnInit {
     protected liabilityEnumerationService: LiabilityEnumerationService,
     protected alertService: AlertService,
     protected router: Router,
-    protected parseLinks: ParseLinks
+    protected parseLinks: ParseLinks,
+    protected store: Store
   ) {}
 
   ngOnInit(): void {
@@ -68,6 +71,13 @@ export class LiabilityEnumerationComponent implements OnInit {
   }
 
   viewPresentValues(item: ILiabilityEnumeration): void {
+    const bookingId = item.leaseContract?.bookingId ?? (item.leaseContractId ? item.leaseContractId.toString() : undefined);
+    this.store.dispatch(
+      setSelectedLiabilityEnumeration({
+        liabilityEnumerationId: item.id,
+        bookingId,
+      })
+    );
     if (item.id) {
       this.router.navigate(['liability-enumeration', item.id, 'present-values']);
     }

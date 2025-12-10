@@ -1,33 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import * as XLSX from 'xlsx';
 import { LiabilityEnumerationService } from '../service/liability-enumeration.service';
 import { AlertService } from 'app/core/util/alert.service';
 import { ILiabilityEnumeration, IPresentValueEnumeration } from '../liability-enumeration.model';
+import { Store } from '@ngrx/store';
+import { selectSelectedLiabilityEnumerationBookingId } from '../state/liability-enumeration.selectors';
 
 @Component({
   selector: 'jhi-present-value-enumeration',
   templateUrl: './present-value-enumeration.component.html',
 })
-export class PresentValueEnumerationComponent implements OnInit {
+export class PresentValueEnumerationComponent implements OnInit, OnDestroy {
   values: IPresentValueEnumeration[] = [];
   liabilityEnumerationId?: number;
   liabilityEnumeration?: ILiabilityEnumeration;
+  selectedBookingId?: string | null;
   isLoading = false;
+  private readonly destroy$ = new Subject<void>();
 
   constructor(
     protected activatedRoute: ActivatedRoute,
     protected liabilityEnumerationService: LiabilityEnumerationService,
-    protected alertService: AlertService
+    protected alertService: AlertService,
+    protected store: Store
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(params => {
+    this.store
+      .select(selectSelectedLiabilityEnumerationBookingId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(bookingId => (this.selectedBookingId = bookingId));
+
+    this.activatedRoute.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.liabilityEnumerationId = Number(params['id']);
       this.load();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   load(): void {
@@ -56,6 +72,9 @@ export class PresentValueEnumerationComponent implements OnInit {
   }
 
   get contractLabel(): string {
+    if (this.selectedBookingId) {
+      return this.selectedBookingId;
+    }
     if (this.liabilityEnumeration?.leaseContract?.bookingId) {
       return this.liabilityEnumeration.leaseContract.bookingId;
     }
