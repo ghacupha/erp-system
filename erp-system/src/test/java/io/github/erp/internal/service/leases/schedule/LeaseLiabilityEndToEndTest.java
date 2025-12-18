@@ -236,9 +236,9 @@ class LeaseLiabilityEndToEndTest {
             BigDecimal mid = lowerBound.add(upperBound).divide(new BigDecimal("2"), 10, RoundingMode.HALF_EVEN);
             BigDecimal closingBalance = computeClosingBalance(mid, monthlyRate, payments, presentValueDate);
             if (closingBalance.compareTo(BigDecimal.ZERO) > 0) {
-                lowerBound = mid;
-            } else {
                 upperBound = mid;
+            } else {
+                lowerBound = mid;
             }
         }
 
