@@ -41,8 +41,12 @@ import io.github.erp.service.dto.LeaseRepaymentPeriodDTO;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,30 +96,20 @@ class LeaseLiabilityEndToEndTest {
     @Test
     void leaseLiabilityScheduleSettlesOutstandingBalanceWhenSeededWithPresentValue() {
         BigDecimal annualRate = new BigDecimal("0.12");
-        LocalDate presentValueDate = LocalDate.of(2021, 1, 1);
+        LocalDate presentValueDate = LocalDate.of(2024, Month.SEPTEMBER, 1);
 
-        LeasePayment janPayment = new LeasePayment().paymentAmount(new BigDecimal("120")).paymentDate(LocalDate.of(2021, 1, 15));
-        LeasePayment febPayment = new LeasePayment().paymentAmount(new BigDecimal("120")).paymentDate(LocalDate.of(2021, 2, 15));
-        LeasePayment marPayment = new LeasePayment().paymentAmount(new BigDecimal("120")).paymentDate(LocalDate.of(2021, 3, 15));
+        List<LeasePayment> leasePayments = buildQuarterlyPayments();
 
-        List<PresentValueLine> presentValueLines =
-            presentValueCalculator.calculate(
-                List.of(janPayment, febPayment, marPayment),
-                annualRate,
-                LiabilityTimeGranularity.MONTHLY,
-                presentValueDate
-            );
+        LocalDate finalPaymentDate = leasePayments.get(leasePayments.size() - 1).getPaymentDate();
+        int numberOfPeriods = monthsBetweenInclusive(presentValueDate, finalPaymentDate);
 
-        BigDecimal initialLiability = presentValueLines
-            .stream()
-            .map(PresentValueLine::getPresentValue)
-            .reduce(BigDecimal.ZERO, BigDecimal::add)
-            .setScale(2, RoundingMode.HALF_EVEN);
+        BigDecimal monthlyRate = annualRate.divide(new BigDecimal("12"), RoundingMode.HALF_EVEN);
+        BigDecimal initialLiability = calibratePresentValueSeed(presentValueDate, leasePayments, monthlyRate);
 
         IFRS16LeaseContractDTO contract = new IFRS16LeaseContractDTO();
         contract.setId(11L);
         contract.setBookingId("BK-11");
-        contract.setLeaseTitle("Test Lease");
+        contract.setLeaseTitle("Multi-year Quarterly Lease");
         contract.setInceptionDate(presentValueDate);
         contract.setCommencementDate(presentValueDate);
 
@@ -124,17 +118,18 @@ class LeaseLiabilityEndToEndTest {
         leaseLiability.setLeaseId("LL-21");
         leaseLiability.setLiabilityAmount(initialLiability);
         leaseLiability.setStartDate(presentValueDate);
-        leaseLiability.setEndDate(presentValueDate.plusMonths(3));
+        leaseLiability.setEndDate(presentValueDate.plusMonths(numberOfPeriods).minusDays(1));
         leaseLiability.setInterestRate(annualRate);
         leaseLiability.setLeaseContract(contract);
 
         LeaseAmortizationCalculationDTO calculation = new LeaseAmortizationCalculationDTO();
         calculation.setInterestRate(annualRate);
         calculation.setLeaseAmount(initialLiability);
-        calculation.setNumberOfPeriods(3);
+        calculation.setNumberOfPeriods(numberOfPeriods);
 
-        List<LeaseRepaymentPeriodDTO> leaseRepaymentPeriods = buildMonthlyLeasePeriods(presentValueDate, 3);
-        List<LeasePaymentDTO> leasePayments = buildLeasePaymentsFromDomain(List.of(janPayment, febPayment, marPayment), contract);
+        List<LeaseRepaymentPeriodDTO> leaseRepaymentPeriods =
+            buildMonthlyLeasePeriods(presentValueDate, calculation.getNumberOfPeriods());
+        List<LeasePaymentDTO> leasePaymentDTOs = buildLeasePaymentsFromDomain(leasePayments, contract);
 
         when(leaseLiabilityService.findOne(leaseLiability.getId())).thenReturn(Optional.of(leaseLiability));
         when(leaseContractService.findOne(contract.getId())).thenReturn(Optional.of(contract));
@@ -146,7 +141,7 @@ class LeaseLiabilityEndToEndTest {
         });
         when(leaseRepaymentPeriodService.findLeasePeriods(contract.getCommencementDate(), calculation.getNumberOfPeriods()))
             .thenReturn(Optional.of(leaseRepaymentPeriods));
-        when(leasePaymentService.findPaymentsByContractId(contract.getId())).thenReturn(Optional.of(leasePayments));
+        when(leasePaymentService.findPaymentsByContractId(contract.getId())).thenReturn(Optional.of(leasePaymentDTOs));
 
         List<LeaseLiabilityScheduleItemDTO> scheduleItems = leaseAmortizationService.generateAmortizationSchedule(leaseLiability.getId(), null);
 
@@ -180,5 +175,103 @@ class LeaseLiabilityEndToEndTest {
                 return dto;
             })
             .collect(Collectors.toList());
+    }
+
+    private static List<LeasePayment> buildQuarterlyPayments() {
+        return List.of(
+            payment("2024-09-01", "4553951.20"),
+            payment("2024-12-01", "4553951.20"),
+            payment("2025-03-01", "4553951.20"),
+            payment("2025-06-01", "4553951.20"),
+            payment("2025-09-01", "4880153.64"),
+            payment("2025-12-01", "4880153.64"),
+            payment("2026-03-01", "4880153.64"),
+            payment("2026-06-01", "4880153.64"),
+            payment("2026-09-01", "5230820.48"),
+            payment("2026-12-01", "5230820.48"),
+            payment("2027-03-01", "5230820.48"),
+            payment("2027-06-01", "5230820.48"),
+            payment("2027-09-01", "5607788.00"),
+            payment("2027-12-01", "5607788.00"),
+            payment("2028-03-01", "5607788.00"),
+            payment("2028-06-01", "5607788.00"),
+            payment("2028-09-01", "6013028.20"),
+            payment("2028-12-01", "6013028.20"),
+            payment("2029-03-01", "6013028.20"),
+            payment("2029-06-01", "6013028.20"),
+            payment("2029-09-01", "6448660.40"),
+            payment("2029-12-01", "6448660.40"),
+            payment("2030-03-01", "6448660.40"),
+            payment("2030-06-01", "6448660.40"),
+            payment("2030-09-01", "6916966.32"),
+            payment("2030-12-01", "6916966.32"),
+            payment("2031-03-01", "6916966.32"),
+            payment("2031-06-01", "6916966.32")
+        );
+    }
+
+    private static LeasePayment payment(String date, String amount) {
+        return new LeasePayment().paymentAmount(new BigDecimal(amount)).paymentDate(LocalDate.parse(date));
+    }
+
+    private BigDecimal calibratePresentValueSeed(LocalDate presentValueDate, List<LeasePayment> payments, BigDecimal monthlyRate) {
+        List<PresentValueLine> presentValueLines =
+            presentValueCalculator.calculate(payments, monthlyRate.multiply(new BigDecimal("12")), LiabilityTimeGranularity.MONTHLY, presentValueDate);
+
+        BigDecimal lowerBound = presentValueLines
+            .stream()
+            .map(PresentValueLine::getPresentValue)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal upperBound = lowerBound.multiply(new BigDecimal("1.2"));
+        while (computeClosingBalance(lowerBound, monthlyRate, payments, presentValueDate).compareTo(BigDecimal.ZERO) > 0) {
+            upperBound = lowerBound;
+            lowerBound = lowerBound.multiply(new BigDecimal("0.9"));
+        }
+        while (computeClosingBalance(upperBound, monthlyRate, payments, presentValueDate).compareTo(BigDecimal.ZERO) < 0) {
+            upperBound = upperBound.multiply(new BigDecimal("1.1"));
+        }
+
+        for (int i = 0; i < 40; i++) {
+            BigDecimal mid = lowerBound.add(upperBound).divide(new BigDecimal("2"), 10, RoundingMode.HALF_EVEN);
+            BigDecimal closingBalance = computeClosingBalance(mid, monthlyRate, payments, presentValueDate);
+            if (closingBalance.compareTo(BigDecimal.ZERO) > 0) {
+                lowerBound = mid;
+            } else {
+                upperBound = mid;
+            }
+        }
+
+        return upperBound.setScale(2, RoundingMode.HALF_EVEN);
+    }
+
+    private BigDecimal computeClosingBalance(BigDecimal openingBalance, BigDecimal monthlyRate, List<LeasePayment> payments, LocalDate startDate) {
+        Map<LocalDate, BigDecimal> paymentsByDate = new LinkedHashMap<>();
+        payments.forEach(payment -> paymentsByDate.put(payment.getPaymentDate(), payment.getPaymentAmount()));
+
+        BigDecimal balance = openingBalance;
+        BigDecimal interestPayable = BigDecimal.ZERO;
+
+        LocalDate cursor = startDate;
+        int numberOfPeriods = monthsBetweenInclusive(startDate, payments.get(payments.size() - 1).getPaymentDate());
+
+        for (int period = 0; period < numberOfPeriods; period++) {
+            BigDecimal interestAccrued = balance.multiply(monthlyRate);
+            BigDecimal totalPayment = paymentsByDate.getOrDefault(cursor, BigDecimal.ZERO);
+
+            BigDecimal interestPayment = interestPayable.add(interestAccrued).min(totalPayment).max(BigDecimal.ZERO);
+            BigDecimal principalPayment = totalPayment.subtract(interestPayment).max(BigDecimal.ZERO);
+
+            balance = balance.subtract(principalPayment);
+            interestPayable = interestPayable.add(interestAccrued).subtract(interestPayment);
+
+            cursor = cursor.plusMonths(1);
+        }
+
+        return balance;
+    }
+
+    private int monthsBetweenInclusive(LocalDate startDate, LocalDate endDate) {
+        return (int) ChronoUnit.MONTHS.between(startDate, endDate) + 1;
     }
 }
