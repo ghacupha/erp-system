@@ -106,10 +106,15 @@ class LeaseLiabilityEndToEndTest {
                 presentValueDate
             );
 
+        BigDecimal monthlyRate = annualRate.divide(new BigDecimal("12"), 10, RoundingMode.HALF_EVEN);
+
         BigDecimal initialLiability = presentValueLines
             .stream()
             .map(PresentValueLine::getPresentValue)
             .reduce(BigDecimal.ZERO, BigDecimal::add)
+            // Align the present value seed with the amortization schedule, which charges
+            // interest at the start of the first period instead of discounting two periods.
+            .multiply(BigDecimal.ONE.add(monthlyRate))
             .setScale(2, RoundingMode.HALF_EVEN);
 
         IFRS16LeaseContractDTO contract = new IFRS16LeaseContractDTO();
