@@ -71,12 +71,6 @@ public class LeaseAmortizationService implements LeaseAmortizationCompilationSer
 
         LeaseLiabilityDTO leaseLiability = leaseLiabilityOpt.get();
 
-        // We'll check just in case the reader did not check the flags
-        //
-        // if (leaseLiability.getHasBeenFullyAmortised()){
-        //     throw new IllegalArgumentException("Lease Liability id # " + leaseLiabilityId + " is already fully amortised");
-        // }
-
         Optional<IFRS16LeaseContractDTO> ifrs16LeaseContractOpt = leaseContractService.findOne(leaseLiability.getLeaseContract().getId());
 
         if (ifrs16LeaseContractOpt.isEmpty()) {
