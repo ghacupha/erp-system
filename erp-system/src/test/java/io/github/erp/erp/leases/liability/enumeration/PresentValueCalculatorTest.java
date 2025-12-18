@@ -27,6 +27,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +42,7 @@ class PresentValueCalculatorTest {
         LocalDate presentValueDate = LocalDate.of(2019, 3, 1);
 
         List<PresentValueLine> lines = calculator.calculate(
-            Arrays.asList(marchPayment),
+            Collections.singletonList(marchPayment),
             new BigDecimal("0.12"),
             LiabilityTimeGranularity.MONTHLY,
             presentValueDate

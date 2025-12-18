@@ -9,6 +9,7 @@ import { AlertService } from 'app/core/util/alert.service';
 import { ILiabilityEnumeration, IPresentValueEnumeration } from '../liability-enumeration.model';
 import { Store } from '@ngrx/store';
 import { selectSelectedLiabilityEnumerationBookingId } from '../state/liability-enumeration.selectors';
+import { formatCurrency } from '@angular/common';
 
 @Component({
   selector: 'jhi-present-value-enumeration',
@@ -140,4 +141,6 @@ export class PresentValueEnumerationComponent implements OnInit, OnDestroy {
     link.click();
     window.URL.revokeObjectURL(link.href);
   }
+
+  protected readonly formatCurrency = formatCurrency;
 }

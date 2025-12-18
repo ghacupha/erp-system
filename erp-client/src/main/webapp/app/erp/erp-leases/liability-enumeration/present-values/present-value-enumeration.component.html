@@ -39,9 +39,9 @@
     <tr *ngFor="let value of values; index as i">
       <td>{{ value.sequenceNumber ?? i + 1 }}</td>
       <td>{{ value.paymentDate }}</td>
-      <td>{{ value.paymentAmount }}</td>
+      <td>{{ value.paymentAmount | currency }}</td>
       <td>{{ value.discountRate }}</td>
-      <td>{{ value.presentValue }}</td>
+      <td>{{ value.presentValue | currency }}</td>
     </tr>
   </tbody>
 </table>
