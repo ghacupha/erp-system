@@ -43,6 +43,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -422,18 +423,25 @@ class LeaseLiabilityEndToEndTest {
 
 
     private BigDecimal computeClosingBalance(BigDecimal openingBalance, BigDecimal monthlyRate, List<LeasePayment> payments, LocalDate startDate) {
-        Map<LocalDate, BigDecimal> paymentsByDate = new LinkedHashMap<>();
-        payments.forEach(payment -> paymentsByDate.put(payment.getPaymentDate(), payment.getPaymentAmount()));
+        Map<YearMonth, BigDecimal> paymentsByMonth = payments
+            .stream()
+            .collect(
+                Collectors.groupingBy(
+                    payment -> YearMonth.from(payment.getPaymentDate()),
+                    LinkedHashMap::new,
+                    Collectors.mapping(LeasePayment::getPaymentAmount, Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))
+                )
+            );
 
         BigDecimal balance = openingBalance;
         BigDecimal interestPayable = BigDecimal.ZERO;
 
-        LocalDate cursor = startDate;
-        int numberOfPeriods = monthsBetweenInclusive(startDate, payments.get(payments.size() - 1).getPaymentDate());
+        YearMonth cursor = YearMonth.from(startDate);
+        YearMonth finalPeriod = YearMonth.from(payments.get(payments.size() - 1).getPaymentDate());
 
-        for (int period = 0; period < numberOfPeriods; period++) {
+        while (!cursor.isAfter(finalPeriod)) {
             BigDecimal interestAccrued = balance.multiply(monthlyRate);
-            BigDecimal totalPayment = paymentsByDate.getOrDefault(cursor, BigDecimal.ZERO);
+            BigDecimal totalPayment = paymentsByMonth.getOrDefault(cursor, BigDecimal.ZERO);
 
             BigDecimal interestPayment = interestPayable.add(interestAccrued).min(totalPayment).max(BigDecimal.ZERO);
             BigDecimal principalPayment = totalPayment.subtract(interestPayment).max(BigDecimal.ZERO);
