@@ -31,6 +31,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PresentValueEnumerationRepository
     extends JpaRepository<PresentValueEnumeration, Long>, JpaSpecificationExecutor<PresentValueEnumeration> {
+    List<PresentValueEnumeration> findAllByLeaseContractId(Long leaseContractId);
+
     List<PresentValueEnumeration> findAllByLiabilityEnumerationId(Long enumerationId);
 
     Page<PresentValueEnumeration> findAllByLiabilityEnumerationId(Long enumerationId, Pageable pageable);
