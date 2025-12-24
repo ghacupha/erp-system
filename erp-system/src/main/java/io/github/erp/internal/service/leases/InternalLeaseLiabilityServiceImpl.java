@@ -19,6 +19,9 @@ package io.github.erp.internal.service.leases;
  */
 import io.github.erp.domain.LeaseLiability;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
+import io.github.erp.domain.PresentValueEnumeration;
+import io.github.erp.repository.LiabilityEnumerationRepository;
+import io.github.erp.repository.PresentValueEnumerationRepository;
 import io.github.erp.internal.repository.InternalLeaseLiabilityRepository;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleItemRepository;
 import io.github.erp.repository.search.LeaseLiabilitySearchRepository;
@@ -31,6 +34,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -54,22 +59,31 @@ public class InternalLeaseLiabilityServiceImpl implements InternalLeaseLiability
 
     private final InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository;
 
+    private final PresentValueEnumerationRepository presentValueEnumerationRepository;
+
+    private final LiabilityEnumerationRepository liabilityEnumerationRepository;
+
     public InternalLeaseLiabilityServiceImpl(
         InternalLeaseLiabilityRepository leaseLiabilityRepository,
         LeaseLiabilityMapper leaseLiabilityMapper,
         LeaseLiabilitySearchRepository leaseLiabilitySearchRepository,
-        InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository
+        InternalLeaseLiabilityScheduleItemRepository leaseLiabilityScheduleItemRepository,
+        PresentValueEnumerationRepository presentValueEnumerationRepository,
+        LiabilityEnumerationRepository liabilityEnumerationRepository
     ) {
         this.leaseLiabilityRepository = leaseLiabilityRepository;
         this.leaseLiabilityMapper = leaseLiabilityMapper;
         this.leaseLiabilitySearchRepository = leaseLiabilitySearchRepository;
         this.leaseLiabilityScheduleItemRepository = leaseLiabilityScheduleItemRepository;
+        this.presentValueEnumerationRepository = presentValueEnumerationRepository;
+        this.liabilityEnumerationRepository = liabilityEnumerationRepository;
     }
 
     @Override
     public LeaseLiabilityDTO save(LeaseLiabilityDTO leaseLiabilityDTO) {
         log.debug("Request to save LeaseLiability : {}", leaseLiabilityDTO);
         LeaseLiability leaseLiability = leaseLiabilityMapper.toEntity(leaseLiabilityDTO);
+        populateLiabilityFromPresentValues(leaseLiability);
         leaseLiability = leaseLiabilityRepository.save(leaseLiability);
         LeaseLiabilityDTO result = leaseLiabilityMapper.toDto(leaseLiability);
         leaseLiabilitySearchRepository.save(leaseLiability);
@@ -80,6 +94,7 @@ public class InternalLeaseLiabilityServiceImpl implements InternalLeaseLiability
     public LeaseLiabilityDTO update(LeaseLiabilityDTO leaseLiabilityDTO) {
         log.debug("Request to save LeaseLiability : {}", leaseLiabilityDTO);
         LeaseLiability leaseLiability = leaseLiabilityMapper.toEntity(leaseLiabilityDTO);
+        populateLiabilityFromPresentValues(leaseLiability);
         leaseLiability = leaseLiabilityRepository.save(leaseLiability);
         return leaseLiabilityMapper.toDto(leaseLiability);
     }
@@ -164,5 +179,36 @@ public class InternalLeaseLiabilityServiceImpl implements InternalLeaseLiability
             .collect(Collectors.toList());
 
         return Optional.of(pendingDtos);
+    }
+
+    /**
+     * Prefills liability amount and interest rate using the latest present value enumeration for the related contract.
+     */
+    private void populateLiabilityFromPresentValues(LeaseLiability leaseLiability) {
+        if (leaseLiability.getLeaseContract() == null || leaseLiability.getLeaseContract().getId() == null) {
+            return;
+        }
+
+        liabilityEnumerationRepository
+            .findTopByLeaseContractIdOrderByRequestDateTimeDesc(leaseLiability.getLeaseContract().getId())
+            .ifPresent(enumeration -> {
+                List<PresentValueEnumeration> lines = presentValueEnumerationRepository.findAllByLiabilityEnumerationId(
+                    enumeration.getId()
+                );
+
+                if (lines.isEmpty()) {
+                    return;
+                }
+
+                BigDecimal totalPresentValue = lines
+                    .stream()
+                    .map(PresentValueEnumeration::getPresentValue)
+                    .filter(pv -> pv != null)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add)
+                    .setScale(2, RoundingMode.HALF_EVEN);
+
+                leaseLiability.setLiabilityAmount(totalPresentValue);
+                leaseLiability.setInterestRate(enumeration.getInterestRate());
+            });
     }
 }
