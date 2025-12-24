@@ -37,6 +37,11 @@ public interface IFRS16LeaseContractMapper extends EntityMapper<IFRS16LeaseContr
     @Mapping(target = "leaseContractCalculations", source = "leaseContractCalculations", qualifiedByName = "documentTitle")
     IFRS16LeaseContractDTO toDto(IFRS16LeaseContract s);
 
+    @Named("id")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    IFRS16LeaseContractDTO toDtoId(IFRS16LeaseContract iFRS16LeaseContract);
+
     @Named("bookingId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
