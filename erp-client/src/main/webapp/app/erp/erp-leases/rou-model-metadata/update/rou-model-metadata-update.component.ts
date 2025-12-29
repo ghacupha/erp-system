@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
 import { IRouModelMetadata, RouModelMetadata } from '../rou-model-metadata.model';
@@ -40,9 +40,8 @@ import {
   copyingRouModelMetadataStatus, creatingRouModelMetadataStatus,
   editingRouModelMetadataStatus, rouModelMetadataUpdateSelectedInstance
 } from '../../../store/selectors/rou-model-metadata-workflows-status.selector';
-import {
-  LeaseAmortizationCalculationService
-} from '../../lease-amortization-calculation/service/lease-amortization-calculation.service';
+import { LeaseLiabilityService } from '../../lease-liability/service/lease-liability.service';
+import { RouInitialDirectCostService } from '../../rou-initial-direct-cost/service/rou-initial-direct-cost.service';
 
 @Component({
   selector: 'jhi-rou-model-metadata-update',
@@ -88,7 +87,8 @@ export class RouModelMetadataUpdateComponent implements OnInit {
     protected transactionAccountService: TransactionAccountService,
     protected assetCategoryService: AssetCategoryService,
     protected businessDocumentService: BusinessDocumentService,
-    protected leaseAmortizationCalculationService: LeaseAmortizationCalculationService,
+    protected leaseLiabilityService: LeaseLiabilityService,
+    protected rouInitialDirectCostService: RouInitialDirectCostService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     protected store: Store<State>,
@@ -131,27 +131,33 @@ export class RouModelMetadataUpdateComponent implements OnInit {
 
   updateCalculationsGivenLeaseContract(): void {
     this.editForm.get(['ifrs16LeaseContract'])?.valueChanges.subscribe((leaseContractChange) => {
-      this.iFRS16LeaseContractService.find(leaseContractChange.id).subscribe((ifrs16Response) => {
+      if (!leaseContractChange?.id) {
+        return;
+      }
+
+      const leaseContractId = leaseContractChange.id;
+
+      this.iFRS16LeaseContractService.find(leaseContractId).subscribe((ifrs16Response) => {
         if (ifrs16Response.body) {
           const ifrs16 = ifrs16Response.body;
 
-          if (ifrs16.id) {
-            this.leaseAmortizationCalculationService.queryByLeaseContractId(ifrs16.id).subscribe(calcResponse => {
-              if (calcResponse.body) {
-
-                const calculation = calcResponse.body;
-
-                // TODO check if we need to update the lease amount in the form with the initial direct costs amount
-                this.editForm.patchValue({
-                  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                  leaseAmount: calculation.leaseAmount,
-                  modelTitle: ifrs16.bookingId,
-                  description: ifrs16.description,
-                });
-              }
-            });
-          }
+          this.editForm.patchValue({
+            modelTitle: ifrs16.bookingId,
+            description: ifrs16.description,
+          });
         }
+      });
+
+      forkJoin({
+        liabilities: this.leaseLiabilityService.query({ 'leaseContractId.equals': leaseContractId }),
+        directCosts: this.rouInitialDirectCostService.query({ 'leaseContractId.equals': leaseContractId }),
+      }).subscribe(({ liabilities, directCosts }) => {
+        const liabilityAmount = liabilities.body?.[0]?.liabilityAmount ?? 0;
+        const directCostAmount = (directCosts.body ?? []).reduce((sum, item) => sum + (item.cost ?? 0), 0);
+
+        this.editForm.patchValue({
+          leaseAmount: liabilityAmount + directCostAmount,
+        });
       });
     });
   }

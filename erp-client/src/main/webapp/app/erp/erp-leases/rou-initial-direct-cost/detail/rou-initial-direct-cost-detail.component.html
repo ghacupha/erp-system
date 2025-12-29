@@ -94,8 +94,20 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/rou-initial-direct-cost', rouInitialDirectCost.id, 'edit']" class="btn btn-primary">
+      <button
+        type="button"
+        (click)='editButtonEvent(rouInitialDirectCost)'
+        [routerLink]="['/rou-initial-direct-cost', rouInitialDirectCost.id, 'edit']"
+        class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+
+      <button
+        type="button"
+        (click)='copyButtonEvent(rouInitialDirectCost)'
+        [routerLink]="['/rou-initial-direct-cost', rouInitialDirectCost.id, 'copy']"
+        class="btn btn-primary">
+        <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
       </button>
     </div>
   </div>

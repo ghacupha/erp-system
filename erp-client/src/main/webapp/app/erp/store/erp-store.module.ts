@@ -38,6 +38,7 @@ import * as fromPaymentInvoiceUpdates from "./reducers/payment-invoice-workflow-
 import * as fromReportNavigationProfile from "./reducers/report-navigation-profile-status.reducer";
 import { Ifrs16LeaseModelWorkflowEffects } from './effects/ifrs16-lease-model-workflow.effects';
 import { RouModelMetadataWorkflowEffects } from './effects/rou-model-metadata-workflow.effects';
+import { RouInitialDirectCostWorkflowEffects } from './effects/rou-initial-direct-cost-workflow.effects';
 import * as fromIfrs16LeaseModelUpdates from "./reducers/ifrs16-lease-model-workflow-status.reducer";
 import * as fromTAAmortizationUpdates from "./reducers/ta-amortization-rule-status.reducer";
 import * as fromTAInterestPaidTransferRuleUpdates from "./reducers/ta-interest-paid-transfer-rule-status.reducer";
@@ -51,6 +52,7 @@ import * as fromLeaseAmortizationCalculationState from "./reducers/lease-amortiz
 import * as fromLeaseLiabilityState from "./reducers/lease-liability.reducer";
 import * as fromLeasePaymentState from "./reducers/lease-payment.reducer";
 import * as fromRouModelMetadataUpdates from "./reducers/rou-model-metadata-workflow-status.reducer";
+import * as fromRouInitialDirectCostUpdates from "./reducers/rou-initial-direct-cost-workflow-status.reducer";
 import * as fromLeasePeriodIdSelectionUpdates from "./reducers/lease-period-selection-workflow-status.reducer";
 import * as fromLeasePeriodReportPathUpdates from "./reducers/lease-period-report-path-selection.reducer";
 import { PrepaymentMarshallingWorkflowEffects } from './effects/prepayment-marshalling-workflow.effects';
@@ -65,6 +67,7 @@ import * as fromIfrs16LeaseContractReport from "./reducers/ifrs16-lease-contract
       PrepaymentMarshallingWorkflowEffects,
       Ifrs16LeaseModelWorkflowEffects,
       RouModelMetadataWorkflowEffects,
+      RouInitialDirectCostWorkflowEffects,
       DealerPaymentsEffects]),
     EffectsModule.forFeature([]),
     StoreModule.forRoot({}, {runtimeChecks: {
@@ -103,6 +106,7 @@ import * as fromIfrs16LeaseContractReport from "./reducers/ifrs16-lease-contract
     StoreModule.forFeature('leaseLiabilityForm', fromLeaseLiabilityState.leaseLiabilityStateReducer),
     StoreModule.forFeature('leasePaymentForm', fromLeasePaymentState.leasePaymentStateReducer),
     StoreModule.forFeature('rouModelMetadataUpdateForm', fromRouModelMetadataUpdates.rouModelMetadataUpdateStateReducer),
+    StoreModule.forFeature('rouInitialDirectCostUpdateForm', fromRouInitialDirectCostUpdates.rouInitialDirectCostUpdateStateReducer),
     StoreModule.forFeature('leasePeriodIdSelection', fromLeasePeriodIdSelectionUpdates.leasePeriodIdSelectionStateReducer),
     StoreModule.forFeature('leasePeriodReportPath', fromLeasePeriodReportPathUpdates.leasePeriodReportPathSelectionStateReducer),
     StoreModule.forFeature('ifrs16LeaseContractReport', fromIfrs16LeaseContractReport.ifrs16LeaseContractReportStateReducer),

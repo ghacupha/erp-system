@@ -58,6 +58,14 @@ const rouInitialDirectCostRoute: Routes = [
     },
     canActivate: [UserRouteAccessService],
   },
+  {
+    path: ':id/copy',
+    component: RouInitialDirectCostUpdateComponent,
+    resolve: {
+      rouInitialDirectCost: RouInitialDirectCostRoutingResolveService,
+    },
+    canActivate: [UserRouteAccessService],
+  },
 ];
 
 @NgModule({

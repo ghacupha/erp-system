@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-rou-initial-direct-cost"
         [routerLink]="['/rou-initial-direct-cost/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Rou Initial Direct Cost </span>
@@ -135,9 +136,21 @@
                 [routerLink]="['/rou-initial-direct-cost', rouInitialDirectCost.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
+                (click)='editButtonEvent(rouInitialDirectCost)'
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/rou-initial-direct-cost', rouInitialDirectCost.id, 'copy']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityCopyButton"
+                (click)='copyButtonEvent(rouInitialDirectCost)'
+              >
+                <fa-icon icon="copy"></fa-icon>
+                <span class="d-none d-md-inline">Copy</span>
               </button>
 
               <button type="submit" (click)="delete(rouInitialDirectCost)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
