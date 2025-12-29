@@ -27,6 +27,11 @@
       "fieldType": "BigDecimal",
       "fieldValidateRules": ["required", "min"],
       "fieldValidateRulesMin": 0
+    },
+    {
+      "fieldName": "hasBeenFullyAmortised",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
     }
   ],
   "relationships": [
