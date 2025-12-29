@@ -91,7 +91,7 @@ public class LeaseLiabilityResourceProd {
         }
         LeaseLiabilityDTO result = leaseLiabilityService.save(leaseLiabilityDTO);
         return ResponseEntity
-            .created(new URI("/api/lease-liabilities/" + result.getId()))
+            .created(new URI("/api/leases/lease-liabilities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
