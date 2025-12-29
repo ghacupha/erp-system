@@ -66,10 +66,9 @@ public class ROUDepreciationEntryCompilationServiceImpl implements ROUDepreciati
 
     private RouDepreciationEntryDTO updateMetadataValues(RouDepreciationEntryDTO entry, RouModelMetadataDTO modelMetadataDTO, String batchJobIdentifier) {
 
-        // TODO BigDecimal depreciationAmount = calculate12MonthlyPeriodicityDepreciationAmount(modelMetadataDTO.getLeaseAmount(), modelMetadataDTO.getCommencementDate(), modelMetadataDTO.getExpirationDate());
+        // TODO check if modelMetadataDTO.getLeaseAmount() is equal to the sum of leaseLiability.getLiabilityAmount() and sum of rou initial direct costs for the same lease contract
         entry.setDescription(entry.getLeasePeriod().getPeriodCode().concat(" ").concat(modelMetadataDTO.getModelTitle()).concat(" depreciation"));
         entry.setDepreciationAmount(modelMetadataDTO.getLeaseAmount().divide(BigDecimal.valueOf(modelMetadataDTO.getLeaseTermPeriods()), RoundingMode.HALF_EVEN).setScale(6, RoundingMode.HALF_EVEN));
-        // TODO entry.setDepreciationAmount(depreciationAmount);
         entry.setOutstandingAmount(BigDecimal.ZERO);
         entry.setRouAssetIdentifier(modelMetadataDTO.getRouModelReference());
         entry.setRouDepreciationIdentifier(UUID.randomUUID());
