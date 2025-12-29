@@ -75,6 +75,8 @@
           <th scope="col" jhiSortBy="startDate"><span>Start Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="endDate"><span>End Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="interestRate"><span>Interest Rate</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="hasBeenAmortised"><span>Has Been Amortised</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="hasBeenFullyAmortised"><span>Has Been Fully Amortised</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="leaseAmortizationCalculation.id">
             <span>Lease Amortization Calculation</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -92,6 +94,8 @@
           <td>{{ leaseLiability.startDate | formatMediumDate }}</td>
           <td>{{ leaseLiability.endDate | formatMediumDate }}</td>
           <td>{{ leaseLiability.interestRate }}</td>
+          <td>{{ leaseLiability.hasBeenAmortised }}</td>
+          <td>{{ leaseLiability.hasBeenFullyAmortised }}</td>
           <td>
             <div *ngIf="leaseLiability.leaseAmortizationCalculation">
               <a [routerLink]="['/lease-amortization-calculation', leaseLiability.leaseAmortizationCalculation?.id, 'view']">{{

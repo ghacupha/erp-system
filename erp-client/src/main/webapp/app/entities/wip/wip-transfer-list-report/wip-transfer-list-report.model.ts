@@ -25,7 +25,7 @@ export interface IWIPTransferListReport {
   requestId?: string;
   fileChecksum?: string | null;
   tempered?: boolean | null;
-  filename?: string;
+  filename?: string | null;
   reportParameters?: string | null;
   reportFileContentType?: string | null;
   reportFile?: string | null;
@@ -39,7 +39,7 @@ export class WIPTransferListReport implements IWIPTransferListReport {
     public requestId?: string,
     public fileChecksum?: string | null,
     public tempered?: boolean | null,
-    public filename?: string,
+    public filename?: string | null,
     public reportParameters?: string | null,
     public reportFileContentType?: string | null,
     public reportFile?: string | null,

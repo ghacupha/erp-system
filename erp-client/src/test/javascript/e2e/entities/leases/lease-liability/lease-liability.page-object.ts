@@ -53,6 +53,8 @@ export class LeaseLiabilityUpdatePage {
   startDateInput = element(by.id('field_startDate'));
   endDateInput = element(by.id('field_endDate'));
   interestRateInput = element(by.id('field_interestRate'));
+  hasBeenAmortisedInput = element(by.id('field_hasBeenAmortised'));
+  hasBeenFullyAmortisedInput = element(by.id('field_hasBeenFullyAmortised'));
 
   leaseAmortizationCalculationSelect = element(by.id('field_leaseAmortizationCalculation'));
   leaseContractSelect = element(by.id('field_leaseContract'));
@@ -107,6 +109,14 @@ export class LeaseLiabilityUpdatePage {
 
   async getInterestRateInput(): Promise<string> {
     return await this.interestRateInput.getAttribute('value');
+  }
+
+  getHasBeenAmortisedInput(): ElementFinder {
+    return this.hasBeenAmortisedInput;
+  }
+
+  getHasBeenFullyAmortisedInput(): ElementFinder {
+    return this.hasBeenFullyAmortisedInput;
   }
 
   async leaseAmortizationCalculationSelectLastOption(): Promise<void> {

@@ -48,6 +48,8 @@ describe('LeaseLiability Service', () => {
       startDate: currentDate,
       endDate: currentDate,
       interestRate: 0,
+      hasBeenAmortised: false,
+      hasBeenFullyAmortised: false,
     };
   });
 
@@ -102,6 +104,8 @@ describe('LeaseLiability Service', () => {
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
           interestRate: 1,
+          hasBeenAmortised: true,
+          hasBeenFullyAmortised: true,
         },
         elemDefault
       );
@@ -127,6 +131,7 @@ describe('LeaseLiability Service', () => {
           leaseId: 'BBBBBB',
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
+          hasBeenAmortised: true,
         },
         new LeaseLiability()
       );
@@ -157,6 +162,8 @@ describe('LeaseLiability Service', () => {
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
           interestRate: 1,
+          hasBeenAmortised: true,
+          hasBeenFullyAmortised: true,
         },
         elemDefault
       );
@@ -214,7 +221,7 @@ describe('LeaseLiability Service', () => {
       });
 
       it('should add only unique LeaseLiability to an array', () => {
-        const leaseLiabilityArray: ILeaseLiability[] = [{ id: 123 }, { id: 456 }, { id: 59942 }];
+        const leaseLiabilityArray: ILeaseLiability[] = [{ id: 123 }, { id: 456 }, { id: 51223 }];
         const leaseLiabilityCollection: ILeaseLiability[] = [{ id: 123 }];
         expectedResult = service.addLeaseLiabilityToCollectionIfMissing(leaseLiabilityCollection, ...leaseLiabilityArray);
         expect(expectedResult).toHaveLength(3);

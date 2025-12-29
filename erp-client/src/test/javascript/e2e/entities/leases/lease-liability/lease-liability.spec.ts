@@ -73,6 +73,8 @@ describe('LeaseLiability e2e test', () => {
             leaseLiabilityUpdatePage.setStartDateInput('2000-12-31'),
             leaseLiabilityUpdatePage.setEndDateInput('2000-12-31'),
             leaseLiabilityUpdatePage.setInterestRateInput('5'),
+            leaseLiabilityUpdatePage.getHasBeenAmortisedInput().click(),
+            leaseLiabilityUpdatePage.getHasBeenFullyAmortisedInput().click(),
             leaseLiabilityUpdatePage.leaseAmortizationCalculationSelectLastOption(),
             leaseLiabilityUpdatePage.leaseContractSelectLastOption(),
         ]);

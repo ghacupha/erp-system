@@ -34,11 +34,7 @@ describe('WIPTransferListReport e2e test', () => {
   const wIPTransferListReportPageUrlPattern = new RegExp('/wip-transfer-list-report(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const wIPTransferListReportSample = {
-    timeOfRequest: '2025-02-03T01:28:22.527Z',
-    requestId: '1ae68dce-00dc-485a-87df-cd9b7577a8b2',
-    filename: '9c4bdad1-52f1-4ff3-b1af-477c688b21b3',
-  };
+  const wIPTransferListReportSample = { timeOfRequest: '2025-02-03T01:28:22.527Z', requestId: '1ae68dce-00dc-485a-87df-cd9b7577a8b2' };
 
   let wIPTransferListReport: any;
 

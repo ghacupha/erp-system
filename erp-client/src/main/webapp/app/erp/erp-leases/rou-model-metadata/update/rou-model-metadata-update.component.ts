@@ -40,6 +40,9 @@ import {
   copyingRouModelMetadataStatus, creatingRouModelMetadataStatus,
   editingRouModelMetadataStatus, rouModelMetadataUpdateSelectedInstance
 } from '../../../store/selectors/rou-model-metadata-workflows-status.selector';
+import {
+  LeaseAmortizationCalculationService
+} from '../../lease-amortization-calculation/service/lease-amortization-calculation.service';
 
 @Component({
   selector: 'jhi-rou-model-metadata-update',
@@ -85,6 +88,7 @@ export class RouModelMetadataUpdateComponent implements OnInit {
     protected transactionAccountService: TransactionAccountService,
     protected assetCategoryService: AssetCategoryService,
     protected businessDocumentService: BusinessDocumentService,
+    protected leaseAmortizationCalculationService: LeaseAmortizationCalculationService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     protected store: Store<State>,
@@ -121,6 +125,35 @@ export class RouModelMetadataUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     }
+
+    this.updateCalculationsGivenLeaseContract();
+  }
+
+  updateCalculationsGivenLeaseContract(): void {
+    this.editForm.get(['ifrs16LeaseContract'])?.valueChanges.subscribe((leaseContractChange) => {
+      this.iFRS16LeaseContractService.find(leaseContractChange.id).subscribe((ifrs16Response) => {
+        if (ifrs16Response.body) {
+          const ifrs16 = ifrs16Response.body;
+
+          if (ifrs16.id) {
+            this.leaseAmortizationCalculationService.queryByLeaseContractId(ifrs16.id).subscribe(calcResponse => {
+              if (calcResponse.body) {
+
+                const calculation = calcResponse.body;
+
+                // TODO check if we need to update the lease amount in the form with the initial direct costs amount
+                this.editForm.patchValue({
+                  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                  leaseAmount: calculation.leaseAmount,
+                  modelTitle: ifrs16.bookingId,
+                  description: ifrs16.description,
+                });
+              }
+            });
+          }
+        }
+      });
+    });
   }
 
   updateContractMetadata(update: IIFRS16LeaseContract): void {

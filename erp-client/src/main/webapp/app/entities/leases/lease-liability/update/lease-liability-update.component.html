@@ -134,6 +134,50 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_hasBeenAmortised">Has Been Amortised</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="hasBeenAmortised"
+            id="field_hasBeenAmortised"
+            data-cy="hasBeenAmortised"
+            formControlName="hasBeenAmortised"
+          />
+          <div
+            *ngIf="
+              editForm.get('hasBeenAmortised')!.invalid &&
+              (editForm.get('hasBeenAmortised')!.dirty || editForm.get('hasBeenAmortised')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('hasBeenAmortised')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_hasBeenFullyAmortised">Has Been Fully Amortised</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="hasBeenFullyAmortised"
+            id="field_hasBeenFullyAmortised"
+            data-cy="hasBeenFullyAmortised"
+            formControlName="hasBeenFullyAmortised"
+          />
+          <div
+            *ngIf="
+              editForm.get('hasBeenFullyAmortised')!.invalid &&
+              (editForm.get('hasBeenFullyAmortised')!.dirty || editForm.get('hasBeenFullyAmortised')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('hasBeenFullyAmortised')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_leaseAmortizationCalculation">Lease Amortization Calculation</label>
           <select
             class="form-control"

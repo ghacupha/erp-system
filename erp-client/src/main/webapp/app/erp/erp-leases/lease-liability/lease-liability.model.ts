@@ -27,6 +27,7 @@ export interface ILeaseLiability {
   startDate?: dayjs.Dayjs;
   endDate?: dayjs.Dayjs;
   interestRate?: number;
+  hasBeenFullyAmortised?: boolean;
   leaseAmortizationCalculation?: ILeaseAmortizationCalculation | null;
   leaseContract?: IIFRS16LeaseContract;
 }
@@ -39,6 +40,7 @@ export class LeaseLiability implements ILeaseLiability {
     public startDate?: dayjs.Dayjs,
     public endDate?: dayjs.Dayjs,
     public interestRate?: number,
+    public hasBeenFullyAmortised?: boolean,
     public leaseAmortizationCalculation?: ILeaseAmortizationCalculation | null,
     public leaseContract?: IIFRS16LeaseContract
   ) {}

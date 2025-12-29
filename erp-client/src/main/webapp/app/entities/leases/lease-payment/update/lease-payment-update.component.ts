@@ -41,7 +41,6 @@ export class LeasePaymentUpdateComponent implements OnInit {
     id: [],
     paymentDate: [],
     paymentAmount: [],
-    active: [true],
     leaseContract: [null, Validators.required],
   });
 
@@ -102,7 +101,6 @@ export class LeasePaymentUpdateComponent implements OnInit {
       id: leasePayment.id,
       paymentDate: leasePayment.paymentDate,
       paymentAmount: leasePayment.paymentAmount,
-      active: leasePayment.active,
       leaseContract: leasePayment.leaseContract,
     });
 
@@ -133,7 +131,6 @@ export class LeasePaymentUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       paymentDate: this.editForm.get(['paymentDate'])!.value,
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
-      active: this.editForm.get(['active'])!.value,
       leaseContract: this.editForm.get(['leaseContract'])!.value,
     };
   }
