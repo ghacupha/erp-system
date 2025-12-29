@@ -124,6 +124,28 @@
           </div>
         </div>
 
+        <div class="form-group" [hidden]='weAreCreating'>
+          <label class="form-control-label" for="field_hasBeenFullyAmortised">Has Been Fully Amortised</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="hasBeenFullyAmortised"
+            id="field_hasBeenFullyAmortised"
+            data-cy="hasBeenFullyAmortised"
+            formControlName="hasBeenFullyAmortised"
+          />
+          <div
+            *ngIf="
+              editForm.get('hasBeenFullyAmortised')!.invalid &&
+              (editForm.get('hasBeenFullyAmortised')!.dirty || editForm.get('hasBeenFullyAmortised')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('hasBeenFullyAmortised')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
         <div class="form-group">
           <label class="form-control-label" for="field_startDate">Start Date</label>
           <div class="input-group">

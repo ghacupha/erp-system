@@ -53,6 +53,14 @@
         <dd>
           <span>{{ leaseLiability.interestRate }}</span>
         </dd>
+        <dt><span>Has Been Amortised</span></dt>
+        <dd>
+          <span>{{ leaseLiability.hasBeenAmortised }}</span>
+        </dd>
+        <dt><span>Has Been Fully Amortised</span></dt>
+        <dd>
+          <span>{{ leaseLiability.hasBeenFullyAmortised }}</span>
+        </dd>
         <dt><span>Lease Amortization Calculation</span></dt>
         <dd>
           <div *ngIf="leaseLiability.leaseAmortizationCalculation">

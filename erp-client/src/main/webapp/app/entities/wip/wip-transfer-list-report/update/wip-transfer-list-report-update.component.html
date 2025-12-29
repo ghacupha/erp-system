@@ -85,9 +85,6 @@
         <div class="form-group">
           <label class="form-control-label" for="field_filename">Filename</label>
           <input type="text" class="form-control" name="filename" id="field_filename" data-cy="filename" formControlName="filename" />
-          <div *ngIf="editForm.get('filename')!.invalid && (editForm.get('filename')!.dirty || editForm.get('filename')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('filename')?.errors?.required"> This field is required. </small>
-          </div>
         </div>
 
         <div class="form-group">

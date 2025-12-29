@@ -27,6 +27,8 @@ export interface ILeaseLiability {
   startDate?: dayjs.Dayjs;
   endDate?: dayjs.Dayjs;
   interestRate?: number;
+  hasBeenAmortised?: boolean;
+  hasBeenFullyAmortised?: boolean;
   leaseAmortizationCalculation?: ILeaseAmortizationCalculation | null;
   leaseContract?: IIFRS16LeaseContract;
 }
@@ -39,9 +41,14 @@ export class LeaseLiability implements ILeaseLiability {
     public startDate?: dayjs.Dayjs,
     public endDate?: dayjs.Dayjs,
     public interestRate?: number,
+    public hasBeenAmortised?: boolean,
+    public hasBeenFullyAmortised?: boolean,
     public leaseAmortizationCalculation?: ILeaseAmortizationCalculation | null,
     public leaseContract?: IIFRS16LeaseContract
-  ) {}
+  ) {
+    this.hasBeenAmortised = this.hasBeenAmortised ?? false;
+    this.hasBeenFullyAmortised = this.hasBeenFullyAmortised ?? false;
+  }
 }
 
 export function getLeaseLiabilityIdentifier(leaseLiability: ILeaseLiability): number | undefined {

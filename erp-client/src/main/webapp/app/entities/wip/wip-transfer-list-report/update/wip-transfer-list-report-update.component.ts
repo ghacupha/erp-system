@@ -49,7 +49,7 @@ export class WIPTransferListReportUpdateComponent implements OnInit {
     requestId: [null, [Validators.required]],
     fileChecksum: [],
     tempered: [],
-    filename: [null, [Validators.required]],
+    filename: [],
     reportParameters: [],
     reportFile: [],
     reportFileContentType: [],

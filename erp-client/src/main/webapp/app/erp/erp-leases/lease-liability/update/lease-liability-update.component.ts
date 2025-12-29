@@ -58,6 +58,7 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
     startDate: [null, [Validators.required]],
     endDate: [null, [Validators.required]],
     leaseAmortizationCalculation: [],
+    hasBeenFullyAmortised: [null, [Validators.required]],
     leaseContract: [null, Validators.required]
   });
 
@@ -126,9 +127,16 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
 
     if (this.weAreCreating) {
 
+      this.updateAmortizationFlagGivenNewMetadata();
       this.updateDetailsGivenLeaseContract();
       this.updateCalculationsGivenLeaseContract();
     }
+  }
+
+  updateAmortizationFlagGivenNewMetadata(): void {
+    this.editForm.patchValue({
+      hasBeenFullyAmortised: false
+    });
   }
 
   updateDetailsGivenLeaseContract(): void {
@@ -205,7 +213,7 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
 
   edit(): void {
     this.isSaving = true;
-    this.subscribeToSaveResponse(this.leaseLiabilityService.update(this.createFromForm()));
+    this.subscribeToSaveResponse(this.leaseLiabilityService.update(this.editFromForm()));
   }
 
   copy(): void {
@@ -249,7 +257,8 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
       startDate: leaseLiability.startDate,
       endDate: leaseLiability.endDate,
       leaseAmortizationCalculation: leaseLiability.leaseAmortizationCalculation,
-      leaseContract: leaseLiability.leaseContract
+      leaseContract: leaseLiability.leaseContract,
+      hasBeenFullyAmortised: leaseLiability.hasBeenFullyAmortised,
     });
 
   }
@@ -264,7 +273,23 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
       startDate: this.editForm.get(['startDate'])!.value,
       endDate: this.editForm.get(['endDate'])!.value,
       leaseAmortizationCalculation: this.editForm.get(['leaseAmortizationCalculation'])!.value,
-      leaseContract: this.editForm.get(['leaseContract'])!.value
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
+      hasBeenFullyAmortised: false
+    };
+  }
+
+  protected editFromForm(): ILeaseLiability {
+    return {
+      ...new LeaseLiability(),
+      id: this.editForm.get(['id'])!.value,
+      leaseId: this.editForm.get(['leaseId'])!.value,
+      liabilityAmount: this.editForm.get(['liabilityAmount'])!.value,
+      interestRate: this.editForm.get(['interestRate'])!.value,
+      startDate: this.editForm.get(['startDate'])!.value,
+      endDate: this.editForm.get(['endDate'])!.value,
+      leaseAmortizationCalculation: this.editForm.get(['leaseAmortizationCalculation'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
+      hasBeenFullyAmortised: this.editForm.get(['hasBeenFullyAmortised'])!.value
     };
   }
 
@@ -277,7 +302,8 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
       startDate: this.editForm.get(['startDate'])!.value,
       endDate: this.editForm.get(['endDate'])!.value,
       leaseAmortizationCalculation: this.editForm.get(['leaseAmortizationCalculation'])!.value,
-      leaseContract: this.editForm.get(['leaseContract'])!.value
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
+      hasBeenFullyAmortised: this.editForm.get(['hasBeenFullyAmortised'])!.value,
     };
   }
 }

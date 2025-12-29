@@ -55,7 +55,7 @@ describe('LeaseAmortizationSchedule e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/lease-liabilities',
-      body: {"leaseId":"Australian","liabilityAmount":60274,"startDate":"2024-06-17","endDate":"2024-06-18","interestRate":34192},
+      body: {"leaseId":"Australian","liabilityAmount":60274,"startDate":"2024-06-17","endDate":"2024-06-18","interestRate":34192,"hasBeenAmortised":false,"hasBeenFullyAmortised":false},
     }).then(({ body }) => {
       leaseLiability = body;
     });

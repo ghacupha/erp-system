@@ -21,7 +21,7 @@
     },
     {
       "fieldName": "filename",
-      "fieldType": "UUID",
+      "fieldType": "UUID"
     },
     {
       "fieldName": "reportParameters",

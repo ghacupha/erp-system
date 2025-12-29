@@ -35,11 +35,13 @@ describe('LeaseLiability e2e test', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const leaseLiabilitySample = {
-    leaseId: 'brand',
-    liabilityAmount: 61154,
+    leaseId: 'Orchestrator Tuna',
+    liabilityAmount: 50846,
     startDate: '2024-06-17',
-    endDate: '2024-06-18',
-    interestRate: 62970,
+    endDate: '2024-06-17',
+    interestRate: 4623,
+    hasBeenAmortised: true,
+    hasBeenFullyAmortised: false,
   };
 
   let leaseLiability: any;
@@ -245,6 +247,12 @@ describe('LeaseLiability e2e test', () => {
       cy.get(`[data-cy="endDate"]`).type('2024-06-18').should('have.value', '2024-06-18');
 
       cy.get(`[data-cy="interestRate"]`).type('24413').should('have.value', '24413');
+
+      cy.get(`[data-cy="hasBeenAmortised"]`).should('not.be.checked');
+      cy.get(`[data-cy="hasBeenAmortised"]`).click().should('be.checked');
+
+      cy.get(`[data-cy="hasBeenFullyAmortised"]`).should('not.be.checked');
+      cy.get(`[data-cy="hasBeenFullyAmortised"]`).click().should('be.checked');
 
       cy.get(`[data-cy="leaseContract"]`).select(1);
 
