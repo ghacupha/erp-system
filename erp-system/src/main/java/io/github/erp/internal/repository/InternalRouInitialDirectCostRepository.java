@@ -21,11 +21,12 @@ import io.github.erp.domain.RouInitialDirectCost;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;        
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,4 +58,7 @@ public interface InternalRouInitialDirectCostRepository
         countQuery = "SELECT CAST(reference_number AS BIGINT) FROM public.rou_initial_direct_cost"
     )
     List<Long> findAllReferenceNumbers();
+
+    @Query("select coalesce(sum(rouInitialDirectCost.cost), 0) from RouInitialDirectCost rouInitialDirectCost where rouInitialDirectCost.leaseContract.id = :leaseContractId")
+    BigDecimal sumCostByLeaseContractId(@Param("leaseContractId") Long leaseContractId);
 }

@@ -27,6 +27,13 @@ import { IRouInitialDirectCost } from '../rou-initial-direct-cost.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { RouInitialDirectCostService } from '../service/rou-initial-direct-cost.service';
 import { RouInitialDirectCostDeleteDialogComponent } from '../delete/rou-initial-direct-cost-delete-dialog.component';
+import {
+  rouInitialDirectCostCopyWorkflowInitiatedFromList,
+  rouInitialDirectCostCreationWorkflowInitiatedFromList,
+  rouInitialDirectCostEditWorkflowInitiatedFromList
+} from '../../../store/actions/rou-initial-direct-cost-update-status.actions';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
 
 @Component({
   selector: 'jhi-rou-initial-direct-cost',
@@ -47,7 +54,8 @@ export class RouInitialDirectCostComponent implements OnInit {
     protected rouInitialDirectCostService: RouInitialDirectCostService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -106,6 +114,18 @@ export class RouInitialDirectCostComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleNavigation();
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(rouInitialDirectCostCreationWorkflowInitiatedFromList());
+  }
+
+  editButtonEvent(instance: IRouInitialDirectCost): void {
+    this.store.dispatch(rouInitialDirectCostEditWorkflowInitiatedFromList({ editedInstance: instance }));
+  }
+
+  copyButtonEvent(instance: IRouInitialDirectCost): void {
+    this.store.dispatch(rouInitialDirectCostCopyWorkflowInitiatedFromList({ copiedInstance: instance }));
   }
 
   trackId(index: number, item: IRouInitialDirectCost): number {

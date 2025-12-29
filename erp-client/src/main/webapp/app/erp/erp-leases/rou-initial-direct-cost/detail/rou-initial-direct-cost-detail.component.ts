@@ -20,6 +20,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IRouInitialDirectCost } from '../rou-initial-direct-cost.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  rouInitialDirectCostCopyWorkflowInitiatedFromView,
+  rouInitialDirectCostEditWorkflowInitiatedFromView
+} from '../../../store/actions/rou-initial-direct-cost-update-status.actions';
 
 @Component({
   selector: 'jhi-rou-initial-direct-cost-detail',
@@ -28,12 +34,20 @@ import { IRouInitialDirectCost } from '../rou-initial-direct-cost.model';
 export class RouInitialDirectCostDetailComponent implements OnInit {
   rouInitialDirectCost: IRouInitialDirectCost | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ rouInitialDirectCost }) => {
       this.rouInitialDirectCost = rouInitialDirectCost;
     });
+  }
+
+  editButtonEvent(instance: IRouInitialDirectCost): void {
+    this.store.dispatch(rouInitialDirectCostEditWorkflowInitiatedFromView({ editedInstance: instance }));
+  }
+
+  copyButtonEvent(instance: IRouInitialDirectCost): void {
+    this.store.dispatch(rouInitialDirectCostCopyWorkflowInitiatedFromView({ copiedInstance: instance }));
   }
 
   previousState(): void {

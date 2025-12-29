@@ -20,6 +20,8 @@ package io.github.erp.internal.service.rou;
 import io.github.erp.service.dto.LeasePeriodDTO;
 import io.github.erp.service.dto.RouDepreciationEntryDTO;
 import io.github.erp.service.dto.RouModelMetadataDTO;
+import io.github.erp.internal.repository.InternalLeaseLiabilityRepository;
+import io.github.erp.internal.repository.InternalRouInitialDirectCostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,9 +50,17 @@ import java.util.stream.Collectors;
 public class ROUDepreciationEntryCompilationServiceImpl implements ROUDepreciationEntryCompilationService {
 
     private final InternalLeasePeriodService internalLeasePeriodService;
+    private final InternalLeaseLiabilityRepository leaseLiabilityRepository;
+    private final InternalRouInitialDirectCostRepository rouInitialDirectCostRepository;
 
-    public ROUDepreciationEntryCompilationServiceImpl(InternalLeasePeriodService internalLeasePeriodService) {
+    public ROUDepreciationEntryCompilationServiceImpl(
+        InternalLeasePeriodService internalLeasePeriodService,
+        InternalLeaseLiabilityRepository leaseLiabilityRepository,
+        InternalRouInitialDirectCostRepository rouInitialDirectCostRepository
+    ) {
         this.internalLeasePeriodService = internalLeasePeriodService;
+        this.leaseLiabilityRepository = leaseLiabilityRepository;
+        this.rouInitialDirectCostRepository = rouInitialDirectCostRepository;
     }
 
     public List<RouDepreciationEntryDTO> compileDepreciationEntries(RouModelMetadataDTO model, String batchJobIdentifier) {
@@ -66,7 +76,7 @@ public class ROUDepreciationEntryCompilationServiceImpl implements ROUDepreciati
 
     private RouDepreciationEntryDTO updateMetadataValues(RouDepreciationEntryDTO entry, RouModelMetadataDTO modelMetadataDTO, String batchJobIdentifier) {
 
-        // TODO check if modelMetadataDTO.getLeaseAmount() is equal to the sum of leaseLiability.getLiabilityAmount() and sum of rou initial direct costs for the same lease contract
+        validateLeaseAmount(modelMetadataDTO);
         entry.setDescription(entry.getLeasePeriod().getPeriodCode().concat(" ").concat(modelMetadataDTO.getModelTitle()).concat(" depreciation"));
         entry.setDepreciationAmount(modelMetadataDTO.getLeaseAmount().divide(BigDecimal.valueOf(modelMetadataDTO.getLeaseTermPeriods()), RoundingMode.HALF_EVEN).setScale(6, RoundingMode.HALF_EVEN));
         entry.setOutstandingAmount(BigDecimal.ZERO);
@@ -84,6 +94,29 @@ public class ROUDepreciationEntryCompilationServiceImpl implements ROUDepreciati
         entry.setIsDeleted(false);
 
         return entry;
+    }
+
+    private void validateLeaseAmount(RouModelMetadataDTO modelMetadataDTO) {
+        if (modelMetadataDTO.getIfrs16LeaseContract() == null || modelMetadataDTO.getIfrs16LeaseContract().getId() == null) {
+            return;
+        }
+
+        Long leaseContractId = modelMetadataDTO.getIfrs16LeaseContract().getId();
+        BigDecimal leaseAmount = modelMetadataDTO.getLeaseAmount() != null ? modelMetadataDTO.getLeaseAmount() : BigDecimal.ZERO;
+
+        BigDecimal liabilityAmount = leaseLiabilityRepository
+            .findOneByLeaseContractId(leaseContractId)
+            .map(leaseLiability -> leaseLiability.getLiabilityAmount())
+            .orElse(BigDecimal.ZERO);
+
+        BigDecimal directCostAmount = rouInitialDirectCostRepository.sumCostByLeaseContractId(leaseContractId);
+        BigDecimal expectedAmount = liabilityAmount.add(directCostAmount);
+
+        if (leaseAmount.compareTo(expectedAmount) != 0) {
+            throw new IllegalStateException(
+                "ROU lease amount mismatch. Expected " + expectedAmount + " (liability " + liabilityAmount + " + direct cost " + directCostAmount + ") but found " + leaseAmount
+            );
+        }
     }
 
     private List<RouDepreciationEntryDTO> mapDepreciationEntryPeriod(List<LeasePeriodDTO> leasePeriods) {

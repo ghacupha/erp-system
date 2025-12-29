@@ -19,12 +19,20 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';        
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
 import { IRouInitialDirectCost, RouInitialDirectCost } from '../rou-initial-direct-cost.model';
 import { RouInitialDirectCostService } from '../service/rou-initial-direct-cost.service';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  copyingRouInitialDirectCostStatus,
+  creatingRouInitialDirectCostStatus,
+  editingRouInitialDirectCostStatus,
+  rouInitialDirectCostUpdateSelectedInstance
+} from '../../../store/selectors/rou-initial-direct-cost-workflows-status.selector';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
 import { IFRS16LeaseContractService } from '../../ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
@@ -40,6 +48,12 @@ import { PlaceholderService } from '../../../erp-pages/placeholder/service/place
 })
 export class RouInitialDirectCostUpdateComponent implements OnInit {
   isSaving = false;
+
+  // Setting up default form states
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = {...new RouInitialDirectCost()}
 
   iFRS16LeaseContractsSharedCollection: IIFRS16LeaseContract[] = [];
   settlementsSharedCollection: ISettlement[] = [];
@@ -66,12 +80,32 @@ export class RouInitialDirectCostUpdateComponent implements OnInit {
     protected transactionAccountService: TransactionAccountService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+    protected fb: FormBuilder,
+    protected store: Store<State>,
+  ) {
+    this.store.pipe(select(copyingRouInitialDirectCostStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingRouInitialDirectCostStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingRouInitialDirectCostStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(rouInitialDirectCostUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+  }
 
   ngOnInit(): void {
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
+    }
+
+    if (this.weAreCopying) {
+      this.copyForm(this.selectedItem);
+    }
+
+    if (this.weAreCreating) {
+      this.loadRelationshipsOptions();
+    }
+
     this.activatedRoute.data.subscribe(({ rouInitialDirectCost }) => {
-      this.updateForm(rouInitialDirectCost);
+      if (!this.weAreEditing && !this.weAreCopying && rouInitialDirectCost) {
+        this.updateForm(rouInitialDirectCost);
+      }
 
       if (rouInitialDirectCost.id === undefined ) {
         this.rouInitialDirectCostService.getNextReferenceNumber().subscribe(nextValue => {
@@ -111,12 +145,15 @@ export class RouInitialDirectCostUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const rouInitialDirectCost = this.createFromForm();
-    if (rouInitialDirectCost.id !== undefined) {
-      this.subscribeToSaveResponse(this.rouInitialDirectCostService.update(rouInitialDirectCost));
-    } else {
-      this.subscribeToSaveResponse(this.rouInitialDirectCostService.create(rouInitialDirectCost));
+    if (this.weAreCopying) {
+      this.subscribeToSaveResponse(this.rouInitialDirectCostService.create(this.copyFromForm()));
+      return;
     }
+    if (this.weAreEditing) {
+      this.subscribeToSaveResponse(this.rouInitialDirectCostService.update(this.createFromForm()));
+      return;
+    }
+    this.subscribeToSaveResponse(this.rouInitialDirectCostService.create(this.createFromForm()));
   }
 
   updatePlaceholders($event: IPlaceholder[]) {
@@ -168,9 +205,42 @@ export class RouInitialDirectCostUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
-  protected updateForm(rouInitialDirectCost: IRouInitialDirectCost): void {
+  protected updateForm(rouInitialDirectCost: IRouInitialDirectCost): void {     
     this.editForm.patchValue({
       id: rouInitialDirectCost.id,
+      transactionDate: rouInitialDirectCost.transactionDate,
+      description: rouInitialDirectCost.description,
+      cost: rouInitialDirectCost.cost,
+      referenceNumber: rouInitialDirectCost.referenceNumber,
+      leaseContract: rouInitialDirectCost.leaseContract,
+      settlementDetails: rouInitialDirectCost.settlementDetails,
+      targetROUAccount: rouInitialDirectCost.targetROUAccount,
+      transferAccount: rouInitialDirectCost.transferAccount,
+      placeholders: rouInitialDirectCost.placeholders,
+    });
+
+    this.iFRS16LeaseContractsSharedCollection = this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
+      this.iFRS16LeaseContractsSharedCollection,
+      rouInitialDirectCost.leaseContract
+    );
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+      this.settlementsSharedCollection,
+      rouInitialDirectCost.settlementDetails
+    );
+    this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
+      this.transactionAccountsSharedCollection,
+      rouInitialDirectCost.targetROUAccount,
+      rouInitialDirectCost.transferAccount
+    );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(rouInitialDirectCost.placeholders ?? [])
+    );
+  }
+
+  protected copyForm(rouInitialDirectCost: IRouInitialDirectCost): void {
+    this.editForm.patchValue({
+      id: undefined,
       transactionDate: rouInitialDirectCost.transactionDate,
       description: rouInitialDirectCost.description,
       cost: rouInitialDirectCost.cost,
@@ -254,6 +324,21 @@ export class RouInitialDirectCostUpdateComponent implements OnInit {
     return {
       ...new RouInitialDirectCost(),
       id: this.editForm.get(['id'])!.value,
+      transactionDate: this.editForm.get(['transactionDate'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      cost: this.editForm.get(['cost'])!.value,
+      referenceNumber: this.editForm.get(['referenceNumber'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
+      settlementDetails: this.editForm.get(['settlementDetails'])!.value,
+      targetROUAccount: this.editForm.get(['targetROUAccount'])!.value,
+      transferAccount: this.editForm.get(['transferAccount'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
+    };
+  }
+
+  protected copyFromForm(): IRouInitialDirectCost {
+    return {
+      ...new RouInitialDirectCost(),
       transactionDate: this.editForm.get(['transactionDate'])!.value,
       description: this.editForm.get(['description'])!.value,
       cost: this.editForm.get(['cost'])!.value,
