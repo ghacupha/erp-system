@@ -133,9 +133,34 @@ public class IFRS16LeaseContract implements Serializable {
     )
     private BusinessDocument leaseContractCalculations;
 
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "assetAccount",
+            "depreciationAccount",
+            "accruedDepreciationAccount",
+            "interestPaidTransferDebitAccount",
+            "interestPaidTransferCreditAccount",
+            "interestAccruedDebitAccount",
+            "interestAccruedCreditAccount",
+            "leaseRecognitionDebitAccount",
+            "leaseRecognitionCreditAccount",
+            "leaseRepaymentDebitAccount",
+            "leaseRepaymentCreditAccount",
+            "rouRecognitionCreditAccount",
+            "rouRecognitionDebitAccount",
+            "assetCategory",
+            "serviceOutlet",
+            "mainDealer",
+            "leaseContracts",
+        },
+        allowSetters = true
+    )
+    private LeaseTemplate leaseTemplate;
+
     @OneToMany(mappedBy = "leaseContract")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "leaseContract" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "leaseContract" }, allowSetters = true)     
     private Set<LeasePayment> leasePayments = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -319,6 +344,19 @@ public class IFRS16LeaseContract implements Serializable {
 
     public IFRS16LeaseContract leaseContractCalculations(BusinessDocument businessDocument) {
         this.setLeaseContractCalculations(businessDocument);
+        return this;
+    }
+
+    public LeaseTemplate getLeaseTemplate() {
+        return this.leaseTemplate;
+    }
+
+    public void setLeaseTemplate(LeaseTemplate leaseTemplate) {
+        this.leaseTemplate = leaseTemplate;
+    }
+
+    public IFRS16LeaseContract leaseTemplate(LeaseTemplate leaseTemplate) {
+        this.setLeaseTemplate(leaseTemplate);
         return this;
     }
 

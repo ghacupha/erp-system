@@ -1,0 +1,260 @@
+<!--
+    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-lease-template-heading-new" data-cy="LeaseTemplateCreateUpdateHeading" [hidden]="!weAreCreating">
+        New Lease Template
+      </h2>
+
+      <h2 id="jhi-lease-template-heading-copy" data-cy="LeaseTemplateCreateUpdateHeading" [hidden]="!weAreCopying">
+        Copy Lease Template # {{ selectedItem.id }} | {{ selectedItem.templateTitle }}
+      </h2>
+
+      <h2 id="jhi-lease-template-heading-edit" data-cy="LeaseTemplateCreateUpdateHeading" [hidden]="!weAreEditing">
+        Edit Lease Template # {{ selectedItem.id }} Entitled: {{ selectedItem.templateTitle }}
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null || weAreCopying">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_templateTitle">Template Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="templateTitle"
+            id="field_templateTitle"
+            data-cy="templateTitle"
+            formControlName="templateTitle"
+          />
+          <div *ngIf="editForm.get('templateTitle')!.invalid && (editForm.get('templateTitle')!.dirty || editForm.get('templateTitle')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('templateTitle')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName="assetAccount"
+          [inputValue]="editForm.get('assetAccount')!.value"
+          (valueSelected)="updateAssetAccount($event)"
+          inputControlLabel="Asset Account"
+        >
+          <option [ngValue]="editForm.get('assetAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName="depreciationAccount"
+          [inputValue]="editForm.get('depreciationAccount')!.value"
+          (valueSelected)="updateDepreciationAccount($event)"
+          inputControlLabel="Depreciation Account"
+        >
+          <option [ngValue]="editForm.get('depreciationAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName="accruedDepreciationAccount"
+          [inputValue]="editForm.get('accruedDepreciationAccount')!.value"
+          (valueSelected)="updateAccruedDepreciationAccount($event)"
+          inputControlLabel="Accrued Depreciation Account"
+        >
+          <option [ngValue]="editForm.get('accruedDepreciationAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName="interestPaidTransferDebitAccount"
+          [inputValue]="editForm.get('interestPaidTransferDebitAccount')!.value"
+          (valueSelected)="updateInterestPaidTransferDebitAccount($event)"
+          inputControlLabel="Interest Paid Transfer Debit Account"
+        >
+          <option [ngValue]="editForm.get('interestPaidTransferDebitAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName="interestPaidTransferCreditAccount"
+          [inputValue]="editForm.get('interestPaidTransferCreditAccount')!.value"
+          (valueSelected)="updateInterestPaidTransferCreditAccount($event)"
+          inputControlLabel="Interest Paid Transfer Credit Account"
+        >
+          <option [ngValue]="editForm.get('interestPaidTransferCreditAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName="interestAccruedDebitAccount"
+          [inputValue]="editForm.get('interestAccruedDebitAccount')!.value"
+          (valueSelected)="updateInterestAccruedDebitAccount($event)"
+          inputControlLabel="Interest Accrued Debit Account"
+        >
+          <option [ngValue]="editForm.get('interestAccruedDebitAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName="interestAccruedCreditAccount"
+          [inputValue]="editForm.get('interestAccruedCreditAccount')!.value"
+          (valueSelected)="updateInterestAccruedCreditAccount($event)"
+          inputControlLabel="Interest Accrued Credit Account"
+        >
+          <option [ngValue]="editForm.get('interestAccruedCreditAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName="leaseRecognitionDebitAccount"
+          [inputValue]="editForm.get('leaseRecognitionDebitAccount')!.value"
+          (valueSelected)="updateLeaseRecognitionDebitAccount($event)"
+          inputControlLabel="Lease Recognition Debit Account"
+        >
+          <option [ngValue]="editForm.get('leaseRecognitionDebitAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName="leaseRecognitionCreditAccount"
+          [inputValue]="editForm.get('leaseRecognitionCreditAccount')!.value"
+          (valueSelected)="updateLeaseRecognitionCreditAccount($event)"
+          inputControlLabel="Lease Recognition Credit Account"
+        >
+          <option [ngValue]="editForm.get('leaseRecognitionCreditAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName="leaseRepaymentDebitAccount"
+          [inputValue]="editForm.get('leaseRepaymentDebitAccount')!.value"
+          (valueSelected)="updateLeaseRepaymentDebitAccount($event)"
+          inputControlLabel="Lease Repayment Debit Account"
+        >
+          <option [ngValue]="editForm.get('leaseRepaymentDebitAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName="leaseRepaymentCreditAccount"
+          [inputValue]="editForm.get('leaseRepaymentCreditAccount')!.value"
+          (valueSelected)="updateLeaseRepaymentCreditAccount($event)"
+          inputControlLabel="Lease Repayment Credit Account"
+        >
+          <option [ngValue]="editForm.get('leaseRepaymentCreditAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName="rouRecognitionCreditAccount"
+          [inputValue]="editForm.get('rouRecognitionCreditAccount')!.value"
+          (valueSelected)="updateRouRecognitionCreditAccount($event)"
+          inputControlLabel="ROU Recognition Credit Account"
+        >
+          <option [ngValue]="editForm.get('rouRecognitionCreditAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName="rouRecognitionDebitAccount"
+          [inputValue]="editForm.get('rouRecognitionDebitAccount')!.value"
+          (valueSelected)="updateRouRecognitionDebitAccount($event)"
+          inputControlLabel="ROU Recognition Debit Account"
+        >
+          <option [ngValue]="editForm.get('rouRecognitionDebitAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-asset-category-form-control
+          ngDefaultControl
+          formControlName="assetCategory"
+          [inputValue]="editForm.get(['assetCategory'])!.value"
+          (valueSelected)="updateAssetCategory($event)"
+          inputControlLabel="Asset Category"
+        >
+          <option [ngValue]="editForm.get(['assetCategory'])!.value"></option>
+        </jhi-m21-asset-category-form-control>
+
+        <jhi-m21-service-outlet-form-control
+          ngDefaultControl
+          formControlName="serviceOutlet"
+          [inputValue]="editForm.get(['serviceOutlet'])!.value"
+          (valueSelected)="updateServiceOutlet($event)"
+          inputControlLabel="Service Outlet"
+        >
+          <option [ngValue]="editForm.get(['serviceOutlet'])!.value"></option>
+        </jhi-m21-service-outlet-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName="mainDealer"
+          [inputValue]="editForm.get(['mainDealer'])!.value"
+          (valueSelected)="updateMainDealer($event)"
+          inputControlLabel="Main Dealer"
+        >
+          <option [ngValue]="editForm.get(['mainDealer'])!.value"></option>
+        </jhi-m21-dealer-form-control>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]="!weAreCreating"
+          (click)="save()"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]="!weAreEditing"
+          (click)="save()"
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]="!weAreCopying"
+          (click)="save()"
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

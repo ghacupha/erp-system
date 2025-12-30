@@ -26,7 +26,7 @@ import org.mapstruct.*;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { ServiceOutletMapper.class, DealerMapper.class, FiscalMonthMapper.class, BusinessDocumentMapper.class }
+    uses = { ServiceOutletMapper.class, DealerMapper.class, FiscalMonthMapper.class, BusinessDocumentMapper.class, LeaseTemplateMapper.class }
 )
 public interface IFRS16LeaseContractMapper extends EntityMapper<IFRS16LeaseContractDTO, IFRS16LeaseContract> {
     @Mapping(target = "superintendentServiceOutlet", source = "superintendentServiceOutlet", qualifiedByName = "outletCode")
@@ -35,6 +35,7 @@ public interface IFRS16LeaseContractMapper extends EntityMapper<IFRS16LeaseContr
     @Mapping(target = "lastReportingPeriod", source = "lastReportingPeriod", qualifiedByName = "fiscalMonthCode")
     @Mapping(target = "leaseContractDocument", source = "leaseContractDocument", qualifiedByName = "documentTitle")
     @Mapping(target = "leaseContractCalculations", source = "leaseContractCalculations", qualifiedByName = "documentTitle")
+    @Mapping(target = "leaseTemplate", source = "leaseTemplate", qualifiedByName = "templateTitle")
     IFRS16LeaseContractDTO toDto(IFRS16LeaseContract s);
 
     @Named("id")

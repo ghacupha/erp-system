@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity LeaseTemplate.
+    -->
+    <changeSet id="20250211120000-1" author="jhipster">
+        <createTable tableName="lease_template">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="template_title" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="asset_account_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="depreciation_account_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="accrued_depreciation_account_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="interest_paid_transfer_debit_account_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="interest_paid_transfer_credit_account_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="interest_accrued_debit_account_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="interest_accrued_credit_account_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="lease_recognition_debit_account_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="lease_recognition_credit_account_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="lease_repayment_debit_account_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="lease_repayment_credit_account_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="rou_recognition_credit_account_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="rou_recognition_debit_account_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="asset_category_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="service_outlet_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="main_dealer_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20250211120000-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/lease_template.csv"
+                  separator=";"
+                  tableName="lease_template"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="template_title" type="string"/>
+            <column name="asset_account_id" type="numeric"/>
+            <column name="depreciation_account_id" type="numeric"/>
+            <column name="accrued_depreciation_account_id" type="numeric"/>
+            <column name="interest_paid_transfer_debit_account_id" type="numeric"/>
+            <column name="interest_paid_transfer_credit_account_id" type="numeric"/>
+            <column name="interest_accrued_debit_account_id" type="numeric"/>
+            <column name="interest_accrued_credit_account_id" type="numeric"/>
+            <column name="lease_recognition_debit_account_id" type="numeric"/>
+            <column name="lease_recognition_credit_account_id" type="numeric"/>
+            <column name="lease_repayment_debit_account_id" type="numeric"/>
+            <column name="lease_repayment_credit_account_id" type="numeric"/>
+            <column name="rou_recognition_credit_account_id" type="numeric"/>
+            <column name="rou_recognition_debit_account_id" type="numeric"/>
+            <column name="asset_category_id" type="numeric"/>
+            <column name="service_outlet_id" type="numeric"/>
+            <column name="main_dealer_id" type="numeric"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

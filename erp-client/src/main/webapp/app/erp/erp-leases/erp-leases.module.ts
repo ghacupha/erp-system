@@ -130,6 +130,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
             ),
         },
         {
+          path: 'lease-template',
+          data: {
+            pageTitle: 'ERP | Lease Templates',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-template/lease-template.module').then(
+              m => m.LeaseTemplateModule
+            ),
+        },
+        {
           path: 'rou-model-metadata',
           data: {
             pageTitle: 'ERP | ROU Metadata',

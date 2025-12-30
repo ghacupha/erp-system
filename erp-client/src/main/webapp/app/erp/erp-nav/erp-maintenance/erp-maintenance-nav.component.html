@@ -154,6 +154,18 @@
             <span>Contract Metadata</span>
           </a>
         </li>
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class='dropdown-item'
+            routerLink='lease-template'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Lease Templates</span>
+          </a>
+        </li>
         <li>
           <a
             class='dropdown-item'

@@ -1,0 +1,121 @@
+{
+  "fields": [
+    {
+      "fieldName": "templateTitle",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "assetAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "depreciationAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "accruedDepreciationAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "interestPaidTransferDebitAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "interestPaidTransferCreditAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "interestAccruedDebitAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "interestAccruedCreditAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "leaseRecognitionDebitAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "leaseRecognitionCreditAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "leaseRepaymentDebitAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "leaseRepaymentCreditAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "rouRecognitionCreditAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "rouRecognitionDebitAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "assetCategory",
+      "otherEntityName": "assetCategory",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "assetCategoryName"
+    },
+    {
+      "relationshipName": "serviceOutlet",
+      "otherEntityName": "serviceOutlet",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "outletCode"
+    },
+    {
+      "relationshipName": "mainDealer",
+      "otherEntityName": "dealer",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "dealerName"
+    },
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "iFRS16LeaseContract",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "leaseTemplate"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "LeaseTemplate",
+  "changelogDate": "20250211120000",
+  "incrementalChangelog": false
+}
