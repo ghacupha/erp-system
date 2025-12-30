@@ -97,22 +97,15 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_leaseTemplate">Lease Template</label>
-          <select
-            class="form-control"
-            id="field_leaseTemplate"
-            data-cy="leaseTemplate"
-            name="leaseTemplate"
-            formControlName="leaseTemplate">
-            <option [ngValue]="null"></option>
-            <option
-              *ngFor="let leaseTemplateOption of leaseTemplatesSharedCollection; trackBy: trackLeaseTemplateById"
-              [ngValue]="leaseTemplateOption">
-              {{ leaseTemplateOption.templateTitle }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-lease-template-form-control
+          ngDefaultControl
+          formControlName="leaseTemplate"
+          [inputValue]="editForm.get(['leaseTemplate'])!.value"
+          (valueSelected)="updateLeaseTemplate($event)"
+          inputControlLabel="Lease Template"
+        >
+          <option [ngValue]="editForm.get(['leaseTemplate'])!.value"></option>
+        </jhi-m21-lease-template-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_inceptionDate">Inception Date</label>

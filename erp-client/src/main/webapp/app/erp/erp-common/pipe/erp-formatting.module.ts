@@ -36,6 +36,7 @@ import { FormatBusinessDocumentPipe } from './format-business-document.pipe';
 import { FormatContractMetadataPipe } from './format-contract-metadata.pipe';
 import { FormatLeaseContractPipe } from './format-lease-contract.pipe';
 import { FormatLeaseModelMetadataPipe } from './format-lease-model-metadata.pipe';
+import { FormatLeaseTemplatePipe } from './format-lease-template.pipe';
 import { FormatAssetCategoryPipe } from './format-asset-category.pipe';
 import { FormatWipTransferPipe } from './format-wip-transfer.pipe';
 import { FormatWorkProjectPipe } from './format-work-project.pipe';
@@ -63,6 +64,7 @@ import { FormatDeliveryNotePipe } from './format-delivery-note.pipe';
     FormatContractMetadataPipe,
     FormatLeaseContractPipe,
     FormatLeaseModelMetadataPipe,
+    FormatLeaseTemplatePipe,
     FormatAssetCategoryPipe,
     FormatWipTransferPipe,
     FormatWorkProjectPipe,
@@ -90,6 +92,7 @@ import { FormatDeliveryNotePipe } from './format-delivery-note.pipe';
     FormatContractMetadataPipe,
     FormatLeaseContractPipe,
     FormatLeaseModelMetadataPipe,
+    FormatLeaseTemplatePipe,
     FormatAssetCategoryPipe,
     FormatWipTransferPipe,
     FormatWorkProjectPipe,

@@ -17,6 +17,6 @@ Lease templates store shared account mappings and reference data that stay consi
 
 ## Use a Template on a Lease Contract
 1. Open an IFRS16 lease contract and select Edit.
-2. Choose a lease template from the Lease Template dropdown.
+2. Choose a lease template from the Lease Template search field (type to filter options).
 3. Confirm the service outlet and main dealer fields are populated as expected.
 4. Save the contract.
