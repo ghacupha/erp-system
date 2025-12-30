@@ -60,6 +60,8 @@ public class IFRS16LeaseContractDTO implements Serializable {
 
     private BusinessDocumentDTO leaseContractCalculations;
 
+    private LeaseTemplateDTO leaseTemplate;
+
     public Long getId() {
         return id;
     }
@@ -172,6 +174,14 @@ public class IFRS16LeaseContractDTO implements Serializable {
         this.leaseContractCalculations = leaseContractCalculations;
     }
 
+    public LeaseTemplateDTO getLeaseTemplate() {
+        return leaseTemplate;
+    }
+
+    public void setLeaseTemplate(LeaseTemplateDTO leaseTemplate) {
+        this.leaseTemplate = leaseTemplate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -211,6 +221,7 @@ public class IFRS16LeaseContractDTO implements Serializable {
             ", lastReportingPeriod=" + getLastReportingPeriod() +
             ", leaseContractDocument=" + getLeaseContractDocument() +
             ", leaseContractCalculations=" + getLeaseContractCalculations() +
+            ", leaseTemplate=" + getLeaseTemplate() +
             "}";
     }
 }

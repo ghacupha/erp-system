@@ -145,6 +145,15 @@ export class RouModelMetadataUpdateComponent implements OnInit {
             modelTitle: ifrs16.bookingId,
             description: ifrs16.description,
           });
+
+          if (ifrs16.leaseTemplate) {
+            this.editForm.patchValue({
+              assetAccount: ifrs16.leaseTemplate.assetAccount,
+              depreciationAccount: ifrs16.leaseTemplate.depreciationAccount,
+              accruedDepreciationAccount: ifrs16.leaseTemplate.accruedDepreciationAccount,
+              assetCategory: ifrs16.leaseTemplate.assetCategory,
+            });
+          }
         }
       });
 

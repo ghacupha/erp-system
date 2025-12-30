@@ -599,6 +599,8 @@
     <include file="config/liquibase/changelog/20241115111306_add_institution_to_ta_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241216105704_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241115103432_added_entity_constraints_ReportingEntity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250211120000_added_entity_LeaseTemplate.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250211120001_added_entity_constraints_LeaseTemplate.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250203103056_added_entity_constraints_WIPListReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250203110822_added_entity_constraints_WIPTransferListReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240828000000_added_entity_LeasePaymentUpload.xml" relativeToChangelogFile="false"/>

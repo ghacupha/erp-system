@@ -191,6 +191,15 @@ public class IFRS16LeaseContractQueryService extends QueryService<IFRS16LeaseCon
                         )
                     );
             }
+            if (criteria.getLeaseTemplateId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getLeaseTemplateId(),
+                            root -> root.join(IFRS16LeaseContract_.leaseTemplate, JoinType.LEFT).get(LeaseTemplate_.id)
+                        )
+                    );
+            }
             if (criteria.getLeasePaymentId() != null) {
                 specification =
                     specification.and(

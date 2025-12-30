@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity LeaseTemplate.
+    -->
+    <changeSet id="20250211120001-1" author="jhipster">
+        <addForeignKeyConstraint baseColumnNames="asset_account_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__asset_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="depreciation_account_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__depreciation_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="accrued_depreciation_account_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__accrued_depreciation_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="interest_paid_transfer_debit_account_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__interest_paid_transfer_debit_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="interest_paid_transfer_credit_account_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__interest_paid_transfer_credit_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="interest_accrued_debit_account_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__interest_accrued_debit_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="interest_accrued_credit_account_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__interest_accrued_credit_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_recognition_debit_account_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__lease_recognition_debit_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_recognition_credit_account_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__lease_recognition_credit_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_repayment_debit_account_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__lease_repayment_debit_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_repayment_credit_account_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__lease_repayment_credit_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="rou_recognition_credit_account_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__rou_recognition_credit_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="rou_recognition_debit_account_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__rou_recognition_debit_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_category_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__asset_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="service_outlet_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__service_outlet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="service_outlet"/>
+
+        <addForeignKeyConstraint baseColumnNames="main_dealer_id"
+                                 baseTableName="lease_template"
+                                 constraintName="fk_lease_template__main_dealer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+    </changeSet>
+
+    <changeSet id="20250211120001-2" author="jhipster">
+        <addColumn tableName="ifrs16lease_contract">
+            <column name="lease_template_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseColumnNames="lease_template_id"
+                                 baseTableName="ifrs16lease_contract"
+                                 constraintName="fk_ifrs16lease_contract__lease_template_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_template"/>
+    </changeSet>
+</databaseChangeLog>

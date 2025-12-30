@@ -34,9 +34,10 @@ import { RouModelMetadataFormState } from './reducers/rou-model-metadata-workflo
 import { LeasePeriodSelectionFormState } from './reducers/lease-period-selection-workflow-status.reducer';
 import { LeasePeriodReportPathSelectionState } from './reducers/lease-period-report-path-selection.reducer';
 import { LeaseAmortizationCalculationFormState } from './reducers/lease-amortization-calculation.reducer';
-import { LeaseLiabilityFormState } from './reducers/lease-liability.reducer';   
-import { LeasePaymentFormState } from './reducers/lease-payment.reducer';       
+import { LeaseLiabilityFormState } from './reducers/lease-liability.reducer';
+import { LeasePaymentFormState } from './reducers/lease-payment.reducer';
 import { RouInitialDirectCostFormState } from './reducers/rou-initial-direct-cost-workflow-status.reducer';
+import { LeaseTemplateFormState } from './reducers/lease-template-workflow-status.reducer';
 import { TAAmortizationRuleFormState } from './reducers/ta-amortization-rule-status.reducer';
 import { TAInterestPaidTransferRuleFormState } from './reducers/ta-interest-paid-transfer-rule-status.reducer';
 import { TALeaseInterestAccrualRuleFormState } from './reducers/ta-lease-interest-accrual-rule-status.reducer';
@@ -65,6 +66,7 @@ export interface State {
   leasePaymentFormState: LeasePaymentFormState,
   rouModelMetadataFormState: RouModelMetadataFormState,
   rouInitialDirectCostFormState: RouInitialDirectCostFormState,
+  leaseTemplateFormState: LeaseTemplateFormState,
   leasePeriodSelectionIdFormState: LeasePeriodSelectionFormState,
   leasePeriodReportPathSelectionState: LeasePeriodReportPathSelectionState,
   taAmortizationRuleFormState: TAAmortizationRuleFormState,
@@ -214,6 +216,14 @@ export const initialState: State = {
     weAreCreating: false,
   },
   rouInitialDirectCostFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  leaseTemplateFormState: {
     selectedInstance: {},
     browserHasBeenRefreshed: false,
     backEndFetchComplete: false,

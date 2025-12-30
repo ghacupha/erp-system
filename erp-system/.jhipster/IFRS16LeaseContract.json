@@ -76,6 +76,12 @@
       "otherEntityField": "documentTitle"
     },
     {
+      "relationshipName": "leaseTemplate",
+      "otherEntityName": "leaseTemplate",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "templateTitle"
+    },
+    {
       "relationshipName": "leasePayment",
       "otherEntityName": "leasePayment",
       "relationshipType": "one-to-many",
