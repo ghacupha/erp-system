@@ -48,6 +48,7 @@ import { M21ContractMetadataFormControlComponent } from './contract-metadata-for
 import { M21LeaseContractFormControlComponent } from './lease-contract-form-components/m21-lease-contract-form-control.component';
 import { M2mLeaseContractFormControlComponent } from './lease-contract-form-components/m2m-lease-contract-form-control.component';
 import { M21LeaseModelMetadataFormControlComponent } from './lease-model-metadata/m21-lease-model-metadata-form-control.component';
+import { M21LeaseTemplateFormControlComponent } from './lease-template-components/m21-lease-template-form-control.component';
 import { M2mAssetAccessoryFormComponent } from './asset-accessory-components/m2m-asset-accessory-form-component';
 import { M2mAssetWarrantyFormComponent } from './asset-warranty-form-components/m2m-asset-warranty-form-component';
 import { M21AssetCategoryFormControlComponent } from './asset-category-form-controls/m21-asset-category-form-control.component';
@@ -115,6 +116,7 @@ import { LeasePaymentUploadFormComponentsModule } from './lease-payment-upload-c
     M21LeaseContractFormControlComponent,
     M2mLeaseContractFormControlComponent,
     M21LeaseModelMetadataFormControlComponent,
+    M21LeaseTemplateFormControlComponent,
     M2mAssetAccessoryFormComponent,
     M2mAssetWarrantyFormComponent,
     M21AssetCategoryFormControlComponent,
@@ -168,6 +170,7 @@ import { LeasePaymentUploadFormComponentsModule } from './lease-payment-upload-c
     M21LeaseContractFormControlComponent,
     M2mLeaseContractFormControlComponent,
     M21LeaseModelMetadataFormControlComponent,
+    M21LeaseTemplateFormControlComponent,
     M2mAssetAccessoryFormComponent,
     M2mAssetWarrantyFormComponent,
     M21AssetCategoryFormControlComponent,

@@ -36,6 +36,7 @@ import { ContractMetadataSelectedOptionViewComponent } from './contract-metadata
 import { ContractMetadataOptionViewComponent } from './contract-metadata-option-view.component';
 import { LeaseContractOptionViewComponent } from './lease-contract-option-view.component';
 import { LeaseContractSelectedOptionViewComponent } from './lease-contract-selected-option-view.component';
+import { LeaseTemplateOptionViewComponent } from './lease-template-option-view.component';
 import { LeaseModelMetadataOptionViewComponent } from './lease-model-metadata-option-view.component';
 import { AssetWarrantyOptionViewComponent } from './asset-warranty-option-view.component';
 import { AssetAccessoryOptionViewComponent } from './asset-accessory-option-view.component';
@@ -63,6 +64,7 @@ import { WipRegistrationOptionViewComponent } from './wip-registration-option-vi
     ContractMetadataOptionViewComponent,
     LeaseContractOptionViewComponent,
     LeaseContractSelectedOptionViewComponent,
+    LeaseTemplateOptionViewComponent,
     LeaseModelMetadataOptionViewComponent,
     AssetWarrantyOptionViewComponent,
     AssetAccessoryOptionViewComponent,
@@ -92,6 +94,7 @@ import { WipRegistrationOptionViewComponent } from './wip-registration-option-vi
     ContractMetadataOptionViewComponent,
     LeaseContractOptionViewComponent,
     LeaseContractSelectedOptionViewComponent,
+    LeaseTemplateOptionViewComponent,
     LeaseModelMetadataOptionViewComponent,
     AssetWarrantyOptionViewComponent,
     AssetAccessoryOptionViewComponent,
