@@ -248,6 +248,8 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
   protected patchAccountsFromLeaseTemplate(leaseContract: IIFRS16LeaseContract): void {
     const debitAccount = leaseContract.leaseTemplate?.interestAccruedDebitAccount;
     const creditAccount = leaseContract.leaseTemplate?.interestAccruedCreditAccount;
+    const currentDebitAccount = this.editForm.get('debit')!.value;
+    const currentCreditAccount = this.editForm.get('credit')!.value;
 
     if (!debitAccount && !creditAccount) {
       return;
@@ -259,9 +261,16 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
       creditAccount
     );
 
+    const shouldPatchDebit = debitAccount && (!currentDebitAccount || currentDebitAccount.id === debitAccount.id);
+    const shouldPatchCredit = creditAccount && (!currentCreditAccount || currentCreditAccount.id === creditAccount.id);
+
+    if (!shouldPatchDebit && !shouldPatchCredit) {
+      return;
+    }
+
     this.editForm.patchValue({
-      debit: debitAccount ?? this.editForm.get('debit')!.value,
-      credit: creditAccount ?? this.editForm.get('credit')!.value,
+      debit: shouldPatchDebit ? debitAccount : currentDebitAccount,
+      credit: shouldPatchCredit ? creditAccount : currentCreditAccount,
     });
   }
 

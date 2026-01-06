@@ -8,6 +8,7 @@ TA Lease Interest Accrual Rule creation now listens for changes to the selected 
 
 * On lease selection, the UI retrieves the full lease (including its template) via `IFRS16LeaseContractService.find`.
 * If the lease template provides `interestAccruedDebitAccount` or `interestAccruedCreditAccount`, the form patches the Debit and Credit controls with those values.
+* When editing an existing rule, the handler keeps any saved Debit and Credit selections that differ from the template defaults; template accounts are only applied when the controls are empty or already match those defaults.
 * The transaction account options are refreshed with any template-provided accounts to keep the dropdown selections valid.
 * If no template exists or neither interest accrued account is defined, the handler leaves existing form values unchanged.
 * Null and ID checks guard the subscription to avoid unnecessary fetches and accidental overwrites when defaults are not present.

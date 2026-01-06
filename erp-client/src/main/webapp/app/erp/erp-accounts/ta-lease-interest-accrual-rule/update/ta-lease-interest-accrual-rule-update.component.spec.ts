@@ -201,6 +201,58 @@ describe('TALeaseInterestAccrualRule Management Update Component', () => {
       expect(comp.editForm.get('debit')!.value).toEqual(existingDebit);
       expect(comp.editForm.get('credit')!.value).toEqual(existingCredit);
     });
+
+    it('should preserve existing debit and credit when editing a rule with different mappings than the template', () => {
+      const templateDebit: ITransactionAccount = { id: 3210 };
+      const templateCredit: ITransactionAccount = { id: 4321 };
+      const leaseWithTemplate: IIFRS16LeaseContract = {
+        id: 24680,
+        leaseTemplate: {
+          interestAccruedDebitAccount: templateDebit,
+          interestAccruedCreditAccount: templateCredit,
+        },
+      };
+      const existingDebit: ITransactionAccount = { id: 9991 };
+      const existingCredit: ITransactionAccount = { id: 9992 };
+      const selectedRule: ITALeaseInterestAccrualRule = {
+        id: 444,
+        leaseContract: leaseWithTemplate,
+        debit: existingDebit,
+        credit: existingCredit,
+      };
+
+      jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseWithTemplate })));
+      jest.spyOn(iFRS16LeaseContractService, 'query').mockReturnValue(of(new HttpResponse({ body: [] })));
+      jest.spyOn(iFRS16LeaseContractService, 'addIFRS16LeaseContractToCollectionIfMissing').mockReturnValue([leaseWithTemplate]);
+
+      jest.spyOn(transactionAccountService, 'query').mockReturnValue(of(new HttpResponse({ body: [] })));
+      jest.spyOn(transactionAccountService, 'addTransactionAccountToCollectionIfMissing').mockImplementation(
+        (collection: ITransactionAccount[], ...accounts: (ITransactionAccount | null | undefined)[]) => [
+          ...collection,
+          ...(accounts.filter(Boolean) as ITransactionAccount[]),
+        ]
+      );
+
+      jest.spyOn(placeholderService, 'query').mockReturnValue(of(new HttpResponse({ body: [] })));
+      jest.spyOn(placeholderService, 'addPlaceholderToCollectionIfMissing').mockImplementation(
+        (collection: IPlaceholder[], ...placeholders: (IPlaceholder | null | undefined)[]) => [
+          ...collection,
+          ...(placeholders.filter(Boolean) as IPlaceholder[]),
+        ]
+      );
+
+      comp.weAreEditing = true;
+      comp.selectedItem = selectedRule;
+
+      comp.ngOnInit();
+
+      expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(leaseWithTemplate.id);
+      expect(comp.editForm.get('debit')!.value).toEqual(existingDebit);
+      expect(comp.editForm.get('credit')!.value).toEqual(existingCredit);
+      expect(comp.transactionAccountsSharedCollection).toEqual(
+        expect.arrayContaining([existingDebit, existingCredit, templateDebit, templateCredit])
+      );
+    });
   });
 
   describe('save', () => {
