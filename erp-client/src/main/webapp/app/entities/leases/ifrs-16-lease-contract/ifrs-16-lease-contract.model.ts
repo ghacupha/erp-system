@@ -22,6 +22,7 @@ import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 import { ILeasePayment } from 'app/entities/leases/lease-payment/lease-payment.model';
+import { ILeaseTemplate } from '../lease-template/lease-template.model';
 
 export interface IIFRS16LeaseContract {
   id?: number;
@@ -38,6 +39,7 @@ export interface IIFRS16LeaseContract {
   lastReportingPeriod?: IFiscalMonth;
   leaseContractDocument?: IBusinessDocument | null;
   leaseContractCalculations?: IBusinessDocument | null;
+  leaseTemplate?: ILeaseTemplate | null;
   leasePayments?: ILeasePayment[] | null;
 }
 
@@ -57,6 +59,7 @@ export class IFRS16LeaseContract implements IIFRS16LeaseContract {
     public lastReportingPeriod?: IFiscalMonth,
     public leaseContractDocument?: IBusinessDocument | null,
     public leaseContractCalculations?: IBusinessDocument | null,
+    public leaseTemplate?: ILeaseTemplate | null,
     public leasePayments?: ILeasePayment[] | null
   ) {}
 }
