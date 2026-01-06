@@ -234,6 +234,35 @@ describe('TAAmortizationRule Management Update Component', () => {
       expect(comp.editForm.get('debit')!.value).toEqual(leaseTemplate.depreciationAccount);
       expect(comp.editForm.get('credit')!.value).toEqual(leaseTemplate.accruedDepreciationAccount);
     });
+
+    it('should not overwrite existing debit and credit when they are already set', () => {
+      const leaseTemplate: ILeaseTemplate = {
+        depreciationAccount: { id: 501 } as ITransactionAccount,
+        accruedDepreciationAccount: { id: 601 } as ITransactionAccount,
+      };
+      const leaseContract: IIFRS16LeaseContract = { id: 322 };
+      const existingDebit = { id: 701 } as ITransactionAccount;
+      const existingCredit = { id: 801 } as ITransactionAccount;
+
+      activatedRoute.data = of({ tAAmortizationRule: new TAAmortizationRule() });
+      jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(
+        of(
+          new HttpResponse({
+            body: { ...leaseContract, leaseTemplate },
+          })
+        )
+      );
+
+      comp.ngOnInit();
+      comp.editForm.patchValue({
+        debit: existingDebit,
+        credit: existingCredit,
+      });
+      comp.editForm.get('leaseContract')!.setValue(leaseContract);
+
+      expect(comp.editForm.get('debit')!.value).toBe(existingDebit);
+      expect(comp.editForm.get('credit')!.value).toBe(existingCredit);
+    });
   });
 
   describe('Tracking relationships identifiers', () => {

@@ -17,5 +17,5 @@
 
 ## Story 4: Prefill amortization rule accounts from a lease template
 - Persona: Accountant configuring amortization rules for a lease contract.
-- Steps: Open the TA amortization rule update form, choose an IFRS16 lease contract that has a lease template, confirm debit and credit prefill with the template’s depreciation and accrued depreciation accounts, then save or adjust as needed.
-- Expected outcome: Debit and credit fields default to the template’s depreciation accounts, reducing manual entry while still allowing overrides.
+- Steps: Open the TA amortization rule update form, choose an IFRS16 lease contract that has a lease template, confirm debit and credit prefill with the template’s depreciation and accrued depreciation accounts when those fields are empty, and keep existing debit/credit values intact when loading an already-saved rule.
+- Expected outcome: Debit and credit fields default to the template’s depreciation accounts only when no values are present, reducing manual entry while preventing overwrites of saved mappings.

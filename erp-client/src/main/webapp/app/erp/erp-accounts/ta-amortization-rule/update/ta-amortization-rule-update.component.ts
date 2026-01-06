@@ -276,13 +276,15 @@ export class TAAmortizationRuleUpdateComponent implements OnInit {
           return;
         }
 
+        const currentDebit = this.editForm.get('debit')?.value;
+        const currentCredit = this.editForm.get('credit')?.value;
         const patchedValues: Partial<ITAAmortizationRule> = {};
 
-        if (leaseTemplate.depreciationAccount) {
+        if (!currentDebit && leaseTemplate.depreciationAccount) {
           patchedValues.debit = leaseTemplate.depreciationAccount;
         }
 
-        if (leaseTemplate.accruedDepreciationAccount) {
+        if (!currentCredit && leaseTemplate.accruedDepreciationAccount) {
           patchedValues.credit = leaseTemplate.accruedDepreciationAccount;
         }
 

@@ -9,11 +9,11 @@ TA amortization rules now pull debit and credit defaults from the selected IFRS1
 - Behaviour:
   - The component fetches the selected IFRS16 lease contract via `IFRS16LeaseContractService.find`.
   - If the contract has a lease template:
-    - `debit` is patched with `leaseTemplate.depreciationAccount` when present.
-    - `credit` is patched with `leaseTemplate.accruedDepreciationAccount` when present.
+    - `debit` is patched with `leaseTemplate.depreciationAccount` when present **and when the form’s debit is still empty**, so persisted mappings are not overwritten when editing an existing rule.
+    - `credit` is patched with `leaseTemplate.accruedDepreciationAccount` when present **and when the form’s credit is still empty**, preserving any saved credit account.
   - If no template is linked, the form is left untouched to preserve manual entries.
 
 ## Design Notes
 - A `valueChanges` subscription on `leaseContract` performs the lookup, using null checks to avoid unnecessary calls.
-- Patching only occurs when template accounts are defined, preventing accidental overwrites when users need manual selections.
+- Patching only occurs when template accounts are defined and the corresponding form controls are empty, preventing accidental overwrites when users load an existing amortization rule.
 - The behaviour is covered by a unit test that verifies debit and credit values update after selecting a lease that carries a template.

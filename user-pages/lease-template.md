@@ -24,5 +24,5 @@ Lease templates store shared account mappings and reference data that stay consi
 ## Apply Template Defaults to Amortization Rules
 1. Open the TA Amortization Rules screen and start a new rule.
 2. Select an IFRS16 lease contract that already references a lease template.
-3. The Debit field prefills with the template’s depreciation account and the Credit field with the accrued depreciation account when those mappings exist.
-4. Adjust either account if needed, then save the rule.
+3. The Debit field prefills with the template’s depreciation account and the Credit field with the accrued depreciation account when those mappings exist **as long as those fields are still empty**—existing debit/credit selections on a loaded rule are left unchanged.
+4. Adjust either account if needed, then save the rule. If you want the template defaults on an existing rule, clear the debit/credit values before selecting the lease contract so the prefills can apply.
