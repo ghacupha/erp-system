@@ -20,8 +20,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { finalize, map, switchMap } from 'rxjs/operators';
 
 import { ITAInterestPaidTransferRule, TAInterestPaidTransferRule } from '../ta-interest-paid-transfer-rule.model';
 import { TAInterestPaidTransferRuleService } from '../service/ta-interest-paid-transfer-rule.service';
@@ -66,6 +66,7 @@ export class TAInterestPaidTransferRuleUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ tAInterestPaidTransferRule }) => {
       this.updateForm(tAInterestPaidTransferRule);
 
+      this.registerLeaseContractValueChangeHandler();
       this.loadRelationshipsOptions();
     });
   }
@@ -105,6 +106,39 @@ export class TAInterestPaidTransferRuleUpdateComponent implements OnInit {
       }
     }
     return option;
+  }
+
+  protected registerLeaseContractValueChangeHandler(): void {
+    this.editForm
+      .get('leaseContract')!
+      .valueChanges.pipe(
+        switchMap((selectedLease: IIFRS16LeaseContract | null) => {
+          if (!selectedLease?.id) {
+            return of(null);
+          }
+          return this.iFRS16LeaseContractService.find(selectedLease.id).pipe(map(response => response.body));
+        })
+      )
+      .subscribe(leaseContract => {
+        const leaseTemplate = leaseContract?.leaseTemplate;
+        if (!leaseTemplate) {
+          return;
+        }
+
+        const debitAccount = leaseTemplate.interestPaidTransferDebitAccount;
+        const creditAccount = leaseTemplate.interestPaidTransferCreditAccount;
+
+        this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
+          this.transactionAccountsSharedCollection,
+          debitAccount,
+          creditAccount
+        );
+
+        this.editForm.patchValue({
+          debit: debitAccount ?? this.editForm.get('debit')!.value,
+          credit: creditAccount ?? this.editForm.get('credit')!.value,
+        });
+      });
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ITAInterestPaidTransferRule>>): void {
