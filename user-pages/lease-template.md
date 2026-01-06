@@ -26,3 +26,9 @@ Lease templates store shared account mappings and reference data that stay consi
 2. Select an IFRS16 lease contract that already references a lease template.
 3. The Debit field prefills with the template’s depreciation account and the Credit field with the accrued depreciation account when those mappings exist.
 4. Adjust either account if needed, then save the rule.
+
+## Apply Template Defaults to Lease Interest Accrual Rules
+1. Open the Lease Interest Accrual Rule screen and start a new rule.
+2. Choose an IFRS16 lease contract that is linked to a lease template.
+3. When the template includes interest accrued accounts, the Debit and Credit fields auto-populate with those defaults.
+4. Override either account as needed before saving the rule.

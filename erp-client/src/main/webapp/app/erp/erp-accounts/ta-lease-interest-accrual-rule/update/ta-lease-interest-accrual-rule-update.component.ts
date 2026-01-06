@@ -83,6 +83,8 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.subscribeToLeaseContractChanges();
+
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
       this.loadRelationshipsOptions();
@@ -229,6 +231,38 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
       this.placeholdersSharedCollection,
       ...(tALeaseInterestAccrualRule.placeholders ?? [])
     );
+  }
+
+  protected subscribeToLeaseContractChanges(): void {
+    this.editForm.get(['leaseContract'])?.valueChanges.subscribe((leaseContract: IIFRS16LeaseContract) => {
+      if (leaseContract?.id) {
+        this.iFRS16LeaseContractService.find(leaseContract.id).subscribe((response: HttpResponse<IIFRS16LeaseContract>) => {
+          if (response.body?.leaseTemplate) {
+            this.patchAccountsFromLeaseTemplate(response.body);
+          }
+        });
+      }
+    });
+  }
+
+  protected patchAccountsFromLeaseTemplate(leaseContract: IIFRS16LeaseContract): void {
+    const debitAccount = leaseContract.leaseTemplate?.interestAccruedDebitAccount;
+    const creditAccount = leaseContract.leaseTemplate?.interestAccruedCreditAccount;
+
+    if (!debitAccount && !creditAccount) {
+      return;
+    }
+
+    this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
+      this.transactionAccountsSharedCollection,
+      debitAccount,
+      creditAccount
+    );
+
+    this.editForm.patchValue({
+      debit: debitAccount ?? this.editForm.get('debit')!.value,
+      credit: creditAccount ?? this.editForm.get('credit')!.value,
+    });
   }
 
   protected loadRelationshipsOptions(): void {
