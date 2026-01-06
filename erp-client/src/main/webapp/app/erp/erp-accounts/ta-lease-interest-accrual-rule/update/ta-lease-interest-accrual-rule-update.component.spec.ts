@@ -26,6 +26,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
+import { provideMockStore } from '@ngrx/store/testing';
 
 import { TALeaseInterestAccrualRuleService } from '../service/ta-lease-interest-accrual-rule.service';
 import { ITALeaseInterestAccrualRule, TALeaseInterestAccrualRule } from '../ta-lease-interest-accrual-rule.model';
@@ -50,7 +51,7 @@ describe('TALeaseInterestAccrualRule Management Update Component', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       declarations: [TALeaseInterestAccrualRuleUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [FormBuilder, ActivatedRoute, provideMockStore({})],
     })
       .overrideTemplate(TALeaseInterestAccrualRuleUpdateComponent, '')
       .compileComponents();
@@ -149,6 +150,56 @@ describe('TALeaseInterestAccrualRule Management Update Component', () => {
       expect(comp.transactionAccountsSharedCollection).toContain(debit);
       expect(comp.transactionAccountsSharedCollection).toContain(credit);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
+    });
+
+    it('should patch debit and credit from lease template interest accrued accounts', () => {
+      const leaseTemplateDebit: ITransactionAccount = { id: 9876 };
+      const leaseTemplateCredit: ITransactionAccount = { id: 6543 };
+      const leaseWithTemplate: IIFRS16LeaseContract = {
+        id: 2468,
+        leaseTemplate: {
+          interestAccruedDebitAccount: leaseTemplateDebit,
+          interestAccruedCreditAccount: leaseTemplateCredit,
+        },
+      };
+      jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseWithTemplate })));
+
+      comp.ngOnInit();
+      comp.editForm.patchValue({
+        debit: null,
+        credit: null,
+      });
+
+      comp.editForm.get('leaseContract')!.setValue(leaseWithTemplate);
+
+      expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(leaseWithTemplate.id);
+      expect(comp.editForm.get('debit')!.value).toEqual(leaseTemplateDebit);
+      expect(comp.editForm.get('credit')!.value).toEqual(leaseTemplateCredit);
+      expect(comp.transactionAccountsSharedCollection).toEqual(
+        expect.arrayContaining([leaseTemplateDebit, leaseTemplateCredit])
+      );
+    });
+
+    it('should leave existing debit and credit untouched when template lacks accrued accounts', () => {
+      const existingDebit: ITransactionAccount = { id: 1111 };
+      const existingCredit: ITransactionAccount = { id: 2222 };
+      const leaseWithEmptyTemplate: IIFRS16LeaseContract = {
+        id: 1357,
+        leaseTemplate: {},
+      };
+      jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseWithEmptyTemplate })));
+
+      comp.ngOnInit();
+      comp.editForm.patchValue({
+        debit: existingDebit,
+        credit: existingCredit,
+      });
+
+      comp.editForm.get('leaseContract')!.setValue(leaseWithEmptyTemplate);
+
+      expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(leaseWithEmptyTemplate.id);
+      expect(comp.editForm.get('debit')!.value).toEqual(existingDebit);
+      expect(comp.editForm.get('credit')!.value).toEqual(existingCredit);
     });
   });
 
