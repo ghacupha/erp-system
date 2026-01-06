@@ -22,7 +22,7 @@ import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 import { ILeasePayment } from 'app/entities/leases/lease-payment/lease-payment.model';
-import { ILeaseTemplate } from '../lease-template/lease-template.model';
+import { ILeaseTemplate } from 'app/erp/erp-leases/lease-template/lease-template.model';
 
 export interface IIFRS16LeaseContract {
   id?: number;

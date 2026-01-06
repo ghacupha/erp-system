@@ -33,7 +33,7 @@ import { ITransactionAccount } from 'app/entities/accounting/transaction-account
 import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { ILeaseTemplate } from 'app/entities/leases/lease-template/lease-template.model';
+import { ILeaseTemplate } from 'app/erp/erp-leases/lease-template/lease-template.model';
 
 import { TAInterestPaidTransferRuleUpdateComponent } from './ta-interest-paid-transfer-rule-update.component';
 
