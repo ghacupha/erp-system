@@ -21,7 +21,7 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize, filter, map, switchMap } from 'rxjs/operators';
 
 import { ITAAmortizationRule, TAAmortizationRule } from '../ta-amortization-rule.model';
 import { TAAmortizationRuleService } from '../service/ta-amortization-rule.service';
@@ -87,6 +87,8 @@ export class TAAmortizationRuleUpdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.registerLeaseContractTemplateDefaults();
 
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
@@ -258,6 +260,36 @@ export class TAAmortizationRuleUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+  }
+
+  private registerLeaseContractTemplateDefaults(): void {
+    this.editForm
+      .get('leaseContract')
+      ?.valueChanges.pipe(
+        filter((leaseContract): leaseContract is IIFRS16LeaseContract => !!leaseContract?.id),
+        switchMap(leaseContract => this.iFRS16LeaseContractService.find(leaseContract.id!))
+      )
+      .subscribe(response => {
+        const leaseTemplate = response.body?.leaseTemplate;
+
+        if (!leaseTemplate) {
+          return;
+        }
+
+        const patchedValues: Partial<ITAAmortizationRule> = {};
+
+        if (leaseTemplate.depreciationAccount) {
+          patchedValues.debit = leaseTemplate.depreciationAccount;
+        }
+
+        if (leaseTemplate.accruedDepreciationAccount) {
+          patchedValues.credit = leaseTemplate.accruedDepreciationAccount;
+        }
+
+        if (Object.keys(patchedValues).length > 0) {
+          this.editForm.patchValue(patchedValues);
+        }
+      });
   }
 
   protected createFromForm(): ITAAmortizationRule {
