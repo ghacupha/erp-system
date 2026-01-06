@@ -14,3 +14,8 @@
 - Persona: Lease manager renewing a contract and reusing shared settings.
 - Steps: Open the IFRS16 lease contract update form, select a lease template, verify the service outlet and main dealer values, and save the contract.
 - Expected outcome: The contract saves with shared fields populated from the template.
+
+## Story 4: Prefill amortization rule accounts from a lease template
+- Persona: Accountant configuring amortization rules for a lease contract.
+- Steps: Open the TA amortization rule update form, choose an IFRS16 lease contract that has a lease template, confirm debit and credit prefill with the template’s depreciation and accrued depreciation accounts, then save or adjust as needed.
+- Expected outcome: Debit and credit fields default to the template’s depreciation accounts, reducing manual entry while still allowing overrides.
