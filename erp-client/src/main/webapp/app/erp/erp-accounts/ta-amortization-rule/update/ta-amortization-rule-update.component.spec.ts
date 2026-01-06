@@ -36,6 +36,7 @@ import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-co
 import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { ILeaseTemplate } from '../../../erp-leases/lease-template/lease-template.model';
 
 describe('TAAmortizationRule Management Update Component', () => {
   let comp: TAAmortizationRuleUpdateComponent;
@@ -206,6 +207,32 @@ describe('TAAmortizationRule Management Update Component', () => {
       expect(tAAmortizationRuleService.update).toHaveBeenCalledWith(tAAmortizationRule);
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('lease contract template defaults', () => {
+    it('should patch debit and credit from lease template when present', () => {
+      const leaseTemplate: ILeaseTemplate = {
+        depreciationAccount: { id: 500 } as ITransactionAccount,
+        accruedDepreciationAccount: { id: 600 } as ITransactionAccount,
+      };
+      const leaseContract: IIFRS16LeaseContract = { id: 321 };
+      const tAAmortizationRule = new TAAmortizationRule();
+      activatedRoute.data = of({ tAAmortizationRule });
+      jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(
+        of(
+          new HttpResponse({
+            body: { ...leaseContract, leaseTemplate },
+          })
+        )
+      );
+
+      comp.ngOnInit();
+      comp.editForm.get('leaseContract')!.setValue(leaseContract);
+
+      expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(leaseContract.id);
+      expect(comp.editForm.get('debit')!.value).toEqual(leaseTemplate.depreciationAccount);
+      expect(comp.editForm.get('credit')!.value).toEqual(leaseTemplate.accruedDepreciationAccount);
     });
   });
 
