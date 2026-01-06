@@ -86,6 +86,7 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
       this.loadRelationshipsOptions();
+      this.registerLeaseContractSelectionListener();
     }
 
     if (this.weAreCopying) {
@@ -94,6 +95,7 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
         identifier: uuidv7(),
       });
       this.loadRelationshipsOptions();
+      this.registerLeaseContractSelectionListener();
     }
 
     if (this.weAreCreating) {
@@ -101,23 +103,26 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
         identifier: uuidv7(),
       });
       this.loadRelationshipsOptions();
+      this.registerLeaseContractSelectionListener();
     }
 
     if (!this.weAreCopying && !this.weAreEditing && !this.weAreCreating) {
       this.activatedRoute.data.subscribe(({ tALeaseRecognitionRule }) => {
-        if (tALeaseRecognitionRule.id) {
-          this.updateForm(tALeaseRecognitionRule);
-        }
+      if (tALeaseRecognitionRule.id) {
+        this.updateForm(tALeaseRecognitionRule);
+        this.registerLeaseContractSelectionListener();
+      }
 
-        if (!tALeaseRecognitionRule.id) {
-          this.editForm.patchValue({
-            identifier: uuidv7(),
-          });
-        }
+      if (!tALeaseRecognitionRule.id) {
+        this.editForm.patchValue({
+          identifier: uuidv7(),
+        });
+        this.registerLeaseContractSelectionListener();
+      }
 
-        this.loadRelationshipsOptions();
-      });
-    }
+      this.loadRelationshipsOptions();
+    });
+  }
   }
 
   updateDebitAccount($event: ITransactionAccount): void {
@@ -268,6 +273,35 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+  }
+
+  protected registerLeaseContractSelectionListener(): void {
+    this.editForm.get('leaseContract')?.valueChanges.subscribe(selectedLease => {
+      if (!selectedLease?.id) {
+        return;
+      }
+
+      this.iFRS16LeaseContractService.find(selectedLease.id).subscribe(response => {
+        const leaseTemplate = response.body?.leaseTemplate;
+        const debitAccount = leaseTemplate?.leaseRecognitionDebitAccount;
+        const creditAccount = leaseTemplate?.leaseRecognitionCreditAccount;
+
+        if (!debitAccount && !creditAccount) {
+          return;
+        }
+
+        this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
+          this.transactionAccountsSharedCollection,
+          debitAccount ?? undefined,
+          creditAccount ?? undefined
+        );
+
+        this.editForm.patchValue({
+          debit: debitAccount ?? this.editForm.get('debit')!.value,
+          credit: creditAccount ?? this.editForm.get('credit')!.value
+        });
+      });
+    });
   }
 
   protected createFromForm(): ITALeaseRecognitionRule {

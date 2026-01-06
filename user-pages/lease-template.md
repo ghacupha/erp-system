@@ -32,3 +32,9 @@ Lease templates store shared account mappings and reference data that stay consi
 2. Choose an IFRS16 lease contract that is linked to a lease template.
 3. When the template includes interest accrued accounts, the Debit and Credit fields auto-populate with those defaults.
 4. Override either account as needed before saving the rule.
+
+## Apply Template Defaults to Lease Recognition Rules
+1. Open the TA Lease Recognition Rules screen and start a new rule.
+2. Select an IFRS16 lease contract that references a lease template.
+3. The Debit field auto-fills with the template’s lease recognition debit account and the Credit field with the lease recognition credit account when defined.
+4. Adjust either account if necessary, then save the rule.
