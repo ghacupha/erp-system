@@ -50,6 +50,16 @@
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
+        <jhi-m21-lease-template-form-control
+          ngDefaultControl
+          formControlName="leaseTemplate"
+          [inputValue]="editForm.get(['leaseTemplate'])!.value"
+          (valueSelected)="updateLeaseTemplate($event)"
+          inputControlLabel="Lease Template"
+        >
+          <option [ngValue]="editForm.get(['leaseTemplate'])!.value"></option>
+        </jhi-m21-lease-template-form-control>
+
         <div class="form-group">
           <label class="form-control-label" for="field_bookingId">Booking Id</label>
           <input type="text" class="form-control" name="bookingId" id="field_bookingId" data-cy="bookingId" formControlName="bookingId" />
@@ -96,16 +106,6 @@
             formControlName="description"
           />
         </div>
-
-        <jhi-m21-lease-template-form-control
-          ngDefaultControl
-          formControlName="leaseTemplate"
-          [inputValue]="editForm.get(['leaseTemplate'])!.value"
-          (valueSelected)="updateLeaseTemplate($event)"
-          inputControlLabel="Lease Template"
-        >
-          <option [ngValue]="editForm.get(['leaseTemplate'])!.value"></option>
-        </jhi-m21-lease-template-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_inceptionDate">Inception Date</label>
