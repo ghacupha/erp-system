@@ -150,6 +150,30 @@ describe('TARecognitionROURule Management Update Component', () => {
       expect(comp.transactionAccountsSharedCollection).toContain(credit);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
     });
+
+    it('Should auto-populate debit and credit from lease template', () => {
+      const debitAccount: ITransactionAccount = { id: 9981 };
+      const creditAccount: ITransactionAccount = { id: 9982 };
+      const leaseContract: IIFRS16LeaseContract = { id: 771 };
+      const leaseContractWithTemplate: IIFRS16LeaseContract = {
+        id: 771,
+        leaseTemplate: {
+          rouRecognitionDebitAccount: debitAccount,
+          rouRecognitionCreditAccount: creditAccount,
+        },
+      };
+
+      jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseContractWithTemplate })));
+
+      comp.ngOnInit();
+      comp.editForm.patchValue({ leaseContract });
+
+      expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(771);
+      expect(comp.editForm.get('debit')!.value).toEqual(debitAccount);
+      expect(comp.editForm.get('credit')!.value).toEqual(creditAccount);
+      expect(comp.transactionAccountsSharedCollection).toContain(debitAccount);
+      expect(comp.transactionAccountsSharedCollection).toContain(creditAccount);
+    });
   });
 
   describe('save', () => {

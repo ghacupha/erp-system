@@ -21,7 +21,7 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { filter, finalize, map, switchMap } from 'rxjs/operators';
 
 import { ITARecognitionROURule, TARecognitionROURule } from '../ta-recognition-rou-rule.model';
 import { TARecognitionROURuleService } from '../service/ta-recognition-rou-rule.service';
@@ -83,6 +83,8 @@ export class TARecognitionROURuleUpdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.registerLeaseContractChangeHandler();
+
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
       this.loadRelationshipsOptions();
@@ -268,6 +270,45 @@ export class TARecognitionROURuleUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+  }
+
+  protected registerLeaseContractChangeHandler(): void {
+    this.editForm
+      .get('leaseContract')!
+      .valueChanges.pipe(
+        filter((leaseContract: IIFRS16LeaseContract | null): leaseContract is IIFRS16LeaseContract => !!leaseContract?.id),
+        switchMap(leaseContract => this.iFRS16LeaseContractService.find(leaseContract.id!)),
+        map((res: HttpResponse<IIFRS16LeaseContract>) => res.body)
+      )
+      .subscribe(leaseContract => {
+        const leaseTemplate = leaseContract?.leaseTemplate;
+        if (!leaseTemplate) {
+          return;
+        }
+
+        const debitAccount = leaseTemplate.rouRecognitionDebitAccount;
+        const creditAccount = leaseTemplate.rouRecognitionCreditAccount;
+        const patch: Partial<ITARecognitionROURule> = {};
+
+        if (debitAccount) {
+          patch.debit = debitAccount;
+        }
+
+        if (creditAccount) {
+          patch.credit = creditAccount;
+        }
+
+        if (Object.keys(patch).length === 0) {
+          return;
+        }
+
+        this.editForm.patchValue(patch);
+        this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
+          this.transactionAccountsSharedCollection,
+          ...(debitAccount ? [debitAccount] : []),
+          ...(creditAccount ? [creditAccount] : [])
+        );
+      });
   }
 
   protected createFromForm(): ITARecognitionROURule {
