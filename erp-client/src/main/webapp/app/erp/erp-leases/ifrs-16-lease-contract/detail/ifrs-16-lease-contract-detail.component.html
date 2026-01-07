@@ -133,6 +133,15 @@
         class="btn btn-primary">
         <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
       </button>
+
+      &nbsp;
+      <button
+        type="button"
+        (click)='createTemplateButtonEvent(iFRS16LeaseContract)'
+        [routerLink]="['/lease-template/new']"
+        class="btn btn-secondary">
+        <fa-icon icon="file-contract"></fa-icon>&nbsp;<span>Create Template</span>
+      </button>
     </div>
   </div>
 </div>

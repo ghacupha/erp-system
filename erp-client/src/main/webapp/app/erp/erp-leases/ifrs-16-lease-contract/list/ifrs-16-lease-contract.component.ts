@@ -34,6 +34,9 @@ import {
   ifrs16LeaseContractEditWorkflowInitiatedFromList,
   ifrs16LeaseContractEditWorkflowInitiatedFromView
 } from '../../../store/actions/ifrs16-lease-model-update-status.actions';
+import {
+  leaseTemplateCreationFromLeaseContractInitiatedFromList
+} from '../../../store/actions/lease-template-update-status.actions';
 import { Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
 
@@ -124,6 +127,10 @@ export class IFRS16LeaseContractComponent implements OnInit {
 
   copyButtonEvent(instance: IIFRS16LeaseContract): void {
     this.store.dispatch(ifrs16LeaseContractCopyWorkflowInitiatedFromList({copiedInstance: instance}))
+  }
+
+  createTemplateButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(leaseTemplateCreationFromLeaseContractInitiatedFromList({ sourceLeaseContract: instance }));
   }
 
   ngOnInit(): void {

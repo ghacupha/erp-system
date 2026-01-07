@@ -17,6 +17,7 @@
 ///
 
 import { ILeaseTemplate } from '../../erp-leases/lease-template/lease-template.model';
+import { IIFRS16LeaseContract } from '../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { initialState, State } from '../global-store.definition';
 import { Action, createReducer, on } from '@ngrx/store';
 import {
@@ -25,11 +26,15 @@ import {
   leaseTemplateCopyWorkflowInitiatedFromView,
   leaseTemplateCreationInitiatedEnRoute,
   leaseTemplateCreationInitiatedFromList,
+  leaseTemplateCreationFromLeaseContractInitiatedFromList,
+  leaseTemplateCreationFromLeaseContractInitiatedFromView,
   leaseTemplateCreationWorkflowInitiatedFromList,
   leaseTemplateDataHasMutated,
   leaseTemplateEditWorkflowInitiatedEnRoute,
   leaseTemplateEditWorkflowInitiatedFromList,
   leaseTemplateEditWorkflowInitiatedFromView,
+  leaseTemplatePrefillDataLoaded,
+  leaseTemplatePrefillDataLoadFailed,
   leaseTemplateUpdateFormHasBeenDestroyed
 } from '../actions/lease-template-update-status.actions';
 
@@ -38,6 +43,8 @@ export const leaseTemplateUpdateFormStateSelector = 'leaseTemplateUpdateForm';
 export interface LeaseTemplateFormState {
   backEndFetchComplete: boolean;
   browserHasBeenRefreshed: boolean;
+  sourceLeaseContract: IIFRS16LeaseContract | null;
+  prefillTemplate: Partial<ILeaseTemplate>;
   selectedInstance: ILeaseTemplate;
   weAreCopying: boolean;
   weAreEditing: boolean;
@@ -52,6 +59,30 @@ const _leaseTemplateUpdateStateReducer = createReducer(
     ...state,
     leaseTemplateFormState: {
       ...state.leaseTemplateFormState,
+      sourceLeaseContract: null,
+      prefillTemplate: {},
+      weAreCopying: false,
+      weAreEditing: false,
+      weAreCreating: true,
+    },
+  })),
+  on(leaseTemplateCreationFromLeaseContractInitiatedFromList, (state, { sourceLeaseContract }) => ({
+    ...state,
+    leaseTemplateFormState: {
+      ...state.leaseTemplateFormState,
+      sourceLeaseContract,
+      prefillTemplate: {},
+      weAreCopying: false,
+      weAreEditing: false,
+      weAreCreating: true,
+    },
+  })),
+  on(leaseTemplateCreationFromLeaseContractInitiatedFromView, (state, { sourceLeaseContract }) => ({
+    ...state,
+    leaseTemplateFormState: {
+      ...state.leaseTemplateFormState,
+      sourceLeaseContract,
+      prefillTemplate: {},
       weAreCopying: false,
       weAreEditing: false,
       weAreCreating: true,
@@ -131,6 +162,8 @@ const _leaseTemplateUpdateStateReducer = createReducer(
     leaseTemplateFormState: {
       ...state.leaseTemplateFormState,
       selectedInstance: {},
+      sourceLeaseContract: null,
+      prefillTemplate: {},
       weAreCopying: false,
       weAreEditing: false,
       weAreCreating: false,
@@ -142,6 +175,8 @@ const _leaseTemplateUpdateStateReducer = createReducer(
     leaseTemplateFormState: {
       ...state.leaseTemplateFormState,
       selectedInstance: {},
+      sourceLeaseContract: null,
+      prefillTemplate: {},
       weAreCopying: false,
       weAreEditing: false,
       weAreCreating: false,
@@ -153,6 +188,8 @@ const _leaseTemplateUpdateStateReducer = createReducer(
     leaseTemplateFormState: {
       ...state.leaseTemplateFormState,
       selectedInstance: {},
+      sourceLeaseContract: null,
+      prefillTemplate: {},
       weAreCopying: false,
       weAreEditing: false,
       weAreCreating: true,
@@ -164,9 +201,26 @@ const _leaseTemplateUpdateStateReducer = createReducer(
     leaseTemplateFormState: {
       ...state.leaseTemplateFormState,
       selectedInstance: {},
+      sourceLeaseContract: null,
+      prefillTemplate: {},
       weAreCopying: false,
       weAreEditing: false,
       weAreCreating: true,
+    },
+  })),
+  on(leaseTemplatePrefillDataLoaded, (state, { prefillTemplate, sourceLeaseContract }) => ({
+    ...state,
+    leaseTemplateFormState: {
+      ...state.leaseTemplateFormState,
+      prefillTemplate,
+      sourceLeaseContract,
+    },
+  })),
+  on(leaseTemplatePrefillDataLoadFailed, state => ({
+    ...state,
+    leaseTemplateFormState: {
+      ...state.leaseTemplateFormState,
+      prefillTemplate: {},
     },
   })),
 );

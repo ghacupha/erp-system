@@ -41,3 +41,13 @@ export const copyingLeaseTemplateStatus = createSelector(
   leaseTemplateUpdateFormState,
   state => state.leaseTemplateFormState.weAreCopying
 );
+
+export const leaseTemplatePrefillTemplate = createSelector(
+  leaseTemplateUpdateFormState,
+  state => state.leaseTemplateFormState.prefillTemplate
+);
+
+export const leaseTemplateSourceLeaseContract = createSelector(
+  leaseTemplateUpdateFormState,
+  state => state.leaseTemplateFormState.sourceLeaseContract
+);

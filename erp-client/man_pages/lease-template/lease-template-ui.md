@@ -13,8 +13,10 @@ Lease templates consolidate recurring IFRS16 lease configuration into a reusable
 1. Users create a lease template, filling in template title plus transaction account mappings, asset category, service outlet, and main dealer.
 2. Users can copy an existing template from the list or detail view to speed up setup for similar lease classes.
 3. Lease contracts select a template, which populates service outlet and main dealer defaults during contract updates.
+4. Lease contract list and detail views provide a "Create Template" action that navigates to the lease template update form with data prefilled from the contract, TA rules, and ROU metadata.
 
 ## Design Decisions
 - Reused existing NgRx workflow patterns to keep copy/edit behaviors consistent with ROU metadata and direct cost flows.
 - Used the shared form control components to avoid duplicating lookup logic for transaction accounts and reference entities.
 - Kept template title required to provide a clear anchor when selecting templates during contract updates.
+- Pull lease template defaults via NgRx effects to keep the update form lightweight while still hydrating data from multiple related sources.

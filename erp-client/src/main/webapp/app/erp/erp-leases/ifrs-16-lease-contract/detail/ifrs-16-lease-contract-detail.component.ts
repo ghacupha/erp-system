@@ -26,6 +26,9 @@ import {
   ifrs16LeaseContractCopyWorkflowInitiatedFromView,
   ifrs16LeaseContractEditWorkflowInitiatedFromView
 } from '../../../store/actions/ifrs16-lease-model-update-status.actions';
+import {
+  leaseTemplateCreationFromLeaseContractInitiatedFromView
+} from '../../../store/actions/lease-template-update-status.actions';
 
 @Component({
   selector: 'jhi-ifrs-16-lease-contract-detail',
@@ -48,6 +51,10 @@ export class IFRS16LeaseContractDetailComponent implements OnInit {
 
   copyButtonEvent(instance: IIFRS16LeaseContract): void {
     this.store.dispatch(ifrs16LeaseContractCopyWorkflowInitiatedFromView({copiedInstance: instance}))
+  }
+
+  createTemplateButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(leaseTemplateCreationFromLeaseContractInitiatedFromView({ sourceLeaseContract: instance }));
   }
 
   previousState(): void {

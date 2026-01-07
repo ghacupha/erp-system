@@ -18,6 +18,7 @@
 
 import { createAction, props } from '@ngrx/store';
 import { ILeaseTemplate } from '../../erp-leases/lease-template/lease-template.model';
+import { IIFRS16LeaseContract } from '../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 
 export const leaseTemplateCreationInitiatedFromList = createAction(
   '[LeaseTemplate Creation: List] Lease Template creation workflow initiated',
@@ -61,6 +62,16 @@ export const leaseTemplateCreationWorkflowInitiatedFromList = createAction(
   '[LeaseTemplate Create: List] Lease Template create workflow initiated',
 );
 
+export const leaseTemplateCreationFromLeaseContractInitiatedFromList = createAction(
+  '[LeaseTemplate Create: LeaseContract List] Lease Template create workflow initiated from lease contract',
+  props<{ sourceLeaseContract: IIFRS16LeaseContract }>()
+);
+
+export const leaseTemplateCreationFromLeaseContractInitiatedFromView = createAction(
+  '[LeaseTemplate Create: LeaseContract View] Lease Template create workflow initiated from lease contract',
+  props<{ sourceLeaseContract: IIFRS16LeaseContract }>()
+);
+
 export const leaseTemplateUpdateFormHasBeenDestroyed = createAction(
   '[LeaseTemplate Form] Lease Template form destroyed',
 );
@@ -76,5 +87,15 @@ export const leaseTemplateUpdateInstanceAcquiredFromBackend = createAction(
 
 export const leaseTemplateUpdateInstanceAcquisitionFromBackendFailed = createAction(
   '[LeaseTemplate Effects: LeaseTemplate-effects] lease-template update instance acquisition failed',
+  props<{ error: string }>()
+);
+
+export const leaseTemplatePrefillDataLoaded = createAction(
+  '[LeaseTemplate Effects: LeaseTemplate-effects] lease-template prefill data loaded',
+  props<{ prefillTemplate: Partial<ILeaseTemplate>; sourceLeaseContract: IIFRS16LeaseContract }>()
+);
+
+export const leaseTemplatePrefillDataLoadFailed = createAction(
+  '[LeaseTemplate Effects: LeaseTemplate-effects] lease-template prefill data load failed',
   props<{ error: string }>()
 );
