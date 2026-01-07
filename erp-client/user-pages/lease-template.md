@@ -10,6 +10,13 @@ Lease templates store shared account mappings and reference data that stay consi
 4. Choose the transaction accounts, asset category, service outlet, and main dealer that should apply to related leases.
 5. Save the template.
 
+## Create a Lease Template from a Lease Contract
+1. Open the IFRS16 lease contract list or detail view.
+2. Select "Create Template".
+3. Review the prefilled template title, account mappings, asset category, service outlet, and main dealer.
+4. Update the template title or mappings if needed.
+5. Save the template.
+
 ## Copy a Lease Template
 1. From the Lease Templates list or detail view, select "Copy".
 2. Adjust any fields as needed.

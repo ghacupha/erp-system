@@ -184,6 +184,18 @@
               </button>
 
               &nbsp;
+              <button
+                type="submit"
+                [routerLink]="['/lease-template/new']"
+                (click)='createTemplateButtonEvent(iFRS16LeaseContract)'
+                class="btn btn-secondary btn-sm"
+                data-cy="entityCreateTemplateButton"
+              >
+                <fa-icon icon="file-contract"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </button>
+
+              &nbsp;
               <button type="submit" (click)="delete(iFRS16LeaseContract)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline"></span>

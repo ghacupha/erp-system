@@ -31,6 +31,7 @@ import {
   copyingLeaseTemplateStatus,
   creatingLeaseTemplateStatus,
   editingLeaseTemplateStatus,
+  leaseTemplatePrefillTemplate,
   leaseTemplateUpdateSelectedInstance
 } from '../../../store/selectors/lease-template-workflows-status.selector';
 import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
@@ -50,6 +51,7 @@ export class LeaseTemplateUpdateComponent implements OnInit {
   weAreEditing = false;
   weAreCreating = false;
   selectedItem = { ...new LeaseTemplate() };
+  prefillTemplate: Partial<ILeaseTemplate> = {};
 
   editForm = this.fb.group({
     id: [],
@@ -82,6 +84,12 @@ export class LeaseTemplateUpdateComponent implements OnInit {
     this.store.pipe(select(editingLeaseTemplateStatus)).subscribe(stat => (this.weAreEditing = stat));
     this.store.pipe(select(creatingLeaseTemplateStatus)).subscribe(stat => (this.weAreCreating = stat));
     this.store.pipe(select(leaseTemplateUpdateSelectedInstance)).subscribe(copied => (this.selectedItem = copied));
+    this.store.pipe(select(leaseTemplatePrefillTemplate)).subscribe(prefill => {
+      this.prefillTemplate = prefill;
+      if (this.weAreCreating && !this.weAreEditing && !this.weAreCopying && this.editForm.pristine) {
+        this.applyPrefill(prefill);
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -221,6 +229,66 @@ export class LeaseTemplateUpdateComponent implements OnInit {
       serviceOutlet: leaseTemplate.serviceOutlet,
       mainDealer: leaseTemplate.mainDealer,
     });
+  }
+
+  protected applyPrefill(prefill: Partial<ILeaseTemplate>): void {
+    const patch: Partial<ILeaseTemplate> = {};
+
+    if (prefill.templateTitle) {
+      patch.templateTitle = prefill.templateTitle;
+    }
+    if (prefill.assetAccount) {
+      patch.assetAccount = prefill.assetAccount;
+    }
+    if (prefill.depreciationAccount) {
+      patch.depreciationAccount = prefill.depreciationAccount;
+    }
+    if (prefill.accruedDepreciationAccount) {
+      patch.accruedDepreciationAccount = prefill.accruedDepreciationAccount;
+    }
+    if (prefill.interestPaidTransferDebitAccount) {
+      patch.interestPaidTransferDebitAccount = prefill.interestPaidTransferDebitAccount;
+    }
+    if (prefill.interestPaidTransferCreditAccount) {
+      patch.interestPaidTransferCreditAccount = prefill.interestPaidTransferCreditAccount;
+    }
+    if (prefill.interestAccruedDebitAccount) {
+      patch.interestAccruedDebitAccount = prefill.interestAccruedDebitAccount;
+    }
+    if (prefill.interestAccruedCreditAccount) {
+      patch.interestAccruedCreditAccount = prefill.interestAccruedCreditAccount;
+    }
+    if (prefill.leaseRecognitionDebitAccount) {
+      patch.leaseRecognitionDebitAccount = prefill.leaseRecognitionDebitAccount;
+    }
+    if (prefill.leaseRecognitionCreditAccount) {
+      patch.leaseRecognitionCreditAccount = prefill.leaseRecognitionCreditAccount;
+    }
+    if (prefill.leaseRepaymentDebitAccount) {
+      patch.leaseRepaymentDebitAccount = prefill.leaseRepaymentDebitAccount;
+    }
+    if (prefill.leaseRepaymentCreditAccount) {
+      patch.leaseRepaymentCreditAccount = prefill.leaseRepaymentCreditAccount;
+    }
+    if (prefill.rouRecognitionCreditAccount) {
+      patch.rouRecognitionCreditAccount = prefill.rouRecognitionCreditAccount;
+    }
+    if (prefill.rouRecognitionDebitAccount) {
+      patch.rouRecognitionDebitAccount = prefill.rouRecognitionDebitAccount;
+    }
+    if (prefill.assetCategory) {
+      patch.assetCategory = prefill.assetCategory;
+    }
+    if (prefill.serviceOutlet) {
+      patch.serviceOutlet = prefill.serviceOutlet;
+    }
+    if (prefill.mainDealer) {
+      patch.mainDealer = prefill.mainDealer;
+    }
+
+    if (Object.keys(patch).length > 0) {
+      this.editForm.patchValue(patch);
+    }
   }
 
   protected copyForm(leaseTemplate: ILeaseTemplate): void {

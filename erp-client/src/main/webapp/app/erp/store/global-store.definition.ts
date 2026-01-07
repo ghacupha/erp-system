@@ -227,6 +227,8 @@ export const initialState: State = {
     selectedInstance: {},
     browserHasBeenRefreshed: false,
     backEndFetchComplete: false,
+    sourceLeaseContract: null,
+    prefillTemplate: {},
     weAreCopying: false,
     weAreEditing: false,
     weAreCreating: false,

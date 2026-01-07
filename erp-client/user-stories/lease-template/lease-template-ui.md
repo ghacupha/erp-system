@@ -19,3 +19,8 @@
 - Persona: Accountant configuring amortization rules for a lease contract.
 - Steps: Open the TA amortization rule update form, choose an IFRS16 lease contract that has a lease template, confirm debit and credit prefill with the template’s depreciation and accrued depreciation accounts, then save or adjust as needed.
 - Expected outcome: Debit and credit fields default to the template’s depreciation accounts, reducing manual entry while still allowing overrides.
+
+## Story 5: Create a lease template from an IFRS16 lease contract
+- Persona: Lease manager standardizing contract data into a reusable template.
+- Steps: Open the IFRS16 lease contract list or detail view, select "Create Template", review the prefilled template fields sourced from the contract and related rules, update the template title if needed, and save.
+- Expected outcome: A new lease template is created with accounts, asset category, service outlet, and main dealer populated from the selected lease contract context.
