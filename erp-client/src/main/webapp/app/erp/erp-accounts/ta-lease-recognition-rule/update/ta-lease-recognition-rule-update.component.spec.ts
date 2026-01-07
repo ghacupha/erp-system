@@ -37,6 +37,7 @@ import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { ILeaseTemplate } from '../../../erp-leases/lease-template/lease-template.model';
+import { LeaseTemplateService } from '../../../erp-leases/lease-template/service/lease-template.service';
 
 describe('TALeaseRecognitionRule Management Update Component', () => {
   let comp: TALeaseRecognitionRuleUpdateComponent;
@@ -46,6 +47,7 @@ describe('TALeaseRecognitionRule Management Update Component', () => {
   let iFRS16LeaseContractService: IFRS16LeaseContractService;
   let transactionAccountService: TransactionAccountService;
   let placeholderService: PlaceholderService;
+  let leaseTemplateService: LeaseTemplateService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -62,6 +64,7 @@ describe('TALeaseRecognitionRule Management Update Component', () => {
     iFRS16LeaseContractService = TestBed.inject(IFRS16LeaseContractService);
     transactionAccountService = TestBed.inject(TransactionAccountService);
     placeholderService = TestBed.inject(PlaceholderService);
+    leaseTemplateService = TestBed.inject(LeaseTemplateService);
 
     comp = fixture.componentInstance;
   });
@@ -276,12 +279,14 @@ describe('TALeaseRecognitionRule Management Update Component', () => {
       const debitAccount: ITransactionAccount = { id: 1001 };
       const creditAccount: ITransactionAccount = { id: 1002 };
       const leaseTemplate: ILeaseTemplate = {
+        id: 55,
         leaseRecognitionDebitAccount: debitAccount,
         leaseRecognitionCreditAccount: creditAccount,
       };
       const leaseContract: IIFRS16LeaseContract = { id: 999, leaseTemplate };
 
       jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseContract })));
+      jest.spyOn(leaseTemplateService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseTemplate })));
       const addTransactionAccountSpy = jest.spyOn(transactionAccountService, 'addTransactionAccountToCollectionIfMissing');
 
       activatedRoute.data = of({ tALeaseRecognitionRule: {} as ITALeaseRecognitionRule });
@@ -290,6 +295,7 @@ describe('TALeaseRecognitionRule Management Update Component', () => {
       comp.editForm.get('leaseContract')!.setValue(leaseContract);
 
       expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(leaseContract.id);
+      expect(leaseTemplateService.find).toHaveBeenCalledWith(leaseTemplate.id);
       expect(addTransactionAccountSpy).toHaveBeenCalledWith(expect.any(Array), debitAccount, creditAccount);
       expect(comp.editForm.get('debit')!.value).toEqual(debitAccount);
       expect(comp.editForm.get('credit')!.value).toEqual(creditAccount);

@@ -37,6 +37,8 @@ import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-co
 import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { ILeaseTemplate } from '../../../erp-leases/lease-template/lease-template.model';
+import { LeaseTemplateService } from '../../../erp-leases/lease-template/service/lease-template.service';
 
 describe('TALeaseInterestAccrualRule Management Update Component', () => {
   let comp: TALeaseInterestAccrualRuleUpdateComponent;
@@ -46,6 +48,7 @@ describe('TALeaseInterestAccrualRule Management Update Component', () => {
   let iFRS16LeaseContractService: IFRS16LeaseContractService;
   let transactionAccountService: TransactionAccountService;
   let placeholderService: PlaceholderService;
+  let leaseTemplateService: LeaseTemplateService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -62,6 +65,7 @@ describe('TALeaseInterestAccrualRule Management Update Component', () => {
     iFRS16LeaseContractService = TestBed.inject(IFRS16LeaseContractService);
     transactionAccountService = TestBed.inject(TransactionAccountService);
     placeholderService = TestBed.inject(PlaceholderService);
+    leaseTemplateService = TestBed.inject(LeaseTemplateService);
 
     comp = fixture.componentInstance;
   });
@@ -155,14 +159,17 @@ describe('TALeaseInterestAccrualRule Management Update Component', () => {
     it('should patch debit and credit from lease template interest accrued accounts', () => {
       const leaseTemplateDebit: ITransactionAccount = { id: 9876 };
       const leaseTemplateCredit: ITransactionAccount = { id: 6543 };
+      const leaseTemplate: ILeaseTemplate = {
+        id: 88,
+        interestAccruedDebitAccount: leaseTemplateDebit,
+        interestAccruedCreditAccount: leaseTemplateCredit,
+      };
       const leaseWithTemplate: IIFRS16LeaseContract = {
         id: 2468,
-        leaseTemplate: {
-          interestAccruedDebitAccount: leaseTemplateDebit,
-          interestAccruedCreditAccount: leaseTemplateCredit,
-        },
+        leaseTemplate,
       };
       jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseWithTemplate })));
+      jest.spyOn(leaseTemplateService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseTemplate })));
 
       comp.ngOnInit();
       comp.editForm.patchValue({
@@ -173,6 +180,7 @@ describe('TALeaseInterestAccrualRule Management Update Component', () => {
       comp.editForm.get('leaseContract')!.setValue(leaseWithTemplate);
 
       expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(leaseWithTemplate.id);
+      expect(leaseTemplateService.find).toHaveBeenCalledWith(leaseTemplate.id);
       expect(comp.editForm.get('debit')!.value).toEqual(leaseTemplateDebit);
       expect(comp.editForm.get('credit')!.value).toEqual(leaseTemplateCredit);
       expect(comp.transactionAccountsSharedCollection).toEqual(
@@ -188,6 +196,7 @@ describe('TALeaseInterestAccrualRule Management Update Component', () => {
         leaseTemplate: {},
       };
       jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseWithEmptyTemplate })));
+      const leaseTemplateFindSpy = jest.spyOn(leaseTemplateService, 'find');
 
       comp.ngOnInit();
       comp.editForm.patchValue({
@@ -198,6 +207,7 @@ describe('TALeaseInterestAccrualRule Management Update Component', () => {
       comp.editForm.get('leaseContract')!.setValue(leaseWithEmptyTemplate);
 
       expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(leaseWithEmptyTemplate.id);
+      expect(leaseTemplateFindSpy).not.toHaveBeenCalled();
       expect(comp.editForm.get('debit')!.value).toEqual(existingDebit);
       expect(comp.editForm.get('credit')!.value).toEqual(existingCredit);
     });

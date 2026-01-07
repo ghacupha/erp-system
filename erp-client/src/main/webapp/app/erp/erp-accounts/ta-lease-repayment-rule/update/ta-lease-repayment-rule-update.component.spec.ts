@@ -36,6 +36,8 @@ import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-co
 import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { ILeaseTemplate } from '../../../erp-leases/lease-template/lease-template.model';
+import { LeaseTemplateService } from '../../../erp-leases/lease-template/service/lease-template.service';
 
 describe('TALeaseRepaymentRule Management Update Component', () => {
   let comp: TALeaseRepaymentRuleUpdateComponent;
@@ -45,6 +47,7 @@ describe('TALeaseRepaymentRule Management Update Component', () => {
   let iFRS16LeaseContractService: IFRS16LeaseContractService;
   let transactionAccountService: TransactionAccountService;
   let placeholderService: PlaceholderService;
+  let leaseTemplateService: LeaseTemplateService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -61,6 +64,7 @@ describe('TALeaseRepaymentRule Management Update Component', () => {
     iFRS16LeaseContractService = TestBed.inject(IFRS16LeaseContractService);
     transactionAccountService = TestBed.inject(TransactionAccountService);
     placeholderService = TestBed.inject(PlaceholderService);
+    leaseTemplateService = TestBed.inject(LeaseTemplateService);
 
     comp = fixture.componentInstance;
   });
@@ -155,15 +159,18 @@ describe('TALeaseRepaymentRule Management Update Component', () => {
       const leaseContract: IIFRS16LeaseContract = { id: 542 };
       const debitAccount: ITransactionAccount = { id: 10101 };
       const creditAccount: ITransactionAccount = { id: 20202 };
+      const leaseTemplate: ILeaseTemplate = {
+        id: 77,
+        leaseRepaymentDebitAccount: debitAccount,
+        leaseRepaymentCreditAccount: creditAccount,
+      };
       const leaseWithTemplate: IIFRS16LeaseContract = {
         ...leaseContract,
-        leaseTemplate: {
-          leaseRepaymentDebitAccount: debitAccount,
-          leaseRepaymentCreditAccount: creditAccount,
-        },
+        leaseTemplate,
       };
 
       jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseWithTemplate })));
+      jest.spyOn(leaseTemplateService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseTemplate })));
       jest.spyOn(iFRS16LeaseContractService, 'query').mockReturnValue(of(new HttpResponse({ body: [] })));
       jest.spyOn(transactionAccountService, 'query').mockReturnValue(of(new HttpResponse({ body: [] })));
       jest.spyOn(placeholderService, 'query').mockReturnValue(of(new HttpResponse({ body: [] })));
@@ -178,6 +185,7 @@ describe('TALeaseRepaymentRule Management Update Component', () => {
       comp.editForm.get('leaseContract')!.setValue(leaseContract);
 
       expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(leaseContract.id);
+      expect(leaseTemplateService.find).toHaveBeenCalledWith(leaseTemplate.id);
       expect(addTransactionAccountToCollectionIfMissingSpy).toHaveBeenCalledWith([], debitAccount, creditAccount);
       expect(comp.editForm.get('debit')!.value).toEqual(debitAccount);
       expect(comp.editForm.get('credit')!.value).toEqual(creditAccount);
