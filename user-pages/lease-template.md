@@ -33,3 +33,4 @@ Lease templates store shared account mappings and reference data that stay consi
 3. When the template includes interest accrued accounts, the Debit and Credit fields auto-populate with those defaults.
 4. Override either account as needed before saving the rule.
 5. Reopening an existing rule keeps its saved Debit and Credit selections; template defaults only reapply when the fields are empty or already aligned with the template.
+6. The Debit and Credit dropdowns still list the template accounts, even when the saved rule uses different mappings.

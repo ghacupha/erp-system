@@ -12,4 +12,4 @@
 4. Override either account if a different mapping is needed.
 5. Complete the remaining fields and save the rule.
 
-**Outcome:** The template’s accrued-interest account defaults speed up setup while still permitting manual overrides. When reopening an existing rule, the saved Debit and Credit selections remain intact even if the linked template carries different defaults.
+**Outcome:** The template’s accrued-interest account defaults speed up setup while still permitting manual overrides. When reopening an existing rule, the saved Debit and Credit selections remain intact even if the linked template carries different defaults, and the template accounts remain selectable in the dropdowns.

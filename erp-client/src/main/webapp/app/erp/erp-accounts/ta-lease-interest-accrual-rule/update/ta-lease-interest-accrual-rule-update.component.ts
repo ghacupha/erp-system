@@ -296,7 +296,8 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
           this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
             transactionAccounts,
             this.editForm.get('debit')!.value,
-            this.editForm.get('credit')!.value
+            this.editForm.get('credit')!.value,
+            ...this.getLeaseTemplateAccounts()
           )
         )
       )
@@ -311,6 +312,16 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+  }
+
+  protected getLeaseTemplateAccounts(): ITransactionAccount[] {
+    const leaseContract = this.editForm.get('leaseContract')!.value as IIFRS16LeaseContract | null;
+    const templateAccounts = [
+      leaseContract?.leaseTemplate?.interestAccruedDebitAccount,
+      leaseContract?.leaseTemplate?.interestAccruedCreditAccount,
+    ];
+
+    return templateAccounts.filter((account): account is ITransactionAccount => !!account);
   }
 
   protected createFromForm(): ITALeaseInterestAccrualRule {
