@@ -37,6 +37,7 @@ import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { ILeaseTemplate } from '../../../erp-leases/lease-template/lease-template.model';
+import { LeaseTemplateService } from '../../../erp-leases/lease-template/service/lease-template.service';
 
 describe('TAAmortizationRule Management Update Component', () => {
   let comp: TAAmortizationRuleUpdateComponent;
@@ -46,6 +47,7 @@ describe('TAAmortizationRule Management Update Component', () => {
   let iFRS16LeaseContractService: IFRS16LeaseContractService;
   let transactionAccountService: TransactionAccountService;
   let placeholderService: PlaceholderService;
+  let leaseTemplateService: LeaseTemplateService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -62,6 +64,7 @@ describe('TAAmortizationRule Management Update Component', () => {
     iFRS16LeaseContractService = TestBed.inject(IFRS16LeaseContractService);
     transactionAccountService = TestBed.inject(TransactionAccountService);
     placeholderService = TestBed.inject(PlaceholderService);
+    leaseTemplateService = TestBed.inject(LeaseTemplateService);
 
     comp = fixture.componentInstance;
   });
@@ -213,6 +216,7 @@ describe('TAAmortizationRule Management Update Component', () => {
   describe('lease contract template defaults', () => {
     it('should patch debit and credit from lease template when present', () => {
       const leaseTemplate: ILeaseTemplate = {
+        id: 77,
         depreciationAccount: { id: 500 } as ITransactionAccount,
         accruedDepreciationAccount: { id: 600 } as ITransactionAccount,
       };
@@ -226,11 +230,13 @@ describe('TAAmortizationRule Management Update Component', () => {
           })
         )
       );
+      jest.spyOn(leaseTemplateService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseTemplate })));
 
       comp.ngOnInit();
       comp.editForm.get('leaseContract')!.setValue(leaseContract);
 
       expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(leaseContract.id);
+      expect(leaseTemplateService.find).toHaveBeenCalledWith(leaseTemplate.id);
       expect(comp.editForm.get('debit')!.value).toEqual(leaseTemplate.depreciationAccount);
       expect(comp.editForm.get('credit')!.value).toEqual(leaseTemplate.accruedDepreciationAccount);
     });

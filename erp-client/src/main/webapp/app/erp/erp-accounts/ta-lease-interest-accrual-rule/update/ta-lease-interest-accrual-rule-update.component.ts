@@ -20,8 +20,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { filter, finalize, map, switchMap } from 'rxjs/operators';
 
 import { ITALeaseInterestAccrualRule, TALeaseInterestAccrualRule } from '../ta-lease-interest-accrual-rule.model';
 import { TALeaseInterestAccrualRuleService } from '../service/ta-lease-interest-accrual-rule.service';
@@ -31,6 +31,8 @@ import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-co
 import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { ILeaseTemplate } from '../../../erp-leases/lease-template/lease-template.model';
+import { LeaseTemplateService } from '../../../erp-leases/lease-template/service/lease-template.service';
 import { uuidv7 } from 'uuidv7';
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
@@ -72,6 +74,7 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
     protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected transactionAccountService: TransactionAccountService,
     protected placeholderService: PlaceholderService,
+    protected leaseTemplateService: LeaseTemplateService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     protected store: Store<State>,
@@ -234,20 +237,34 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
   }
 
   protected subscribeToLeaseContractChanges(): void {
-    this.editForm.get(['leaseContract'])?.valueChanges.subscribe((leaseContract: IIFRS16LeaseContract) => {
-      if (leaseContract?.id) {
-        this.iFRS16LeaseContractService.find(leaseContract.id).subscribe((response: HttpResponse<IIFRS16LeaseContract>) => {
-          if (response.body?.leaseTemplate) {
-            this.patchAccountsFromLeaseTemplate(response.body);
+    this.editForm
+      .get(['leaseContract'])
+      ?.valueChanges.pipe(
+        filter((leaseContract: IIFRS16LeaseContract | null): leaseContract is IIFRS16LeaseContract => !!leaseContract?.id),
+        switchMap(leaseContract => this.iFRS16LeaseContractService.find(leaseContract.id)),
+        switchMap((response: HttpResponse<IIFRS16LeaseContract>) => {
+          const leaseTemplate = response.body?.leaseTemplate;
+          const leaseTemplateId = leaseTemplate?.id;
+
+          if (!leaseTemplateId) {
+            return of(undefined);
           }
-        });
-      }
-    });
+
+          return this.leaseTemplateService
+            .find(leaseTemplateId)
+            .pipe(map(templateResponse => templateResponse.body ?? (leaseTemplate as ILeaseTemplate)));
+        })
+      )
+      .subscribe(leaseTemplate => {
+        if (leaseTemplate) {
+          this.patchAccountsFromLeaseTemplate(leaseTemplate);
+        }
+      });
   }
 
-  protected patchAccountsFromLeaseTemplate(leaseContract: IIFRS16LeaseContract): void {
-    const debitAccount = leaseContract.leaseTemplate?.interestAccruedDebitAccount;
-    const creditAccount = leaseContract.leaseTemplate?.interestAccruedCreditAccount;
+  protected patchAccountsFromLeaseTemplate(leaseTemplate: ILeaseTemplate): void {
+    const debitAccount = leaseTemplate.interestAccruedDebitAccount;
+    const creditAccount = leaseTemplate.interestAccruedCreditAccount;
 
     if (!debitAccount && !creditAccount) {
       return;
