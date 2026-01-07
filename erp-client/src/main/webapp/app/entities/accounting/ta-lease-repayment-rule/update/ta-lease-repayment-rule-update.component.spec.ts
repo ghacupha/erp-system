@@ -149,6 +149,39 @@ describe('TALeaseRepaymentRule Management Update Component', () => {
       expect(comp.transactionAccountsSharedCollection).toContain(credit);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
     });
+
+    it('should patch debit and credit from the lease template when the lease changes', () => {
+      const leaseContract: IIFRS16LeaseContract = { id: 542 };
+      const debitAccount: ITransactionAccount = { id: 10101 };
+      const creditAccount: ITransactionAccount = { id: 20202 };
+      const leaseWithTemplate: IIFRS16LeaseContract = {
+        ...leaseContract,
+        leaseTemplate: {
+          leaseRepaymentDebitAccount: debitAccount,
+          leaseRepaymentCreditAccount: creditAccount,
+        },
+      };
+
+      jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseWithTemplate })));
+      jest.spyOn(iFRS16LeaseContractService, 'query').mockReturnValue(of(new HttpResponse({ body: [] })));
+      jest.spyOn(transactionAccountService, 'query').mockReturnValue(of(new HttpResponse({ body: [] })));
+      jest.spyOn(placeholderService, 'query').mockReturnValue(of(new HttpResponse({ body: [] })));
+      const addTransactionAccountToCollectionIfMissingSpy = jest
+        .spyOn(transactionAccountService, 'addTransactionAccountToCollectionIfMissing')
+        .mockImplementation(
+          (collection, ...accounts) => [...collection, ...accounts.filter(Boolean)] as ITransactionAccount[]
+        );
+      activatedRoute.data = of({ tALeaseRepaymentRule: new TALeaseRepaymentRule() });
+
+      comp.ngOnInit();
+      comp.editForm.get('leaseContract')!.setValue(leaseContract);
+
+      expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(leaseContract.id);
+      expect(addTransactionAccountToCollectionIfMissingSpy).toHaveBeenCalledWith([], debitAccount, creditAccount);
+      expect(comp.editForm.get('debit')!.value).toEqual(debitAccount);
+      expect(comp.editForm.get('credit')!.value).toEqual(creditAccount);
+      expect(comp.transactionAccountsSharedCollection).toEqual(expect.arrayContaining([debitAccount, creditAccount]));
+    });
   });
 
   describe('save', () => {
