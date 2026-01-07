@@ -23,15 +23,19 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 
 import { IFRS16LeaseContractService } from '../service/ifrs-16-lease-contract.service';
 
 import { IFRS16LeaseContractComponent } from './ifrs-16-lease-contract.component';
+import { State } from '../../../store/global-store.definition';
+import { leaseTemplateCreationFromLeaseContractInitiatedFromList } from '../../../store/actions/lease-template-update-status.actions';
 
 describe('IFRS16LeaseContract Management Component', () => {
   let comp: IFRS16LeaseContractComponent;
   let fixture: ComponentFixture<IFRS16LeaseContractComponent>;
   let service: IFRS16LeaseContractService;
+  let store: MockStore<State>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,6 +43,7 @@ describe('IFRS16LeaseContract Management Component', () => {
       declarations: [IFRS16LeaseContractComponent],
       providers: [
         Router,
+        provideMockStore(),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -63,6 +68,7 @@ describe('IFRS16LeaseContract Management Component', () => {
     fixture = TestBed.createComponent(IFRS16LeaseContractComponent);
     comp = fixture.componentInstance;
     service = TestBed.inject(IFRS16LeaseContractService);
+    store = TestBed.inject(MockStore);
 
     const headers = new HttpHeaders();
     jest.spyOn(service, 'query').mockReturnValue(
@@ -113,5 +119,15 @@ describe('IFRS16LeaseContract Management Component', () => {
 
     // THEN
     expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['name,desc', 'id'] }));
+  });
+
+  it('should dispatch create template workflow action', () => {
+    const dispatchSpy = jest.spyOn(store, 'dispatch');
+
+    comp.createTemplateButtonEvent({ id: 123 });
+
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      leaseTemplateCreationFromLeaseContractInitiatedFromList({ sourceLeaseContract: { id: 123 } })
+    );
   });
 });
