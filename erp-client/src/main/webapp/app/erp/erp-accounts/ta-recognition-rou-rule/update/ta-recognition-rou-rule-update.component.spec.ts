@@ -36,6 +36,8 @@ import { ITransactionAccount } from '../../transaction-account/transaction-accou
 import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { ILeaseTemplate } from '../../../erp-leases/lease-template/lease-template.model';
+import { LeaseTemplateService } from '../../../erp-leases/lease-template/service/lease-template.service';
 
 describe('TARecognitionROURule Management Update Component', () => {
   let comp: TARecognitionROURuleUpdateComponent;
@@ -45,6 +47,7 @@ describe('TARecognitionROURule Management Update Component', () => {
   let iFRS16LeaseContractService: IFRS16LeaseContractService;
   let transactionAccountService: TransactionAccountService;
   let placeholderService: PlaceholderService;
+  let leaseTemplateService: LeaseTemplateService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -61,6 +64,7 @@ describe('TARecognitionROURule Management Update Component', () => {
     iFRS16LeaseContractService = TestBed.inject(IFRS16LeaseContractService);
     transactionAccountService = TestBed.inject(TransactionAccountService);
     placeholderService = TestBed.inject(PlaceholderService);
+    leaseTemplateService = TestBed.inject(LeaseTemplateService);
 
     comp = fixture.componentInstance;
   });
@@ -154,21 +158,25 @@ describe('TARecognitionROURule Management Update Component', () => {
     it('Should auto-populate debit and credit from lease template', () => {
       const debitAccount: ITransactionAccount = { id: 9981 };
       const creditAccount: ITransactionAccount = { id: 9982 };
+      const leaseTemplate: ILeaseTemplate = {
+        id: 101,
+        rouRecognitionDebitAccount: debitAccount,
+        rouRecognitionCreditAccount: creditAccount,
+      };
       const leaseContract: IIFRS16LeaseContract = { id: 771 };
       const leaseContractWithTemplate: IIFRS16LeaseContract = {
         id: 771,
-        leaseTemplate: {
-          rouRecognitionDebitAccount: debitAccount,
-          rouRecognitionCreditAccount: creditAccount,
-        },
+        leaseTemplate,
       };
 
       jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseContractWithTemplate })));
+      jest.spyOn(leaseTemplateService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseTemplate })));
 
       comp.ngOnInit();
       comp.editForm.patchValue({ leaseContract });
 
       expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(771);
+      expect(leaseTemplateService.find).toHaveBeenCalledWith(leaseTemplate.id);
       expect(comp.editForm.get('debit')!.value).toEqual(debitAccount);
       expect(comp.editForm.get('credit')!.value).toEqual(creditAccount);
       expect(comp.transactionAccountsSharedCollection).toContain(debitAccount);

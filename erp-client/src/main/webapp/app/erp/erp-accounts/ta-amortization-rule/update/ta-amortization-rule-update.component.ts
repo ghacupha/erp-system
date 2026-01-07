@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { finalize, filter, map, switchMap } from 'rxjs/operators';
 
 import { ITAAmortizationRule, TAAmortizationRule } from '../ta-amortization-rule.model';
@@ -34,6 +34,8 @@ import { ITransactionAccount } from '../../transaction-account/transaction-accou
 import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { ILeaseTemplate } from '../../../erp-leases/lease-template/lease-template.model';
+import { LeaseTemplateService } from '../../../erp-leases/lease-template/service/lease-template.service';
 import { uuidv7 } from 'uuidv7';
 import { select, Store } from '@ngrx/store';
 import {
@@ -76,6 +78,7 @@ export class TAAmortizationRuleUpdateComponent implements OnInit {
     protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected transactionAccountService: TransactionAccountService,
     protected placeholderService: PlaceholderService,
+    protected leaseTemplateService: LeaseTemplateService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     protected store: Store<State>,
@@ -267,11 +270,21 @@ export class TAAmortizationRuleUpdateComponent implements OnInit {
       .get('leaseContract')
       ?.valueChanges.pipe(
         filter((leaseContract): leaseContract is IIFRS16LeaseContract => !!leaseContract?.id),
-        switchMap(leaseContract => this.iFRS16LeaseContractService.find(leaseContract.id!))
-      )
-      .subscribe(response => {
-        const leaseTemplate = response.body?.leaseTemplate;
+        switchMap(leaseContract => this.iFRS16LeaseContractService.find(leaseContract.id!)),
+        switchMap(response => {
+          const leaseTemplate = response.body?.leaseTemplate;
+          const leaseTemplateId = leaseTemplate?.id;
 
+          if (!leaseTemplateId) {
+            return of(undefined);
+          }
+
+          return this.leaseTemplateService
+            .find(leaseTemplateId)
+            .pipe(map(templateResponse => templateResponse.body ?? (leaseTemplate as ILeaseTemplate)));
+        })
+      )
+      .subscribe(leaseTemplate => {
         if (!leaseTemplate) {
           return;
         }
