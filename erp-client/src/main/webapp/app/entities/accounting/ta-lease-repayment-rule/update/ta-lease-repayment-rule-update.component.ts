@@ -21,7 +21,7 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { filter, finalize, map, switchMap } from 'rxjs/operators';
 
 import { ITALeaseRepaymentRule, TALeaseRepaymentRule } from '../ta-lease-repayment-rule.model';
 import { TALeaseRepaymentRuleService } from '../service/ta-lease-repayment-rule.service';
@@ -31,6 +31,7 @@ import { ITransactionAccount } from 'app/entities/accounting/transaction-account
 import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { ILeaseTemplate } from 'app/entities/leases/lease-template/lease-template.model';
 
 @Component({
   selector: 'jhi-ta-lease-repayment-rule-update',
@@ -63,6 +64,7 @@ export class TALeaseRepaymentRuleUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.registerLeaseContractChangeHandler();
     this.activatedRoute.data.subscribe(({ tALeaseRepaymentRule }) => {
       this.updateForm(tALeaseRepaymentRule);
 
@@ -105,6 +107,42 @@ export class TALeaseRepaymentRuleUpdateComponent implements OnInit {
       }
     }
     return option;
+  }
+
+  protected registerLeaseContractChangeHandler(): void {
+    this.editForm
+      .get('leaseContract')
+      ?.valueChanges.pipe(
+        filter((leaseContract): leaseContract is IIFRS16LeaseContract => !!leaseContract?.id),
+        switchMap(leaseContract => this.iFRS16LeaseContractService.find(leaseContract.id!)),
+        map(
+          (response: HttpResponse<IIFRS16LeaseContract>): ILeaseTemplate | undefined =>
+            response.body?.leaseTemplate ?? undefined
+        )
+      )
+      .subscribe(leaseTemplate => {
+        if (!leaseTemplate) {
+          return;
+        }
+
+        const debitAccount = leaseTemplate.leaseRepaymentDebitAccount ?? undefined;
+        const creditAccount = leaseTemplate.leaseRepaymentCreditAccount ?? undefined;
+
+        if (!debitAccount && !creditAccount) {
+          return;
+        }
+
+        this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
+          this.transactionAccountsSharedCollection,
+          debitAccount,
+          creditAccount
+        );
+
+        this.editForm.patchValue({
+          debit: debitAccount ?? this.editForm.get('debit')!.value,
+          credit: creditAccount ?? this.editForm.get('credit')!.value,
+        });
+      });
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ITALeaseRepaymentRule>>): void {
