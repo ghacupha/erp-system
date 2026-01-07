@@ -42,6 +42,7 @@ import {
 } from '../../../store/selectors/rou-model-metadata-workflows-status.selector';
 import { LeaseLiabilityService } from '../../lease-liability/service/lease-liability.service';
 import { RouInitialDirectCostService } from '../../rou-initial-direct-cost/service/rou-initial-direct-cost.service';
+import { LeaseTemplateService } from '../../lease-template/service/lease-template.service';
 
 @Component({
   selector: 'jhi-rou-model-metadata-update',
@@ -89,6 +90,7 @@ export class RouModelMetadataUpdateComponent implements OnInit {
     protected businessDocumentService: BusinessDocumentService,
     protected leaseLiabilityService: LeaseLiabilityService,
     protected rouInitialDirectCostService: RouInitialDirectCostService,
+    protected leaseTemplateService: LeaseTemplateService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     protected store: Store<State>,
@@ -144,14 +146,24 @@ export class RouModelMetadataUpdateComponent implements OnInit {
           this.editForm.patchValue({
             modelTitle: ifrs16.bookingId,
             description: ifrs16.description,
+            commencementDate: ifrs16.commencementDate,
+            expirationDate: ifrs16.lastReportingPeriod?.endDate,
           });
 
-          if (ifrs16.leaseTemplate) {
-            this.editForm.patchValue({
-              assetAccount: ifrs16.leaseTemplate.assetAccount,
-              depreciationAccount: ifrs16.leaseTemplate.depreciationAccount,
-              accruedDepreciationAccount: ifrs16.leaseTemplate.accruedDepreciationAccount,
-              assetCategory: ifrs16.leaseTemplate.assetCategory,
+          if (ifrs16.leaseTemplate?.id != null) {
+            this.leaseTemplateService.find(ifrs16.leaseTemplate.id).subscribe(templateResponse => {
+              const leaseTemplate = templateResponse.body ?? ifrs16.leaseTemplate;
+
+              if (!leaseTemplate) {
+                return;
+              }
+
+              this.editForm.patchValue({
+                assetAccount: leaseTemplate.assetAccount ?? null,
+                depreciationAccount: leaseTemplate.depreciationAccount ?? null,
+                accruedDepreciationAccount: leaseTemplate.accruedDepreciationAccount ?? null,
+                assetCategory: leaseTemplate.assetCategory ?? null,
+              });
             });
           }
         }
