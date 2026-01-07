@@ -240,7 +240,10 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
     this.editForm
       .get(['leaseContract'])
       ?.valueChanges.pipe(
-        filter((leaseContract: IIFRS16LeaseContract | null): leaseContract is IIFRS16LeaseContract => !!leaseContract?.id),
+        filter(
+          (leaseContract: IIFRS16LeaseContract | null): leaseContract is IIFRS16LeaseContract & { id: number } =>
+            leaseContract?.id != null
+        ),
         switchMap(leaseContract => this.iFRS16LeaseContractService.find(leaseContract.id)),
         switchMap((response: HttpResponse<IIFRS16LeaseContract>) => {
           const leaseTemplate = response.body?.leaseTemplate;
