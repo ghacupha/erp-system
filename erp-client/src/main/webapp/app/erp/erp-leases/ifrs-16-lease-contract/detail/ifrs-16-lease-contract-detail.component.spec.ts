@@ -19,17 +19,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
 
 import { IFRS16LeaseContractDetailComponent } from './ifrs-16-lease-contract-detail.component';
+import { State } from '../../../store/global-store.definition';
+import { leaseTemplateCreationFromLeaseContractInitiatedFromView } from '../../../store/actions/lease-template-update-status.actions';
 
 describe('IFRS16LeaseContract Management Detail Component', () => {
   let comp: IFRS16LeaseContractDetailComponent;
   let fixture: ComponentFixture<IFRS16LeaseContractDetailComponent>;
+  let store: MockStore<State>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [IFRS16LeaseContractDetailComponent],
       providers: [
+        provideMockStore(),
         {
           provide: ActivatedRoute,
           useValue: { data: of({ iFRS16LeaseContract: { id: 123 } }) },
@@ -40,6 +45,7 @@ describe('IFRS16LeaseContract Management Detail Component', () => {
       .compileComponents();
     fixture = TestBed.createComponent(IFRS16LeaseContractDetailComponent);
     comp = fixture.componentInstance;
+    store = TestBed.inject(MockStore);
   });
 
   describe('OnInit', () => {
@@ -50,5 +56,15 @@ describe('IFRS16LeaseContract Management Detail Component', () => {
       // THEN
       expect(comp.iFRS16LeaseContract).toEqual(expect.objectContaining({ id: 123 }));
     });
+  });
+
+  it('should dispatch create template workflow action', () => {
+    const dispatchSpy = jest.spyOn(store, 'dispatch');
+
+    comp.createTemplateButtonEvent({ id: 456 });
+
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      leaseTemplateCreationFromLeaseContractInitiatedFromView({ sourceLeaseContract: { id: 456 } })
+    );
   });
 });
