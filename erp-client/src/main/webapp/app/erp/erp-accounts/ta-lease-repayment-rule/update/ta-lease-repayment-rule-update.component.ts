@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { filter, finalize, map, switchMap } from 'rxjs/operators';
 
 import { ITALeaseRepaymentRule, TALeaseRepaymentRule } from '../ta-lease-repayment-rule.model';
@@ -32,6 +32,7 @@ import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-co
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { ILeaseTemplate } from '../../../erp-leases/lease-template/lease-template.model';
+import { LeaseTemplateService } from '../../../erp-leases/lease-template/service/lease-template.service';
 import { uuidv7 } from 'uuidv7';
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
@@ -73,6 +74,7 @@ export class TALeaseRepaymentRuleUpdateComponent implements OnInit {
     protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected transactionAccountService: TransactionAccountService,
     protected placeholderService: PlaceholderService,
+    protected leaseTemplateService: LeaseTemplateService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     protected store: Store<State>,
@@ -193,10 +195,18 @@ export class TALeaseRepaymentRuleUpdateComponent implements OnInit {
       ?.valueChanges.pipe(
         filter((leaseContract): leaseContract is IIFRS16LeaseContract => !!leaseContract?.id),
         switchMap(leaseContract => this.iFRS16LeaseContractService.find(leaseContract.id!)),
-        map(
-          (response: HttpResponse<IIFRS16LeaseContract>): ILeaseTemplate | undefined =>
-            response.body?.leaseTemplate ?? undefined
-        )
+        switchMap((response: HttpResponse<IIFRS16LeaseContract>) => {
+          const leaseTemplate = response.body?.leaseTemplate ?? undefined;
+          const leaseTemplateId = leaseTemplate?.id;
+
+          if (!leaseTemplateId) {
+            return of(undefined);
+          }
+
+          return this.leaseTemplateService
+            .find(leaseTemplateId)
+            .pipe(map(templateResponse => templateResponse.body ?? (leaseTemplate as ILeaseTemplate)));
+        })
       )
       .subscribe(leaseTemplate => {
         if (!leaseTemplate) {
