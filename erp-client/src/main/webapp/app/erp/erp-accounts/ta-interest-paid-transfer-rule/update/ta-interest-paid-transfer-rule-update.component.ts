@@ -20,8 +20,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { filter, finalize, map, switchMap } from 'rxjs/operators';
 
 import { ITAInterestPaidTransferRule, TAInterestPaidTransferRule } from '../ta-interest-paid-transfer-rule.model';
 import { TAInterestPaidTransferRuleService } from '../service/ta-interest-paid-transfer-rule.service';
@@ -31,6 +31,8 @@ import { ITransactionAccount } from '../../transaction-account/transaction-accou
 import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { ILeaseTemplate } from '../../../erp-leases/lease-template/lease-template.model';
+import { LeaseTemplateService } from '../../../erp-leases/lease-template/service/lease-template.service';
 import { uuidv7 } from 'uuidv7';
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
@@ -72,6 +74,7 @@ export class TAInterestPaidTransferRuleUpdateComponent implements OnInit {
     protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected transactionAccountService: TransactionAccountService,
     protected placeholderService: PlaceholderService,
+    protected leaseTemplateService: LeaseTemplateService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     protected store: Store<State>,
@@ -83,6 +86,8 @@ export class TAInterestPaidTransferRuleUpdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.subscribeToLeaseContractChanges();
+
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
       this.loadRelationshipsOptions();
@@ -229,6 +234,55 @@ export class TAInterestPaidTransferRuleUpdateComponent implements OnInit {
       this.placeholdersSharedCollection,
       ...(tAInterestPaidTransferRule.placeholders ?? [])
     );
+  }
+
+  protected subscribeToLeaseContractChanges(): void {
+    this.editForm
+      .get(['leaseContract'])
+      ?.valueChanges.pipe(
+        filter(
+          (leaseContract: IIFRS16LeaseContract | null): leaseContract is IIFRS16LeaseContract & { id: number } =>
+            leaseContract?.id != null
+        ),
+        switchMap(leaseContract => this.iFRS16LeaseContractService.find(leaseContract.id)),
+        switchMap((response: HttpResponse<IIFRS16LeaseContract>) => {
+          const leaseTemplate = response.body?.leaseTemplate;
+          const leaseTemplateId = leaseTemplate?.id;
+
+          if (!leaseTemplateId) {
+            return of(undefined);
+          }
+
+          return this.leaseTemplateService
+            .find(leaseTemplateId)
+            .pipe(map(templateResponse => templateResponse.body ?? (leaseTemplate as ILeaseTemplate)));
+        })
+      )
+      .subscribe(leaseTemplate => {
+        if (leaseTemplate) {
+          this.patchAccountsFromLeaseTemplate(leaseTemplate);
+        }
+      });
+  }
+
+  protected patchAccountsFromLeaseTemplate(leaseTemplate: ILeaseTemplate): void {
+    const debitAccount = leaseTemplate.interestPaidTransferDebitAccount;
+    const creditAccount = leaseTemplate.interestPaidTransferCreditAccount;
+
+    if (!debitAccount && !creditAccount) {
+      return;
+    }
+
+    this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
+      this.transactionAccountsSharedCollection,
+      debitAccount,
+      creditAccount
+    );
+
+    this.editForm.patchValue({
+      debit: debitAccount ?? this.editForm.get('debit')!.value,
+      credit: creditAccount ?? this.editForm.get('credit')!.value,
+    });
   }
 
   protected loadRelationshipsOptions(): void {
