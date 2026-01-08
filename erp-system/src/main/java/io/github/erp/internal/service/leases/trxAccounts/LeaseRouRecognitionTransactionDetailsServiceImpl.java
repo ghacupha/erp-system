@@ -36,8 +36,6 @@
  */
 package io.github.erp.internal.service.leases.trxAccounts;
 
-import io.github.erp.internal.repository.LeaseRouRecognitionTransactionDetailsRepository;
-import io.github.erp.internal.repository.ROUAmortizationTransactionDetailsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -45,15 +43,15 @@ import java.util.UUID;
 @Service
 public class LeaseRouRecognitionTransactionDetailsServiceImpl implements LeaseRouRecognitionTransactionDetailsService {
 
-    private final LeaseRouRecognitionTransactionDetailsRepository leaseRouRecognitionTransactionDetailsRepository;
+    private final LeaseTransactionPostingService leaseTransactionPostingService;
 
-    public LeaseRouRecognitionTransactionDetailsServiceImpl(LeaseRouRecognitionTransactionDetailsRepository leaseRouRecognitionTransactionDetailsRepository) {
-        this.leaseRouRecognitionTransactionDetailsRepository = leaseRouRecognitionTransactionDetailsRepository;
+    public LeaseRouRecognitionTransactionDetailsServiceImpl(LeaseTransactionPostingService leaseTransactionPostingService) {
+        this.leaseTransactionPostingService = leaseTransactionPostingService;
     }
 
     @Override
     public void createTransactionDetails(UUID requisitionId, Long postedById){
 
-        leaseRouRecognitionTransactionDetailsRepository.insertTransactionDetails(requisitionId, postedById, "ROU Initial Direct Cost Recognition");
+        leaseTransactionPostingService.postLeaseRouRecognition(requisitionId, postedById);
     }
 }
