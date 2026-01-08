@@ -1,7 +1,7 @@
 # Lease Template UI Workflows
 
 ## Purpose
-Lease templates consolidate recurring IFRS16 lease configuration into a reusable parent entity. The UI supports creating and copying templates, then selecting them on lease contracts so shared data (service outlet, main dealer) is reused when contracts renew.
+Lease templates consolidate recurring IFRS16 lease configuration into a reusable parent entity. The UI supports creating and copying templates, then selecting them on lease contracts so shared data (service outlet, main dealer, and various transaction-accounts) is reused when contracts renew.
 
 ## Key Components
 - `LeaseTemplateModule` and CRUD components provide list, detail, update, and delete views.
