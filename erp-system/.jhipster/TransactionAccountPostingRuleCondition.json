@@ -1,0 +1,39 @@
+{
+  "name": "TransactionAccountPostingRuleCondition",
+  "fields": [
+    {
+      "fieldName": "conditionKey",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "conditionOperator",
+      "fieldType": "PostingRuleConditionOperator",
+      "fieldValues": "EQUALS,NOT_EQUALS,CONTAINS",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "conditionValue",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "postingRule",
+      "otherEntityName": "transactionAccountPostingRule",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "entityTableName": "trx_account_posting_rule_condition",
+  "name": "TransactionAccountPostingRuleCondition",
+  "changelogDate": "20250310120000",
+  "incrementalChangelog": false
+}
