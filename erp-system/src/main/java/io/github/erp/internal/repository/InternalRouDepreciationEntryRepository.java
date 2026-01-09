@@ -67,6 +67,13 @@ public interface InternalRouDepreciationEntryRepository
     Optional<Integer> countRouDepreciationEntriesByBatchJobIdentifierEquals(UUID batchJobIdentifier);
 
     @Query(
+        "select distinct rouDepreciationEntry from RouDepreciationEntry rouDepreciationEntry " +
+            "join fetch rouDepreciationEntry.leaseContract " +
+            "join fetch rouDepreciationEntry.leasePeriod"
+    )
+    List<RouDepreciationEntry> findAllWithLeaseContractAndPeriod();
+
+    @Query(
         nativeQuery = true,
         value =
             "SELECT rde.id AS entryId,\n" +

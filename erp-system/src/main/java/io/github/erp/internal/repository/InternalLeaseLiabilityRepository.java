@@ -41,4 +41,7 @@ public interface InternalLeaseLiabilityRepository extends JpaRepository<LeaseLia
 
     @Query("select leaseLiability from LeaseLiability leaseLiability where leaseLiability.leaseContract.id = :leaseContractId")
     Optional<LeaseLiability> findOneByLeaseContractId(@Param("leaseContractId") Long leaseContractId);
+
+    @Query("select leaseLiability from LeaseLiability leaseLiability join fetch leaseLiability.leaseContract")
+    List<LeaseLiability> findAllWithLeaseContract();
 }

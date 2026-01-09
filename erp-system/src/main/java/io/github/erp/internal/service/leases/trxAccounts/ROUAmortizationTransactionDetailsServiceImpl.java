@@ -36,7 +36,6 @@ package io.github.erp.internal.service.leases.trxAccounts;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import io.github.erp.internal.repository.ROUAmortizationTransactionDetailsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -44,15 +43,15 @@ import java.util.UUID;
 @Service
 public class ROUAmortizationTransactionDetailsServiceImpl implements ROUAmortizationTransactionDetailsService {
 
-    private final ROUAmortizationTransactionDetailsRepository rouAmortizationTransactionDetailsRepository;
+    private final LeaseTransactionPostingService leaseTransactionPostingService;
 
-    public ROUAmortizationTransactionDetailsServiceImpl(ROUAmortizationTransactionDetailsRepository rouAmortizationTransactionDetailsRepository) {
-        this.rouAmortizationTransactionDetailsRepository = rouAmortizationTransactionDetailsRepository;
+    public ROUAmortizationTransactionDetailsServiceImpl(LeaseTransactionPostingService leaseTransactionPostingService) {
+        this.leaseTransactionPostingService = leaseTransactionPostingService;
     }
 
     @Override
     public void createTransactionDetails(UUID requisitionId, Long postedById){
 
-        rouAmortizationTransactionDetailsRepository.insertTransactionDetails(requisitionId, postedById, "ROU Amortization");
+        leaseTransactionPostingService.postRouAmortization(requisitionId, postedById);
     }
 }
