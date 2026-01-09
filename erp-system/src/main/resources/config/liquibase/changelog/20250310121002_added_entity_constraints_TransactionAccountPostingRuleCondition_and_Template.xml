@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entities TransactionAccountPostingRuleCondition and TransactionAccountPostingRuleTemplate.
+    -->
+    <changeSet id="20250310121002-1" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="posting_rule_id"
+                                 baseTableName="trx_account_posting_rule_condition"
+                                 constraintName="fk_trx_posting_rule_condition__posting_rule_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="trx_account_posting_rule"/>
+
+        <addForeignKeyConstraint baseColumnNames="debit_account_id"
+                                 baseTableName="trx_account_posting_rule_template"
+                                 constraintName="fk_trx_posting_rule_template__debit_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="credit_account_id"
+                                 baseTableName="trx_account_posting_rule_template"
+                                 constraintName="fk_trx_posting_rule_template__credit_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="posting_rule_id"
+                                 baseTableName="trx_account_posting_rule_template"
+                                 constraintName="fk_trx_posting_rule_template__posting_rule_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="trx_account_posting_rule"/>
+    </changeSet>
+</databaseChangeLog>

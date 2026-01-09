@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Extend TransactionAccountPostingRule with scenario metadata.
+    -->
+    <changeSet id="20250310121000-1" author="jhipster">
+        <addColumn tableName="trx_account_posting_rule">
+            <column name="module" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="event_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="variance_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="invoice_timing" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </addColumn>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+</databaseChangeLog>

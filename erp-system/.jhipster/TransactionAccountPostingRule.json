@@ -9,6 +9,22 @@
       "fieldName": "identifier",
       "fieldType": "UUID",
       "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "module",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "eventType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "varianceType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "invoiceTiming",
+      "fieldType": "String"
     }
   ],
   "relationships": [
@@ -31,6 +47,18 @@
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-one",
       "otherEntityField": "description"
+    },
+    {
+      "relationshipName": "postingRuleConditions",
+      "otherEntityName": "transactionAccountPostingRuleCondition",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "postingRule"
+    },
+    {
+      "relationshipName": "postingRuleTemplates",
+      "otherEntityName": "transactionAccountPostingRuleTemplate",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "postingRule"
     }
   ],
   "service": "serviceImpl",

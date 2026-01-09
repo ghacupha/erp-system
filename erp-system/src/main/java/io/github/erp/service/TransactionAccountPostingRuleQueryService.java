@@ -121,6 +121,18 @@ public class TransactionAccountPostingRuleQueryService extends QueryService<Tran
             if (criteria.getIdentifier() != null) {
                 specification = specification.and(buildSpecification(criteria.getIdentifier(), TransactionAccountPostingRule_.identifier));
             }
+            if (criteria.getModule() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getModule(), TransactionAccountPostingRule_.module));
+            }
+            if (criteria.getEventType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getEventType(), TransactionAccountPostingRule_.eventType));
+            }
+            if (criteria.getVarianceType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getVarianceType(), TransactionAccountPostingRule_.varianceType));
+            }
+            if (criteria.getInvoiceTiming() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getInvoiceTiming(), TransactionAccountPostingRule_.invoiceTiming));
+            }
             if (criteria.getDebitAccountTypeId() != null) {
                 specification =
                     specification.and(

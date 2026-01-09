@@ -24,7 +24,15 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link TransactionAccountPostingRule} and its DTO {@link TransactionAccountPostingRuleDTO}.
  */
-@Mapper(componentModel = "spring", uses = { TransactionAccountCategoryMapper.class, PlaceholderMapper.class })
+@Mapper(
+    componentModel = "spring",
+    uses = {
+        TransactionAccountCategoryMapper.class,
+        PlaceholderMapper.class,
+        TransactionAccountPostingRuleConditionMapper.class,
+        TransactionAccountPostingRuleTemplateMapper.class,
+    }
+)
 public interface TransactionAccountPostingRuleMapper extends EntityMapper<TransactionAccountPostingRuleDTO, TransactionAccountPostingRule> {
     @Mapping(target = "debitAccountType", source = "debitAccountType", qualifiedByName = "name")
     @Mapping(target = "creditAccountType", source = "creditAccountType", qualifiedByName = "name")

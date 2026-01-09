@@ -1,0 +1,48 @@
+{
+  "name": "TransactionAccountPostingRuleTemplate",
+  "fields": [
+    {
+      "fieldName": "lineDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "amountMultiplier",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMin": "0",
+      "fieldValidateRulesMax": "9999999999"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "debitAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "creditAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "postingRule",
+      "otherEntityName": "transactionAccountPostingRule",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "entityTableName": "trx_account_posting_rule_template",
+  "name": "TransactionAccountPostingRuleTemplate",
+  "changelogDate": "20250310120001",
+  "incrementalChangelog": false
+}
