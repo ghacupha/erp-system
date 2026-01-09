@@ -36,7 +36,6 @@
  */
 package io.github.erp.internal.service.leases.trxAccounts;
 
-import io.github.erp.internal.repository.LeaseInterestAccrualTransactionDetailsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -44,15 +43,15 @@ import java.util.UUID;
 @Service
 public class LeaseInterestAccrualTransactionDetailsServiceImpl implements LeaseInterestAccrualTransactionDetailsService {
 
-    private final LeaseInterestAccrualTransactionDetailsRepository leaseInterestAccrualTransactionDetailsRepository;
+    private final LeaseTransactionPostingService leaseTransactionPostingService;
 
-    public LeaseInterestAccrualTransactionDetailsServiceImpl(LeaseInterestAccrualTransactionDetailsRepository leaseInterestAccrualTransactionDetailsRepository) {
-        this.leaseInterestAccrualTransactionDetailsRepository = leaseInterestAccrualTransactionDetailsRepository;
+    public LeaseInterestAccrualTransactionDetailsServiceImpl(LeaseTransactionPostingService leaseTransactionPostingService) {
+        this.leaseTransactionPostingService = leaseTransactionPostingService;
     }
 
     @Override
     public void createTransactionDetails(UUID requisitionId, Long postedById){
 
-        leaseInterestAccrualTransactionDetailsRepository.insertTransactionDetails(requisitionId, postedById, "Lease Interest Accrual");
+        leaseTransactionPostingService.postLeaseInterestAccrual(requisitionId, postedById);
     }
 }

@@ -36,7 +36,6 @@
  */
 package io.github.erp.internal.service.leases.trxAccounts;
 
-import io.github.erp.internal.repository.LeaseLiabilityRecognitionTransactionDetailsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -44,15 +43,15 @@ import java.util.UUID;
 @Service
 public class LeaseLiabilityRecognitionTransactionDetailsServiceImpl implements LeaseLiabilityRecognitionTransactionDetailsService {
 
-    private final LeaseLiabilityRecognitionTransactionDetailsRepository leaseLiabilityRecognitionTransactionDetailsRepository;
+    private final LeaseTransactionPostingService leaseTransactionPostingService;
 
-    public LeaseLiabilityRecognitionTransactionDetailsServiceImpl(LeaseLiabilityRecognitionTransactionDetailsRepository leaseLiabilityRecognitionTransactionDetailsRepository) {
-        this.leaseLiabilityRecognitionTransactionDetailsRepository = leaseLiabilityRecognitionTransactionDetailsRepository;
+    public LeaseLiabilityRecognitionTransactionDetailsServiceImpl(LeaseTransactionPostingService leaseTransactionPostingService) {
+        this.leaseTransactionPostingService = leaseTransactionPostingService;
     }
 
     @Override
     public void createTransactionDetails(UUID requisitionId, Long postedById){
 
-        leaseLiabilityRecognitionTransactionDetailsRepository.insertTransactionDetails(requisitionId, postedById, "Lease Liability Recognition");
+        leaseTransactionPostingService.postLeaseLiabilityRecognition(requisitionId, postedById);
     }
 }

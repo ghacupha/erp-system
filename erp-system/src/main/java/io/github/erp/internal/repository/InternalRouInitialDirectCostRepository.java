@@ -53,6 +53,14 @@ public interface InternalRouInitialDirectCostRepository
     Optional<RouInitialDirectCost> findOneWithEagerRelationships(@Param("id") Long id);
 
     @Query(
+        "select distinct rouInitialDirectCost from RouInitialDirectCost rouInitialDirectCost " +
+            "join fetch rouInitialDirectCost.leaseContract " +
+            "join fetch rouInitialDirectCost.targetROUAccount " +
+            "join fetch rouInitialDirectCost.transferAccount"
+    )
+    List<RouInitialDirectCost> findAllWithAccounts();
+
+    @Query(
         nativeQuery = true,
         value = "SELECT CAST(reference_number AS BIGINT) FROM public.rou_initial_direct_cost",
         countQuery = "SELECT CAST(reference_number AS BIGINT) FROM public.rou_initial_direct_cost"

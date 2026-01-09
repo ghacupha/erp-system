@@ -52,6 +52,14 @@ public interface InternalLeaseLiabilityScheduleItemRepository
     )
     Optional<LeaseLiabilityScheduleItem> findOneWithEagerRelationships(@Param("id") Long id);
 
+    @Query(
+        "select distinct leaseLiabilityScheduleItem from LeaseLiabilityScheduleItem leaseLiabilityScheduleItem " +
+            "join fetch leaseLiabilityScheduleItem.leaseContract " +
+            "join fetch leaseLiabilityScheduleItem.leasePeriod leasePeriod " +
+            "join fetch leasePeriod.fiscalMonth"
+    )
+    List<LeaseLiabilityScheduleItem> findAllWithLeaseContractAndPeriod();
+
     @Modifying(clearAutomatically = true)
     @Query(
         "update LeaseLiabilityScheduleItem item set item.active = :active where item.leaseLiabilityCompilation.id = :compilationId"
