@@ -1,4 +1,4 @@
-package io.github.erp.repository;
+package io.github.erp.service.mapper;
 
 /*-
  * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
@@ -17,18 +17,13 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.TransactionAccountPostingRule;
-import java.util.List;
-import org.springframework.data.jpa.repository.*;
-import org.springframework.stereotype.Repository;
+import io.github.erp.domain.TransactionAccountPostingRuleCondition;
+import io.github.erp.service.dto.TransactionAccountPostingRuleConditionDTO;
+import org.mapstruct.*;
 
 /**
- * Spring Data SQL repository for the TransactionAccountPostingRule entity.
+ * Mapper for the entity {@link TransactionAccountPostingRuleCondition} and its DTO {@link TransactionAccountPostingRuleConditionDTO}.
  */
-@SuppressWarnings("unused")
-@Repository
-public interface TransactionAccountPostingRuleRepository
-    extends JpaRepository<TransactionAccountPostingRule, Long>, JpaSpecificationExecutor<TransactionAccountPostingRule> {
-    @EntityGraph(attributePaths = { "postingRuleConditions", "postingRuleTemplates" })
-    List<TransactionAccountPostingRule> findByModuleAndEventType(String module, String eventType);
-}
+@Mapper(componentModel = "spring")
+public interface TransactionAccountPostingRuleConditionMapper
+    extends EntityMapper<TransactionAccountPostingRuleConditionDTO, TransactionAccountPostingRuleCondition> {}

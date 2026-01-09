@@ -302,6 +302,8 @@
     <include file="config/liquibase/changelog/20241007122528_added_entity_TransactionAccountPostingProcessType.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241008093214_added_entity_TransactionAccountPostingRun.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241008092538_added_entity_TransactionAccountPostingRule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250310121000_added_fields_trx_account_posting_rule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250310121001_added_entity_TransactionAccountPostingRuleCondition_and_Template.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241008094705_added_entity_TransactionAccountTypeMapping.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241008111457_added_entity_TAAmortizationRule.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241014145156_added_entity_TransactionDetails.xml" relativeToChangelogFile="false"/>
@@ -577,6 +579,7 @@
     <include file="config/liquibase/changelog/20241007122528_added_entity_constraints_TransactionAccountPostingProcessType.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241008093214_added_entity_constraints_TransactionAccountPostingRun.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241008092538_added_entity_constraints_TransactionAccountPostingRule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250310121002_added_entity_constraints_TransactionAccountPostingRuleCondition_and_Template.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241008094705_added_entity_constraints_TransactionAccountTypeMapping.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241008111457_added_entity_constraints_TAAmortizationRule.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241014145156_added_entity_constraints_TransactionDetails.xml" relativeToChangelogFile="false"/>

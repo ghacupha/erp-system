@@ -19,6 +19,8 @@ package io.github.erp.domain;
  */
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -62,6 +64,28 @@ public class TransactionAccountPostingRule implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Placeholder transactionContext;
+
+    @Column(name = "module")
+    private String module;
+
+    @Column(name = "event_type")
+    private String eventType;
+
+    @Column(name = "variance_type")
+    private String varianceType;
+
+    @Column(name = "invoice_timing")
+    private String invoiceTiming;
+
+    @OneToMany(mappedBy = "postingRule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "postingRule" }, allowSetters = true)
+    private Set<TransactionAccountPostingRuleCondition> postingRuleConditions = new HashSet<>();
+
+    @OneToMany(mappedBy = "postingRule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "postingRule" }, allowSetters = true)
+    private Set<TransactionAccountPostingRuleTemplate> postingRuleTemplates = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -143,6 +167,120 @@ public class TransactionAccountPostingRule implements Serializable {
         return this;
     }
 
+    public String getModule() {
+        return this.module;
+    }
+
+    public TransactionAccountPostingRule module(String module) {
+        this.setModule(module);
+        return this;
+    }
+
+    public void setModule(String module) {
+        this.module = module;
+    }
+
+    public String getEventType() {
+        return this.eventType;
+    }
+
+    public TransactionAccountPostingRule eventType(String eventType) {
+        this.setEventType(eventType);
+        return this;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public String getVarianceType() {
+        return this.varianceType;
+    }
+
+    public TransactionAccountPostingRule varianceType(String varianceType) {
+        this.setVarianceType(varianceType);
+        return this;
+    }
+
+    public void setVarianceType(String varianceType) {
+        this.varianceType = varianceType;
+    }
+
+    public String getInvoiceTiming() {
+        return this.invoiceTiming;
+    }
+
+    public TransactionAccountPostingRule invoiceTiming(String invoiceTiming) {
+        this.setInvoiceTiming(invoiceTiming);
+        return this;
+    }
+
+    public void setInvoiceTiming(String invoiceTiming) {
+        this.invoiceTiming = invoiceTiming;
+    }
+
+    public Set<TransactionAccountPostingRuleCondition> getPostingRuleConditions() {
+        return this.postingRuleConditions;
+    }
+
+    public void setPostingRuleConditions(Set<TransactionAccountPostingRuleCondition> postingRuleConditions) {
+        if (this.postingRuleConditions != null) {
+            this.postingRuleConditions.forEach(condition -> condition.setPostingRule(null));
+        }
+        if (postingRuleConditions != null) {
+            postingRuleConditions.forEach(condition -> condition.setPostingRule(this));
+        }
+        this.postingRuleConditions = postingRuleConditions;
+    }
+
+    public TransactionAccountPostingRule postingRuleConditions(Set<TransactionAccountPostingRuleCondition> postingRuleConditions) {
+        this.setPostingRuleConditions(postingRuleConditions);
+        return this;
+    }
+
+    public TransactionAccountPostingRule addPostingRuleCondition(TransactionAccountPostingRuleCondition condition) {
+        this.postingRuleConditions.add(condition);
+        condition.setPostingRule(this);
+        return this;
+    }
+
+    public TransactionAccountPostingRule removePostingRuleCondition(TransactionAccountPostingRuleCondition condition) {
+        this.postingRuleConditions.remove(condition);
+        condition.setPostingRule(null);
+        return this;
+    }
+
+    public Set<TransactionAccountPostingRuleTemplate> getPostingRuleTemplates() {
+        return this.postingRuleTemplates;
+    }
+
+    public void setPostingRuleTemplates(Set<TransactionAccountPostingRuleTemplate> postingRuleTemplates) {
+        if (this.postingRuleTemplates != null) {
+            this.postingRuleTemplates.forEach(template -> template.setPostingRule(null));
+        }
+        if (postingRuleTemplates != null) {
+            postingRuleTemplates.forEach(template -> template.setPostingRule(this));
+        }
+        this.postingRuleTemplates = postingRuleTemplates;
+    }
+
+    public TransactionAccountPostingRule postingRuleTemplates(Set<TransactionAccountPostingRuleTemplate> postingRuleTemplates) {
+        this.setPostingRuleTemplates(postingRuleTemplates);
+        return this;
+    }
+
+    public TransactionAccountPostingRule addPostingRuleTemplate(TransactionAccountPostingRuleTemplate template) {
+        this.postingRuleTemplates.add(template);
+        template.setPostingRule(this);
+        return this;
+    }
+
+    public TransactionAccountPostingRule removePostingRuleTemplate(TransactionAccountPostingRuleTemplate template) {
+        this.postingRuleTemplates.remove(template);
+        template.setPostingRule(null);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -169,6 +307,10 @@ public class TransactionAccountPostingRule implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", identifier='" + getIdentifier() + "'" +
+            ", module='" + getModule() + "'" +
+            ", eventType='" + getEventType() + "'" +
+            ", varianceType='" + getVarianceType() + "'" +
+            ", invoiceTiming='" + getInvoiceTiming() + "'" +
             "}";
     }
 }
