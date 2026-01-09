@@ -18,7 +18,9 @@ package io.github.erp.service.dto;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import javax.validation.constraints.*;
 
@@ -39,6 +41,18 @@ public class TransactionAccountPostingRuleDTO implements Serializable {
     private TransactionAccountCategoryDTO creditAccountType;
 
     private PlaceholderDTO transactionContext;
+
+    private String module;
+
+    private String eventType;
+
+    private String varianceType;
+
+    private String invoiceTiming;
+
+    private Set<TransactionAccountPostingRuleConditionDTO> postingRuleConditions = new HashSet<>();
+
+    private Set<TransactionAccountPostingRuleTemplateDTO> postingRuleTemplates = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -88,6 +102,54 @@ public class TransactionAccountPostingRuleDTO implements Serializable {
         this.transactionContext = transactionContext;
     }
 
+    public String getModule() {
+        return module;
+    }
+
+    public void setModule(String module) {
+        this.module = module;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public String getVarianceType() {
+        return varianceType;
+    }
+
+    public void setVarianceType(String varianceType) {
+        this.varianceType = varianceType;
+    }
+
+    public String getInvoiceTiming() {
+        return invoiceTiming;
+    }
+
+    public void setInvoiceTiming(String invoiceTiming) {
+        this.invoiceTiming = invoiceTiming;
+    }
+
+    public Set<TransactionAccountPostingRuleConditionDTO> getPostingRuleConditions() {
+        return postingRuleConditions;
+    }
+
+    public void setPostingRuleConditions(Set<TransactionAccountPostingRuleConditionDTO> postingRuleConditions) {
+        this.postingRuleConditions = postingRuleConditions;
+    }
+
+    public Set<TransactionAccountPostingRuleTemplateDTO> getPostingRuleTemplates() {
+        return postingRuleTemplates;
+    }
+
+    public void setPostingRuleTemplates(Set<TransactionAccountPostingRuleTemplateDTO> postingRuleTemplates) {
+        this.postingRuleTemplates = postingRuleTemplates;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -119,6 +181,12 @@ public class TransactionAccountPostingRuleDTO implements Serializable {
             ", debitAccountType=" + getDebitAccountType() +
             ", creditAccountType=" + getCreditAccountType() +
             ", transactionContext=" + getTransactionContext() +
+            ", module='" + getModule() + "'" +
+            ", eventType='" + getEventType() + "'" +
+            ", varianceType='" + getVarianceType() + "'" +
+            ", invoiceTiming='" + getInvoiceTiming() + "'" +
+            ", postingRuleConditions=" + getPostingRuleConditions() +
+            ", postingRuleTemplates=" + getPostingRuleTemplates() +
             "}";
     }
 }

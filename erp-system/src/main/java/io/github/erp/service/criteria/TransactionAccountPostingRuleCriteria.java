@@ -54,6 +54,14 @@ public class TransactionAccountPostingRuleCriteria implements Serializable, Crit
 
     private LongFilter transactionContextId;
 
+    private StringFilter module;
+
+    private StringFilter eventType;
+
+    private StringFilter varianceType;
+
+    private StringFilter invoiceTiming;
+
     private Boolean distinct;
 
     public TransactionAccountPostingRuleCriteria() {}
@@ -65,6 +73,10 @@ public class TransactionAccountPostingRuleCriteria implements Serializable, Crit
         this.debitAccountTypeId = other.debitAccountTypeId == null ? null : other.debitAccountTypeId.copy();
         this.creditAccountTypeId = other.creditAccountTypeId == null ? null : other.creditAccountTypeId.copy();
         this.transactionContextId = other.transactionContextId == null ? null : other.transactionContextId.copy();
+        this.module = other.module == null ? null : other.module.copy();
+        this.eventType = other.eventType == null ? null : other.eventType.copy();
+        this.varianceType = other.varianceType == null ? null : other.varianceType.copy();
+        this.invoiceTiming = other.invoiceTiming == null ? null : other.invoiceTiming.copy();
         this.distinct = other.distinct;
     }
 
@@ -163,6 +175,66 @@ public class TransactionAccountPostingRuleCriteria implements Serializable, Crit
         this.transactionContextId = transactionContextId;
     }
 
+    public StringFilter getModule() {
+        return module;
+    }
+
+    public StringFilter module() {
+        if (module == null) {
+            module = new StringFilter();
+        }
+        return module;
+    }
+
+    public void setModule(StringFilter module) {
+        this.module = module;
+    }
+
+    public StringFilter getEventType() {
+        return eventType;
+    }
+
+    public StringFilter eventType() {
+        if (eventType == null) {
+            eventType = new StringFilter();
+        }
+        return eventType;
+    }
+
+    public void setEventType(StringFilter eventType) {
+        this.eventType = eventType;
+    }
+
+    public StringFilter getVarianceType() {
+        return varianceType;
+    }
+
+    public StringFilter varianceType() {
+        if (varianceType == null) {
+            varianceType = new StringFilter();
+        }
+        return varianceType;
+    }
+
+    public void setVarianceType(StringFilter varianceType) {
+        this.varianceType = varianceType;
+    }
+
+    public StringFilter getInvoiceTiming() {
+        return invoiceTiming;
+    }
+
+    public StringFilter invoiceTiming() {
+        if (invoiceTiming == null) {
+            invoiceTiming = new StringFilter();
+        }
+        return invoiceTiming;
+    }
+
+    public void setInvoiceTiming(StringFilter invoiceTiming) {
+        this.invoiceTiming = invoiceTiming;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -187,13 +259,29 @@ public class TransactionAccountPostingRuleCriteria implements Serializable, Crit
             Objects.equals(debitAccountTypeId, that.debitAccountTypeId) &&
             Objects.equals(creditAccountTypeId, that.creditAccountTypeId) &&
             Objects.equals(transactionContextId, that.transactionContextId) &&
+            Objects.equals(module, that.module) &&
+            Objects.equals(eventType, that.eventType) &&
+            Objects.equals(varianceType, that.varianceType) &&
+            Objects.equals(invoiceTiming, that.invoiceTiming) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, identifier, debitAccountTypeId, creditAccountTypeId, transactionContextId, distinct);
+        return Objects.hash(
+            id,
+            name,
+            identifier,
+            debitAccountTypeId,
+            creditAccountTypeId,
+            transactionContextId,
+            module,
+            eventType,
+            varianceType,
+            invoiceTiming,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -206,6 +294,10 @@ public class TransactionAccountPostingRuleCriteria implements Serializable, Crit
             (debitAccountTypeId != null ? "debitAccountTypeId=" + debitAccountTypeId + ", " : "") +
             (creditAccountTypeId != null ? "creditAccountTypeId=" + creditAccountTypeId + ", " : "") +
             (transactionContextId != null ? "transactionContextId=" + transactionContextId + ", " : "") +
+            (module != null ? "module=" + module + ", " : "") +
+            (eventType != null ? "eventType=" + eventType + ", " : "") +
+            (varianceType != null ? "varianceType=" + varianceType + ", " : "") +
+            (invoiceTiming != null ? "invoiceTiming=" + invoiceTiming + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }
