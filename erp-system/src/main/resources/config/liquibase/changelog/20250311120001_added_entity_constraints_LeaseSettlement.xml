@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity LeaseSettlement.
+    -->
+    <changeSet id="20250311120001-1" author="jhipster">
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id"
+                                 baseTableName="lease_settlement"
+                                 constraintName="fk_lease_settlement__lease_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ifrs16lease_contract"/>
+
+        <addForeignKeyConstraint baseColumnNames="period_id"
+                                 baseTableName="lease_settlement"
+                                 constraintName="fk_lease_settlement__period_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_repayment_period"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_payment_id"
+                                 baseTableName="lease_settlement"
+                                 constraintName="fk_lease_settlement__lease_payment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_payment"/>
+    </changeSet>
+</databaseChangeLog>

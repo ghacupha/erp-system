@@ -610,6 +610,8 @@
     <include file="config/liquibase/changelog/20240828000000_added_entity_constraints_LeasePaymentUpload.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240828000500_add_active_and_upload_to_lease_payment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240801090000_update_report_metadata_filters.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250311120000_added_entity_LeaseSettlement.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250311120001_added_entity_constraints_LeaseSettlement.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <include file="config/liquibase/changelog/20250205121500_update_lease_liability_schedule_item_compilation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250206120000_add_active_to_lease_liability_compilation.xml" relativeToChangelogFile="false"/>

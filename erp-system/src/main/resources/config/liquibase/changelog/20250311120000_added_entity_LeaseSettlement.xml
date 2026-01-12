@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity LeaseSettlement.
+    -->
+    <changeSet id="20250311120000-1" author="jhipster">
+        <createTable tableName="lease_settlement">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="settlement_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="invoice_amount" type="numeric(21, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="invoice_reference" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="variance_amount" type="numeric(21, 2)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="variance_reason" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="posting_id" type="${uuidType}">
+                <constraints nullable="true"/>
+            </column>
+            <column name="reconciliation_status" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lease_contract_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="period_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lease_payment_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20250311120000-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/lease_settlement.csv"
+                  separator=";"
+                  tableName="lease_settlement"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="settlement_date" type="date"/>
+            <column name="invoice_amount" type="numeric"/>
+            <column name="invoice_reference" type="string"/>
+            <column name="variance_amount" type="numeric"/>
+            <column name="variance_reason" type="string"/>
+            <column name="posting_id" type="${uuidType}"/>
+            <column name="reconciliation_status" type="string"/>
+            <column name="lease_contract_id" type="numeric"/>
+            <column name="period_id" type="numeric"/>
+            <column name="lease_payment_id" type="numeric"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

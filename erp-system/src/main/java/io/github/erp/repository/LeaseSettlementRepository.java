@@ -17,29 +17,16 @@ package io.github.erp.repository;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.LeasePayment;
+import io.github.erp.domain.LeaseSettlement;
 import java.util.List;
-import java.time.LocalDate;
 import org.springframework.data.jpa.repository.*;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
- * Spring Data SQL repository for the LeasePayment entity.
+ * Spring Data SQL repository for the LeaseSettlement entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface LeasePaymentRepository extends JpaRepository<LeasePayment, Long>, JpaSpecificationExecutor<LeasePayment> {
-    @Modifying
-    @Query("update LeasePayment lp set lp.active = :active where lp.leasePaymentUpload.id = :uploadId")
-    void updateActiveFlagForUpload(@Param("active") Boolean active, @Param("uploadId") Long uploadId);
-
-    List<LeasePayment> findAllByLeasePaymentUploadId(Long uploadId);
-
-    List<LeasePayment> findAllByLeasePaymentUploadIdAndLeaseContractIdAndActiveTrueOrderByPaymentDateAsc(
-        Long uploadId,
-        Long leaseContractId
-    );
-
-    List<LeasePayment> findAllByPaymentDateBetweenAndActiveTrue(LocalDate startDate, LocalDate endDate);
+public interface LeaseSettlementRepository extends JpaRepository<LeaseSettlement, Long>, JpaSpecificationExecutor<LeaseSettlement> {
+    List<LeaseSettlement> findAllByPeriodId(Long periodId);
 }
