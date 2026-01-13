@@ -17,21 +17,17 @@ package io.github.erp.service.mapper;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.domain.LeasePayment;
-import io.github.erp.service.dto.LeasePaymentDTO;
+import io.github.erp.domain.LeaseSettlement;
+import io.github.erp.service.dto.LeaseSettlementDTO;
 import org.mapstruct.*;
 
 /**
- * Mapper for the entity {@link LeasePayment} and its DTO {@link LeasePaymentDTO}.
+ * Mapper for the entity {@link LeaseSettlement} and its DTO {@link LeaseSettlementDTO}.
  */
-@Mapper(componentModel = "spring", uses = { IFRS16LeaseContractMapper.class, LeasePaymentUploadMapper.class })
-public interface LeasePaymentMapper extends EntityMapper<LeasePaymentDTO, LeasePayment> {
+@Mapper(componentModel = "spring", uses = { IFRS16LeaseContractMapper.class, LeaseRepaymentPeriodMapper.class, LeasePaymentMapper.class })
+public interface LeaseSettlementMapper extends EntityMapper<LeaseSettlementDTO, LeaseSettlement> {
     @Mapping(target = "leaseContract", source = "leaseContract", qualifiedByName = "bookingId")
-    @Mapping(target = "leasePaymentUpload", source = "leasePaymentUpload", qualifiedByName = "id")
-    LeasePaymentDTO toDto(LeasePayment s);
-
-    @Named("id")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    LeasePaymentDTO toDtoId(LeasePayment leasePayment);
+    @Mapping(target = "period", source = "period", qualifiedByName = "periodCode")
+    @Mapping(target = "leasePayment", source = "leasePayment", qualifiedByName = "id")
+    LeaseSettlementDTO toDto(LeaseSettlement s);
 }

@@ -1,0 +1,66 @@
+{
+  "fields": [
+    {
+      "fieldName": "settlementDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "invoiceAmount",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "invoiceReference",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "varianceAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "varianceReason",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "postingId",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "reconciliationStatus",
+      "fieldType": "ReconciliationStatusType",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "iFRS16LeaseContract",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "bookingId"
+    },
+    {
+      "relationshipName": "period",
+      "otherEntityName": "leaseRepaymentPeriod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "periodCode"
+    },
+    {
+      "relationshipName": "leasePayment",
+      "otherEntityName": "leasePayment",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "paymentDate"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "LeaseSettlement",
+  "changelogDate": "20250311120000",
+  "incrementalChangelog": false
+}
