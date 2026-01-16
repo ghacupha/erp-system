@@ -18,6 +18,7 @@ package io.github.erp.internal.service.posting;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 import io.github.erp.domain.ApplicationUser;
@@ -80,7 +81,7 @@ class PostingRuleEvaluatorTest {
         condition.setPostingRule(rule);
         rule.setPostingRuleConditions(Set.of(condition));
 
-        when(postingRuleRepository.findByModuleAndEventType("LEASE", "LEASE_REPAYMENT")).thenReturn(List.of(rule));
+        when(postingRuleRepository.findByModuleAndEventTypeOrderByIdAsc("LEASE", "LEASE_REPAYMENT")).thenReturn(List.of(rule));
         when(transactionEntryIdGenerator.nextEntryId()).thenReturn(100L);
 
         PostingContext context = PostingContext
@@ -104,5 +105,39 @@ class PostingRuleEvaluatorTest {
         assertThat(detail.getDebitAccount()).isSameAs(debitAccount);
         assertThat(detail.getCreditAccount()).isSameAs(creditAccount);
         assertThat(detail.getAmount()).isEqualByComparingTo("100.00");
+    }
+
+    @Test
+    void evaluateRejectsMultipleMatchingRules() {
+        TransactionAccountPostingRule firstRule = new TransactionAccountPostingRule();
+        firstRule.setId(1L);
+        firstRule.setName("First rule");
+        firstRule.setModule("LEASE");
+        firstRule.setEventType("LEASE_REPAYMENT");
+
+        TransactionAccountPostingRule secondRule = new TransactionAccountPostingRule();
+        secondRule.setId(2L);
+        secondRule.setName("Second rule");
+        secondRule.setModule("LEASE");
+        secondRule.setEventType("LEASE_REPAYMENT");
+
+        when(postingRuleRepository.findByModuleAndEventTypeOrderByIdAsc("LEASE", "LEASE_REPAYMENT"))
+            .thenReturn(List.of(firstRule, secondRule));
+
+        PostingContext context = PostingContext
+            .builder()
+            .module("LEASE")
+            .eventType("LEASE_REPAYMENT")
+            .transactionType("Lease Repayment")
+            .transactionDate(LocalDate.of(2024, 1, 1))
+            .description("Lease repayment")
+            .amount(new BigDecimal("100.00"))
+            .postingId(UUID.randomUUID())
+            .postedBy(new ApplicationUser().id(7L))
+            .build();
+
+        assertThatThrownBy(() -> postingRuleEvaluator.evaluate(context))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessageContaining("Multiple posting rules matched for module LEASE and event LEASE_REPAYMENT");
     }
 }
