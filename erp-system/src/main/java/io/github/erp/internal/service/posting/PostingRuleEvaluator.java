@@ -53,20 +53,27 @@ public class PostingRuleEvaluator {
 
     public List<TransactionDetails> evaluate(PostingContext context) {
         validateContext(context);
-        List<TransactionAccountPostingRule> candidates = postingRuleRepository.findByModuleAndEventType(
+        List<TransactionAccountPostingRule> candidates = postingRuleRepository.findByModuleAndEventTypeOrderByIdAsc(
             context.getModule(),
             context.getEventType()
         );
-        TransactionAccountPostingRule selectedRule = candidates
-            .stream()
-            .filter(rule -> matchesRule(rule, context))
-            .findFirst()
-            .orElseThrow(
-                () ->
-                    new IllegalStateException(
-                        "No posting rule found for module " + context.getModule() + " and event " + context.getEventType()
-                    )
+        List<TransactionAccountPostingRule> matchingRules = candidates.stream().filter(rule -> matchesRule(rule, context)).collect(Collectors.toList());
+        if (matchingRules.isEmpty()) {
+            throw new IllegalStateException(
+                "No posting rule found for module " + context.getModule() + " and event " + context.getEventType()
             );
+        }
+        if (matchingRules.size() > 1) {
+            throw new IllegalStateException(
+                "Multiple posting rules matched for module " +
+                context.getModule() +
+                " and event " +
+                context.getEventType() +
+                ": " +
+                matchingRules.stream().map(this::describeRule).collect(Collectors.joining(", "))
+            );
+        }
+        TransactionAccountPostingRule selectedRule = matchingRules.get(0);
         Set<TransactionAccountPostingRuleTemplate> templates = Optional
             .ofNullable(selectedRule.getPostingRuleTemplates())
             .orElse(Collections.emptySet());
@@ -165,5 +172,11 @@ public class PostingRuleEvaluator {
             return amount;
         }
         return amount.multiply(multiplier);
+    }
+
+    private String describeRule(TransactionAccountPostingRule rule) {
+        String name = rule.getName() == null ? "unnamed" : rule.getName();
+        String id = rule.getId() == null ? "unknown" : rule.getId().toString();
+        return name + "#" + id;
     }
 }

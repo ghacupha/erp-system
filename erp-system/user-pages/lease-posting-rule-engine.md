@@ -24,3 +24,6 @@ When you post lease events, the system:
 3. Applies rule conditions and emits balanced transaction details from the templates.
 
 If no rule matches or a rule has no templates, the posting run will report a configuration error so the rule can be corrected.
+
+## Avoid Overlapping Rules
+The posting engine expects exactly one rule to match a given module/event context. If multiple rules match, the posting run will stop with an error that lists the conflicting rules. Review rule conditions and deactivate or refine overlaps before retrying the posting.
