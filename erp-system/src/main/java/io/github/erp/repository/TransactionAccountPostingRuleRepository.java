@@ -30,5 +30,5 @@ import org.springframework.stereotype.Repository;
 public interface TransactionAccountPostingRuleRepository
     extends JpaRepository<TransactionAccountPostingRule, Long>, JpaSpecificationExecutor<TransactionAccountPostingRule> {
     @EntityGraph(attributePaths = { "postingRuleConditions", "postingRuleTemplates" })
-    List<TransactionAccountPostingRule> findByModuleAndEventType(String module, String eventType);
+    List<TransactionAccountPostingRule> findByModuleAndEventTypeOrderByIdAsc(String module, String eventType);
 }
