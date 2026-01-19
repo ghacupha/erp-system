@@ -29,7 +29,7 @@ export const leasePostingRuleFormUpdated = createAction(
 
 export const leasePostingRuleLeaseContractSelected = createAction(
   '[LeasePostingRule Form] Lease contract selected',
-  props<{ leaseContract: IIFRS16LeaseContract }>()
+  props<{ leaseContract: IIFRS16LeaseContract; eventType?: string | null }>()
 );
 
 export const leasePostingRuleSuggestionsUpdated = createAction(
