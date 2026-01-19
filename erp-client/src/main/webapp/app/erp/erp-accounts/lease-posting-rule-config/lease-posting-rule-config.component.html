@@ -1,0 +1,250 @@
+<!--
+
+    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-10">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-lease-posting-rule-config-heading" data-cy="LeasePostingRuleConfigHeading">Lease Posting Rule Configuration</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_name">Rule Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+          <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_identifier">Identifier</label>
+          <input
+            type="text"
+            class="form-control"
+            name="identifier"
+            id="field_identifier"
+            data-cy="identifier"
+            formControlName="identifier"
+          />
+          <div *ngIf="editForm.get('identifier')!.invalid && (editForm.get('identifier')!.dirty || editForm.get('identifier')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('identifier')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_module">Module</label>
+          <input type="text" class="form-control" name="module" id="field_module" formControlName="module" readonly />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_eventType">Event Type</label>
+          <select class="form-control" id="field_eventType" data-cy="eventType" name="eventType" formControlName="eventType">
+            <option [ngValue]="null" selected></option>
+            <option *ngFor="let eventType of eventTypes" [ngValue]="eventType.value">{{ eventType.label }}</option>
+          </select>
+          <div *ngIf="editForm.get('eventType')!.invalid && (editForm.get('eventType')!.dirty || editForm.get('eventType')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('eventType')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <jhi-m21-ifrs16-lease-form-control
+          ngDefaultControl
+          formControlName="leaseContract"
+          [inputValue]="editForm.get('leaseContract')!.value"
+          (valueSelected)="updateLeaseContract($event)"
+          inputControlLabel="Lease Contract"
+        >
+          <option [ngValue]="editForm.get('leaseContract')!.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
+
+        <div class="row">
+          <div class="col-md-6">
+            <jhi-m21-account-category-form-control
+              ngDefaultControl
+              formControlName="debitAccountType"
+              [inputValue]="editForm.get('debitAccountType')!.value"
+              (valueSelected)="updateDebitAccountType($event)"
+              inputControlLabel="Debit Account Category"
+            >
+              <option [ngValue]="editForm.get('debitAccountType')!.value"></option>
+            </jhi-m21-account-category-form-control>
+          </div>
+          <div class="col-md-6">
+            <jhi-m21-account-category-form-control
+              ngDefaultControl
+              formControlName="creditAccountType"
+              [inputValue]="editForm.get('creditAccountType')!.value"
+              (valueSelected)="updateCreditAccountType($event)"
+              inputControlLabel="Credit Account Category"
+            >
+              <option [ngValue]="editForm.get('creditAccountType')!.value"></option>
+            </jhi-m21-account-category-form-control>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_varianceType">Variance Type</label>
+          <input type="text" class="form-control" id="field_varianceType" formControlName="varianceType" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_invoiceTiming">Invoice Timing</label>
+          <input type="text" class="form-control" id="field_invoiceTiming" formControlName="invoiceTiming" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_transactionContext">Transaction Context</label>
+          <select class="form-control" id="field_transactionContext" data-cy="transactionContext" name="transactionContext" formControlName="transactionContext">
+            <option [ngValue]="null" selected></option>
+            <option
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+              [ngValue]="placeholderOption.id === editForm.get('transactionContext')!.value?.id ? editForm.get('transactionContext')!.value : placeholderOption"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <h4>Posting Rule Templates</h4>
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addTemplate()">
+            <fa-icon icon="plus"></fa-icon>
+            <span>Add Template</span>
+          </button>
+        </div>
+
+        <div formArrayName="postingRuleTemplates">
+          <div
+            class="border rounded p-3 mb-3"
+            *ngFor="let templateCtrl of postingRuleTemplates.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <strong>Template {{ i + 1 }}</strong>
+              <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeTemplate(i)" [disabled]="postingRuleTemplates.length === 1">
+                <fa-icon icon="times"></fa-icon>
+                <span>Remove</span>
+              </button>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <label class="form-control-label">Debit Account</label>
+                <select class="form-control" formControlName="debitAccount">
+                  <option [ngValue]="null" selected></option>
+                  <option
+                    *ngFor="let accountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+                    [ngValue]="accountOption.id === templateCtrl.get('debitAccount')!.value?.id ? templateCtrl.get('debitAccount')!.value : accountOption"
+                  >
+                    {{ accountOption.accountNumber }} - {{ accountOption.accountName }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-control-label">Credit Account</label>
+                <select class="form-control" formControlName="creditAccount">
+                  <option [ngValue]="null" selected></option>
+                  <option
+                    *ngFor="let accountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+                    [ngValue]="accountOption.id === templateCtrl.get('creditAccount')!.value?.id ? templateCtrl.get('creditAccount')!.value : accountOption"
+                  >
+                    {{ accountOption.accountNumber }} - {{ accountOption.accountName }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col-md-8">
+                <label class="form-control-label">Line Description</label>
+                <input type="text" class="form-control" formControlName="lineDescription" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-control-label">Amount Multiplier</label>
+                <input type="number" step="0.000001" class="form-control" formControlName="amountMultiplier" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <h4>Posting Rule Conditions</h4>
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addCondition()">
+            <fa-icon icon="plus"></fa-icon>
+            <span>Add Condition</span>
+          </button>
+        </div>
+
+        <div formArrayName="postingRuleConditions">
+          <div
+            class="border rounded p-3 mb-3"
+            *ngFor="let conditionCtrl of postingRuleConditions.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <strong>Condition {{ i + 1 }}</strong>
+              <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeCondition(i)" [disabled]="postingRuleConditions.length === 1">
+                <fa-icon icon="times"></fa-icon>
+                <span>Remove</span>
+              </button>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <label class="form-control-label">Condition Key</label>
+                <input type="text" class="form-control" formControlName="conditionKey" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-control-label">Operator</label>
+                <select class="form-control" formControlName="conditionOperator">
+                  <option *ngFor="let operator of conditionOperators" [ngValue]="operator">{{ operator }}</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-control-label">Value</label>
+                <input type="text" class="form-control" formControlName="conditionValue" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save Posting Rule</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
