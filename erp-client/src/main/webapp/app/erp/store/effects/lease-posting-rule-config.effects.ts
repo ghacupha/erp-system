@@ -31,13 +31,14 @@ import {
 } from '../actions/lease-posting-rule-config.actions';
 import { ILeaseTemplate } from '../../erp-leases/lease-template/lease-template.model';
 import { IIFRS16LeaseContract } from '../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { ITransactionAccount } from '../../erp-accounts/transaction-account/transaction-account.model';
 
 @Injectable()
 export class LeasePostingRuleConfigEffects {
   loadLeaseTemplateSuggestions$ = createEffect(() =>
     this.actions$.pipe(
       ofType(leasePostingRuleLeaseContractSelected),
-      switchMap(({ leaseContract }) =>
+      switchMap(({ leaseContract, eventType }) =>
         this.leaseContractService.find(leaseContract.id!).pipe(
           switchMap((response: HttpResponse<IIFRS16LeaseContract>) => {
             const template = response.body?.leaseTemplate;
@@ -57,8 +58,7 @@ export class LeasePostingRuleConfigEffects {
             return this.leaseTemplateService.find(templateId).pipe(
               map((templateResponse: HttpResponse<ILeaseTemplate>) => {
                 const leaseTemplate = templateResponse.body ?? template;
-                const debitAccount = leaseTemplate?.leaseRecognitionDebitAccount ?? null;
-                const creditAccount = leaseTemplate?.leaseRecognitionCreditAccount ?? null;
+                const { debitAccount, creditAccount } = this.mapAccountsForEventType(leaseTemplate, eventType);
                 return leasePostingRuleSuggestionsUpdated({
                   suggestions: {
                     debitAccount,
@@ -87,4 +87,48 @@ export class LeasePostingRuleConfigEffects {
     protected leaseContractService: IFRS16LeaseContractService,
     protected leaseTemplateService: LeaseTemplateService
   ) {}
+
+  protected mapAccountsForEventType(
+    leaseTemplate: ILeaseTemplate | undefined,
+    eventType?: string | null
+  ): { debitAccount: ITransactionAccount | null; creditAccount: ITransactionAccount | null } {
+    if (!leaseTemplate || !eventType) {
+      return { debitAccount: null, creditAccount: null };
+    }
+
+    switch (eventType) {
+      case 'LEASE_LIABILITY_RECOGNITION':
+        return {
+          debitAccount: leaseTemplate.leaseRecognitionDebitAccount ?? null,
+          creditAccount: leaseTemplate.leaseRecognitionCreditAccount ?? null,
+        };
+      case 'LEASE_REPAYMENT':
+        return {
+          debitAccount: leaseTemplate.leaseRepaymentDebitAccount ?? null,
+          creditAccount: leaseTemplate.leaseRepaymentCreditAccount ?? null,
+        };
+      case 'LEASE_INTEREST_ACCRUAL':
+        return {
+          debitAccount: leaseTemplate.interestAccruedDebitAccount ?? null,
+          creditAccount: leaseTemplate.interestAccruedCreditAccount ?? null,
+        };
+      case 'LEASE_INTEREST_PAID_TRANSFER':
+        return {
+          debitAccount: leaseTemplate.interestPaidTransferDebitAccount ?? null,
+          creditAccount: leaseTemplate.interestPaidTransferCreditAccount ?? null,
+        };
+      case 'LEASE_ROU_RECOGNITION':
+        return {
+          debitAccount: leaseTemplate.rouRecognitionDebitAccount ?? null,
+          creditAccount: leaseTemplate.rouRecognitionCreditAccount ?? null,
+        };
+      case 'LEASE_ROU_AMORTIZATION':
+        return {
+          debitAccount: leaseTemplate.depreciationAccount ?? null,
+          creditAccount: leaseTemplate.accruedDepreciationAccount ?? null,
+        };
+      default:
+        return { debitAccount: null, creditAccount: null };
+    }
+  }
 }
