@@ -98,6 +98,7 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
     this.addCondition();
     this.loadRelationshipsOptions();
     this.registerLeaseContractListener();
+    this.registerEventTypeListener();
 
     this.store
       .select(selectLeasePostingRuleSuggestions)
@@ -106,8 +107,8 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
         if (!suggestions) {
           return;
         }
-        this.applyAccountSuggestions(suggestions.debitAccount ?? undefined, suggestions.creditAccount ?? undefined);
-        this.applyAccountTypeSuggestions(suggestions.debitAccountType ?? undefined, suggestions.creditAccountType ?? undefined);
+        this.applyAccountSuggestions(suggestions.debitAccount ?? null, suggestions.creditAccount ?? null);
+        this.applyAccountTypeSuggestions(suggestions.debitAccountType ?? null, suggestions.creditAccountType ?? null);
       });
 
     this.editForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
@@ -241,8 +242,23 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
       if (!selectedLease?.id) {
         return;
       }
-      this.store.dispatch(leasePostingRuleLeaseContractSelected({ leaseContract: selectedLease }));
+      this.store.dispatch(
+        leasePostingRuleLeaseContractSelected({
+          leaseContract: selectedLease,
+          eventType: this.editForm.get('eventType')?.value,
+        })
+      );
       this.applyLeaseContractCondition(selectedLease);
+    });
+  }
+
+  protected registerEventTypeListener(): void {
+    this.editForm.get('eventType')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(eventType => {
+      const leaseContract = this.editForm.get('leaseContract')?.value;
+      if (!leaseContract?.id) {
+        return;
+      }
+      this.store.dispatch(leasePostingRuleLeaseContractSelected({ leaseContract, eventType }));
     });
   }
 
@@ -261,28 +277,24 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected applyAccountSuggestions(debitAccount?: ITransactionAccount, creditAccount?: ITransactionAccount): void {
+  protected applyAccountSuggestions(debitAccount?: ITransactionAccount | null, creditAccount?: ITransactionAccount | null): void {
     if (this.postingRuleTemplates.length === 0) {
       this.addTemplate();
     }
     const firstTemplate = this.postingRuleTemplates.at(0);
-    if (debitAccount) {
-      firstTemplate.patchValue({ debitAccount });
-    }
-    if (creditAccount) {
-      firstTemplate.patchValue({ creditAccount });
-    }
+    firstTemplate.patchValue({
+      debitAccount: debitAccount ?? null,
+      creditAccount: creditAccount ?? null,
+    });
   }
 
   protected applyAccountTypeSuggestions(
-    debitAccountType?: ITransactionAccountCategory,
-    creditAccountType?: ITransactionAccountCategory
+    debitAccountType?: ITransactionAccountCategory | null,
+    creditAccountType?: ITransactionAccountCategory | null
   ): void {
-    if (debitAccountType) {
-      this.editForm.patchValue({ debitAccountType });
-    }
-    if (creditAccountType) {
-      this.editForm.patchValue({ creditAccountType });
-    }
+    this.editForm.patchValue({
+      debitAccountType: debitAccountType ?? null,
+      creditAccountType: creditAccountType ?? null,
+    });
   }
 }
