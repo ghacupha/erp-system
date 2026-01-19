@@ -7,6 +7,7 @@ Legacy TA rule screens (repayment, interest accrual, interest paid transfer, lea
 
 ## Configure a Posting Rule
 1. Open the posting rule administration page.
+   - For lease workflows, use the **Lease Posting Rule Config** screen to create the rule, templates, and conditions together.
 2. Create a new rule and set:
    - **Module**: `LEASE`.
    - **Event Type**: choose the lease event (e.g., `LEASE_REPAYMENT`, `LEASE_INTEREST_ACCRUAL`).
