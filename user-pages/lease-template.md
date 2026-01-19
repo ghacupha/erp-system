@@ -30,26 +30,11 @@ This option is designed for renewals, so you can reuse the same dealers, service
 3. Confirm the service outlet and main dealer fields are populated as expected.
 4. Save the contract.
 
-## Apply Template Defaults to Amortization Rules
-1. Open the TA Amortization Rules screen and start a new rule.
-2. Select an IFRS16 lease contract that already references a lease template.
-3. The Debit field prefills with the template’s depreciation account and the Credit field with the accrued depreciation account when those mappings exist.
-4. Adjust either account if needed, then save the rule.
+## Apply Template Defaults to Posting Rules
+Posting rules now replace the legacy TA rule screens. Use lease templates as a reference when selecting debit and credit accounts in posting templates.
 
-## Apply Template Defaults to Lease Interest Accrual Rules
-1. Open the Lease Interest Accrual Rule screen and start a new rule.
-2. Choose an IFRS16 lease contract that is linked to a lease template.
-3. When the template includes interest accrued accounts, the Debit and Credit fields auto-populate with those defaults.
-4. Override either account as needed before saving the rule.
-
-## Apply Template Defaults to Lease Recognition Rules
-1. Open the TA Lease Recognition Rules screen and start a new rule.
-2. Select an IFRS16 lease contract that references a lease template.
-3. The form retrieves the full lease template (even when the contract record only references it) so the Debit field auto-fills with the template’s lease recognition debit account and the Credit field with the lease recognition credit account when defined.
-4. Adjust either account if necessary, then save the rule.
-
-## Apply Template Defaults to ROU Recognition and Lease Repayment Rules
-1. Open the ROU Recognition or Lease Repayment rule screen and start a new rule.
-2. Select an IFRS16 lease contract that references a lease template.
-3. The form fetches the full lease template and pre-populates debit and credit accounts with the template mappings when available.
-4. Confirm the defaults or override them before saving.
+1. Open the posting rule administration page and start a new rule for module `LEASE`.
+2. Choose the event type (for example, `LEASE_REPAYMENT`, `LEASE_INTEREST_ACCRUAL`, `LEASE_INTEREST_PAID_TRANSFER`, `LEASE_LIABILITY_RECOGNITION`, `LEASE_ROU_RECOGNITION`, or `LEASE_ROU_AMORTIZATION`).
+3. Add a posting template and select the debit and credit accounts. Use the lease template's account mappings to pick the correct ledgers.
+4. Add optional conditions (such as `leaseContractId`) when rules should only apply to specific leases.
+5. Save the posting rule.

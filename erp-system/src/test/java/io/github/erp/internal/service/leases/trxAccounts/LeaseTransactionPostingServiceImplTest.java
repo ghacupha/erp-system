@@ -28,7 +28,6 @@ import io.github.erp.domain.FiscalMonth;
 import io.github.erp.domain.IFRS16LeaseContract;
 import io.github.erp.domain.LeaseLiabilityScheduleItem;
 import io.github.erp.domain.LeaseRepaymentPeriod;
-import io.github.erp.domain.TALeaseRepaymentRule;
 import io.github.erp.domain.TransactionAccount;
 import io.github.erp.domain.TransactionDetails;
 import io.github.erp.internal.repository.InternalApplicationUserRepository;
@@ -36,17 +35,15 @@ import io.github.erp.internal.repository.InternalLeaseLiabilityRepository;
 import io.github.erp.internal.repository.InternalLeaseLiabilityScheduleItemRepository;
 import io.github.erp.internal.repository.InternalRouDepreciationEntryRepository;
 import io.github.erp.internal.repository.InternalRouInitialDirectCostRepository;
-import io.github.erp.internal.repository.InternalTAAmortizationRuleRepository;
-import io.github.erp.internal.repository.InternalTAInterestPaidTransferRuleRepository;
-import io.github.erp.internal.repository.InternalTALeaseInterestAccrualRuleRepository;
-import io.github.erp.internal.repository.InternalTALeaseRecognitionRuleRepository;
-import io.github.erp.internal.repository.InternalTALeaseRepaymentRuleRepository;
 import io.github.erp.internal.repository.InternalTransactionDetailsRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import io.github.erp.internal.service.posting.PostingRuleEvaluator;
+import io.github.erp.internal.service.posting.PostingContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,27 +70,12 @@ class LeaseTransactionPostingServiceImplTest {
     private InternalRouDepreciationEntryRepository rouDepreciationEntryRepository;
 
     @Mock
-    private InternalTALeaseRepaymentRuleRepository leaseRepaymentRuleRepository;
-
-    @Mock
-    private InternalTALeaseInterestAccrualRuleRepository leaseInterestAccrualRuleRepository;
-
-    @Mock
-    private InternalTAInterestPaidTransferRuleRepository interestPaidTransferRuleRepository;
-
-    @Mock
-    private InternalTALeaseRecognitionRuleRepository leaseRecognitionRuleRepository;
-
-    @Mock
-    private InternalTAAmortizationRuleRepository amortizationRuleRepository;
-
-    @Mock
     private InternalApplicationUserRepository applicationUserRepository;
 
-    @Mock
-    private TransactionEntryIdGenerator transactionEntryIdGenerator;
-
     private LeaseTransactionPostingServiceImpl leaseTransactionPostingService;
+
+    @Mock
+    private PostingRuleEvaluator postingRuleEvaluator;
 
     @BeforeEach
     void setUp() {
@@ -103,13 +85,8 @@ class LeaseTransactionPostingServiceImplTest {
             leaseLiabilityRepository,
             rouInitialDirectCostRepository,
             rouDepreciationEntryRepository,
-            leaseRepaymentRuleRepository,
-            leaseInterestAccrualRuleRepository,
-            interestPaidTransferRuleRepository,
-            leaseRecognitionRuleRepository,
-            amortizationRuleRepository,
             applicationUserRepository,
-            transactionEntryIdGenerator
+            postingRuleEvaluator
         );
     }
 
@@ -125,15 +102,10 @@ class LeaseTransactionPostingServiceImplTest {
         leaseContract.setId(55L);
         leaseContract.setShortTitle("Lease-A");
 
-        TransactionAccount debitAccount = new TransactionAccount();
-        debitAccount.setId(1L);
-        TransactionAccount creditAccount = new TransactionAccount();
-        creditAccount.setId(2L);
-
-        TALeaseRepaymentRule rule = new TALeaseRepaymentRule();
-        rule.setLeaseContract(leaseContract);
-        rule.setDebit(debitAccount);
-        rule.setCredit(creditAccount);
+        TransactionAccount leaseLiability = new TransactionAccount();
+        leaseLiability.setId(1L);
+        TransactionAccount lessorsAccount = new TransactionAccount();
+        lessorsAccount.setId(2L);
 
         FiscalMonth fiscalMonth = new FiscalMonth();
         fiscalMonth.setFiscalMonthCode("YM2024-01");
@@ -147,28 +119,43 @@ class LeaseTransactionPostingServiceImplTest {
         scheduleItem.setLeasePeriod(leasePeriod);
         scheduleItem.setCashPayment(new BigDecimal("1200.00"));
 
+        TransactionDetails details = new TransactionDetails();
+        details.setEntryId(991L);
+        details.setPostingId(requisitionId);
+        details.setTransactionType("Lease Repayment");
+        details.setAmount(new BigDecimal("1200.00"));
+        details.setDescription("Lease-A 2024-01REPAYMENT");
+        details.setTransactionDate(LocalDate.of(2024, 1, 31));
+        details.setDebitAccount(leaseLiability);
+        details.setCreditAccount(lessorsAccount);
+
         when(applicationUserRepository.findById(postedById)).thenReturn(Optional.of(postedBy));
-        when(leaseRepaymentRuleRepository.findAll()).thenReturn(List.of(rule));
         when(leaseLiabilityScheduleItemRepository.findAllWithLeaseContractAndPeriod()).thenReturn(List.of(scheduleItem));
-        when(transactionEntryIdGenerator.nextEntryId()).thenReturn(991L);
+        when(postingRuleEvaluator.evaluate(any())).thenReturn(List.of(details));
         when(transactionDetailsRepository.saveAll(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         leaseTransactionPostingService.postLeaseRepayment(requisitionId, postedById);
+
+        ArgumentCaptor<PostingContext> contextCaptor = ArgumentCaptor.forClass(PostingContext.class);
+        verify(postingRuleEvaluator).evaluate(contextCaptor.capture());
+        PostingContext context = contextCaptor.getValue();
+        assertThat(context.getModule()).isEqualTo("LEASE");
+        assertThat(context.getEventType()).isEqualTo("LEASE_REPAYMENT");
+        assertThat(context.getTransactionType()).isEqualTo("Lease Repayment");
+        assertThat(context.getTransactionDate()).isEqualTo(LocalDate.of(2024, 1, 31));
+        assertThat(context.getDescription()).isEqualTo("Lease-A 2024-01REPAYMENT");
+        assertThat(context.getAmount()).isEqualByComparingTo("1200.00");
+        assertThat(context.getPostingId()).isEqualTo(requisitionId);
+        assertThat(context.getPostedBy()).isSameAs(postedBy);
+        assertThat(context.getAttributes()).containsEntry("leaseContractId", "55");
 
         ArgumentCaptor<List<TransactionDetails>> captor = ArgumentCaptor.forClass(List.class);
         verify(transactionDetailsRepository).saveAll(captor.capture());
 
         List<TransactionDetails> saved = captor.getValue();
         assertThat(saved).hasSize(1);
-        TransactionDetails details = saved.get(0);
-        assertThat(details.getEntryId()).isEqualTo(991L);
-        assertThat(details.getPostingId()).isEqualTo(requisitionId);
-        assertThat(details.getTransactionType()).isEqualTo("Lease Repayment");
-        assertThat(details.getAmount()).isEqualByComparingTo("1200.00");
-        assertThat(details.getDebitAccount()).isEqualTo(debitAccount);
-        assertThat(details.getCreditAccount()).isEqualTo(creditAccount);
-        assertThat(details.getDescription()).isEqualTo("Lease-A 2024-01REPAYMENT");
-        assertThat(details.getTransactionDate()).isEqualTo(LocalDate.of(2024, 1, 31));
-        assertThat(details.getCreatedAt()).isNotNull();
+        assertThat(saved.get(0)).isSameAs(details);
+        assertThat(saved.get(0).getDebitAccount()).isEqualTo(leaseLiability);
+        assertThat(saved.get(0).getCreditAccount()).isEqualTo(lessorsAccount);
     }
 }
