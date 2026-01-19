@@ -81,7 +81,7 @@ public interface InternalTACompilationRequestService {
     Page<TACompilationRequestDTO> search(String query, Pageable pageable);
 
     /**
-     * This method is used to launch actual postings of transactions into the transaction-details
+     * This method is used to lodge actual postings of transactions into the transaction-details
      * table, in their respective debit and credit account positions
      *
      * @param compilationRequest DTO containing the run parameters
