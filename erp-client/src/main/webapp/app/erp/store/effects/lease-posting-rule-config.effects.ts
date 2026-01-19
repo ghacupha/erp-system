@@ -89,7 +89,7 @@ export class LeasePostingRuleConfigEffects {
   ) {}
 
   protected mapAccountsForEventType(
-    leaseTemplate: ILeaseTemplate | undefined,
+    leaseTemplate: ILeaseTemplate | null | undefined,
     eventType?: string | null
   ): { debitAccount: ITransactionAccount | null; creditAccount: ITransactionAccount | null } {
     if (!leaseTemplate || !eventType) {
