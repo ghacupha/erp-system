@@ -1,9 +1,11 @@
-## Prefilling lease repayment rules from lease templates
+## Using lease templates to configure lease repayment posting rules
 
-1. Open the *Lease Repayment Rule* screen.
-2. Choose the lease contract to apply. If the lease is tied to a template, the form fetches it immediately.
-3. The *Debit* and *Credit* fields prefill with the template’s lease repayment accounts whenever they are available.
-4. If you prefer different ledgers, select alternative debit or credit accounts—the defaults are only a starting point.
-5. Finish the remaining required fields and save the rule.
+Lease repayment postings now use the posting rule engine. Configure them by creating a posting rule with the event type `LEASE_REPAYMENT`.
 
-**Tip:** When no template or repayment accounts exist on the selected lease, the fields stay unchanged so you can enter values manually.
+1. Open the posting rule administration page.
+2. Create a rule for module `LEASE` and event `LEASE_REPAYMENT`.
+3. Add a posting template and select the debit and credit accounts.
+4. If you use lease templates, reference the template's lease repayment accounts when selecting the debit and credit accounts.
+5. Add optional conditions (for example, `leaseContractId`) and save the rule.
+
+**Tip:** Legacy lease repayment rule forms are no longer required for posting. Use posting templates to define account mappings.

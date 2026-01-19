@@ -1,9 +1,11 @@
-## Using lease templates to prefill interest paid transfer rules
+## Using lease templates to configure interest paid transfer posting rules
 
-1. Open the *Interest Paid Transfer Rule* form.
-2. Choose the lease contract you want to map. If the lease is linked to a template, the UI retrieves that template.
-3. The *Debit* and *Credit* fields automatically populate with the template’s **Interest Paid Transfer** accounts.
-4. Review the suggested accounts. If a different mapping is required for this rule, select new debit or credit accounts—the prefill does not lock the fields.
-5. Complete the remaining fields (name, identifier, placeholders) and save.
+Interest paid transfer postings now use the posting rule engine. Configure them by creating a posting rule with the event type `LEASE_INTEREST_PAID_TRANSFER`.
 
-**Notes:** If the selected lease has no template or the template does not define transfer accounts, the debit and credit selections remain as-is so you can provide them manually.
+1. Open the posting rule administration page.
+2. Create a rule for module `LEASE` and event `LEASE_INTEREST_PAID_TRANSFER`.
+3. Add a posting template and select the debit and credit accounts.
+4. If you use lease templates, reference the template's interest paid transfer accounts when selecting the debit and credit accounts.
+5. Add optional conditions (for example, `leaseContractId`) and save the rule.
+
+**Notes:** Legacy interest paid transfer rule forms are no longer required for posting. Use posting templates to define account mappings.

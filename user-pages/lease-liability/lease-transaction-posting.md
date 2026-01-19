@@ -4,6 +4,8 @@
 
 Lease transaction posting turns lease schedules and recognition data into accounting entries. The system uses configured lease posting rules to resolve the debit and credit accounts and posts all eligible entries in bulk during the batch process.
 
+Legacy TA rule screens (repayment, interest accrual, interest paid transfer, lease recognition, ROU recognition, and amortization) are replaced by posting rules configured in the posting rule administration page.
+
 ## How to post schedule-based transactions
 
 1. Open the lease liability schedule batch view.
@@ -20,3 +22,5 @@ Lease transaction posting turns lease schedules and recognition data into accoun
 3. Review the posted entries for the requisition identifier.
 
 **Result:** Recognition and amortization postings appear as transaction details tied to the requisition, with the debit/credit accounts resolved from the configured rules.
+
+If a posting rule is missing or multiple rules match, the batch reports a configuration error so the rule set can be corrected before retrying.

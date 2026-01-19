@@ -59,29 +59,29 @@ class PostingRuleEvaluatorTest {
 
     @Test
     void evaluateBuildsTransactionDetailsFromTemplates() {
-        TransactionAccountPostingRule rule = new TransactionAccountPostingRule();
-        rule.setName("Lease repayment rule");
-        rule.setModule("LEASE");
-        rule.setEventType("LEASE_REPAYMENT");
+        TransactionAccountPostingRule leaseRepaymentRule = new TransactionAccountPostingRule();
+        leaseRepaymentRule.setName("Lease repayment rule");
+        leaseRepaymentRule.setModule("LEASE");
+        leaseRepaymentRule.setEventType("LEASE_REPAYMENT");
 
-        TransactionAccount debitAccount = new TransactionAccount().id(1L);
-        TransactionAccount creditAccount = new TransactionAccount().id(2L);
+        TransactionAccount leaseLiabilityAccount = new TransactionAccount().id(1L);
+        TransactionAccount lessorsAccount = new TransactionAccount().id(2L);
 
         TransactionAccountPostingRuleTemplate template = new TransactionAccountPostingRuleTemplate();
-        template.setDebitAccount(debitAccount);
-        template.setCreditAccount(creditAccount);
+        template.setDebitAccount(leaseLiabilityAccount);
+        template.setCreditAccount(lessorsAccount);
         template.setAmountMultiplier(BigDecimal.ONE);
-        template.setPostingRule(rule);
-        rule.setPostingRuleTemplates(Set.of(template));
+        template.setPostingRule(leaseRepaymentRule);
+        leaseRepaymentRule.setPostingRuleTemplates(Set.of(template));
 
         TransactionAccountPostingRuleCondition condition = new TransactionAccountPostingRuleCondition();
         condition.setConditionKey("leaseContractId");
         condition.setConditionOperator(PostingRuleConditionOperator.EQUALS);
         condition.setConditionValue("42");
-        condition.setPostingRule(rule);
-        rule.setPostingRuleConditions(Set.of(condition));
+        condition.setPostingRule(leaseRepaymentRule);
+        leaseRepaymentRule.setPostingRuleConditions(Set.of(condition));
 
-        when(postingRuleRepository.findByModuleAndEventTypeOrderByIdAsc("LEASE", "LEASE_REPAYMENT")).thenReturn(List.of(rule));
+        when(postingRuleRepository.findByModuleAndEventTypeOrderByIdAsc("LEASE", "LEASE_REPAYMENT")).thenReturn(List.of(leaseRepaymentRule));
         when(transactionEntryIdGenerator.nextEntryId()).thenReturn(100L);
 
         PostingContext context = PostingContext
@@ -102,8 +102,8 @@ class PostingRuleEvaluatorTest {
         assertThat(details).hasSize(1);
         TransactionDetails detail = details.get(0);
         assertThat(detail.getEntryId()).isEqualTo(100L);
-        assertThat(detail.getDebitAccount()).isSameAs(debitAccount);
-        assertThat(detail.getCreditAccount()).isSameAs(creditAccount);
+        assertThat(detail.getDebitAccount()).isSameAs(leaseLiabilityAccount);
+        assertThat(detail.getCreditAccount()).isSameAs(lessorsAccount);
         assertThat(detail.getAmount()).isEqualByComparingTo("100.00");
     }
 

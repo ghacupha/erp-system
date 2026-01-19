@@ -8,7 +8,7 @@
    - **Lease Number** – ERP lease identifier.
    - **Dealer** – main dealer on the lease contract.
    - **Narration** – booking ID plus lease title; copy this into the journal description.
-   - **Debit Account / Credit Account** – posting accounts derived from the TA lease interest accrual rule.
+   - **Debit Account / Credit Account** – posting accounts derived from the `LEASE_INTEREST_ACCRUAL` posting rule template.
    - **Interest Expense** – current month interest accrued.
    - **Cumulative (Annual)** – year-to-date interest (January to selected month).
    - **Cumulative (Up to last month)** – cumulative interest excluding the selected month (zero in January).

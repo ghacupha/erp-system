@@ -1,19 +1,17 @@
-# TA ROU Recognition Rule Auto-Population
+# ROU Recognition Posting Rule Guidance
 
 ## Purpose
-When you select a lease contract while creating or editing a TA Recognition ROU Rule, the
-system can automatically fill in the debit and credit accounts from the lease template.
-This ensures your recognition rule stays aligned with the lease setup.
+ROU recognition postings now use the posting rule engine. Use the lease template
+accounts to choose the debit and credit accounts when creating the posting rule templates.
+This keeps the ROU recognition postings aligned with the lease setup.
 
 ## How to Use
-1. Open the TA Recognition ROU Rule create or edit form.
-2. Choose a lease contract in the Lease Contract field.
-3. Review the Debit and Credit fields:
-   - If the lease template defines ROU recognition accounts, the fields will populate
-     automatically.
-   - If the template does not include these accounts, the fields remain unchanged and you
-     can select them manually.
+1. Open the posting rule administration page and create a rule for module `LEASE` with event `LEASE_ROU_RECOGNITION`.
+2. Choose a lease contract or reference the lease template to determine the correct accounts.
+3. Add a posting template and select the debit and credit accounts:
+   - If the lease template defines ROU recognition accounts, use those as the default selections.
+   - If the template does not include these accounts, select the appropriate ledgers manually.
 
 ## Tips
 - Ensure the lease template linked to the contract includes ROU recognition debit and
-  credit accounts to take advantage of auto-population.
+  credit accounts so the posting rule templates match the intended mappings.

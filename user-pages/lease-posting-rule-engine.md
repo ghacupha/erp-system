@@ -3,6 +3,8 @@
 ## Purpose
 Lease postings now use the posting rule engine. Posting rules define which debit and credit accounts are used for a specific lease event (repayment, interest accrual, liability recognition, and so on), along with optional conditions and amount multipliers.
 
+Legacy TA rule screens (repayment, interest accrual, interest paid transfer, lease recognition, ROU recognition, and amortization) are replaced by the posting rule engine for production posting.
+
 ## Configure a Posting Rule
 1. Open the posting rule administration page.
 2. Create a new rule and set:
@@ -16,6 +18,23 @@ Lease postings now use the posting rule engine. Posting rules define which debit
    - Optionally add an amount multiplier if the line should scale the posting amount.
    - Optionally supply a line description to override the posting description.
 5. Save the rule.
+
+## Replace Legacy Rules
+Use posting rules with the following event types to replace legacy rule screens:
+- `LEASE_REPAYMENT`
+- `LEASE_INTEREST_ACCRUAL`
+- `LEASE_INTEREST_PAID_TRANSFER`
+- `LEASE_LIABILITY_RECOGNITION`
+- `LEASE_ROU_RECOGNITION`
+- `LEASE_ROU_AMORTIZATION`
+
+Create one posting rule per event and mirror the debit/credit accounts from the legacy configurations in the posting templates.
+
+## Migrate Existing Configurations
+1. Export or note the debit/credit accounts from the legacy rule screens.
+2. Create the matching posting rules and templates in the posting rule administration page.
+3. Add conditions (such as `leaseContractId`) when rules are lease-specific.
+4. Run a posting batch to confirm the generated transaction details match expectations.
 
 ## Run Lease Posting
 When you post lease events, the system:
