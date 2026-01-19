@@ -47,6 +47,7 @@ import { TARecognitionROURuleFormState } from './reducers/ta-recognition-rou-rul
 import { TransactionAccountFormState } from './reducers/transaction-account-update-status.reducer';
 import { TransactionAccountReportDateSelectionState } from './reducers/transaction-account-report-date-selection.reducer';
 import { IFRS16LeaseContractReportState } from './reducers/ifrs16-lease-contract-report.reducer';
+import { LeasePostingRuleConfigState } from './reducers/lease-posting-rule-config.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -77,7 +78,8 @@ export interface State {
   taRecognitionRouRuleFormState: TARecognitionROURuleFormState,
   transactionAccountFormState: TransactionAccountFormState,
   transactionAccountReportDateSelectionState: TransactionAccountReportDateSelectionState,
-  ifrs16LeaseContractReportState: IFRS16LeaseContractReportState
+  ifrs16LeaseContractReportState: IFRS16LeaseContractReportState,
+  leasePostingRuleConfigState: LeasePostingRuleConfigState
 }
 
 export const initialState: State = {
@@ -295,5 +297,13 @@ export const initialState: State = {
   },
   ifrs16LeaseContractReportState: {
     selectedLeaseContractId: undefined,
+  },
+  leasePostingRuleConfigState: {
+    draft: {},
+    selectedLeaseContract: null,
+    suggestedDebitAccount: null,
+    suggestedCreditAccount: null,
+    suggestedDebitAccountType: null,
+    suggestedCreditAccountType: null,
   }
 }

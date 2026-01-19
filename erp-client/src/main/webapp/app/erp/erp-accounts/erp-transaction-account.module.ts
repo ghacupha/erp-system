@@ -166,6 +166,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
             import('./transaction-details/transaction-details.module').then(
               m => m.TransactionDetailsModule
             )
+        },
+        {
+          path: 'lease-posting-rule-config',
+          data: {
+            pageTitle: 'ERP | Lease Posting Rule Configuration',
+            authorities: ['ROLE_BOOK_KEEPING', 'ROLE_LEASES_MANAGER']
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-posting-rule-config/lease-posting-rule-config.module').then(
+              m => m.LeasePostingRuleConfigModule
+            )
         }
       ]
     )

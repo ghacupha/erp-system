@@ -59,6 +59,8 @@ import * as fromLeasePeriodIdSelectionUpdates from "./reducers/lease-period-sele
 import * as fromLeasePeriodReportPathUpdates from "./reducers/lease-period-report-path-selection.reducer";
 import { PrepaymentMarshallingWorkflowEffects } from './effects/prepayment-marshalling-workflow.effects';
 import * as fromIfrs16LeaseContractReport from "./reducers/ifrs16-lease-contract-report.reducer";
+import { LeasePostingRuleConfigEffects } from './effects/lease-posting-rule-config.effects';
+import * as fromLeasePostingRuleConfig from './reducers/lease-posting-rule-config.reducer';
 
 @NgModule({
   imports: [
@@ -71,6 +73,7 @@ import * as fromIfrs16LeaseContractReport from "./reducers/ifrs16-lease-contract
       RouModelMetadataWorkflowEffects,
       RouInitialDirectCostWorkflowEffects,
       LeaseTemplateWorkflowEffects,
+      LeasePostingRuleConfigEffects,
       DealerPaymentsEffects]),
     EffectsModule.forFeature([]),
     StoreModule.forRoot({}, {runtimeChecks: {
@@ -114,6 +117,7 @@ import * as fromIfrs16LeaseContractReport from "./reducers/ifrs16-lease-contract
     StoreModule.forFeature('leasePeriodIdSelection', fromLeasePeriodIdSelectionUpdates.leasePeriodIdSelectionStateReducer),
     StoreModule.forFeature('leasePeriodReportPath', fromLeasePeriodReportPathUpdates.leasePeriodReportPathSelectionStateReducer),
     StoreModule.forFeature('ifrs16LeaseContractReport', fromIfrs16LeaseContractReport.ifrs16LeaseContractReportStateReducer),
+    StoreModule.forFeature(fromLeasePostingRuleConfig.leasePostingRuleConfigFeatureKey, fromLeasePostingRuleConfig.leasePostingRuleConfigReducer),
   ],
   exports: [
     EffectsModule,
