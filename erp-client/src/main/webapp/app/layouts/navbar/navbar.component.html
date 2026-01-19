@@ -3412,6 +3412,18 @@
           <li>
             <a
               class="dropdown-item"
+              routerLink="lease-posting-rule-config"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Lease Posting Rule Config</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
               routerLink="ta-interest-paid-transfer-rule"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
