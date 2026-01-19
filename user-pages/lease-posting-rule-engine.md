@@ -20,6 +20,17 @@ Legacy TA rule screens (repayment, interest accrual, interest paid transfer, lea
    - Optionally supply a line description to override the posting description.
 5. Save the rule.
 
+## Template Suggestions by Event Type
+When you select a lease contract in the **Lease Posting Rule Config** screen, the form checks the lease template and suggests debit/credit accounts for the chosen **Event Type**. If the lease template does not define accounts for that event, the form clears any existing suggestions so you can choose the correct accounts manually.
+
+Use the event type to determine which template fields are used:
+- `LEASE_LIABILITY_RECOGNITION` → lease recognition debit/credit accounts.
+- `LEASE_REPAYMENT` → lease repayment debit/credit accounts.
+- `LEASE_INTEREST_ACCRUAL` → interest accrued debit/credit accounts.
+- `LEASE_INTEREST_PAID_TRANSFER` → interest paid transfer debit/credit accounts.
+- `LEASE_ROU_RECOGNITION` → ROU recognition debit/credit accounts.
+- `LEASE_ROU_AMORTIZATION` → depreciation and accrued depreciation accounts.
+
 ## Replace Legacy Rules
 Use posting rules with the following event types to replace legacy rule screens:
 - `LEASE_REPAYMENT`
