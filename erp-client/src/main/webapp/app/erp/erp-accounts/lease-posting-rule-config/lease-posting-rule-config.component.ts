@@ -17,8 +17,9 @@
 ///
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpResponse } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
@@ -52,12 +53,16 @@ import { selectLeasePostingRuleSuggestions } from '../../store/selectors/lease-p
 })
 export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
   isSaving = false;
+  isViewMode = false;
+  isEditMode = false;
+  isNewMode = false;
   leaseContractsCollection: IIFRS16LeaseContract[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   private lastSuggestedDebitAccount: ITransactionAccount | null = null;
   private lastSuggestedCreditAccount: ITransactionAccount | null = null;
   private lastSuggestedDebitAccountType: ITransactionAccountCategory | null = null;
   private lastSuggestedCreditAccountType: ITransactionAccountCategory | null = null;
+  private pendingLeaseContractId?: number;
 
   eventTypes = [
     { value: 'LEASE_LIABILITY_RECOGNITION', label: 'Lease Liability Recognition' },
@@ -71,6 +76,7 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
   conditionOperators = ['EQUALS', 'NOT_EQUALS', 'CONTAINS'];
 
   editForm = this.fb.group({
+    id: [],
     name: [null, [Validators.required]],
     identifier: [uuidv7(), [Validators.required]],
     module: [{ value: 'LEASE', disabled: true }, [Validators.required]],
@@ -92,12 +98,22 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
     protected postingRuleService: TransactionAccountPostingRuleService,
     protected leaseContractService: IFRS16LeaseContractService,
     protected placeholderService: PlaceholderService,
-    protected store: Store<State>
+    protected store: Store<State>,
+    protected activatedRoute: ActivatedRoute,
+    protected router: Router
   ) {}
 
   ngOnInit(): void {
-    this.addTemplate();
-    this.addCondition();
+    const mode = this.activatedRoute.snapshot.data['mode'];
+    this.isViewMode = mode === 'view';
+    this.isEditMode = mode === 'edit';
+    this.isNewMode = mode === 'new' || (!this.isViewMode && !this.isEditMode);
+    const ruleId = this.activatedRoute.snapshot.params['id'];
+    if (ruleId) {
+      this.loadPostingRule(Number(ruleId));
+    } else {
+      this.initializeNewForm();
+    }
     this.loadRelationshipsOptions();
     this.registerLeaseContractListener();
     this.registerEventTypeListener();
@@ -114,6 +130,9 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
       });
 
     this.editForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      if (this.isViewMode) {
+        return;
+      }
       this.store.dispatch(leasePostingRuleFormUpdated({ draft: this.createFromForm() }));
     });
   }
@@ -133,12 +152,7 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
   }
 
   addTemplate(): void {
-    const templateGroup = this.fb.group({
-      lineDescription: [],
-      amountMultiplier: [],
-      debitAccount: [null, Validators.required],
-      creditAccount: [null, Validators.required],
-    });
+    const templateGroup = this.createTemplateGroup();
     this.postingRuleTemplates.push(templateGroup);
   }
 
@@ -147,11 +161,7 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
   }
 
   addCondition(): void {
-    const conditionGroup = this.fb.group({
-      conditionKey: ['leaseContractId', Validators.required],
-      conditionOperator: ['EQUALS', Validators.required],
-      conditionValue: [null, Validators.required],
-    });
+    const conditionGroup = this.createConditionGroup();
     this.postingRuleConditions.push(conditionGroup);
   }
 
@@ -161,14 +171,16 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
 
   save(): void {
     this.isSaving = true;
-    this.postingRuleService.create(this.createFromForm()).subscribe({
+    const postingRule = this.createFromForm();
+    const request$ = postingRule.id ? this.postingRuleService.update(postingRule) : this.postingRuleService.create(postingRule);
+    request$.subscribe({
       next: () => this.onSaveSuccess(),
       error: () => this.onSaveError(),
     });
   }
 
   previousState(): void {
-    window.history.back();
+    this.router.navigate(['/lease-posting-rule-config']);
   }
 
   trackLeaseContractById(index: number, item: IIFRS16LeaseContract): number {
@@ -219,6 +231,7 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
   protected createFromForm(): ITransactionAccountPostingRule {
     return {
       ...new TransactionAccountPostingRule(),
+      id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
       identifier: this.editForm.get(['identifier'])!.value,
       module: 'LEASE',
@@ -236,7 +249,16 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
   protected loadRelationshipsOptions(): void {
     this.leaseContractService
       .query()
-      .subscribe((res: HttpResponse<IIFRS16LeaseContract[]>) => (this.leaseContractsCollection = res.body ?? []));
+      .subscribe((res: HttpResponse<IIFRS16LeaseContract[]>) => {
+        this.leaseContractsCollection = res.body ?? [];
+        if (this.pendingLeaseContractId) {
+          const selectedLease = this.leaseContractsCollection.find(contract => contract.id === this.pendingLeaseContractId);
+          if (selectedLease) {
+            this.editForm.patchValue({ leaseContract: selectedLease });
+            this.pendingLeaseContractId = undefined;
+          }
+        }
+      });
 
     this.placeholderService
       .query()
@@ -245,6 +267,9 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
 
   protected registerLeaseContractListener(): void {
     this.editForm.get('leaseContract')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(selectedLease => {
+      if (this.isViewMode) {
+        return;
+      }
       if (!selectedLease?.id) {
         return;
       }
@@ -260,11 +285,103 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
 
   protected registerEventTypeListener(): void {
     this.editForm.get('eventType')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(eventType => {
+      if (this.isViewMode) {
+        return;
+      }
       const leaseContract = this.editForm.get('leaseContract')?.value;
       if (!leaseContract?.id) {
         return;
       }
       this.store.dispatch(leasePostingRuleLeaseContractSelected({ leaseContract, eventType }));
+    });
+  }
+
+  protected initializeNewForm(): void {
+    this.postingRuleTemplates.clear();
+    this.postingRuleConditions.clear();
+    this.addTemplate();
+    this.addCondition();
+    if (this.isViewMode) {
+      this.editForm.disable({ emitEvent: false });
+    }
+  }
+
+  protected loadPostingRule(id: number): void {
+    this.postingRuleService.find(id).subscribe({
+      next: response => {
+        const postingRule = response.body;
+        if (!postingRule) {
+          return;
+        }
+        this.updateForm(postingRule);
+        if (this.isViewMode) {
+          this.editForm.disable({ emitEvent: false });
+        }
+      },
+      error: () => this.onSaveError(),
+    });
+  }
+
+  protected updateForm(postingRule: ITransactionAccountPostingRule): void {
+    this.editForm.patchValue({
+      id: postingRule.id,
+      name: postingRule.name,
+      identifier: postingRule.identifier,
+      module: postingRule.module ?? 'LEASE',
+      eventType: postingRule.eventType,
+      debitAccountType: postingRule.debitAccountType,
+      creditAccountType: postingRule.creditAccountType,
+      transactionContext: postingRule.transactionContext,
+      varianceType: postingRule.varianceType,
+      invoiceTiming: postingRule.invoiceTiming,
+    });
+
+    this.postingRuleTemplates.clear();
+    const templates = postingRule.postingRuleTemplates ?? [];
+    if (templates.length > 0) {
+      templates.forEach(template => this.postingRuleTemplates.push(this.createTemplateGroup(template)));
+    } else {
+      this.addTemplate();
+    }
+
+    this.postingRuleConditions.clear();
+    const conditions = postingRule.postingRuleConditions ?? [];
+    if (conditions.length > 0) {
+      conditions.forEach(condition => this.postingRuleConditions.push(this.createConditionGroup(condition)));
+    } else {
+      this.addCondition();
+    }
+
+    const leaseCondition = conditions.find(condition => condition.conditionKey === 'leaseContractId');
+    if (leaseCondition?.conditionValue) {
+      const leaseContractId = Number(leaseCondition.conditionValue);
+      if (!Number.isNaN(leaseContractId)) {
+        const selectedLease = this.leaseContractsCollection.find(contract => contract.id === leaseContractId);
+        if (selectedLease) {
+          this.editForm.patchValue({ leaseContract: selectedLease });
+        } else {
+          this.pendingLeaseContractId = leaseContractId;
+        }
+      }
+    }
+  }
+
+  protected createTemplateGroup(template?: ITransactionAccountPostingRuleTemplate): FormGroup {
+    return this.fb.group({
+      id: [template?.id ?? null],
+      lineDescription: [template?.lineDescription ?? null],
+      amountMultiplier: [template?.amountMultiplier ?? null],
+      debitAccount: [template?.debitAccount ?? null, Validators.required],
+      creditAccount: [template?.creditAccount ?? null, Validators.required],
+    });
+  }
+
+  protected createConditionGroup(condition?: ITransactionAccountPostingRuleCondition): FormGroup {
+    return this.fb.group({
+      id: [condition?.id ?? null],
+      conditionKey: [condition?.conditionKey ?? 'leaseContractId', Validators.required],
+      conditionOperator: [condition?.conditionOperator ?? 'EQUALS', Validators.required],
+      conditionValue: [condition?.conditionValue ?? null, Validators.required],
     });
   }
 
