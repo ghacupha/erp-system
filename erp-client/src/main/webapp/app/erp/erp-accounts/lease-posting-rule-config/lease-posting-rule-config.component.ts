@@ -34,7 +34,6 @@ import {
 import { IIFRS16LeaseContract } from '../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { IFRS16LeaseContractService } from '../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 import { ITransactionAccount } from '../transaction-account/transaction-account.model';
-import { TransactionAccountService } from '../transaction-account/service/transaction-account.service';
 import { ITransactionAccountCategory } from 'app/entities/accounting/transaction-account-category/transaction-account-category.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { PlaceholderService } from '../../erp-pages/placeholder/service/placeholder.service';
@@ -43,6 +42,7 @@ import {
   leasePostingRuleFormUpdated,
   leasePostingRuleLeaseContractSelected,
   leasePostingRuleResetDraft,
+  leasePostingRuleTemplateAccountSelected,
 } from '../../store/actions/lease-posting-rule-config.actions';
 import { selectLeasePostingRuleSuggestions } from '../../store/selectors/lease-posting-rule-config.selectors';
 
@@ -53,7 +53,6 @@ import { selectLeasePostingRuleSuggestions } from '../../store/selectors/lease-p
 export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
   isSaving = false;
   leaseContractsCollection: IIFRS16LeaseContract[] = [];
-  transactionAccountsSharedCollection: ITransactionAccount[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
   eventTypes = [
@@ -88,7 +87,6 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
     protected fb: FormBuilder,
     protected postingRuleService: TransactionAccountPostingRuleService,
     protected leaseContractService: IFRS16LeaseContractService,
-    protected transactionAccountService: TransactionAccountService,
     protected placeholderService: PlaceholderService,
     protected store: Store<State>
   ) {}
@@ -173,10 +171,6 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
     return item.id!;
   }
 
-  trackTransactionAccountById(index: number, item: ITransactionAccount): number {
-    return item.id!;
-  }
-
   trackAccountCategoryById(index: number, item: ITransactionAccountCategory): number {
     return item.id!;
   }
@@ -195,6 +189,18 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
 
   updateCreditAccountType(accountType: ITransactionAccountCategory): void {
     this.editForm.patchValue({ creditAccountType: accountType });
+  }
+
+  updateTemplateDebitAccount(index: number, account: ITransactionAccount | null): void {
+    const templateGroup = this.postingRuleTemplates.at(index);
+    templateGroup.patchValue({ debitAccount: account });
+    this.store.dispatch(leasePostingRuleTemplateAccountSelected({ debitAccount: account ?? null }));
+  }
+
+  updateTemplateCreditAccount(index: number, account: ITransactionAccount | null): void {
+    const templateGroup = this.postingRuleTemplates.at(index);
+    templateGroup.patchValue({ creditAccount: account });
+    this.store.dispatch(leasePostingRuleTemplateAccountSelected({ creditAccount: account ?? null }));
   }
 
   protected onSaveSuccess(): void {
@@ -227,10 +233,6 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
     this.leaseContractService
       .query()
       .subscribe((res: HttpResponse<IIFRS16LeaseContract[]>) => (this.leaseContractsCollection = res.body ?? []));
-
-    this.transactionAccountService
-      .query()
-      .subscribe((res: HttpResponse<ITransactionAccount[]>) => (this.transactionAccountsSharedCollection = res.body ?? []));
 
     this.placeholderService
       .query()
@@ -282,10 +284,12 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
       this.addTemplate();
     }
     const firstTemplate = this.postingRuleTemplates.at(0);
+    const currentDebit = firstTemplate.get('debitAccount')?.value;
+    const currentCredit = firstTemplate.get('creditAccount')?.value;
     firstTemplate.patchValue(
       {
-        debitAccount: debitAccount ?? null,
-        creditAccount: creditAccount ?? null,
+        debitAccount: currentDebit ?? debitAccount ?? null,
+        creditAccount: currentCredit ?? creditAccount ?? null,
       },
       { emitEvent: false }
     );
