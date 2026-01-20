@@ -20,3 +20,4 @@ Use the Lease Posting Rule Configuration page to create contract-specific postin
 - If you overwrite the suggested accounts, the account categories update automatically to match the new selection.
 - Changing either the **Event Type** or **Lease Contract** refreshes the template debit and credit account suggestions and account categories.
 - If you manually override the suggested accounts, the form keeps your selection even when you change the event type or lease contract.
+- If a newly saved posting rule does not appear immediately in search results, wait a moment for indexing to complete and retry the search.
