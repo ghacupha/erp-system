@@ -9,8 +9,9 @@
 2. Select the lease contract to configure.
 3. Review the suggested debit/credit accounts pulled from the lease template.
 4. Confirm the default `leaseContractId` condition and adjust if needed.
-5. Add additional templates or conditions where required.
-6. Save the posting rule.
+5. Update the rule name or other fields and confirm the form remains responsive.
+6. Add additional templates or conditions where required.
+7. Save the posting rule.
 
 **Expected outcome:**
 A posting rule is created for the selected lease contract, including templates and conditions that drive the lease posting engine.
