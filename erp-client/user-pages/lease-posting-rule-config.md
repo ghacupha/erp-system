@@ -1,0 +1,16 @@
+# Lease Posting Rule Configuration
+
+## Purpose
+The Lease Posting Rule Configuration screen lets you define contract-specific posting rules with templates and conditions in one place.
+
+## Steps
+1. Open the page from **Ledgers → Posting Rules**.
+2. Enter the **Rule Name** and review the identifier.
+3. Select the **Event Type** and **Lease Contract**.
+4. Confirm suggested debit/credit accounts and account categories.
+5. Adjust templates or conditions if needed.
+6. Save the posting rule.
+
+## What to expect
+- The form remains responsive while you edit fields such as the rule name.
+- Suggestions from the lease template update only the relevant account fields.
