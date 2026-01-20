@@ -282,19 +282,25 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
       this.addTemplate();
     }
     const firstTemplate = this.postingRuleTemplates.at(0);
-    firstTemplate.patchValue({
-      debitAccount: debitAccount ?? null,
-      creditAccount: creditAccount ?? null,
-    });
+    firstTemplate.patchValue(
+      {
+        debitAccount: debitAccount ?? null,
+        creditAccount: creditAccount ?? null,
+      },
+      { emitEvent: false }
+    );
   }
 
   protected applyAccountTypeSuggestions(
     debitAccountType?: ITransactionAccountCategory | null,
     creditAccountType?: ITransactionAccountCategory | null
   ): void {
-    this.editForm.patchValue({
-      debitAccountType: debitAccountType ?? null,
-      creditAccountType: creditAccountType ?? null,
-    });
+    this.editForm.patchValue(
+      {
+        debitAccountType: debitAccountType ?? null,
+        creditAccountType: creditAccountType ?? null,
+      },
+      { emitEvent: false }
+    );
   }
 }
