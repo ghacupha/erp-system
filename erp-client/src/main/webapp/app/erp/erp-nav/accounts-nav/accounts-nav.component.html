@@ -45,6 +45,18 @@
         <li>
           <a
             class="dropdown-item"
+            routerLink="lease-posting-rule-config"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="navToAccountReportItems()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Posting Rules</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
             routerLink="transaction-account"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
