@@ -18,4 +18,5 @@ Use the Lease Posting Rule Configuration page to create contract-specific postin
 - Editing fields such as the rule name should remain responsive; if you update suggestions, the form will not overwrite your in-progress edits.
 - Leave the module as **LEASE** to ensure the posting rule aligns with lease workflows.
 - If you overwrite the suggested accounts, the account categories update automatically to match the new selection.
-- Changing either the **Event Type** or **Lease Contract** refreshes the template debit and credit account suggestions.
+- Changing either the **Event Type** or **Lease Contract** refreshes the template debit and credit account suggestions and account categories.
+- If you manually override the suggested accounts, the form keeps your selection even when you change the event type or lease contract.

@@ -54,6 +54,10 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
   isSaving = false;
   leaseContractsCollection: IIFRS16LeaseContract[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  private lastSuggestedDebitAccount: ITransactionAccount | null = null;
+  private lastSuggestedCreditAccount: ITransactionAccount | null = null;
+  private lastSuggestedDebitAccountType: ITransactionAccountCategory | null = null;
+  private lastSuggestedCreditAccountType: ITransactionAccountCategory | null = null;
 
   eventTypes = [
     { value: 'LEASE_LIABILITY_RECOGNITION', label: 'Lease Liability Recognition' },
@@ -286,25 +290,55 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
     const firstTemplate = this.postingRuleTemplates.at(0);
     const currentDebit = firstTemplate.get('debitAccount')?.value;
     const currentCredit = firstTemplate.get('creditAccount')?.value;
+    const shouldUpdateDebit = !currentDebit || this.isSameAccount(currentDebit, this.lastSuggestedDebitAccount);
+    const shouldUpdateCredit = !currentCredit || this.isSameAccount(currentCredit, this.lastSuggestedCreditAccount);
     firstTemplate.patchValue(
       {
-        debitAccount: currentDebit ?? debitAccount ?? null,
-        creditAccount: currentCredit ?? creditAccount ?? null,
+        debitAccount: shouldUpdateDebit ? debitAccount ?? null : currentDebit,
+        creditAccount: shouldUpdateCredit ? creditAccount ?? null : currentCredit,
       },
       { emitEvent: false }
     );
+    this.lastSuggestedDebitAccount = debitAccount ?? null;
+    this.lastSuggestedCreditAccount = creditAccount ?? null;
   }
 
   protected applyAccountTypeSuggestions(
     debitAccountType?: ITransactionAccountCategory | null,
     creditAccountType?: ITransactionAccountCategory | null
   ): void {
+    const currentDebitType = this.editForm.get('debitAccountType')?.value;
+    const currentCreditType = this.editForm.get('creditAccountType')?.value;
+    const shouldUpdateDebit = !currentDebitType || this.isSameAccountType(currentDebitType, this.lastSuggestedDebitAccountType);
+    const shouldUpdateCredit = !currentCreditType || this.isSameAccountType(currentCreditType, this.lastSuggestedCreditAccountType);
     this.editForm.patchValue(
       {
-        debitAccountType: debitAccountType ?? null,
-        creditAccountType: creditAccountType ?? null,
+        debitAccountType: shouldUpdateDebit ? debitAccountType ?? null : currentDebitType,
+        creditAccountType: shouldUpdateCredit ? creditAccountType ?? null : currentCreditType,
       },
       { emitEvent: false }
     );
+    this.lastSuggestedDebitAccountType = debitAccountType ?? null;
+    this.lastSuggestedCreditAccountType = creditAccountType ?? null;
+  }
+
+  protected isSameAccount(first?: ITransactionAccount | null, second?: ITransactionAccount | null): boolean {
+    if (!first && !second) {
+      return true;
+    }
+    if (!first || !second) {
+      return false;
+    }
+    return first.id === second.id;
+  }
+
+  protected isSameAccountType(first?: ITransactionAccountCategory | null, second?: ITransactionAccountCategory | null): boolean {
+    if (!first && !second) {
+      return true;
+    }
+    if (!first || !second) {
+      return false;
+    }
+    return first.id === second.id;
   }
 }
