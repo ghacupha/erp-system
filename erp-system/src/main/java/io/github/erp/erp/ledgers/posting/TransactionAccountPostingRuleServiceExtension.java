@@ -137,7 +137,7 @@ public class TransactionAccountPostingRuleServiceExtension implements Transactio
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
         if (ids.isEmpty()) {
-            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+            return new PageImpl<>(Collections.emptyList(), pageable, searchPage.getTotalElements());
         }
 
         Map<Long, TransactionAccountPostingRule> entitiesById = new HashMap<>();
@@ -151,7 +151,7 @@ public class TransactionAccountPostingRuleServiceExtension implements Transactio
             }
         }
 
-        return new PageImpl<>(results, pageable, results.size());
+        return new PageImpl<>(results, pageable, searchPage.getTotalElements());
     }
 
     private TransactionAccountPostingRuleIndexMessage buildIndexMessage(

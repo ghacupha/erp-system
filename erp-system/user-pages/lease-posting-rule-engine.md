@@ -27,3 +27,7 @@ If no rule matches or a rule has no templates, the posting run will report a con
 
 ## Avoid Overlapping Rules
 The posting engine expects exactly one rule to match a given module/event context. If multiple rules match, the posting run will stop with an error that lists the conflicting rules. Review rule conditions and deactivate or refine overlaps before retrying the posting.
+
+## Search and pagination
+- The posting rule search uses pagination. Scroll or load more results to see additional matches beyond the first page.
+- Results that were removed from the database are filtered out even if they briefly remain in the search index.
