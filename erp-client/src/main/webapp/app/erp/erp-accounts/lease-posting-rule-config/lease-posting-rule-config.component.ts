@@ -284,10 +284,12 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
       this.addTemplate();
     }
     const firstTemplate = this.postingRuleTemplates.at(0);
+    const currentDebit = firstTemplate.get('debitAccount')?.value;
+    const currentCredit = firstTemplate.get('creditAccount')?.value;
     firstTemplate.patchValue(
       {
-        debitAccount: debitAccount ?? null,
-        creditAccount: creditAccount ?? null,
+        debitAccount: currentDebit ?? debitAccount ?? null,
+        creditAccount: currentCredit ?? creditAccount ?? null,
       },
       { emitEvent: false }
     );
