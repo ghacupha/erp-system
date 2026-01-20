@@ -20,7 +20,21 @@
 <div class="row justify-content-center">
   <div class="col-10">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-lease-posting-rule-config-heading" data-cy="LeasePostingRuleConfigHeading">Lease Posting Rule Configuration</h2>
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 id="jhi-lease-posting-rule-config-heading" data-cy="LeasePostingRuleConfigHeading">
+          Lease Posting Rule Configuration
+        </h2>
+        <div class="btn-group" *ngIf="isViewMode">
+          <button type="button" class="btn btn-outline-secondary" (click)="previousState()">
+            <fa-icon icon="arrow-left"></fa-icon>
+            <span>Back to List</span>
+          </button>
+          <button type="button" class="btn btn-primary" [routerLink]="['/lease-posting-rule-config', editForm.get('id')?.value, 'edit']">
+            <fa-icon icon="pencil-alt"></fa-icon>
+            <span>Edit</span>
+          </button>
+        </div>
+      </div>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
@@ -126,7 +140,7 @@
       <div class="mt-4">
         <div class="d-flex justify-content-between align-items-center">
           <h4>Posting Rule Templates</h4>
-          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addTemplate()">
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addTemplate()" *ngIf="!isViewMode">
             <fa-icon icon="plus"></fa-icon>
             <span>Add Template</span>
           </button>
@@ -140,7 +154,12 @@
           >
             <div class="d-flex justify-content-between align-items-center mb-2">
               <strong>Template {{ i + 1 }}</strong>
-              <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeTemplate(i)" [disabled]="postingRuleTemplates.length === 1">
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm"
+                (click)="removeTemplate(i)"
+                [disabled]="postingRuleTemplates.length === 1 || isViewMode"
+              >
                 <fa-icon icon="times"></fa-icon>
                 <span>Remove</span>
               </button>
@@ -188,7 +207,7 @@
       <div class="mt-4">
         <div class="d-flex justify-content-between align-items-center">
           <h4>Posting Rule Conditions</h4>
-          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addCondition()">
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addCondition()" *ngIf="!isViewMode">
             <fa-icon icon="plus"></fa-icon>
             <span>Add Condition</span>
           </button>
@@ -202,7 +221,12 @@
           >
             <div class="d-flex justify-content-between align-items-center mb-2">
               <strong>Condition {{ i + 1 }}</strong>
-              <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeCondition(i)" [disabled]="postingRuleConditions.length === 1">
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm"
+                (click)="removeCondition(i)"
+                [disabled]="postingRuleConditions.length === 1 || isViewMode"
+              >
                 <fa-icon icon="times"></fa-icon>
                 <span>Remove</span>
               </button>
@@ -228,7 +252,7 @@
         </div>
       </div>
 
-      <div class="mt-4">
+      <div class="mt-4" *ngIf="!isViewMode">
         <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
           <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
         </button>

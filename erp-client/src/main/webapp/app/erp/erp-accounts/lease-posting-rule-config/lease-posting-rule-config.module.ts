@@ -20,10 +20,12 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from 'app/shared/shared.module';
 import { ErpCommonModule } from 'app/erp/erp-common/erp-common.module';
 import { LeasePostingRuleConfigComponent } from './lease-posting-rule-config.component';
+import { LeasePostingRuleConfigListComponent } from './list/lease-posting-rule-config-list.component';
+import { LeasePostingRuleConfigDeleteDialogComponent } from './delete/lease-posting-rule-config-delete-dialog.component';
 import { LeasePostingRuleConfigRoutingModule } from './route/lease-posting-rule-config-routing.module';
 
 @NgModule({
   imports: [SharedModule, ErpCommonModule, LeasePostingRuleConfigRoutingModule],
-  declarations: [LeasePostingRuleConfigComponent],
+  declarations: [LeasePostingRuleConfigComponent, LeasePostingRuleConfigListComponent, LeasePostingRuleConfigDeleteDialogComponent],
 })
 export class LeasePostingRuleConfigModule {}

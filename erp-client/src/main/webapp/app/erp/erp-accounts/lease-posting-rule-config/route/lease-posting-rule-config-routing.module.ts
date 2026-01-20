@@ -20,14 +20,46 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { LeasePostingRuleConfigComponent } from '../lease-posting-rule-config.component';
+import { LeasePostingRuleConfigListComponent } from '../list/lease-posting-rule-config-list.component';
 
 const leasePostingRuleConfigRoute: Routes = [
   {
     path: '',
+    component: LeasePostingRuleConfigListComponent,
+    data: {
+      pageTitle: 'ERP | Lease Posting Rule Configuration',
+      defaultSort: 'id,asc',
+      authorities: ['ROLE_BOOK_KEEPING', 'ROLE_LEASES_MANAGER'],
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'new',
     component: LeasePostingRuleConfigComponent,
     data: {
       pageTitle: 'ERP | Lease Posting Rule Configuration',
       authorities: ['ROLE_BOOK_KEEPING', 'ROLE_LEASES_MANAGER'],
+      mode: 'new',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: ':id/view',
+    component: LeasePostingRuleConfigComponent,
+    data: {
+      pageTitle: 'ERP | Lease Posting Rule Configuration',
+      authorities: ['ROLE_BOOK_KEEPING', 'ROLE_LEASES_MANAGER'],
+      mode: 'view',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: ':id/edit',
+    component: LeasePostingRuleConfigComponent,
+    data: {
+      pageTitle: 'ERP | Lease Posting Rule Configuration',
+      authorities: ['ROLE_BOOK_KEEPING', 'ROLE_LEASES_MANAGER'],
+      mode: 'edit',
     },
     canActivate: [UserRouteAccessService],
   },
