@@ -31,12 +31,35 @@ export const selectLeasePostingRuleDraft = createSelector(
   state => state.draft
 );
 
-export const selectLeasePostingRuleSuggestions = createSelector(
+export const selectLeasePostingRuleSuggestedDebitAccount = createSelector(
   selectLeasePostingRuleConfigState,
-  state => ({
-    debitAccount: state.suggestedDebitAccount,
-    creditAccount: state.suggestedCreditAccount,
-    debitAccountType: state.suggestedDebitAccountType,
-    creditAccountType: state.suggestedCreditAccountType,
+  state => state.suggestedDebitAccount
+);
+
+export const selectLeasePostingRuleSuggestedCreditAccount = createSelector(
+  selectLeasePostingRuleConfigState,
+  state => state.suggestedCreditAccount
+);
+
+export const selectLeasePostingRuleSuggestedDebitAccountType = createSelector(
+  selectLeasePostingRuleConfigState,
+  state => state.suggestedDebitAccountType
+);
+
+export const selectLeasePostingRuleSuggestedCreditAccountType = createSelector(
+  selectLeasePostingRuleConfigState,
+  state => state.suggestedCreditAccountType
+);
+
+export const selectLeasePostingRuleSuggestions = createSelector(
+  selectLeasePostingRuleSuggestedDebitAccount,
+  selectLeasePostingRuleSuggestedCreditAccount,
+  selectLeasePostingRuleSuggestedDebitAccountType,
+  selectLeasePostingRuleSuggestedCreditAccountType,
+  (debitAccount, creditAccount, debitAccountType, creditAccountType) => ({
+    debitAccount,
+    creditAccount,
+    debitAccountType,
+    creditAccountType,
   })
 );

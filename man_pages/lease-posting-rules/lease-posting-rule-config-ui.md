@@ -28,7 +28,9 @@ This makes it possible to define rules per contract and keep them in the unified
 - **NgRx draft synchronization**: The form dispatches draft updates to keep rule, template, and condition data in a single store payload.
 - **Lease template suggestions**: Reuses lease template debit/credit accounts to reduce manual configuration errors.
 - **Lease contract condition**: Defaults to `leaseContractId` so that posting rules remain per-contract without needing separate entities.
+- **Suggestion patch isolation**: Suggestions are patched into the form without emitting value-change events, and selector inputs are narrowed to avoid emitting on unrelated draft updates. This prevents a feedback loop that could lock the UI when a user edits a field.
 
 ## Notes
 - The UI intentionally limits module selection to `LEASE` to avoid cross-module errors.
 - Posting rule templates and conditions are sent as nested payloads for persistence in one request.
+- Form updates tied to suggestions are intentionally quiet so user edits remain responsive.
