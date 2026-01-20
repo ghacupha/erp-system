@@ -20,7 +20,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 
 import { IFRS16LeaseContractService } from '../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 import { LeaseTemplateService } from '../../erp-leases/lease-template/service/lease-template.service';
@@ -28,10 +29,13 @@ import {
   leasePostingRuleLeaseContractSelected,
   leasePostingRuleSuggestionsFailed,
   leasePostingRuleSuggestionsUpdated,
+  leasePostingRuleTemplateAccountSelected,
 } from '../actions/lease-posting-rule-config.actions';
 import { ILeaseTemplate } from '../../erp-leases/lease-template/lease-template.model';
 import { IIFRS16LeaseContract } from '../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { ITransactionAccount } from '../../erp-accounts/transaction-account/transaction-account.model';
+import { selectLeasePostingRuleSuggestions } from '../selectors/lease-posting-rule-config.selectors';
+import { State } from '../global-store.definition';
 
 @Injectable()
 export class LeasePostingRuleConfigEffects {
@@ -82,10 +86,26 @@ export class LeasePostingRuleConfigEffects {
     )
   );
 
+  updateAccountTypeSuggestions$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(leasePostingRuleTemplateAccountSelected),
+      withLatestFrom(this.store.select(selectLeasePostingRuleSuggestions)),
+      map(([{ debitAccount, creditAccount }, suggestions]) =>
+        leasePostingRuleSuggestionsUpdated({
+          suggestions: {
+            debitAccountType: debitAccount ? debitAccount.accountCategory ?? null : suggestions.debitAccountType ?? null,
+            creditAccountType: creditAccount ? creditAccount.accountCategory ?? null : suggestions.creditAccountType ?? null,
+          },
+        })
+      )
+    )
+  );
+
   constructor(
     protected actions$: Actions,
     protected leaseContractService: IFRS16LeaseContractService,
-    protected leaseTemplateService: LeaseTemplateService
+    protected leaseTemplateService: LeaseTemplateService,
+    protected store: Store<State>
   ) {}
 
   protected mapAccountsForEventType(
