@@ -148,28 +148,26 @@
 
             <div class="row">
               <div class="col-md-6">
-                <label class="form-control-label">Debit Account</label>
-                <select class="form-control" formControlName="debitAccount">
-                  <option [ngValue]="null" selected></option>
-                  <option
-                    *ngFor="let accountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-                    [ngValue]="accountOption.id === templateCtrl.get('debitAccount')!.value?.id ? templateCtrl.get('debitAccount')!.value : accountOption"
-                  >
-                    {{ accountOption.accountNumber }} - {{ accountOption.accountName }}
-                  </option>
-                </select>
+                <jhi-m21-transaction-account-form-control
+                  ngDefaultControl
+                  formControlName="debitAccount"
+                  [inputValue]="templateCtrl.get('debitAccount')!.value"
+                  (valueSelected)="updateTemplateDebitAccount(i, $event)"
+                  inputControlLabel="Debit Account"
+                >
+                  <option [ngValue]="templateCtrl.get('debitAccount')!.value"></option>
+                </jhi-m21-transaction-account-form-control>
               </div>
               <div class="col-md-6">
-                <label class="form-control-label">Credit Account</label>
-                <select class="form-control" formControlName="creditAccount">
-                  <option [ngValue]="null" selected></option>
-                  <option
-                    *ngFor="let accountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-                    [ngValue]="accountOption.id === templateCtrl.get('creditAccount')!.value?.id ? templateCtrl.get('creditAccount')!.value : accountOption"
-                  >
-                    {{ accountOption.accountNumber }} - {{ accountOption.accountName }}
-                  </option>
-                </select>
+                <jhi-m21-transaction-account-form-control
+                  ngDefaultControl
+                  formControlName="creditAccount"
+                  [inputValue]="templateCtrl.get('creditAccount')!.value"
+                  (valueSelected)="updateTemplateCreditAccount(i, $event)"
+                  inputControlLabel="Credit Account"
+                >
+                  <option [ngValue]="templateCtrl.get('creditAccount')!.value"></option>
+                </jhi-m21-transaction-account-form-control>
               </div>
             </div>
 

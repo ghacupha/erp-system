@@ -32,6 +32,11 @@ export const leasePostingRuleLeaseContractSelected = createAction(
   props<{ leaseContract: IIFRS16LeaseContract; eventType?: string | null }>()
 );
 
+export const leasePostingRuleTemplateAccountSelected = createAction(
+  '[LeasePostingRule Form] Template account selected',
+  props<{ debitAccount?: ITransactionAccount | null; creditAccount?: ITransactionAccount | null }>()
+);
+
 export const leasePostingRuleSuggestionsUpdated = createAction(
   '[LeasePostingRule Effects] Lease posting rule suggestions updated',
   props<{

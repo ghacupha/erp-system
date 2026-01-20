@@ -60,10 +60,12 @@ export const leasePostingRuleConfigReducer = createReducer(
   })),
   on(leasePostingRuleSuggestionsUpdated, (state, { suggestions }) => ({
     ...state,
-    suggestedDebitAccount: suggestions.debitAccount ?? null,
-    suggestedCreditAccount: suggestions.creditAccount ?? null,
-    suggestedDebitAccountType: suggestions.debitAccountType ?? null,
-    suggestedCreditAccountType: suggestions.creditAccountType ?? null,
+    suggestedDebitAccount: suggestions.debitAccount === undefined ? state.suggestedDebitAccount : suggestions.debitAccount ?? null,
+    suggestedCreditAccount: suggestions.creditAccount === undefined ? state.suggestedCreditAccount : suggestions.creditAccount ?? null,
+    suggestedDebitAccountType:
+      suggestions.debitAccountType === undefined ? state.suggestedDebitAccountType : suggestions.debitAccountType ?? null,
+    suggestedCreditAccountType:
+      suggestions.creditAccountType === undefined ? state.suggestedCreditAccountType : suggestions.creditAccountType ?? null,
   })),
   on(leasePostingRuleResetDraft, () => ({ ...initialLeasePostingRuleConfigState }))
 );
