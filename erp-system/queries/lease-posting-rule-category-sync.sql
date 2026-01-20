@@ -40,6 +40,7 @@ lease_rule_map AS (
     JOIN trx_account_posting_rule_condition prc
         ON prc.posting_rule_id = pr.id
         AND prc.condition_key = 'leaseContractId'
+        AND prc.condition_operator = 'EQUALS'
     JOIN ta_rules ta
         ON ta.lease_contract_id = prc.condition_value::bigint
         AND pr.event_type = ta.event_type

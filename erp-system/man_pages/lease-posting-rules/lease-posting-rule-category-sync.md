@@ -11,7 +11,7 @@ Lease posting rules can be created from legacy TA rule screens or from the unifi
 5. Normalize the `leaseContractId` condition value so it matches the lease contract in the TA rule.
 
 ## Implementation notes
-- The synchronization relies on the posting rule condition key `leaseContractId` to associate a posting rule with a lease contract.
+- The synchronization relies on the posting rule condition key `leaseContractId` with the `EQUALS` operator to associate a posting rule with a lease contract.
 - Only rules with `module = 'LEASE'` are updated.
 - Each posting rule is updated with the account categories derived from `transaction_account.account_category_id`.
 
