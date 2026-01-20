@@ -17,3 +17,5 @@ The Lease Posting Rule Configuration screen lets you define contract-specific po
 - The form remains responsive while you edit fields such as the rule name.
 - Suggestions from the lease template update only the relevant account fields.
 - Changing the template debit or credit account updates the associated account category automatically.
+- Changing the event type or lease contract refreshes the suggested template accounts.
+
