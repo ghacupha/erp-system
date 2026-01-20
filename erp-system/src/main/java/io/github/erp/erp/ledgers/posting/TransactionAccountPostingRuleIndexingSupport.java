@@ -106,7 +106,6 @@ public class TransactionAccountPostingRuleIndexingSupport {
 
         Placeholder sanitized = new Placeholder();
         sanitized.setId(source.getId());
-        sanitized.setPlaceholder(source.getPlaceholder());
         sanitized.setDescription(source.getDescription());
         return sanitized;
     }
