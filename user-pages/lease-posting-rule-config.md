@@ -21,6 +21,9 @@ The Lease Posting Rule Configuration area lets you review, create, and update le
 2. Update the pre-filled fields, templates, or conditions.
 3. Save to return to the list.
 
+## Syncing account categories after template changes
+When you update a lease posting rule template’s debit or credit account for an existing lease contract, the posting rule header categories must be re-aligned to match the account categories of the selected accounts. Run the lease posting rule category sync SQL script to update the posting rule header categories, templates, and `leaseContractId` conditions after the update is saved. Execute the full script in one go so each statement can rebuild its mapping data.
+
 ## Deleting a rule
 1. From the list, click **Delete** next to the rule.
 2. Confirm the deletion in the dialog.
