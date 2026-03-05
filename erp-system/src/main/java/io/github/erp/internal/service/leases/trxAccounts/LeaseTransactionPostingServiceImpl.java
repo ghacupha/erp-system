@@ -39,12 +39,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 public class LeaseTransactionPostingServiceImpl implements LeaseTransactionPostingService {
+
+    private static final Logger log = LoggerFactory.getLogger(LeaseTransactionPostingServiceImpl.class);
 
     private static final String LEASE_REPAYMENT_TYPE = "Lease Repayment";
     private static final String LEASE_INTEREST_ACCRUAL_TYPE = "Lease Interest Accrual";
@@ -111,7 +115,7 @@ public class LeaseTransactionPostingServiceImpl implements LeaseTransactionPosti
             )
             .collect(Collectors.toList());
 
-        transactionDetailsRepository.saveAll(details);
+        saveDetails(LEASE_REPAYMENT_EVENT, requisitionId, details);
     }
 
     @Override
@@ -139,7 +143,7 @@ public class LeaseTransactionPostingServiceImpl implements LeaseTransactionPosti
             )
             .collect(Collectors.toList());
 
-        transactionDetailsRepository.saveAll(details);
+        saveDetails(LEASE_INTEREST_ACCRUAL_EVENT, requisitionId, details);
     }
 
     @Override
@@ -167,7 +171,7 @@ public class LeaseTransactionPostingServiceImpl implements LeaseTransactionPosti
             )
             .collect(Collectors.toList());
 
-        transactionDetailsRepository.saveAll(details);
+        saveDetails(LEASE_INTEREST_PAID_TRANSFER_EVENT, requisitionId, details);
     }
 
     @Override
@@ -192,7 +196,7 @@ public class LeaseTransactionPostingServiceImpl implements LeaseTransactionPosti
             )
             .collect(Collectors.toList());
 
-        transactionDetailsRepository.saveAll(details);
+        saveDetails(LEASE_LIABILITY_RECOGNITION_EVENT, requisitionId, details);
     }
 
     @Override
@@ -211,7 +215,7 @@ public class LeaseTransactionPostingServiceImpl implements LeaseTransactionPosti
             )
             .collect(Collectors.toList());
 
-        transactionDetailsRepository.saveAll(details);
+        saveDetails(LEASE_ROU_RECOGNITION_EVENT, requisitionId, details);
     }
 
     @Override
@@ -236,7 +240,7 @@ public class LeaseTransactionPostingServiceImpl implements LeaseTransactionPosti
             )
             .collect(Collectors.toList());
 
-        transactionDetailsRepository.saveAll(details);
+        saveDetails(LEASE_ROU_AMORTIZATION_EVENT, requisitionId, details);
     }
 
     private ApplicationUser loadPostedBy(Long postedById) {
@@ -371,5 +375,23 @@ public class LeaseTransactionPostingServiceImpl implements LeaseTransactionPosti
 
     private String stripFiscalMonthCode(String fiscalMonthCode) {
         return fiscalMonthCode == null ? "" : fiscalMonthCode.replace("YM", "");
+    }
+
+    private void saveDetails(String eventType, UUID requisitionId, List<TransactionDetails> details) {
+        if (details.isEmpty()) {
+            log.warn(
+                "No transaction details produced for event {} and posting id {}. Check posting rules and source data.",
+                eventType,
+                requisitionId
+            );
+        } else {
+            log.info(
+                "Saving {} transaction details for event {} and posting id {}.",
+                details.size(),
+                eventType,
+                requisitionId
+            );
+        }
+        transactionDetailsRepository.saveAll(details);
     }
 }
