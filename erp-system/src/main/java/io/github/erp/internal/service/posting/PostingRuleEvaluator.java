@@ -33,12 +33,16 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 public class PostingRuleEvaluator {
+
+    private static final Logger log = LoggerFactory.getLogger(PostingRuleEvaluator.class);
 
     private final TransactionAccountPostingRuleRepository postingRuleRepository;
     private final TransactionEntryIdGenerator transactionEntryIdGenerator;
@@ -53,17 +57,27 @@ public class PostingRuleEvaluator {
 
     public List<TransactionDetails> evaluate(PostingContext context) {
         validateContext(context);
+        log.debug("Evaluating posting rules for context: {}", summarizeContext(context));
         List<TransactionAccountPostingRule> candidates = postingRuleRepository.findByModuleAndEventTypeOrderByIdAsc(
             context.getModule(),
             context.getEventType()
         );
+        log.debug(
+            "Loaded {} posting rule candidates for module {} and event {}: {}",
+            candidates.size(),
+            context.getModule(),
+            context.getEventType(),
+            summarizeRules(candidates)
+        );
         List<TransactionAccountPostingRule> matchingRules = candidates.stream().filter(rule -> matchesRule(rule, context)).collect(Collectors.toList());
         if (matchingRules.isEmpty()) {
+            log.warn("No posting rule matched for context: {}", summarizeContext(context));
             throw new IllegalStateException(
                 "No posting rule found for module " + context.getModule() + " and event " + context.getEventType()
             );
         }
         if (matchingRules.size() > 1) {
+            log.warn("Multiple posting rules matched for context: {}. Matches: {}", summarizeContext(context), summarizeRules(matchingRules));
             throw new IllegalStateException(
                 "Multiple posting rules matched for module " +
                 context.getModule() +
@@ -78,9 +92,12 @@ public class PostingRuleEvaluator {
             .ofNullable(selectedRule.getPostingRuleTemplates())
             .orElse(Collections.emptySet());
         if (templates.isEmpty()) {
+            log.warn("Posting rule {} has no templates for context: {}", describeRule(selectedRule), summarizeContext(context));
             throw new IllegalStateException("Posting rule " + selectedRule.getName() + " has no templates configured.");
         }
-        return templates.stream().map(template -> buildDetail(template, context)).collect(Collectors.toList());
+        List<TransactionDetails> details = templates.stream().map(template -> buildDetail(template, context)).collect(Collectors.toList());
+        log.debug("Built {} transaction details from rule {} for context {}", details.size(), describeRule(selectedRule), summarizeContext(context));
+        return details;
     }
 
     private void validateContext(PostingContext context) {
@@ -178,5 +195,79 @@ public class PostingRuleEvaluator {
         String name = rule.getName() == null ? "unnamed" : rule.getName();
         String id = rule.getId() == null ? "unknown" : rule.getId().toString();
         return name + "#" + id;
+    }
+
+    private String summarizeContext(PostingContext context) {
+        Long postedById = context.getPostedBy() == null ? null : context.getPostedBy().getId();
+        int placeholderCount = context.getPlaceholders() == null ? 0 : context.getPlaceholders().size();
+        return "module=" +
+        context.getModule() +
+        ", eventType=" +
+        context.getEventType() +
+        ", varianceType=" +
+        context.getVarianceType() +
+        ", invoiceTiming=" +
+        context.getInvoiceTiming() +
+        ", attributes=" +
+        context.getAttributes() +
+        ", amount=" +
+        context.getAmount() +
+        ", transactionDate=" +
+        context.getTransactionDate() +
+        ", transactionType=" +
+        context.getTransactionType() +
+        ", postingId=" +
+        context.getPostingId() +
+        ", postedById=" +
+        postedById +
+        ", placeholders=" +
+        placeholderCount;
+    }
+
+    private String summarizeRules(List<TransactionAccountPostingRule> rules) {
+        if (rules == null || rules.isEmpty()) {
+            return "none";
+        }
+        return rules.stream().map(this::summarizeRule).collect(Collectors.joining(" | "));
+    }
+
+    private String summarizeRule(TransactionAccountPostingRule rule) {
+        String transactionContextId = rule.getTransactionContext() == null ? null : rule.getTransactionContext().getId().toString();
+        String conditions = Optional
+            .ofNullable(rule.getPostingRuleConditions())
+            .orElse(Collections.emptySet())
+            .stream()
+            .map(condition -> condition.getConditionKey() + " " + condition.getConditionOperator() + " " + condition.getConditionValue())
+            .collect(Collectors.joining("; "));
+        String templates = Optional
+            .ofNullable(rule.getPostingRuleTemplates())
+            .orElse(Collections.emptySet())
+            .stream()
+            .map(template -> {
+                String debitId = template.getDebitAccount() == null ? "null" : template.getDebitAccount().getId().toString();
+                String creditId = template.getCreditAccount() == null ? "null" : template.getCreditAccount().getId().toString();
+                return "template{debit=" + debitId + ", credit=" + creditId + ", multiplier=" + template.getAmountMultiplier() + "}";
+            })
+            .collect(Collectors.joining(", "));
+        return "rule{" +
+        "id=" +
+        (rule.getId() == null ? "null" : rule.getId()) +
+        ", name=" +
+        rule.getName() +
+        ", module=" +
+        rule.getModule() +
+        ", eventType=" +
+        rule.getEventType() +
+        ", varianceType=" +
+        rule.getVarianceType() +
+        ", invoiceTiming=" +
+        rule.getInvoiceTiming() +
+        ", transactionContextId=" +
+        transactionContextId +
+        ", conditions=" +
+        conditions +
+        ", templates=" +
+        templates +
+        "}";
     }
 }
