@@ -19,6 +19,8 @@ package io.github.erp;
  */
 import io.github.erp.config.ApplicationProperties;
 import java.net.InetAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -127,8 +129,35 @@ public class ErpSystemApp {
         }
         log.info(
             "\n----------------------------------------------------------\n\t" +
-                "Config Server: \t{}\n----------------------------------------------------------",
-            configServerStatus
+                "Config Server: \t{}{}\n----------------------------------------------------------",
+            configServerStatus,
+            registryEndpointSummary(env)
         );
+    }
+
+    private static String registryEndpointSummary(Environment env) {
+        return Optional
+            .ofNullable(env.getProperty("eureka.client.service-url.defaultZone"))
+            .or(() -> Optional.ofNullable(env.getProperty("spring.cloud.config.uri")))
+            .flatMap(ErpSystemApp::safeUri)
+            .map(uri -> " (registry endpoint: " + uri.getHost() + ":" + registryPort(uri) + ")")
+            .orElse("");
+    }
+
+    private static Optional<URI> safeUri(String value) {
+        try {
+            return Optional.of(new URI(value));
+        } catch (URISyntaxException e) {
+            log.warn("Could not parse registry endpoint from configured URI");
+            return Optional.empty();
+        }
+    }
+
+    private static int registryPort(URI uri) {
+        if (uri.getPort() > -1) {
+            return uri.getPort();
+        }
+
+        return "https".equalsIgnoreCase(uri.getScheme()) ? 443 : 80;
     }
 }

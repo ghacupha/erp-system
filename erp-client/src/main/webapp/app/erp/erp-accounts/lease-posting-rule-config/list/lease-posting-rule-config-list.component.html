@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-lease-posting-rule"
         [routerLink]="['/lease-posting-rule-config/new']"
+        (click)="createButtonEvent()"
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Lease Posting Rule </span>
@@ -105,9 +106,21 @@
                 [routerLink]="['/lease-posting-rule-config', postingRule.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
+                (click)="editButtonEvent(postingRule)"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/lease-posting-rule-config', postingRule.id, 'copy']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityCopyButton"
+                (click)="copyButtonEvent(postingRule)"
+              >
+                <fa-icon icon="copy"></fa-icon>
+                <span class="d-none d-md-inline">Copy</span>
               </button>
 
               <button type="submit" (click)="delete(postingRule)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">

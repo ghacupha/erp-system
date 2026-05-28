@@ -46,6 +46,20 @@ import {
   leasePostingRuleTemplateAccountSelected,
 } from '../../store/actions/lease-posting-rule-config.actions';
 import { selectLeasePostingRuleSuggestions } from '../../store/selectors/lease-posting-rule-config.selectors';
+import {
+  copyingLeasePostingRuleStatus,
+  creatingLeasePostingRuleStatus,
+  editingLeasePostingRuleStatus,
+  leasePostingRuleUpdateSelectedInstance,
+  leasePostingRuleUpdateSourceLeaseContract,
+} from '../../store/selectors/lease-posting-rule-workflows-status.selector';
+import {
+  leasePostingRuleCopyWorkflowInitiatedEnRoute,
+  leasePostingRuleCreationInitiatedEnRoute,
+  leasePostingRuleDataHasMutated,
+  leasePostingRuleEditWorkflowInitiatedEnRoute,
+  leasePostingRuleUpdateFormHasBeenDestroyed,
+} from '../../store/actions/lease-posting-rule-workflow-status.actions';
 
 @Component({
   selector: 'jhi-lease-posting-rule-config',
@@ -56,6 +70,11 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
   isViewMode = false;
   isEditMode = false;
   isNewMode = false;
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedInstance: ITransactionAccountPostingRule = {};
+  sourceLeaseContract: IIFRS16LeaseContract | null = null;
   leaseContractsCollection: IIFRS16LeaseContract[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   private lastSuggestedDebitAccount: ITransactionAccount | null = null;
@@ -101,18 +120,47 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
     protected store: Store<State>,
     protected activatedRoute: ActivatedRoute,
     protected router: Router
-  ) {}
+  ) {
+    this.store.select(copyingLeasePostingRuleStatus).pipe(takeUntil(this.destroy$)).subscribe(stat => (this.weAreCopying = stat));
+    this.store.select(editingLeasePostingRuleStatus).pipe(takeUntil(this.destroy$)).subscribe(stat => (this.weAreEditing = stat));
+    this.store.select(creatingLeasePostingRuleStatus).pipe(takeUntil(this.destroy$)).subscribe(stat => (this.weAreCreating = stat));
+    this.store
+      .select(leasePostingRuleUpdateSelectedInstance)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(instance => {
+        this.selectedInstance = instance as ITransactionAccountPostingRule;
+        if (this.weAreCopying && this.selectedInstance?.id) {
+          this.copyForm(this.selectedInstance);
+        }
+        if (this.weAreEditing && this.selectedInstance?.id) {
+          this.updateForm(this.selectedInstance);
+        }
+      });
+    this.store
+      .select(leasePostingRuleUpdateSourceLeaseContract)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(contract => {
+        this.sourceLeaseContract = contract as IIFRS16LeaseContract | null;
+        if (!this.isViewMode && contract && !this.editForm.get('leaseContract')?.value) {
+          this.editForm.patchValue({ leaseContract: contract });
+          this.applyLeaseContractCondition(contract);
+        }
+      });
+  }
 
   ngOnInit(): void {
     const mode = this.activatedRoute.snapshot.data['mode'];
     this.isViewMode = mode === 'view';
     this.isEditMode = mode === 'edit';
-    this.isNewMode = mode === 'new' || (!this.isViewMode && !this.isEditMode);
+    this.isNewMode = mode === 'new' || (!this.isViewMode && !this.isEditMode && mode !== 'copy');
     const ruleId = this.activatedRoute.snapshot.params['id'];
     if (ruleId) {
-      this.loadPostingRule(Number(ruleId));
+      this.loadPostingRule(Number(ruleId), mode);
     } else {
       this.initializeNewForm();
+      if (mode === 'new' && !this.weAreCreating) {
+        this.store.dispatch(leasePostingRuleCreationInitiatedEnRoute());
+      }
     }
     this.loadRelationshipsOptions();
     this.registerLeaseContractListener();
@@ -139,6 +187,7 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.store.dispatch(leasePostingRuleResetDraft());
+    this.store.dispatch(leasePostingRuleUpdateFormHasBeenDestroyed());
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -171,8 +220,17 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
 
   save(): void {
     this.isSaving = true;
+    if (this.weAreCopying) {
+      const request$ = this.postingRuleService.create(this.copyFromForm());
+      request$.subscribe({
+        next: () => this.onSaveSuccess(),
+        error: () => this.onSaveError(),
+      });
+      return;
+    }
+
     const postingRule = this.createFromForm();
-    const request$ = postingRule.id ? this.postingRuleService.update(postingRule) : this.postingRuleService.create(postingRule);
+    const request$ = this.weAreEditing ? this.postingRuleService.update(postingRule) : this.postingRuleService.create(postingRule);
     request$.subscribe({
       next: () => this.onSaveSuccess(),
       error: () => this.onSaveError(),
@@ -219,8 +277,13 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
     this.store.dispatch(leasePostingRuleTemplateAccountSelected({ creditAccount: account ?? null }));
   }
 
+  editButtonEvent(): void {
+    this.store.dispatch(leasePostingRuleEditWorkflowInitiatedEnRoute({ editedInstance: this.createFromForm() }));
+  }
+
   protected onSaveSuccess(): void {
     this.isSaving = false;
+    this.store.dispatch(leasePostingRuleDataHasMutated());
     this.previousState();
   }
 
@@ -243,6 +306,31 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
       invoiceTiming: this.editForm.get(['invoiceTiming'])!.value,
       postingRuleTemplates: this.postingRuleTemplates.value as ITransactionAccountPostingRuleTemplate[],
       postingRuleConditions: this.postingRuleConditions.value as ITransactionAccountPostingRuleCondition[],
+    };
+  }
+
+  protected copyFromForm(): ITransactionAccountPostingRule {
+    const templates = (this.postingRuleTemplates.value as ITransactionAccountPostingRuleTemplate[]).map(template => ({
+      ...template,
+      id: undefined,
+    }));
+    const conditions = (this.postingRuleConditions.value as ITransactionAccountPostingRuleCondition[]).map(condition => ({
+      ...condition,
+      id: undefined,
+    }));
+    return {
+      ...new TransactionAccountPostingRule(),
+      name: this.editForm.get(['name'])!.value,
+      identifier: this.editForm.get(['identifier'])!.value,
+      module: 'LEASE',
+      eventType: this.editForm.get(['eventType'])!.value,
+      debitAccountType: this.editForm.get(['debitAccountType'])!.value,
+      creditAccountType: this.editForm.get(['creditAccountType'])!.value,
+      transactionContext: this.editForm.get(['transactionContext'])!.value,
+      varianceType: this.editForm.get(['varianceType'])!.value,
+      invoiceTiming: this.editForm.get(['invoiceTiming'])!.value,
+      postingRuleTemplates: templates,
+      postingRuleConditions: conditions,
     };
   }
 
@@ -306,14 +394,20 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected loadPostingRule(id: number): void {
+  protected loadPostingRule(id: number, mode?: string): void {
     this.postingRuleService.find(id).subscribe({
       next: response => {
         const postingRule = response.body;
         if (!postingRule) {
           return;
         }
-        this.updateForm(postingRule);
+        if (mode === 'copy') {
+          this.store.dispatch(leasePostingRuleCopyWorkflowInitiatedEnRoute({ copiedInstance: postingRule }));
+          this.copyForm(postingRule);
+        } else {
+          this.store.dispatch(leasePostingRuleEditWorkflowInitiatedEnRoute({ editedInstance: postingRule }));
+          this.updateForm(postingRule);
+        }
         if (this.isViewMode) {
           this.editForm.disable({ emitEvent: false });
         }
@@ -327,6 +421,50 @@ export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
       id: postingRule.id,
       name: postingRule.name,
       identifier: postingRule.identifier,
+      module: postingRule.module ?? 'LEASE',
+      eventType: postingRule.eventType,
+      debitAccountType: postingRule.debitAccountType,
+      creditAccountType: postingRule.creditAccountType,
+      transactionContext: postingRule.transactionContext,
+      varianceType: postingRule.varianceType,
+      invoiceTiming: postingRule.invoiceTiming,
+    });
+
+    this.postingRuleTemplates.clear();
+    const templates = postingRule.postingRuleTemplates ?? [];
+    if (templates.length > 0) {
+      templates.forEach(template => this.postingRuleTemplates.push(this.createTemplateGroup(template)));
+    } else {
+      this.addTemplate();
+    }
+
+    this.postingRuleConditions.clear();
+    const conditions = postingRule.postingRuleConditions ?? [];
+    if (conditions.length > 0) {
+      conditions.forEach(condition => this.postingRuleConditions.push(this.createConditionGroup(condition)));
+    } else {
+      this.addCondition();
+    }
+
+    const leaseCondition = conditions.find(condition => condition.conditionKey === 'leaseContractId');
+    if (leaseCondition?.conditionValue) {
+      const leaseContractId = Number(leaseCondition.conditionValue);
+      if (!Number.isNaN(leaseContractId)) {
+        const selectedLease = this.leaseContractsCollection.find(contract => contract.id === leaseContractId);
+        if (selectedLease) {
+          this.editForm.patchValue({ leaseContract: selectedLease });
+        } else {
+          this.pendingLeaseContractId = leaseContractId;
+        }
+      }
+    }
+  }
+
+  protected copyForm(postingRule: ITransactionAccountPostingRule): void {
+    this.editForm.patchValue({
+      id: undefined,
+      name: postingRule.name,
+      identifier: uuidv7(),
       module: postingRule.module ?? 'LEASE',
       eventType: postingRule.eventType,
       debitAccountType: postingRule.debitAccountType,

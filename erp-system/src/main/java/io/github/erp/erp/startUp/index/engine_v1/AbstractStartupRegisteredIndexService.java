@@ -609,6 +609,7 @@
  */
 package io.github.erp.erp.startUp.index.engine_v1;
 
+import io.github.erp.erp.search.ShallowSearchDocumentSanitizer;
 import io.github.erp.erp.startUp.index.api.ApplicationIndexingService;
 import io.github.erp.internal.IndexProperties;
 import org.jetbrains.annotations.NotNull;
@@ -658,4 +659,8 @@ public abstract class AbstractStartupRegisteredIndexService implements Controlle
     public abstract void index();
 
     public abstract void tearDown();
+
+    protected <T> T prepareEntityForIndexing(T entity) {
+        return ShallowSearchDocumentSanitizer.sanitize(entity);
+    }
 }

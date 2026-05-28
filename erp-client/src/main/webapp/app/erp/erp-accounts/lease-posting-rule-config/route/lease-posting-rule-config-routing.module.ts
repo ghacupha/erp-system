@@ -63,6 +63,16 @@ const leasePostingRuleConfigRoute: Routes = [
     },
     canActivate: [UserRouteAccessService],
   },
+  {
+    path: ':id/copy',
+    component: LeasePostingRuleConfigComponent,
+    data: {
+      pageTitle: 'ERP | Lease Posting Rule Configuration',
+      authorities: ['ROLE_BOOK_KEEPING', 'ROLE_LEASES_MANAGER'],
+      mode: 'copy',
+    },
+    canActivate: [UserRouteAccessService],
+  },
 ];
 
 @NgModule({

@@ -48,6 +48,7 @@ import { TransactionAccountFormState } from './reducers/transaction-account-upda
 import { TransactionAccountReportDateSelectionState } from './reducers/transaction-account-report-date-selection.reducer';
 import { IFRS16LeaseContractReportState } from './reducers/ifrs16-lease-contract-report.reducer';
 import { LeasePostingRuleConfigState } from './reducers/lease-posting-rule-config.reducer';
+import { LeasePostingRuleFormState } from './reducers/lease-posting-rule-workflow-status.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -79,7 +80,8 @@ export interface State {
   transactionAccountFormState: TransactionAccountFormState,
   transactionAccountReportDateSelectionState: TransactionAccountReportDateSelectionState,
   ifrs16LeaseContractReportState: IFRS16LeaseContractReportState,
-  leasePostingRuleConfigState: LeasePostingRuleConfigState
+  leasePostingRuleConfigState: LeasePostingRuleConfigState,
+  leasePostingRuleFormState: LeasePostingRuleFormState
 }
 
 export const initialState: State = {
@@ -305,5 +307,13 @@ export const initialState: State = {
     suggestedCreditAccount: null,
     suggestedDebitAccountType: null,
     suggestedCreditAccountType: null,
+  },
+  leasePostingRuleFormState: {
+    selectedInstance: {},
+    sourceLeaseContract: null,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+    weAreDeleting: false,
   }
 }

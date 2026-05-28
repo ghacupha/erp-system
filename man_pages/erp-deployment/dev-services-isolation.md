@@ -8,8 +8,9 @@ The previous setup pointed both `application-dev` and `application-prod` at the 
 
 ## Implementation
 
-* Introduced `erp-deployment/services-dev.yml` to start isolated brokers on ports 2182 (ZooKeeper), 9870/29093 (Kafka), 9771 (JHipster Registry), and 8840/8841 (Elasticsearch) with their own data directories.
+* Introduced `erp-deployment/services-dev.yml` to start isolated brokers on ports 2182 (ZooKeeper), 9870/29093 (Kafka), 8771 (JHipster Registry), and 8840/8841 (Elasticsearch) with their own data directories.
 * Updated the central configuration for the development profile so Kafka bootstrap servers use `localhost:9870`, Eureka points to the dev registry port, and `SPRING_DATA_JEST_URI` targets the dev Elasticsearch instance.
+* Updated the ERP server startup banner to append the configured registry endpoint, so a Maven-run dev backend displays the active registry host and port without exposing credentials.
 
 ## Usage
 

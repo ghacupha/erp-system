@@ -140,8 +140,9 @@ public class SettlementIndexingService extends AbstractStartUpBatchedIndexServic
      * @return
      */
     protected Settlement prepareForIndexing(Settlement entity) {
-        entity.setCalculationFile(null);
-        entity.setCalculationFileContentType(null);
-        return entity;
+        Settlement prepared = super.prepareForIndexing(entity);
+        prepared.setCalculationFile(null);
+        prepared.setCalculationFileContentType(null);
+        return prepared;
     }
 }

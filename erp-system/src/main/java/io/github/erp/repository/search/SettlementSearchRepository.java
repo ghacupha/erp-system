@@ -22,12 +22,12 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import io.github.erp.domain.Settlement;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
@@ -52,12 +52,12 @@ class SettlementSearchRepositoryInternalImpl implements SettlementSearchReposito
     public Page<Settlement> search(String query, Pageable pageable) {
         NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
         nativeSearchQuery.setPageable(pageable);
-        List<Settlement> hits = elasticsearchTemplate
-            .search(nativeSearchQuery, Settlement.class)
+        SearchHits<Settlement> searchHits = elasticsearchTemplate.search(nativeSearchQuery, Settlement.class);
+        List<Settlement> hits = searchHits
             .map(SearchHit::getContent)
             .stream()
             .collect(Collectors.toList());
 
-        return new PageImpl<>(hits, pageable, hits.size());
+        return new PageImpl<>(hits, pageable, searchHits.getTotalHits());
     }
 }
