@@ -26,6 +26,14 @@ import { ITransactionAccountPostingRule } from '../../transaction-account-postin
 import { TransactionAccountPostingRuleService } from '../../transaction-account-posting-rule/service/transaction-account-posting-rule.service';
 import { LeasePostingRuleConfigDeleteDialogComponent } from '../delete/lease-posting-rule-config-delete-dialog.component';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  leasePostingRuleCopyWorkflowInitiatedFromList,
+  leasePostingRuleCreationWorkflowInitiatedFromList,
+  leasePostingRuleDeleteWorkflowInitiatedFromList,
+  leasePostingRuleEditWorkflowInitiatedFromList,
+} from '../../../store/actions/lease-posting-rule-workflow-status.actions';
 
 @Component({
   selector: 'jhi-lease-posting-rule-config-list',
@@ -46,7 +54,8 @@ export class LeasePostingRuleConfigListComponent implements OnInit {
     protected postingRuleService: TransactionAccountPostingRuleService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -111,7 +120,20 @@ export class LeasePostingRuleConfigListComponent implements OnInit {
     return item.id!;
   }
 
+  createButtonEvent(): void {
+    this.store.dispatch(leasePostingRuleCreationWorkflowInitiatedFromList());
+  }
+
+  editButtonEvent(instance: ITransactionAccountPostingRule): void {
+    this.store.dispatch(leasePostingRuleEditWorkflowInitiatedFromList({ editedInstance: instance }));
+  }
+
+  copyButtonEvent(instance: ITransactionAccountPostingRule): void {
+    this.store.dispatch(leasePostingRuleCopyWorkflowInitiatedFromList({ copiedInstance: instance }));
+  }
+
   delete(postingRule: ITransactionAccountPostingRule): void {
+    this.store.dispatch(leasePostingRuleDeleteWorkflowInitiatedFromList({ deletedInstance: postingRule }));
     const modalRef = this.modalService.open(LeasePostingRuleConfigDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.postingRule = postingRule;
     modalRef.closed.subscribe(reason => {

@@ -124,7 +124,6 @@
  */
 package io.github.erp.erp.startUp.index.engine_v2;
 
-import io.github.erp.domain.Settlement;
 import io.github.erp.erp.startUp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.internal.IndexProperties;
 import io.reactivex.Observable;
@@ -159,7 +158,7 @@ public abstract class AbstractStartUpBatchedIndexService<T> extends AbstractStar
      * @return
      */
     protected T prepareForIndexing(T entity) {
-        return entity;
+        return prepareEntityForIndexing(entity);
     };
 
     public int processInBatchesOf(int preferredBatchSize) {

@@ -8,8 +8,9 @@ Running the production `docker-compose.yml` alongside a locally executed `applic
 
 ## What changed
 
-* Added `services-dev.yml` which starts dedicated development instances on non-conflicting ports (ZooKeeper 2182, Kafka 9870/29093, JHipster Registry 9771, and Elasticsearch 8840/8841) with separate data volumes.
+* Added `services-dev.yml` which starts dedicated development instances on non-conflicting ports (ZooKeeper 2182, Kafka 9870/29093, JHipster Registry 8771, and Elasticsearch 8840/8841) with separate data volumes.
 * Updated the central config `application-dev.yml` so the development profile connects to the new Kafka port, the JHipster Registry dev port, and publishes `SPRING_DATA_JEST_URI` for the matching Elasticsearch endpoint.
+* The ERP server startup banner now appends the configured registry endpoint, making it visible when the Maven-run dev backend is connected to the Docker support registry.
 
 ## How to use
 

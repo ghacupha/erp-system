@@ -29,7 +29,12 @@
             <fa-icon icon="arrow-left"></fa-icon>
             <span>Back to List</span>
           </button>
-          <button type="button" class="btn btn-primary" [routerLink]="['/lease-posting-rule-config', editForm.get('id')?.value, 'edit']">
+          <button
+            type="button"
+            class="btn btn-primary"
+            [routerLink]="['/lease-posting-rule-config', editForm.get('id')?.value, 'edit']"
+            (click)="editButtonEvent()"
+          >
             <fa-icon icon="pencil-alt"></fa-icon>
             <span>Edit</span>
           </button>

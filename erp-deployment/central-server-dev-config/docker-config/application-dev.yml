@@ -19,9 +19,11 @@
 # Common configuration shared between all applications
 configserver:
   name: Docker JHipster Registry
-  status: Connected to the JHipster Registry running in Docker
+  status: ERP client is now connected to the JHipster Registry 8771
 
 jhipster:
+  registry:
+    password: admin
   security:
     authentication:
       jwt:
@@ -31,11 +33,14 @@ jhipster:
 eureka:
   client:
     service-url:
-      defaultZone: http://admin:admin@jhipster-registry:8771/eureka/
+      defaultZone: http://admin:admin@localhost:8771/eureka/
 
 spring:
+   elasticsearch:
+    rest:
+      uris: http://localhost:8840
    kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: localhost:9870
     admin:
       properties:
         replication.factor: 8
@@ -45,30 +50,10 @@ spring:
           name: "depreciation_batch_topic"
         consumer:
           group.id: erp-system-depreciation
+          auto.offset.reset: earliest
       nbv:
         topic:
           name: "nbv_batch_topic"
         consumer:
           group.id: erp-system-nbv
           auto.offset.reset: earliest
-
-# kafka:
-#   bootstrap-servers: kafka:9092
-#   admin:
-#     properties:
-#       replication.factor: 3
-#   consumer:
-#     group.id: erp-system
-#     key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#     value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-#     auto.offset.reset: earliest
-#     properties:
-#       spring.json.trusted.packages: "*"
-#   producer:
-#     key.serializer: org.apache.kafka.common.serialization.StringSerializer
-#     value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
-#     properties:
-#       replication.factor: 3;
-#   depreciation-batch:
-#     topic:
-#       name: "depreciation_batch_topic"

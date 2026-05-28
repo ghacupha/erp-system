@@ -609,6 +609,7 @@
     <include file="config/liquibase/changelog/20240828000000_added_entity_LeasePaymentUpload.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240828000000_added_entity_constraints_LeasePaymentUpload.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240828000500_add_active_and_upload_to_lease_payment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240828000600_deferred_liability_enumeration_constraints.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240801090000_update_report_metadata_filters.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250311120000_added_entity_LeaseSettlement.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250311120001_added_entity_constraints_LeaseSettlement.xml" relativeToChangelogFile="false"/>

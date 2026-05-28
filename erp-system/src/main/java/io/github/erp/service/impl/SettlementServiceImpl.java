@@ -20,15 +20,22 @@ package io.github.erp.service.impl;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 import io.github.erp.domain.Settlement;
+import io.github.erp.domain.SettlementCurrency;
+import io.github.erp.erp.search.SearchIndexingService;
 import io.github.erp.repository.SettlementRepository;
 import io.github.erp.repository.search.SettlementSearchRepository;
 import io.github.erp.service.SettlementService;
 import io.github.erp.service.dto.SettlementDTO;
 import io.github.erp.service.mapper.SettlementMapper;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,14 +55,18 @@ public class SettlementServiceImpl implements SettlementService {
 
     private final SettlementSearchRepository settlementSearchRepository;
 
+    private final SearchIndexingService searchIndexingService;
+
     public SettlementServiceImpl(
         SettlementRepository settlementRepository,
         SettlementMapper settlementMapper,
-        SettlementSearchRepository settlementSearchRepository
+        SettlementSearchRepository settlementSearchRepository,
+        SearchIndexingService searchIndexingService
     ) {
         this.settlementRepository = settlementRepository;
         this.settlementMapper = settlementMapper;
         this.settlementSearchRepository = settlementSearchRepository;
+        this.searchIndexingService = searchIndexingService;
     }
 
     @Override
@@ -64,7 +75,7 @@ public class SettlementServiceImpl implements SettlementService {
         Settlement settlement = settlementMapper.toEntity(settlementDTO);
         settlement = settlementRepository.save(settlement);
         SettlementDTO result = settlementMapper.toDto(settlement);
-        settlementSearchRepository.save(settlement);
+        indexAfterCommit(settlement);
         return result;
     }
 
@@ -81,7 +92,7 @@ public class SettlementServiceImpl implements SettlementService {
             })
             .map(settlementRepository::save)
             .map(savedSettlement -> {
-                settlementSearchRepository.save(savedSettlement);
+                indexAfterCommit(savedSettlement);
 
                 return savedSettlement;
             })
@@ -110,13 +121,60 @@ public class SettlementServiceImpl implements SettlementService {
     public void delete(Long id) {
         log.debug("Request to delete Settlement : {}", id);
         settlementRepository.deleteById(id);
-        settlementSearchRepository.deleteById(id);
+        deleteFromIndexAfterCommit(id);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<SettlementDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Settlements for query {}", query);
-        return settlementSearchRepository.search(query, pageable).map(settlementMapper::toDto);
+        Page<Settlement> searchPage = settlementSearchRepository.search(query, pageable);
+        List<Long> ids = searchPage.getContent().stream().map(Settlement::getId).filter(id -> id != null).collect(Collectors.toList());
+
+        Map<Long, Settlement> persistedSettlements = settlementRepository
+            .findAllById(ids)
+            .stream()
+            .collect(Collectors.toMap(Settlement::getId, Function.identity()));
+
+        List<SettlementDTO> reconciledResults = ids
+            .stream()
+            .map(persistedSettlements::get)
+            .filter(settlement -> settlement != null)
+            .map(settlementMapper::toDto)
+            .collect(Collectors.toList());
+
+        return new PageImpl<>(reconciledResults, pageable, reconciledResults.size());
+    }
+
+    private Settlement sanitizeForIndexing(Settlement source) {
+        Settlement indexSettlement = new Settlement()
+            .id(source.getId())
+            .paymentNumber(source.getPaymentNumber())
+            .paymentDate(source.getPaymentDate())
+            .paymentAmount(source.getPaymentAmount())
+            .description(source.getDescription())
+            .notes(source.getNotes())
+            .fileUploadToken(source.getFileUploadToken())
+            .compilationToken(source.getCompilationToken())
+            .remarks(source.getRemarks());
+
+        if (source.getSettlementCurrency() != null) {
+            SettlementCurrency currency = new SettlementCurrency();
+            currency.setId(source.getSettlementCurrency().getId());
+            currency.setIso4217CurrencyCode(source.getSettlementCurrency().getIso4217CurrencyCode());
+            currency.setCurrencyName(source.getSettlementCurrency().getCurrencyName());
+            indexSettlement.setSettlementCurrency(currency);
+        }
+
+        return indexSettlement;
+    }
+
+    private void indexAfterCommit(Settlement settlement) {
+        Settlement indexSettlement = sanitizeForIndexing(settlement);
+        searchIndexingService.saveAfterCommit(settlementSearchRepository, indexSettlement);
+    }
+
+    private void deleteFromIndexAfterCommit(Long id) {
+        searchIndexingService.deleteAfterCommit(settlementSearchRepository, id);
     }
 }
