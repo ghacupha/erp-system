@@ -20,3 +20,7 @@ After deployment, Liquibase should create or confirm these constraints:
 - `fk_present_value_enumeration__liability_enumeration_id`
 
 The JHipster registry error seen in development logs is separate from this database failure. It indicates the registry process is trying to contact a Eureka endpoint that is not accepting connections. For the isolated development stack, use the dev registry published on port `8771` and the dev Elasticsearch endpoint on port `8840`.
+
+If a previous failed startup left Liquibase locked, review `erp-system/queries/liquibase-lock-health.sql`. Release the lock only after confirming that no ERP server process is still running a migration against the same PostgreSQL database.
+
+For repository-driven Liquibase operations, use `erp-system/scripts/liquibase-compose.cmd`. It resolves the same database connection variables used by the Docker Compose production server before running Maven Liquibase commands.
