@@ -190,6 +190,15 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             )
         ),
         new ReportMetadataSeed(
+            "Unallocated Prepayment Accounts",
+            "Prepayment accounts whose active amortisation entries do not fully utilise the recognised amount.",
+            "Prepayments",
+            "reports/view/unallocated-prepayment-accounts",
+            "api/prepayments/unallocated-prepayment-accounts",
+            true,
+            List.of()
+        ),
+        new ReportMetadataSeed(
             "Amortisation Posting Summary",
             "Summary of amortisation postings grouped by recognition rule for reconciliation.",
             "Amortisation",
