@@ -1,0 +1,156 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="leaseTemplate">
+      <h2 data-cy="leaseTemplateDetailsHeading"><span>Lease Template</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ leaseTemplate.id }}</span>
+        </dd>
+        <dt><span>Template Title</span></dt>
+        <dd>
+          <span>{{ leaseTemplate.templateTitle }}</span>
+        </dd>
+        <dt><span>Asset Account</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.assetAccount">
+            <a [routerLink]="['/transaction-account', leaseTemplate.assetAccount?.id, 'view']">{{
+              leaseTemplate.assetAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Depreciation Account</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.depreciationAccount">
+            <a [routerLink]="['/transaction-account', leaseTemplate.depreciationAccount?.id, 'view']">{{
+              leaseTemplate.depreciationAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Accrued Depreciation Account</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.accruedDepreciationAccount">
+            <a [routerLink]="['/transaction-account', leaseTemplate.accruedDepreciationAccount?.id, 'view']">{{
+              leaseTemplate.accruedDepreciationAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Interest Paid Transfer Debit Account</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.interestPaidTransferDebitAccount">
+            <a [routerLink]="['/transaction-account', leaseTemplate.interestPaidTransferDebitAccount?.id, 'view']">{{
+              leaseTemplate.interestPaidTransferDebitAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Interest Paid Transfer Credit Account</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.interestPaidTransferCreditAccount">
+            <a [routerLink]="['/transaction-account', leaseTemplate.interestPaidTransferCreditAccount?.id, 'view']">{{
+              leaseTemplate.interestPaidTransferCreditAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Interest Accrued Debit Account</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.interestAccruedDebitAccount">
+            <a [routerLink]="['/transaction-account', leaseTemplate.interestAccruedDebitAccount?.id, 'view']">{{
+              leaseTemplate.interestAccruedDebitAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Interest Accrued Credit Account</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.interestAccruedCreditAccount">
+            <a [routerLink]="['/transaction-account', leaseTemplate.interestAccruedCreditAccount?.id, 'view']">{{
+              leaseTemplate.interestAccruedCreditAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Recognition Debit Account</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.leaseRecognitionDebitAccount">
+            <a [routerLink]="['/transaction-account', leaseTemplate.leaseRecognitionDebitAccount?.id, 'view']">{{
+              leaseTemplate.leaseRecognitionDebitAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Recognition Credit Account</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.leaseRecognitionCreditAccount">
+            <a [routerLink]="['/transaction-account', leaseTemplate.leaseRecognitionCreditAccount?.id, 'view']">{{
+              leaseTemplate.leaseRecognitionCreditAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Repayment Debit Account</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.leaseRepaymentDebitAccount">
+            <a [routerLink]="['/transaction-account', leaseTemplate.leaseRepaymentDebitAccount?.id, 'view']">{{
+              leaseTemplate.leaseRepaymentDebitAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Repayment Credit Account</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.leaseRepaymentCreditAccount">
+            <a [routerLink]="['/transaction-account', leaseTemplate.leaseRepaymentCreditAccount?.id, 'view']">{{
+              leaseTemplate.leaseRepaymentCreditAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Rou Recognition Credit Account</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.rouRecognitionCreditAccount">
+            <a [routerLink]="['/transaction-account', leaseTemplate.rouRecognitionCreditAccount?.id, 'view']">{{
+              leaseTemplate.rouRecognitionCreditAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Rou Recognition Debit Account</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.rouRecognitionDebitAccount">
+            <a [routerLink]="['/transaction-account', leaseTemplate.rouRecognitionDebitAccount?.id, 'view']">{{
+              leaseTemplate.rouRecognitionDebitAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Asset Category</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.assetCategory">
+            <a [routerLink]="['/asset-category', leaseTemplate.assetCategory?.id, 'view']">{{
+              leaseTemplate.assetCategory?.assetCategoryName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.serviceOutlet">
+            <a [routerLink]="['/service-outlet', leaseTemplate.serviceOutlet?.id, 'view']">{{ leaseTemplate.serviceOutlet?.outletCode }}</a>
+          </div>
+        </dd>
+        <dt><span>Main Dealer</span></dt>
+        <dd>
+          <div *ngIf="leaseTemplate.mainDealer">
+            <a [routerLink]="['/dealer', leaseTemplate.mainDealer?.id, 'view']">{{ leaseTemplate.mainDealer?.dealerName }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/lease-template', leaseTemplate.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

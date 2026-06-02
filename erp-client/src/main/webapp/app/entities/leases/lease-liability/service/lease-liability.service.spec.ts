@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import * as dayjs from 'dayjs';
@@ -48,7 +30,6 @@ describe('LeaseLiability Service', () => {
       startDate: currentDate,
       endDate: currentDate,
       interestRate: 0,
-      hasBeenAmortised: false,
       hasBeenFullyAmortised: false,
     };
   });
@@ -104,7 +85,6 @@ describe('LeaseLiability Service', () => {
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
           interestRate: 1,
-          hasBeenAmortised: true,
           hasBeenFullyAmortised: true,
         },
         elemDefault
@@ -131,7 +111,7 @@ describe('LeaseLiability Service', () => {
           leaseId: 'BBBBBB',
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
-          hasBeenAmortised: true,
+          hasBeenFullyAmortised: true,
         },
         new LeaseLiability()
       );
@@ -162,7 +142,6 @@ describe('LeaseLiability Service', () => {
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
           interestRate: 1,
-          hasBeenAmortised: true,
           hasBeenFullyAmortised: true,
         },
         elemDefault
@@ -221,7 +200,7 @@ describe('LeaseLiability Service', () => {
       });
 
       it('should add only unique LeaseLiability to an array', () => {
-        const leaseLiabilityArray: ILeaseLiability[] = [{ id: 123 }, { id: 456 }, { id: 51223 }];
+        const leaseLiabilityArray: ILeaseLiability[] = [{ id: 123 }, { id: 456 }, { id: 40912 }];
         const leaseLiabilityCollection: ILeaseLiability[] = [{ id: 123 }];
         expectedResult = service.addLeaseLiabilityToCollectionIfMissing(leaseLiabilityCollection, ...leaseLiabilityArray);
         expect(expectedResult).toHaveLength(3);

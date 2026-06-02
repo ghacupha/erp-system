@@ -1,22 +1,5 @@
 package io.github.erp.service.criteria;
 
-/*-
- * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
- * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -56,6 +39,8 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
 
     private LocalDateFilter recognitionDate;
 
+    private LocalDateFilter postingDate;
+
     private LongFilter settlementCurrencyId;
 
     private LongFilter prepaymentTransactionId;
@@ -76,6 +61,8 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
 
     private LongFilter businessDocumentId;
 
+    private LongFilter createdById;
+
     private Boolean distinct;
 
     public PrepaymentAccountCriteria() {}
@@ -87,6 +74,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
         this.prepaymentAmount = other.prepaymentAmount == null ? null : other.prepaymentAmount.copy();
         this.prepaymentGuid = other.prepaymentGuid == null ? null : other.prepaymentGuid.copy();
         this.recognitionDate = other.recognitionDate == null ? null : other.recognitionDate.copy();
+        this.postingDate = other.postingDate == null ? null : other.postingDate.copy();
         this.settlementCurrencyId = other.settlementCurrencyId == null ? null : other.settlementCurrencyId.copy();
         this.prepaymentTransactionId = other.prepaymentTransactionId == null ? null : other.prepaymentTransactionId.copy();
         this.serviceOutletId = other.serviceOutletId == null ? null : other.serviceOutletId.copy();
@@ -97,6 +85,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
         this.generalParametersId = other.generalParametersId == null ? null : other.generalParametersId.copy();
         this.prepaymentParametersId = other.prepaymentParametersId == null ? null : other.prepaymentParametersId.copy();
         this.businessDocumentId = other.businessDocumentId == null ? null : other.businessDocumentId.copy();
+        this.createdById = other.createdById == null ? null : other.createdById.copy();
         this.distinct = other.distinct;
     }
 
@@ -193,6 +182,21 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
 
     public void setRecognitionDate(LocalDateFilter recognitionDate) {
         this.recognitionDate = recognitionDate;
+    }
+
+    public LocalDateFilter getPostingDate() {
+        return postingDate;
+    }
+
+    public LocalDateFilter postingDate() {
+        if (postingDate == null) {
+            postingDate = new LocalDateFilter();
+        }
+        return postingDate;
+    }
+
+    public void setPostingDate(LocalDateFilter postingDate) {
+        this.postingDate = postingDate;
     }
 
     public LongFilter getSettlementCurrencyId() {
@@ -345,6 +349,21 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
         this.businessDocumentId = businessDocumentId;
     }
 
+    public LongFilter getCreatedById() {
+        return createdById;
+    }
+
+    public LongFilter createdById() {
+        if (createdById == null) {
+            createdById = new LongFilter();
+        }
+        return createdById;
+    }
+
+    public void setCreatedById(LongFilter createdById) {
+        this.createdById = createdById;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -369,6 +388,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             Objects.equals(prepaymentAmount, that.prepaymentAmount) &&
             Objects.equals(prepaymentGuid, that.prepaymentGuid) &&
             Objects.equals(recognitionDate, that.recognitionDate) &&
+            Objects.equals(postingDate, that.postingDate) &&
             Objects.equals(settlementCurrencyId, that.settlementCurrencyId) &&
             Objects.equals(prepaymentTransactionId, that.prepaymentTransactionId) &&
             Objects.equals(serviceOutletId, that.serviceOutletId) &&
@@ -379,6 +399,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             Objects.equals(generalParametersId, that.generalParametersId) &&
             Objects.equals(prepaymentParametersId, that.prepaymentParametersId) &&
             Objects.equals(businessDocumentId, that.businessDocumentId) &&
+            Objects.equals(createdById, that.createdById) &&
             Objects.equals(distinct, that.distinct)
         );
     }
@@ -392,6 +413,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             prepaymentAmount,
             prepaymentGuid,
             recognitionDate,
+            postingDate,
             settlementCurrencyId,
             prepaymentTransactionId,
             serviceOutletId,
@@ -402,6 +424,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             generalParametersId,
             prepaymentParametersId,
             businessDocumentId,
+            createdById,
             distinct
         );
     }
@@ -416,6 +439,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             (prepaymentAmount != null ? "prepaymentAmount=" + prepaymentAmount + ", " : "") +
             (prepaymentGuid != null ? "prepaymentGuid=" + prepaymentGuid + ", " : "") +
             (recognitionDate != null ? "recognitionDate=" + recognitionDate + ", " : "") +
+            (postingDate != null ? "postingDate=" + postingDate + ", " : "") +
             (settlementCurrencyId != null ? "settlementCurrencyId=" + settlementCurrencyId + ", " : "") +
             (prepaymentTransactionId != null ? "prepaymentTransactionId=" + prepaymentTransactionId + ", " : "") +
             (serviceOutletId != null ? "serviceOutletId=" + serviceOutletId + ", " : "") +
@@ -426,6 +450,7 @@ public class PrepaymentAccountCriteria implements Serializable, Criteria {
             (generalParametersId != null ? "generalParametersId=" + generalParametersId + ", " : "") +
             (prepaymentParametersId != null ? "prepaymentParametersId=" + prepaymentParametersId + ", " : "") +
             (businessDocumentId != null ? "businessDocumentId=" + businessDocumentId + ", " : "") +
+            (createdById != null ? "createdById=" + createdById + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

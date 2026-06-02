@@ -3541,6 +3541,18 @@
               <span>WIP Transfer List Report</span>
             </a>
           </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="lease-template"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Lease Template</span>
+            </a>
+          </li>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </ul>
       </li>

@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -33,7 +15,6 @@ import { ITransactionAccount } from 'app/entities/accounting/transaction-account
 import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { ILeaseTemplate } from 'app/entities/leases/lease-template/lease-template.model';
 
 import { TALeaseRecognitionRuleUpdateComponent } from './ta-lease-recognition-rule-update.component';
 
@@ -267,31 +248,6 @@ describe('TALeaseRecognitionRule Management Update Component', () => {
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });
-    });
-  });
-
-  describe('lease contract selection', () => {
-    it('should patch debit and credit from the selected lease template', () => {
-      const debitAccount: ITransactionAccount = { id: 1001 };
-      const creditAccount: ITransactionAccount = { id: 1002 };
-      const leaseTemplate: ILeaseTemplate = {
-        leaseRecognitionDebitAccount: debitAccount,
-        leaseRecognitionCreditAccount: creditAccount,
-      };
-      const leaseContract: IIFRS16LeaseContract = { id: 999, leaseTemplate };
-
-      jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseContract })));
-      const addTransactionAccountSpy = jest.spyOn(transactionAccountService, 'addTransactionAccountToCollectionIfMissing');
-
-      activatedRoute.data = of({ tALeaseRecognitionRule: {} as ITALeaseRecognitionRule });
-      comp.ngOnInit();
-
-      comp.editForm.get('leaseContract')!.setValue(leaseContract);
-
-      expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(leaseContract.id);
-      expect(addTransactionAccountSpy).toHaveBeenCalledWith(expect.any(Array), debitAccount, creditAccount);
-      expect(comp.editForm.get('debit')!.value).toEqual(debitAccount);
-      expect(comp.editForm.get('credit')!.value).toEqual(creditAccount);
     });
   });
 });

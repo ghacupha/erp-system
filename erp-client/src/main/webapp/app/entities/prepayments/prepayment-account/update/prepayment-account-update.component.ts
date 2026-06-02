@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -46,6 +28,8 @@ import { IPrepaymentMapping } from 'app/entities/prepayments/prepayment-mapping/
 import { PrepaymentMappingService } from 'app/entities/prepayments/prepayment-mapping/service/prepayment-mapping.service';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 import { BusinessDocumentService } from 'app/entities/documentation/business-document/service/business-document.service';
+import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
+import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 
 @Component({
   selector: 'jhi-prepayment-account-update',
@@ -63,6 +47,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   prepaymentMappingsSharedCollection: IPrepaymentMapping[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
+  applicationUsersSharedCollection: IApplicationUser[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -82,6 +67,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     generalParameters: [],
     prepaymentParameters: [],
     businessDocuments: [],
+    createdBy: [],
   });
 
   constructor(
@@ -97,6 +83,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected prepaymentMappingService: PrepaymentMappingService,
     protected businessDocumentService: BusinessDocumentService,
+    protected applicationUserService: ApplicationUserService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -171,6 +158,10 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   }
 
   trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
+    return item.id!;
+  }
+
+  trackApplicationUserById(index: number, item: IApplicationUser): number {
     return item.id!;
   }
 
@@ -259,6 +250,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       generalParameters: prepaymentAccount.generalParameters,
       prepaymentParameters: prepaymentAccount.prepaymentParameters,
       businessDocuments: prepaymentAccount.businessDocuments,
+      createdBy: prepaymentAccount.createdBy,
     });
 
     this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
@@ -297,6 +289,10 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
       this.businessDocumentsSharedCollection,
       ...(prepaymentAccount.businessDocuments ?? [])
+    );
+    this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing(
+      this.applicationUsersSharedCollection,
+      prepaymentAccount.createdBy
     );
   }
 
@@ -405,6 +401,16 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
         )
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
+
+    this.applicationUserService
+      .query()
+      .pipe(map((res: HttpResponse<IApplicationUser[]>) => res.body ?? []))
+      .pipe(
+        map((applicationUsers: IApplicationUser[]) =>
+          this.applicationUserService.addApplicationUserToCollectionIfMissing(applicationUsers, this.editForm.get('createdBy')!.value)
+        )
+      )
+      .subscribe((applicationUsers: IApplicationUser[]) => (this.applicationUsersSharedCollection = applicationUsers));
   }
 
   protected createFromForm(): IPrepaymentAccount {
@@ -427,6 +433,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       generalParameters: this.editForm.get(['generalParameters'])!.value,
       prepaymentParameters: this.editForm.get(['prepaymentParameters'])!.value,
       businessDocuments: this.editForm.get(['businessDocuments'])!.value,
+      createdBy: this.editForm.get(['createdBy'])!.value,
     };
   }
 }

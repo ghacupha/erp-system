@@ -1,22 +1,5 @@
 package io.github.erp.service.dto;
 
-/*-
- * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
- * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -49,6 +32,8 @@ public class PrepaymentAccountDTO implements Serializable {
 
     private LocalDate recognitionDate;
 
+    private LocalDate postingDate;
+
     private SettlementCurrencyDTO settlementCurrency;
 
     private SettlementDTO prepaymentTransaction;
@@ -68,6 +53,8 @@ public class PrepaymentAccountDTO implements Serializable {
     private Set<PrepaymentMappingDTO> prepaymentParameters = new HashSet<>();
 
     private Set<BusinessDocumentDTO> businessDocuments = new HashSet<>();
+
+    private ApplicationUserDTO createdBy;
 
     public Long getId() {
         return id;
@@ -123,6 +110,14 @@ public class PrepaymentAccountDTO implements Serializable {
 
     public void setRecognitionDate(LocalDate recognitionDate) {
         this.recognitionDate = recognitionDate;
+    }
+
+    public LocalDate getPostingDate() {
+        return postingDate;
+    }
+
+    public void setPostingDate(LocalDate postingDate) {
+        this.postingDate = postingDate;
     }
 
     public SettlementCurrencyDTO getSettlementCurrency() {
@@ -205,6 +200,14 @@ public class PrepaymentAccountDTO implements Serializable {
         this.businessDocuments = businessDocuments;
     }
 
+    public ApplicationUserDTO getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(ApplicationUserDTO createdBy) {
+        this.createdBy = createdBy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -237,6 +240,7 @@ public class PrepaymentAccountDTO implements Serializable {
             ", prepaymentAmount=" + getPrepaymentAmount() +
             ", prepaymentGuid='" + getPrepaymentGuid() + "'" +
             ", recognitionDate='" + getRecognitionDate() + "'" +
+            ", postingDate='" + getPostingDate() + "'" +
             ", settlementCurrency=" + getSettlementCurrency() +
             ", prepaymentTransaction=" + getPrepaymentTransaction() +
             ", serviceOutlet=" + getServiceOutlet() +
@@ -247,6 +251,7 @@ public class PrepaymentAccountDTO implements Serializable {
             ", generalParameters=" + getGeneralParameters() +
             ", prepaymentParameters=" + getPrepaymentParameters() +
             ", businessDocuments=" + getBusinessDocuments() +
+            ", createdBy=" + getCreatedBy() +
             "}";
     }
 }

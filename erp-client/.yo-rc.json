@@ -332,7 +332,8 @@
       "WIPListItem",
       "WIPListReport",
       "WIPTransferListItem",
-      "WIPTransferListReport"
+      "WIPTransferListReport",
+      "LeaseTemplate"
     ],
     "lastLiquibaseTimestamp": 1728302935000,
     "monorepository": true,

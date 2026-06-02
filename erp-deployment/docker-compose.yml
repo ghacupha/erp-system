@@ -121,6 +121,9 @@ services:
       - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
       - "cluster.max_shards_per_node=3000"
       # - "index.mapping.total_fields.limit=2000"
+      - "xpack.security.enabled=true"
+      - "xpack.security.transport.ssl.enabled=false"
+      - "ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD}"
     networks:
       - erp-system-network
 
@@ -148,6 +151,8 @@ services:
       - KAFKA_REPLICATION_FACTOR=8
       - SPRING_ELASTICSEARCH_REST_URIS=http://erpsystem-elasticsearch:9200
       #- SPRING_ELASTICSEARCH_REST_URIS=${SPRING_DATA_JEST_URI}
+      - SPRING_ELASTICSEARCH_REST_USERNAME=elastic
+      - SPRING_ELASTICSEARCH_REST_PASSWORD=${ELASTICSEARCH_PASSWORD}
       - ERP_SYSTEM_PROD_DB=${ERP_SYSTEM_PROD_DB}
       - ERP_SYSTEM_DEV_DB=${ERP_SYSTEM_DEV_DB}
       - ERP_SYSTEM_PORT=${ERP_SYSTEM_PORT}

@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -33,6 +15,8 @@ import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.mode
 import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 import { BusinessDocumentService } from 'app/entities/documentation/business-document/service/business-document.service';
+import { ILeaseTemplate } from 'app/entities/lease-template/lease-template.model';
+import { LeaseTemplateService } from 'app/entities/lease-template/service/lease-template.service';
 
 @Component({
   selector: 'jhi-ifrs-16-lease-contract-update',
@@ -45,6 +29,7 @@ export class IFRS16LeaseContractUpdateComponent implements OnInit {
   dealersSharedCollection: IDealer[] = [];
   fiscalMonthsSharedCollection: IFiscalMonth[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
+  leaseTemplatesSharedCollection: ILeaseTemplate[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -61,6 +46,7 @@ export class IFRS16LeaseContractUpdateComponent implements OnInit {
     lastReportingPeriod: [null, Validators.required],
     leaseContractDocument: [],
     leaseContractCalculations: [],
+    leaseTemplate: [],
   });
 
   constructor(
@@ -69,6 +55,7 @@ export class IFRS16LeaseContractUpdateComponent implements OnInit {
     protected dealerService: DealerService,
     protected fiscalMonthService: FiscalMonthService,
     protected businessDocumentService: BusinessDocumentService,
+    protected leaseTemplateService: LeaseTemplateService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -111,6 +98,10 @@ export class IFRS16LeaseContractUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackLeaseTemplateById(index: number, item: ILeaseTemplate): number {
+    return item.id!;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IIFRS16LeaseContract>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -146,6 +137,7 @@ export class IFRS16LeaseContractUpdateComponent implements OnInit {
       lastReportingPeriod: iFRS16LeaseContract.lastReportingPeriod,
       leaseContractDocument: iFRS16LeaseContract.leaseContractDocument,
       leaseContractCalculations: iFRS16LeaseContract.leaseContractCalculations,
+      leaseTemplate: iFRS16LeaseContract.leaseTemplate,
     });
 
     this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
@@ -165,6 +157,10 @@ export class IFRS16LeaseContractUpdateComponent implements OnInit {
       this.businessDocumentsSharedCollection,
       iFRS16LeaseContract.leaseContractDocument,
       iFRS16LeaseContract.leaseContractCalculations
+    );
+    this.leaseTemplatesSharedCollection = this.leaseTemplateService.addLeaseTemplateToCollectionIfMissing(
+      this.leaseTemplatesSharedCollection,
+      iFRS16LeaseContract.leaseTemplate
     );
   }
 
@@ -215,6 +211,16 @@ export class IFRS16LeaseContractUpdateComponent implements OnInit {
         )
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
+
+    this.leaseTemplateService
+      .query()
+      .pipe(map((res: HttpResponse<ILeaseTemplate[]>) => res.body ?? []))
+      .pipe(
+        map((leaseTemplates: ILeaseTemplate[]) =>
+          this.leaseTemplateService.addLeaseTemplateToCollectionIfMissing(leaseTemplates, this.editForm.get('leaseTemplate')!.value)
+        )
+      )
+      .subscribe((leaseTemplates: ILeaseTemplate[]) => (this.leaseTemplatesSharedCollection = leaseTemplates));
   }
 
   protected createFromForm(): IIFRS16LeaseContract {
@@ -234,6 +240,7 @@ export class IFRS16LeaseContractUpdateComponent implements OnInit {
       lastReportingPeriod: this.editForm.get(['lastReportingPeriod'])!.value,
       leaseContractDocument: this.editForm.get(['leaseContractDocument'])!.value,
       leaseContractCalculations: this.editForm.get(['leaseContractCalculations'])!.value,
+      leaseTemplate: this.editForm.get(['leaseTemplate'])!.value,
     };
   }
 }

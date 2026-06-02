@@ -1,22 +1,5 @@
 package io.github.erp.service.criteria;
 
-/*-
- * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
- * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import io.github.erp.domain.enumeration.CompilationStatusTypes;
 import java.io.Serializable;
 import java.util.Objects;
@@ -71,7 +54,11 @@ public class PrepaymentCompilationRequestCriteria implements Serializable, Crite
 
     private UUIDFilter compilationToken;
 
+    private StringFilter narration;
+
     private LongFilter placeholderId;
+
+    private LongFilter createdById;
 
     private Boolean distinct;
 
@@ -83,7 +70,9 @@ public class PrepaymentCompilationRequestCriteria implements Serializable, Crite
         this.compilationStatus = other.compilationStatus == null ? null : other.compilationStatus.copy();
         this.itemsProcessed = other.itemsProcessed == null ? null : other.itemsProcessed.copy();
         this.compilationToken = other.compilationToken == null ? null : other.compilationToken.copy();
+        this.narration = other.narration == null ? null : other.narration.copy();
         this.placeholderId = other.placeholderId == null ? null : other.placeholderId.copy();
+        this.createdById = other.createdById == null ? null : other.createdById.copy();
         this.distinct = other.distinct;
     }
 
@@ -167,6 +156,21 @@ public class PrepaymentCompilationRequestCriteria implements Serializable, Crite
         this.compilationToken = compilationToken;
     }
 
+    public StringFilter getNarration() {
+        return narration;
+    }
+
+    public StringFilter narration() {
+        if (narration == null) {
+            narration = new StringFilter();
+        }
+        return narration;
+    }
+
+    public void setNarration(StringFilter narration) {
+        this.narration = narration;
+    }
+
     public LongFilter getPlaceholderId() {
         return placeholderId;
     }
@@ -180,6 +184,21 @@ public class PrepaymentCompilationRequestCriteria implements Serializable, Crite
 
     public void setPlaceholderId(LongFilter placeholderId) {
         this.placeholderId = placeholderId;
+    }
+
+    public LongFilter getCreatedById() {
+        return createdById;
+    }
+
+    public LongFilter createdById() {
+        if (createdById == null) {
+            createdById = new LongFilter();
+        }
+        return createdById;
+    }
+
+    public void setCreatedById(LongFilter createdById) {
+        this.createdById = createdById;
     }
 
     public Boolean getDistinct() {
@@ -205,14 +224,26 @@ public class PrepaymentCompilationRequestCriteria implements Serializable, Crite
             Objects.equals(compilationStatus, that.compilationStatus) &&
             Objects.equals(itemsProcessed, that.itemsProcessed) &&
             Objects.equals(compilationToken, that.compilationToken) &&
+            Objects.equals(narration, that.narration) &&
             Objects.equals(placeholderId, that.placeholderId) &&
+            Objects.equals(createdById, that.createdById) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, timeOfRequest, compilationStatus, itemsProcessed, compilationToken, placeholderId, distinct);
+        return Objects.hash(
+            id,
+            timeOfRequest,
+            compilationStatus,
+            itemsProcessed,
+            compilationToken,
+            narration,
+            placeholderId,
+            createdById,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -224,7 +255,9 @@ public class PrepaymentCompilationRequestCriteria implements Serializable, Crite
             (compilationStatus != null ? "compilationStatus=" + compilationStatus + ", " : "") +
             (itemsProcessed != null ? "itemsProcessed=" + itemsProcessed + ", " : "") +
             (compilationToken != null ? "compilationToken=" + compilationToken + ", " : "") +
+            (narration != null ? "narration=" + narration + ", " : "") +
             (placeholderId != null ? "placeholderId=" + placeholderId + ", " : "") +
+            (createdById != null ? "createdById=" + createdById + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

@@ -199,6 +199,15 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             List.of()
         ),
         new ReportMetadataSeed(
+            "Unallocated Prepayment Amortizations",
+            "Prepayment amortisation entries that are not allocated to a prepayment account.",
+            "Prepayments",
+            "reports/view/unallocated-prepayment-amortizations",
+            "api/prepayments/unallocated-prepayment-amortizations",
+            true,
+            List.of()
+        ),
+        new ReportMetadataSeed(
             "Amortisation Posting Summary",
             "Summary of amortisation postings grouped by recognition rule for reconciliation.",
             "Amortisation",

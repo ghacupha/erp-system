@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -35,6 +17,8 @@ import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.mode
 import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 import { BusinessDocumentService } from 'app/entities/documentation/business-document/service/business-document.service';
+import { ILeaseTemplate } from 'app/entities/lease-template/lease-template.model';
+import { LeaseTemplateService } from 'app/entities/lease-template/service/lease-template.service';
 
 import { IFRS16LeaseContractUpdateComponent } from './ifrs-16-lease-contract-update.component';
 
@@ -47,6 +31,7 @@ describe('IFRS16LeaseContract Management Update Component', () => {
   let dealerService: DealerService;
   let fiscalMonthService: FiscalMonthService;
   let businessDocumentService: BusinessDocumentService;
+  let leaseTemplateService: LeaseTemplateService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -64,6 +49,7 @@ describe('IFRS16LeaseContract Management Update Component', () => {
     dealerService = TestBed.inject(DealerService);
     fiscalMonthService = TestBed.inject(FiscalMonthService);
     businessDocumentService = TestBed.inject(BusinessDocumentService);
+    leaseTemplateService = TestBed.inject(LeaseTemplateService);
 
     comp = fixture.componentInstance;
   });
@@ -155,6 +141,28 @@ describe('IFRS16LeaseContract Management Update Component', () => {
       expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call LeaseTemplate query and add missing value', () => {
+      const iFRS16LeaseContract: IIFRS16LeaseContract = { id: 456 };
+      const leaseTemplate: ILeaseTemplate = { id: 51409 };
+      iFRS16LeaseContract.leaseTemplate = leaseTemplate;
+
+      const leaseTemplateCollection: ILeaseTemplate[] = [{ id: 65502 }];
+      jest.spyOn(leaseTemplateService, 'query').mockReturnValue(of(new HttpResponse({ body: leaseTemplateCollection })));
+      const additionalLeaseTemplates = [leaseTemplate];
+      const expectedCollection: ILeaseTemplate[] = [...additionalLeaseTemplates, ...leaseTemplateCollection];
+      jest.spyOn(leaseTemplateService, 'addLeaseTemplateToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ iFRS16LeaseContract });
+      comp.ngOnInit();
+
+      expect(leaseTemplateService.query).toHaveBeenCalled();
+      expect(leaseTemplateService.addLeaseTemplateToCollectionIfMissing).toHaveBeenCalledWith(
+        leaseTemplateCollection,
+        ...additionalLeaseTemplates
+      );
+      expect(comp.leaseTemplatesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const iFRS16LeaseContract: IIFRS16LeaseContract = { id: 456 };
       const superintendentServiceOutlet: IServiceOutlet = { id: 76435 };
@@ -169,6 +177,8 @@ describe('IFRS16LeaseContract Management Update Component', () => {
       iFRS16LeaseContract.leaseContractDocument = leaseContractDocument;
       const leaseContractCalculations: IBusinessDocument = { id: 32620 };
       iFRS16LeaseContract.leaseContractCalculations = leaseContractCalculations;
+      const leaseTemplate: ILeaseTemplate = { id: 30598 };
+      iFRS16LeaseContract.leaseTemplate = leaseTemplate;
 
       activatedRoute.data = of({ iFRS16LeaseContract });
       comp.ngOnInit();
@@ -180,6 +190,7 @@ describe('IFRS16LeaseContract Management Update Component', () => {
       expect(comp.fiscalMonthsSharedCollection).toContain(lastReportingPeriod);
       expect(comp.businessDocumentsSharedCollection).toContain(leaseContractDocument);
       expect(comp.businessDocumentsSharedCollection).toContain(leaseContractCalculations);
+      expect(comp.leaseTemplatesSharedCollection).toContain(leaseTemplate);
     });
   });
 
@@ -276,6 +287,14 @@ describe('IFRS16LeaseContract Management Update Component', () => {
       it('Should return tracked BusinessDocument primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackBusinessDocumentById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackLeaseTemplateById', () => {
+      it('Should return tracked LeaseTemplate primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackLeaseTemplateById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

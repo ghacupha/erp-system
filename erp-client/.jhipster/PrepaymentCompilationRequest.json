@@ -17,6 +17,14 @@
       "fieldName": "compilationToken",
       "fieldType": "UUID",
       "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "narration",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "postedBy",
+      "fieldType": "String"
     }
   ],
   "clientRootFolder": "prepayments",

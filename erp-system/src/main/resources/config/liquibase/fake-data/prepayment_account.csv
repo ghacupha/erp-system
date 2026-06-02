@@ -1,11 +1,11 @@
-id;catalogue_number;particulars;notes;prepayment_amount;prepayment_guid;recognition_date
-1;Computer middleware collaborative;mint Account Soft;../fake-data/blob/hipster.txt;54503;04cca300-95a5-4285-8dc6-38cab2c6c0c5;2022-05-01
-2;Soft;payment;../fake-data/blob/hipster.txt;45451;fa4b189e-2513-4844-854e-9aadfedc59c7;2022-05-01
-3;info-mediaries Soap portals;bluetooth Incredible;../fake-data/blob/hipster.txt;82438;6ff97e1e-8256-4e88-b9ee-14ffa9548b63;2022-04-30
-4;AI systems;FTP Court value-added;../fake-data/blob/hipster.txt;39064;b09c1792-8909-4581-aa69-a0e902e3abf9;2022-04-30
-5;Illinois Tasty;Soft Optimization matrices;../fake-data/blob/hipster.txt;26657;7b21db2a-4e22-4f99-9e4a-1404d580395a;2022-04-30
-6;Rustic;Seychelles;../fake-data/blob/hipster.txt;44655;9ab07b0a-a602-445f-9e0e-b7e11ad03d7e;2022-05-01
-7;mission-critical Infrastructure withdrawal;SMTP;../fake-data/blob/hipster.txt;38598;56cc27ae-423d-4f1d-8146-e249c8acd884;2022-05-01
-8;Berkshire Chips Maryland;Internal Mountains;../fake-data/blob/hipster.txt;35329;eac80cbe-0e57-4152-9b3d-76203f7c23f1;2022-05-01
-9;Bike generate Maryland;Metal transform partnerships;../fake-data/blob/hipster.txt;48240;af2a3994-678b-4e9b-afb3-6d26fea1a623;2022-05-01
-10;Adaptive;National;../fake-data/blob/hipster.txt;71915;88c7c4cc-a7e9-4721-a4c2-094d1ebe916c;2022-04-30
+id;catalogue_number;particulars;notes;prepayment_amount;prepayment_guid;recognition_date;posting_date
+1;Computer middleware collaborative;mint Account Soft;../fake-data/blob/hipster.txt;54503;04cca300-95a5-4285-8dc6-38cab2c6c0c5;2022-05-01;2022-05-01
+2;programming;Bedfordshire Developer;../fake-data/blob/hipster.txt;72674;189e2513-8448-454e-9aad-fedc59c71f47;2022-04-30;2022-05-01
+3;Japan alarm;bandwidth Fresh;../fake-data/blob/hipster.txt;99862;f97e1e82-56e8-48f9-ae14-ffa9548b63a7;2022-04-30;2022-05-01
+4;systems;FTP Court value-added;../fake-data/blob/hipster.txt;39064;b09c1792-8909-4581-aa69-a0e902e3abf9;2022-04-30;2022-05-01
+5;Persevering Creative;reboot;../fake-data/blob/hipster.txt;50702;059f47b2-1db2-4a4e-a2f9-99e4a1404d58;2022-05-01;2022-05-01
+6;monitoring alliance;Savings;../fake-data/blob/hipster.txt;69119;b779ab07-b0aa-4602-85f1-e0eb7e11ad03;2022-04-30;2022-04-30
+7;Mouse Infrastructure withdrawal;SMTP;../fake-data/blob/hipster.txt;38598;56cc27ae-423d-4f1d-8146-e249c8acd884;2022-05-01;2022-04-30
+8;killer Agent;Metal indexing;../fake-data/blob/hipster.txt;53378;65eac80c-be0e-4571-925b-3d76203f7c23;2022-04-30;2022-05-01
+9;panel Fantastic;Maryland driver;../fake-data/blob/hipster.txt;71471;08612615-7af2-4a39-9467-8be9befb36d2;2022-05-01;2022-04-30
+10;deposit orchestrate transform;Steel;../fake-data/blob/hipster.txt;33039;bb88c7c4-cca7-4e97-a1e4-c2094d1ebe91;2022-05-01;2022-04-30
