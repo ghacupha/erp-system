@@ -1,22 +1,5 @@
 package io.github.erp.domain;
 
-/*-
- * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
- * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.github.erp.domain.enumeration.CompilationStatusTypes;
 import java.io.Serializable;
@@ -60,6 +43,9 @@ public class PrepaymentCompilationRequest implements Serializable {
     @Column(name = "compilation_token", nullable = false, unique = true)
     private UUID compilationToken;
 
+    @Column(name = "narration")
+    private String narration;
+
     @ManyToMany
     @JoinTable(
         name = "rel_prepayment_compilation_request__placeholder",
@@ -69,6 +55,9 @@ public class PrepaymentCompilationRequest implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "containingPlaceholder" }, allowSetters = true)
     private Set<Placeholder> placeholders = new HashSet<>();
+
+    @ManyToOne
+    private ApplicationUser createdBy;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -137,6 +126,19 @@ public class PrepaymentCompilationRequest implements Serializable {
         this.compilationToken = compilationToken;
     }
 
+    public String getNarration() {
+        return this.narration;
+    }
+
+    public PrepaymentCompilationRequest narration(String narration) {
+        this.setNarration(narration);
+        return this;
+    }
+
+    public void setNarration(String narration) {
+        this.narration = narration;
+    }
+
     public Set<Placeholder> getPlaceholders() {
         return this.placeholders;
     }
@@ -157,6 +159,19 @@ public class PrepaymentCompilationRequest implements Serializable {
 
     public PrepaymentCompilationRequest removePlaceholder(Placeholder placeholder) {
         this.placeholders.remove(placeholder);
+        return this;
+    }
+
+    public ApplicationUser getCreatedBy() {
+        return this.createdBy;
+    }
+
+    public void setCreatedBy(ApplicationUser applicationUser) {
+        this.createdBy = applicationUser;
+    }
+
+    public PrepaymentCompilationRequest createdBy(ApplicationUser applicationUser) {
+        this.setCreatedBy(applicationUser);
         return this;
     }
 
@@ -188,6 +203,7 @@ public class PrepaymentCompilationRequest implements Serializable {
             ", compilationStatus='" + getCompilationStatus() + "'" +
             ", itemsProcessed=" + getItemsProcessed() +
             ", compilationToken='" + getCompilationToken() + "'" +
+            ", narration='" + getNarration() + "'" +
             "}";
     }
 }

@@ -24,7 +24,7 @@ eureka:
   client:
     enabled: true # By default, the JHipster Registry is not used in the "dev" profile
     service-url:
-      defaultZone: http://admin:${jhipster.registry.password}@localhost:8771/eureka/
+      defaultZone: http://admin:${jhipster.registry.password}@localhost:${JHIPSTER_REGISTRY_PORT:8771}/eureka/
 
 logging:
   level:
@@ -53,7 +53,7 @@ spring:
       indent-output: true
   cloud:
     config:
-      uri: http://admin:${jhipster.registry.password}@localhost:8771/config
+      uri: http://admin:${jhipster.registry.password}@localhost:${JHIPSTER_REGISTRY_PORT:8771}/config
       # name of the config server's property source (file.yml) that we want to use
       name: erpSystem
       profile: dev

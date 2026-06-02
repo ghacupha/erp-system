@@ -17,6 +17,10 @@
       "fieldName": "compilationToken",
       "fieldType": "UUID",
       "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "narration",
+      "fieldType": "String"
     }
   ],
   "relationships": [
@@ -27,6 +31,12 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "prepaymentCompilationRequest"
+    },
+    {
+      "relationshipName": "createdBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
     }
   ],
   "service": "serviceImpl",

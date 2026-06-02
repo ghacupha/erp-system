@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
@@ -64,7 +46,7 @@ describe('AmortizationSequence e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/prepayment-accounts',
-      body: {"catalogueNumber":"navigate hack","recognitionDate":"2022-05-01","particulars":"navigating","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","prepaymentAmount":15832,"prepaymentGuid":"e445692b-3244-4a7e-9f3d-e4306f33927f"},
+      body: {"catalogueNumber":"navigate hack","recognitionDate":"2022-05-01","particulars":"navigating","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","prepaymentAmount":15832,"prepaymentGuid":"e445692b-3244-4a7e-9f3d-e4306f33927f","postingDate":"2022-05-01","postedBy":"encoding"},
     }).then(({ body }) => {
       prepaymentAccount = body;
     });

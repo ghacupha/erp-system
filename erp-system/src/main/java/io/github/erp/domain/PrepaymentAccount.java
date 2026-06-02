@@ -78,6 +78,9 @@ public class PrepaymentAccount implements Serializable {
     @Field(type = FieldType.Date)
     private LocalDate recognitionDate;
 
+    @Column(name = "posting_date")
+    private LocalDate postingDate;
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "placeholders" }, allowSetters = true)
     private SettlementCurrency settlementCurrency;
@@ -175,6 +178,13 @@ public class PrepaymentAccount implements Serializable {
     )
     private Set<BusinessDocument> businessDocuments = new HashSet<>();
 
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity", "placeholders" },
+        allowSetters = true
+    )
+    private ApplicationUser createdBy;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -266,6 +276,19 @@ public class PrepaymentAccount implements Serializable {
 
     public void setRecognitionDate(LocalDate recognitionDate) {
         this.recognitionDate = recognitionDate;
+    }
+
+    public LocalDate getPostingDate() {
+        return this.postingDate;
+    }
+
+    public PrepaymentAccount postingDate(LocalDate postingDate) {
+        this.setPostingDate(postingDate);
+        return this;
+    }
+
+    public void setPostingDate(LocalDate postingDate) {
+        this.postingDate = postingDate;
     }
 
     public SettlementCurrency getSettlementCurrency() {
@@ -438,6 +461,19 @@ public class PrepaymentAccount implements Serializable {
         return this;
     }
 
+    public ApplicationUser getCreatedBy() {
+        return this.createdBy;
+    }
+
+    public void setCreatedBy(ApplicationUser applicationUser) {
+        this.createdBy = applicationUser;
+    }
+
+    public PrepaymentAccount createdBy(ApplicationUser applicationUser) {
+        this.setCreatedBy(applicationUser);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -468,6 +504,7 @@ public class PrepaymentAccount implements Serializable {
             ", prepaymentAmount=" + getPrepaymentAmount() +
             ", prepaymentGuid='" + getPrepaymentGuid() + "'" +
             ", recognitionDate='" + getRecognitionDate() + "'" +
+            ", postingDate='" + getPostingDate() + "'" +
             "}";
     }
 }

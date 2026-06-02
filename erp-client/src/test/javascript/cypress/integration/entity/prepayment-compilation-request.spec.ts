@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
@@ -34,7 +16,7 @@ describe('PrepaymentCompilationRequest e2e test', () => {
   const prepaymentCompilationRequestPageUrlPattern = new RegExp('/prepayment-compilation-request(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const prepaymentCompilationRequestSample = { compilationToken: 'a7fda709-e1ab-4867-9703-67529bf0de6c' };
+  const prepaymentCompilationRequestSample = { compilationToken: '71703675-29bf-40de-acc3-00432a6e02dd' };
 
   let prepaymentCompilationRequest: any;
 
@@ -181,6 +163,10 @@ describe('PrepaymentCompilationRequest e2e test', () => {
         .type('e101e6fd-4278-4b89-b653-d1ac282568c7')
         .invoke('val')
         .should('match', new RegExp('e101e6fd-4278-4b89-b653-d1ac282568c7'));
+
+      cy.get(`[data-cy="narration"]`).type('Ways Investment').should('have.value', 'Ways Investment');
+
+      cy.get(`[data-cy="postedBy"]`).type('SDD generate').should('have.value', 'SDD generate');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

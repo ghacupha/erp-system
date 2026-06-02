@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { element, by, ElementFinder } from 'protractor';
 
 export class IFRS16LeaseContractComponentsPage {
@@ -62,6 +44,7 @@ export class IFRS16LeaseContractUpdatePage {
   lastReportingPeriodSelect = element(by.id('field_lastReportingPeriod'));
   leaseContractDocumentSelect = element(by.id('field_leaseContractDocument'));
   leaseContractCalculationsSelect = element(by.id('field_leaseContractCalculations'));
+  leaseTemplateSelect = element(by.id('field_leaseTemplate'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -225,6 +208,22 @@ export class IFRS16LeaseContractUpdatePage {
 
   async getLeaseContractCalculationsSelectedOption(): Promise<string> {
     return await this.leaseContractCalculationsSelect.element(by.css('option:checked')).getText();
+  }
+
+  async leaseTemplateSelectLastOption(): Promise<void> {
+    await this.leaseTemplateSelect.all(by.tagName('option')).last().click();
+  }
+
+  async leaseTemplateSelectOption(option: string): Promise<void> {
+    await this.leaseTemplateSelect.sendKeys(option);
+  }
+
+  getLeaseTemplateSelect(): ElementFinder {
+    return this.leaseTemplateSelect;
+  }
+
+  async getLeaseTemplateSelectedOption(): Promise<string> {
+    return await this.leaseTemplateSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

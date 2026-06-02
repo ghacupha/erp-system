@@ -1,0 +1,403 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-lease-template-heading" data-cy="LeaseTemplateCreateUpdateHeading">Create or edit a Lease Template</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_templateTitle">Template Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="templateTitle"
+            id="field_templateTitle"
+            data-cy="templateTitle"
+            formControlName="templateTitle"
+          />
+          <div
+            *ngIf="
+              editForm.get('templateTitle')!.invalid && (editForm.get('templateTitle')!.dirty || editForm.get('templateTitle')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('templateTitle')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetAccount">Asset Account</label>
+          <select class="form-control" id="field_assetAccount" data-cy="assetAccount" name="assetAccount" formControlName="assetAccount">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('assetAccount')!.value?.id
+                  ? editForm.get('assetAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationAccount">Depreciation Account</label>
+          <select
+            class="form-control"
+            id="field_depreciationAccount"
+            data-cy="depreciationAccount"
+            name="depreciationAccount"
+            formControlName="depreciationAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('depreciationAccount')!.value?.id
+                  ? editForm.get('depreciationAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accruedDepreciationAccount">Accrued Depreciation Account</label>
+          <select
+            class="form-control"
+            id="field_accruedDepreciationAccount"
+            data-cy="accruedDepreciationAccount"
+            name="accruedDepreciationAccount"
+            formControlName="accruedDepreciationAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('accruedDepreciationAccount')!.value?.id
+                  ? editForm.get('accruedDepreciationAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_interestPaidTransferDebitAccount">Interest Paid Transfer Debit Account</label>
+          <select
+            class="form-control"
+            id="field_interestPaidTransferDebitAccount"
+            data-cy="interestPaidTransferDebitAccount"
+            name="interestPaidTransferDebitAccount"
+            formControlName="interestPaidTransferDebitAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('interestPaidTransferDebitAccount')!.value?.id
+                  ? editForm.get('interestPaidTransferDebitAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_interestPaidTransferCreditAccount">Interest Paid Transfer Credit Account</label>
+          <select
+            class="form-control"
+            id="field_interestPaidTransferCreditAccount"
+            data-cy="interestPaidTransferCreditAccount"
+            name="interestPaidTransferCreditAccount"
+            formControlName="interestPaidTransferCreditAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('interestPaidTransferCreditAccount')!.value?.id
+                  ? editForm.get('interestPaidTransferCreditAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_interestAccruedDebitAccount">Interest Accrued Debit Account</label>
+          <select
+            class="form-control"
+            id="field_interestAccruedDebitAccount"
+            data-cy="interestAccruedDebitAccount"
+            name="interestAccruedDebitAccount"
+            formControlName="interestAccruedDebitAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('interestAccruedDebitAccount')!.value?.id
+                  ? editForm.get('interestAccruedDebitAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_interestAccruedCreditAccount">Interest Accrued Credit Account</label>
+          <select
+            class="form-control"
+            id="field_interestAccruedCreditAccount"
+            data-cy="interestAccruedCreditAccount"
+            name="interestAccruedCreditAccount"
+            formControlName="interestAccruedCreditAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('interestAccruedCreditAccount')!.value?.id
+                  ? editForm.get('interestAccruedCreditAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseRecognitionDebitAccount">Lease Recognition Debit Account</label>
+          <select
+            class="form-control"
+            id="field_leaseRecognitionDebitAccount"
+            data-cy="leaseRecognitionDebitAccount"
+            name="leaseRecognitionDebitAccount"
+            formControlName="leaseRecognitionDebitAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('leaseRecognitionDebitAccount')!.value?.id
+                  ? editForm.get('leaseRecognitionDebitAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseRecognitionCreditAccount">Lease Recognition Credit Account</label>
+          <select
+            class="form-control"
+            id="field_leaseRecognitionCreditAccount"
+            data-cy="leaseRecognitionCreditAccount"
+            name="leaseRecognitionCreditAccount"
+            formControlName="leaseRecognitionCreditAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('leaseRecognitionCreditAccount')!.value?.id
+                  ? editForm.get('leaseRecognitionCreditAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseRepaymentDebitAccount">Lease Repayment Debit Account</label>
+          <select
+            class="form-control"
+            id="field_leaseRepaymentDebitAccount"
+            data-cy="leaseRepaymentDebitAccount"
+            name="leaseRepaymentDebitAccount"
+            formControlName="leaseRepaymentDebitAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('leaseRepaymentDebitAccount')!.value?.id
+                  ? editForm.get('leaseRepaymentDebitAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseRepaymentCreditAccount">Lease Repayment Credit Account</label>
+          <select
+            class="form-control"
+            id="field_leaseRepaymentCreditAccount"
+            data-cy="leaseRepaymentCreditAccount"
+            name="leaseRepaymentCreditAccount"
+            formControlName="leaseRepaymentCreditAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('leaseRepaymentCreditAccount')!.value?.id
+                  ? editForm.get('leaseRepaymentCreditAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_rouRecognitionCreditAccount">Rou Recognition Credit Account</label>
+          <select
+            class="form-control"
+            id="field_rouRecognitionCreditAccount"
+            data-cy="rouRecognitionCreditAccount"
+            name="rouRecognitionCreditAccount"
+            formControlName="rouRecognitionCreditAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('rouRecognitionCreditAccount')!.value?.id
+                  ? editForm.get('rouRecognitionCreditAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_rouRecognitionDebitAccount">Rou Recognition Debit Account</label>
+          <select
+            class="form-control"
+            id="field_rouRecognitionDebitAccount"
+            data-cy="rouRecognitionDebitAccount"
+            name="rouRecognitionDebitAccount"
+            formControlName="rouRecognitionDebitAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('rouRecognitionDebitAccount')!.value?.id
+                  ? editForm.get('rouRecognitionDebitAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetCategory">Asset Category</label>
+          <select
+            class="form-control"
+            id="field_assetCategory"
+            data-cy="assetCategory"
+            name="assetCategory"
+            formControlName="assetCategory"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                assetCategoryOption.id === editForm.get('assetCategory')!.value?.id
+                  ? editForm.get('assetCategory')!.value
+                  : assetCategoryOption
+              "
+              *ngFor="let assetCategoryOption of assetCategoriesSharedCollection; trackBy: trackAssetCategoryById"
+            >
+              {{ assetCategoryOption.assetCategoryName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_serviceOutlet">Service Outlet</label>
+          <select
+            class="form-control"
+            id="field_serviceOutlet"
+            data-cy="serviceOutlet"
+            name="serviceOutlet"
+            formControlName="serviceOutlet"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                serviceOutletOption.id === editForm.get('serviceOutlet')!.value?.id
+                  ? editForm.get('serviceOutlet')!.value
+                  : serviceOutletOption
+              "
+              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
+            >
+              {{ serviceOutletOption.outletCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_mainDealer">Main Dealer</label>
+          <select class="form-control" id="field_mainDealer" data-cy="mainDealer" name="mainDealer" formControlName="mainDealer">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('mainDealer')!.value?.id ? editForm.get('mainDealer')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

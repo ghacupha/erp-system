@@ -26,6 +26,10 @@
     {
       "fieldName": "recognitionDate",
       "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "postingDate",
+      "fieldType": "LocalDate"
     }
   ],
   "relationships": [
@@ -96,6 +100,12 @@
       "otherEntityField": "documentTitle",
       "ownerSide": true,
       "otherEntityRelationshipName": "prepaymentAccount"
+    },
+    {
+      "relationshipName": "createdBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
     }
   ],
   "service": "serviceImpl",

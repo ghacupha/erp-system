@@ -1,22 +1,3 @@
-<!--
-
-    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
 <div>
   <h2 id="page-heading" data-cy="IFRS16LeaseContractHeading">
     <span>IFRS 16 Lease Contracts</span>
@@ -93,6 +74,7 @@
           <th scope="col" jhiSortBy="leaseContractCalculations.documentTitle">
             <span>Lease Contract Calculations</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="leaseTemplate.templateTitle"><span>Lease Template</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -145,6 +127,13 @@
             <div *ngIf="iFRS16LeaseContract.leaseContractCalculations">
               <a [routerLink]="['/business-document', iFRS16LeaseContract.leaseContractCalculations?.id, 'view']">{{
                 iFRS16LeaseContract.leaseContractCalculations?.documentTitle
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="iFRS16LeaseContract.leaseTemplate">
+              <a [routerLink]="['/lease-template', iFRS16LeaseContract.leaseTemplate?.id, 'view']">{{
+                iFRS16LeaseContract.leaseTemplate?.templateTitle
               }}</a>
             </div>
           </td>

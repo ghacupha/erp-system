@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+#
+# Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
+# Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# Client-side variant: adds --skip-server flag.
+# See erp-system/scripts/generate-entity for full strategy explanation.
+#
+
+set -euo pipefail
+
+ENTITY_NAME="${1:-}"
+
+if [[ -z "$ENTITY_NAME" ]]; then
+    echo "Usage: generate-entity <EntityName>"
+    echo "Example: generate-entity PrepaymentAccount"
+    exit 1
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CLIENT_ROOT="$(dirname "$SCRIPT_DIR")"
+JHIPSTER_DIR="$CLIENT_ROOT/.jhipster"
+
+if [[ ! -f "$JHIPSTER_DIR/$ENTITY_NAME.json" ]]; then
+    echo "Error: entity file not found: $JHIPSTER_DIR/$ENTITY_NAME.json" >&2
+    exit 1
+fi
+
+BACKUP_DIR="$(mktemp -d)"
+
+restore_stubs() {
+    if [[ -d "$BACKUP_DIR" ]]; then
+        for f in "$BACKUP_DIR"/*.json 2>/dev/null; do
+            [[ -e "$f" ]] || continue
+            cp "$f" "$JHIPSTER_DIR/$(basename "$f")"
+        done
+        local count
+        count=$(find "$BACKUP_DIR" -name '*.json' | wc -l)
+        rm -rf "$BACKUP_DIR"
+        echo "Restored $count entity file(s)."
+    fi
+}
+
+trap restore_stubs EXIT
+
+python3 - "$ENTITY_NAME" "$JHIPSTER_DIR" "$BACKUP_DIR" <<'PYEOF'
+import json, os, sys
+from collections import deque
+
+entity_name  = sys.argv[1]
+jhipster_dir = sys.argv[2]
+backup_dir   = sys.argv[3]
+
+visited = set()
+queue   = deque([entity_name])
+while queue:
+    current = queue.popleft()
+    if current in visited:
+        continue
+    visited.add(current)
+    path = os.path.join(jhipster_dir, current + '.json')
+    if not os.path.exists(path):
+        continue
+    for r in json.load(open(path)).get('relationships', []):
+        n = r.get('otherEntityName', '')
+        if n:
+            pascal = n[0].upper() + n[1:]
+            if pascal not in visited:
+                queue.append(pascal)
+
+# Extend with one level of incoming references
+camel_closure = {n[0].lower() + n[1:] for n in visited}
+for fname in os.listdir(jhipster_dir):
+    if not fname.endswith('.json'):
+        continue
+    base = fname[:-5]
+    if base in visited:
+        continue
+    data = json.load(open(os.path.join(jhipster_dir, base + '.json')))
+    for r in data.get('relationships', []):
+        if r.get('otherEntityName', '') in camel_closure:
+            visited.add(base)
+            break
+
+stub = {
+    'changelogDate': '20200101000000',
+    'fields':        [],
+    'relationships': [],
+    'dto':           'no',
+    'service':       'no',
+    'pagination':    'no',
+}
+
+count = 0
+for fname in os.listdir(jhipster_dir):
+    if not fname.endswith('.json'):
+        continue
+    base = fname[:-5]
+    if base in visited:
+        continue
+    full_path = os.path.join(jhipster_dir, fname)
+    with open(os.path.join(backup_dir, fname), 'w') as bak:
+        with open(full_path) as src:
+            bak.write(src.read())
+    s = dict(stub, name=base)
+    with open(full_path, 'w') as out:
+        json.dump(s, out, indent=2)
+    count += 1
+
+print(f"Stubbed {count} entities. Closure size: {len(visited)}.", flush=True)
+PYEOF
+
+cd "$CLIENT_ROOT"
+npx jhipster entity "$ENTITY_NAME" --single-entity --skip-server

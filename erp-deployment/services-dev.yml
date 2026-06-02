@@ -85,5 +85,8 @@ services:
       - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
       - "cluster.max_shards_per_node=3000"
+      - "xpack.security.enabled=true"
+      - "xpack.security.transport.ssl.enabled=false"
+      - "ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD}"
     networks:
       - erp-system-dev-network

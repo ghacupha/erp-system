@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
@@ -35,12 +17,11 @@ describe('LeaseLiability e2e test', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const leaseLiabilitySample = {
-    leaseId: 'Orchestrator Tuna',
-    liabilityAmount: 50846,
+    leaseId: 'Way e-business',
+    liabilityAmount: 76474,
     startDate: '2024-06-17',
     endDate: '2024-06-17',
-    interestRate: 4623,
-    hasBeenAmortised: true,
+    interestRate: 88938,
     hasBeenFullyAmortised: false,
   };
 
@@ -247,9 +228,6 @@ describe('LeaseLiability e2e test', () => {
       cy.get(`[data-cy="endDate"]`).type('2024-06-18').should('have.value', '2024-06-18');
 
       cy.get(`[data-cy="interestRate"]`).type('24413').should('have.value', '24413');
-
-      cy.get(`[data-cy="hasBeenAmortised"]`).should('not.be.checked');
-      cy.get(`[data-cy="hasBeenAmortised"]`).click().should('be.checked');
 
       cy.get(`[data-cy="hasBeenFullyAmortised"]`).should('not.be.checked');
       cy.get(`[data-cy="hasBeenFullyAmortised"]`).click().should('be.checked');

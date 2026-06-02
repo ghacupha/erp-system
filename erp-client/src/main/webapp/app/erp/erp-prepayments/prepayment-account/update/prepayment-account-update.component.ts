@@ -57,6 +57,7 @@ import {
   editingPrepaymentAccountStatus,
   prepaymentAccountUpdateSelectedInstance
 } from '../../../store/selectors/prepayment-account-workflows-status.selector';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'jhi-prepayment-account-update',
@@ -181,7 +182,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
         // prevent GUID overwrite
         prepaymentGuid: this.editForm.get(['prepaymentGuid'])?.value,
         dealer: transaction.biller,
-        recognitionDate: transaction.paymentDate,
+        recognitionDate: dayjs(transaction.paymentDate),
         settlementCurrency: transaction.settlementCurrency,
         particulars: transaction.description,
         prepaymentAmount: transaction.paymentAmount,

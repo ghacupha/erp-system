@@ -105,6 +105,12 @@
       "ownerSide": true,
       "relationshipName": "businessDocument",
       "relationshipType": "many-to-many"
+    },
+    {
+      "relationshipName": "createdBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
     }
   ],
   "service": "serviceImpl"

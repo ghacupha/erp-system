@@ -320,7 +320,17 @@
       "WIPListItem",
       "WIPTransferListItem",
       "WIPListReport",
-      "WIPTransferListReport"
+      "WIPTransferListReport",
+      "CsvFileUpload",
+      "LeaseLiabilityScheduleFileUpload",
+      "LeasePaymentUpload",
+      "LeaseSettlement",
+      "LeaseTemplate",
+      "LiabilityEnumeration",
+      "PresentValueEnumeration",
+      "ReportMetadata",
+      "TransactionAccountPostingRuleCondition",
+      "TransactionAccountPostingRuleTemplate"
     ],
     "entitySuffix": "",
     "incrementalChangelog": false,

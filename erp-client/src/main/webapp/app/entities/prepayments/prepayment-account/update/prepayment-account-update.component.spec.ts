@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -45,6 +27,8 @@ import { IPrepaymentMapping } from 'app/entities/prepayments/prepayment-mapping/
 import { PrepaymentMappingService } from 'app/entities/prepayments/prepayment-mapping/service/prepayment-mapping.service';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 import { BusinessDocumentService } from 'app/entities/documentation/business-document/service/business-document.service';
+import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
+import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 
 import { PrepaymentAccountUpdateComponent } from './prepayment-account-update.component';
 
@@ -62,6 +46,7 @@ describe('PrepaymentAccount Management Update Component', () => {
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
   let prepaymentMappingService: PrepaymentMappingService;
   let businessDocumentService: BusinessDocumentService;
+  let applicationUserService: ApplicationUserService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -84,6 +69,7 @@ describe('PrepaymentAccount Management Update Component', () => {
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
     prepaymentMappingService = TestBed.inject(PrepaymentMappingService);
     businessDocumentService = TestBed.inject(BusinessDocumentService);
+    applicationUserService = TestBed.inject(ApplicationUserService);
 
     comp = fixture.componentInstance;
   });
@@ -285,6 +271,28 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call ApplicationUser query and add missing value', () => {
+      const prepaymentAccount: IPrepaymentAccount = { id: 456 };
+      const createdBy: IApplicationUser = { id: 70681 };
+      prepaymentAccount.createdBy = createdBy;
+
+      const applicationUserCollection: IApplicationUser[] = [{ id: 12535 }];
+      jest.spyOn(applicationUserService, 'query').mockReturnValue(of(new HttpResponse({ body: applicationUserCollection })));
+      const additionalApplicationUsers = [createdBy];
+      const expectedCollection: IApplicationUser[] = [...additionalApplicationUsers, ...applicationUserCollection];
+      jest.spyOn(applicationUserService, 'addApplicationUserToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ prepaymentAccount });
+      comp.ngOnInit();
+
+      expect(applicationUserService.query).toHaveBeenCalled();
+      expect(applicationUserService.addApplicationUserToCollectionIfMissing).toHaveBeenCalledWith(
+        applicationUserCollection,
+        ...additionalApplicationUsers
+      );
+      expect(comp.applicationUsersSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const prepaymentAccount: IPrepaymentAccount = { id: 456 };
       const settlementCurrency: ISettlementCurrency = { id: 83958 };
@@ -307,6 +315,8 @@ describe('PrepaymentAccount Management Update Component', () => {
       prepaymentAccount.prepaymentParameters = [prepaymentParameters];
       const businessDocuments: IBusinessDocument = { id: 22127 };
       prepaymentAccount.businessDocuments = [businessDocuments];
+      const createdBy: IApplicationUser = { id: 2101 };
+      prepaymentAccount.createdBy = createdBy;
 
       activatedRoute.data = of({ prepaymentAccount });
       comp.ngOnInit();
@@ -322,6 +332,7 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(generalParameters);
       expect(comp.prepaymentMappingsSharedCollection).toContain(prepaymentParameters);
       expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
+      expect(comp.applicationUsersSharedCollection).toContain(createdBy);
     });
   });
 
@@ -458,6 +469,14 @@ describe('PrepaymentAccount Management Update Component', () => {
       it('Should return tracked BusinessDocument primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackBusinessDocumentById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackApplicationUserById', () => {
+      it('Should return tracked ApplicationUser primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackApplicationUserById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

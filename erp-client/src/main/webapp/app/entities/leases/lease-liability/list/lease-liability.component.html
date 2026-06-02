@@ -1,22 +1,3 @@
-<!--
-
-    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
 <div>
   <h2 id="page-heading" data-cy="LeaseLiabilityHeading">
     <span>Lease Liabilities</span>
@@ -75,7 +56,6 @@
           <th scope="col" jhiSortBy="startDate"><span>Start Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="endDate"><span>End Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="interestRate"><span>Interest Rate</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="hasBeenAmortised"><span>Has Been Amortised</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="hasBeenFullyAmortised"><span>Has Been Fully Amortised</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="leaseAmortizationCalculation.id">
             <span>Lease Amortization Calculation</span> <fa-icon icon="sort"></fa-icon>
@@ -94,7 +74,6 @@
           <td>{{ leaseLiability.startDate | formatMediumDate }}</td>
           <td>{{ leaseLiability.endDate | formatMediumDate }}</td>
           <td>{{ leaseLiability.interestRate }}</td>
-          <td>{{ leaseLiability.hasBeenAmortised }}</td>
           <td>{{ leaseLiability.hasBeenFullyAmortised }}</td>
           <td>
             <div *ngIf="leaseLiability.leaseAmortizationCalculation">

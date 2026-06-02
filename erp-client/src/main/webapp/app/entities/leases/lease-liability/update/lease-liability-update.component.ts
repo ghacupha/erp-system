@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -47,7 +29,6 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
     startDate: [null, [Validators.required]],
     endDate: [null, [Validators.required]],
     interestRate: [null, [Validators.required, Validators.min(0)]],
-    hasBeenAmortised: [null, [Validators.required]],
     hasBeenFullyAmortised: [null, [Validators.required]],
     leaseAmortizationCalculation: [],
     leaseContract: [null, Validators.required],
@@ -118,7 +99,6 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
       startDate: leaseLiability.startDate,
       endDate: leaseLiability.endDate,
       interestRate: leaseLiability.interestRate,
-      hasBeenAmortised: leaseLiability.hasBeenAmortised,
       hasBeenFullyAmortised: leaseLiability.hasBeenFullyAmortised,
       leaseAmortizationCalculation: leaseLiability.leaseAmortizationCalculation,
       leaseContract: leaseLiability.leaseContract,
@@ -175,7 +155,6 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
       startDate: this.editForm.get(['startDate'])!.value,
       endDate: this.editForm.get(['endDate'])!.value,
       interestRate: this.editForm.get(['interestRate'])!.value,
-      hasBeenAmortised: this.editForm.get(['hasBeenAmortised'])!.value,
       hasBeenFullyAmortised: this.editForm.get(['hasBeenFullyAmortised'])!.value,
       leaseAmortizationCalculation: this.editForm.get(['leaseAmortizationCalculation'])!.value,
       leaseContract: this.editForm.get(['leaseContract'])!.value,

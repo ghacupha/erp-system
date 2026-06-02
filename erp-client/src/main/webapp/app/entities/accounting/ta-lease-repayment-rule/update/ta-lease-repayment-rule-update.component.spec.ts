@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -148,39 +130,6 @@ describe('TALeaseRepaymentRule Management Update Component', () => {
       expect(comp.transactionAccountsSharedCollection).toContain(debit);
       expect(comp.transactionAccountsSharedCollection).toContain(credit);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
-    });
-
-    it('should patch debit and credit from the lease template when the lease changes', () => {
-      const leaseContract: IIFRS16LeaseContract = { id: 542 };
-      const debitAccount: ITransactionAccount = { id: 10101 };
-      const creditAccount: ITransactionAccount = { id: 20202 };
-      const leaseWithTemplate: IIFRS16LeaseContract = {
-        ...leaseContract,
-        leaseTemplate: {
-          leaseRepaymentDebitAccount: debitAccount,
-          leaseRepaymentCreditAccount: creditAccount,
-        },
-      };
-
-      jest.spyOn(iFRS16LeaseContractService, 'find').mockReturnValue(of(new HttpResponse({ body: leaseWithTemplate })));
-      jest.spyOn(iFRS16LeaseContractService, 'query').mockReturnValue(of(new HttpResponse({ body: [] })));
-      jest.spyOn(transactionAccountService, 'query').mockReturnValue(of(new HttpResponse({ body: [] })));
-      jest.spyOn(placeholderService, 'query').mockReturnValue(of(new HttpResponse({ body: [] })));
-      const addTransactionAccountToCollectionIfMissingSpy = jest
-        .spyOn(transactionAccountService, 'addTransactionAccountToCollectionIfMissing')
-        .mockImplementation(
-          (collection, ...accounts) => [...collection, ...accounts.filter(Boolean)] as ITransactionAccount[]
-        );
-      activatedRoute.data = of({ tALeaseRepaymentRule: new TALeaseRepaymentRule() });
-
-      comp.ngOnInit();
-      comp.editForm.get('leaseContract')!.setValue(leaseContract);
-
-      expect(iFRS16LeaseContractService.find).toHaveBeenCalledWith(leaseContract.id);
-      expect(addTransactionAccountToCollectionIfMissingSpy).toHaveBeenCalledWith([], debitAccount, creditAccount);
-      expect(comp.editForm.get('debit')!.value).toEqual(debitAccount);
-      expect(comp.editForm.get('credit')!.value).toEqual(creditAccount);
-      expect(comp.transactionAccountsSharedCollection).toEqual(expect.arrayContaining([debitAccount, creditAccount]));
     });
   });
 

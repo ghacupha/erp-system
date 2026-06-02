@@ -1,150 +1,128 @@
-# Agent Handoff Notes
+# General behavioral guidelines
 
-## Workspace
+Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
 
-- Root: `D:\labs\erp`
-- Backend module: `erp-system`
-- Deployment module: `erp-deployment`
-- Frontend module: `erp-client`
-- Current date during this handoff: 2026-05-28
+**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
-## Current Task State
+## 1. Think Before Coding
 
-The latest implemented feature is a searchable prepayment reconciliation report named `Unallocated Prepayment Accounts`.
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
 
-The report appears through the existing ERP navbar `Search reports` panel because report metadata is seeded by the backend. It does not require a dedicated Angular route or component.
+Before implementing:
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them - don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
 
-## Uncommitted Feature Changes
+## 2. Simplicity First
 
-Backend report implementation:
+**Minimum code that solves the problem. Nothing speculative.**
 
-- `erp-system/src/main/java/io/github/erp/erp/reports/prepayments/UnallocatedPrepaymentAccountReportItem.java`
-- `erp-system/src/main/java/io/github/erp/erp/repository/prepayments/UnallocatedPrepaymentAccountReportRepository.java`
-- `erp-system/src/main/java/io/github/erp/erp/resources/prepayments/UnallocatedPrepaymentAccountReportResource.java`
-- `erp-system/src/main/java/io/github/erp/erp/reports/ReportMetadataSeederExtension.java`
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
 
-Review SQL:
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
 
-- `erp-system/queries/unallocated-prepayment-accounts.sql`
+## 3. Surgical Changes
 
-Documentation:
+**Touch only what you must. Clean up only your own mess.**
 
-- `man_pages/prepayments/unallocated-prepayment-accounts-report.md`
-- `erp-system/man_pages/prepayments/unallocated-prepayment-accounts-report.md`
-- `user-stories/prepayments/unallocated-prepayment-accounts-report.md`
-- `erp-system/user-stories/prepayments/unallocated-prepayment-accounts-report.md`
-- `user-pages/prepayment-reconciliation-reports.md`
-- `erp-system/user-pages/prepayment-reconciliation-reports.md`
+When editing existing code:
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it - don't delete it.
 
-## Report Behavior
+When your changes create orphans:
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
 
-Endpoint:
+The test: Every changed line should trace directly to the user's request.
 
-```text
-GET /api/prepayments/unallocated-prepayment-accounts
+## 4. Goal-Driven Execution
+
+**Define success criteria. Loop until verified.**
+
+Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+
+For multi-step tasks, state a brief plan:
+```
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
 ```
 
-Default materiality threshold:
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
-```text
-minimumOutstandingAmount = 1.00
-```
+---
 
-Calculation:
+**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
 
-```text
-prepayment_account.prepayment_amount
-  - sum(prepayment_amortization.prepayment_amount where inactive is not true)
-```
+## Unified Agent Guidelines for ERP Projects
 
-Rows are included when the outstanding amount is greater than or equal to the threshold. This intentionally excludes fully consumed prepayments and very small decimal residue.
+These guidelines apply to both the back‑end (erp‑system) and the front‑end (erp‑client) projects that are generated with JHipster. They are intended to harmonise how we write code, document our work and verify that the system meets the expectations of both developers and end‑users.
 
-Returned fields include:
+##### Purpose
 
-- prepayment account id
-- catalogue number
-- particulars
-- recognition date
-- dealer name
-- debit account number/name
-- transfer account number/name
-- currency code
-- prepayment amount
-- amortised amount
-- outstanding amount
-- active amortisation entry count
-- latest amortisation period
+We want to provide future developers and users with enough context to understand why a change was made and how to use the resulting feature. There are two complementary kinds of documentation:
 
-Search metadata:
+Technical analysis and man‑pages — case‑study style write‑ups of the underlying workflows and design decisions. These capture the model's reasoning when adding or modifying code, and may include excerpts from logs. They live in the man_pages folder of the current module and in the root project’s man_pages so that a change in either module is visible at the top level.
 
-- Report title: `Unallocated Prepayment Accounts`
-- Module: `Prepayments`
-- Page path: `reports/view/unallocated-prepayment-accounts`
-- Backend API: `api/prepayments/unallocated-prepayment-accounts`
+User stories and manuals — narrative descriptions of what a user wants to accomplish and how they achieve it. These do not delve into internal class names or file structures; instead they focus on the sequence of pages, buttons and outcomes that a human interacts with. They live in the user-stories folder of the current module and also in the root project’s user-stories folder for discoverability. The user manual (in the user-pages folder) should be updated or created to reflect any feature that was modified or introduced.
 
-## Verification Already Run
+For every significant feature, especially those related to the report‑submission service, you should provide both types of documentation where appropriate. If a workflow can be expressed as user stories then include them; if not, a technical analysis alone is acceptable. The goal is to be thorough but realistic: avoid duplicating obvious behaviours or copying code comments verbatim, and focus on explaining the why and how behind your changes.
 
-Backend compile was run from `erp-system`:
+##### Commit Messages
 
-```powershell
-mvn -DskipTests compile
-```
+Write commit messages using a short imperative summary (no more than 72 characters) followed by an optional body. The summary should convey what the change does (“Add audit log to report submission” rather than “Added…”). If the change is complex, the body should explain the rationale and reference any relevant documentation you have added.
 
-Result:
+##### Documentation Tasks
 
-```text
-BUILD SUCCESS
-```
+When you implement or modify a feature, perform the following documentation steps:
 
-Expected existing warnings appeared:
+Technical write‑up — Draft a detailed analysis of the workflow(s) affected by the change. Explain the business purpose, the key services or components involved, and why the change was necessary. Include notes on any decisions taken during development. Organise technical documents by subject: within each man_pages directory, create subfolders based on the topic, theme or JHipster module that the document covers (for example, report-submission/ or lease-liability/). Save each write‑up as a Markdown file in:
 
-- duplicate `spring-boot-starter-batch` dependency warning
-- Maven enforcer dependency convergence warnings
-- MapStruct unmapped target warnings
+man_pages/ at the root of the repository.
 
-No compile errors were introduced by the prepayment report changes.
+The corresponding man_pages/ folder in the module you are working in (erp-system/man_pages/, erp-client/man_pages/ or the deployment project). Create the folder if it does not exist.
 
-## Operational Context From This Session
+User stories (if applicable) — Describe the scenario from an end‑user’s perspective. Within each user-stories directory, group stories into subfolders that correspond to the feature or module they relate to (for example, report-submission/ for report submission user journeys). For each story, outline:
 
-Liquibase production/deployment work was also handled earlier in this workspace:
+##### The persona or role.
 
-- A deferred FK migration was added for `liability_enumeration -> lease_payment_upload`.
-- A Liquibase compose runner was added under both backend and deployment scripts.
-- Liquibase status against production-style compose configuration succeeded and reported the database was up to date.
-- A previous Liquibase startup failure showed a stale changelog lock; use the Liquibase script and inspect `databasechangeloglock` before manually clearing anything.
+The steps they take through the UI (pages visited, buttons pressed).
 
-Elasticsearch indexing work was also started/completed earlier:
+The expected result or outcome.
+Save these in user-stories/ at the root and in the module’s own user-stories/ subfolder.
 
-- Shallow search document sanitizing was introduced for startup indexing.
-- The intent is to avoid indexing deep object graphs with heavy relationships.
-- Search reconciliation should shrink counts to PostgreSQL-valid rows where the response is reconciled.
+`User manual` — Update or create a page in the user-pages/ folder that explains how to use the feature in practice. This can reference the user stories but should be written as a how‑to guide. Ensure there is a section for every feature you have modified or added.
 
-Development deployment context:
+`Entity definitions` — If you add, remove or rename fields on a JHipster entity, update the corresponding /.jhipster/*.json file so that future code generation is aware of the change.
 
-- The user runs the dev backend as a Maven process for debugging.
-- `services-dev.yml` should remain support-service only for now.
-- Dev support containers include Elasticsearch, Kafka, and JHipster Registry.
-- Dev JHipster Registry is intentionally separated from production and runs on port `8771`; production keeps the default `8761`.
+`Integrated tests` — Where feasible, write integration or end‑to‑end tests that follow the user stories. These tests should cover the full workflow from navigating the appropriate front‑end component through to the services involved in report submission. This helps ensure that the documented behaviour is verified by the system.
 
-Startup mode scripts were added in deployment work:
+`Queries` — If a workflow involves custom SQL, place a PostgreSQL script in erp-system/queries/ showing the relevant query. These scripts are for review and manual testing; they will not be executed automatically.
 
-- `erp-deployment/scripts/enable-index-refresh-startup.ps1`
-- `erp-deployment/scripts/normal-startup.ps1`
-- `erp-deployment/scripts/show-startup-mode.ps1`
+`Sensitive files` — Update the top‑level .gitignore to exclude any configuration, credentials or generated artefacts introduced by your change.
 
-These set index/cache refresh environment values for the current terminal startup mode instead of requiring manual edits to `.env.dataupdate`.
+While comprehensive documentation is important, it should not impede development. Use your judgement to balance detail with practicality, and avoid labelling the requirements themselves as unrealistic. If a change does not materially alter the user experience or business logic, a brief note may suffice.
 
-## Next Agent Checklist
+##### Project Structure and Custom Code
 
-1. Run `git status --short` before changing anything. There may be unrelated dirty files from the user or earlier work.
-2. Do not revert unrelated changes.
-3. If validating the report against a live database, start the backend so `ReportMetadataSeederExtension` can seed the new report metadata.
-4. In the UI, search for `Unallocated Prepayment Accounts` or `prepayment` in the navbar report search box.
-5. If finance wants a larger materiality threshold, update the endpoint call to pass `minimumOutstandingAmount`; the current generic dynamic report page does not expose this as a filter yet.
-6. If adding a UI filter later, wire a numeric report filter into the dynamic report metadata/filter system rather than hard-coding a prepayment-specific page.
+Adhere to the standard JHipster layout and naming conventions. Avoid modifying generated service classes directly; instead, implement custom logic in classes suffixed with Extension (e.g. ReportSubmissionServiceExtension) within the appropriate subpackages (service, repository, web.rest, etc.) under the io.github.erp.erp namespace. Inject these extension classes into the resources io.github.erp.erp namespace. Then a resource which is a copy of generated corresponding resource (and named with the Prod suffix) is the one that is applied as production code. This way your enhancements remain separate from the generated code.
 
-## Caution
+Keep your code changes scoped to the appropriate module (server, client or deployment) and ensure that any cross‑module impacts are documented. For example, a new API endpoint in the back‑end should be accompanied by the corresponding UI changes in the front‑end and both should be described in the relevant user stories.
 
-This repository has a large generated JHipster surface. Prefer adding custom ERP code under `io.github.erp.erp...` and avoid editing generated services directly unless there is no better extension point.
+In general custom code resides in the erp package: io.github.erp.erp for the backend and for the client it's the erp subfolder under app.
 
-For database fixes, prefer additive Liquibase changesets over editing already-applied changesets. Production migration safety matters more than making the changelog look tidy.
+##### Quality Assurance
+
+Create unit tests locally before creating a pull request. Ensure that formatting and linting checks pass. Integration tests should cover the main workflows described in your user stories. If there are limitations that prevent full test coverage (e.g. complex UI interactions), document these limitations alongside the user stories so reviewers understand what has been verified manually.
+
+By following these unified guidelines, both the ERP back‑end and front‑end projects will maintain consistent documentation and efficient development practices.

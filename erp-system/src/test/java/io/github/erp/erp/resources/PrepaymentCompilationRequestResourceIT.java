@@ -77,6 +77,12 @@ class PrepaymentCompilationRequestResourceIT {
     private static final UUID DEFAULT_COMPILATION_TOKEN = UUID.randomUUID();
     private static final UUID UPDATED_COMPILATION_TOKEN = UUID.randomUUID();
 
+    private static final String DEFAULT_NARRATION = "AAAAAAAAAA";
+    private static final String UPDATED_NARRATION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_POSTED_BY = "AAAAAAAAAA";
+    private static final String UPDATED_POSTED_BY = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/prepayments/prepayment-compilation-requests";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
     private static final String ENTITY_SEARCH_API_URL = "/api/prepayments/_search/prepayment-compilation-requests";
@@ -123,7 +129,8 @@ class PrepaymentCompilationRequestResourceIT {
             .timeOfRequest(DEFAULT_TIME_OF_REQUEST)
             .compilationStatus(DEFAULT_COMPILATION_STATUS)
             .itemsProcessed(DEFAULT_ITEMS_PROCESSED)
-            .compilationToken(DEFAULT_COMPILATION_TOKEN);
+            .compilationToken(DEFAULT_COMPILATION_TOKEN)
+            .narration(DEFAULT_NARRATION);
         return prepaymentCompilationRequest;
     }
 
@@ -138,7 +145,8 @@ class PrepaymentCompilationRequestResourceIT {
             .timeOfRequest(UPDATED_TIME_OF_REQUEST)
             .compilationStatus(UPDATED_COMPILATION_STATUS)
             .itemsProcessed(UPDATED_ITEMS_PROCESSED)
-            .compilationToken(UPDATED_COMPILATION_TOKEN);
+            .compilationToken(UPDATED_COMPILATION_TOKEN)
+            .narration(UPDATED_NARRATION);
         return prepaymentCompilationRequest;
     }
 
@@ -147,7 +155,7 @@ class PrepaymentCompilationRequestResourceIT {
         prepaymentCompilationRequest = createEntity(em);
     }
 
-    // @Test
+    @Test
     @Transactional
     void createPrepaymentCompilationRequest() throws Exception {
         int databaseSizeBeforeCreate = prepaymentCompilationRequestRepository.findAll().size();
@@ -173,6 +181,7 @@ class PrepaymentCompilationRequestResourceIT {
         assertThat(testPrepaymentCompilationRequest.getCompilationStatus()).isEqualTo(DEFAULT_COMPILATION_STATUS);
         assertThat(testPrepaymentCompilationRequest.getItemsProcessed()).isEqualTo(DEFAULT_ITEMS_PROCESSED);
         assertThat(testPrepaymentCompilationRequest.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
+        assertThat(testPrepaymentCompilationRequest.getNarration()).isEqualTo(DEFAULT_NARRATION);
 
         // Validate the PrepaymentCompilationRequest in Elasticsearch
         verify(mockPrepaymentCompilationRequestSearchRepository, times(1)).save(testPrepaymentCompilationRequest);
@@ -245,7 +254,9 @@ class PrepaymentCompilationRequestResourceIT {
             .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUEST))))
             .andExpect(jsonPath("$.[*].compilationStatus").value(hasItem(DEFAULT_COMPILATION_STATUS.toString())))
             .andExpect(jsonPath("$.[*].itemsProcessed").value(hasItem(DEFAULT_ITEMS_PROCESSED)))
-            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN.toString())));
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN.toString())))
+            .andExpect(jsonPath("$.[*].narration").value(hasItem(DEFAULT_NARRATION)))
+            .andExpect(jsonPath("$.[*].postedBy").value(hasItem(DEFAULT_POSTED_BY)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -451,6 +462,7 @@ class PrepaymentCompilationRequestResourceIT {
         assertThat(testPrepaymentCompilationRequest.getCompilationStatus()).isEqualTo(DEFAULT_COMPILATION_STATUS);
         assertThat(testPrepaymentCompilationRequest.getItemsProcessed()).isEqualTo(DEFAULT_ITEMS_PROCESSED);
         assertThat(testPrepaymentCompilationRequest.getCompilationToken()).isEqualTo(DEFAULT_COMPILATION_TOKEN);
+        assertThat(testPrepaymentCompilationRequest.getNarration()).isEqualTo(DEFAULT_NARRATION);
     }
 
     // @Test
@@ -614,6 +626,8 @@ class PrepaymentCompilationRequestResourceIT {
             .andExpect(jsonPath("$.[*].timeOfRequest").value(hasItem(sameInstant(DEFAULT_TIME_OF_REQUEST))))
             .andExpect(jsonPath("$.[*].compilationStatus").value(hasItem(DEFAULT_COMPILATION_STATUS.toString())))
             .andExpect(jsonPath("$.[*].itemsProcessed").value(hasItem(DEFAULT_ITEMS_PROCESSED)))
-            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN.toString())));
+            .andExpect(jsonPath("$.[*].compilationToken").value(hasItem(DEFAULT_COMPILATION_TOKEN.toString())))
+            .andExpect(jsonPath("$.[*].narration").value(hasItem(DEFAULT_NARRATION)))
+            .andExpect(jsonPath("$.[*].postedBy").value(hasItem(DEFAULT_POSTED_BY)));
     }
 }

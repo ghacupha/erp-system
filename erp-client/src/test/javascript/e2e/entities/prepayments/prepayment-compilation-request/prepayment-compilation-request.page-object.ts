@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { element, by, ElementFinder } from 'protractor';
 
 export class PrepaymentCompilationRequestComponentsPage {
@@ -52,6 +34,8 @@ export class PrepaymentCompilationRequestUpdatePage {
   compilationStatusSelect = element(by.id('field_compilationStatus'));
   itemsProcessedInput = element(by.id('field_itemsProcessed'));
   compilationTokenInput = element(by.id('field_compilationToken'));
+  narrationInput = element(by.id('field_narration'));
+  postedByInput = element(by.id('field_postedBy'));
 
   placeholderSelect = element(by.id('field_placeholder'));
 
@@ -101,6 +85,22 @@ export class PrepaymentCompilationRequestUpdatePage {
 
   async getCompilationTokenInput(): Promise<string> {
     return await this.compilationTokenInput.getAttribute('value');
+  }
+
+  async setNarrationInput(narration: string): Promise<void> {
+    await this.narrationInput.sendKeys(narration);
+  }
+
+  async getNarrationInput(): Promise<string> {
+    return await this.narrationInput.getAttribute('value');
+  }
+
+  async setPostedByInput(postedBy: string): Promise<void> {
+    await this.postedByInput.sendKeys(postedBy);
+  }
+
+  async getPostedByInput(): Promise<string> {
+    return await this.postedByInput.getAttribute('value');
   }
 
   async placeholderSelectLastOption(): Promise<void> {

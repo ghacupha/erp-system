@@ -16,7 +16,7 @@ spring:
     active: #spring.profiles.active#
   cloud:
     fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
-    uri: http://admin:${jhipster.registry.password}@localhost:8771/config
+    uri: http://admin:${jhipster.registry.password}@localhost:${JHIPSTER_REGISTRY_PORT:8771}/config
     # name of the config server's property source (file.yml) that we want to use
     name: erpSystem
     profile: dev # profile(s) of the property source
