@@ -15,8 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-// Load erp-client/.env if it exists (optional — set SYSTEM_BUILD there or as a system env var)
-require('dotenv').config();
+// Load erp-client/.env if dotenv is available and the file exists.
+// dotenv is optional — SYSTEM_BUILD can also be set directly in the shell.
+try { require('dotenv').config(); } catch { /* dotenv not installed, skip */ }
 
 module.exports = {
   I18N_HASH: 'generated_hash',

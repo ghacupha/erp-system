@@ -66,26 +66,32 @@
         *ngIf="!unallocatedLoading && filteredUnallocated.length > 0"
         style="max-height: 65vh; overflow-y: auto;"
       >
-        <div
+        <button
+          type="button"
           *ngFor="let acct of filteredUnallocated"
-          class="hud-account-row px-3 py-2 border-bottom"
-          [title]="acct.accountNumber ?? ''"
+          class="hud-account-row btn btn-link text-left px-3 py-2 border-bottom w-100"
+          [class.active]="acct.prepaymentAccountId === selectedUnallocatedAccountId"
+          [title]="acct.catalogueNumber ?? ''"
+          (click)="selectUnallocatedAccount(acct)"
         >
           <div class="small font-weight-bold text-truncate" style="max-width: 100%;">
-            {{ acct.accountName }}
+            {{ acct.catalogueNumber }} {{ acct.particulars }}
           </div>
-          <div class="d-flex justify-content-between align-items-center mt-1">
-            <small class="text-muted text-truncate">{{ acct.accountNumber }}</small>
+          <div class="small text-muted text-truncate mt-1">
+            {{ acct.debitAccountName }}
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-1 w-100">
+            <small class="text-muted text-truncate">{{ acct.transferAccountNumber }}</small>
             <small class="text-warning font-weight-bold ml-2" style="white-space: nowrap;">
-              {{ acct.prepaymentAmount | number:'1.0-0' }}
+              {{ acct.outstandingAmount | number:'1.0-0' }}
             </small>
           </div>
-        </div>
+        </button>
       </div>
 
       <div class="card-footer py-1">
         <small class="text-muted">
-          Select the account from the <strong>Prepayment Account</strong> field on the right.
+          Select an account here or use the <strong>Prepayment Account</strong> field on the right.
         </small>
       </div>
     </div>
@@ -149,6 +155,44 @@
             />
           </div>
         </div>
+      </div>
+
+      <div
+        *ngIf="relatedDocumentsLoading || relatedBusinessDocuments.length > 0"
+        class="document-reference-panel my-3"
+      >
+        <div class="d-flex align-items-center justify-content-between">
+          <h3 class="h6 mb-0">Business Documents</h3>
+          <small *ngIf="relatedDocumentsLoading" class="text-muted">
+            <span class="spinner-border spinner-border-sm mr-1" role="status"></span>
+            Loading documents...
+          </small>
+        </div>
+
+        <div *ngIf="!relatedDocumentsLoading && relatedBusinessDocuments.length > 0" class="document-link-list mt-2">
+          <button
+            *ngFor="let document of relatedBusinessDocuments"
+            type="button"
+            class="btn btn-outline-info btn-sm mr-2 mb-2"
+            (click)="previewBusinessDocument(document)"
+          >
+            <fa-icon icon="file-contract"></fa-icon>&nbsp;<span>{{ document.documentTitle }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="documentPreviewUrl" class="document-preview-panel mb-3">
+        <div class="document-preview-header d-flex align-items-center justify-content-between">
+          <strong class="text-truncate">{{ documentPreviewTitle }}</strong>
+          <button type="button" class="btn btn-sm btn-outline-secondary" (click)="closeDocumentPreview()">
+            <fa-icon icon="times"></fa-icon>
+          </button>
+        </div>
+        <iframe
+          class="document-preview-frame"
+          [src]="documentPreviewUrl"
+          title="Business document preview">
+        </iframe>
       </div>
 
       <!-- Two-column row: First Amortization Period + First Fiscal Month -->
