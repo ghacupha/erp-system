@@ -17,120 +17,73 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
-  <div class="col-8">
-    <div *ngIf="businessDocument">
-      <h2 data-cy="businessDocumentDetailsHeading"><span>Business Document</span></h2>
-
-      <hr />
-
-      <jhi-alert-error></jhi-alert-error>
-
-      <jhi-alert></jhi-alert>
-
-      <dl class="row-md jh-entity-details">
-        <dt><span>ID</span></dt>
-        <dd>
-          <span>{{ businessDocument.id }}</span>
-        </dd>
-        <dt><span>Document Title</span></dt>
-        <dd>
-          <span>{{ businessDocument.documentTitle }}</span>
-        </dd>
-        <dt><span>Description</span></dt>
-        <dd>
-          <span>{{ businessDocument.description }}</span>
-        </dd>
-        <dt><span>Document Serial</span></dt>
-        <dd>
-          <span>{{ businessDocument.documentSerial }}</span>
-        </dd>
-        <dt><span>Last Modified</span></dt>
-        <dd>
-          <span>{{ businessDocument.lastModified | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span>Attachment File Path</span></dt>
-        <dd>
-          <span>{{ businessDocument.attachmentFilePath }}</span>
-        </dd>
-        <dt><span>Document File</span></dt>
-        <dd>
-          <div *ngIf="businessDocument.documentFile">
-            <a (click)="openFile(businessDocument.documentFile, businessDocument.documentFileContentType)">open</a>
-            {{ businessDocument.documentFileContentType }}, {{ byteSize(businessDocument.documentFile) }}
-          </div>
-        </dd>
-        <dt><span>File Tampered</span></dt>
-        <dd>
-          <span>{{ businessDocument.fileTampered }}</span>
-        </dd>
-        <dt><span>Document File Checksum</span></dt>
-        <dd>
-          <span *jhiHasAnyAuthority="'ROLE_DEV'">{{ businessDocument.documentFileChecksum }}</span>
-        </dd>
-        <dt><span>Created By</span></dt>
-        <dd>
-          <div *ngIf="businessDocument.createdBy">
-            <a [routerLink]="['/application-user', businessDocument.createdBy?.id, 'view']">{{
-              businessDocument.createdBy?.applicationIdentity
-            }}</a>
-          </div>
-        </dd>
-        <dt><span>Last Modified By</span></dt>
-        <dd>
-          <div *ngIf="businessDocument.lastModifiedBy">
-            <a [routerLink]="['/application-user', businessDocument.lastModifiedBy?.id, 'view']">{{
-              businessDocument.lastModifiedBy?.applicationIdentity
-            }}</a>
-          </div>
-        </dd>
-        <dt><span>Originating Department</span></dt>
-        <dd>
-          <div *ngIf="businessDocument.originatingDepartment">
-            <a [routerLink]="['/dealer', businessDocument.originatingDepartment?.id, 'view']">{{
-              businessDocument.originatingDepartment?.dealerName
-            }}</a>
-          </div>
-        </dd>
-        <dt><span>Application Mappings</span></dt>
-        <dd>
-          <span *ngFor="let applicationMappings of businessDocument.applicationMappings; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', applicationMappings?.id, 'view']">{{ applicationMappings.universalKey }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span>Placeholder</span></dt>
-        <dd>
-          <span *ngFor="let placeholder of businessDocument.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span>File Checksum Algorithm</span></dt>
-        <dd>
-          <div *ngIf="businessDocument.fileChecksumAlgorithm">
-            <a [routerLink]="['/algorithm', businessDocument.fileChecksumAlgorithm?.id, 'view']">{{
-              businessDocument.fileChecksumAlgorithm?.name
-            }}</a>
-          </div>
-        </dd>
-        <dt><span>Security Clearance</span></dt>
-        <dd>
-          <div *ngIf="businessDocument.securityClearance">
-            <a [routerLink]="['/security-clearance', businessDocument.securityClearance?.id, 'view']">{{
-              businessDocument.securityClearance?.clearanceLevel
-            }}</a>
-          </div>
-        </dd>
-      </dl>
-
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
-      </button>
-
-      <button type="button" [routerLink]="['/business-document', businessDocument.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
-      </button>
+<div class="business-document-detail page">
+  <div *ngIf="businessDocument" class="detail-shell">
+    <div class="heading-row">
+      <div>
+        <h2 data-cy="businessDocumentDetailsHeading">Business Document</h2>
+        <div class="summary-line">
+          <span *ngIf="businessDocument.documentTitle">{{ businessDocument.documentTitle }}</span>
+          <span *ngIf="businessDocument.documentSerial">Serial {{ businessDocument.documentSerial }}</span>
+          <span *ngIf="businessDocument.lastModified">Updated {{ businessDocument.lastModified | formatMediumDatetime }}</span>
+        </div>
+      </div>
+      <div class="button-row">
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+        <button type="button" [routerLink]="['/business-document', businessDocument.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
     </div>
+
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
+
+    <div class="detail-grid">
+      <section class="detail-panel">
+        <h3>Document Details</h3>
+        <dl class="field-grid">
+          <div><dt>ID</dt><dd>{{ businessDocument.id }}</dd></div>
+          <div><dt>Document Title</dt><dd>{{ businessDocument.documentTitle }}</dd></div>
+          <div><dt>Description</dt><dd>{{ businessDocument.description }}</dd></div>
+          <div><dt>Document Serial</dt><dd>{{ businessDocument.documentSerial }}</dd></div>
+          <div><dt>Last Modified</dt><dd>{{ businessDocument.lastModified | formatMediumDatetime }}</dd></div>
+          <div><dt>Attachment File Path</dt><dd>{{ businessDocument.attachmentFilePath }}</dd></div>
+          <div><dt>File Tampered</dt><dd>{{ businessDocument.fileTampered }}</dd></div>
+          <div><dt>Document File Checksum</dt><dd *jhiHasAnyAuthority="'ROLE_DEV'">{{ businessDocument.documentFileChecksum }}</dd></div>
+        </dl>
+      </section>
+
+      <section class="detail-panel">
+        <h3>Document Preview</h3>
+        <div class="file-toolbar" *ngIf="businessDocument.documentFile">
+          <button type="button" class="file-link" (click)="openFile(businessDocument.documentFile, businessDocument.documentFileContentType)">
+            Open in browser
+          </button>
+          <span>{{ businessDocument.documentFileContentType }}, {{ byteSize(businessDocument.documentFile) }}</span>
+        </div>
+        <div class="document-preview" *ngIf="documentPreviewUrl; else noPreview">
+          <iframe [src]="documentPreviewUrl" title="Business document preview"></iframe>
+        </div>
+        <ng-template #noPreview>
+          <div class="empty-preview">No preview is available for this document.</div>
+        </ng-template>
+      </section>
+    </div>
+
+    <section class="detail-panel secondary-panel">
+      <h3>Related Records</h3>
+      <dl class="field-grid compact-grid">
+        <div><dt>Created By</dt><dd><a *ngIf="businessDocument.createdBy" [routerLink]="['/application-user', businessDocument.createdBy?.id, 'view']">{{ businessDocument.createdBy?.applicationIdentity }}</a></dd></div>
+        <div><dt>Last Modified By</dt><dd><a *ngIf="businessDocument.lastModifiedBy" [routerLink]="['/application-user', businessDocument.lastModifiedBy?.id, 'view']">{{ businessDocument.lastModifiedBy?.applicationIdentity }}</a></dd></div>
+        <div><dt>Originating Department</dt><dd><a *ngIf="businessDocument.originatingDepartment" [routerLink]="['/dealer', businessDocument.originatingDepartment?.id, 'view']">{{ businessDocument.originatingDepartment?.dealerName }}</a></dd></div>
+        <div><dt>File Checksum Algorithm</dt><dd><a *ngIf="businessDocument.fileChecksumAlgorithm" [routerLink]="['/algorithm', businessDocument.fileChecksumAlgorithm?.id, 'view']">{{ businessDocument.fileChecksumAlgorithm?.name }}</a></dd></div>
+        <div><dt>Security Clearance</dt><dd><a *ngIf="businessDocument.securityClearance" [routerLink]="['/security-clearance', businessDocument.securityClearance?.id, 'view']">{{ businessDocument.securityClearance?.clearanceLevel }}</a></dd></div>
+        <div><dt>Application Mappings</dt><dd><span *ngFor="let applicationMappings of businessDocument.applicationMappings; let last = last"><a [routerLink]="['/universally-unique-mapping', applicationMappings?.id, 'view']">{{ applicationMappings.universalKey }}</a>{{ last ? '' : ', ' }}</span></dd></div>
+        <div><dt>Placeholder</dt><dd><span *ngFor="let placeholder of businessDocument.placeholders; let last = last"><a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a>{{ last ? '' : ', ' }}</span></dd></div>
+      </dl>
+    </section>
   </div>
 </div>

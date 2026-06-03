@@ -18,6 +18,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { IBusinessDocument } from '../business-document.model';
 import { DataUtils } from 'app/core/util/data-util.service';
@@ -25,15 +26,19 @@ import { DataUtils } from 'app/core/util/data-util.service';
 @Component({
   selector: 'jhi-business-document-detail',
   templateUrl: './business-document-detail.component.html',
+  styleUrls: ['./business-document-detail.component.scss'],
 })
 export class BusinessDocumentDetailComponent implements OnInit {
   businessDocument: IBusinessDocument | null = null;
+  documentPreviewUrl: SafeResourceUrl | null = null;
+  private previewObjectUrl: string | null = null;
 
-  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute) {}
+  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute, protected sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ businessDocument }) => {
       this.businessDocument = businessDocument;
+      this.preparePreview();
     });
   }
 
@@ -47,5 +52,37 @@ export class BusinessDocumentDetailComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  clearPreview(): void {
+    this.revokePreviewUrl();
+    this.documentPreviewUrl = null;
+  }
+
+  private preparePreview(): void {
+    this.clearPreview();
+    if (!this.businessDocument?.documentFile || !this.businessDocument.documentFileContentType) {
+      return;
+    }
+
+    const blob = this.base64ToBlob(this.businessDocument.documentFile, this.businessDocument.documentFileContentType);
+    this.previewObjectUrl = URL.createObjectURL(blob);
+    this.documentPreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.previewObjectUrl);
+  }
+
+  private revokePreviewUrl(): void {
+    if (this.previewObjectUrl) {
+      URL.revokeObjectURL(this.previewObjectUrl);
+      this.previewObjectUrl = null;
+    }
+  }
+
+  private base64ToBlob(base64: string, contentType: string): Blob {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let index = 0; index < byteCharacters.length; index++) {
+      byteNumbers[index] = byteCharacters.charCodeAt(index);
+    }
+    return new Blob([new Uint8Array(byteNumbers)], { type: contentType });
   }
 }
