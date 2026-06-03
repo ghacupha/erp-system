@@ -49,6 +49,14 @@
         <dd>
           <span>{{ prepaymentCompilationRequest.compilationToken }}</span>
         </dd>
+        <dt><span>Narration</span></dt>
+        <dd>
+          <span>{{ prepaymentCompilationRequest.narration }}</span>
+        </dd>
+        <dt><span>Posted By</span></dt>
+        <dd>
+          <span>{{ prepaymentCompilationRequest.createdBy?.applicationIdentity }}</span>
+        </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of prepaymentCompilationRequest.placeholders; let last = last">

@@ -49,6 +49,8 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
     compilationStatus: [],
     itemsProcessed: [],
     compilationToken: [null, [Validators.required]],
+    narration: [],
+    createdBy: [],
     placeholders: [],
   });
 
@@ -132,6 +134,7 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
       compilationStatus: prepaymentCompilationRequest.compilationStatus,
       itemsProcessed: prepaymentCompilationRequest.itemsProcessed,
       compilationToken: prepaymentCompilationRequest.compilationToken,
+      narration: prepaymentCompilationRequest.narration,
       placeholders: prepaymentCompilationRequest.placeholders,
     });
 
@@ -163,6 +166,7 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
       compilationStatus: this.editForm.get(['compilationStatus'])!.value,
       itemsProcessed: this.editForm.get(['itemsProcessed'])!.value,
       compilationToken: this.editForm.get(['compilationToken'])!.value,
+      narration: this.editForm.get(['narration'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }
