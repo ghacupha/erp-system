@@ -1,0 +1,12 @@
+.hud-account-row {
+  cursor: default;
+  transition: background-color 0.12s;
+
+  &:hover {
+    background-color: rgba(255, 193, 7, 0.08);
+  }
+
+  &:last-child {
+    border-bottom: none !important;
+  }
+}

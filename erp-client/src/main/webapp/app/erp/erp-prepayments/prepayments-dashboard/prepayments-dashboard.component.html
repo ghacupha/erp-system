@@ -193,7 +193,7 @@
                         {{ run.compilationStatus }}
                       </span>
                     </td>
-                    <td class="small">{{ run.postedBy ?? '—' }}</td>
+                    <td class="small">{{ run.createdBy?.applicationIdentity ?? '—' }}</td>
                     <td class="small text-muted">{{ run.narration ?? '—' }}</td>
                     <td class="small text-right">{{ run.itemsProcessed | number }}</td>
                   </tr>
