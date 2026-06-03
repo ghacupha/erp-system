@@ -32,16 +32,20 @@ import { IPlaceholder } from 'app/erp/erp-pages/placeholder/placeholder.model';
 import { CompilationStatusTypes } from '../../../erp-common/enumerations/compilation-status-types.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { v4 as uuidv4 } from 'uuid';
+import { PrepaymentMarshallingService } from '../../prepayment-marshalling/service/prepayment-marshalling.service';
+import { IPrepaymentMarshalling } from '../../prepayment-marshalling/prepayment-marshalling.model';
 
 @Component({
   selector: 'jhi-prepayment-compilation-request-update',
   templateUrl: './prepayment-compilation-request-update.component.html',
+  styleUrls: ['./prepayment-compilation-request-update.component.scss'],
 })
 export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
   isSaving = false;
   compilationStatusTypesValues = Object.keys(CompilationStatusTypes);
 
   placeholdersSharedCollection: IPlaceholder[] = [];
+  pendingMarshallings: IPrepaymentMarshalling[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -57,6 +61,7 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
   constructor(
     protected prepaymentCompilationRequestService: PrepaymentCompilationRequestService,
     protected placeholderService: PlaceholderService,
+    protected prepaymentMarshallingService: PrepaymentMarshallingService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -74,6 +79,7 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
       this.updateForm(prepaymentCompilationRequest);
 
       this.loadRelationshipsOptions();
+      this.loadPendingMarshallings();
     });
   }
 
@@ -104,6 +110,10 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
       }
     }
     return option;
+  }
+
+  trackPrepaymentMarshallingById(index: number, item: IPrepaymentMarshalling): number {
+    return item.id ?? index;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPrepaymentCompilationRequest>>): void {
@@ -154,6 +164,15 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+  }
+
+  protected loadPendingMarshallings(): void {
+    this.prepaymentMarshallingService
+      .query({ 'processed.equals': false, size: 200, sort: ['id,desc'] })
+      .pipe(map((res: HttpResponse<IPrepaymentMarshalling[]>) => res.body ?? []))
+      .subscribe((marshallings: IPrepaymentMarshalling[]) => {
+        this.pendingMarshallings = marshallings.filter(marshalling => marshalling.processed === false);
+      });
   }
 
   protected createFromForm(): IPrepaymentCompilationRequest {
