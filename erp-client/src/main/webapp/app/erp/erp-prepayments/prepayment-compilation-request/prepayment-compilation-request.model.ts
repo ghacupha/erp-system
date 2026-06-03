@@ -26,6 +26,8 @@ export interface IPrepaymentCompilationRequest {
   compilationStatus?: CompilationStatusTypes | null;
   itemsProcessed?: number | null;
   compilationToken?: string;
+  narration?: string | null;
+  postedBy?: string | null;
   placeholders?: IPlaceholder[] | null;
 }
 
@@ -36,6 +38,8 @@ export class PrepaymentCompilationRequest implements IPrepaymentCompilationReque
     public compilationStatus?: CompilationStatusTypes | null,
     public itemsProcessed?: number | null,
     public compilationToken?: string,
+    public narration?: string | null,
+    public postedBy?: string | null,
     public placeholders?: IPlaceholder[] | null
   ) {}
 }

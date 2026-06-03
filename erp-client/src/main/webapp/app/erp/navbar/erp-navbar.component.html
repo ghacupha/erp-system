@@ -35,7 +35,7 @@
   >
     <fa-icon icon="bars"></fa-icon>
   </a>
-  <div class="navbar-search" ngbDropdown #reportSearchDropdown="ngbDropdown" autoClose="outside">
+  <div class="navbar-search" ngbDropdown #reportSearchDropdown="ngbDropdown" autoClose="outside" *ngIf="account !== null">
     <div class="input-group input-group-sm report-search__control">
       <div class="input-group-prepend">
         <span class="input-group-text"><fa-icon icon="search"></fa-icon></span>

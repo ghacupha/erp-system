@@ -90,6 +90,7 @@
           <th scope="col" jhiSortBy="debitAccount.accountNumber"><span>Debit Account</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="transferAccount.accountNumber"><span>Transfer Account</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="postingDate"><span>Posting Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="createdBy"><span>Created By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -143,6 +144,7 @@
             </div>
           </td>
           <td>{{ prepaymentAccount.postingDate | formatMediumDate }}</td>
+          <td>{{ prepaymentAccount.createdBy?.applicationIdentity }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button
