@@ -19,8 +19,10 @@
 import { createAction, props } from '@ngrx/store';
 import { IIFRS16LeaseContract } from '../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { ITransactionAccount } from '../../erp-accounts/transaction-account/transaction-account.model';
-import { ITransactionAccountCategory } from 'app/entities/accounting/transaction-account-category/transaction-account-category.model';
 import { ITransactionAccountPostingRule } from '../../erp-accounts/transaction-account-posting-rule/transaction-account-posting-rule.model';
+import {
+  ITransactionAccountCategory
+} from '../../erp-accounts/transaction-account-category/transaction-account-category.model';
 
 export const leasePostingRuleFormUpdated = createAction(
   '[LeasePostingRule Form] Lease posting rule draft updated',
