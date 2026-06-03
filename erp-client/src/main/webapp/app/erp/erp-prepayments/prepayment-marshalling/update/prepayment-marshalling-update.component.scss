@@ -1,12 +1,48 @@
 .hud-account-row {
-  cursor: default;
+  border-radius: 0;
+  color: inherit;
+  cursor: pointer;
   transition: background-color 0.12s;
 
   &:hover {
     background-color: rgba(255, 193, 7, 0.08);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &.active {
+    background-color: rgba(255, 193, 7, 0.18);
+    box-shadow: inset 3px 0 0 #d98200;
   }
 
   &:last-child {
     border-bottom: none !important;
   }
+}
+
+.document-reference-panel {
+  border: 1px solid #d8e7ef;
+  border-radius: 4px;
+  padding: 0.75rem;
+}
+
+.document-link-list {
+  max-width: 100%;
+}
+
+.document-preview-panel {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.document-preview-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ced4da;
+  padding: 0.5rem 0.75rem;
+}
+
+.document-preview-frame {
+  border: 0;
+  height: 62vh;
+  width: 100%;
 }
