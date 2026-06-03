@@ -63,5 +63,6 @@
   "pagination": "pagination",
   "name": "DepreciationJob",
   "changelogDate": "20230705135041",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

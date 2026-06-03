@@ -22,5 +22,6 @@
   "pagination": "pagination",
   "name": "TransactionAccountReportItem",
   "changelogDate": "20241115120936",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

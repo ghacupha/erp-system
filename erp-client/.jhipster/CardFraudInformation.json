@@ -27,5 +27,6 @@
   "pagination": "pagination",
   "name": "CardFraudInformation",
   "changelogDate": "20231004103408",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

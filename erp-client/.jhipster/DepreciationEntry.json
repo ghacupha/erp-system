@@ -95,5 +95,6 @@
   "pagination": "pagination",
   "name": "DepreciationEntry",
   "changelogDate": "20230704162523",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

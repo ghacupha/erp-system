@@ -73,5 +73,6 @@
   "pagination": "pagination",
   "name": "AssetGeneralAdjustment",
   "changelogDate": "20240412085640",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

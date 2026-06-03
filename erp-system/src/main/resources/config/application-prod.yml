@@ -114,8 +114,9 @@ spring:
             replication.factor: ${KAFKA_REPLICATION_FACTOR}
   elasticsearch:
     rest:
-      # uris: http://localhost:9200
       uris: ${SPRING_ELASTICSEARCH_REST_URIS:${SPRING_DATA_JEST_URI}}
+      username: ${ELASTIC_USERNAME:elastic}
+      password: ${ELASTICSEARCH_PASSWORD}
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod

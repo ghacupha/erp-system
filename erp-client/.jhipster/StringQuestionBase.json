@@ -60,5 +60,6 @@
       "relationshipName": "placeholderItem",
       "relationshipType": "many-to-many"
     }
-  ]
+  ],
+  "skipServer": true
 }

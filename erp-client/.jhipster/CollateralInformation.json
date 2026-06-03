@@ -131,5 +131,6 @@
   "pagination": "pagination",
   "name": "CollateralInformation",
   "changelogDate": "20231004123713",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

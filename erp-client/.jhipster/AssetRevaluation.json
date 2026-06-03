@@ -79,5 +79,6 @@
   "pagination": "pagination",
   "name": "AssetRevaluation",
   "changelogDate": "20240412053158",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

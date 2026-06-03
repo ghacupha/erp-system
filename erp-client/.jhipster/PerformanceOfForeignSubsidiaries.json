@@ -103,5 +103,6 @@
   "name": "PerformanceOfForeignSubsidiaries",
   "changelogDate": "20231004090122",
   "incrementalChangelog": false,
-  "entityTableName": "foreign_subsidiary_performance"
+  "entityTableName": "foreign_subsidiary_performance",
+  "skipServer": true
 }

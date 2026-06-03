@@ -50,5 +50,6 @@
   "pagination": "pagination",
   "name": "WIPListItem",
   "changelogDate": "20250203102026",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

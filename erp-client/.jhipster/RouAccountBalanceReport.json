@@ -59,5 +59,6 @@
   "pagination": "pagination",
   "name": "RouAccountBalanceReport",
   "changelogDate": "20240313092355",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

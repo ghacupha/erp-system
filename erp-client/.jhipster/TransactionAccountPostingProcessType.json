@@ -39,5 +39,6 @@
   "entityTableName": "trx_account_posting_prx_type",
   "name": "TransactionAccountPostingProcessType",
   "changelogDate": "20241007122528",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

@@ -54,5 +54,6 @@
   "pagination": "pagination",
   "name": "WeeklyCashHolding",
   "changelogDate": "20231004061118",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

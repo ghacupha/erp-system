@@ -56,5 +56,6 @@
   "pagination": "infinite-scroll",
   "name": "AutonomousReport",
   "changelogDate": "20231207063650",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

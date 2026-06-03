@@ -60,5 +60,6 @@
   "pagination": "pagination",
   "name": "ExchangeRate",
   "changelogDate": "20231003140605",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

@@ -31,6 +31,7 @@ describe('PrepaymentAccount Service', () => {
       notes: 'AAAAAAA',
       prepaymentAmount: 0,
       prepaymentGuid: 'AAAAAAA',
+      postingDate: currentDate,
     };
   });
 
@@ -39,6 +40,7 @@ describe('PrepaymentAccount Service', () => {
       const returnedFromService = Object.assign(
         {
           recognitionDate: currentDate.format(DATE_FORMAT),
+          postingDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -55,6 +57,7 @@ describe('PrepaymentAccount Service', () => {
         {
           id: 0,
           recognitionDate: currentDate.format(DATE_FORMAT),
+          postingDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -62,6 +65,7 @@ describe('PrepaymentAccount Service', () => {
       const expected = Object.assign(
         {
           recognitionDate: currentDate,
+          postingDate: currentDate,
         },
         returnedFromService
       );
@@ -83,6 +87,7 @@ describe('PrepaymentAccount Service', () => {
           notes: 'BBBBBB',
           prepaymentAmount: 1,
           prepaymentGuid: 'BBBBBB',
+          postingDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -90,6 +95,7 @@ describe('PrepaymentAccount Service', () => {
       const expected = Object.assign(
         {
           recognitionDate: currentDate,
+          postingDate: currentDate,
         },
         returnedFromService
       );
@@ -106,6 +112,7 @@ describe('PrepaymentAccount Service', () => {
         {
           catalogueNumber: 'BBBBBB',
           prepaymentGuid: 'BBBBBB',
+          postingDate: currentDate.format(DATE_FORMAT),
         },
         new PrepaymentAccount()
       );
@@ -115,6 +122,7 @@ describe('PrepaymentAccount Service', () => {
       const expected = Object.assign(
         {
           recognitionDate: currentDate,
+          postingDate: currentDate,
         },
         returnedFromService
       );
@@ -136,6 +144,7 @@ describe('PrepaymentAccount Service', () => {
           notes: 'BBBBBB',
           prepaymentAmount: 1,
           prepaymentGuid: 'BBBBBB',
+          postingDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -143,6 +152,7 @@ describe('PrepaymentAccount Service', () => {
       const expected = Object.assign(
         {
           recognitionDate: currentDate,
+          postingDate: currentDate,
         },
         returnedFromService
       );
@@ -192,7 +202,7 @@ describe('PrepaymentAccount Service', () => {
       });
 
       it('should add only unique PrepaymentAccount to an array', () => {
-        const prepaymentAccountArray: IPrepaymentAccount[] = [{ id: 123 }, { id: 456 }, { id: 55750 }];
+        const prepaymentAccountArray: IPrepaymentAccount[] = [{ id: 123 }, { id: 456 }, { id: 14927 }];
         const prepaymentAccountCollection: IPrepaymentAccount[] = [{ id: 123 }];
         expectedResult = service.addPrepaymentAccountToCollectionIfMissing(prepaymentAccountCollection, ...prepaymentAccountArray);
         expect(expectedResult).toHaveLength(3);

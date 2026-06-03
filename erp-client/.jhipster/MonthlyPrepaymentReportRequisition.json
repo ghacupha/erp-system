@@ -45,5 +45,6 @@
   "pagination": "pagination",
   "entityTableName": "monthly_prepayment_requisition",
   "name": "MonthlyPrepaymentReportRequisition",
-  "changelogDate": "20240305103128"
+  "changelogDate": "20240305103128",
+  "skipServer": true
 }

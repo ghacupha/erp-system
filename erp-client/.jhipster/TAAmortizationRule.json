@@ -53,5 +53,6 @@
   "pagination": "pagination",
   "name": "TAAmortizationRule",
   "changelogDate": "20241008111457",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

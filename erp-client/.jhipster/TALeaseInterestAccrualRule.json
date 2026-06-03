@@ -53,5 +53,6 @@
   "pagination": "pagination",
   "name": "TALeaseInterestAccrualRule",
   "changelogDate": "20241014154806",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

@@ -60,5 +60,6 @@
   "pagination": "pagination",
   "name": "RouDepreciationEntryReport",
   "changelogDate": "20240313075647",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

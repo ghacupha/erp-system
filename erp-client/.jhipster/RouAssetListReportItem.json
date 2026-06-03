@@ -66,5 +66,6 @@
   "pagination": "infinite-scroll",
   "name": "RouAssetListReportItem",
   "changelogDate": "20240313083108",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

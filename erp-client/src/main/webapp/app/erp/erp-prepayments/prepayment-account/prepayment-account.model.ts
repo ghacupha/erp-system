@@ -24,6 +24,7 @@ import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet
 import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
 import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
 import * as dayjs from 'dayjs';
 
@@ -45,6 +46,8 @@ export interface IPrepaymentAccount {
   generalParameters?: IUniversallyUniqueMapping[] | null;
   prepaymentParameters?: IPrepaymentMapping[] | null;
   businessDocuments?: IBusinessDocument[] | null;
+  postingDate?: dayjs.Dayjs | null;
+  createdBy?: IApplicationUser | null;
 }
 
 export class PrepaymentAccount implements IPrepaymentAccount {
@@ -65,7 +68,9 @@ export class PrepaymentAccount implements IPrepaymentAccount {
     public placeholders?: IPlaceholder[] | null,
     public generalParameters?: IUniversallyUniqueMapping[] | null,
     public prepaymentParameters?: IPrepaymentMapping[] | null,
-    public businessDocuments?: IBusinessDocument[] | null
+    public businessDocuments?: IBusinessDocument[] | null,
+    public postingDate?: dayjs.Dayjs | null,
+    public createdBy?: IApplicationUser | null
   ) {}
 }
 

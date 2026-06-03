@@ -88,5 +88,6 @@
   "pagination": "pagination",
   "name": "AccountAttribute",
   "changelogDate": "20231003130755",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

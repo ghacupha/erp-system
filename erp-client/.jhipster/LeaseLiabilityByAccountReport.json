@@ -55,5 +55,6 @@
   "entityTableName": "lease_liability_by_acct_rpt",
   "name": "LeaseLiabilityByAccountReport",
   "changelogDate": "20240828112149",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

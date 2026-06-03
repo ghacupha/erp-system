@@ -58,5 +58,6 @@
   "pagination": "infinite-scroll",
   "name": "RouAssetNBVReportItem",
   "changelogDate": "20240313084433",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

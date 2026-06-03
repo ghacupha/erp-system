@@ -80,5 +80,6 @@
   "pagination": "pagination",
   "name": "PrepaymentAmortization",
   "changelogDate": "20220503162809",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

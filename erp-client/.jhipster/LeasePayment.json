@@ -26,5 +26,6 @@
   "pagination": "pagination",
   "name": "LeasePayment",
   "changelogDate": "20240618055255",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

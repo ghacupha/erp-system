@@ -70,5 +70,6 @@
   "pagination": "pagination",
   "name": "AccountBalance",
   "changelogDate": "20231004091106",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

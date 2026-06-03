@@ -66,5 +66,6 @@
   "pagination": "pagination",
   "name": "RouInitialDirectCost",
   "changelogDate": "20241104162219",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

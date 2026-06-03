@@ -99,5 +99,6 @@
   "pagination": "pagination",
   "name": "RouModelMetadata",
   "changelogDate": "20240307081647",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

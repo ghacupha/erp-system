@@ -48,5 +48,6 @@
   "pagination": "pagination",
   "name": "RouAssetListReport",
   "changelogDate": "20240313093232",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

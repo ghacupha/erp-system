@@ -22,5 +22,6 @@
   "readOnly": true,
   "pagination": "infinite-scroll",
   "name": "PrepaymentOutstandingOverviewReport",
-  "changelogDate": "20231130132010"
+  "changelogDate": "20231130132010",
+  "skipServer": true
 }

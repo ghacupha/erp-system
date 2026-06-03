@@ -89,5 +89,6 @@
   "pagination": "pagination",
   "name": "CardUsageInformation",
   "changelogDate": "20231004121919",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

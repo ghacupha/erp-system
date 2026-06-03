@@ -133,5 +133,6 @@
       "otherEntityField": "dealerName"
     }
   ],
-  "service": "serviceImpl"
+  "service": "serviceImpl",
+  "skipServer": true
 }

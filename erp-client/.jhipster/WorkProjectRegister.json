@@ -70,5 +70,6 @@
   "pagination": "pagination",
   "name": "WorkProjectRegister",
   "changelogDate": "20220428124926",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

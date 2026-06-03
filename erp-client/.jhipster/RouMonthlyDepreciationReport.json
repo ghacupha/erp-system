@@ -61,5 +61,6 @@
   "entityTableName": "rou_mon_deprec_rpt",
   "name": "RouMonthlyDepreciationReport",
   "changelogDate": "20240313103527",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

@@ -54,5 +54,6 @@
   "pagination": "pagination",
   "name": "FiscalQuarter",
   "changelogDate": "20230816125243",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

@@ -89,6 +89,7 @@
           <!--<th scope="col" jhiSortBy="placeholder.description"><span>Placeholder</span> <fa-icon icon="sort"></fa-icon></th>-->
           <th scope="col" jhiSortBy="debitAccount.accountNumber"><span>Debit Account</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="transferAccount.accountNumber"><span>Transfer Account</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="postingDate"><span>Posting Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -100,8 +101,6 @@
           <td>{{ prepaymentAccount.catalogueNumber }}</td>
           <td>{{ prepaymentAccount.recognitionDate | formatMediumDate }}</td>
           <td>{{ prepaymentAccount.particulars }}</td>
-          <!-- // TODO remove this from list view as it makes the view to busy-->
-          <!--<td>{{ prepaymentAccount.notes }}</td>-->
           <td>{{ prepaymentAccount.prepaymentAmount | currency }}</td>
           <td>
             <div *ngIf="prepaymentAccount.settlementCurrency">
@@ -129,13 +128,6 @@
               <a [routerLink]="['/dealer', prepaymentAccount.dealer?.id, 'view']">{{ prepaymentAccount.dealer?.dealerName }}</a>
             </div>
           </td>
-          <!--<td>
-            <div *ngIf="prepaymentAccount.placeholders">
-              <a [routerLink]="['/placeholder', prepaymentAccount.placeholders?., 'view']">{{
-                prepaymentAccount.placeholder?.description
-              }}</a>
-            </div>
-          </td>-->
           <td>
             <div *ngIf="prepaymentAccount.debitAccount">
               <a [routerLink]="['/transaction-account', prepaymentAccount.debitAccount?.id, 'view']">{{
@@ -150,6 +142,7 @@
               }}</a>
             </div>
           </td>
+          <td>{{ prepaymentAccount.postingDate | formatMediumDate }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

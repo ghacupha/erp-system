@@ -25,5 +25,6 @@
   "pagination": "pagination",
   "name": "CardState",
   "changelogDate": "20231004131702",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

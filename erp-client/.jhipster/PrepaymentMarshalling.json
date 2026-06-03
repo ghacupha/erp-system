@@ -60,5 +60,6 @@
   "pagination": "pagination",
   "name": "PrepaymentMarshalling",
   "changelogDate": "20220503161722",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

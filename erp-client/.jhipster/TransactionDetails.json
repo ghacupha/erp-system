@@ -71,5 +71,6 @@
   "pagination": "pagination",
   "name": "TransactionDetails",
   "changelogDate": "20241014145156",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

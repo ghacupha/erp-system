@@ -46,5 +46,6 @@
   "pagination": "pagination",
   "name": "WorkInProgressOutstandingReport",
   "changelogDate": "20231030075738",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

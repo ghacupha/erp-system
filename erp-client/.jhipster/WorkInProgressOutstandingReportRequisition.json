@@ -60,5 +60,6 @@
   "name": "WorkInProgressOutstandingReportRequisition",
   "changelogDate": "20240509064742",
   "incrementalChangelog": false,
-  "entityTableName": "wip_outstanding_rpt_rx"
+  "entityTableName": "wip_outstanding_rpt_rx",
+  "skipServer": true
 }

@@ -107,5 +107,6 @@
     }
   ],
   "searchEngine": "elasticsearch",
-  "service": "serviceImpl"
+  "service": "serviceImpl",
+  "skipServer": true
 }

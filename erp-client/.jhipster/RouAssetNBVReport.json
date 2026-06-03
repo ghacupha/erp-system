@@ -59,5 +59,6 @@
   "pagination": "pagination",
   "name": "RouAssetNBVReport",
   "changelogDate": "20240313083631",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

@@ -17,6 +17,12 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
+<!-- Prepayments dashboard — visible only to ROLE_PREPAYMENTS_MODULE_USER -->
+<ng-container *jhiHasAnyAuthority="'ROLE_PREPAYMENTS_MODULE_USER'">
+  <jhi-prepayments-dashboard></jhi-prepayments-dashboard>
+  <hr class="my-4">
+</ng-container>
+
 <div class="row">
   <div class="col-md-3">
     <span class="hipster img-fluid rounded"></span>

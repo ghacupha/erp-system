@@ -53,5 +53,6 @@
   "pagination": "pagination",
   "name": "TALeaseRepaymentRule",
   "changelogDate": "20241014152137",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

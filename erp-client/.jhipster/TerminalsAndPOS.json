@@ -90,5 +90,6 @@
   "pagination": "pagination",
   "name": "TerminalsAndPOS",
   "changelogDate": "20231004070943",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

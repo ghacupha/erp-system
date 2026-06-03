@@ -70,5 +70,6 @@
   "pagination": "infinite-scroll",
   "name": "NbvCompilationBatch",
   "changelogDate": "20240219093155",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

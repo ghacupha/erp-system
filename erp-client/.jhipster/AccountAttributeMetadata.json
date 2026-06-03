@@ -74,5 +74,6 @@
   "pagination": "pagination",
   "name": "AccountAttributeMetadata",
   "changelogDate": "20231003131804",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

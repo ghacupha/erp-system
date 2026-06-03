@@ -70,5 +70,6 @@
       "relationshipValidateRules": ["required"]
     }
   ],
-  "service": "serviceImpl"
+  "service": "serviceImpl",
+  "skipServer": true
 }

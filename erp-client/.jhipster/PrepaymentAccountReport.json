@@ -38,5 +38,6 @@
   "pagination": "infinite-scroll",
   "name": "PrepaymentAccountReport",
   "changelogDate": "20231128140040",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

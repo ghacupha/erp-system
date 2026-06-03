@@ -32,5 +32,6 @@
       "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl"
+  "service": "serviceImpl",
+  "skipServer": true
 }
