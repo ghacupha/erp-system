@@ -23,6 +23,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
+import { PrepaymentAccountReportService } from '../../prepayment-account-report/service/prepayment-account-report.service';
+import { IPrepaymentAccountReport } from '../../prepayment-account-report/prepayment-account-report.model';
+
 import { IPrepaymentMarshalling, PrepaymentMarshalling } from '../prepayment-marshalling.model';
 import { PrepaymentMarshallingService } from '../service/prepayment-marshalling.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
@@ -45,7 +48,8 @@ import dayjs from 'dayjs';
 
 @Component({
   selector: 'jhi-prepayment-marshalling-update',
-  templateUrl: './prepayment-marshalling-update.component.html'
+  templateUrl: './prepayment-marshalling-update.component.html',
+  styleUrls: ['./prepayment-marshalling-update.component.scss'],
 })
 export class PrepaymentMarshallingUpdateComponent implements OnInit {
   isSaving = false;
@@ -54,6 +58,12 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
   prepaymentAccountsSharedCollection: IPrepaymentAccount[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   fiscalMonthsSharedCollection: IFiscalMonth[] = [];
+
+  // Unallocated accounts HUD
+  unallocatedAccounts: IPrepaymentAccountReport[] = [];
+  filteredUnallocated: IPrepaymentAccountReport[] = [];
+  hudFilter = '';
+  unallocatedLoading = false;
 
   // Setting up default form states
   weAreCopying = false;
@@ -80,6 +90,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
   constructor(
     protected prepaymentMarshallingService: PrepaymentMarshallingService,
     protected prepaymentAccountService: PrepaymentAccountService,
+    protected prepaymentAccountReportService: PrepaymentAccountReportService,
     protected amortizationPeriodService: AmortizationPeriodService,
     protected placeholderService: PlaceholderService,
     protected fiscalMonthService: FiscalMonthService,
@@ -117,6 +128,36 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
 
     this.updateLastFiscalMonthGivenAmortizationPeriod();
 
+    this.loadUnallocatedAccounts();
+  }
+
+  loadUnallocatedAccounts(): void {
+    this.unallocatedLoading = true;
+    const today = dayjs().format('YYYY-MM-DD');
+    this.prepaymentAccountReportService
+      .queryByReportDate({ reportDate: today, size: 200 })
+      .subscribe({
+        next: res => {
+          const all = res.body ?? [];
+          this.unallocatedAccounts = all.filter(r => (r.numberOfAmortisedItems ?? 0) === 0);
+          this.filteredUnallocated = [...this.unallocatedAccounts];
+          this.unallocatedLoading = false;
+        },
+        error: () => { this.unallocatedLoading = false; },
+      });
+  }
+
+  filterHud(query: string): void {
+    this.hudFilter = query;
+    if (!query.trim()) {
+      this.filteredUnallocated = [...this.unallocatedAccounts];
+    } else {
+      const q = query.toLowerCase();
+      this.filteredUnallocated = this.unallocatedAccounts.filter(a =>
+        a.accountName?.toLowerCase().includes(q) ||
+        a.accountNumber?.toLowerCase().includes(q)
+      );
+    }
   }
 
   updateFirstPeriod(): void {

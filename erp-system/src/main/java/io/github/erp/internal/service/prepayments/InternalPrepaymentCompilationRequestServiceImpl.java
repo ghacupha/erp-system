@@ -20,6 +20,7 @@ package io.github.erp.internal.service.prepayments;
 import io.github.erp.domain.PrepaymentCompilationRequest;
 import io.github.erp.internal.repository.InternalPrepaymentAmortizationRepository;
 import io.github.erp.internal.repository.InternalPrepaymentMarshallingRepository;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.repository.PrepaymentCompilationRequestRepository;
 import io.github.erp.repository.search.PrepaymentCompilationRequestSearchRepository;
 import io.github.erp.service.PrepaymentAmortizationService;
@@ -47,18 +48,24 @@ public class InternalPrepaymentCompilationRequestServiceImpl implements Internal
     private final PrepaymentCompilationRequestMapper prepaymentCompilationRequestMapper;
     private final PrepaymentCompilationRequestSearchRepository prepaymentCompilationRequestSearchRepository;
 
-    public InternalPrepaymentCompilationRequestServiceImpl(InternalPrepaymentMarshallingRepository prepaymentMarshallingRepository, PrepaymentAmortizationService prepaymentAmortizationService, InternalPrepaymentAmortizationRepository prepaymentAmortizationRepository, PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository, PrepaymentCompilationRequestMapper prepaymentCompilationRequestMapper, PrepaymentCompilationRequestSearchRepository prepaymentCompilationRequestSearchRepository) {
+    private final InternalApplicationUserDetailService applicationUserDetailService;
+
+    public InternalPrepaymentCompilationRequestServiceImpl(InternalPrepaymentMarshallingRepository prepaymentMarshallingRepository, PrepaymentAmortizationService prepaymentAmortizationService, InternalPrepaymentAmortizationRepository prepaymentAmortizationRepository, PrepaymentCompilationRequestRepository prepaymentCompilationRequestRepository, PrepaymentCompilationRequestMapper prepaymentCompilationRequestMapper, PrepaymentCompilationRequestSearchRepository prepaymentCompilationRequestSearchRepository, InternalApplicationUserDetailService applicationUserDetailService) {
         this.prepaymentMarshallingRepository = prepaymentMarshallingRepository;
         this.prepaymentAmortizationService = prepaymentAmortizationService;
         this.prepaymentAmortizationRepository = prepaymentAmortizationRepository;
         this.prepaymentCompilationRequestRepository = prepaymentCompilationRequestRepository;
         this.prepaymentCompilationRequestMapper = prepaymentCompilationRequestMapper;
         this.prepaymentCompilationRequestSearchRepository = prepaymentCompilationRequestSearchRepository;
+        this.applicationUserDetailService = applicationUserDetailService;
     }
 
     @Override
     public PrepaymentCompilationRequestDTO save(PrepaymentCompilationRequestDTO prepaymentCompilationRequestDTO) {
         log.debug("Request to save PrepaymentCompilationRequest : {}", prepaymentCompilationRequestDTO);
+
+        applicationUserDetailService.getCurrentApplicationUser().ifPresent(prepaymentCompilationRequestDTO::setCreatedBy);
+
         PrepaymentCompilationRequest prepaymentCompilationRequest = prepaymentCompilationRequestMapper.toEntity(
             prepaymentCompilationRequestDTO
         );
