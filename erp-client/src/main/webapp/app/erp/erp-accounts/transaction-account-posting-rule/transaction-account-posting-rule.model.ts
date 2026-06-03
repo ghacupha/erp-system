@@ -17,8 +17,8 @@
 ///
 
 import { ITransactionAccount } from '../transaction-account/transaction-account.model';
-import { ITransactionAccountCategory } from 'app/entities/accounting/transaction-account-category/transaction-account-category.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { ITransactionAccountCategory } from '../transaction-account-category/transaction-account-category.model';
 
 export interface ITransactionAccountPostingRuleTemplate {
   id?: number;
