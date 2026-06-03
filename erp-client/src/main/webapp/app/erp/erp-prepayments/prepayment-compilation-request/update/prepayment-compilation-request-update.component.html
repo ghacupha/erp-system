@@ -19,12 +19,12 @@
 -->
 <div class="row justify-content-center">
   <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-prepayment-compilation-request-heading" data-cy="PrepaymentCompilationRequestCreateUpdateHeading">
-        Create or edit a Prepayment Compilation Request
-      </h2>
+    <div class="compilation-request-layout">
+      <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm" class="request-form">
+        <h2 id="jhi-prepayment-compilation-request-heading" data-cy="PrepaymentCompilationRequestCreateUpdateHeading">
+          Create or edit a Prepayment Compilation Request
+        </h2>
 
-      <div>
         <jhi-alert-error></jhi-alert-error>
 
         <div class="form-group" [hidden]="editForm.get('id')!.value == null">
@@ -52,23 +52,55 @@
           </div>
         </div>
 
-      </div>
+        <div class="button-row">
+          <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+            <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+          </button>
 
-      <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
-        </button>
+          <button
+            type="submit"
+            id="save-entity"
+            data-cy="entityCreateSaveButton"
+            [disabled]="editForm.invalid || isSaving"
+            class="btn btn-primary"
+          >
+            <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+          </button>
+        </div>
+      </form>
 
-        <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
-        >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
-        </button>
-      </div>
-    </form>
+      <aside class="hud-panel">
+        <div class="hud-header">
+          <h3>Pending Marshalling</h3>
+          <span class="hud-count">{{ pendingMarshallings.length }}</span>
+        </div>
+        <p class="hud-note">Prepayment accounts that are ready for amortisation because their marshalling items are still not processed.</p>
+
+        <div class="hud-empty" *ngIf="!pendingMarshallings.length">No unprocessed marshalling items were found.</div>
+
+        <div class="hud-list" *ngIf="pendingMarshallings.length">
+          <article class="hud-card" *ngFor="let marshalling of pendingMarshallings; trackBy: trackPrepaymentMarshallingById">
+            <div class="hud-card-top">
+              <div class="hud-title">
+                <a [routerLink]="['/prepayment-account', marshalling.prepaymentAccount?.id, 'view']">
+                  {{ marshalling.prepaymentAccount?.catalogueNumber }}
+                </a>
+              </div>
+              <div class="hud-badge">Not processed</div>
+            </div>
+            <div class="hud-meta">
+              <div><span>Narration</span>{{ marshalling.prepaymentAccount?.particulars }}</div>
+              <div><span>Prepayment amount</span>{{ marshalling.prepaymentAccount?.prepaymentAmount | currency }}</div>
+              <div><span>Amortization periods</span>{{ marshalling.amortizationPeriods }}</div>
+              <div><span>Start month</span>{{ marshalling.firstFiscalMonth?.fiscalMonthCode }}</div>
+              <div><span>End month</span>{{ marshalling.lastFiscalMonth?.fiscalMonthCode }}</div>
+              <div><span>Dealer</span>{{ marshalling.prepaymentAccount?.dealer?.dealerName }}</div>
+              <div><span>Debit account</span>{{ marshalling.prepaymentAccount?.debitAccount?.accountName }}</div>
+              <div><span>Transfer account</span>{{ marshalling.prepaymentAccount?.transferAccount?.accountName }}</div>
+            </div>
+          </article>
+        </div>
+      </aside>
+    </div>
   </div>
 </div>

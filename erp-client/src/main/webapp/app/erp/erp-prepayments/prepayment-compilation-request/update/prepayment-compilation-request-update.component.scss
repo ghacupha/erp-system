@@ -1,0 +1,114 @@
+.compilation-request-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.request-form,
+.hud-panel {
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  padding: 1rem;
+  background: #fff;
+}
+
+.button-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.hud-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.hud-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.hud-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: #e7f1ff;
+  color: #0d6efd;
+  font-weight: 600;
+}
+
+.hud-note {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.hud-empty {
+  color: #6c757d;
+  font-size: 0.9rem;
+  padding: 0.75rem 0;
+}
+
+.hud-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.hud-card {
+  border: 1px solid #dfe3e8;
+  border-radius: 4px;
+  padding: 0.75rem;
+  background: #fafbfc;
+}
+
+.hud-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.hud-title a {
+  font-weight: 600;
+}
+
+.hud-badge {
+  color: #198754;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.hud-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem 0.75rem;
+}
+
+.hud-meta div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.hud-meta span {
+  color: #6c757d;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+@media (max-width: 991.98px) {
+  .compilation-request-layout,
+  .hud-meta {
+    grid-template-columns: 1fr;
+  }
+}
