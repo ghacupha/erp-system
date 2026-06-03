@@ -17,132 +17,212 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="prepayments-dashboard mb-4">
+<div class="prepayments-dashboard">
 
-  <!-- Header -->
+  <!-- ── Header ──────────────────────────────────────────────────────────── -->
   <div class="d-flex align-items-center mb-3">
     <h4 class="mb-0 mr-3">Prepayments Overview</h4>
+    <small class="text-muted mr-3" *ngIf="dataAsOf" title="Latest prepayment account recognition date">
+      data as of <strong>{{ dataAsOf }}</strong>
+    </small>
     <span *ngIf="isLoading" class="spinner-border spinner-border-sm text-secondary" role="status">
-      <span class="sr-only">Loading...</span>
+      <span class="sr-only">Loading…</span>
     </span>
   </div>
 
-  <!-- KPI Cards -->
-  <div class="row">
+  <!-- ── Skeleton while loading / content when ready ──────────────────────── -->
+  <ng-container *ngIf="!isLoading; else loadingBlock">
 
-    <div class="col-sm-6 col-xl-3 mb-3">
-      <div class="card kpi-card border-left-primary h-100">
-        <div class="card-body py-3">
-          <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Accounts</div>
-          <div class="kpi-value">{{ totalAccounts | number }}</div>
+    <!-- Row 1: KPI Cards ───────────────────────────────────────────────────── -->
+    <div class="row">
+
+      <div class="col-sm-6 col-xl-3 mb-3">
+        <div class="card kpi-card border-left-primary h-100">
+          <div class="card-body py-3">
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Accounts</div>
+            <div class="kpi-value">{{ totalAccounts | number }}</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-sm-6 col-xl-3 mb-3">
-      <div class="card kpi-card border-left-secondary h-100">
-        <div class="card-body py-3">
-          <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">Total Prepayment</div>
-          <div class="kpi-value">{{ totalPrepaymentAmount | number:'1.2-2' }}</div>
+      <div class="col-sm-6 col-xl-3 mb-3">
+        <div class="card kpi-card border-left-secondary h-100">
+          <div class="card-body py-3">
+            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">Total Prepayment</div>
+            <div class="kpi-value">{{ totalPrepaymentAmount | number:'1.2-2' }}</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-sm-6 col-xl-3 mb-3">
-      <div class="card kpi-card border-left-success h-100">
-        <div class="card-body py-3">
-          <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Amortised to Date</div>
-          <div class="kpi-value text-success">{{ totalAmortisedAmount | number:'1.2-2' }}</div>
-          <div class="text-xs text-muted mt-1">{{ amortisationPercent }}% of total</div>
-          <div class="progress mt-1" style="height: 4px;">
-            <div class="progress-bar bg-success" role="progressbar"
-              [style.width.%]="amortisationPercent"
-              [attr.aria-valuenow]="amortisationPercent"
-              aria-valuemin="0"
-              aria-valuemax="100">
+      <div class="col-sm-6 col-xl-3 mb-3">
+        <div class="card kpi-card border-left-success h-100">
+          <div class="card-body py-3">
+            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Amortised to Date</div>
+            <div class="kpi-value text-success">{{ totalAmortisedAmount | number:'1.2-2' }}</div>
+            <div class="text-xs text-muted mt-1">{{ amortisationPercent }}% of total</div>
+            <div class="progress mt-1" style="height: 4px;">
+              <div class="progress-bar bg-success" role="progressbar"
+                [style.width.%]="amortisationPercent"
+                [attr.aria-valuenow]="amortisationPercent"
+                aria-valuemin="0" aria-valuemax="100">
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="col-sm-6 col-xl-3 mb-3">
-      <div class="card kpi-card border-left-warning h-100">
-        <div class="card-body py-3">
-          <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Outstanding Balance</div>
-          <div class="kpi-value text-warning">{{ totalOutstandingAmount | number:'1.2-2' }}</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Trend Chart + Top Accounts Table -->
-  <div class="row">
-
-    <!-- Amortization trend bar chart -->
-    <div class="col-lg-8 mb-3">
-      <div class="card h-100">
-        <div class="card-header py-2 d-flex align-items-center justify-content-between">
-          <span class="font-weight-bold small text-uppercase">Monthly Amortization (last 12 months)</span>
-          <span *ngIf="trendLoading" class="spinner-border spinner-border-sm text-secondary" role="status">
-            <span class="sr-only">Loading...</span>
-          </span>
-        </div>
-        <div class="card-body">
-          <canvas *ngIf="!trendLoading && (trendChartData.labels?.length ?? 0) > 0"
-            baseChart
-            [data]="trendChartData"
-            type="bar"
-            [options]="trendChartOptions">
-          </canvas>
-          <div *ngIf="!trendLoading && (trendChartData.labels?.length ?? 0) === 0"
-            class="text-center text-muted py-4 small">
-            No amortization data for the past 12 months.
+      <div class="col-sm-6 col-xl-3 mb-3">
+        <div class="card kpi-card border-left-warning h-100">
+          <div class="card-body py-3">
+            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Outstanding Balance</div>
+            <div class="kpi-value text-warning">{{ totalOutstandingAmount | number:'1.2-2' }}</div>
           </div>
         </div>
       </div>
+
     </div>
 
-    <!-- Top 10 accounts by outstanding balance -->
-    <div class="col-lg-4 mb-3">
-      <div class="card h-100">
-        <div class="card-header py-2 d-flex align-items-center justify-content-between">
-          <span class="font-weight-bold small text-uppercase">Top Accounts by Outstanding</span>
-          <span *ngIf="reportsLoading" class="spinner-border spinner-border-sm text-secondary" role="status">
-            <span class="sr-only">Loading...</span>
-          </span>
-        </div>
-        <div class="card-body p-0">
-          <div *ngIf="!reportsLoading && topAccounts.length === 0"
-            class="text-center text-muted py-4 small">
-            No account data available.
+    <!-- Row 2: Doughnut + Trend Chart ─────────────────────────────────────── -->
+    <div class="row">
+
+      <div class="col-lg-4 mb-3">
+        <div class="card h-100">
+          <div class="card-header py-2">
+            <span class="font-weight-bold small text-uppercase">Amortisation Breakdown</span>
           </div>
-          <div *ngIf="!reportsLoading && topAccounts.length > 0" class="table-responsive">
-            <table class="table table-sm table-hover table-striped mb-0">
-              <thead class="thead-light">
-                <tr>
-                  <th class="small">#</th>
-                  <th class="small">Account</th>
-                  <th class="small text-right">Outstanding</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let acct of topAccounts; let i = index">
-                  <td class="small text-muted">{{ i + 1 }}</td>
-                  <td class="small" [title]="acct.accountNumber ?? ''">
-                    {{ acct.accountName }}
-                  </td>
-                  <td class="small text-right">
-                    {{ acct.outstandingAmount | number:'1.0-0' }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="card-body d-flex align-items-center justify-content-center">
+            <canvas *ngIf="totalPrepaymentAmount > 0"
+              baseChart
+              [data]="doughnutChartData"
+              type="doughnut"
+              [options]="doughnutChartOptions"
+              style="max-height: 260px;">
+            </canvas>
+            <div *ngIf="totalPrepaymentAmount === 0" class="text-center text-muted py-4 small">
+              No prepayment data available.
+            </div>
           </div>
         </div>
       </div>
+
+      <div class="col-lg-8 mb-3">
+        <div class="card h-100">
+          <div class="card-header py-2">
+            <span class="font-weight-bold small text-uppercase">Monthly Amortization (last 12 months)</span>
+          </div>
+          <div class="card-body">
+            <canvas *ngIf="(trendChartData.labels?.length ?? 0) > 0"
+              baseChart
+              [data]="trendChartData"
+              type="bar"
+              [options]="trendChartOptions">
+            </canvas>
+            <div *ngIf="(trendChartData.labels?.length ?? 0) === 0"
+              class="text-center text-muted py-4 small">
+              No amortization data for the past 12 months.
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-  </div>
+    <!-- Row 3: Top Accounts + Recent Compilations ──────────────────────────── -->
+    <div class="row">
+
+      <div class="col-lg-6 mb-3">
+        <div class="card h-100">
+          <div class="card-header py-2">
+            <span class="font-weight-bold small text-uppercase">Top Accounts by Outstanding</span>
+          </div>
+          <div class="card-body p-0">
+            <div *ngIf="topAccounts.length === 0" class="text-center text-muted py-4 small">
+              No account data available.
+            </div>
+            <div *ngIf="topAccounts.length > 0" class="table-responsive">
+              <table class="table table-sm table-hover table-striped mb-0">
+                <thead class="thead-light">
+                  <tr>
+                    <th class="small">#</th>
+                    <th class="small">Account</th>
+                    <th class="small text-right">Prepayment</th>
+                    <th class="small text-right">Amortised</th>
+                    <th class="small text-right">Outstanding</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let acct of topAccounts; let i = index">
+                    <td class="small text-muted">{{ i + 1 }}</td>
+                    <td class="small" [title]="acct.accountNumber ?? ''">{{ acct.accountName }}</td>
+                    <td class="small text-right">{{ acct.prepaymentAmount  | number:'1.0-0' }}</td>
+                    <td class="small text-right text-success">{{ acct.amortisedAmount   | number:'1.0-0' }}</td>
+                    <td class="small text-right text-warning font-weight-bold">{{ acct.outstandingAmount | number:'1.0-0' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-3">
+        <div class="card h-100">
+          <div class="card-header py-2">
+            <span class="font-weight-bold small text-uppercase">Recent Compilation Runs</span>
+          </div>
+          <div class="card-body p-0">
+            <div *ngIf="recentCompilations.length === 0" class="text-center text-muted py-4 small">
+              No compilation runs found.
+            </div>
+            <div *ngIf="recentCompilations.length > 0" class="table-responsive">
+              <table class="table table-sm table-hover mb-0">
+                <thead class="thead-light">
+                  <tr>
+                    <th class="small" style="white-space:nowrap;">Time of Request</th>
+                    <th class="small">Status</th>
+                    <th class="small">Posted By</th>
+                    <th class="small">Narration</th>
+                    <th class="small text-right">Items</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let run of recentCompilations">
+                    <td class="small" style="white-space:nowrap;">{{ run.timeOfRequest | formatMediumDatetime }}</td>
+                    <td class="small">
+                      <span class="badge" [ngClass]="compilationStatusClass(run.compilationStatus)">
+                        {{ run.compilationStatus }}
+                      </span>
+                    </td>
+                    <td class="small">{{ run.postedBy ?? '—' }}</td>
+                    <td class="small text-muted">{{ run.narration ?? '—' }}</td>
+                    <td class="small text-right">{{ run.itemsProcessed | number }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </ng-container>
+
+  <!-- ── Loading skeleton ─────────────────────────────────────────────────── -->
+  <ng-template #loadingBlock>
+    <div class="row">
+      <div class="col-sm-6 col-xl-3 mb-3" *ngFor="let _ of [1,2,3,4]">
+        <div class="card h-100"><div class="card-body py-3 loading-placeholder"></div></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 mb-3">
+        <div class="card h-100"><div class="card-body loading-placeholder" style="min-height:200px;"></div></div>
+      </div>
+      <div class="col-lg-8 mb-3">
+        <div class="card h-100"><div class="card-body loading-placeholder" style="min-height:200px;"></div></div>
+      </div>
+    </div>
+  </ng-template>
+
 </div>

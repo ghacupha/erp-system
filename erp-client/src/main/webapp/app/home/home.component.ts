@@ -43,6 +43,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe(account => (this.account = account));
   }
 
+  get isPrepaymentUser(): boolean {
+    return this.account?.authorities?.includes('ROLE_PREPAYMENTS_MODULE_USER') ?? false;
+  }
+
   login(): void {
     this.router.navigate(['/login']);
   }

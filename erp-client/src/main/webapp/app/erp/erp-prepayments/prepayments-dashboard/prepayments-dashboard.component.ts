@@ -20,13 +20,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
 import { ChartData, ChartOptions } from 'chart.js';
 
-import { DATE_FORMAT } from 'app/config/input.constants';
-import { PrepaymentAccountReportService } from '../prepayment-account-report/service/prepayment-account-report.service';
-import { PrepaymentAmortizationService } from '../prepayment-amortization/service/prepayment-amortization.service';
+import { PrepaymentsDashboardService } from './prepayments-dashboard.service';
 import { IPrepaymentAccountReport } from '../prepayment-account-report/prepayment-account-report.model';
+import { IPrepaymentCompilationRequest } from '../prepayment-compilation-request/prepayment-compilation-request.model';
+import { CompilationStatusTypes } from '../../erp-common/enumerations/compilation-status-types.model';
 
 @Component({
   selector: 'jhi-prepayments-dashboard',
@@ -34,17 +33,23 @@ import { IPrepaymentAccountReport } from '../prepayment-account-report/prepaymen
   styleUrls: ['./prepayments-dashboard.component.scss'],
 })
 export class PrepaymentsDashboardComponent implements OnInit, OnDestroy {
-  // KPI totals
+  CompilationStatusTypes = CompilationStatusTypes;
+
+  // Populated from the latest PrepaymentAccount.recognitionDate
+  dataAsOf = '';
+
+  // KPI values
   totalAccounts = 0;
   totalPrepaymentAmount = 0;
   totalAmortisedAmount = 0;
   totalOutstandingAmount = 0;
   amortisationPercent = 0;
 
-  // Top accounts table (top 10 by outstanding balance)
+  // Table data
   topAccounts: IPrepaymentAccountReport[] = [];
+  recentCompilations: IPrepaymentCompilationRequest[] = [];
 
-  // Amortization trend — last 12 fiscal months
+  // Amortization trend bar chart
   trendChartData: ChartData<'bar'> = { labels: [], datasets: [] };
   trendChartOptions: ChartOptions<'bar'> = {
     responsive: true,
@@ -67,19 +72,37 @@ export class PrepaymentsDashboardComponent implements OnInit, OnDestroy {
     },
   };
 
-  reportsLoading = true;
-  trendLoading = true;
+  // Amortised vs Outstanding doughnut chart
+  doughnutChartData: ChartData<'doughnut'> = {
+    labels: ['Amortised', 'Outstanding'],
+    datasets: [{
+      data: [0, 0],
+      backgroundColor: ['rgba(40, 167, 69, 0.8)', 'rgba(255, 193, 7, 0.8)'],
+      borderColor: ['rgba(40, 167, 69, 1)', 'rgba(255, 193, 7, 1)'],
+      borderWidth: 1,
+    }],
+  };
+  doughnutChartOptions: ChartOptions<'doughnut'> = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' },
+      tooltip: {
+        callbacks: {
+          label: ctx =>
+            ` ${ctx.label as string}: ${(ctx.parsed as number).toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+        },
+      },
+    },
+  };
+
+  isLoading = true;
 
   private readonly destroy$ = new Subject<void>();
 
-  constructor(
-    private accountReportService: PrepaymentAccountReportService,
-    private amortizationService: PrepaymentAmortizationService
-  ) {}
+  constructor(private dashboardService: PrepaymentsDashboardService) {}
 
   ngOnInit(): void {
-    this.loadAccountReports();
-    this.loadTrend();
+    this.loadDashboard();
   }
 
   ngOnDestroy(): void {
@@ -87,78 +110,73 @@ export class PrepaymentsDashboardComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private loadAccountReports(): void {
-    this.accountReportService
-      .query({ size: 2000, sort: 'outstandingAmount,desc' })
+  compilationStatusClass(status: CompilationStatusTypes | null | undefined): string {
+    switch (status) {
+      case CompilationStatusTypes.COMPLETE:    return 'badge-success';
+      case CompilationStatusTypes.IN_PROGRESS: return 'badge-warning';
+      case CompilationStatusTypes.STARTED:     return 'badge-info';
+      case CompilationStatusTypes.REVERSED:    return 'badge-danger';
+      default:                                 return 'badge-secondary';
+    }
+  }
+
+  private loadDashboard(): void {
+    this.isLoading = true;
+
+    this.dashboardService.load()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: res => {
-          const reports = res.body ?? [];
-          this.totalAccounts = reports.length;
-          this.totalPrepaymentAmount = reports.reduce((s, r) => s + (r.prepaymentAmount ?? 0), 0);
-          this.totalAmortisedAmount = reports.reduce((s, r) => s + (r.amortisedAmount ?? 0), 0);
-          this.totalOutstandingAmount = reports.reduce((s, r) => s + (r.outstandingAmount ?? 0), 0);
+        next: data => {
+          this.dataAsOf = data.dataAsOf;
+          // KPI totals
+          this.totalAccounts          = data.totals.numberOfPrepaymentAccounts;
+          this.totalPrepaymentAmount  = data.totals.totalPrepaymentAmount;
+          this.totalAmortisedAmount   = data.totals.totalAmortisedAmount;
+          this.totalOutstandingAmount = data.totals.totalOutstandingAmount;
           this.amortisationPercent =
             this.totalPrepaymentAmount > 0
               ? Math.round((this.totalAmortisedAmount / this.totalPrepaymentAmount) * 100)
               : 0;
-          this.topAccounts = reports.slice(0, 10);
-          this.reportsLoading = false;
-        },
-        error: () => { this.reportsLoading = false; },
-      });
-  }
 
-  private loadTrend(): void {
-    // Fetch the last 13 months of active amortization entries
-    const fromDate = dayjs().subtract(12, 'month').startOf('month').format(DATE_FORMAT);
+          // Tables
+          this.topAccounts       = data.topAccounts;
+          this.recentCompilations = data.recentCompilations;
 
-    this.amortizationService
-      .query({
-        'prepaymentPeriod.greaterThanOrEqual': fromDate,
-        'inactive.equals': false,
-        sort: 'prepaymentPeriod,asc',
-        size: 2000,
-      })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: res => {
-          const amortizations = res.body ?? [];
-          // Aggregate amounts by period (YYYY-MM)
-          const grouped = new Map<string, number>();
-          amortizations.forEach(a => {
-            if (a.prepaymentPeriod?.isValid()) {
-              const key = a.prepaymentPeriod.format('YYYY-MM');
-              grouped.set(key, (grouped.get(key) ?? 0) + (a.prepaymentAmount ?? 0));
-            }
-          });
-
-          const sorted = Array.from(grouped.entries()).sort((a, b) => a[0].localeCompare(b[0]));
-          this.trendChartData = {
-            labels: sorted.map(([label]) => label),
-            datasets: [
-              {
-                data: sorted.map(([, amount]) => amount),
-                label: 'Amortization',
-                backgroundColor: sorted.map((_, i, arr) =>
-                  i === arr.length - 1
-                    ? 'rgba(40, 167, 69, 0.85)'   // current month: green
-                    : 'rgba(54, 162, 235, 0.65)'  // prior months: blue
-                ),
-                borderColor: sorted.map((_, i, arr) =>
-                  i === arr.length - 1 ? 'rgba(40, 167, 69, 1)' : 'rgba(54, 162, 235, 1)'
-                ),
-                borderWidth: 1,
-              },
-            ],
+          // Doughnut — updated after totals are resolved
+          this.doughnutChartData = {
+            labels: ['Amortised', 'Outstanding'],
+            datasets: [{
+              data: [this.totalAmortisedAmount, this.totalOutstandingAmount],
+              backgroundColor: ['rgba(40, 167, 69, 0.8)', 'rgba(255, 193, 7, 0.8)'],
+              borderColor:     ['rgba(40, 167, 69, 1)',   'rgba(255, 193, 7, 1)'  ],
+              borderWidth: 1,
+            }],
           };
-          this.trendLoading = false;
-        },
-        error: () => { this.trendLoading = false; },
-      });
-  }
 
-  get isLoading(): boolean {
-    return this.reportsLoading || this.trendLoading;
+          // Trend bar chart
+          const trend = data.trend;
+          this.trendChartData = {
+            labels: trend.map(t => t.label),
+            datasets: [{
+              data:  trend.map(t => t.amount),
+              label: 'Amortization',
+              backgroundColor: trend.map((_, i, arr) =>
+                i === arr.length - 1 ? 'rgba(40, 167, 69, 0.85)' : 'rgba(54, 162, 235, 0.65)'
+              ),
+              borderColor: trend.map((_, i, arr) =>
+                i === arr.length - 1 ? 'rgba(40, 167, 69, 1)' : 'rgba(54, 162, 235, 1)'
+              ),
+              borderWidth: 1,
+            }],
+          };
+
+          this.isLoading = false;
+        },
+        error: () => {
+          // forkJoin with catchError in the service means this path is only
+          // reached on truly unexpected failures (e.g. network-level error)
+          this.isLoading = false;
+        },
+      });
   }
 }
