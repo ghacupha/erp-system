@@ -78,6 +78,8 @@
           <th scope="col" jhiSortBy="compilationToken">
             <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="narration"><span>Narration</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="createdBy.applicaionIdentity"><span>Created By</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -92,6 +94,8 @@
           <td>{{ prepaymentCompilationRequest.compilationStatus }}</td>
           <td>{{ prepaymentCompilationRequest.itemsProcessed }}</td>
           <td>{{ prepaymentCompilationRequest.compilationToken }}</td>
+          <td>{{ prepaymentCompilationRequest.narration }}</td>
+          <td>{{ prepaymentCompilationRequest.createdBy?.applicationIdentity }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

@@ -19,16 +19,25 @@
 // approach, but it keeps things simple, readable, and for now is good enough.
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { gitDescribe, gitDescribeSync } = require('git-describe');
+const { gitDescribeSync } = require('git-describe');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { writeFileSync } = require('fs');
 
+// Allow CI/CD or the .env file to inject the commit hash via SYSTEM_BUILD.
+// If set, that value is used instead of interrogating git directly.
 // eslint-disable-next-line no-undef
-const gitInfo = gitDescribeSync(__dirname, {
-  longSemver: true,
-  dirtySemver: false,
-  customArguments: ['--abbrev=16']
-});
-const versionInfoJson = JSON.stringify(gitInfo, null, 2);
+const envHash = process.env.SYSTEM_BUILD;
 
-writeFileSync('git-version.json', versionInfoJson);
+let gitInfo;
+if (envHash) {
+  gitInfo = { hash: envHash, raw: envHash, dirty: false, tag: null, semver: null, suffix: envHash, semverString: null, distance: null };
+} else {
+  // eslint-disable-next-line no-undef
+  gitInfo = gitDescribeSync(__dirname, {
+    longSemver: true,
+    dirtySemver: false,
+    customArguments: ['--abbrev=16']
+  });
+}
+
+writeFileSync('git-version.json', JSON.stringify(gitInfo, null, 2));

@@ -16,34 +16,22 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { VERSION as AngularVersion } from '@angular/core';
 import { versionInfo } from '../../../version-info';
-import { ApplicationStatusService } from './application-status.service';
 
 @Component({
   selector: 'jhi-footer',
   templateUrl: './footer.component.html',
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
   version = AngularVersion.full;
 
-  clientHash = versionInfo.hash.substring(0,8);
-
-  serverHash = '';
+  // Prefer the SYSTEM_BUILD env var injected by webpack DefinePlugin (from erp-client/.env
+  // or a CI/system env var). Falls back to the hash in git-version.json when not set.
+  systemBuild = (SYSTEM_BUILD || versionInfo.hash).substring(0, 7);
 
   clientVersion = '1.7.8';
 
   serverVersion = '1.8.1';
-
-  constructor(protected serverInformationService: ApplicationStatusService) {
-  }
-
-  ngOnInit(): void {
-    this.serverInformationService.fetch().subscribe(appStatus => {
-      if (appStatus.body) {
-        this.serverHash = appStatus.body.build ?? '43eb79ee';
-      }
-    });
-  }
 }

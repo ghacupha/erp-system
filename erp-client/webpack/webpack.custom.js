@@ -134,6 +134,8 @@ module.exports = async (config, options, targetOptions) => {
       // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
       // SERVER_API_URL: `"http://localhost:8980/"`,
       SERVER_API_URL: process.env.SERVER_API_URL,
+      // Set SYSTEM_BUILD in erp-client/.env or as a system/CI env var to override the git-version.json hash.
+      SYSTEM_BUILD: JSON.stringify(environment.SYSTEM_BUILD),
     })
   );
 

@@ -15,7 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-// require('dotenv').config();
+// Load erp-client/.env if it exists (optional — set SYSTEM_BUILD there or as a system env var)
+require('dotenv').config();
 
 module.exports = {
   I18N_HASH: 'generated_hash',
@@ -23,4 +24,8 @@ module.exports = {
   SERVER_API_URL: process.env.SERVER_API_URL,
   __VERSION__: process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'DEV',
   __DEBUG_INFO_ENABLED__: true,
+  // 7-character git short hash injected at build time.
+  // Set SYSTEM_BUILD in erp-client/.env or as a system/CI env var.
+  // When absent, the footer falls back to the git-version.json hash.
+  SYSTEM_BUILD: process.env.SYSTEM_BUILD || '',
 };
