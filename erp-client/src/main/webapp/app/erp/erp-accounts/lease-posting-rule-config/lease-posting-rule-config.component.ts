@@ -35,7 +35,6 @@ import {
 import { IIFRS16LeaseContract } from '../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { IFRS16LeaseContractService } from '../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 import { ITransactionAccount } from '../transaction-account/transaction-account.model';
-import { ITransactionAccountCategory } from 'app/entities/accounting/transaction-account-category/transaction-account-category.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { PlaceholderService } from '../../erp-pages/placeholder/service/placeholder.service';
 import { State } from '../../store/global-store.definition';
@@ -60,6 +59,7 @@ import {
   leasePostingRuleEditWorkflowInitiatedEnRoute,
   leasePostingRuleUpdateFormHasBeenDestroyed,
 } from '../../store/actions/lease-posting-rule-workflow-status.actions';
+import { ITransactionAccountCategory } from '../transaction-account-category/transaction-account-category.model';
 
 @Component({
   selector: 'jhi-lease-posting-rule-config',
