@@ -199,6 +199,15 @@ public class ReportMetadataSeederExtension implements ApplicationRunner {
             List.of()
         ),
         new ReportMetadataSeed(
+            "Over-Amortised Prepayment Accounts",
+            "Prepayment accounts whose amortisation entries exceed the recognised amount, regardless of report date.",
+            "Prepayments",
+            "reports/view/over-amortised-prepayment-accounts",
+            "api/prepayments/over-amortised-prepayment-accounts",
+            true,
+            List.of()
+        ),
+        new ReportMetadataSeed(
             "Unallocated Prepayment Amortizations",
             "Prepayment amortisation entries that are not allocated to a prepayment account.",
             "Prepayments",

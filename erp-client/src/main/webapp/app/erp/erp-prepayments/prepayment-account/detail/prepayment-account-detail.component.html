@@ -17,156 +17,83 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
-  <div class="col-8">
-    <div *ngIf="prepaymentAccount">
-      <h2 data-cy="prepaymentAccountDetailsHeading"><span>Prepayment Account</span></h2>
-
-      <hr />
-
-      <jhi-alert-error></jhi-alert-error>
-
-      <jhi-alert></jhi-alert>
-
-      <dl class="row-md jh-entity-details">
-        <dt><span>ID</span></dt>
-        <dd>
-          <span>{{ prepaymentAccount.id }}</span>
-        </dd>
-        <dt><span>Prepayment Guid</span></dt>
-        <dd>
-          <span>{{ prepaymentAccount.prepaymentGuid }}</span>
-        </dd>
-        <dt><span>Catalogue Number</span></dt>
-        <dd>
-          <span>{{ prepaymentAccount.catalogueNumber }}</span>
-        </dd>
-        <dt><span>Recognition Date</span></dt>
-        <dd>
-          <span>{{ prepaymentAccount.recognitionDate | formatMediumDate }}</span>
-        </dd>
-        <dt><span>Particulars</span></dt>
-        <dd>
-          <span>{{ prepaymentAccount.particulars }}</span>
-        </dd>
-        <dt><span>Notes</span></dt>
-        <dd>
-          <span>{{ prepaymentAccount.notes }}</span>
-        </dd>
-        <dt><span>Prepayment Amount</span></dt>
-        <dd>
-          <span>{{ prepaymentAccount.prepaymentAmount | currency }}</span>
-        </dd>
-        <dt><span>Settlement Currency</span></dt>
-        <dd>
-          <div *ngIf="prepaymentAccount.settlementCurrency">
-            <a [routerLink]="['/settlement-currency', prepaymentAccount.settlementCurrency?.id, 'view']">{{
-              prepaymentAccount.settlementCurrency?.iso4217CurrencyCode
-            }}</a>
-          </div>
-        </dd>
-        <dt><span>Prepayment Transaction</span></dt>
-        <dd>
-          <div *ngIf="prepaymentAccount.prepaymentTransaction">
-            <a [routerLink]="['/settlement', prepaymentAccount.prepaymentTransaction?.id, 'view']">{{
-              prepaymentAccount.prepaymentTransaction?.paymentNumber
-            }}</a>
-          </div>
-        </dd>
-        <dt><span>Service Outlet</span></dt>
-        <dd>
-          <div *ngIf="prepaymentAccount.serviceOutlet">
-            <a [routerLink]="['/service-outlet', prepaymentAccount.serviceOutlet?.id, 'view']">{{
-              prepaymentAccount.serviceOutlet?.outletCode
-            }}</a>
-          </div>
-        </dd>
-        <dt><span>Dealer</span></dt>
-        <dd>
-          <div *ngIf="prepaymentAccount.dealer">
-            <a [routerLink]="['/dealer', prepaymentAccount.dealer?.id, 'view']">{{ prepaymentAccount.dealer?.dealerName }}</a>
-          </div>
-        </dd>
-        <dt><span>Debit Account</span></dt>
-        <dd>
-          <div *ngIf="prepaymentAccount.debitAccount">
-            <a [routerLink]="['/transaction-account', prepaymentAccount.debitAccount?.id, 'view']">{{
-              prepaymentAccount.debitAccount?.accountName
-            }}</a>
-          </div>
-        </dd>
-        <dt><span>Transfer Account</span></dt>
-        <dd>
-          <div *ngIf="prepaymentAccount.transferAccount">
-            <a [routerLink]="['/transaction-account', prepaymentAccount.transferAccount?.id, 'view']">{{
-              prepaymentAccount.transferAccount?.accountName
-            }}</a>
-          </div>
-        </dd>
-        <dt><span>Posting Date</span></dt>
-        <dd>
-          <span>{{ prepaymentAccount.postingDate | formatMediumDate }}</span>
-        </dd>
-        <dt><span>Created By</span></dt>
-        <dd>
-          <span>{{ prepaymentAccount.createdBy?.applicationIdentity }}</span>
-        </dd>
-        <dt><span>Settlement Currency</span></dt>
-
-        <dt><span>Business Document</span></dt>
-        <dd>
-          <span *ngFor="let businessDocument of prepaymentAccount.businessDocuments; let last = last">
-            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-
-        <dt><span>Placeholder</span></dt>
-        <dd>
-          <span *ngFor="let placeholder of prepaymentAccount.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span>General Parameters</span></dt>
-        <dd>
-          <span *ngFor="let generalParameters of prepaymentAccount.generalParameters; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', generalParameters?.id, 'view']">{{generalParameters.universalKey}}: {{ generalParameters.mappedValue }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span>Prepayment Parameters</span></dt>
-        <dd>
-          <span *ngFor="let prepaymentParameters of prepaymentAccount.prepaymentParameters; let last = last">
-            <a [routerLink]="['/prepayment-mapping', prepaymentParameters?.id, 'view']">{{ prepaymentParameters.parameterKey }}:{{prepaymentParameters.parameter}}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-      </dl>
-
-      <button
-        type="submit"
-        (click)="previousState()"
-        class="btn btn-info"
-        data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
-      </button>
-
-      <button
-        type="button"
-        (click)='editButtonEvent(prepaymentAccount)'
-        [routerLink]="['/prepayment-account', prepaymentAccount.id, 'edit']"
-        class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
-      </button>
-
-      <button
-        type="button"
-        (click)='copyButtonEvent(prepaymentAccount)'
-        [routerLink]="['/prepayment-account', prepaymentAccount.id, 'copy']"
-        class="btn btn-primary">
-        <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
-      </button>
+<div class="prepayment-account-detail page">
+  <div *ngIf="prepaymentAccount" class="detail-shell">
+    <div class="heading-row">
+      <div>
+        <h2 data-cy="prepaymentAccountDetailsHeading">Prepayment Account</h2>
+        <div class="summary-line">
+          <span *ngIf="prepaymentAccount.catalogueNumber">Catalogue {{ prepaymentAccount.catalogueNumber }}</span>
+          <span *ngIf="prepaymentAccount.particulars">{{ prepaymentAccount.particulars }}</span>
+          <span *ngIf="prepaymentAccount.prepaymentGuid">GUID {{ prepaymentAccount.prepaymentGuid }}</span>
+        </div>
+      </div>
+      <div class="button-row">
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+        <button type="button" (click)="editButtonEvent(prepaymentAccount)" [routerLink]="['/prepayment-account', prepaymentAccount.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+        <button type="button" (click)="copyButtonEvent(prepaymentAccount)" [routerLink]="['/prepayment-account', prepaymentAccount.id, 'copy']" class="btn btn-primary">
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
+        </button>
+      </div>
     </div>
+
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
+
+    <div class="detail-grid">
+      <section class="detail-panel">
+        <h3>Account Details</h3>
+        <dl class="field-grid">
+          <div><dt>ID</dt><dd>{{ prepaymentAccount.id }}</dd></div>
+          <div><dt>Recognition Date</dt><dd>{{ prepaymentAccount.recognitionDate | formatMediumDate }}</dd></div>
+          <div><dt>Posting Date</dt><dd>{{ prepaymentAccount.postingDate | formatMediumDate }}</dd></div>
+          <div><dt>Prepayment Amount</dt><dd>{{ prepaymentAccount.prepaymentAmount | currency }}</dd></div>
+          <div><dt>Settlement Currency</dt><dd><a *ngIf="prepaymentAccount.settlementCurrency" [routerLink]="['/settlement-currency', prepaymentAccount.settlementCurrency?.id, 'view']">{{ prepaymentAccount.settlementCurrency?.iso4217CurrencyCode }}</a></dd></div>
+          <div><dt>Prepayment Transaction</dt><dd><a *ngIf="prepaymentAccount.prepaymentTransaction" [routerLink]="['/settlement', prepaymentAccount.prepaymentTransaction?.id, 'view']">{{ prepaymentAccount.prepaymentTransaction?.paymentNumber }}</a></dd></div>
+          <div><dt>Service Outlet</dt><dd><a *ngIf="prepaymentAccount.serviceOutlet" [routerLink]="['/service-outlet', prepaymentAccount.serviceOutlet?.id, 'view']">{{ prepaymentAccount.serviceOutlet?.outletCode }}</a></dd></div>
+          <div><dt>Dealer</dt><dd><a *ngIf="prepaymentAccount.dealer" [routerLink]="['/dealer', prepaymentAccount.dealer?.id, 'view']">{{ prepaymentAccount.dealer?.dealerName }}</a></dd></div>
+          <div><dt>Debit Account</dt><dd><a *ngIf="prepaymentAccount.debitAccount" [routerLink]="['/transaction-account', prepaymentAccount.debitAccount?.id, 'view']">{{ prepaymentAccount.debitAccount?.accountName }}</a></dd></div>
+          <div><dt>Transfer Account</dt><dd><a *ngIf="prepaymentAccount.transferAccount" [routerLink]="['/transaction-account', prepaymentAccount.transferAccount?.id, 'view']">{{ prepaymentAccount.transferAccount?.accountName }}</a></dd></div>
+          <div class="wide"><dt>Notes</dt><dd>{{ prepaymentAccount.notes }}</dd></div>
+        </dl>
+      </section>
+
+      <section class="detail-panel">
+        <h3>Related Documents</h3>
+        <div class="document-toolbar">
+          <span *ngIf="loadingDocuments">Loading documents...</span>
+          <span *ngIf="!loadingDocuments && !relatedBusinessDocuments.length">No related business documents were found.</span>
+        </div>
+        <div class="document-list" *ngIf="relatedBusinessDocuments.length">
+          <button
+            type="button"
+            class="document-link"
+            *ngFor="let businessDocument of relatedBusinessDocuments; trackBy: trackBusinessDocument"
+            (click)="selectBusinessDocument(businessDocument)"
+            [class.active]="selectedBusinessDocument?.id === businessDocument.id"
+          >
+            {{ businessDocument.documentTitle }}
+          </button>
+        </div>
+        <div class="document-preview" *ngIf="documentPreviewUrl">
+          <div class="preview-header">{{ documentPreviewTitle }}</div>
+          <iframe [src]="documentPreviewUrl" title="Business document preview"></iframe>
+        </div>
+      </section>
+    </div>
+
+    <section class="detail-panel secondary-panel">
+      <h3>Supporting Data</h3>
+      <dl class="field-grid compact-grid">
+        <div><dt>Created By</dt><dd>{{ prepaymentAccount.createdBy?.applicationIdentity }}</dd></div>
+        <div><dt>Placeholder</dt><dd><span *ngFor="let placeholder of prepaymentAccount.placeholders; let last = last"><a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a>{{ last ? '' : ', ' }}</span></dd></div>
+        <div><dt>General Parameters</dt><dd><span *ngFor="let generalParameters of prepaymentAccount.generalParameters; let last = last"><a [routerLink]="['/universally-unique-mapping', generalParameters?.id, 'view']">{{ generalParameters.universalKey }}: {{ generalParameters.mappedValue }}</a>{{ last ? '' : ', ' }}</span></dd></div>
+        <div><dt>Prepayment Parameters</dt><dd><span *ngFor="let prepaymentParameters of prepaymentAccount.prepaymentParameters; let last = last"><a [routerLink]="['/prepayment-mapping', prepaymentParameters?.id, 'view']">{{ prepaymentParameters.parameterKey }}:{{ prepaymentParameters.parameter }}</a>{{ last ? '' : ', ' }}</span></dd></div>
+      </dl>
+    </section>
   </div>
 </div>
