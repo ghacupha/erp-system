@@ -1,0 +1,59 @@
+name: Build Docker Images
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-system:
+    name: Build ERP System image
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '18'
+          cache: maven
+
+      - name: Build and push backend image to GHCR
+        working-directory: erp-system
+        env:
+          JIB_TO_IMAGE: ghcr.io/${{ github.repository_owner }}/erp-system:${{ github.sha }}
+          JIB_TO_AUTH_USERNAME: ${{ github.actor }}
+          JIB_TO_AUTH_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        run: ./mvnw -ntp -DskipTests jib:build -Djib.to.image=${JIB_TO_IMAGE} -Djib.to.auth.username=${JIB_TO_AUTH_USERNAME} -Djib.to.auth.password=${JIB_TO_AUTH_PASSWORD}
+
+  build-client:
+    name: Build ERP Client image
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push frontend image to GHCR
+        uses: docker/build-push-action@v6
+        with:
+          context: ./erp-client
+          file: ./erp-client/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/erp-client:${{ github.sha }}
