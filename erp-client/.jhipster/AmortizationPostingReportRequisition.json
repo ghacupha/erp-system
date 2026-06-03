@@ -59,5 +59,6 @@
   "pagination": "pagination",
   "entityTableName": "amortization_posting_report_rx",
   "name": "AmortizationPostingReportRequisition",
-  "changelogDate": "20240502083407"
+  "changelogDate": "20240502083407",
+  "skipServer": true
 }

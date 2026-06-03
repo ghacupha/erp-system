@@ -44,5 +44,6 @@
   "pagination": "pagination",
   "name": "LeaseAmortizationCalculation",
   "changelogDate": "20240614144622",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

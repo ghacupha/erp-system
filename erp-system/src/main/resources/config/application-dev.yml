@@ -22,7 +22,7 @@ eureka:
   instance:
     prefer-ip-address: true
   client:
-    enabled: true # By default, the JHipster Registry is not used in the "dev" profile
+    enabled: false # By default, the JHipster Registry is not used in the "dev" profile
     service-url:
       defaultZone: http://admin:${jhipster.registry.password}@localhost:${JHIPSTER_REGISTRY_PORT:8771}/eureka/
 
@@ -94,6 +94,8 @@ spring:
   elasticsearch:
     rest:
       uris: ${SPRING_DATA_JEST_URI:- http://localhost:8840}
+      username: ${ELASTIC_USERNAME:elastic}
+      password: ${ELASTICSEARCH_PASSWORD}
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev #, faker

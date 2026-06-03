@@ -1,0 +1,29 @@
+// Left-border accent colours for KPI cards (Bootstrap 4 pattern)
+.kpi-card {
+  border-left-width: 4px !important;
+  border-left-style: solid !important;
+  transition: box-shadow 0.15s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+  }
+
+  &.border-left-primary  { border-left-color: #4e73df !important; }
+  &.border-left-secondary { border-left-color: #858796 !important; }
+  &.border-left-success  { border-left-color: #1cc88a !important; }
+  &.border-left-warning  { border-left-color: #f6c23e !important; }
+
+  .kpi-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.text-xs {
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+}

@@ -38,6 +38,10 @@
         <dd>
           <span>{{ prepaymentAccount.prepaymentGuid }}</span>
         </dd>
+        <dt><span>Posting Date</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.postingDate | formatMediumDate }}</span>
+        </dd>
         <dt><span>Settlement Currency</span></dt>
         <dd>
           <div *ngIf="prepaymentAccount.settlementCurrency">

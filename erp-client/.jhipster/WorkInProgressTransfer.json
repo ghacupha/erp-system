@@ -87,5 +87,6 @@
   "readOnly": false,
   "pagination": "pagination",
   "name": "WorkInProgressTransfer",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

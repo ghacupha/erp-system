@@ -29,5 +29,6 @@
   "pagination": "pagination",
   "name": "TransactionAccountLedger",
   "changelogDate": "20241113125548",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

@@ -36,6 +36,7 @@ export class PrepaymentAccountUpdatePage {
   notesInput = element(by.id('field_notes'));
   prepaymentAmountInput = element(by.id('field_prepaymentAmount'));
   prepaymentGuidInput = element(by.id('field_prepaymentGuid'));
+  postingDateInput = element(by.id('field_postingDate'));
 
   settlementCurrencySelect = element(by.id('field_settlementCurrency'));
   prepaymentTransactionSelect = element(by.id('field_prepaymentTransaction'));
@@ -107,6 +108,14 @@ export class PrepaymentAccountUpdatePage {
 
   async getPrepaymentGuidInput(): Promise<string> {
     return await this.prepaymentGuidInput.getAttribute('value');
+  }
+
+  async setPostingDateInput(postingDate: string): Promise<void> {
+    await this.postingDateInput.sendKeys(postingDate);
+  }
+
+  async getPostingDateInput(): Promise<string> {
+    return await this.postingDateInput.getAttribute('value');
   }
 
   async settlementCurrencySelectLastOption(): Promise<void> {

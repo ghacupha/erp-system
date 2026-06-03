@@ -27,5 +27,6 @@
   "pagination": "pagination",
   "name": "LeaseLiabilityCompilation",
   "changelogDate": "20240618104247",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

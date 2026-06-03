@@ -30,6 +30,10 @@
     {
       "fieldName": "prepaymentGuid",
       "fieldType": "UUID"
+    },
+    {
+      "fieldName": "postingDate",
+      "fieldType": "LocalDate"
     }
   ],
   "incrementalChangelog": false,
@@ -113,5 +117,6 @@
       "otherEntityField": "applicationIdentity"
     }
   ],
-  "service": "serviceImpl"
+  "service": "serviceImpl",
+  "skipServer": true
 }

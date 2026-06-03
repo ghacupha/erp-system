@@ -34,5 +34,6 @@
   "pagination": "pagination",
   "name": "ReportingEntity",
   "changelogDate": "20241115103432",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

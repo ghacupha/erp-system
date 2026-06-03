@@ -67,5 +67,6 @@
   "pagination": "pagination",
   "name": "NbvReport",
   "changelogDate": "20240219151405",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

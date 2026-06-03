@@ -67,5 +67,6 @@
   "pagination": "pagination",
   "name": "DepreciationReport",
   "changelogDate": "20240115051854",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

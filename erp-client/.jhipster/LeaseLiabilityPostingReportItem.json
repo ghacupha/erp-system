@@ -34,5 +34,6 @@
   "pagination": "infinite-scroll",
   "name": "LeaseLiabilityPostingReportItem",
   "changelogDate": "20240828094733",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

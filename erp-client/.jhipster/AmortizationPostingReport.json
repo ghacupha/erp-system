@@ -26,5 +26,6 @@
   "readOnly": true,
   "pagination": "infinite-scroll",
   "name": "AmortizationPostingReport",
-  "changelogDate": "20231220155255"
+  "changelogDate": "20231220155255",
+  "skipServer": true
 }

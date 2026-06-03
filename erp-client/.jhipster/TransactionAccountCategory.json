@@ -37,5 +37,6 @@
   "pagination": "pagination",
   "name": "TransactionAccountCategory",
   "changelogDate": "20241007115738",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

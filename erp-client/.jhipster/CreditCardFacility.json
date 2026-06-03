@@ -79,5 +79,6 @@
   "pagination": "pagination",
   "name": "CreditCardFacility",
   "changelogDate": "20231004124958",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

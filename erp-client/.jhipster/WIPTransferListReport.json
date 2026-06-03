@@ -48,5 +48,6 @@
   "pagination": "pagination",
   "name": "WIPTransferListReport",
   "changelogDate": "20250203110822",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

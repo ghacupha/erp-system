@@ -19,10 +19,13 @@ package io.github.erp.internal.service.prepayments;
  */
 import io.github.erp.domain.PrepaymentAccount;
 import io.github.erp.internal.repository.InternalPrepaymentAccountRepository;
+import io.github.erp.internal.service.applicationUser.CurrentUserContext;
+import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
 import io.github.erp.internal.service.cache.ScheduledCacheRefreshService;
 import io.github.erp.internal.utilities.NextIntegerFiller;
 import io.github.erp.repository.SettlementRepository;
 import io.github.erp.repository.search.PrepaymentAccountSearchRepository;
+import io.github.erp.security.DomainUserDetailsService;
 import io.github.erp.service.PrepaymentAccountQueryService;
 import io.github.erp.service.criteria.PrepaymentAccountCriteria;
 import io.github.erp.service.dto.PrepaymentAccountDTO;
@@ -32,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,18 +64,22 @@ public class InternalPrepaymentAccountServiceImpl implements InternalPrepaymentA
 
     private final PrepaymentAccountSearchRepository prepaymentAccountSearchRepository;
 
+    private final InternalApplicationUserDetailService applicationUserDetailService;
+
     public InternalPrepaymentAccountServiceImpl(
         InternalPrepaymentAccountRepository prepaymentAccountRepository,
         PrepaymentAccountMapper prepaymentAccountMapper,
         SettlementRepository settlementRepository, PrepaymentAccountQueryService prepaymentAccountQueryService,
         @Qualifier("scheduledTransactionAccountCacheRefreshService") ScheduledCacheRefreshService scheduledTransactionAccountCacheRefreshService,
-        PrepaymentAccountSearchRepository prepaymentAccountSearchRepository) {
+        PrepaymentAccountSearchRepository prepaymentAccountSearchRepository,
+        InternalApplicationUserDetailService applicationUserDetailService) {
         this.prepaymentAccountRepository = prepaymentAccountRepository;
         this.prepaymentAccountMapper = prepaymentAccountMapper;
         this.settlementRepository = settlementRepository;
         this.prepaymentAccountQueryService = prepaymentAccountQueryService;
         this.scheduledTransactionAccountCacheRefreshService = scheduledTransactionAccountCacheRefreshService;
         this.prepaymentAccountSearchRepository = prepaymentAccountSearchRepository;
+        this.applicationUserDetailService = applicationUserDetailService;
     }
 
     PrepaymentAccount checkIfExistsSettlement(PrepaymentAccount prepaymentAccount) {
@@ -90,6 +98,8 @@ public class InternalPrepaymentAccountServiceImpl implements InternalPrepaymentA
     @Override
     public PrepaymentAccountDTO save(PrepaymentAccountDTO prepaymentAccountDTO) {
         log.debug("Request to save PrepaymentAccount : {}", prepaymentAccountDTO);
+
+        applicationUserDetailService.getCurrentApplicationUser().ifPresent(prepaymentAccountDTO::setCreatedBy);
 
         PrepaymentAccount prepaymentAccount = checkIfExistsSettlement(prepaymentAccountMapper.toEntity(prepaymentAccountDTO));
         prepaymentAccount = prepaymentAccountRepository.save(prepaymentAccount);

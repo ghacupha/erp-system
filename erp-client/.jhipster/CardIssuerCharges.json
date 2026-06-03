@@ -64,5 +64,6 @@
   "pagination": "pagination",
   "name": "CardIssuerCharges",
   "changelogDate": "20231004103003",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

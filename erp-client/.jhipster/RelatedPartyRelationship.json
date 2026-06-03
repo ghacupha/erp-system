@@ -47,5 +47,6 @@
   "pagination": "pagination",
   "name": "RelatedPartyRelationship",
   "changelogDate": "20231004065545",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

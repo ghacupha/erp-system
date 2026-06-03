@@ -42,5 +42,6 @@
   "pagination": "infinite-scroll",
   "name": "RouAccountBalanceReportItem",
   "changelogDate": "20240313091444",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

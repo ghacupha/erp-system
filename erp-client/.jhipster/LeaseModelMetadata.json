@@ -163,5 +163,6 @@
   "pagination": "pagination",
   "name": "LeaseModelMetadata",
   "changelogDate": "20230328100320",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

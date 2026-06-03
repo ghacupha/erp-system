@@ -151,6 +151,27 @@
           />
         </div>
 
+        <div class="form-group">
+          <label class="form-control-label" for="field_postingDate">Posting Date</label>
+          <div class="input-group">
+            <input
+              id="field_postingDate"
+              data-cy="postingDate"
+              type="text"
+              class="form-control"
+              name="postingDate"
+              ngbDatepicker
+              #postingDateDp="ngbDatepicker"
+              formControlName="postingDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="postingDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
         <jhi-m21-settlement-currency-form-control
           ngDefaultControl
           formControlName='settlementCurrency'

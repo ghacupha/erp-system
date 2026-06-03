@@ -18,6 +18,7 @@ export interface IPrepaymentAccount {
   notes?: string | null;
   prepaymentAmount?: number | null;
   prepaymentGuid?: string | null;
+  postingDate?: dayjs.Dayjs | null;
   settlementCurrency?: ISettlementCurrency | null;
   prepaymentTransaction?: ISettlement | null;
   serviceOutlet?: IServiceOutlet | null;
@@ -40,6 +41,7 @@ export class PrepaymentAccount implements IPrepaymentAccount {
     public notes?: string | null,
     public prepaymentAmount?: number | null,
     public prepaymentGuid?: string | null,
+    public postingDate?: dayjs.Dayjs | null,
     public settlementCurrency?: ISettlementCurrency | null,
     public prepaymentTransaction?: ISettlement | null,
     public serviceOutlet?: IServiceOutlet | null,

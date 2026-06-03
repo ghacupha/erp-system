@@ -103,6 +103,15 @@
             }}</a>
           </div>
         </dd>
+        <dt><span>Posting Date</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.postingDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Created By</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.createdBy?.applicationIdentity }}</span>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
 
         <dt><span>Business Document</span></dt>
         <dd>

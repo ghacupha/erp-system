@@ -93,5 +93,6 @@
   "pagination": "pagination",
   "name": "DepreciationJobNotice",
   "changelogDate": "20230816150648",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

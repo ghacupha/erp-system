@@ -1,0 +1,148 @@
+<!--
+
+    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="prepayments-dashboard mb-4">
+
+  <!-- Header -->
+  <div class="d-flex align-items-center mb-3">
+    <h4 class="mb-0 mr-3">Prepayments Overview</h4>
+    <span *ngIf="isLoading" class="spinner-border spinner-border-sm text-secondary" role="status">
+      <span class="sr-only">Loading...</span>
+    </span>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="row">
+
+    <div class="col-sm-6 col-xl-3 mb-3">
+      <div class="card kpi-card border-left-primary h-100">
+        <div class="card-body py-3">
+          <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Accounts</div>
+          <div class="kpi-value">{{ totalAccounts | number }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3 mb-3">
+      <div class="card kpi-card border-left-secondary h-100">
+        <div class="card-body py-3">
+          <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">Total Prepayment</div>
+          <div class="kpi-value">{{ totalPrepaymentAmount | number:'1.2-2' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3 mb-3">
+      <div class="card kpi-card border-left-success h-100">
+        <div class="card-body py-3">
+          <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Amortised to Date</div>
+          <div class="kpi-value text-success">{{ totalAmortisedAmount | number:'1.2-2' }}</div>
+          <div class="text-xs text-muted mt-1">{{ amortisationPercent }}% of total</div>
+          <div class="progress mt-1" style="height: 4px;">
+            <div class="progress-bar bg-success" role="progressbar"
+              [style.width.%]="amortisationPercent"
+              [attr.aria-valuenow]="amortisationPercent"
+              aria-valuemin="0"
+              aria-valuemax="100">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3 mb-3">
+      <div class="card kpi-card border-left-warning h-100">
+        <div class="card-body py-3">
+          <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Outstanding Balance</div>
+          <div class="kpi-value text-warning">{{ totalOutstandingAmount | number:'1.2-2' }}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Trend Chart + Top Accounts Table -->
+  <div class="row">
+
+    <!-- Amortization trend bar chart -->
+    <div class="col-lg-8 mb-3">
+      <div class="card h-100">
+        <div class="card-header py-2 d-flex align-items-center justify-content-between">
+          <span class="font-weight-bold small text-uppercase">Monthly Amortization (last 12 months)</span>
+          <span *ngIf="trendLoading" class="spinner-border spinner-border-sm text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+          </span>
+        </div>
+        <div class="card-body">
+          <canvas *ngIf="!trendLoading && (trendChartData.labels?.length ?? 0) > 0"
+            baseChart
+            [data]="trendChartData"
+            type="bar"
+            [options]="trendChartOptions">
+          </canvas>
+          <div *ngIf="!trendLoading && (trendChartData.labels?.length ?? 0) === 0"
+            class="text-center text-muted py-4 small">
+            No amortization data for the past 12 months.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top 10 accounts by outstanding balance -->
+    <div class="col-lg-4 mb-3">
+      <div class="card h-100">
+        <div class="card-header py-2 d-flex align-items-center justify-content-between">
+          <span class="font-weight-bold small text-uppercase">Top Accounts by Outstanding</span>
+          <span *ngIf="reportsLoading" class="spinner-border spinner-border-sm text-secondary" role="status">
+            <span class="sr-only">Loading...</span>
+          </span>
+        </div>
+        <div class="card-body p-0">
+          <div *ngIf="!reportsLoading && topAccounts.length === 0"
+            class="text-center text-muted py-4 small">
+            No account data available.
+          </div>
+          <div *ngIf="!reportsLoading && topAccounts.length > 0" class="table-responsive">
+            <table class="table table-sm table-hover table-striped mb-0">
+              <thead class="thead-light">
+                <tr>
+                  <th class="small">#</th>
+                  <th class="small">Account</th>
+                  <th class="small text-right">Outstanding</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let acct of topAccounts; let i = index">
+                  <td class="small text-muted">{{ i + 1 }}</td>
+                  <td class="small" [title]="acct.accountNumber ?? ''">
+                    {{ acct.accountName }}
+                  </td>
+                  <td class="small text-right">
+                    {{ acct.outstandingAmount | number:'1.0-0' }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

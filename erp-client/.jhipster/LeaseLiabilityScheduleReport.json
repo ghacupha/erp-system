@@ -56,5 +56,6 @@
   "entityTableName": "lease_liability_schedule_rpt",
   "name": "LeaseLiabilityScheduleReport",
   "changelogDate": "20240828112619",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

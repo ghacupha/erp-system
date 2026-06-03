@@ -50,5 +50,6 @@
     }
   ],
   "searchEngine": "elasticsearch",
-  "service": "serviceClass"
+  "service": "serviceClass",
+  "skipServer": true
 }

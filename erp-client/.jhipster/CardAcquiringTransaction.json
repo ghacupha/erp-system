@@ -68,5 +68,6 @@
   "pagination": "pagination",
   "name": "CardAcquiringTransaction",
   "changelogDate": "20231004102823",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

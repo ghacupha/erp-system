@@ -192,5 +192,6 @@
       "otherEntityField": "paymentDate"
     }
   ],
-  "service": "serviceImpl"
+  "service": "serviceImpl",
+  "skipServer": true
 }

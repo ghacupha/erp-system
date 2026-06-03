@@ -58,6 +58,7 @@ import {
   prepaymentAccountUpdateSelectedInstance
 } from '../../../store/selectors/prepayment-account-workflows-status.selector';
 import dayjs from 'dayjs';
+import { DATE_FORMAT } from '../../../../config/input.constants';
 
 @Component({
   selector: 'jhi-prepayment-account-update',
@@ -82,6 +83,8 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   weAreCreating = false;
   selectedItem = {...new PrepaymentAccount()}
 
+  postDate = dayjs();
+
   editForm = this.fb.group({
     id: [],
     catalogueNumber: [null, [Validators.required]],
@@ -100,6 +103,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     generalParameters: [],
     prepaymentParameters: [],
     businessDocuments: [],
+    postingDate: [],
   });
 
   constructor(
@@ -134,6 +138,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
 
       this.editForm.patchValue({
         prepaymentGuid: uuidv4(),
+        postingDate: this.postDate,
       })
     }
 
@@ -142,6 +147,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
 
       this.editForm.patchValue({
         prepaymentGuid: uuidv4(),
+        postingDate: this.postDate,
       })
 
       // Update catalogue number
@@ -158,6 +164,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
 
       this.editForm.patchValue({
         prepaymentGuid: uuidv4(),
+        postingDate: this.postDate,
       })
 
       this.prepaymentAccountService.getNextCatalogueNumber().subscribe(nextValue => {
@@ -408,6 +415,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       generalParameters: prepaymentAccount.generalParameters,
       prepaymentParameters: prepaymentAccount.prepaymentParameters,
       businessDocuments: prepaymentAccount.businessDocuments,
+      postingDate: prepaymentAccount.postingDate,
     });
 
     this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
@@ -468,6 +476,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       generalParameters: prepaymentAccount.generalParameters,
       prepaymentParameters: prepaymentAccount.prepaymentParameters,
       businessDocuments: prepaymentAccount.businessDocuments,
+      postingDate: prepaymentAccount.postingDate,
     });
 
     this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
@@ -636,6 +645,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       generalParameters: this.editForm.get(['generalParameters'])!.value,
       prepaymentParameters: this.editForm.get(['prepaymentParameters'])!.value,
       businessDocuments: this.editForm.get(['businessDocuments'])!.value,
+      postingDate: this.editForm.get(['postingDate'])!.value,
     };
   }
 

@@ -73,5 +73,6 @@
   "pagination": "pagination",
   "name": "AssetWriteOff",
   "changelogDate": "20240320112940",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

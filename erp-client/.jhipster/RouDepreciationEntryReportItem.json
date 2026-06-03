@@ -59,5 +59,6 @@
   "pagination": "infinite-scroll",
   "name": "RouDepreciationEntryReportItem",
   "changelogDate": "20240313073952",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

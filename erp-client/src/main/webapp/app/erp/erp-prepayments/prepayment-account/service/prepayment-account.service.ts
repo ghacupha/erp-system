@@ -118,12 +118,14 @@ export class PrepaymentAccountService {
   protected convertDateFromClient(prepaymentAccount: IPrepaymentAccount): IPrepaymentAccount {
     return Object.assign({}, prepaymentAccount, {
       recognitionDate: prepaymentAccount.recognitionDate?.isValid() ? prepaymentAccount.recognitionDate.format(DATE_FORMAT) : undefined,
+      postingDate: prepaymentAccount.postingDate?.isValid() ? prepaymentAccount.postingDate.format(DATE_FORMAT) : undefined,
     });
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
       res.body.recognitionDate = res.body.recognitionDate ? dayjs(res.body.recognitionDate) : undefined;
+      res.body.postingDate = res.body.postingDate ? dayjs(res.body.postingDate) : undefined;
     }
     return res;
   }
@@ -132,6 +134,7 @@ export class PrepaymentAccountService {
     if (res.body) {
       res.body.forEach((prepaymentAccount: IPrepaymentAccount) => {
         prepaymentAccount.recognitionDate = prepaymentAccount.recognitionDate ? dayjs(prepaymentAccount.recognitionDate) : undefined;
+        prepaymentAccount.postingDate = prepaymentAccount.postingDate ? dayjs(prepaymentAccount.postingDate) : undefined;
       });
     }
     return res;

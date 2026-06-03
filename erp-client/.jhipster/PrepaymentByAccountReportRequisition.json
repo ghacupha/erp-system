@@ -59,5 +59,6 @@
   "entityTableName": "prepayment_by_acc_rpt_rx",
   "name": "PrepaymentByAccountReportRequisition",
   "changelogDate": "20240506110010",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

@@ -45,5 +45,6 @@
   "pagination": "pagination",
   "name": "AmortizationPeriod",
   "changelogDate": "20240427185244",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

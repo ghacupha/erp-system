@@ -17,9 +17,9 @@ describe('PrepaymentAccount e2e test', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const prepaymentAccountSample = {
-    catalogueNumber: 'Intelligent parsing eco-centric',
-    recognitionDate: '2022-05-01',
-    particulars: 'Optimization',
+    catalogueNumber: 'Synergized',
+    recognitionDate: '2022-04-30',
+    particulars: 'eco-centric Shoes Squares',
   };
 
   let prepaymentAccount: any;
@@ -174,6 +174,8 @@ describe('PrepaymentAccount e2e test', () => {
         .type('4a9ca187-6d89-4bd3-936d-47544aa5d6d9')
         .invoke('val')
         .should('match', new RegExp('4a9ca187-6d89-4bd3-936d-47544aa5d6d9'));
+
+      cy.get(`[data-cy="postingDate"]`).type('2022-04-30').should('have.value', '2022-04-30');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

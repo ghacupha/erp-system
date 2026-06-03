@@ -117,5 +117,6 @@
   "pagination": "pagination",
   "name": "LeaseTemplate",
   "changelogDate": "20250211120000",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

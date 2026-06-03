@@ -90,5 +90,6 @@
   "pagination": "pagination",
   "name": "ParticularsOfOutlet",
   "changelogDate": "20231004053154",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

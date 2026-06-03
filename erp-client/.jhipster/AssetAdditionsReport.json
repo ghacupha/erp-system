@@ -47,5 +47,6 @@
   "pagination": "pagination",
   "name": "AssetAdditionsReport",
   "changelogDate": "20240126043430",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

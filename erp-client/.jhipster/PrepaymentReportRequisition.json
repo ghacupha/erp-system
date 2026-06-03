@@ -60,5 +60,6 @@
   "pagination": "pagination",
   "name": "PrepaymentReportRequisition",
   "changelogDate": "20240430114123",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

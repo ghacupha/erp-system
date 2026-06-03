@@ -60,5 +60,6 @@
   "entityTableName": "rou_deprec_pst_rpt",
   "name": "RouDepreciationPostingReport",
   "changelogDate": "20240313094655",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

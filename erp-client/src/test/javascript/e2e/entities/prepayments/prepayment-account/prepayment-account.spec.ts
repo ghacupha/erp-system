@@ -56,6 +56,7 @@ describe('PrepaymentAccount e2e test', () => {
       prepaymentAccountUpdatePage.setNotesInput('notes'),
       prepaymentAccountUpdatePage.setPrepaymentAmountInput('5'),
       prepaymentAccountUpdatePage.setPrepaymentGuidInput('64c99148-3908-465d-8c4a-e510e3ade974'),
+      prepaymentAccountUpdatePage.setPostingDateInput('2000-12-31'),
       prepaymentAccountUpdatePage.settlementCurrencySelectLastOption(),
       prepaymentAccountUpdatePage.prepaymentTransactionSelectLastOption(),
       prepaymentAccountUpdatePage.serviceOutletSelectLastOption(),

@@ -95,5 +95,6 @@
   "pagination": "pagination",
   "name": "AssetDisposal",
   "changelogDate": "20240321051842",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

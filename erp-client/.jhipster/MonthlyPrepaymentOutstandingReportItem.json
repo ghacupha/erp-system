@@ -30,5 +30,6 @@
   "pagination": "infinite-scroll",
   "name": "MonthlyPrepaymentOutstandingReportItem",
   "changelogDate": "20240304133311",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

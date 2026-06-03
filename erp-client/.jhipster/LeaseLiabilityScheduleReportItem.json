@@ -51,5 +51,6 @@
   "pagination": "infinite-scroll",
   "name": "LeaseLiabilityScheduleReportItem",
   "changelogDate": "20240828092411",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

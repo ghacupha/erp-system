@@ -32,5 +32,6 @@
   "pagination": "pagination",
   "name": "WorkInProgressReport",
   "changelogDate": "20231107053508",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

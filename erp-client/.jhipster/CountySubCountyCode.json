@@ -36,5 +36,6 @@
   "pagination": "pagination",
   "name": "CountySubCountyCode",
   "changelogDate": "20231004062159",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

@@ -62,5 +62,6 @@
   "pagination": "pagination",
   "name": "LeaseLiability",
   "changelogDate": "20240618060237",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

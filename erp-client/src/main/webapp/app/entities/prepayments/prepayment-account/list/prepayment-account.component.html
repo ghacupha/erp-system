@@ -61,6 +61,7 @@
           <th scope="col" jhiSortBy="prepaymentGuid">
             <span>Prepayment Guid</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="postingDate"><span>Posting Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
             <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -86,6 +87,7 @@
           <td>{{ prepaymentAccount.notes }}</td>
           <td>{{ prepaymentAccount.prepaymentAmount }}</td>
           <td>{{ prepaymentAccount.prepaymentGuid }}</td>
+          <td>{{ prepaymentAccount.postingDate | formatMediumDate }}</td>
           <td>
             <div *ngIf="prepaymentAccount.settlementCurrency">
               <a [routerLink]="['/settlement-currency', prepaymentAccount.settlementCurrency?.id, 'view']">{{

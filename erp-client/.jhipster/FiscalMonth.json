@@ -60,5 +60,6 @@
   "pagination": "pagination",
   "name": "FiscalMonth",
   "changelogDate": "20230816131238",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

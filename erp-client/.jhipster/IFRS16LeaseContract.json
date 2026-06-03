@@ -96,5 +96,6 @@
   "pagination": "pagination",
   "name": "IFRS16LeaseContract",
   "changelogDate": "20240307045420",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }

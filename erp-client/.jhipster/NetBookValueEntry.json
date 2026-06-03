@@ -104,5 +104,6 @@
   "pagination": "infinite-scroll",
   "name": "NetBookValueEntry",
   "changelogDate": "20240219053625",
-  "incrementalChangelog": false
+  "incrementalChangelog": false,
+  "skipServer": true
 }
