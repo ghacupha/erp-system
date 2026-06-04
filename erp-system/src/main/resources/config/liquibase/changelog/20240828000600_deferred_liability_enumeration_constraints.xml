@@ -24,11 +24,11 @@
                 <foreignKeyConstraintExists foreignKeyName="fk_liability_enumeration__lease_payment_upload_id"/>
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="lease_payment_upload_id"
+        <!--<addForeignKeyConstraint baseColumnNames="lease_payment_upload_id"
                                  baseTableName="liability_enumeration"
                                  constraintName="fk_liability_enumeration__lease_payment_upload_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="lease_payment_upload"/>
+                                 referencedTableName="lease_payment_upload"/> -->
     </changeSet>
 
     <changeSet id="20240828000600-3" author="jhipster">
@@ -37,23 +37,23 @@
                 <foreignKeyConstraintExists foreignKeyName="fk_present_value_enumeration__ifrs16lease_contract_id"/>
             </not>
         </preConditions>
-        <addForeignKeyConstraint baseColumnNames="ifrs16lease_contract_id"
+        <!--<addForeignKeyConstraint baseColumnNames="ifrs16lease_contract_id"
                                  baseTableName="present_value_enumeration"
                                  constraintName="fk_present_value_enumeration__ifrs16lease_contract_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="ifrs16lease_contract"/>
+                                 referencedTableName="ifrs16lease_contract"/>-->
     </changeSet>
 
     <changeSet id="20240828000600-4" author="jhipster">
-        <preConditions onFail="MARK_RAN">
+        <!--<preConditions onFail="MARK_RAN">
             <not>
                 <foreignKeyConstraintExists foreignKeyName="fk_present_value_enumeration__liability_enumeration_id"/>
             </not>
-        </preConditions>
-        <addForeignKeyConstraint baseColumnNames="liability_enumeration_id"
+        </preConditions>-->
+        <!--<addForeignKeyConstraint baseColumnNames="liability_enumeration_id"
                                  baseTableName="present_value_enumeration"
                                  constraintName="fk_present_value_enumeration__liability_enumeration_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="liability_enumeration"/>
+                                 referencedTableName="liability_enumeration"/>-->
     </changeSet>
 </databaseChangeLog>

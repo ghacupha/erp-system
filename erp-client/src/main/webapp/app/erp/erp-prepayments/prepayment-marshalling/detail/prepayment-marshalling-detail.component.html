@@ -45,6 +45,10 @@
         <dd>
           <span>{{ prepaymentMarshalling.processed }}</span>
         </dd>
+        <dt><span>Posting Date</span></dt>
+        <dd>
+          <span>{{ prepaymentMarshalling.postingDate | formatMediumDate }}</span>
+        </dd>
         <dt><span>Prepayment Account</span></dt>
         <dd>
           <div *ngIf="prepaymentMarshalling.prepaymentAccount">
@@ -74,6 +78,14 @@
           <div *ngIf="prepaymentMarshalling.lastFiscalMonth">
             <a [routerLink]="['/fiscal-month', prepaymentMarshalling.lastFiscalMonth?.id, 'view']">{{
               prepaymentMarshalling.lastFiscalMonth?.endDate
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Created By</span></dt>
+        <dd>
+          <div *ngIf="prepaymentMarshalling.createdBy">
+            <a [routerLink]="['/application-user', prepaymentMarshalling.createdBy?.id, 'view']">{{
+              prepaymentMarshalling.createdBy?.applicationIdentity
             }}</a>
           </div>
         </dd>

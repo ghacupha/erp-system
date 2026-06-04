@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="20260604100000-1" author="erp-agent">
+        <addColumn tableName="prepayment_marshalling">
+            <column name="posting_date" type="date">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_by_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20260604100000-2" author="erp-agent">
+        <addForeignKeyConstraint baseColumnNames="created_by_id"
+                                 baseTableName="prepayment_marshalling"
+                                 constraintName="fk_prepayment_marshalling__created_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+    </changeSet>
+
+</databaseChangeLog>

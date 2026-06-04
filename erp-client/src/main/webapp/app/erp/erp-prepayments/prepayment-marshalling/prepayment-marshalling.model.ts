@@ -20,17 +20,21 @@ import { IPrepaymentAccount } from '../prepayment-account/prepayment-account.mod
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
 import { IAmortizationPeriod } from '../amortization-period/amortization-period.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
+import * as dayjs from 'dayjs';
 
 export interface IPrepaymentMarshalling {
   id?: number;
   inactive?: boolean;
   amortizationPeriods?: number | null;
   processed?: boolean | null;
+  postingDate?: dayjs.Dayjs | null;
   prepaymentAccount?: IPrepaymentAccount;
   placeholders?: IPlaceholder[] | null;
   firstFiscalMonth?: IFiscalMonth;
   lastFiscalMonth?: IFiscalMonth;
   firstAmortizationPeriod?: IAmortizationPeriod;
+  createdBy?: IApplicationUser | null;
 }
 
 export class PrepaymentMarshalling implements IPrepaymentMarshalling {
@@ -39,11 +43,13 @@ export class PrepaymentMarshalling implements IPrepaymentMarshalling {
     public inactive?: boolean,
     public amortizationPeriods?: number | null,
     public processed?: boolean | null,
+    public postingDate?: dayjs.Dayjs | null,
     public prepaymentAccount?: IPrepaymentAccount,
     public placeholders?: IPlaceholder[] | null,
     public firstFiscalMonth?: IFiscalMonth,
     public lastFiscalMonth?: IFiscalMonth,
     public firstAmortizationPeriod?: IAmortizationPeriod,
+    public createdBy?: IApplicationUser | null,
   ) {
     this.inactive = this.inactive ?? false;
     this.processed = this.processed ?? false;

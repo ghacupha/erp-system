@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <h4 class="modal-title">Confirm past amortization period</h4>
+  <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <p class="mb-2">
+    You are about to set the first amortization period to a period that has already passed.
+  </p>
+  <p class="mb-2">
+    That can disturb previously balanced reports and create differences with the core banking system unless this change is part of a legitimate reconciliation.
+  </p>
+
+  <div class="border rounded p-3 bg-light">
+    <div class="font-weight-bold mb-1">{{ amortizationPeriod?.periodCode }}</div>
+    <div class="small text-muted" *ngIf="amortizationPeriod?.startDate || amortizationPeriod?.endDate">
+      <span *ngIf="amortizationPeriod?.startDate">Start: {{ amortizationPeriod?.startDate?.format('DD/MM/YYYY') }}</span>
+      <span *ngIf="amortizationPeriod?.startDate && amortizationPeriod?.endDate">&nbsp;|&nbsp;</span>
+      <span *ngIf="amortizationPeriod?.endDate">End: {{ amortizationPeriod?.endDate?.format('DD/MM/YYYY') }}</span>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="dismiss()">Cancel</button>
+  <button type="button" class="btn btn-warning" (click)="proceed()">Proceed anyway</button>
+</div>

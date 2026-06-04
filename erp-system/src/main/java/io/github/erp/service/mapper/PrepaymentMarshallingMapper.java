@@ -26,7 +26,13 @@ import org.mapstruct.*;
  */
 @Mapper(
     componentModel = "spring",
-    uses = { PrepaymentAccountMapper.class, PlaceholderMapper.class, FiscalMonthMapper.class, AmortizationPeriodMapper.class }
+    uses = {
+        PrepaymentAccountMapper.class,
+        PlaceholderMapper.class,
+        FiscalMonthMapper.class,
+        AmortizationPeriodMapper.class,
+        ApplicationUserMapper.class,
+    }
 )
 public interface PrepaymentMarshallingMapper extends EntityMapper<PrepaymentMarshallingDTO, PrepaymentMarshalling> {
     @Mapping(target = "prepaymentAccount", source = "prepaymentAccount", qualifiedByName = "catalogueNumber")
@@ -34,6 +40,7 @@ public interface PrepaymentMarshallingMapper extends EntityMapper<PrepaymentMars
     @Mapping(target = "firstFiscalMonth", source = "firstFiscalMonth", qualifiedByName = "startDate")
     @Mapping(target = "lastFiscalMonth", source = "lastFiscalMonth", qualifiedByName = "endDate")
     @Mapping(target = "firstAmortizationPeriod", source = "firstAmortizationPeriod", qualifiedByName = "periodCode")
+    @Mapping(target = "createdBy", source = "createdBy", qualifiedByName = "applicationIdentity")
     PrepaymentMarshallingDTO toDto(PrepaymentMarshalling s);
 
     @Mapping(target = "removePlaceholder", ignore = true)
