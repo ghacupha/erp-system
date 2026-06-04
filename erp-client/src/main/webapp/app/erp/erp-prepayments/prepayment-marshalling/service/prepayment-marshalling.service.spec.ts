@@ -18,16 +18,19 @@
 
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import * as dayjs from 'dayjs';
 
 import { IPrepaymentMarshalling, PrepaymentMarshalling } from '../prepayment-marshalling.model';
 
 import { PrepaymentMarshallingService } from './prepayment-marshalling.service';
+import { DATE_FORMAT } from '../../../../config/input.constants';
 
 describe('PrepaymentMarshalling Service', () => {
   let service: PrepaymentMarshallingService;
   let httpMock: HttpTestingController;
   let elemDefault: IPrepaymentMarshalling;
   let expectedResult: IPrepaymentMarshalling | IPrepaymentMarshalling[] | boolean | null;
+  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -36,18 +39,22 @@ describe('PrepaymentMarshalling Service', () => {
     expectedResult = null;
     service = TestBed.inject(PrepaymentMarshallingService);
     httpMock = TestBed.inject(HttpTestingController);
+    currentDate = dayjs();
 
     elemDefault = {
       id: 0,
       inactive: false,
       amortizationPeriods: 0,
       processed: false,
+      postingDate: currentDate,
     };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign({}, elemDefault);
+      const returnedFromService = Object.assign({}, elemDefault, {
+        postingDate: currentDate.format(DATE_FORMAT),
+      });
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
@@ -57,12 +64,10 @@ describe('PrepaymentMarshalling Service', () => {
     });
 
     it('should create a PrepaymentMarshalling', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 0,
-        },
-        elemDefault
-      );
+      const returnedFromService = Object.assign({}, elemDefault, {
+        id: 0,
+        postingDate: currentDate.format(DATE_FORMAT),
+      });
 
       const expected = Object.assign({}, returnedFromService);
 
@@ -74,15 +79,13 @@ describe('PrepaymentMarshalling Service', () => {
     });
 
     it('should update a PrepaymentMarshalling', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          inactive: true,
-          amortizationPeriods: 1,
-          processed: true,
-        },
-        elemDefault
-      );
+      const returnedFromService = Object.assign({}, elemDefault, {
+        id: 1,
+        inactive: true,
+        amortizationPeriods: 1,
+        processed: true,
+        postingDate: currentDate.format(DATE_FORMAT),
+      });
 
       const expected = Object.assign({}, returnedFromService);
 
@@ -101,7 +104,9 @@ describe('PrepaymentMarshalling Service', () => {
         new PrepaymentMarshalling()
       );
 
-      const returnedFromService = Object.assign(patchObject, elemDefault);
+      const returnedFromService = Object.assign({}, elemDefault, patchObject, {
+        postingDate: currentDate.format(DATE_FORMAT),
+      });
 
       const expected = Object.assign({}, returnedFromService);
 
@@ -113,15 +118,13 @@ describe('PrepaymentMarshalling Service', () => {
     });
 
     it('should return a list of PrepaymentMarshalling', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          inactive: true,
-          amortizationPeriods: 1,
-          processed: true,
-        },
-        elemDefault
-      );
+      const returnedFromService = Object.assign({}, elemDefault, {
+        id: 1,
+        inactive: true,
+        amortizationPeriods: 1,
+        processed: true,
+        postingDate: currentDate.format(DATE_FORMAT),
+      });
 
       const expected = Object.assign({}, returnedFromService);
 

@@ -25,6 +25,7 @@ import { PrepaymentMarshallingDeleteDialogComponent } from './delete/prepayment-
 import { PrepaymentMarshallingRoutingModule } from './route/prepayment-marshalling-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 import { PrepaymentMarshallingCustomRoutingModule } from './route/prepayment-marshalling-custom-routing.module';
+import { PastAmortizationPeriodWarningDialogComponent } from './update/past-amortization-period-warning-dialog.component';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { PrepaymentMarshallingCustomRoutingModule } from './route/prepayment-mar
     PrepaymentMarshallingDetailComponent,
     PrepaymentMarshallingUpdateComponent,
     PrepaymentMarshallingDeleteDialogComponent,
+    PastAmortizationPeriodWarningDialogComponent,
   ],
-  entryComponents: [PrepaymentMarshallingDeleteDialogComponent],
+  entryComponents: [PrepaymentMarshallingDeleteDialogComponent, PastAmortizationPeriodWarningDialogComponent],
 })
 export class PrepaymentMarshallingModule {}

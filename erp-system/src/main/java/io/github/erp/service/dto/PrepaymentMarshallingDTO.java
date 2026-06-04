@@ -18,6 +18,7 @@ package io.github.erp.service.dto;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -39,6 +40,8 @@ public class PrepaymentMarshallingDTO implements Serializable {
 
     private UUID compilationToken;
 
+    private LocalDate postingDate;
+
     private PrepaymentAccountDTO prepaymentAccount;
 
     private Set<PlaceholderDTO> placeholders = new HashSet<>();
@@ -48,6 +51,8 @@ public class PrepaymentMarshallingDTO implements Serializable {
     private FiscalMonthDTO lastFiscalMonth;
 
     private AmortizationPeriodDTO firstAmortizationPeriod;
+
+    private ApplicationUserDTO createdBy;
 
     public Long getId() {
         return id;
@@ -87,6 +92,14 @@ public class PrepaymentMarshallingDTO implements Serializable {
 
     public void setCompilationToken(UUID compilationToken) {
         this.compilationToken = compilationToken;
+    }
+
+    public LocalDate getPostingDate() {
+        return postingDate;
+    }
+
+    public void setPostingDate(LocalDate postingDate) {
+        this.postingDate = postingDate;
     }
 
     public PrepaymentAccountDTO getPrepaymentAccount() {
@@ -129,6 +142,14 @@ public class PrepaymentMarshallingDTO implements Serializable {
         this.firstAmortizationPeriod = firstAmortizationPeriod;
     }
 
+    public ApplicationUserDTO getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(ApplicationUserDTO createdBy) {
+        this.createdBy = createdBy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -159,11 +180,13 @@ public class PrepaymentMarshallingDTO implements Serializable {
             ", amortizationPeriods=" + getAmortizationPeriods() +
             ", processed='" + getProcessed() + "'" +
             ", compilationToken='" + getCompilationToken() + "'" +
+            ", postingDate='" + getPostingDate() + "'" +
             ", prepaymentAccount=" + getPrepaymentAccount() +
             ", placeholders=" + getPlaceholders() +
             ", firstFiscalMonth=" + getFirstFiscalMonth() +
             ", lastFiscalMonth=" + getLastFiscalMonth() +
             ", firstAmortizationPeriod=" + getFirstAmortizationPeriod() +
+            ", createdBy=" + getCreatedBy() +
             "}";
     }
 }

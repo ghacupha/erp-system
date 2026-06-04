@@ -33,18 +33,18 @@ import org.springframework.stereotype.Repository;
 public interface PrepaymentMarshallingRepository
     extends JpaRepository<PrepaymentMarshalling, Long>, JpaSpecificationExecutor<PrepaymentMarshalling> {
     @Query(
-        value = "select distinct prepaymentMarshalling from PrepaymentMarshalling prepaymentMarshalling left join fetch prepaymentMarshalling.placeholders",
+        value = "select distinct prepaymentMarshalling from PrepaymentMarshalling prepaymentMarshalling left join fetch prepaymentMarshalling.placeholders left join fetch prepaymentMarshalling.createdBy",
         countQuery = "select count(distinct prepaymentMarshalling) from PrepaymentMarshalling prepaymentMarshalling"
     )
     Page<PrepaymentMarshalling> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct prepaymentMarshalling from PrepaymentMarshalling prepaymentMarshalling left join fetch prepaymentMarshalling.placeholders"
+        "select distinct prepaymentMarshalling from PrepaymentMarshalling prepaymentMarshalling left join fetch prepaymentMarshalling.placeholders left join fetch prepaymentMarshalling.createdBy"
     )
     List<PrepaymentMarshalling> findAllWithEagerRelationships();
 
     @Query(
-        "select prepaymentMarshalling from PrepaymentMarshalling prepaymentMarshalling left join fetch prepaymentMarshalling.placeholders where prepaymentMarshalling.id =:id"
+        "select prepaymentMarshalling from PrepaymentMarshalling prepaymentMarshalling left join fetch prepaymentMarshalling.placeholders left join fetch prepaymentMarshalling.createdBy where prepaymentMarshalling.id =:id"
     )
     Optional<PrepaymentMarshalling> findOneWithEagerRelationships(@Param("id") Long id);
 }

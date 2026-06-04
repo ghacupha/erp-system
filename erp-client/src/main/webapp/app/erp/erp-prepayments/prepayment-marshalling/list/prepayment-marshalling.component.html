@@ -74,12 +74,14 @@
           <th scope="col" jhiSortBy="inactive"><span>Inactive</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="processed"><span>Processed</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="amortizationPeriods"><span>Amortization Periods</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="postingDate"><span>Posting Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="prepaymentAccount.catalogueNumber"><span>Prepayment Account</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="firstAmortizationPeriod.periodCode">
             <span>First Amortization Period</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="firstFiscalMonth.startDate"><span>First Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="lastFiscalMonth.endDate"><span>Last Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"><span>Created By</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -95,6 +97,7 @@
           <td *ngIf=!prepaymentMarshalling.processed>Not processed</td>
 
           <td>{{ prepaymentMarshalling.amortizationPeriods }}</td>
+          <td>{{ prepaymentMarshalling.postingDate | formatMediumDate }}</td>
 
           <td>
             <div *ngIf="prepaymentMarshalling.prepaymentAccount">
@@ -123,6 +126,13 @@
             <div *ngIf="prepaymentMarshalling.lastFiscalMonth">
               <a [routerLink]="['/fiscal-month', prepaymentMarshalling.lastFiscalMonth?.id, 'view']">{{
                 prepaymentMarshalling.lastFiscalMonth?.endDate
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="prepaymentMarshalling.createdBy">
+              <a [routerLink]="['/application-user', prepaymentMarshalling.createdBy?.id, 'view']">{{
+                prepaymentMarshalling.createdBy?.applicationIdentity
               }}</a>
             </div>
           </td>

@@ -19,6 +19,7 @@ package io.github.erp.domain;
  */
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -55,6 +56,9 @@ public class PrepaymentMarshalling implements Serializable {
 
     @Column(name = "compilation_token")
     private UUID compilationToken;
+
+    @Column(name = "posting_date")
+    private LocalDate postingDate;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -99,6 +103,13 @@ public class PrepaymentMarshalling implements Serializable {
     @NotNull
     @JsonIgnoreProperties(value = { "fiscalMonth" }, allowSetters = true)
     private AmortizationPeriod firstAmortizationPeriod;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = { "organization", "department", "securityClearance", "systemIdentity", "userProperties", "dealerIdentity", "placeholders" },
+        allowSetters = true
+    )
+    private ApplicationUser createdBy;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -165,6 +176,19 @@ public class PrepaymentMarshalling implements Serializable {
 
     public void setCompilationToken(UUID compilationToken) {
         this.compilationToken = compilationToken;
+    }
+
+    public LocalDate getPostingDate() {
+        return this.postingDate;
+    }
+
+    public PrepaymentMarshalling postingDate(LocalDate postingDate) {
+        this.setPostingDate(postingDate);
+        return this;
+    }
+
+    public void setPostingDate(LocalDate postingDate) {
+        this.postingDate = postingDate;
     }
 
     public PrepaymentAccount getPrepaymentAccount() {
@@ -239,6 +263,19 @@ public class PrepaymentMarshalling implements Serializable {
 
     public PrepaymentMarshalling firstAmortizationPeriod(AmortizationPeriod amortizationPeriod) {
         this.setFirstAmortizationPeriod(amortizationPeriod);
+        return this;
+    }
+
+    public ApplicationUser getCreatedBy() {
+        return this.createdBy;
+    }
+
+    public void setCreatedBy(ApplicationUser applicationUser) {
+        this.createdBy = applicationUser;
+    }
+
+    public PrepaymentMarshalling createdBy(ApplicationUser applicationUser) {
+        this.setCreatedBy(applicationUser);
         return this;
     }
 

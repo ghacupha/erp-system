@@ -21,6 +21,7 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, Observable, of } from 'rxjs';
 import { finalize, map, switchMap } from 'rxjs/operators';
 
@@ -49,6 +50,7 @@ import dayjs from 'dayjs';
 import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
 import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { PastAmortizationPeriodWarningDialogComponent } from './past-amortization-period-warning-dialog.component';
 
 @Component({
   selector: 'jhi-prepayment-marshalling-update',
@@ -110,7 +112,8 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit, OnDestroy {
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     protected store: Store<State>,
-    protected sanitizer: DomSanitizer
+    protected sanitizer: DomSanitizer,
+    protected modalService: NgbModal
   ) {
     this.store.pipe(select(copyingPrepaymentMarshallingStatus)).subscribe(stat => this.weAreCopying = stat);
     this.store.pipe(select(editingPrepaymentMarshallingStatus)).subscribe(stat => this.weAreEditing = stat);
@@ -299,9 +302,22 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit, OnDestroy {
   }
 
   updateFirstAmortizationPeriod(update: IAmortizationPeriod): void {
-    this.editForm.patchValue({
-      firstAmortizationPeriod: update
-    });
+    if (this.shouldWarnAboutPastAmortizationPeriod(update)) {
+      const modalRef = this.modalService.open(PastAmortizationPeriodWarningDialogComponent, {
+        centered: true,
+        backdrop: 'static',
+        size: 'lg',
+      });
+      modalRef.componentInstance.amortizationPeriod = update;
+      modalRef.result
+        .then(() => this.applyFirstAmortizationPeriod(update))
+        .catch(() => {
+          // Keep the previous amortization period selection when the user cancels.
+        });
+      return;
+    }
+
+    this.applyFirstAmortizationPeriod(update);
   }
 
   updatePlaceholders(update: IPlaceholder[]): void {
@@ -595,5 +611,15 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit, OnDestroy {
     this.documentPreviewObjectUrl = URL.createObjectURL(blob);
     this.documentPreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.documentPreviewObjectUrl);
     this.documentPreviewTitle = document.documentTitle;
+  }
+
+  private shouldWarnAboutPastAmortizationPeriod(amortizationPeriod: IAmortizationPeriod): boolean {
+    return !!amortizationPeriod?.endDate?.isBefore(dayjs().startOf('day'), 'day');
+  }
+
+  private applyFirstAmortizationPeriod(amortizationPeriod: IAmortizationPeriod): void {
+    this.editForm.patchValue({
+      firstAmortizationPeriod: amortizationPeriod,
+    });
   }
 }

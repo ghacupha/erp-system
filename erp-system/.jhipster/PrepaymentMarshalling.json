@@ -15,6 +15,10 @@
     {
       "fieldName": "compilationToken",
       "fieldType": "UUID"
+    },
+    {
+      "fieldName": "postingDate",
+      "fieldType": "LocalDate"
     }
   ],
   "relationships": [
@@ -53,6 +57,12 @@
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "periodCode"
+    },
+    {
+      "relationshipName": "createdBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
     }
   ],
   "service": "serviceImpl",

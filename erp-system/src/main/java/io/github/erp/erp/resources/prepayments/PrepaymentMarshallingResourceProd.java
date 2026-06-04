@@ -17,9 +17,9 @@ package io.github.erp.erp.resources.prepayments;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import io.github.erp.repository.PrepaymentMarshallingRepository;
+import io.github.erp.internal.repository.InternalPrepaymentMarshallingRepository;
+import io.github.erp.internal.service.prepayments.InternalPrepaymentMarshallingService;
 import io.github.erp.service.PrepaymentMarshallingQueryService;
-import io.github.erp.service.PrepaymentMarshallingService;
 import io.github.erp.service.criteria.PrepaymentMarshallingCriteria;
 import io.github.erp.service.dto.PrepaymentMarshallingDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
@@ -57,15 +57,15 @@ public class PrepaymentMarshallingResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final PrepaymentMarshallingService prepaymentMarshallingService;
+    private final InternalPrepaymentMarshallingService prepaymentMarshallingService;
 
-    private final PrepaymentMarshallingRepository prepaymentMarshallingRepository;
+    private final InternalPrepaymentMarshallingRepository prepaymentMarshallingRepository;
 
     private final PrepaymentMarshallingQueryService prepaymentMarshallingQueryService;
 
     public PrepaymentMarshallingResourceProd(
-        PrepaymentMarshallingService prepaymentMarshallingService,
-        PrepaymentMarshallingRepository prepaymentMarshallingRepository,
+        InternalPrepaymentMarshallingService prepaymentMarshallingService,
+        InternalPrepaymentMarshallingRepository prepaymentMarshallingRepository,
         PrepaymentMarshallingQueryService prepaymentMarshallingQueryService
     ) {
         this.prepaymentMarshallingService = prepaymentMarshallingService;
