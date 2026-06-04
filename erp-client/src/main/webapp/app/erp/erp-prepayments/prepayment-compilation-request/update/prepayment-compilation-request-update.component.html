@@ -18,8 +18,55 @@
 
 -->
 <div class="row justify-content-center">
-  <div class="col-8">
+  <div class="col-12 col-xxl-11">
     <div class="compilation-request-layout">
+      <section class="hud-panel">
+        <div class="hud-header">
+          <div>
+            <h3>Pending Marshalling</h3>
+            <p class="hud-note">Prepayment accounts ready for amortisation because their marshalling items are still not processed.</p>
+          </div>
+          <span class="hud-count">{{ pendingMarshallings.length }}</span>
+        </div>
+
+        <div class="hud-empty" *ngIf="!pendingMarshallings.length">No unprocessed marshalling items were found.</div>
+
+        <div class="hud-table-wrap" *ngIf="pendingMarshallings.length">
+          <table class="table table-sm table-hover hud-table">
+            <thead>
+              <tr>
+                <th scope="col">Acct</th>
+                <th scope="col">Narration</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Periods</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+                <th scope="col">Dealer</th>
+                <th scope="col">Credit</th>
+                <th scope="col">Debit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let marshalling of pendingMarshallings; trackBy: trackPrepaymentMarshallingById">
+                <td class="cell-truncate" [title]="marshalling.prepaymentAccount?.catalogueNumber ?? ''">
+                  <a [routerLink]="['/prepayment-account', marshalling.prepaymentAccount?.id, 'view']">
+                    {{ marshalling.prepaymentAccount?.catalogueNumber }}
+                  </a>
+                </td>
+                <td class="cell-truncate" [title]="marshallingNarration(marshalling)">{{ marshallingNarration(marshalling) }}</td>
+                <td class="cell-number" [title]="(marshallingAmount(marshalling) | currency) ?? ''">{{ marshallingAmount(marshalling) | currency }}</td>
+                <td class="cell-number">{{ marshalling.amortizationPeriods }}</td>
+                <td class="cell-number">{{ marshalling.firstFiscalMonth?.fiscalMonthCode }}</td>
+                <td class="cell-number">{{ marshalling.lastFiscalMonth?.fiscalMonthCode }}</td>
+                <td class="cell-truncate" [title]="marshallingDealer(marshalling)">{{ marshallingDealer(marshalling) }}</td>
+                <td class="cell-number" [title]="marshallingCreditAccount(marshalling)">{{ marshallingCreditAccount(marshalling) }}</td>
+                <td class="cell-number" [title]="marshallingDebitAccount(marshalling)">{{ marshallingDebitAccount(marshalling) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm" class="request-form">
         <h2 id="jhi-prepayment-compilation-request-heading" data-cy="PrepaymentCompilationRequestCreateUpdateHeading">
           Create or edit a Prepayment Compilation Request
@@ -68,39 +115,6 @@
           </button>
         </div>
       </form>
-
-      <aside class="hud-panel">
-        <div class="hud-header">
-          <h3>Pending Marshalling</h3>
-          <span class="hud-count">{{ pendingMarshallings.length }}</span>
-        </div>
-        <p class="hud-note">Prepayment accounts that are ready for amortisation because their marshalling items are still not processed.</p>
-
-        <div class="hud-empty" *ngIf="!pendingMarshallings.length">No unprocessed marshalling items were found.</div>
-
-        <div class="hud-list" *ngIf="pendingMarshallings.length">
-          <article class="hud-card" *ngFor="let marshalling of pendingMarshallings; trackBy: trackPrepaymentMarshallingById">
-            <div class="hud-card-top">
-              <div class="hud-title">
-                <a [routerLink]="['/prepayment-account', marshalling.prepaymentAccount?.id, 'view']">
-                  {{ marshalling.prepaymentAccount?.catalogueNumber }}
-                </a>
-              </div>
-              <div class="hud-badge">Not processed</div>
-            </div>
-            <div class="hud-meta">
-              <div><span>Narration</span>{{ marshalling.prepaymentAccount?.particulars }}</div>
-              <div><span>Prepayment amount</span>{{ marshalling.prepaymentAccount?.prepaymentAmount | currency }}</div>
-              <div><span>Amortization periods</span>{{ marshalling.amortizationPeriods }}</div>
-              <div><span>Start month</span>{{ marshalling.firstFiscalMonth?.fiscalMonthCode }}</div>
-              <div><span>End month</span>{{ marshalling.lastFiscalMonth?.fiscalMonthCode }}</div>
-              <div><span>Dealer</span>{{ marshalling.prepaymentAccount?.dealer?.dealerName }}</div>
-              <div><span>Debit account</span>{{ marshalling.prepaymentAccount?.debitAccount?.accountName }}</div>
-              <div><span>Transfer account</span>{{ marshalling.prepaymentAccount?.transferAccount?.accountName }}</div>
-            </div>
-          </article>
-        </div>
-      </aside>
     </div>
   </div>
 </div>
