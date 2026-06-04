@@ -20,9 +20,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
+import { finalize, map, switchMap } from 'rxjs/operators';
 
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
@@ -37,9 +36,7 @@ import { PrepaymentMarshallingService } from '../../prepayment-marshalling/servi
 import { IPrepaymentMarshalling } from '../../prepayment-marshalling/prepayment-marshalling.model';
 import { PrepaymentAccountService } from '../../prepayment-account/service/prepayment-account.service';
 import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.model';
-import {
-  TransactionAccountService
-} from '../../../erp-accounts/transaction-account/service/transaction-account.service';
+import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
 import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
 import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
 import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
@@ -68,14 +65,14 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
   });
 
   constructor(
-  protected prepaymentCompilationRequestService: PrepaymentCompilationRequestService,
-  protected placeholderService: PlaceholderService,
-  protected prepaymentMarshallingService: PrepaymentMarshallingService,
-  protected prepaymentAccountService: PrepaymentAccountService,
-  protected transactionAccountService: TransactionAccountService,
-  protected fiscalMonthService: FiscalMonthService,
-  protected activatedRoute: ActivatedRoute,
-  protected fb: FormBuilder
+    protected prepaymentCompilationRequestService: PrepaymentCompilationRequestService,
+    protected placeholderService: PlaceholderService,
+    protected prepaymentMarshallingService: PrepaymentMarshallingService,
+    protected prepaymentAccountService: PrepaymentAccountService,
+    protected transactionAccountService: TransactionAccountService,
+    protected fiscalMonthService: FiscalMonthService,
+    protected activatedRoute: ActivatedRoute,
+    protected fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -209,49 +206,64 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
           return;
         }
 
-        forkJoin(
-          pendingMarshallings.map(marshalling =>
-            forkJoin({
-              prepaymentAccount: this.prepaymentAccountService.find(marshalling.prepaymentAccount!.id!).pipe(
-                map((response: HttpResponse<IPrepaymentAccount>) => response.body ?? marshalling.prepaymentAccount)
-              ),
-              firstFiscalMonth: marshalling.firstFiscalMonth?.id
-                ? this.fiscalMonthService.find(marshalling.firstFiscalMonth.id).pipe(
-                    map((response: HttpResponse<IFiscalMonth>) => response.body ?? marshalling.firstFiscalMonth)
-                  )
-                : of(marshalling.firstFiscalMonth ?? undefined),
-              lastFiscalMonth: marshalling.lastFiscalMonth?.id
-                ? this.fiscalMonthService.find(marshalling.lastFiscalMonth.id).pipe(
-                    map((response: HttpResponse<IFiscalMonth>) => response.body ?? marshalling.lastFiscalMonth)
-                  )
-                : of(marshalling.lastFiscalMonth ?? undefined),
-              debitAccount: marshalling.prepaymentAccount?.debitAccount?.id
-                ? this.transactionAccountService.find(marshalling.prepaymentAccount.debitAccount.id).pipe(
-                    map((response: HttpResponse<ITransactionAccount>) => response.body ?? marshalling.prepaymentAccount?.debitAccount)
-                  )
-                : of(marshalling.prepaymentAccount?.debitAccount ?? undefined),
-              transferAccount: marshalling.prepaymentAccount?.transferAccount?.id
-                ? this.transactionAccountService.find(marshalling.prepaymentAccount.transferAccount.id).pipe(
-                    map((response: HttpResponse<ITransactionAccount>) => response.body ?? marshalling.prepaymentAccount?.transferAccount)
-                  )
-                : of(marshalling.prepaymentAccount?.transferAccount ?? undefined),
-            }).pipe(
-              map(({ prepaymentAccount, firstFiscalMonth, lastFiscalMonth, debitAccount, transferAccount }) => ({
-                ...marshalling,
-                prepaymentAccount: {
-                  ...prepaymentAccount,
-                  debitAccount,
-                  transferAccount,
-                } as IPrepaymentAccount,
-                firstFiscalMonth,
-                lastFiscalMonth,
-              }))
-            )
-          )
-        ).subscribe((items: IPrepaymentMarshalling[]) => {
+        forkJoin(pendingMarshallings.map(marshalling => this.hydratePendingMarshalling(marshalling))).subscribe((items: IPrepaymentMarshalling[]) => {
           this.pendingMarshallings = items;
         });
       });
+  }
+
+  protected hydratePendingMarshalling(marshalling: IPrepaymentMarshalling): Observable<IPrepaymentMarshalling> {
+    const prepaymentAccount$ = this.prepaymentAccountService.find(marshalling.prepaymentAccount!.id!).pipe(
+      map((response: HttpResponse<IPrepaymentAccount>) => response.body ?? marshalling.prepaymentAccount)
+    );
+
+    const firstFiscalMonth$ = marshalling.firstFiscalMonth?.id
+      ? this.fiscalMonthService.find(marshalling.firstFiscalMonth.id).pipe(
+          map((response: HttpResponse<IFiscalMonth>) => response.body ?? marshalling.firstFiscalMonth)
+        )
+      : of(marshalling.firstFiscalMonth ?? undefined);
+
+    const lastFiscalMonth$ = marshalling.lastFiscalMonth?.id
+      ? this.fiscalMonthService.find(marshalling.lastFiscalMonth.id).pipe(
+          map((response: HttpResponse<IFiscalMonth>) => response.body ?? marshalling.lastFiscalMonth)
+        )
+      : of(marshalling.lastFiscalMonth ?? undefined);
+
+    return forkJoin({
+      prepaymentAccount: prepaymentAccount$,
+      firstFiscalMonth: firstFiscalMonth$,
+      lastFiscalMonth: lastFiscalMonth$,
+    }).pipe(
+      switchMap(({ prepaymentAccount, firstFiscalMonth, lastFiscalMonth }) => {
+        const hydratedAccount = prepaymentAccount ?? marshalling.prepaymentAccount;
+        const debitAccount$ = hydratedAccount?.debitAccount?.id
+          ? this.transactionAccountService.find(hydratedAccount.debitAccount.id).pipe(
+              map((response: HttpResponse<ITransactionAccount>) => response.body ?? hydratedAccount.debitAccount)
+            )
+          : of(hydratedAccount?.debitAccount ?? undefined);
+        const transferAccount$ = hydratedAccount?.transferAccount?.id
+          ? this.transactionAccountService.find(hydratedAccount.transferAccount.id).pipe(
+              map((response: HttpResponse<ITransactionAccount>) => response.body ?? hydratedAccount.transferAccount)
+            )
+          : of(hydratedAccount?.transferAccount ?? undefined);
+
+        return forkJoin({
+          debitAccount: debitAccount$,
+          transferAccount: transferAccount$,
+        }).pipe(
+          map(({ debitAccount, transferAccount }) => ({
+            ...marshalling,
+            prepaymentAccount: {
+              ...(hydratedAccount ?? {}),
+              debitAccount,
+              transferAccount,
+            } as IPrepaymentAccount,
+            firstFiscalMonth,
+            lastFiscalMonth,
+          }))
+        );
+      })
+    );
   }
 
   protected createFromForm(): IPrepaymentCompilationRequest {
