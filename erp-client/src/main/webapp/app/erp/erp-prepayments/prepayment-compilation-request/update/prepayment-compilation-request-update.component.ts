@@ -22,6 +22,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
@@ -34,6 +35,12 @@ import { PlaceholderService } from '../../../erp-pages/placeholder/service/place
 import { v4 as uuidv4 } from 'uuid';
 import { PrepaymentMarshallingService } from '../../prepayment-marshalling/service/prepayment-marshalling.service';
 import { IPrepaymentMarshalling } from '../../prepayment-marshalling/prepayment-marshalling.model';
+import { PrepaymentAccountService } from '../../prepayment-account/service/prepayment-account.service';
+import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.model';
+import {
+  TransactionAccountService
+} from '../../../erp-accounts/transaction-account/service/transaction-account.service';
+import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
 
 @Component({
   selector: 'jhi-prepayment-compilation-request-update',
@@ -59,11 +66,13 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
   });
 
   constructor(
-    protected prepaymentCompilationRequestService: PrepaymentCompilationRequestService,
-    protected placeholderService: PlaceholderService,
-    protected prepaymentMarshallingService: PrepaymentMarshallingService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+  protected prepaymentCompilationRequestService: PrepaymentCompilationRequestService,
+  protected placeholderService: PlaceholderService,
+  protected prepaymentMarshallingService: PrepaymentMarshallingService,
+  protected prepaymentAccountService: PrepaymentAccountService,
+  protected transactionAccountService: TransactionAccountService,
+  protected activatedRoute: ActivatedRoute,
+  protected fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -114,6 +123,26 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
 
   trackPrepaymentMarshallingById(index: number, item: IPrepaymentMarshalling): number {
     return item.id ?? index;
+  }
+
+  marshallingCreditAccount(marshalling: IPrepaymentMarshalling): string {
+    return marshalling.prepaymentAccount?.debitAccount?.accountNumber ?? '';
+  }
+
+  marshallingDebitAccount(marshalling: IPrepaymentMarshalling): string {
+    return marshalling.prepaymentAccount?.transferAccount?.accountNumber ?? '';
+  }
+
+  marshallingAmount(marshalling: IPrepaymentMarshalling): number | null | undefined {
+    return marshalling.prepaymentAccount?.prepaymentAmount;
+  }
+
+  marshallingNarration(marshalling: IPrepaymentMarshalling): string {
+    return marshalling.prepaymentAccount?.particulars ?? '';
+  }
+
+  marshallingDealer(marshalling: IPrepaymentMarshalling): string {
+    return marshalling.prepaymentAccount?.dealer?.dealerName ?? '';
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPrepaymentCompilationRequest>>): void {
@@ -171,7 +200,24 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
       .query({ 'processed.equals': false, size: 200, sort: ['id,desc'] })
       .pipe(map((res: HttpResponse<IPrepaymentMarshalling[]>) => res.body ?? []))
       .subscribe((marshallings: IPrepaymentMarshalling[]) => {
-        this.pendingMarshallings = marshallings.filter(marshalling => marshalling.processed === false);
+        const pendingMarshallings = marshallings.filter(marshalling => marshalling.processed === false && !!marshalling.prepaymentAccount?.id);
+        if (!pendingMarshallings.length) {
+          this.pendingMarshallings = [];
+          return;
+        }
+
+        forkJoin(
+          pendingMarshallings.map(marshalling =>
+            this.prepaymentAccountService.find(marshalling.prepaymentAccount!.id!).pipe(
+              map((response: HttpResponse<IPrepaymentAccount>) => ({
+                ...marshalling,
+                prepaymentAccount: response.body ?? marshalling.prepaymentAccount,
+              }))
+            )
+          )
+        ).subscribe((items: IPrepaymentMarshalling[]) => {
+          this.pendingMarshallings = items;
+        });
       });
   }
 

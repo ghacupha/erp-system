@@ -1,8 +1,6 @@
 .compilation-request-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: 1rem;
-  align-items: start;
 }
 
 .request-form,
@@ -23,7 +21,7 @@
 .hud-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.75rem;
   margin-bottom: 0.5rem;
 }
@@ -48,7 +46,7 @@
 .hud-note {
   color: #6c757d;
   font-size: 0.9rem;
-  margin-bottom: 0.75rem;
+  margin: 0.25rem 0 0;
 }
 
 .hud-empty {
@@ -57,58 +55,79 @@
   padding: 0.75rem 0;
 }
 
-.hud-list {
-  display: grid;
-  gap: 0.75rem;
+.hud-table-wrap {
+  overflow-x: auto;
 }
 
-.hud-card {
-  border: 1px solid #dfe3e8;
-  border-radius: 4px;
-  padding: 0.75rem;
-  background: #fafbfc;
+.hud-table {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  table-layout: fixed;
+  width: 100%;
 }
 
-.hud-card-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
+.hud-table th,
+.hud-table td {
+  vertical-align: top;
+  white-space: nowrap;
 }
 
-.hud-title a {
-  font-weight: 600;
+.hud-table th:nth-child(1),
+.hud-table td:nth-child(1) {
+  width: 7rem;
+}
+
+.hud-table th:nth-child(2),
+.hud-table td:nth-child(2) {
+  width: 16rem;
+}
+
+.hud-table th:nth-child(3),
+.hud-table td:nth-child(3) {
+  width: 8rem;
+}
+
+.hud-table th:nth-child(4),
+.hud-table td:nth-child(4) {
+  width: 6rem;
+}
+
+.hud-table th:nth-child(5),
+.hud-table td:nth-child(5),
+.hud-table th:nth-child(6),
+.hud-table td:nth-child(6) {
+  width: 6rem;
+}
+
+.hud-table th:nth-child(7),
+.hud-table td:nth-child(7) {
+  width: 14rem;
+}
+
+.hud-table th:nth-child(8),
+.hud-table td:nth-child(8),
+.hud-table th:nth-child(9),
+.hud-table td:nth-child(9) {
+  width: 10rem;
+}
+
+.cell-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cell-number {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .hud-badge {
   color: #198754;
-  font-size: 0.85rem;
-  white-space: nowrap;
-}
-
-.hud-meta {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem 0.75rem;
-}
-
-.hud-meta div {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  min-width: 0;
-}
-
-.hud-meta span {
-  color: #6c757d;
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0;
+  font-weight: 600;
 }
 
 @media (max-width: 991.98px) {
-  .compilation-request-layout,
-  .hud-meta {
+  .compilation-request-layout {
     grid-template-columns: 1fr;
   }
 }
