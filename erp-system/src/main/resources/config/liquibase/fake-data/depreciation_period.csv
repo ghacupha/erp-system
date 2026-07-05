@@ -1,3 +1,0 @@
-id;start_date;end_date;depreciation_period_status;period_code;process_locked;fiscal_month_id
-1;2023-07-03;2023-07-04;PROCESSING;Fresh synthesize;true;1
-2;2023-07-04;2023-07-03;CLOSED;River Auto;true;2

@@ -1,9 +1,0 @@
-export enum ContractType {
-  SUPPLIER = 'SUPPLIER',
-
-  CUSTOMER = 'CUSTOMER',
-
-  BUSINESS_PARTNER = 'BUSINESS_PARTNER',
-
-  STAFF = 'STAFF',
-}
