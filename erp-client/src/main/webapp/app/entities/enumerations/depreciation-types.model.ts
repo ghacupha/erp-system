@@ -1,5 +1,0 @@
-export enum DepreciationTypes {
-  STRAIGHT_LINE = 'STRAIGHT_LINE',
-
-  DECLINING_BALANCE = 'DECLINING_BALANCE',
-}

@@ -1,5 +1,0 @@
-export enum SourceOrPurposeOfRemittancFlag {
-  PURPOSE_OF_REMITTANCE = 'PURPOSE_OF_REMITTANCE',
-
-  SOURCE_OF_FUNDS = 'SOURCE_OF_FUNDS',
-}
