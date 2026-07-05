@@ -1,0 +1,89 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-financial-derivative-type-code-heading" data-cy="FinancialDerivativeTypeCodeCreateUpdateHeading">
+        Create or edit a Financial Derivative Type Code
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_financialDerivativeTypeCode">Financial Derivative Type Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="financialDerivativeTypeCode"
+            id="field_financialDerivativeTypeCode"
+            data-cy="financialDerivativeTypeCode"
+            formControlName="financialDerivativeTypeCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('financialDerivativeTypeCode')!.invalid &&
+              (editForm.get('financialDerivativeTypeCode')!.dirty || editForm.get('financialDerivativeTypeCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('financialDerivativeTypeCode')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_financialDerivativeType">Financial Derivative Type</label>
+          <input
+            type="text"
+            class="form-control"
+            name="financialDerivativeType"
+            id="field_financialDerivativeType"
+            data-cy="financialDerivativeType"
+            formControlName="financialDerivativeType"
+          />
+          <div
+            *ngIf="
+              editForm.get('financialDerivativeType')!.invalid &&
+              (editForm.get('financialDerivativeType')!.dirty || editForm.get('financialDerivativeType')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('financialDerivativeType')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_financialDerivativeTypeDetails">Financial Derivative Type Details</label>
+          <textarea
+            class="form-control"
+            name="financialDerivativeTypeDetails"
+            id="field_financialDerivativeTypeDetails"
+            data-cy="financialDerivativeTypeDetails"
+            formControlName="financialDerivativeTypeDetails"
+          ></textarea>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+    <changeSet id="20240704120000-1" author="agent">
+        <createTable tableName="csv_file_upload">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="original_file_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stored_file_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_path" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_size" type="bigint"/>
+            <column name="content_type" type="varchar(255)"/>
+            <column name="uploaded_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="processed" type="boolean"/>
+            <column name="checksum" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20240704120000-2" author="agent">
+        <addUniqueConstraint tableName="csv_file_upload" columnNames="stored_file_name" constraintName="ux_csv_file_upload_stored_name"/>
+        <addUniqueConstraint tableName="csv_file_upload" columnNames="file_path" constraintName="ux_csv_file_upload_path"/>
+    </changeSet>
+
+</databaseChangeLog>

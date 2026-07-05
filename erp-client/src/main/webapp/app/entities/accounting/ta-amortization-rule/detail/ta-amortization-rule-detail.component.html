@@ -1,0 +1,65 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="tAAmortizationRule">
+      <h2 data-cy="tAAmortizationRuleDetailsHeading"><span>TA Amortization Rule</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ tAAmortizationRule.id }}</span>
+        </dd>
+        <dt><span>Name</span></dt>
+        <dd>
+          <span>{{ tAAmortizationRule.name }}</span>
+        </dd>
+        <dt><span>Identifier</span></dt>
+        <dd>
+          <span>{{ tAAmortizationRule.identifier }}</span>
+        </dd>
+        <dt><span>Lease Contract</span></dt>
+        <dd>
+          <div *ngIf="tAAmortizationRule.leaseContract">
+            <a [routerLink]="['/ifrs-16-lease-contract', tAAmortizationRule.leaseContract?.id, 'view']">{{
+              tAAmortizationRule.leaseContract?.shortTitle
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Debit</span></dt>
+        <dd>
+          <div *ngIf="tAAmortizationRule.debit">
+            <a [routerLink]="['/transaction-account', tAAmortizationRule.debit?.id, 'view']">{{ tAAmortizationRule.debit?.accountName }}</a>
+          </div>
+        </dd>
+        <dt><span>Credit</span></dt>
+        <dd>
+          <div *ngIf="tAAmortizationRule.credit">
+            <a [routerLink]="['/transaction-account', tAAmortizationRule.credit?.id, 'view']">{{
+              tAAmortizationRule.credit?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of tAAmortizationRule.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/ta-amortization-rule', tAAmortizationRule.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

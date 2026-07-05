@@ -1,0 +1,93 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-counter-party-category-heading" data-cy="CounterPartyCategoryCreateUpdateHeading">
+        Create or edit a Counter Party Category
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_counterpartyCategoryCode">Counterparty Category Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="counterpartyCategoryCode"
+            id="field_counterpartyCategoryCode"
+            data-cy="counterpartyCategoryCode"
+            formControlName="counterpartyCategoryCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('counterpartyCategoryCode')!.invalid &&
+              (editForm.get('counterpartyCategoryCode')!.dirty || editForm.get('counterpartyCategoryCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('counterpartyCategoryCode')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_counterpartyCategoryCodeDetails">Counterparty Category Code Details</label>
+          <select
+            class="form-control"
+            name="counterpartyCategoryCodeDetails"
+            formControlName="counterpartyCategoryCodeDetails"
+            id="field_counterpartyCategoryCodeDetails"
+            data-cy="counterpartyCategoryCodeDetails"
+          >
+            <option [ngValue]="null"></option>
+            <option *ngFor="let counterpartyCategory of counterpartyCategoryValues" [value]="counterpartyCategory">
+              counterpartyCategory
+            </option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('counterpartyCategoryCodeDetails')!.invalid &&
+              (editForm.get('counterpartyCategoryCodeDetails')!.dirty || editForm.get('counterpartyCategoryCodeDetails')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('counterpartyCategoryCodeDetails')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_counterpartyCategoryDescription">Counterparty Category Description</label>
+          <textarea
+            class="form-control"
+            name="counterpartyCategoryDescription"
+            id="field_counterpartyCategoryDescription"
+            data-cy="counterpartyCategoryDescription"
+            formControlName="counterpartyCategoryDescription"
+          ></textarea>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

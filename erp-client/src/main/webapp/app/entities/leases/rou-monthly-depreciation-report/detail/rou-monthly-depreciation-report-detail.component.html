@@ -1,0 +1,83 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="rouMonthlyDepreciationReport">
+      <h2 data-cy="rouMonthlyDepreciationReportDetailsHeading"><span>Rou Monthly Depreciation Report</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ rouMonthlyDepreciationReport.id }}</span>
+        </dd>
+        <dt><span>Request Id</span></dt>
+        <dd>
+          <span>{{ rouMonthlyDepreciationReport.requestId }}</span>
+        </dd>
+        <dt><span>Time Of Request</span></dt>
+        <dd>
+          <span>{{ rouMonthlyDepreciationReport.timeOfRequest | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Report Is Compiled</span></dt>
+        <dd>
+          <span>{{ rouMonthlyDepreciationReport.reportIsCompiled }}</span>
+        </dd>
+        <dt><span>File Checksum</span></dt>
+        <dd>
+          <span>{{ rouMonthlyDepreciationReport.fileChecksum }}</span>
+        </dd>
+        <dt><span>Tampered</span></dt>
+        <dd>
+          <span>{{ rouMonthlyDepreciationReport.tampered }}</span>
+        </dd>
+        <dt><span>Filename</span></dt>
+        <dd>
+          <span>{{ rouMonthlyDepreciationReport.filename }}</span>
+        </dd>
+        <dt><span>Report Parameters</span></dt>
+        <dd>
+          <span>{{ rouMonthlyDepreciationReport.reportParameters }}</span>
+        </dd>
+        <dt><span>Report File</span></dt>
+        <dd>
+          <div *ngIf="rouMonthlyDepreciationReport.reportFile">
+            <a (click)="openFile(rouMonthlyDepreciationReport.reportFile, rouMonthlyDepreciationReport.reportFileContentType)">open</a>
+            {{ rouMonthlyDepreciationReport.reportFileContentType }}, {{ byteSize(rouMonthlyDepreciationReport.reportFile) }}
+          </div>
+        </dd>
+        <dt><span>Requested By</span></dt>
+        <dd>
+          <div *ngIf="rouMonthlyDepreciationReport.requestedBy">
+            <a [routerLink]="['/application-user', rouMonthlyDepreciationReport.requestedBy?.id, 'view']">{{
+              rouMonthlyDepreciationReport.requestedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Reporting Year</span></dt>
+        <dd>
+          <div *ngIf="rouMonthlyDepreciationReport.reportingYear">
+            <a [routerLink]="['/fiscal-year', rouMonthlyDepreciationReport.reportingYear?.id, 'view']">{{
+              rouMonthlyDepreciationReport.reportingYear?.fiscalYearCode
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/rou-monthly-depreciation-report', rouMonthlyDepreciationReport.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

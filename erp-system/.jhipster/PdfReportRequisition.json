@@ -1,0 +1,70 @@
+{
+  "fields": [
+    {
+      "fieldName": "reportName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "reportDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "userPassword",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "ownerPassword",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "reportFileChecksum",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reportStatus",
+      "fieldType": "ReportStatusTypes",
+      "fieldValues": "GENERATING,SUCCESSFUL,FAILED"
+    },
+    {
+      "fieldName": "reportId",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "reportTemplate",
+      "otherEntityName": "reportTemplate",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "catalogueNumber"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "pdfReportRequisition"
+    },
+    {
+      "relationshipName": "parameters",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "mappedValue",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "pdfReportRequisition"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "PdfReportRequisition",
+  "changelogDate": "20220520053032",
+  "incrementalChangelog": false
+}

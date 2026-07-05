@@ -1,0 +1,57 @@
+{
+  "fields": [
+    {
+      "fieldName": "quarterNumber",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "startDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "fiscalQuarterCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "fiscalYear",
+      "otherEntityName": "fiscalYear",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "fiscalYearCode"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "fiscalQuarter"
+    },
+    {
+      "relationshipName": "universallyUniqueMapping",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "universalKey",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "fiscalQuarter"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "FiscalQuarter",
+  "changelogDate": "20230816125243",
+  "incrementalChangelog": false
+}

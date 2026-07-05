@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="executiveCategoryType">
+      <h2 data-cy="executiveCategoryTypeDetailsHeading"><span>Executive Category Type</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ executiveCategoryType.id }}</span>
+        </dd>
+        <dt><span>Director Category Type Code</span></dt>
+        <dd>
+          <span>{{ executiveCategoryType.directorCategoryTypeCode }}</span>
+        </dd>
+        <dt><span>Director Category Type</span></dt>
+        <dd>
+          <span>{{ executiveCategoryType.directorCategoryType }}</span>
+        </dd>
+        <dt><span>Director Category Type Details</span></dt>
+        <dd>
+          <span>{{ executiveCategoryType.directorCategoryTypeDetails }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/executive-category-type', executiveCategoryType.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

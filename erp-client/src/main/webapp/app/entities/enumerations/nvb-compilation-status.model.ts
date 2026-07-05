@@ -1,0 +1,15 @@
+export enum NVBCompilationStatus {
+  STARTED = 'STARTED',
+
+  RUNNING = 'RUNNING',
+
+  ENQUEUED = 'ENQUEUED',
+
+  DEPLOYED = 'DEPLOYED',
+
+  ERRORED = 'ERRORED',
+
+  INTERRUPTED = 'INTERRUPTED',
+
+  COMPLETE = 'COMPLETE',
+}

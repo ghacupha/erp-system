@@ -1,0 +1,89 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-account-status-type-heading" data-cy="AccountStatusTypeCreateUpdateHeading">Create or edit a Account Status Type</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountStatusCode">Account Status Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="accountStatusCode"
+            id="field_accountStatusCode"
+            data-cy="accountStatusCode"
+            formControlName="accountStatusCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('accountStatusCode')!.invalid &&
+              (editForm.get('accountStatusCode')!.dirty || editForm.get('accountStatusCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('accountStatusCode')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountStatusType">Account Status Type</label>
+          <select
+            class="form-control"
+            name="accountStatusType"
+            formControlName="accountStatusType"
+            id="field_accountStatusType"
+            data-cy="accountStatusType"
+          >
+            <option [ngValue]="null"></option>
+            <option *ngFor="let accountStatusTypes of accountStatusTypesValues" [value]="accountStatusTypes">accountStatusTypes</option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('accountStatusType')!.invalid &&
+              (editForm.get('accountStatusType')!.dirty || editForm.get('accountStatusType')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('accountStatusType')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountStatusDescription">Account Status Description</label>
+          <textarea
+            class="form-control"
+            name="accountStatusDescription"
+            id="field_accountStatusDescription"
+            data-cy="accountStatusDescription"
+            formControlName="accountStatusDescription"
+          ></textarea>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="crbAccountStatus">
+      <h2 data-cy="crbAccountStatusDetailsHeading"><span>Crb Account Status</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ crbAccountStatus.id }}</span>
+        </dd>
+        <dt><span>Account Status Type Code</span></dt>
+        <dd>
+          <span>{{ crbAccountStatus.accountStatusTypeCode }}</span>
+        </dd>
+        <dt><span>Account Status Type</span></dt>
+        <dd>
+          <span>{{ crbAccountStatus.accountStatusType }}</span>
+        </dd>
+        <dt><span>Account Status Type Details</span></dt>
+        <dd>
+          <span>{{ crbAccountStatus.accountStatusTypeDetails }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/crb-account-status', crbAccountStatus.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

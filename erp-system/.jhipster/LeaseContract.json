@@ -1,0 +1,75 @@
+{
+  "fields": [
+    {
+      "fieldName": "bookingId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "leaseTitle",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "identifier",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "commencementDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "terminalDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "leaseContract"
+    },
+    {
+      "relationshipName": "systemMappings",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "mappedValue",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "leaseContract"
+    },
+    {
+      "relationshipName": "businessDocument",
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "leaseContract"
+    },
+    {
+      "relationshipName": "contractMetadata",
+      "otherEntityName": "contractMetadata",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "contractTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "leaseContract"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "LeaseContract",
+  "changelogDate": "20230109133953",
+  "incrementalChangelog": false
+}

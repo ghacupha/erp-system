@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "issuerOfSecuritiesCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "issuerOfSecurities",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "issuerOfSecuritiesDescription",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "IssuersOfSecurities",
+  "changelogDate": "20230914090807",
+  "incrementalChangelog": false
+}

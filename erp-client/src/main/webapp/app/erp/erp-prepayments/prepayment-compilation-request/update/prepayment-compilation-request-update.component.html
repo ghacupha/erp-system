@@ -1,0 +1,120 @@
+<!--
+
+    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-12 col-xxl-11">
+    <div class="compilation-request-layout">
+      <section class="hud-panel">
+        <div class="hud-header">
+          <div>
+            <h3>Pending Marshalling</h3>
+            <p class="hud-note">Prepayment accounts ready for amortisation because their marshalling items are still not processed.</p>
+          </div>
+          <span class="hud-count">{{ pendingMarshallings.length }}</span>
+        </div>
+
+        <div class="hud-empty" *ngIf="!pendingMarshallings.length">No unprocessed marshalling items were found.</div>
+
+        <div class="hud-table-wrap" *ngIf="pendingMarshallings.length">
+          <table class="table table-sm table-hover hud-table">
+            <thead>
+              <tr>
+                <th scope="col">Acct</th>
+                <th scope="col">Narration</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Periods</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+                <th scope="col">Dealer</th>
+                <th scope="col">Credit</th>
+                <th scope="col">Debit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let marshalling of pendingMarshallings; trackBy: trackPrepaymentMarshallingById">
+                <td class="cell-truncate" [title]="marshalling.prepaymentAccount?.catalogueNumber ?? ''">
+                  <a [routerLink]="['/prepayment-account', marshalling.prepaymentAccount?.id, 'view']">
+                    {{ marshalling.prepaymentAccount?.catalogueNumber }}
+                  </a>
+                </td>
+                <td class="cell-truncate" [title]="marshallingNarration(marshalling)">{{ marshallingNarration(marshalling) }}</td>
+                <td class="cell-number" [title]="(marshallingAmount(marshalling) | currency) ?? ''">{{ marshallingAmount(marshalling) | currency }}</td>
+                <td class="cell-number">{{ marshalling.amortizationPeriods }}</td>
+                <td class="cell-number">{{ marshalling.firstFiscalMonth?.fiscalMonthCode }}</td>
+                <td class="cell-number">{{ marshalling.lastFiscalMonth?.fiscalMonthCode }}</td>
+                <td class="cell-truncate" [title]="marshallingDealer(marshalling)">{{ marshallingDealer(marshalling) }}</td>
+                <td class="cell-number" [title]="marshallingCreditAccount(marshalling)">{{ marshallingCreditAccount(marshalling) }}</td>
+                <td class="cell-number" [title]="marshallingDebitAccount(marshalling)">{{ marshallingDebitAccount(marshalling) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm" class="request-form">
+        <h2 id="jhi-prepayment-compilation-request-heading" data-cy="PrepaymentCompilationRequestCreateUpdateHeading">
+          Create or edit a Prepayment Compilation Request
+        </h2>
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_narration">Narration</label>
+          <input type="text" class="form-control" name="narration" id="field_narration" data-cy="narration" formControlName="narration" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_timeOfRequest">Time Of Request</label>
+          <div class="d-flex">
+            <input
+              id="field_timeOfRequest"
+              data-cy="timeOfRequest"
+              type="datetime-local"
+              class="form-control"
+              name="timeOfRequest"
+              formControlName="timeOfRequest"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+            <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+          </button>
+
+          <button
+            type="submit"
+            id="save-entity"
+            data-cy="entityCreateSaveButton"
+            [disabled]="editForm.invalid || isSaving"
+            class="btn btn-primary"
+          >
+            <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

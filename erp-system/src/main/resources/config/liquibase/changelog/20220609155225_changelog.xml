@@ -1,0 +1,53 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1654790128731-4">
+        <createTable tableName="rel_pdf_report_requisition__parameters">
+            <column name="pdf_report_requisition_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="parameters_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1654790128731-5">
+        <createTable tableName="rel_xlsx_report_requisition__parameters">
+            <column name="xlsx_report_requisition_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="parameters_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1654790128731-8">
+        <addForeignKeyConstraint baseColumnNames="parameters_id" baseTableName="rel_pdf_report_requisition__parameters" constraintName="FKdq8lolctkiaeun6qosb6vva35" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="universally_unique_mapping" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1654790128731-9">
+        <addForeignKeyConstraint baseColumnNames="xlsx_report_requisition_id" baseTableName="rel_xlsx_report_requisition__parameters" constraintName="FKkr0vhwkvxfviu3dg3l1y35o1a" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="xlsx_report_requisition" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1654790128731-10">
+        <addForeignKeyConstraint baseColumnNames="parameters_id" baseTableName="rel_xlsx_report_requisition__parameters" constraintName="FKonuwdcm3vkubj5ui70ip0e3gf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="universally_unique_mapping" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1654790128731-11">
+        <addForeignKeyConstraint baseColumnNames="pdf_report_requisition_id" baseTableName="rel_pdf_report_requisition__parameters" constraintName="FKrv4djmpu25qx42w1egm4d3wgw" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="pdf_report_requisition" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1654790128731-12">
+        <dropForeignKeyConstraint baseTableName="rel_xlsx_report_requisition__value_maps" constraintName="FK390cct2dsa3uq1gaaqxt1k6w2"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1654790128731-13">
+        <dropForeignKeyConstraint baseTableName="rel_xlsx_report_requisition__value_maps" constraintName="FK3ayunq62d0q5srvna3r9ak8lf"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1654790128731-14">
+        <dropForeignKeyConstraint baseTableName="rel_pdf_report_requisition__value_maps" constraintName="FK8vvkfis7x55n7m5ykk7sscmy"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1654790128731-15">
+        <dropForeignKeyConstraint baseTableName="rel_pdf_report_requisition__value_maps" constraintName="FKs4v5vwul8v0ir2qbmmvd1adbg"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1654790128731-27">
+        <dropTable tableName="rel_pdf_report_requisition__value_maps"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1654790128731-28">
+        <dropTable tableName="rel_xlsx_report_requisition__value_maps"/>
+    </changeSet>
+</databaseChangeLog>

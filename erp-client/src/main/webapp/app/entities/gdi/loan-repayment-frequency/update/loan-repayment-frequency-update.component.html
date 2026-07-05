@@ -1,0 +1,86 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-loan-repayment-frequency-heading" data-cy="LoanRepaymentFrequencyCreateUpdateHeading">
+        Create or edit a Loan Repayment Frequency
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_frequencyTypeCode">Frequency Type Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="frequencyTypeCode"
+            id="field_frequencyTypeCode"
+            data-cy="frequencyTypeCode"
+            formControlName="frequencyTypeCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('frequencyTypeCode')!.invalid &&
+              (editForm.get('frequencyTypeCode')!.dirty || editForm.get('frequencyTypeCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('frequencyTypeCode')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_frequencyType">Frequency Type</label>
+          <input
+            type="text"
+            class="form-control"
+            name="frequencyType"
+            id="field_frequencyType"
+            data-cy="frequencyType"
+            formControlName="frequencyType"
+          />
+          <div
+            *ngIf="
+              editForm.get('frequencyType')!.invalid && (editForm.get('frequencyType')!.dirty || editForm.get('frequencyType')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('frequencyType')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_frequencyTypeDetails">Frequency Type Details</label>
+          <textarea
+            class="form-control"
+            name="frequencyTypeDetails"
+            id="field_frequencyTypeDetails"
+            data-cy="frequencyTypeDetails"
+            formControlName="frequencyTypeDetails"
+          ></textarea>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

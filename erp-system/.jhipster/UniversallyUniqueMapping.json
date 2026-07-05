@@ -1,0 +1,38 @@
+{
+  "fields": [
+    {
+      "fieldName": "universalKey",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "mappedValue",
+      "fieldType": "String",
+      "fieldValidateRules": []
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "parentMapping",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "universalKey"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "universallyUniqueMapping"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "UniversallyUniqueMapping",
+  "changelogDate": "20220608075128",
+  "incrementalChangelog": false
+}

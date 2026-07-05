@@ -1,0 +1,93 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="amortizationPostingReportRequisition">
+      <h2 data-cy="amortizationPostingReportRequisitionDetailsHeading"><span>Amortization Posting Report Requisition</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ amortizationPostingReportRequisition.id }}</span>
+        </dd>
+        <dt><span>Request Id</span></dt>
+        <dd>
+          <span>{{ amortizationPostingReportRequisition.requestId }}</span>
+        </dd>
+        <dt><span>Time Of Requisition</span></dt>
+        <dd>
+          <span>{{ amortizationPostingReportRequisition.timeOfRequisition | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>File Checksum</span></dt>
+        <dd>
+          <span>{{ amortizationPostingReportRequisition.fileChecksum }}</span>
+        </dd>
+        <dt><span>Tampered</span></dt>
+        <dd>
+          <span>{{ amortizationPostingReportRequisition.tampered }}</span>
+        </dd>
+        <dt><span>Filename</span></dt>
+        <dd>
+          <span>{{ amortizationPostingReportRequisition.filename }}</span>
+        </dd>
+        <dt><span>Report Parameters</span></dt>
+        <dd>
+          <span>{{ amortizationPostingReportRequisition.reportParameters }}</span>
+        </dd>
+        <dt><span>Report File</span></dt>
+        <dd>
+          <div *ngIf="amortizationPostingReportRequisition.reportFile">
+            <a
+              (click)="
+                openFile(amortizationPostingReportRequisition.reportFile, amortizationPostingReportRequisition.reportFileContentType)
+              "
+              >open</a
+            >
+            {{ amortizationPostingReportRequisition.reportFileContentType }},
+            {{ byteSize(amortizationPostingReportRequisition.reportFile) }}
+          </div>
+        </dd>
+        <dt><span>Amortization Period</span></dt>
+        <dd>
+          <div *ngIf="amortizationPostingReportRequisition.amortizationPeriod">
+            <a [routerLink]="['/amortization-period', amortizationPostingReportRequisition.amortizationPeriod?.id, 'view']">{{
+              amortizationPostingReportRequisition.amortizationPeriod?.periodCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Requested By</span></dt>
+        <dd>
+          <div *ngIf="amortizationPostingReportRequisition.requestedBy">
+            <a [routerLink]="['/application-user', amortizationPostingReportRequisition.requestedBy?.id, 'view']">{{
+              amortizationPostingReportRequisition.requestedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Last Accessed By</span></dt>
+        <dd>
+          <div *ngIf="amortizationPostingReportRequisition.lastAccessedBy">
+            <a [routerLink]="['/application-user', amortizationPostingReportRequisition.lastAccessedBy?.id, 'view']">{{
+              amortizationPostingReportRequisition.lastAccessedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/amortization-posting-report-requisition', amortizationPostingReportRequisition.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

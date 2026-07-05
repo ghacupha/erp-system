@@ -1,0 +1,57 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="businessStamp">
+      <h2 data-cy="businessStampDetailsHeading"><span>Business Stamp</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ businessStamp.id }}</span>
+        </dd>
+        <dt><span>Stamp Date</span></dt>
+        <dd>
+          <span>{{ businessStamp.stampDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Purpose</span></dt>
+        <dd>
+          <span>{{ businessStamp.purpose }}</span>
+        </dd>
+        <dt><span>Details</span></dt>
+        <dd>
+          <span>{{ businessStamp.details }}</span>
+        </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ businessStamp.remarks }}</span>
+        </dd>
+        <dt><span>Stamp Holder</span></dt>
+        <dd>
+          <div *ngIf="businessStamp.stampHolder">
+            <a [routerLink]="['/dealer', businessStamp.stampHolder?.id, 'view']">{{ businessStamp.stampHolder?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of businessStamp.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/business-stamp', businessStamp.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

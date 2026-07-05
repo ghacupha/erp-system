@@ -1,0 +1,79 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="leaseLiabilityScheduleReport">
+      <h2 data-cy="leaseLiabilityScheduleReportDetailsHeading"><span>Lease Liability Schedule Report</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReport.id }}</span>
+        </dd>
+        <dt><span>Request Id</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReport.requestId }}</span>
+        </dd>
+        <dt><span>Time Of Request</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReport.timeOfRequest | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>File Checksum</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReport.fileChecksum }}</span>
+        </dd>
+        <dt><span>Tampered</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReport.tampered }}</span>
+        </dd>
+        <dt><span>Filename</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReport.filename }}</span>
+        </dd>
+        <dt><span>Report Parameters</span></dt>
+        <dd>
+          <span>{{ leaseLiabilityScheduleReport.reportParameters }}</span>
+        </dd>
+        <dt><span>Report File</span></dt>
+        <dd>
+          <div *ngIf="leaseLiabilityScheduleReport.reportFile">
+            <a (click)="openFile(leaseLiabilityScheduleReport.reportFile, leaseLiabilityScheduleReport.reportFileContentType)">open</a>
+            {{ leaseLiabilityScheduleReport.reportFileContentType }}, {{ byteSize(leaseLiabilityScheduleReport.reportFile) }}
+          </div>
+        </dd>
+        <dt><span>Requested By</span></dt>
+        <dd>
+          <div *ngIf="leaseLiabilityScheduleReport.requestedBy">
+            <a [routerLink]="['/application-user', leaseLiabilityScheduleReport.requestedBy?.id, 'view']">{{
+              leaseLiabilityScheduleReport.requestedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Amortization Schedule</span></dt>
+        <dd>
+          <div *ngIf="leaseLiabilityScheduleReport.leaseAmortizationSchedule">
+            <a [routerLink]="['/lease-amortization-schedule', leaseLiabilityScheduleReport.leaseAmortizationSchedule?.id, 'view']">{{
+              leaseLiabilityScheduleReport.leaseAmortizationSchedule?.id
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/lease-liability-schedule-report', leaseLiabilityScheduleReport.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

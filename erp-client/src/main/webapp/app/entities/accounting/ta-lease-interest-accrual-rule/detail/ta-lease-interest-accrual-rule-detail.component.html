@@ -1,0 +1,71 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="tALeaseInterestAccrualRule">
+      <h2 data-cy="tALeaseInterestAccrualRuleDetailsHeading"><span>TA Lease Interest Accrual Rule</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ tALeaseInterestAccrualRule.id }}</span>
+        </dd>
+        <dt><span>Name</span></dt>
+        <dd>
+          <span>{{ tALeaseInterestAccrualRule.name }}</span>
+        </dd>
+        <dt><span>Identifier</span></dt>
+        <dd>
+          <span>{{ tALeaseInterestAccrualRule.identifier }}</span>
+        </dd>
+        <dt><span>Lease Contract</span></dt>
+        <dd>
+          <div *ngIf="tALeaseInterestAccrualRule.leaseContract">
+            <a [routerLink]="['/ifrs-16-lease-contract', tALeaseInterestAccrualRule.leaseContract?.id, 'view']">{{
+              tALeaseInterestAccrualRule.leaseContract?.shortTitle
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Debit</span></dt>
+        <dd>
+          <div *ngIf="tALeaseInterestAccrualRule.debit">
+            <a [routerLink]="['/transaction-account', tALeaseInterestAccrualRule.debit?.id, 'view']">{{
+              tALeaseInterestAccrualRule.debit?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Credit</span></dt>
+        <dd>
+          <div *ngIf="tALeaseInterestAccrualRule.credit">
+            <a [routerLink]="['/transaction-account', tALeaseInterestAccrualRule.credit?.id, 'view']">{{
+              tALeaseInterestAccrualRule.credit?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of tALeaseInterestAccrualRule.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/ta-lease-interest-accrual-rule', tALeaseInterestAccrualRule.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,94 @@
+{
+  "clientRootFolder": "gdi-data",
+  "fields": [
+    {
+      "fieldName": "reportingDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "terminalId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "merchantId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "terminalName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "terminalLocation",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "iso6709Latitute",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "iso6709Longitude",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "terminalOpeningDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "terminalClosureDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "terminalType",
+      "otherEntityName": "terminalTypes",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "txnTerminalTypeCode"
+    },
+    {
+      "relationshipName": "terminalFunctionality",
+      "otherEntityName": "terminalFunctions",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "terminalFunctionality"
+    },
+    {
+      "relationshipName": "physicalLocation",
+      "otherEntityName": "countySubCountyCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "subCountyCode"
+    },
+    {
+      "relationshipName": "bankId",
+      "otherEntityName": "institutionCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "institutionName"
+    },
+    {
+      "relationshipName": "branchId",
+      "otherEntityName": "bankBranchCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "branchCode"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "TerminalsAndPOS",
+  "changelogDate": "20231004070943",
+  "incrementalChangelog": false
+}

@@ -1,0 +1,87 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-counterparty-type-heading" data-cy="CounterpartyTypeCreateUpdateHeading">Create or edit a Counterparty Type</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_counterpartyTypeCode">Counterparty Type Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="counterpartyTypeCode"
+            id="field_counterpartyTypeCode"
+            data-cy="counterpartyTypeCode"
+            formControlName="counterpartyTypeCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('counterpartyTypeCode')!.invalid &&
+              (editForm.get('counterpartyTypeCode')!.dirty || editForm.get('counterpartyTypeCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('counterpartyTypeCode')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_counterPartyType">Counter Party Type</label>
+          <input
+            type="text"
+            class="form-control"
+            name="counterPartyType"
+            id="field_counterPartyType"
+            data-cy="counterPartyType"
+            formControlName="counterPartyType"
+          />
+          <div
+            *ngIf="
+              editForm.get('counterPartyType')!.invalid &&
+              (editForm.get('counterPartyType')!.dirty || editForm.get('counterPartyType')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('counterPartyType')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_counterpartyTypeDescription">Counterparty Type Description</label>
+          <textarea
+            class="form-control"
+            name="counterpartyTypeDescription"
+            id="field_counterpartyTypeDescription"
+            data-cy="counterpartyTypeDescription"
+            formControlName="counterpartyTypeDescription"
+          ></textarea>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

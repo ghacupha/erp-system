@@ -1,0 +1,111 @@
+<div>
+  <h2 id="page-heading" data-cy="RouAssetListReportItemHeading">
+    <span>Rou Asset List Report Items</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <form name="searchForm" class="form-inline">
+        <div class="input-group w-100 mt-3">
+          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+
+          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+
+          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="rouAssetListReportItems?.length === 0">
+    <span>No rouAssetListReportItems found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="rouAssetListReportItems && rouAssetListReportItems.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="modelTitle"><span>Model Title</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="modelVersion"><span>Model Version</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="leaseTermPeriods"><span>Lease Term Periods</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="rouModelReference">
+            <span>Rou Model Reference</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="commencementDate"><span>Commencement Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="expirationDate"><span>Expiration Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="leaseContractTitle">
+            <span>Lease Contract Title</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="assetAccountNumber">
+            <span>Asset Account Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="depreciationAccountNumber">
+            <span>Depreciation Account Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="accruedDepreciationAccountNumber">
+            <span>Accrued Depreciation Account Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="assetCategoryName">
+            <span>Asset Category Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="leaseAmount"><span>Lease Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="leaseContractSerialNumber">
+            <span>Lease Contract Serial Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+        <tr *ngFor="let rouAssetListReportItem of rouAssetListReportItems; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/rou-asset-list-report-item', rouAssetListReportItem.id, 'view']">{{ rouAssetListReportItem.id }}</a>
+          </td>
+          <td>{{ rouAssetListReportItem.modelTitle }}</td>
+          <td>{{ rouAssetListReportItem.modelVersion }}</td>
+          <td>{{ rouAssetListReportItem.description }}</td>
+          <td>{{ rouAssetListReportItem.leaseTermPeriods }}</td>
+          <td>{{ rouAssetListReportItem.rouModelReference }}</td>
+          <td>{{ rouAssetListReportItem.commencementDate | formatMediumDate }}</td>
+          <td>{{ rouAssetListReportItem.expirationDate | formatMediumDate }}</td>
+          <td>{{ rouAssetListReportItem.leaseContractTitle }}</td>
+          <td>{{ rouAssetListReportItem.assetAccountNumber }}</td>
+          <td>{{ rouAssetListReportItem.depreciationAccountNumber }}</td>
+          <td>{{ rouAssetListReportItem.accruedDepreciationAccountNumber }}</td>
+          <td>{{ rouAssetListReportItem.assetCategoryName }}</td>
+          <td>{{ rouAssetListReportItem.leaseAmount }}</td>
+          <td>{{ rouAssetListReportItem.leaseContractSerialNumber }}</td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/rou-asset-list-report-item', rouAssetListReportItem.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

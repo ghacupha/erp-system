@@ -1,0 +1,92 @@
+{
+  "fields": [
+    {
+      "fieldName": "reportingDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "customerNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accountContractNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "accountName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accountOpeningDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "accountClosingDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "debitInterestRate",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "creditInterestRate",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sanctionedAccountLimitFcy",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sanctionedAccountLimitLcy",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accountStatusChangeDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "expiryDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "clientRootFolder": "gdi-data",
+  "relationships": [
+    {
+      "relationshipName": "bankCode",
+      "otherEntityName": "institutionCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "institutionCode"
+    },
+    {
+      "relationshipName": "branchCode",
+      "otherEntityName": "bankBranchCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "branchCode"
+    },
+    {
+      "relationshipName": "accountOwnershipType",
+      "otherEntityName": "accountOwnershipType",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "accountOwnershipType"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "AccountAttribute",
+  "changelogDate": "20231003130755",
+  "incrementalChangelog": false
+}

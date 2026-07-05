@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity AssetAccessory.
+    -->
+    <changeSet id="20230505113336-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="asset_registration_id"
+                                 baseTableName="asset_accessory"
+                                 constraintName="fk_asset_accessory__asset_registration_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_accessory_id"
+                                 baseTableName="rel_asset_accessory__placeholder"
+                                 constraintName="fk_rel_asset_accessory__placeholder__asset_accessory_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_accessory"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_asset_accessory__placeholder"
+                                 constraintName="fk_rel_asset_accessory__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_accessory_id"
+                                 baseTableName="rel_asset_accessory__payment_invoices"
+                                 constraintName="fk_rel_asset_accessory__payment_invoices__asset_accessory_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_accessory"/>
+
+        <addForeignKeyConstraint baseColumnNames="payment_invoices_id"
+                                 baseTableName="rel_asset_accessory__payment_invoices"
+                                 constraintName="fk_rel_asset_accessory__payment_invoices__payment_invoices_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="payment_invoice"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_accessory_id"
+                                 baseTableName="rel_asset_accessory__service_outlet"
+                                 constraintName="fk_rel_asset_accessory__service_outlet__asset_accessory_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_accessory"/>
+
+        <addForeignKeyConstraint baseColumnNames="service_outlet_id"
+                                 baseTableName="rel_asset_accessory__service_outlet"
+                                 constraintName="fk_rel_asset_accessory__service_outlet__service_outlet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="service_outlet"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_accessory_id"
+                                 baseTableName="rel_asset_accessory__settlement"
+                                 constraintName="fk_rel_asset_accessory__settlement__asset_accessory_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_accessory"/>
+
+        <addForeignKeyConstraint baseColumnNames="settlement_id"
+                                 baseTableName="rel_asset_accessory__settlement"
+                                 constraintName="fk_rel_asset_accessory__settlement__settlement_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="settlement"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_category_id"
+                                 baseTableName="asset_accessory"
+                                 constraintName="fk_asset_accessory__asset_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_accessory_id"
+                                 baseTableName="rel_asset_accessory__purchase_order"
+                                 constraintName="fk_rel_asset_accessory__purchase_order__asset_accessory_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_accessory"/>
+
+        <addForeignKeyConstraint baseColumnNames="purchase_order_id"
+                                 baseTableName="rel_asset_accessory__purchase_order"
+                                 constraintName="fk_rel_asset_accessory__purchase_order__purchase_order_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="purchase_order"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_accessory_id"
+                                 baseTableName="rel_asset_accessory__delivery_note"
+                                 constraintName="fk_rel_asset_accessory__delivery_note__asset_accessory_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_accessory"/>
+
+        <addForeignKeyConstraint baseColumnNames="delivery_note_id"
+                                 baseTableName="rel_asset_accessory__delivery_note"
+                                 constraintName="fk_rel_asset_accessory__delivery_note__delivery_note_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="delivery_note"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_accessory_id"
+                                 baseTableName="rel_asset_accessory__job_sheet"
+                                 constraintName="fk_rel_asset_accessory__job_sheet__asset_accessory_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_accessory"/>
+
+        <addForeignKeyConstraint baseColumnNames="job_sheet_id"
+                                 baseTableName="rel_asset_accessory__job_sheet"
+                                 constraintName="fk_rel_asset_accessory__job_sheet__job_sheet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="job_sheet"/>
+
+        <addForeignKeyConstraint baseColumnNames="dealer_id"
+                                 baseTableName="asset_accessory"
+                                 constraintName="fk_asset_accessory__dealer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_accessory_id"
+                                 baseTableName="rel_asset_accessory__designated_users"
+                                 constraintName="fk_rel_asset_accessory__designated_users__asset_accessory_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_accessory"/>
+
+        <addForeignKeyConstraint baseColumnNames="designated_users_id"
+                                 baseTableName="rel_asset_accessory__designated_users"
+                                 constraintName="fk_rel_asset_accessory__designated_users__designated_users_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dealer"/>
+
+        <addForeignKeyConstraint baseColumnNames="settlement_currency_id"
+                                 baseTableName="asset_accessory"
+                                 constraintName="fk_asset_accessory__settlement_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="settlement_currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_accessory_id"
+                                 baseTableName="rel_asset_accessory__business_document"
+                                 constraintName="fk_rel_asset_accessory__business_document__asset_accessory_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_accessory"/>
+
+        <addForeignKeyConstraint baseColumnNames="business_document_id"
+                                 baseTableName="rel_asset_accessory__business_document"
+                                 constraintName="fk_rel_asset_accessory__busines__business_document_b8_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="business_document"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_accessory_id"
+                                 baseTableName="rel_asset_accessory__universally_unique_mapping"
+                                 constraintName="fk_rel_asset_accessory__univers__asset_accessory_6e_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="asset_accessory"/>
+
+        <addForeignKeyConstraint baseColumnNames="universally_unique_mapping_id"
+                                 baseTableName="rel_asset_accessory__universally_unique_mapping"
+                                 constraintName="fk_rel_asset_accessory__univers__universally_unique_mappi_71_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+    </changeSet>
+</databaseChangeLog>

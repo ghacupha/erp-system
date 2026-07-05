@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+    <changeSet id="20240704120100-1" author="agent">
+        <createTable tableName="lease_liability_schedule_file_upload">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="lease_liability_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lease_amortization_schedule_id" type="bigint"/>
+            <column name="lease_liability_compilation_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="upload_status" type="varchar(100)"/>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="csv_file_upload_id" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20240704120100-2" author="agent">
+        <addForeignKeyConstraint
+            baseTableName="lease_liability_schedule_file_upload"
+            baseColumnNames="csv_file_upload_id"
+            constraintName="fk_lease_liability_schedule_file_upload_csv"
+            referencedTableName="csv_file_upload"
+            referencedColumnNames="id"
+            deferrable="false"
+            initiallyDeferred="false"
+            onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>

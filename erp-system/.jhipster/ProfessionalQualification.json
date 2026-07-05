@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "professionalQualificationsCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "professionalQualificationsType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "professionalQualificationsDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "ProfessionalQualification",
+  "changelogDate": "20230912123143",
+  "incrementalChangelog": false
+}

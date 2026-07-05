@@ -1,0 +1,80 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="rouAssetListReportItem">
+      <h2 data-cy="rouAssetListReportItemDetailsHeading"><span>Rou Asset List Report Item</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.id }}</span>
+        </dd>
+        <dt><span>Model Title</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.modelTitle }}</span>
+        </dd>
+        <dt><span>Model Version</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.modelVersion }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.description }}</span>
+        </dd>
+        <dt><span>Lease Term Periods</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.leaseTermPeriods }}</span>
+        </dd>
+        <dt><span>Rou Model Reference</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.rouModelReference }}</span>
+        </dd>
+        <dt><span>Commencement Date</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.commencementDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Expiration Date</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.expirationDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Lease Contract Title</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.leaseContractTitle }}</span>
+        </dd>
+        <dt><span>Asset Account Number</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.assetAccountNumber }}</span>
+        </dd>
+        <dt><span>Depreciation Account Number</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.depreciationAccountNumber }}</span>
+        </dd>
+        <dt><span>Accrued Depreciation Account Number</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.accruedDepreciationAccountNumber }}</span>
+        </dd>
+        <dt><span>Asset Category Name</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.assetCategoryName }}</span>
+        </dd>
+        <dt><span>Lease Amount</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.leaseAmount }}</span>
+        </dd>
+        <dt><span>Lease Contract Serial Number</span></dt>
+        <dd>
+          <span>{{ rouAssetListReportItem.leaseContractSerialNumber }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+    </div>
+  </div>
+</div>

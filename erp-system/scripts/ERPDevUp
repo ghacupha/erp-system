@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+#
+# Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
+# Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# Usage:
+#   ERPDevUp                         -- docker + client + Maven
+#   ERPDevUp --skip-docker           -- skip docker, start client + Maven
+#   ERPDevUp --docker-only           -- docker only, no client or Maven
+#   ERPDevUp --skip-client           -- no Angular client
+#   ERPDevUp --client-heap-mb 2048   -- set client Node.js heap (default 1024)
+#
+
+set -euo pipefail
+
+SKIP_DOCKER=false
+DOCKER_ONLY=false
+SKIP_CLIENT=false
+CLIENT_HEAP_MB=1024
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --skip-docker)    SKIP_DOCKER=true    ; shift ;;
+        --docker-only)    DOCKER_ONLY=true    ; shift ;;
+        --skip-client)    SKIP_CLIENT=true    ; shift ;;
+        --client-heap-mb) CLIENT_HEAP_MB="$2" ; shift 2 ;;
+        *) shift ;;
+    esac
+done
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SYSTEM_ROOT="$(dirname "$SCRIPT_DIR")"
+REPO_ROOT="$(dirname "$SYSTEM_ROOT")"
+CLIENT_ROOT="$REPO_ROOT/erp-client"
+ENV_FILE="$SYSTEM_ROOT/.env"
+COMPOSE_FILE="$REPO_ROOT/erp-deployment/services-dev.yml"
+
+if [[ ! -f "$ENV_FILE" ]];     then echo "Error: .env not found: $ENV_FILE" >&2; exit 1; fi
+if [[ ! -f "$COMPOSE_FILE" ]]; then echo "Error: compose file not found: $COMPOSE_FILE" >&2; exit 1; fi
+
+# Load .env
+echo "Loading environment from: $ENV_FILE"
+count=0
+while IFS= read -r line || [[ -n "$line" ]]; do
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    key="${line%%=*}"
+    value="${line#*=}"
+    value="${value%\"}"
+    value="${value#\"}"
+    export "$key=$value"
+    (( count++ )) || true
+done < "$ENV_FILE"
+echo "Loaded $count environment variable(s)."
+
+# Inject Elasticsearch credentials into Spring URIs
+if [[ -n "${ELASTICSEARCH_PASSWORD:-}" ]]; then
+    for var in SPRING_DATA_JEST_URI SPRING_ELASTICSEARCH_REST_URIS; do
+        val="${!var:-}"
+        if [[ -n "$val" && "$val" != *@* ]]; then
+            export "$var=${val/:\/\//://elastic:${ELASTICSEARCH_PASSWORD}@}"
+        fi
+    done
+    echo "Elasticsearch URIs updated with credentials."
+fi
+
+# Start infrastructure
+if ! $SKIP_DOCKER; then
+    echo ""
+    echo "Starting dev infrastructure: $COMPOSE_FILE"
+    docker-compose -f "$COMPOSE_FILE" up -d
+    echo "Infrastructure services started."
+fi
+
+if $DOCKER_ONLY; then
+    echo "DockerOnly: infrastructure is up. Skipping Maven and client."
+    exit 0
+fi
+
+# Launch Angular client in background terminal
+if ! $SKIP_CLIENT; then
+    NG_BIN="$CLIENT_ROOT/node_modules/@angular/cli/bin/ng"
+    if [[ -f "$NG_BIN" ]]; then
+        export NODE_OPTIONS='--openssl-legacy-provider'
+        ( cd "$CLIENT_ROOT"
+          node --max_old_space_size="$CLIENT_HEAP_MB" "$NG_BIN" serve --hmr
+        ) &
+        CLIENT_PID=$!
+        echo "Angular client launched (PID $CLIENT_PID, heap cap: ${CLIENT_HEAP_MB} MB)."
+    else
+        echo "Warning: $NG_BIN not found. Run 'npm install' in erp-client first." >&2
+    fi
+fi
+
+# Start the application
+echo ""
+echo "Starting ERP System (dev profile)..."
+cd "$SYSTEM_ROOT"
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev

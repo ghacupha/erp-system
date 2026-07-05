@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity DepreciationJobNotice.
+    -->
+    <changeSet id="20230816150648-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="depreciation_job_id"
+                                 baseTableName="depreciation_job_notice"
+                                 constraintName="fk_depreciation_job_notice__depreciation_job_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="depreciation_job"/>
+
+        <addForeignKeyConstraint baseColumnNames="depreciation_batch_sequence_id"
+                                 baseTableName="depreciation_job_notice"
+                                 constraintName="fk_depreciation_job_notice__depreciation_batch_sequence_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="depreciation_batch_sequence"/>
+
+        <addForeignKeyConstraint baseColumnNames="depreciation_period_id"
+                                 baseTableName="depreciation_job_notice"
+                                 constraintName="fk_depreciation_job_notice__depreciation_period_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="depreciation_period"/>
+
+        <addForeignKeyConstraint baseColumnNames="depreciation_job_notice_id"
+                                 baseTableName="rel_depreciation_job_notice__placeholder"
+                                 constraintName="fk_rel_depreciation_job_notice___depreciation_job_notice_0a_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="depreciation_job_notice"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_depreciation_job_notice__placeholder"
+                                 constraintName="fk_rel_depreciation_job_notice__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="depreciation_job_notice_id"
+                                 baseTableName="rel_depreciation_job_notice__universally_unique_mapping"
+                                 constraintName="fk_rel_depreciation_job_notice___depreciation_job_notice_d6_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="depreciation_job_notice"/>
+
+        <addForeignKeyConstraint baseColumnNames="universally_unique_mapping_id"
+                                 baseTableName="rel_depreciation_job_notice__universally_unique_mapping"
+                                 constraintName="fk_rel_depreciation_job_notice___universally_unique_mappi_8e_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+
+        <addForeignKeyConstraint baseColumnNames="superintended_id"
+                                 baseTableName="depreciation_job_notice"
+                                 constraintName="fk_depreciation_job_notice__superintended_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+    </changeSet>
+</databaseChangeLog>

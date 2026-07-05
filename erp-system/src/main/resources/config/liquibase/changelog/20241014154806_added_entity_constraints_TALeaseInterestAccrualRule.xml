@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity TALeaseInterestAccrualRule.
+    -->
+    <changeSet id="20241014154806-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id"
+                                 baseTableName="talease_interest_accrual_rule"
+                                 constraintName="fk_talease_interest_accrual_rule__lease_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ifrs16lease_contract"/>
+
+        <addForeignKeyConstraint baseColumnNames="debit_id"
+                                 baseTableName="talease_interest_accrual_rule"
+                                 constraintName="fk_talease_interest_accrual_rule__debit_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="credit_id"
+                                 baseTableName="talease_interest_accrual_rule"
+                                 constraintName="fk_talease_interest_accrual_rule__credit_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account"/>
+
+        <addForeignKeyConstraint baseColumnNames="talease_interest_accrual_rule_id"
+                                 baseTableName="rel_talease_interest_accrual_rule__placeholder"
+                                 constraintName="fk_rel_talease_interest_accrual__talease_interest_accrual_6d_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="talease_interest_accrual_rule"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_talease_interest_accrual_rule__placeholder"
+                                 constraintName="fk_rel_talease_interest_accrual__placeholder_35_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>

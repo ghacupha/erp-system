@@ -1,0 +1,64 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <!--<changeSet author="edwin.njeru (generated)" id="1679399157154-7">
+        <createTable tableName="rel_contract_metadata__placeholder">
+            <column name="contract_metadata_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="placeholder_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>-->
+    <!--<changeSet author="edwin.njeru (generated)" id="1679399157154-8">
+        <createTable tableName="rel_contract_metadata__related_contracts">
+            <column name="contract_metadata_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="related_contracts_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>-->
+    <!--<changeSet author="edwin.njeru (generated)" id="1679399157154-9">
+        <createTable tableName="rel_contract_metadata__signatory">
+            <column name="contract_metadata_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="signatory_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>-->
+    <changeSet author="edwin.njeru (generated)" id="1679399157154-10">
+        <createTable tableName="rel_lease_contract__contract_metadata">
+            <column name="lease_contract_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="contract_metadata_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1679399157154-12">
+        <addUniqueConstraint columnNames="contract_identifier" constraintName="UC_CONTRACT_METADATACONTRACT_IDENTIFIER_COL" tableName="contract_metadata"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1679399157154-13">
+        <addUniqueConstraint columnNames="contract_identifier_short" constraintName="UC_CONTRACT_METADATACONTRACT_IDENTIFIER_SHORT_COL" tableName="contract_metadata"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1679399157154-14">
+        <addUniqueConstraint columnNames="contract_title" constraintName="UC_CONTRACT_METADATACONTRACT_TITLE_COL" tableName="contract_metadata"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1679399157154-16">
+        <addForeignKeyConstraint baseColumnNames="contract_partner_id" baseTableName="contract_metadata" constraintName="FK1ih0n6lxrypr78oeany6b13gy" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="dealer" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1679399157154-17">
+        <addForeignKeyConstraint baseColumnNames="contract_metadata_id" baseTableName="rel_contract_metadata__contract_document_file" constraintName="FK2hdkebnhx1cuygywxjgol04la" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="contract_metadata" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1679399157154-18">
+        <addForeignKeyConstraint baseColumnNames="department_id" baseTableName="contract_metadata" constraintName="FK30hxacv62wswkx455ni9k8dga" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="dealer" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1679399157154-19">
+        <addForeignKeyConstraint baseColumnNames="responsible_person_id" baseTableName="contract_metadata" constraintName="FK3cpbu8o0xle76komfc8p0xue3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application_user" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

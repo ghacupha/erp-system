@@ -1,0 +1,82 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="cardIssuerCharges">
+      <h2 data-cy="cardIssuerChargesDetailsHeading"><span>Card Issuer Charges</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ cardIssuerCharges.id }}</span>
+        </dd>
+        <dt><span>Reporting Date</span></dt>
+        <dd>
+          <span>{{ cardIssuerCharges.reportingDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Card Fee Charge In LCY</span></dt>
+        <dd>
+          <span>{{ cardIssuerCharges.cardFeeChargeInLCY }}</span>
+        </dd>
+        <dt><span>Bank Code</span></dt>
+        <dd>
+          <div *ngIf="cardIssuerCharges.bankCode">
+            <a [routerLink]="['/institution-code', cardIssuerCharges.bankCode?.id, 'view']">{{
+              cardIssuerCharges.bankCode?.institutionName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Card Category</span></dt>
+        <dd>
+          <div *ngIf="cardIssuerCharges.cardCategory">
+            <a [routerLink]="['/card-category-type', cardIssuerCharges.cardCategory?.id, 'view']">{{
+              cardIssuerCharges.cardCategory?.cardCategoryDescription
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Card Type</span></dt>
+        <dd>
+          <div *ngIf="cardIssuerCharges.cardType">
+            <a [routerLink]="['/card-types', cardIssuerCharges.cardType?.id, 'view']">{{ cardIssuerCharges.cardType?.cardType }}</a>
+          </div>
+        </dd>
+        <dt><span>Card Brand</span></dt>
+        <dd>
+          <div *ngIf="cardIssuerCharges.cardBrand">
+            <a [routerLink]="['/card-brand-type', cardIssuerCharges.cardBrand?.id, 'view']">{{
+              cardIssuerCharges.cardBrand?.cardBrandType
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Card Class</span></dt>
+        <dd>
+          <div *ngIf="cardIssuerCharges.cardClass">
+            <a [routerLink]="['/card-class-type', cardIssuerCharges.cardClass?.id, 'view']">{{
+              cardIssuerCharges.cardClass?.cardClassType
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Card Charge Type</span></dt>
+        <dd>
+          <div *ngIf="cardIssuerCharges.cardChargeType">
+            <a [routerLink]="['/card-charges', cardIssuerCharges.cardChargeType?.id, 'view']">{{
+              cardIssuerCharges.cardChargeType?.cardChargeTypeName
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/card-issuer-charges', cardIssuerCharges.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

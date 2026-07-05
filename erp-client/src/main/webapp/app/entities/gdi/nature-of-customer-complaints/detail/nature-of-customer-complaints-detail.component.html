@@ -1,0 +1,44 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="natureOfCustomerComplaints">
+      <h2 data-cy="natureOfCustomerComplaintsDetailsHeading"><span>Nature Of Customer Complaints</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ natureOfCustomerComplaints.id }}</span>
+        </dd>
+        <dt><span>Nature Of Complaint Type Code</span></dt>
+        <dd>
+          <span>{{ natureOfCustomerComplaints.natureOfComplaintTypeCode }}</span>
+        </dd>
+        <dt><span>Nature Of Complaint Type</span></dt>
+        <dd>
+          <span>{{ natureOfCustomerComplaints.natureOfComplaintType }}</span>
+        </dd>
+        <dt><span>Nature Of Complaint Type Details</span></dt>
+        <dd>
+          <span>{{ natureOfCustomerComplaints.natureOfComplaintTypeDetails }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/nature-of-customer-complaints', natureOfCustomerComplaints.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

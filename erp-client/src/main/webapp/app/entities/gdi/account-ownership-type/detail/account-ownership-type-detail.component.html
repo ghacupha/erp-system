@@ -1,0 +1,36 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="accountOwnershipType">
+      <h2 data-cy="accountOwnershipTypeDetailsHeading"><span>Account Ownership Type</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ accountOwnershipType.id }}</span>
+        </dd>
+        <dt><span>Account Ownership Type Code</span></dt>
+        <dd>
+          <span>{{ accountOwnershipType.accountOwnershipTypeCode }}</span>
+        </dd>
+        <dt><span>Account Ownership Type</span></dt>
+        <dd>
+          <span>{{ accountOwnershipType.accountOwnershipType }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ accountOwnershipType.description }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+    </div>
+  </div>
+</div>

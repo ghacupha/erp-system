@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity LeaseContract.
+    -->
+    <changeSet id="20230109133953-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id"
+                                 baseTableName="rel_lease_contract__placeholder"
+                                 constraintName="fk_rel_lease_contract__placeholder__lease_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_contract"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_lease_contract__placeholder"
+                                 constraintName="fk_rel_lease_contract__placeholder__placeholder_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id"
+                                 baseTableName="rel_lease_contract__system_mappings"
+                                 constraintName="fk_rel_lease_contract__system_mappings__lease_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_contract"/>
+
+        <addForeignKeyConstraint baseColumnNames="system_mappings_id"
+                                 baseTableName="rel_lease_contract__system_mappings"
+                                 constraintName="fk_rel_lease_contract__system_mappings__system_mappings_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="universally_unique_mapping"/>
+
+        <addForeignKeyConstraint baseColumnNames="lease_contract_id"
+                                 baseTableName="rel_lease_contract__business_document"
+                                 constraintName="fk_rel_lease_contract__business_document__lease_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lease_contract"/>
+
+        <addForeignKeyConstraint baseColumnNames="business_document_id"
+                                 baseTableName="rel_lease_contract__business_document"
+                                 constraintName="fk_rel_lease_contract__business_document__business_document_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="business_document"/>
+    </changeSet>
+</databaseChangeLog>

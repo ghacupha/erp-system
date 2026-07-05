@@ -1,0 +1,51 @@
+{
+  "clientRootFolder": "gdi-data",
+  "fields": [
+    {
+      "fieldName": "reportingDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "customerId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "relatedPartyId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "bankCode",
+      "otherEntityName": "institutionCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "institutionName"
+    },
+    {
+      "relationshipName": "branchId",
+      "otherEntityName": "bankBranchCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "branchCode"
+    },
+    {
+      "relationshipName": "relationshipType",
+      "otherEntityName": "partyRelationType",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "partyRelationType"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "RelatedPartyRelationship",
+  "changelogDate": "20231004065545",
+  "incrementalChangelog": false
+}

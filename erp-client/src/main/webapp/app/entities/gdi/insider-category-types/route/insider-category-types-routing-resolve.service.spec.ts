@@ -1,0 +1,80 @@
+jest.mock('@angular/router');
+
+import { TestBed } from '@angular/core/testing';
+import { HttpResponse } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { of } from 'rxjs';
+
+import { IInsiderCategoryTypes, InsiderCategoryTypes } from '../insider-category-types.model';
+import { InsiderCategoryTypesService } from '../service/insider-category-types.service';
+
+import { InsiderCategoryTypesRoutingResolveService } from './insider-category-types-routing-resolve.service';
+
+describe('InsiderCategoryTypes routing resolve service', () => {
+  let mockRouter: Router;
+  let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
+  let routingResolveService: InsiderCategoryTypesRoutingResolveService;
+  let service: InsiderCategoryTypesService;
+  let resultInsiderCategoryTypes: IInsiderCategoryTypes | undefined;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [Router, ActivatedRouteSnapshot],
+    });
+    mockRouter = TestBed.inject(Router);
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    routingResolveService = TestBed.inject(InsiderCategoryTypesRoutingResolveService);
+    service = TestBed.inject(InsiderCategoryTypesService);
+    resultInsiderCategoryTypes = undefined;
+  });
+
+  describe('resolve', () => {
+    it('should return IInsiderCategoryTypes returned by find', () => {
+      // GIVEN
+      service.find = jest.fn(id => of(new HttpResponse({ body: { id } })));
+      mockActivatedRouteSnapshot.params = { id: 123 };
+
+      // WHEN
+      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
+        resultInsiderCategoryTypes = result;
+      });
+
+      // THEN
+      expect(service.find).toBeCalledWith(123);
+      expect(resultInsiderCategoryTypes).toEqual({ id: 123 });
+    });
+
+    it('should return new IInsiderCategoryTypes if id is not provided', () => {
+      // GIVEN
+      service.find = jest.fn();
+      mockActivatedRouteSnapshot.params = {};
+
+      // WHEN
+      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
+        resultInsiderCategoryTypes = result;
+      });
+
+      // THEN
+      expect(service.find).not.toBeCalled();
+      expect(resultInsiderCategoryTypes).toEqual(new InsiderCategoryTypes());
+    });
+
+    it('should route to 404 page if data not found in server', () => {
+      // GIVEN
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as InsiderCategoryTypes })));
+      mockActivatedRouteSnapshot.params = { id: 123 };
+
+      // WHEN
+      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
+        resultInsiderCategoryTypes = result;
+      });
+
+      // THEN
+      expect(service.find).toBeCalledWith(123);
+      expect(resultInsiderCategoryTypes).toEqual(undefined);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
+    });
+  });
+});

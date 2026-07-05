@@ -1,0 +1,17 @@
+# Lease Liability Schedule CSV Upload Pipeline
+
+The ERP back-end now supports uploading lease liability schedules from CSV files without persisting the binary data in the database. The flow mirrors the documentation in `erp-system/man-pages/lease-liability/lease-liability-schedule-csv-upload.md` and can be summarised as follows:
+
+1. A multipart request to `/api/leases/lease-liability-schedule-file-uploads` stores the file on disk via `CsvUploadFSStorageService` while persisting metadata in `CsvFileUpload` and `LeaseLiabilityScheduleFileUpload`. When the client only supplies the `leaseLiabilityId`, the backend now creates the required amortisation schedule and lease liability compilation after fetching the latest IFRS16 contract tied to that liability.
+2. A Spring Batch job (`leaseLiabilityScheduleUploadJob`) reads the CSV, validates mandatory columns, enriches each row with the lease identifiers provided in the request, and publishes the items to the Kafka topic `lease-liability-schedule-items`.
+3. `LeaseLiabilityScheduleItemKafkaConsumer` consumes the messages, resolves the referenced aggregates (lease liability, amortisation schedule, compilation, repayment period), and saves `LeaseLiabilityScheduleItem` entities.
+4. Upload status is tracked on the `LeaseLiabilityScheduleFileUpload` record (`PENDING` → `PROCESSING` → `COMPLETED`/`FAILED`).
+
+The CSV header now includes a `paymentDate` column. When the lease repayment period id is not supplied, the batch configuration queries `InternalLeaseRepaymentPeriodRepository` to find the period containing the payment date and injects the matching id before publishing the message.
+
+Liquibase changelog files `20240704120000_added_entity_CsvFileUpload.xml` and `20240704120100_added_entity_LeaseLiabilityScheduleFileUpload.xml` create the supporting tables and enforce the one-to-one relationship between upload metadata and the CSV descriptor.
+
+### Supported date formats
+The CSV reader now accepts a mix of ISO (`2023-01-31`), slash-delimited (`31/01/2023` or `1/1/2023`), and abbreviated month formats (`31-Dec-22`, `1-Jan-2023`). The additional `dd-MMM-yy` and `dd-MMM-yyyy` patterns match the export format used in the finance workbook so uploads like the sample in `1019-schedule.csv` no longer fail validation.
+
+When running the batch pipeline on Spring Batch 4.x, remember that `StepBuilder` and `JobBuilder` require the `JobRepository` to be supplied via `.repository(...)`; otherwise the application fails fast at startup with a `JobRepository is mandatory` exception.

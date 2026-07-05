@@ -1,0 +1,9 @@
+export enum ContractStatus {
+  ACTIVE = 'ACTIVE',
+
+  INACTIVE = 'INACTIVE',
+
+  UNDER_RENEGOTIATION = 'UNDER_RENEGOTIATION',
+
+  TERMINATED = 'TERMINATED',
+}

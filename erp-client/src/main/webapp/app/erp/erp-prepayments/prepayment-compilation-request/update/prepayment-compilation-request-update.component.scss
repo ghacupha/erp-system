@@ -1,0 +1,93 @@
+.compilation-request-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.request-form,
+.hud-panel {
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  padding: 1rem;
+  background: #fff;
+}
+
+.button-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.hud-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.hud-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.hud-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: #e7f1ff;
+  color: #0d6efd;
+  font-weight: 600;
+}
+
+.hud-note {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin: 0.25rem 0 0;
+}
+
+.hud-empty {
+  color: #6c757d;
+  font-size: 0.9rem;
+  padding: 0.75rem 0;
+}
+
+.hud-table-wrap {
+  overflow-x: auto;
+}
+
+.hud-table {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.hud-table th,
+.hud-table td {
+  vertical-align: top;
+  white-space: normal;
+}
+
+.cell-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+}
+
+.cell-number {
+  white-space: nowrap;
+}
+
+.hud-badge {
+  color: #198754;
+  font-weight: 600;
+}
+
+@media (max-width: 991.98px) {
+  .compilation-request-layout {
+    grid-template-columns: 1fr;
+  }
+}

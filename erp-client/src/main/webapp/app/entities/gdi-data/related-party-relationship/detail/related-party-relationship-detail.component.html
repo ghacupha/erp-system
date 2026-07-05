@@ -1,0 +1,64 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="relatedPartyRelationship">
+      <h2 data-cy="relatedPartyRelationshipDetailsHeading"><span>Related Party Relationship</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ relatedPartyRelationship.id }}</span>
+        </dd>
+        <dt><span>Reporting Date</span></dt>
+        <dd>
+          <span>{{ relatedPartyRelationship.reportingDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Customer Id</span></dt>
+        <dd>
+          <span>{{ relatedPartyRelationship.customerId }}</span>
+        </dd>
+        <dt><span>Related Party Id</span></dt>
+        <dd>
+          <span>{{ relatedPartyRelationship.relatedPartyId }}</span>
+        </dd>
+        <dt><span>Bank Code</span></dt>
+        <dd>
+          <div *ngIf="relatedPartyRelationship.bankCode">
+            <a [routerLink]="['/institution-code', relatedPartyRelationship.bankCode?.id, 'view']">{{
+              relatedPartyRelationship.bankCode?.institutionName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Branch Id</span></dt>
+        <dd>
+          <div *ngIf="relatedPartyRelationship.branchId">
+            <a [routerLink]="['/bank-branch-code', relatedPartyRelationship.branchId?.id, 'view']">{{
+              relatedPartyRelationship.branchId?.branchCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Relationship Type</span></dt>
+        <dd>
+          <div *ngIf="relatedPartyRelationship.relationshipType">
+            <a [routerLink]="['/party-relation-type', relatedPartyRelationship.relationshipType?.id, 'view']">{{
+              relatedPartyRelationship.relationshipType?.partyRelationType
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/related-party-relationship', relatedPartyRelationship.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

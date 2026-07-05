@@ -1,0 +1,60 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="amortizationPeriod">
+      <h2 data-cy="amortizationPeriodDetailsHeading"><span>Amortization Period</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ amortizationPeriod.id }}</span>
+        </dd>
+        <dt><span>Sequence Number</span></dt>
+        <dd>
+          <span>{{ amortizationPeriod.sequenceNumber }}</span>
+        </dd>
+        <dt><span>Start Date</span></dt>
+        <dd>
+          <span>{{ amortizationPeriod.startDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>End Date</span></dt>
+        <dd>
+          <span>{{ amortizationPeriod.endDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Period Code</span></dt>
+        <dd>
+          <span>{{ amortizationPeriod.periodCode }}</span>
+        </dd>
+        <dt><span>Fiscal Month</span></dt>
+        <dd>
+          <div *ngIf="amortizationPeriod.fiscalMonth">
+            <a [routerLink]="['/fiscal-month', amortizationPeriod.fiscalMonth?.id, 'view']">{{
+              amortizationPeriod.fiscalMonth?.fiscalMonthCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Amortization Period</span></dt>
+        <dd>
+          <div *ngIf="amortizationPeriod.amortizationPeriod">
+            <a [routerLink]="['/amortization-period', amortizationPeriod.amortizationPeriod?.id, 'view']">{{
+              amortizationPeriod.amortizationPeriod?.periodCode
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/amortization-period', amortizationPeriod.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

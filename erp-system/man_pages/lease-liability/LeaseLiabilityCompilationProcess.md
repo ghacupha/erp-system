@@ -1,0 +1,72 @@
+# Lease Liability Compilation – Backend Process Notes
+
+## Scope
+This manual documents the backend workflow that produces IFRS16 lease amortization schedules after a compilation request is submitted. It is tailored for engineers maintaining the ERP System server module.
+
+## Data Flow Summary
+1. **REST intake** – `LeaseLiabilityCompilationResourceProd` persists the incoming `LeaseLiabilityCompilationDTO` and returns the created entity.
+2. **AOP interception** – `LeaseLiabilityCompilationRequestInterceptor` intercepts successful responses, logs execution, and forwards the DTO to the compilation job.
+3. **Batch job kick-off** – `LeaseLiabilityCompilationJobImpl` constructs Spring Batch `JobParameters` (job token, batch identifier, request ID) and launches the `leaseLiabilityCompilationJob`.
+4. **Chunk-oriented processing** – `LeaseLiabilityCompilationBatchConfig` wires the reader, processor, and writer beans that handle liabilities in chunks of 24.
+5. **Schedule calculation** – `LeaseAmortizationService` aggregates liability, contract, calculation, repayment period, and payment data to build `LeaseLiabilityScheduleItemDTO` results.
+6. **Persistence** – `LeaseLiabilityCompilationItemWriter` commits the generated schedule items using `InternalLeaseLiabilityScheduleItemService.saveAll` while forcing `active=true` and stamping the current compilation identifier.
+7. **Activation toggle** – `/api/leases/lease-liability-compilations/{id}/activate` and `/deactivate` delegate to `InternalLeaseLiabilityCompilationService.updateScheduleItemActivation` so downstream reports can switch between historical and promoted compilations without rewriting data. The service now flips both the compilation-level `active` flag and the schedule item rows.
+
+## Detailed Components
+### REST Resource
+- Validates that incoming DTOs do not carry an ID and delegates persistence to `InternalLeaseLiabilityCompilationService`.
+- Exposes the POST route under `/api/leases/lease-liability-compilations`.
+- Provides secured activation toggles under `/api/leases/lease-liability-compilations/{id}/activate` and `/deactivate`. These routes check the compilation’s existence and emit JHipster alert headers containing the affected row count identifier payload.
+- Other CRUD endpoints remain available for querying compilations after processing.
+
+### Interceptor
+- Pointcut: `execution(* io.github.erp.erp.resources.leases.LeaseLiabilityCompilationResourceProd.createLeaseLiabilityCompilation(..))`.
+- Advice: `@AfterReturning` obtains the saved DTO, logs context, and invokes `compileLeaseLiabilitySchedule` on the job interface.
+- Runs asynchronously to avoid blocking the HTTP response lifecycle.
+
+### Batch Infrastructure
+- `LeaseLiabilityCompilationItemReader` pulls liabilities tied to the compilation request and batch identifier.
+- `LeaseLiabilityCompilationItemProcessor` transforms each liability into a list of schedule items by calling the amortization service and forwarding the compilation ID.
+- `LeaseLiabilityCompilationItemWriter` iterates over each list, forces every DTO to be active, back-fills missing compilation metadata, and saves it in bulk.
+
+### Amortization Logic
+- `generateAmortizationSchedule` checks for the existence of the liability, contract, calculation, payments, and amortization schedule records and attaches the compilation identifier supplied by the processor.
+- It derives a monthly rate from the calculation’s interest rate, aligns payments with repayment periods, and maintains running balances for interest and principal.
+- Each `LeaseLiabilityScheduleItemDTO` captures opening balance, cash payment, split between interest and principal, outstanding balance, and links to the lease period and amortization schedule metadata.
+
+## Operational Guidance
+- Monitor job executions via Spring Batch tooling; job parameters include the batch identifier for correlation.
+- Missing prerequisite data surfaces as `IllegalArgumentException`s—capture these in logs or monitoring dashboards to inform data stewards.
+- Adjust chunk size or introduce parallel steps in `LeaseLiabilityCompilationBatchConfig` when scaling to larger portfolios.
+- Use the activation/deactivation endpoints when promoting a compilation to production reporting or when freezing a run for audit review. The service performs a bulk `UPDATE` via `updateActiveStateByCompilation`, updates the compilation record itself, and reindexes schedule items in Elasticsearch-sized batches (200 per page) to avoid recursion limits while keeping search results in sync.
+
+## Reporting recommendations for lease-period monitoring
+Engineering teams can expose focused reports to track how schedule items evolve for a specific lease period and compilation run.
+
+### Lease-period schedule delta view
+- **Objective** – Compare principal, interest, and outstanding balances for the same lease period across sequential compilation runs.
+- **Suggested inputs** – Lease contract booking ID, lease liability ID, repayment period ID/sequence, compilation timestamp.
+- **Data points** – Opening/closing balances, interest accrued, interest/principal payment split, cash payment, interest payable opening/closing.
+- **Implementation hint** – Query `LeaseLiabilityScheduleItem` entities joined on `leasePeriod.id` and `leaseLiability.id`, sorted by compilation execution time, and compute deltas across runs.
+
+**Note** There is some nuance to what the leasePeriod field in the `LeaseLiabilityScheduleItem` stands for. At glance one might assume this represents the related value from the `leasePeriod` entity
+ and that would be a grievous mistake, since the `leasePeriod.id` does not refer to the `leasePeriod` instance but to the `leaseRepaymentPeriod`. This other table exists to bring flexibility in how
+ we configure the schedule for reporting purposes and to allow for difference between contract dates and actual calendar repayment dates. For practicality when we report we do need to refer to calendar
+ periods and that's what the `leaseRepaymentPeriod` represents, but for office processes we use `leasePeriod` because contract dates do not always fall on dates it would be expedient to allow for officers sufficient time to
+ process and compile data for end period reporting.
+
+### Lease-period payment variance audit
+- **Objective** – Validate that schedule cash payments align with expected lease payments for the period.
+- **Suggested inputs** – Lease contract booking ID, repayment period boundaries, payment date, compilation status.
+- **Data points** – Schedule cash payment, expected payment sourced from `LeasePayment` records, absolute/percentage variance, tolerance indicator.
+- **Implementation hint** – Blend schedule items with `LeasePayment` entries using date overlap logic from `LeaseAmortizationService`. Highlight exceptions exceeding tolerance to prompt data stewardship.
+
+### Compilation trend and exception dashboard
+- **Objective** – Surface lease periods that frequently change or fail due to missing inputs.
+- **Suggested inputs** – Compilation job execution date, lease liability ID, exception category, period sequence, batch identifier.
+- **Data points** – Count of compilations per period, number of failures or warning flags, average time between recompilations, outstanding exception age.
+- **Implementation hint** – Combine Spring Batch execution metadata with amortization service logs. Use heat maps or sparklines to visualize volatile periods and drive remediation.
+
+## Related Artifacts
+- User stories describing this workflow are stored in `../user-stories/lease-liability-compilation.md` and `../erp-system/user-stories/lease-liability-compilation.md`.
+- Source implementations reside under `io.github.erp.erp.resources.leases`, `io.github.erp.aop.lease`, and `io.github.erp.internal.service.leases` packages.

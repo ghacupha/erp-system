@@ -1,0 +1,89 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-acquiring-issuing-flag-heading" data-cy="AcquiringIssuingFlagCreateUpdateHeading">
+        Create or edit a Acquiring Issuing Flag
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_cardAcquiringIssuingFlagCode">Card Acquiring Issuing Flag Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="cardAcquiringIssuingFlagCode"
+            id="field_cardAcquiringIssuingFlagCode"
+            data-cy="cardAcquiringIssuingFlagCode"
+            formControlName="cardAcquiringIssuingFlagCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('cardAcquiringIssuingFlagCode')!.invalid &&
+              (editForm.get('cardAcquiringIssuingFlagCode')!.dirty || editForm.get('cardAcquiringIssuingFlagCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('cardAcquiringIssuingFlagCode')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_cardAcquiringIssuingDescription">Card Acquiring Issuing Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="cardAcquiringIssuingDescription"
+            id="field_cardAcquiringIssuingDescription"
+            data-cy="cardAcquiringIssuingDescription"
+            formControlName="cardAcquiringIssuingDescription"
+          />
+          <div
+            *ngIf="
+              editForm.get('cardAcquiringIssuingDescription')!.invalid &&
+              (editForm.get('cardAcquiringIssuingDescription')!.dirty || editForm.get('cardAcquiringIssuingDescription')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('cardAcquiringIssuingDescription')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_cardAcquiringIssuingDetails">Card Acquiring Issuing Details</label>
+          <textarea
+            class="form-control"
+            name="cardAcquiringIssuingDetails"
+            id="field_cardAcquiringIssuingDetails"
+            data-cy="cardAcquiringIssuingDetails"
+            formControlName="cardAcquiringIssuingDetails"
+          ></textarea>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

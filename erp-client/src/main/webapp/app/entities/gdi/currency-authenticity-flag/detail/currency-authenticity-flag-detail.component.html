@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="currencyAuthenticityFlag">
+      <h2 data-cy="currencyAuthenticityFlagDetailsHeading"><span>Currency Authenticity Flag</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ currencyAuthenticityFlag.id }}</span>
+        </dd>
+        <dt><span>Currency Authenticity Flag</span></dt>
+        <dd>
+          <span>{{ currencyAuthenticityFlag.currencyAuthenticityFlag }}</span>
+        </dd>
+        <dt><span>Currency Authenticity Type</span></dt>
+        <dd>
+          <span>{{ currencyAuthenticityFlag.currencyAuthenticityType }}</span>
+        </dd>
+        <dt><span>Currency Authenticity Type Details</span></dt>
+        <dd>
+          <span>{{ currencyAuthenticityFlag.currencyAuthenticityTypeDetails }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/currency-authenticity-flag', currencyAuthenticityFlag.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

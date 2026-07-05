@@ -1,0 +1,89 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-fx-transaction-channel-type-heading" data-cy="FxTransactionChannelTypeCreateUpdateHeading">
+        Create or edit a Fx Transaction Channel Type
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fxTransactionChannelCode">Fx Transaction Channel Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fxTransactionChannelCode"
+            id="field_fxTransactionChannelCode"
+            data-cy="fxTransactionChannelCode"
+            formControlName="fxTransactionChannelCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('fxTransactionChannelCode')!.invalid &&
+              (editForm.get('fxTransactionChannelCode')!.dirty || editForm.get('fxTransactionChannelCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('fxTransactionChannelCode')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fxTransactionChannelType">Fx Transaction Channel Type</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fxTransactionChannelType"
+            id="field_fxTransactionChannelType"
+            data-cy="fxTransactionChannelType"
+            formControlName="fxTransactionChannelType"
+          />
+          <div
+            *ngIf="
+              editForm.get('fxTransactionChannelType')!.invalid &&
+              (editForm.get('fxTransactionChannelType')!.dirty || editForm.get('fxTransactionChannelType')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('fxTransactionChannelType')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fxChannelTypeDetails">Fx Channel Type Details</label>
+          <textarea
+            class="form-control"
+            name="fxChannelTypeDetails"
+            id="field_fxChannelTypeDetails"
+            data-cy="fxChannelTypeDetails"
+            formControlName="fxChannelTypeDetails"
+          ></textarea>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

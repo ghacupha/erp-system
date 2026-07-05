@@ -1,0 +1,51 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="countyCode">
+      <h2 data-cy="countyCodeDetailsHeading"><span>County Code</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ countyCode.id }}</span>
+        </dd>
+        <dt><span>County Code</span></dt>
+        <dd>
+          <span>{{ countyCode.countyCode }}</span>
+        </dd>
+        <dt><span>County Name</span></dt>
+        <dd>
+          <span>{{ countyCode.countyName }}</span>
+        </dd>
+        <dt><span>Sub County Code</span></dt>
+        <dd>
+          <span>{{ countyCode.subCountyCode }}</span>
+        </dd>
+        <dt><span>Sub County Name</span></dt>
+        <dd>
+          <span>{{ countyCode.subCountyName }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of countyCode.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/county-code', countyCode.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

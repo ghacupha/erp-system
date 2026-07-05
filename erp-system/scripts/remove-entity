@@ -1,0 +1,234 @@
+#!/usr/bin/env bash
+#
+# Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
+# Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+
+set -euo pipefail
+
+ENTITY_NAME="${1:-}"
+DRY_RUN=false
+FORCE=false
+
+for arg in "${@:2}"; do
+    case "$arg" in
+        --dry-run) DRY_RUN=true ;;
+        --force)   FORCE=true ;;
+    esac
+done
+
+if [[ -z "$ENTITY_NAME" ]]; then
+    echo "Usage:   remove-entity <EntityName> [--dry-run] [--force]"
+    echo "Example: remove-entity PrepaymentAccount"
+    echo "         remove-entity PrepaymentAccount --dry-run"
+    exit 1
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SYSTEM_ROOT="$(dirname "$SCRIPT_DIR")"
+REPO_ROOT="$(dirname "$SYSTEM_ROOT")"
+CLIENT_ROOT="$REPO_ROOT/erp-client"
+
+SERVER_JHIPSTER="$SYSTEM_ROOT/.jhipster"
+CLIENT_JHIPSTER="$CLIENT_ROOT/.jhipster"
+SERVER_YO_RC="$SYSTEM_ROOT/.yo-rc.json"
+CLIENT_YO_RC="$CLIENT_ROOT/.yo-rc.json"
+
+if [[ ! -f "$SERVER_JHIPSTER/$ENTITY_NAME.json" ]]; then
+    echo "Error: entity not found in erp-system: $SERVER_JHIPSTER/$ENTITY_NAME.json" >&2
+    exit 1
+fi
+
+# PascalCase → kebab-case
+to_kebab() {
+    echo "$1" | sed 's/\([A-Z]\)/-\1/g' | sed 's/^-//' | tr '[:upper:]' '[:lower:]'
+}
+
+delete_if_exists() {
+    if [[ -e "$1" ]]; then
+        if $DRY_RUN; then
+            echo "  [dry-run] would delete: $1"
+        else
+            rm -rf "$1"
+            echo "  deleted: $1"
+        fi
+    fi
+}
+
+delete_glob() {
+    local dir="$1" pattern="$2"
+    [[ -d "$dir" ]] || return 0
+    while IFS= read -r -d '' f; do
+        if $DRY_RUN; then
+            echo "  [dry-run] would delete: $f"
+        else
+            rm -f "$f"
+            echo "  deleted: $f"
+        fi
+    done < <(find "$dir" -maxdepth 1 -name "$pattern" -print0 2>/dev/null)
+}
+
+delete_glob_recursive() {
+    local dir="$1" pattern="$2"
+    [[ -d "$dir" ]] || return 0
+    while IFS= read -r -d '' f; do
+        if $DRY_RUN; then
+            echo "  [dry-run] would delete: $f"
+        else
+            rm -f "$f"
+            echo "  deleted: $f"
+        fi
+    done < <(find "$dir" -name "$pattern" -print0 2>/dev/null)
+}
+
+KEBAB="$(to_kebab "$ENTITY_NAME")"
+
+# ── 1. Find dependents ────────────────────────────────────────────────────────
+echo ""
+echo "Scanning for entities that depend on '$ENTITY_NAME'..."
+
+mapfile -t dependents < <(python3 - "$ENTITY_NAME" "$SERVER_JHIPSTER" <<'PYEOF'
+import json, os, sys
+
+entity_name  = sys.argv[1]
+jhipster_dir = sys.argv[2]
+
+for fname in os.listdir(jhipster_dir):
+    if not fname.endswith('.json'):
+        continue
+    base = fname[:-5]
+    if base == entity_name:
+        continue
+    data = json.load(open(os.path.join(jhipster_dir, fname)))
+    for r in data.get('relationships', []):
+        n = r.get('otherEntityName', '')
+        if n:
+            pascal = n[0].upper() + n[1:]
+            if pascal == entity_name:
+                print(base)
+                break
+PYEOF
+)
+
+if [[ ${#dependents[@]} -gt 0 ]]; then
+    echo "WARNING: the following entities have relationships pointing to '$ENTITY_NAME':"
+    for d in "${dependents[@]}"; do echo "    $d"; done
+    echo ""
+    echo "Update those entity JSON files to remove the relationship before regenerating them."
+    echo ""
+fi
+
+# ── 2. Confirm ────────────────────────────────────────────────────────────────
+if ! $FORCE && ! $DRY_RUN; then
+    read -r -p "Proceed with removing '$ENTITY_NAME'? [y/N] " answer
+    if [[ ! "$answer" =~ ^[Yy]$ ]]; then
+        echo "Aborted."
+        exit 0
+    fi
+fi
+
+[[ "$DRY_RUN" == true ]] && echo "=== DRY RUN — nothing will be deleted ==="
+
+# ── 3. .jhipster JSON files ───────────────────────────────────────────────────
+echo ""
+echo "[.jhipster definitions]"
+delete_if_exists "$SERVER_JHIPSTER/$ENTITY_NAME.json"
+delete_if_exists "$CLIENT_JHIPSTER/$ENTITY_NAME.json"
+
+# ── 4. .yo-rc.json ───────────────────────────────────────────────────────────
+echo ""
+echo "[.yo-rc.json]"
+for yo_rc in "$SERVER_YO_RC" "$CLIENT_YO_RC"; do
+    [[ -f "$yo_rc" ]] || continue
+    if $DRY_RUN; then
+        echo "  [dry-run] would remove '$ENTITY_NAME' from entities list in: $yo_rc"
+    else
+        python3 - "$ENTITY_NAME" "$yo_rc" <<'PYEOF'
+import json, sys
+name, path = sys.argv[1], sys.argv[2]
+data = json.load(open(path))
+before = len(data['generator-jhipster']['entities'])
+data['generator-jhipster']['entities'] = [e for e in data['generator-jhipster']['entities'] if e != name]
+after = len(data['generator-jhipster']['entities'])
+with open(path, 'w') as f:
+    json.dump(data, f, indent=2)
+print(f"  updated: {path}  (removed '{name}'; {before} → {after} entries)")
+PYEOF
+    fi
+done
+
+# ── 5. Server-side generated files ───────────────────────────────────────────
+echo ""
+echo "[erp-system generated files]"
+JAVA_BASE="$SYSTEM_ROOT/src/main/java/io/github/erp"
+TEST_BASE="$SYSTEM_ROOT/src/test/java/io/github/erp"
+
+for subdir in domain repository "web/rest" service "service/impl" "service/dto" "service/mapper" "service/criteria"; do
+    delete_glob "$JAVA_BASE/$subdir" "${ENTITY_NAME}*.java"
+done
+delete_glob_recursive "$TEST_BASE" "${ENTITY_NAME}*.java"
+delete_glob_recursive "$TEST_BASE" "${ENTITY_NAME}*.scala"
+
+# ── 6. Liquibase changelogs ───────────────────────────────────────────────────
+echo ""
+echo "[liquibase changelogs]"
+CHANGELOG_DIR="$SYSTEM_ROOT/src/main/resources/config/liquibase/changelog"
+delete_glob "$CHANGELOG_DIR" "*_${ENTITY_NAME}.xml"
+delete_glob "$CHANGELOG_DIR" "*_entity_${ENTITY_NAME}.xml"
+delete_glob "$CHANGELOG_DIR" "*_entity_constraints_${ENTITY_NAME}.xml"
+delete_glob "$CHANGELOG_DIR" "*${KEBAB}*.xml"
+
+MASTER_XML="$SYSTEM_ROOT/src/main/resources/config/liquibase/master.xml"
+if [[ -f "$MASTER_XML" ]]; then
+    matches=$(grep -c "$ENTITY_NAME\|$KEBAB" "$MASTER_XML" || true)
+    if [[ "$matches" -gt 0 ]]; then
+        if $DRY_RUN; then
+            echo "  [dry-run] would remove $matches line(s) from master.xml referencing '$ENTITY_NAME'"
+        else
+            grep -v "$ENTITY_NAME\|$KEBAB" "$MASTER_XML" > "${MASTER_XML}.tmp" && mv "${MASTER_XML}.tmp" "$MASTER_XML"
+            echo "  updated master.xml: removed $matches line(s) referencing '$ENTITY_NAME'"
+        fi
+    fi
+fi
+
+# ── 7. Client-side generated files ───────────────────────────────────────────
+echo ""
+echo "[erp-client generated files]"
+WEBAPP_ENTITIES="$CLIENT_ROOT/src/main/webapp/app/entities"
+if [[ -d "$WEBAPP_ENTITIES" ]]; then
+    while IFS= read -r -d '' dir; do
+        if $DRY_RUN; then
+            echo "  [dry-run] would delete folder: $dir"
+        else
+            rm -rf "$dir"
+            echo "  deleted folder: $dir"
+        fi
+    done < <(find "$WEBAPP_ENTITIES" -type d -name "$KEBAB" -print0 2>/dev/null)
+fi
+
+# ── 8. Summary ────────────────────────────────────────────────────────────────
+echo ""
+if $DRY_RUN; then
+    echo "Dry run complete. Re-run without --dry-run to apply changes."
+else
+    echo "Removal of '$ENTITY_NAME' complete."
+fi
+
+if [[ ${#dependents[@]} -gt 0 ]]; then
+    echo ""
+    echo "REMINDER: these entities still reference '$ENTITY_NAME' — update them manually:"
+    for d in "${dependents[@]}"; do echo "    $d"; done
+fi

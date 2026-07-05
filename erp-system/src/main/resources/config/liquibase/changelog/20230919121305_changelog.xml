@@ -1,0 +1,31 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1695125881502-4">
+        <addColumn tableName="iso_country_code">
+            <column name="continent_code" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1695125881502-5">
+        <addColumn tableName="iso_country_code">
+            <column name="continent_name" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1695125881502-8">
+        <addColumn tableName="iso_country_code">
+            <column name="sub_region" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1695125881502-9">
+        <addColumn tableName="sna_sector_code">
+            <column name="sub_sub_sector_code" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1695125881502-10">
+        <addColumn tableName="sna_sector_code">
+            <column name="sub_sub_sector_name" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1695125881502-38">
+        <dropColumn columnName="sub_sub_sector_code_sub_sub_sector_name" tableName="sna_sector_code"/>
+    </changeSet>
+</databaseChangeLog>

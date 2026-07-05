@@ -1,0 +1,56 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="institutionContactDetails">
+      <h2 data-cy="institutionContactDetailsDetailsHeading"><span>Institution Contact Details</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ institutionContactDetails.id }}</span>
+        </dd>
+        <dt><span>Entity Id</span></dt>
+        <dd>
+          <span>{{ institutionContactDetails.entityId }}</span>
+        </dd>
+        <dt><span>Entity Name</span></dt>
+        <dd>
+          <span>{{ institutionContactDetails.entityName }}</span>
+        </dd>
+        <dt><span>Contact Type</span></dt>
+        <dd>
+          <span>{{ institutionContactDetails.contactType }}</span>
+        </dd>
+        <dt><span>Contact Level</span></dt>
+        <dd>
+          <span>{{ institutionContactDetails.contactLevel }}</span>
+        </dd>
+        <dt><span>Contact Value</span></dt>
+        <dd>
+          <span>{{ institutionContactDetails.contactValue }}</span>
+        </dd>
+        <dt><span>Contact Name</span></dt>
+        <dd>
+          <span>{{ institutionContactDetails.contactName }}</span>
+        </dd>
+        <dt><span>Contact Designation</span></dt>
+        <dd>
+          <span>{{ institutionContactDetails.contactDesignation }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/institution-contact-details', institutionContactDetails.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="rouAccountBalanceReport">
+      <h2 data-cy="rouAccountBalanceReportDetailsHeading"><span>Rou Account Balance Report</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ rouAccountBalanceReport.id }}</span>
+        </dd>
+        <dt><span>Request Id</span></dt>
+        <dd>
+          <span>{{ rouAccountBalanceReport.requestId }}</span>
+        </dd>
+        <dt><span>Time Of Request</span></dt>
+        <dd>
+          <span>{{ rouAccountBalanceReport.timeOfRequest | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Report Is Compiled</span></dt>
+        <dd>
+          <span>{{ rouAccountBalanceReport.reportIsCompiled }}</span>
+        </dd>
+        <dt><span>File Checksum</span></dt>
+        <dd>
+          <span>{{ rouAccountBalanceReport.fileChecksum }}</span>
+        </dd>
+        <dt><span>Tampered</span></dt>
+        <dd>
+          <span>{{ rouAccountBalanceReport.tampered }}</span>
+        </dd>
+        <dt><span>Filename</span></dt>
+        <dd>
+          <span>{{ rouAccountBalanceReport.filename }}</span>
+        </dd>
+        <dt><span>Report Parameters</span></dt>
+        <dd>
+          <span>{{ rouAccountBalanceReport.reportParameters }}</span>
+        </dd>
+        <dt><span>Report File</span></dt>
+        <dd>
+          <div *ngIf="rouAccountBalanceReport.reportFile">
+            <a (click)="openFile(rouAccountBalanceReport.reportFile, rouAccountBalanceReport.reportFileContentType)">open</a>
+            {{ rouAccountBalanceReport.reportFileContentType }}, {{ byteSize(rouAccountBalanceReport.reportFile) }}
+          </div>
+        </dd>
+        <dt><span>Lease Period</span></dt>
+        <dd>
+          <div *ngIf="rouAccountBalanceReport.leasePeriod">
+            <a [routerLink]="['/lease-period', rouAccountBalanceReport.leasePeriod?.id, 'view']">{{
+              rouAccountBalanceReport.leasePeriod?.periodCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Requested By</span></dt>
+        <dd>
+          <div *ngIf="rouAccountBalanceReport.requestedBy">
+            <a [routerLink]="['/application-user', rouAccountBalanceReport.requestedBy?.id, 'view']">{{
+              rouAccountBalanceReport.requestedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/rou-account-balance-report', rouAccountBalanceReport.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

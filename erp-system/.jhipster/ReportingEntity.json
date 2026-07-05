@@ -1,0 +1,37 @@
+{
+  "fields": [
+    {
+      "fieldName": "entityName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "reportingCurrency",
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "iso4217CurrencyCode",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "reportingEntity"
+    },
+    {
+      "relationshipName": "retainedEarningsAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "accountName",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "reportingEntity"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "ReportingEntity",
+  "changelogDate": "20241115103432",
+  "incrementalChangelog": false
+}

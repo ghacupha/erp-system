@@ -1,0 +1,59 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="transactionAccountPostingProcessType">
+      <h2 data-cy="transactionAccountPostingProcessTypeDetailsHeading"><span>Transaction Account Posting Process Type</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ transactionAccountPostingProcessType.id }}</span>
+        </dd>
+        <dt><span>Name</span></dt>
+        <dd>
+          <span>{{ transactionAccountPostingProcessType.name }}</span>
+        </dd>
+        <dt><span>Debit Account Type</span></dt>
+        <dd>
+          <div *ngIf="transactionAccountPostingProcessType.debitAccountType">
+            <a [routerLink]="['/transaction-account-category', transactionAccountPostingProcessType.debitAccountType?.id, 'view']">{{
+              transactionAccountPostingProcessType.debitAccountType?.name
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Credit Account Type</span></dt>
+        <dd>
+          <div *ngIf="transactionAccountPostingProcessType.creditAccountType">
+            <a [routerLink]="['/transaction-account-category', transactionAccountPostingProcessType.creditAccountType?.id, 'view']">{{
+              transactionAccountPostingProcessType.creditAccountType?.name
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of transactionAccountPostingProcessType.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/transaction-account-posting-process-type', transactionAccountPostingProcessType.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

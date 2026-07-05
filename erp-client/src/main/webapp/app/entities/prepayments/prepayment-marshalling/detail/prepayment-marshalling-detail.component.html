@@ -1,0 +1,79 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="prepaymentMarshalling">
+      <h2 data-cy="prepaymentMarshallingDetailsHeading"><span>Prepayment Marshalling</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ prepaymentMarshalling.id }}</span>
+        </dd>
+        <dt><span>Inactive</span></dt>
+        <dd>
+          <span>{{ prepaymentMarshalling.inactive }}</span>
+        </dd>
+        <dt><span>Amortization Periods</span></dt>
+        <dd>
+          <span>{{ prepaymentMarshalling.amortizationPeriods }}</span>
+        </dd>
+        <dt><span>Processed</span></dt>
+        <dd>
+          <span>{{ prepaymentMarshalling.processed }}</span>
+        </dd>
+        <dt><span>Prepayment Account</span></dt>
+        <dd>
+          <div *ngIf="prepaymentMarshalling.prepaymentAccount">
+            <a [routerLink]="['/prepayment-account', prepaymentMarshalling.prepaymentAccount?.id, 'view']">{{
+              prepaymentMarshalling.prepaymentAccount?.catalogueNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>First Amortization Period</span></dt>
+        <dd>
+          <div *ngIf="prepaymentMarshalling.firstAmortizationPeriod">
+            <a [routerLink]="['/amortization-period', prepaymentMarshalling.firstAmortizationPeriod?.id, 'view']">{{
+              prepaymentMarshalling.firstAmortizationPeriod?.periodCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of prepaymentMarshalling.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>First Fiscal Month</span></dt>
+        <dd>
+          <div *ngIf="prepaymentMarshalling.firstFiscalMonth">
+            <a [routerLink]="['/fiscal-month', prepaymentMarshalling.firstFiscalMonth?.id, 'view']">{{
+              prepaymentMarshalling.firstFiscalMonth?.startDate
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Last Fiscal Month</span></dt>
+        <dd>
+          <div *ngIf="prepaymentMarshalling.lastFiscalMonth">
+            <a [routerLink]="['/fiscal-month', prepaymentMarshalling.lastFiscalMonth?.id, 'view']">{{
+              prepaymentMarshalling.lastFiscalMonth?.endDate
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/prepayment-marshalling', prepaymentMarshalling.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

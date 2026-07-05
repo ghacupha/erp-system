@@ -1,0 +1,48 @@
+{
+  "fields": [
+    {
+      "fieldName": "sequenceNumber",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "paymentDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "paymentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "discountRate",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "presentValue",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "iFRS16LeaseContract",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "bookingId"
+    },
+    {
+      "relationshipName": "liabilityEnumeration",
+      "otherEntityName": "liabilityEnumeration",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "PresentValueEnumeration",
+  "changelogDate": "20240620090000",
+  "incrementalChangelog": false
+}

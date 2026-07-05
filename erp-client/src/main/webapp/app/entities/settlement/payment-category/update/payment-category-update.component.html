@@ -1,0 +1,136 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-payment-category-heading" data-cy="PaymentCategoryCreateUpdateHeading">Create or edit a Payment Category</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_categoryName">Category Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="categoryName"
+            id="field_categoryName"
+            data-cy="categoryName"
+            formControlName="categoryName"
+          />
+          <div
+            *ngIf="editForm.get('categoryName')!.invalid && (editForm.get('categoryName')!.dirty || editForm.get('categoryName')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('categoryName')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_categoryDescription">Category Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="categoryDescription"
+            id="field_categoryDescription"
+            data-cy="categoryDescription"
+            formControlName="categoryDescription"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_categoryType">Category Type</label>
+          <select class="form-control" name="categoryType" formControlName="categoryType" id="field_categoryType" data-cy="categoryType">
+            <option [ngValue]="null"></option>
+            <option *ngFor="let categoryTypes of categoryTypesValues" [value]="categoryTypes">categoryTypes</option>
+          </select>
+          <div
+            *ngIf="editForm.get('categoryType')!.invalid && (editForm.get('categoryType')!.dirty || editForm.get('categoryType')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('categoryType')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fileUploadToken"
+            id="field_fileUploadToken"
+            data-cy="fileUploadToken"
+            formControlName="fileUploadToken"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="compilationToken"
+            id="field_compilationToken"
+            data-cy="compilationToken"
+            formControlName="compilationToken"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="field_paymentLabels">Payment Label</label>
+          <select
+            class="form-control"
+            id="field_paymentLabels"
+            data-cy="paymentLabel"
+            multiple
+            name="paymentLabels"
+            formControlName="paymentLabels"
+          >
+            <option
+              [ngValue]="getSelectedPaymentLabel(paymentLabelOption, editForm.get('paymentLabels')!.value)"
+              *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
+            >
+              {{ paymentLabelOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

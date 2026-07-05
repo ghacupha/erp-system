@@ -1,0 +1,44 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="crbSubscriptionStatusTypeCode">
+      <h2 data-cy="crbSubscriptionStatusTypeCodeDetailsHeading"><span>Crb Subscription Status Type Code</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ crbSubscriptionStatusTypeCode.id }}</span>
+        </dd>
+        <dt><span>Subscription Status Type Code</span></dt>
+        <dd>
+          <span>{{ crbSubscriptionStatusTypeCode.subscriptionStatusTypeCode }}</span>
+        </dd>
+        <dt><span>Subscription Status Type</span></dt>
+        <dd>
+          <span>{{ crbSubscriptionStatusTypeCode.subscriptionStatusType }}</span>
+        </dd>
+        <dt><span>Subscription Status Type Description</span></dt>
+        <dd>
+          <span>{{ crbSubscriptionStatusTypeCode.subscriptionStatusTypeDescription }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/crb-subscription-status-type-code', crbSubscriptionStatusTypeCode.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

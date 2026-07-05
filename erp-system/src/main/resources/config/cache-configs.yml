@@ -1,0 +1,3 @@
+erp-cache:
+  rebuildCache: ${ERP_CACHE_REBUILD_ENABLED}
+  teardownRebuildCache: ${ERP_CACHE_TEARDOWN_REBUILD_ENABLED}

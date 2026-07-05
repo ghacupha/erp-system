@@ -1,0 +1,70 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="weeklyCashHolding">
+      <h2 data-cy="weeklyCashHoldingDetailsHeading"><span>Weekly Cash Holding</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ weeklyCashHolding.id }}</span>
+        </dd>
+        <dt><span>Reporting Date</span></dt>
+        <dd>
+          <span>{{ weeklyCashHolding.reportingDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Fit Units</span></dt>
+        <dd>
+          <span>{{ weeklyCashHolding.fitUnits }}</span>
+        </dd>
+        <dt><span>Unfit Units</span></dt>
+        <dd>
+          <span>{{ weeklyCashHolding.unfitUnits }}</span>
+        </dd>
+        <dt><span>Bank Code</span></dt>
+        <dd>
+          <div *ngIf="weeklyCashHolding.bankCode">
+            <a [routerLink]="['/institution-code', weeklyCashHolding.bankCode?.id, 'view']">{{
+              weeklyCashHolding.bankCode?.institutionName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Branch Id</span></dt>
+        <dd>
+          <div *ngIf="weeklyCashHolding.branchId">
+            <a [routerLink]="['/bank-branch-code', weeklyCashHolding.branchId?.id, 'view']">{{ weeklyCashHolding.branchId?.branchCode }}</a>
+          </div>
+        </dd>
+        <dt><span>Sub County Code</span></dt>
+        <dd>
+          <div *ngIf="weeklyCashHolding.subCountyCode">
+            <a [routerLink]="['/county-sub-county-code', weeklyCashHolding.subCountyCode?.id, 'view']">{{
+              weeklyCashHolding.subCountyCode?.subCountyName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Denomination</span></dt>
+        <dd>
+          <div *ngIf="weeklyCashHolding.denomination">
+            <a [routerLink]="['/kenyan-currency-denomination', weeklyCashHolding.denomination?.id, 'view']">{{
+              weeklyCashHolding.denomination?.currencyDenominationType
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/weekly-cash-holding', weeklyCashHolding.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

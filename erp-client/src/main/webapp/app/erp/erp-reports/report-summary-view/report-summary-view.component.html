@@ -1,0 +1,112 @@
+<!--
+
+    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="report-summary" *ngIf="metadata; else metadataError">
+  <div class="report-summary__header">
+    <div class="report-summary__intro">
+      <h1 class="report-summary__title">{{ metadata?.reportTitle }}</h1>
+      <p class="report-summary__description" *ngIf="metadata?.description">{{ metadata?.description }}</p>
+    </div>
+    <div class="report-summary__actions" *ngIf="metadata?.backendApi">
+      <button
+        type="button"
+        class="btn btn-outline-secondary btn-sm me-2"
+        (click)="exportToCsv()"
+        [disabled]="loading || exportingCsv || exportingExcel"
+      >
+        <fa-icon icon="file-csv" class="me-1"></fa-icon>
+        Export CSV
+        <span class="spinner-border spinner-border-sm" *ngIf="exportingCsv" role="status" aria-hidden="true"></span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary btn-sm"
+        (click)="exportToExcel()"
+        [disabled]="loading || exportingCsv || exportingExcel"
+      >
+        <fa-icon icon="file-excel" class="me-1"></fa-icon>
+        Export Excel
+        <span class="spinner-border spinner-border-sm" *ngIf="exportingExcel" role="status" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="alert alert-danger mt-2" *ngIf="exportErrorMessage">{{ exportErrorMessage }}</div>
+
+  <div class="report-summary__filters" *ngIf="filters.length">
+    <div class="report-summary__filter" *ngFor="let filter of filters; trackBy: trackFilterByQueryKey">
+      <label class="form-label" [attr.for]="buildFilterControlId(filter)">{{ filter.definition.label }}</label>
+      <ng-select
+        [id]="buildFilterControlId(filter)"
+        [items]="filter.options"
+        bindLabel="label"
+        [loading]="filter.loading"
+        [placeholder]="filter.definition.label"
+        [(ngModel)]="filter.selected"
+        (change)="onFilterSelectionChange(filter, filter.selected)"
+        (search)="onFilterSearch(filter, $any($event).term)"
+        [clearable]="true"
+        [ngModelOptions]="{ standalone: true }"
+        [searchable]="true"
+        [closeOnSelect]="true"
+        [trackByFn]="trackFilterOptionByValue"
+        [attr.name]="filter.definition.queryParameterKey"
+      >
+        <ng-template ng-option-tmp let-item="item">
+          <div class="option-primary">{{ item.label }}</div>
+          <small class="option-secondary" *ngIf="item.description">{{ item.description }}</small>
+        </ng-template>
+      </ng-select>
+      <div class="text-danger small mt-1" *ngIf="filter.error">{{ filter.error }}</div>
+    </div>
+  </div>
+
+  <div class="alert alert-warning" *ngIf="errorMessage && !loading">{{ errorMessage }}</div>
+
+  <div class="report-summary__loading" *ngIf="loading">
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <span class="loading-text">Loading summary...</span>
+  </div>
+
+  <div class="report-summary__empty" *ngIf="!loading && !errorMessage && !summaryItems.length">
+    No summary data available for the selected criteria.
+  </div>
+
+  <div class="table-responsive" *ngIf="summaryItems.length">
+    <table class="table table-striped table-hover table-sm align-middle">
+      <thead>
+        <tr>
+          <th *ngFor="let column of displayedColumns">{{ column }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of summaryItems; trackBy: trackRow">
+          <td *ngFor="let column of displayedColumns">{{ formatValue(row[column]) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #metadataError>
+  <div class="alert alert-danger" *ngIf="errorMessage; else metadataPlaceholder">{{ errorMessage }}</div>
+  <ng-template #metadataPlaceholder>
+    <div class="alert alert-info">Select a report from the search menu to view its summary.</div>
+  </ng-template>
+</ng-template>

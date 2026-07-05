@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity TransactionAccountPostingProcessType.
+    -->
+    <changeSet id="20241007122528-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="debit_account_type_id"
+                                 baseTableName="trx_account_posting_prx_type"
+                                 constraintName="fk_trx_account_posting_prx_type__debit_account_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="credit_account_type_id"
+                                 baseTableName="trx_account_posting_prx_type"
+                                 constraintName="fk_trx_account_posting_prx_type__credit_account_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_account_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="trx_account_posting_prx_type_id"
+                                 baseTableName="rel_trx_account_posting_prx_type__placeholder"
+                                 constraintName="fk_rel_trx_account_posting_prx___trx_account_posting_prx__95_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="trx_account_posting_prx_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="placeholder_id"
+                                 baseTableName="rel_trx_account_posting_prx_type__placeholder"
+                                 constraintName="fk_rel_trx_account_posting_prx___placeholder_ba_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="placeholder"/>
+    </changeSet>
+</databaseChangeLog>

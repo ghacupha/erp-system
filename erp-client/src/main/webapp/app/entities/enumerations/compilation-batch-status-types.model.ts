@@ -1,0 +1,13 @@
+export enum CompilationBatchStatusTypes {
+  CREATED = 'CREATED',
+
+  RUNNING = 'RUNNING',
+
+  COMPLETED = 'COMPLETED',
+
+  ERRORED = 'ERRORED',
+
+  INTERRUPTED = 'INTERRUPTED',
+
+  ENQUEUED = 'ENQUEUED',
+}

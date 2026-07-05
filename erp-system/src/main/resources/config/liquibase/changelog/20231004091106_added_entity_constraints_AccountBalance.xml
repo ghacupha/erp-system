@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity AccountBalance.
+    -->
+    <changeSet id="20231004091106-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="bank_code_id"
+                                 baseTableName="account_balance"
+                                 constraintName="fk_account_balance__bank_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="institution_code"/>
+
+        <addForeignKeyConstraint baseColumnNames="branch_id_id"
+                                 baseTableName="account_balance"
+                                 constraintName="fk_account_balance__branch_id_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="bank_branch_code"/>
+
+        <addForeignKeyConstraint baseColumnNames="currency_code_id"
+                                 baseTableName="account_balance"
+                                 constraintName="fk_account_balance__currency_code_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="iso_currency_code"/>
+    </changeSet>
+</databaseChangeLog>

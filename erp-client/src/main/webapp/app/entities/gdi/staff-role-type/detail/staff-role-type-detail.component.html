@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="staffRoleType">
+      <h2 data-cy="staffRoleTypeDetailsHeading"><span>Staff Role Type</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ staffRoleType.id }}</span>
+        </dd>
+        <dt><span>Staff Role Type Code</span></dt>
+        <dd>
+          <span>{{ staffRoleType.staffRoleTypeCode }}</span>
+        </dd>
+        <dt><span>Staff Role Type</span></dt>
+        <dd>
+          <span>{{ staffRoleType.staffRoleType }}</span>
+        </dd>
+        <dt><span>Staff Role Type Details</span></dt>
+        <dd>
+          <span>{{ staffRoleType.staffRoleTypeDetails }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/staff-role-type', staffRoleType.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

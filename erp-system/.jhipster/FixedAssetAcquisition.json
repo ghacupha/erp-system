@@ -1,0 +1,59 @@
+{
+  "changelogDate": "20210323113701",
+  "clientRootFolder": "assets",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "entityTableName": "fixed_asset_acquisition",
+  "fields": [
+    {
+      "fieldName": "assetNumber",
+      "fieldType": "Long",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "serviceOutletCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetTag",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "assetDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "purchaseDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "assetCategory",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "purchasePrice",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "fileUploadToken",
+      "fieldType": "String"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "erpService",
+  "name": "FixedAssetAcquisition",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "elasticsearch",
+  "service": "serviceImpl"
+}

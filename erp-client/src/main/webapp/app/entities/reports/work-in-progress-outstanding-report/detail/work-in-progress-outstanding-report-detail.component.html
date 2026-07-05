@@ -1,0 +1,60 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="workInProgressOutstandingReport">
+      <h2 data-cy="workInProgressOutstandingReportDetailsHeading"><span>Work In Progress Outstanding Report</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.id }}</span>
+        </dd>
+        <dt><span>Sequence Number</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.sequenceNumber }}</span>
+        </dd>
+        <dt><span>Particulars</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.particulars }}</span>
+        </dd>
+        <dt><span>Dealer Name</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.dealerName }}</span>
+        </dd>
+        <dt><span>Instalment Transaction Number</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.instalmentTransactionNumber }}</span>
+        </dd>
+        <dt><span>Instalment Transaction Date</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.instalmentTransactionDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Iso 4217 Code</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.iso4217Code }}</span>
+        </dd>
+        <dt><span>Instalment Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.instalmentAmount }}</span>
+        </dd>
+        <dt><span>Total Transfer Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.totalTransferAmount }}</span>
+        </dd>
+        <dt><span>Outstanding Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressOutstandingReport.outstandingAmount }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+    </div>
+  </div>
+</div>

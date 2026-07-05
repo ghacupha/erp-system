@@ -1,0 +1,48 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="isoCountryCode">
+      <h2 data-cy="isoCountryCodeDetailsHeading"><span>Iso Country Code</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ isoCountryCode.id }}</span>
+        </dd>
+        <dt><span>Country Code</span></dt>
+        <dd>
+          <span>{{ isoCountryCode.countryCode }}</span>
+        </dd>
+        <dt><span>Country Description</span></dt>
+        <dd>
+          <span>{{ isoCountryCode.countryDescription }}</span>
+        </dd>
+        <dt><span>Continent Code</span></dt>
+        <dd>
+          <span>{{ isoCountryCode.continentCode }}</span>
+        </dd>
+        <dt><span>Continent Name</span></dt>
+        <dd>
+          <span>{{ isoCountryCode.continentName }}</span>
+        </dd>
+        <dt><span>Sub Region</span></dt>
+        <dd>
+          <span>{{ isoCountryCode.subRegion }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/iso-country-code', isoCountryCode.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

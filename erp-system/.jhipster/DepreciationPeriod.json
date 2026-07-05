@@ -1,0 +1,54 @@
+{
+  "fields": [
+    {
+      "fieldName": "startDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "depreciationPeriodStatus",
+      "fieldType": "DepreciationPeriodStatusTypes",
+      "fieldValues": "OPEN,CLOSED,PROCESSING"
+    },
+    {
+      "fieldName": "periodCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "processLocked",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "previousPeriod",
+      "otherEntityName": "depreciationPeriod",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "endDate",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "nextPeriod"
+    },
+    {
+      "relationshipName": "fiscalMonth",
+      "otherEntityName": "fiscalMonth",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "fiscalMonthCode"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "DepreciationPeriod",
+  "changelogDate": "20230704155659",
+  "incrementalChangelog": false
+}

@@ -1,0 +1,599 @@
+///
+/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+///
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License
+/// along with this program. If not, see <http://www.gnu.org/licenses/>.
+///
+
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpResponse } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { uuidv7 } from 'uuidv7';
+
+import { TransactionAccountPostingRuleService } from '../transaction-account-posting-rule/service/transaction-account-posting-rule.service';
+import {
+  ITransactionAccountPostingRule,
+  ITransactionAccountPostingRuleCondition,
+  ITransactionAccountPostingRuleTemplate,
+  TransactionAccountPostingRule,
+} from '../transaction-account-posting-rule/transaction-account-posting-rule.model';
+import { IIFRS16LeaseContract } from '../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IFRS16LeaseContractService } from '../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
+import { ITransactionAccount } from '../transaction-account/transaction-account.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../erp-pages/placeholder/service/placeholder.service';
+import { State } from '../../store/global-store.definition';
+import {
+  leasePostingRuleFormUpdated,
+  leasePostingRuleLeaseContractSelected,
+  leasePostingRuleResetDraft,
+  leasePostingRuleTemplateAccountSelected,
+} from '../../store/actions/lease-posting-rule-config.actions';
+import { selectLeasePostingRuleSuggestions } from '../../store/selectors/lease-posting-rule-config.selectors';
+import {
+  copyingLeasePostingRuleStatus,
+  creatingLeasePostingRuleStatus,
+  editingLeasePostingRuleStatus,
+  leasePostingRuleUpdateSelectedInstance,
+  leasePostingRuleUpdateSourceLeaseContract,
+} from '../../store/selectors/lease-posting-rule-workflows-status.selector';
+import {
+  leasePostingRuleCopyWorkflowInitiatedEnRoute,
+  leasePostingRuleCreationInitiatedEnRoute,
+  leasePostingRuleDataHasMutated,
+  leasePostingRuleEditWorkflowInitiatedEnRoute,
+  leasePostingRuleUpdateFormHasBeenDestroyed,
+} from '../../store/actions/lease-posting-rule-workflow-status.actions';
+import { ITransactionAccountCategory } from '../transaction-account-category/transaction-account-category.model';
+
+@Component({
+  selector: 'jhi-lease-posting-rule-config',
+  templateUrl: './lease-posting-rule-config.component.html',
+})
+export class LeasePostingRuleConfigComponent implements OnInit, OnDestroy {
+  isSaving = false;
+  isViewMode = false;
+  isEditMode = false;
+  isNewMode = false;
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedInstance: ITransactionAccountPostingRule = {};
+  sourceLeaseContract: IIFRS16LeaseContract | null = null;
+  leaseContractsCollection: IIFRS16LeaseContract[] = [];
+  placeholdersSharedCollection: IPlaceholder[] = [];
+  private lastSuggestedDebitAccount: ITransactionAccount | null = null;
+  private lastSuggestedCreditAccount: ITransactionAccount | null = null;
+  private lastSuggestedDebitAccountType: ITransactionAccountCategory | null = null;
+  private lastSuggestedCreditAccountType: ITransactionAccountCategory | null = null;
+  private pendingLeaseContractId?: number;
+
+  eventTypes = [
+    { value: 'LEASE_LIABILITY_RECOGNITION', label: 'Lease Liability Recognition' },
+    { value: 'LEASE_REPAYMENT', label: 'Lease Repayment' },
+    { value: 'LEASE_INTEREST_ACCRUAL', label: 'Lease Interest Accrual' },
+    { value: 'LEASE_INTEREST_PAID_TRANSFER', label: 'Lease Interest Paid Transfer' },
+    { value: 'LEASE_ROU_RECOGNITION', label: 'ROU Recognition' },
+    { value: 'LEASE_ROU_AMORTIZATION', label: 'ROU Amortization' },
+  ];
+
+  conditionOperators = ['EQUALS', 'NOT_EQUALS', 'CONTAINS'];
+
+  editForm = this.fb.group({
+    id: [],
+    name: [null, [Validators.required]],
+    identifier: [uuidv7(), [Validators.required]],
+    module: [{ value: 'LEASE', disabled: true }, [Validators.required]],
+    eventType: [null, [Validators.required]],
+    leaseContract: [null, [Validators.required]],
+    debitAccountType: [null, [Validators.required]],
+    creditAccountType: [null, [Validators.required]],
+    transactionContext: [],
+    varianceType: [],
+    invoiceTiming: [],
+    postingRuleTemplates: this.fb.array([]),
+    postingRuleConditions: this.fb.array([]),
+  });
+
+  private readonly destroy$ = new Subject<void>();
+
+  constructor(
+    protected fb: FormBuilder,
+    protected postingRuleService: TransactionAccountPostingRuleService,
+    protected leaseContractService: IFRS16LeaseContractService,
+    protected placeholderService: PlaceholderService,
+    protected store: Store<State>,
+    protected activatedRoute: ActivatedRoute,
+    protected router: Router
+  ) {
+    this.store.select(copyingLeasePostingRuleStatus).pipe(takeUntil(this.destroy$)).subscribe(stat => (this.weAreCopying = stat));
+    this.store.select(editingLeasePostingRuleStatus).pipe(takeUntil(this.destroy$)).subscribe(stat => (this.weAreEditing = stat));
+    this.store.select(creatingLeasePostingRuleStatus).pipe(takeUntil(this.destroy$)).subscribe(stat => (this.weAreCreating = stat));
+    this.store
+      .select(leasePostingRuleUpdateSelectedInstance)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(instance => {
+        this.selectedInstance = instance as ITransactionAccountPostingRule;
+        if (this.weAreCopying && this.selectedInstance?.id) {
+          this.copyForm(this.selectedInstance);
+        }
+        if (this.weAreEditing && this.selectedInstance?.id) {
+          this.updateForm(this.selectedInstance);
+        }
+      });
+    this.store
+      .select(leasePostingRuleUpdateSourceLeaseContract)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(contract => {
+        this.sourceLeaseContract = contract as IIFRS16LeaseContract | null;
+        if (!this.isViewMode && contract && !this.editForm.get('leaseContract')?.value) {
+          this.editForm.patchValue({ leaseContract: contract });
+          this.applyLeaseContractCondition(contract);
+        }
+      });
+  }
+
+  ngOnInit(): void {
+    const mode = this.activatedRoute.snapshot.data['mode'];
+    this.isViewMode = mode === 'view';
+    this.isEditMode = mode === 'edit';
+    this.isNewMode = mode === 'new' || (!this.isViewMode && !this.isEditMode && mode !== 'copy');
+    const ruleId = this.activatedRoute.snapshot.params['id'];
+    if (ruleId) {
+      this.loadPostingRule(Number(ruleId), mode);
+    } else {
+      this.initializeNewForm();
+      if (mode === 'new' && !this.weAreCreating) {
+        this.store.dispatch(leasePostingRuleCreationInitiatedEnRoute());
+      }
+    }
+    this.loadRelationshipsOptions();
+    this.registerLeaseContractListener();
+    this.registerEventTypeListener();
+
+    this.store
+      .select(selectLeasePostingRuleSuggestions)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(suggestions => {
+        if (!suggestions) {
+          return;
+        }
+        this.applyAccountSuggestions(suggestions.debitAccount ?? null, suggestions.creditAccount ?? null);
+        this.applyAccountTypeSuggestions(suggestions.debitAccountType ?? null, suggestions.creditAccountType ?? null);
+      });
+
+    this.editForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      if (this.isViewMode) {
+        return;
+      }
+      this.store.dispatch(leasePostingRuleFormUpdated({ draft: this.createFromForm() }));
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.store.dispatch(leasePostingRuleResetDraft());
+    this.store.dispatch(leasePostingRuleUpdateFormHasBeenDestroyed());
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  get postingRuleTemplates(): FormArray {
+    return this.editForm.get('postingRuleTemplates') as FormArray;
+  }
+
+  get postingRuleConditions(): FormArray {
+    return this.editForm.get('postingRuleConditions') as FormArray;
+  }
+
+  addTemplate(): void {
+    const templateGroup = this.createTemplateGroup();
+    this.postingRuleTemplates.push(templateGroup);
+  }
+
+  removeTemplate(index: number): void {
+    this.postingRuleTemplates.removeAt(index);
+  }
+
+  addCondition(): void {
+    const conditionGroup = this.createConditionGroup();
+    this.postingRuleConditions.push(conditionGroup);
+  }
+
+  removeCondition(index: number): void {
+    this.postingRuleConditions.removeAt(index);
+  }
+
+  save(): void {
+    this.isSaving = true;
+    if (this.weAreCopying) {
+      const request$ = this.postingRuleService.create(this.copyFromForm());
+      request$.subscribe({
+        next: () => this.onSaveSuccess(),
+        error: () => this.onSaveError(),
+      });
+      return;
+    }
+
+    const postingRule = this.createFromForm();
+    const request$ = this.weAreEditing ? this.postingRuleService.update(postingRule) : this.postingRuleService.create(postingRule);
+    request$.subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
+  }
+
+  previousState(): void {
+    this.router.navigate(['/lease-posting-rule-config']);
+  }
+
+  trackLeaseContractById(index: number, item: IIFRS16LeaseContract): number {
+    return item.id!;
+  }
+
+  trackAccountCategoryById(index: number, item: ITransactionAccountCategory): number {
+    return item.id!;
+  }
+
+  trackPlaceholderById(index: number, item: IPlaceholder): number {
+    return item.id!;
+  }
+
+  updateLeaseContract(leaseContract: IIFRS16LeaseContract): void {
+    this.editForm.patchValue({ leaseContract });
+  }
+
+  updateDebitAccountType(accountType: ITransactionAccountCategory): void {
+    this.editForm.patchValue({ debitAccountType: accountType });
+  }
+
+  updateCreditAccountType(accountType: ITransactionAccountCategory): void {
+    this.editForm.patchValue({ creditAccountType: accountType });
+  }
+
+  updateTemplateDebitAccount(index: number, account: ITransactionAccount | null): void {
+    const templateGroup = this.postingRuleTemplates.at(index);
+    templateGroup.patchValue({ debitAccount: account });
+    this.store.dispatch(leasePostingRuleTemplateAccountSelected({ debitAccount: account ?? null }));
+  }
+
+  updateTemplateCreditAccount(index: number, account: ITransactionAccount | null): void {
+    const templateGroup = this.postingRuleTemplates.at(index);
+    templateGroup.patchValue({ creditAccount: account });
+    this.store.dispatch(leasePostingRuleTemplateAccountSelected({ creditAccount: account ?? null }));
+  }
+
+  editButtonEvent(): void {
+    this.store.dispatch(leasePostingRuleEditWorkflowInitiatedEnRoute({ editedInstance: this.createFromForm() }));
+  }
+
+  protected onSaveSuccess(): void {
+    this.isSaving = false;
+    this.store.dispatch(leasePostingRuleDataHasMutated());
+    this.previousState();
+  }
+
+  protected onSaveError(): void {
+    this.isSaving = false;
+  }
+
+  protected createFromForm(): ITransactionAccountPostingRule {
+    return {
+      ...new TransactionAccountPostingRule(),
+      id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      identifier: this.editForm.get(['identifier'])!.value,
+      module: 'LEASE',
+      eventType: this.editForm.get(['eventType'])!.value,
+      debitAccountType: this.editForm.get(['debitAccountType'])!.value,
+      creditAccountType: this.editForm.get(['creditAccountType'])!.value,
+      transactionContext: this.editForm.get(['transactionContext'])!.value,
+      varianceType: this.editForm.get(['varianceType'])!.value,
+      invoiceTiming: this.editForm.get(['invoiceTiming'])!.value,
+      postingRuleTemplates: this.postingRuleTemplates.value as ITransactionAccountPostingRuleTemplate[],
+      postingRuleConditions: this.postingRuleConditions.value as ITransactionAccountPostingRuleCondition[],
+    };
+  }
+
+  protected copyFromForm(): ITransactionAccountPostingRule {
+    const templates = (this.postingRuleTemplates.value as ITransactionAccountPostingRuleTemplate[]).map(template => ({
+      ...template,
+      id: undefined,
+    }));
+    const conditions = (this.postingRuleConditions.value as ITransactionAccountPostingRuleCondition[]).map(condition => ({
+      ...condition,
+      id: undefined,
+    }));
+    return {
+      ...new TransactionAccountPostingRule(),
+      name: this.editForm.get(['name'])!.value,
+      identifier: this.editForm.get(['identifier'])!.value,
+      module: 'LEASE',
+      eventType: this.editForm.get(['eventType'])!.value,
+      debitAccountType: this.editForm.get(['debitAccountType'])!.value,
+      creditAccountType: this.editForm.get(['creditAccountType'])!.value,
+      transactionContext: this.editForm.get(['transactionContext'])!.value,
+      varianceType: this.editForm.get(['varianceType'])!.value,
+      invoiceTiming: this.editForm.get(['invoiceTiming'])!.value,
+      postingRuleTemplates: templates,
+      postingRuleConditions: conditions,
+    };
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.leaseContractService
+      .query()
+      .subscribe((res: HttpResponse<IIFRS16LeaseContract[]>) => {
+        this.leaseContractsCollection = res.body ?? [];
+        if (this.pendingLeaseContractId) {
+          const selectedLease = this.leaseContractsCollection.find(contract => contract.id === this.pendingLeaseContractId);
+          if (selectedLease) {
+            this.editForm.patchValue({ leaseContract: selectedLease });
+            this.pendingLeaseContractId = undefined;
+          }
+        }
+      });
+
+    this.placeholderService
+      .query()
+      .subscribe((res: HttpResponse<IPlaceholder[]>) => (this.placeholdersSharedCollection = res.body ?? []));
+  }
+
+  protected registerLeaseContractListener(): void {
+    this.editForm.get('leaseContract')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(selectedLease => {
+      if (this.isViewMode) {
+        return;
+      }
+      if (!selectedLease?.id) {
+        return;
+      }
+      this.store.dispatch(
+        leasePostingRuleLeaseContractSelected({
+          leaseContract: selectedLease,
+          eventType: this.editForm.get('eventType')?.value,
+        })
+      );
+      this.applyLeaseContractCondition(selectedLease);
+    });
+  }
+
+  protected registerEventTypeListener(): void {
+    this.editForm.get('eventType')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(eventType => {
+      if (this.isViewMode) {
+        return;
+      }
+      const leaseContract = this.editForm.get('leaseContract')?.value;
+      if (!leaseContract?.id) {
+        return;
+      }
+      this.store.dispatch(leasePostingRuleLeaseContractSelected({ leaseContract, eventType }));
+    });
+  }
+
+  protected initializeNewForm(): void {
+    this.postingRuleTemplates.clear();
+    this.postingRuleConditions.clear();
+    this.addTemplate();
+    this.addCondition();
+    if (this.isViewMode) {
+      this.editForm.disable({ emitEvent: false });
+    }
+  }
+
+  protected loadPostingRule(id: number, mode?: string): void {
+    this.postingRuleService.find(id).subscribe({
+      next: response => {
+        const postingRule = response.body;
+        if (!postingRule) {
+          return;
+        }
+        if (mode === 'copy') {
+          this.store.dispatch(leasePostingRuleCopyWorkflowInitiatedEnRoute({ copiedInstance: postingRule }));
+          this.copyForm(postingRule);
+        } else {
+          this.store.dispatch(leasePostingRuleEditWorkflowInitiatedEnRoute({ editedInstance: postingRule }));
+          this.updateForm(postingRule);
+        }
+        if (this.isViewMode) {
+          this.editForm.disable({ emitEvent: false });
+        }
+      },
+      error: () => this.onSaveError(),
+    });
+  }
+
+  protected updateForm(postingRule: ITransactionAccountPostingRule): void {
+    this.editForm.patchValue({
+      id: postingRule.id,
+      name: postingRule.name,
+      identifier: postingRule.identifier,
+      module: postingRule.module ?? 'LEASE',
+      eventType: postingRule.eventType,
+      debitAccountType: postingRule.debitAccountType,
+      creditAccountType: postingRule.creditAccountType,
+      transactionContext: postingRule.transactionContext,
+      varianceType: postingRule.varianceType,
+      invoiceTiming: postingRule.invoiceTiming,
+    });
+
+    this.postingRuleTemplates.clear();
+    const templates = postingRule.postingRuleTemplates ?? [];
+    if (templates.length > 0) {
+      templates.forEach(template => this.postingRuleTemplates.push(this.createTemplateGroup(template)));
+    } else {
+      this.addTemplate();
+    }
+
+    this.postingRuleConditions.clear();
+    const conditions = postingRule.postingRuleConditions ?? [];
+    if (conditions.length > 0) {
+      conditions.forEach(condition => this.postingRuleConditions.push(this.createConditionGroup(condition)));
+    } else {
+      this.addCondition();
+    }
+
+    const leaseCondition = conditions.find(condition => condition.conditionKey === 'leaseContractId');
+    if (leaseCondition?.conditionValue) {
+      const leaseContractId = Number(leaseCondition.conditionValue);
+      if (!Number.isNaN(leaseContractId)) {
+        const selectedLease = this.leaseContractsCollection.find(contract => contract.id === leaseContractId);
+        if (selectedLease) {
+          this.editForm.patchValue({ leaseContract: selectedLease });
+        } else {
+          this.pendingLeaseContractId = leaseContractId;
+        }
+      }
+    }
+  }
+
+  protected copyForm(postingRule: ITransactionAccountPostingRule): void {
+    this.editForm.patchValue({
+      id: undefined,
+      name: postingRule.name,
+      identifier: uuidv7(),
+      module: postingRule.module ?? 'LEASE',
+      eventType: postingRule.eventType,
+      debitAccountType: postingRule.debitAccountType,
+      creditAccountType: postingRule.creditAccountType,
+      transactionContext: postingRule.transactionContext,
+      varianceType: postingRule.varianceType,
+      invoiceTiming: postingRule.invoiceTiming,
+    });
+
+    this.postingRuleTemplates.clear();
+    const templates = postingRule.postingRuleTemplates ?? [];
+    if (templates.length > 0) {
+      templates.forEach(template => this.postingRuleTemplates.push(this.createTemplateGroup(template)));
+    } else {
+      this.addTemplate();
+    }
+
+    this.postingRuleConditions.clear();
+    const conditions = postingRule.postingRuleConditions ?? [];
+    if (conditions.length > 0) {
+      conditions.forEach(condition => this.postingRuleConditions.push(this.createConditionGroup(condition)));
+    } else {
+      this.addCondition();
+    }
+
+    const leaseCondition = conditions.find(condition => condition.conditionKey === 'leaseContractId');
+    if (leaseCondition?.conditionValue) {
+      const leaseContractId = Number(leaseCondition.conditionValue);
+      if (!Number.isNaN(leaseContractId)) {
+        const selectedLease = this.leaseContractsCollection.find(contract => contract.id === leaseContractId);
+        if (selectedLease) {
+          this.editForm.patchValue({ leaseContract: selectedLease });
+        } else {
+          this.pendingLeaseContractId = leaseContractId;
+        }
+      }
+    }
+  }
+
+  protected createTemplateGroup(template?: ITransactionAccountPostingRuleTemplate): FormGroup {
+    return this.fb.group({
+      id: [template?.id ?? null],
+      lineDescription: [template?.lineDescription ?? null],
+      amountMultiplier: [template?.amountMultiplier ?? null],
+      debitAccount: [template?.debitAccount ?? null, Validators.required],
+      creditAccount: [template?.creditAccount ?? null, Validators.required],
+    });
+  }
+
+  protected createConditionGroup(condition?: ITransactionAccountPostingRuleCondition): FormGroup {
+    return this.fb.group({
+      id: [condition?.id ?? null],
+      conditionKey: [condition?.conditionKey ?? 'leaseContractId', Validators.required],
+      conditionOperator: [condition?.conditionOperator ?? 'EQUALS', Validators.required],
+      conditionValue: [condition?.conditionValue ?? null, Validators.required],
+    });
+  }
+
+  protected applyLeaseContractCondition(leaseContract: IIFRS16LeaseContract): void {
+    const conditionIndex = this.postingRuleConditions.controls.findIndex(control => control.get('conditionKey')?.value === 'leaseContractId');
+    const conditionGroup = conditionIndex >= 0 ? this.postingRuleConditions.at(conditionIndex) : null;
+    if (conditionGroup) {
+      conditionGroup.patchValue({ conditionValue: leaseContract.id?.toString() });
+    } else {
+      this.addCondition();
+      this.postingRuleConditions.at(this.postingRuleConditions.length - 1).patchValue({
+        conditionKey: 'leaseContractId',
+        conditionOperator: 'EQUALS',
+        conditionValue: leaseContract.id?.toString(),
+      });
+    }
+  }
+
+  protected applyAccountSuggestions(debitAccount?: ITransactionAccount | null, creditAccount?: ITransactionAccount | null): void {
+    if (this.postingRuleTemplates.length === 0) {
+      this.addTemplate();
+    }
+    const firstTemplate = this.postingRuleTemplates.at(0);
+    const currentDebit = firstTemplate.get('debitAccount')?.value;
+    const currentCredit = firstTemplate.get('creditAccount')?.value;
+    const shouldUpdateDebit = !currentDebit || this.isSameAccount(currentDebit, this.lastSuggestedDebitAccount);
+    const shouldUpdateCredit = !currentCredit || this.isSameAccount(currentCredit, this.lastSuggestedCreditAccount);
+    firstTemplate.patchValue(
+      {
+        debitAccount: shouldUpdateDebit ? debitAccount ?? null : currentDebit,
+        creditAccount: shouldUpdateCredit ? creditAccount ?? null : currentCredit,
+      },
+      { emitEvent: false }
+    );
+    this.lastSuggestedDebitAccount = debitAccount ?? null;
+    this.lastSuggestedCreditAccount = creditAccount ?? null;
+  }
+
+  protected applyAccountTypeSuggestions(
+    debitAccountType?: ITransactionAccountCategory | null,
+    creditAccountType?: ITransactionAccountCategory | null
+  ): void {
+    const currentDebitType = this.editForm.get('debitAccountType')?.value;
+    const currentCreditType = this.editForm.get('creditAccountType')?.value;
+    const shouldUpdateDebit = !currentDebitType || this.isSameAccountType(currentDebitType, this.lastSuggestedDebitAccountType);
+    const shouldUpdateCredit = !currentCreditType || this.isSameAccountType(currentCreditType, this.lastSuggestedCreditAccountType);
+    this.editForm.patchValue(
+      {
+        debitAccountType: shouldUpdateDebit ? debitAccountType ?? null : currentDebitType,
+        creditAccountType: shouldUpdateCredit ? creditAccountType ?? null : currentCreditType,
+      },
+      { emitEvent: false }
+    );
+    this.lastSuggestedDebitAccountType = debitAccountType ?? null;
+    this.lastSuggestedCreditAccountType = creditAccountType ?? null;
+  }
+
+  protected isSameAccount(first?: ITransactionAccount | null, second?: ITransactionAccount | null): boolean {
+    if (!first && !second) {
+      return true;
+    }
+    if (!first || !second) {
+      return false;
+    }
+    return first.id === second.id;
+  }
+
+  protected isSameAccountType(first?: ITransactionAccountCategory | null, second?: ITransactionAccountCategory | null): boolean {
+    if (!first && !second) {
+      return true;
+    }
+    if (!first || !second) {
+      return false;
+    }
+    return first.id === second.id;
+  }
+}

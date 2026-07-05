@@ -1,0 +1,31 @@
+{
+  "clientRootFolder": "gdi-data",
+  "fields": [
+    {
+      "fieldName": "reportingDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "totalNumberOfFraudIncidents",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": 0
+    },
+    {
+      "fieldName": "valueOfFraudIncedentsInLCY",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": 0
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CardFraudInformation",
+  "changelogDate": "20231004103408",
+  "incrementalChangelog": false
+}

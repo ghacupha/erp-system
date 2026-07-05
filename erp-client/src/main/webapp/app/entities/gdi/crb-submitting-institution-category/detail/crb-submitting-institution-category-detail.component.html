@@ -1,0 +1,44 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="crbSubmittingInstitutionCategory">
+      <h2 data-cy="crbSubmittingInstitutionCategoryDetailsHeading"><span>Crb Submitting Institution Category</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ crbSubmittingInstitutionCategory.id }}</span>
+        </dd>
+        <dt><span>Submitting Institution Category Type Code</span></dt>
+        <dd>
+          <span>{{ crbSubmittingInstitutionCategory.submittingInstitutionCategoryTypeCode }}</span>
+        </dd>
+        <dt><span>Submitting Institution Category Type</span></dt>
+        <dd>
+          <span>{{ crbSubmittingInstitutionCategory.submittingInstitutionCategoryType }}</span>
+        </dd>
+        <dt><span>Submitting Institution Category Details</span></dt>
+        <dd>
+          <span>{{ crbSubmittingInstitutionCategory.submittingInstitutionCategoryDetails }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/crb-submitting-institution-category', crbSubmittingInstitutionCategory.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

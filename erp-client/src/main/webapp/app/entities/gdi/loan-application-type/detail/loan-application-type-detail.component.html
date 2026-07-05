@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="loanApplicationType">
+      <h2 data-cy="loanApplicationTypeDetailsHeading"><span>Loan Application Type</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ loanApplicationType.id }}</span>
+        </dd>
+        <dt><span>Loan Application Type Code</span></dt>
+        <dd>
+          <span>{{ loanApplicationType.loanApplicationTypeCode }}</span>
+        </dd>
+        <dt><span>Loan Application Type</span></dt>
+        <dd>
+          <span>{{ loanApplicationType.loanApplicationType }}</span>
+        </dd>
+        <dt><span>Loan Application Details</span></dt>
+        <dd>
+          <span>{{ loanApplicationType.loanApplicationDetails }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/loan-application-type', loanApplicationType.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

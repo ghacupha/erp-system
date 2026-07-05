@@ -1,0 +1,40 @@
+{
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "transactionAccountPostingType",
+      "fieldType": "transactionAccountPostingTypes",
+      "fieldValues": "DEBIT,CREDIT",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "transactionAccountCategory"
+    },
+    {
+      "relationshipName": "accountLedger",
+      "otherEntityName": "transactionAccountLedger",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "ledgerName"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "TransactionAccountCategory",
+  "changelogDate": "20241007115738",
+  "incrementalChangelog": false
+}

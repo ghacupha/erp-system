@@ -1,0 +1,52 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="prepaymentAccountReport">
+      <h2 data-cy="prepaymentAccountReportDetailsHeading"><span>Prepayment Account Report</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ prepaymentAccountReport.id }}</span>
+        </dd>
+        <dt><span>Account Name</span></dt>
+        <dd>
+          <span>{{ prepaymentAccountReport.accountName }}</span>
+        </dd>
+        <dt><span>Account Number</span></dt>
+        <dd>
+          <span>{{ prepaymentAccountReport.accountNumber }}</span>
+        </dd>
+        <dt><span>Prepayment Amount</span></dt>
+        <dd>
+          <span>{{ prepaymentAccountReport.prepaymentAmount }}</span>
+        </dd>
+        <dt><span>Amortised Amount</span></dt>
+        <dd>
+          <span>{{ prepaymentAccountReport.amortisedAmount }}</span>
+        </dd>
+        <dt><span>Outstanding Amount</span></dt>
+        <dd>
+          <span>{{ prepaymentAccountReport.outstandingAmount }}</span>
+        </dd>
+        <dt><span>Number Of Prepayment Accounts</span></dt>
+        <dd>
+          <span>{{ prepaymentAccountReport.numberOfPrepaymentAccounts }}</span>
+        </dd>
+        <dt><span>Number Of Amortised Items</span></dt>
+        <dd>
+          <span>{{ prepaymentAccountReport.numberOfAmortisedItems }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+    </div>
+  </div>
+</div>

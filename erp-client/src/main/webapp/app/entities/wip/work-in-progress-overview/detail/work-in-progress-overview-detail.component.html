@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="workInProgressOverview">
+      <h2 data-cy="workInProgressOverviewDetailsHeading"><span>Work In Progress Overview</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ workInProgressOverview.id }}</span>
+        </dd>
+        <dt><span>Number Of Items</span></dt>
+        <dd>
+          <span>{{ workInProgressOverview.numberOfItems }}</span>
+        </dd>
+        <dt><span>Instalment Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressOverview.instalmentAmount }}</span>
+        </dd>
+        <dt><span>Total Transfer Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressOverview.totalTransferAmount }}</span>
+        </dd>
+        <dt><span>Outstanding Amount</span></dt>
+        <dd>
+          <span>{{ workInProgressOverview.outstandingAmount }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+    </div>
+  </div>
+</div>

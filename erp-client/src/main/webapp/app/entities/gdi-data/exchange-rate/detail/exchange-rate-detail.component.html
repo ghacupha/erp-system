@@ -1,0 +1,72 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="exchangeRate">
+      <h2 data-cy="exchangeRateDetailsHeading"><span>Exchange Rate</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ exchangeRate.id }}</span>
+        </dd>
+        <dt><span>Business Reporting Day</span></dt>
+        <dd>
+          <span>{{ exchangeRate.businessReportingDay | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Buying Rate</span></dt>
+        <dd>
+          <span>{{ exchangeRate.buyingRate }}</span>
+        </dd>
+        <dt><span>Selling Rate</span></dt>
+        <dd>
+          <span>{{ exchangeRate.sellingRate }}</span>
+        </dd>
+        <dt><span>Mean Rate</span></dt>
+        <dd>
+          <span>{{ exchangeRate.meanRate }}</span>
+        </dd>
+        <dt><span>Closing Bid Rate</span></dt>
+        <dd>
+          <span>{{ exchangeRate.closingBidRate }}</span>
+        </dd>
+        <dt><span>Closing Offer Rate</span></dt>
+        <dd>
+          <span>{{ exchangeRate.closingOfferRate }}</span>
+        </dd>
+        <dt><span>Usd Cross Rate</span></dt>
+        <dd>
+          <span>{{ exchangeRate.usdCrossRate }}</span>
+        </dd>
+        <dt><span>Institution Code</span></dt>
+        <dd>
+          <div *ngIf="exchangeRate.institutionCode">
+            <a [routerLink]="['/institution-code', exchangeRate.institutionCode?.id, 'view']">{{
+              exchangeRate.institutionCode?.institutionName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Currency Code</span></dt>
+        <dd>
+          <div *ngIf="exchangeRate.currencyCode">
+            <a [routerLink]="['/iso-currency-code', exchangeRate.currencyCode?.id, 'view']">{{
+              exchangeRate.currencyCode?.alphabeticCode
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/exchange-rate', exchangeRate.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

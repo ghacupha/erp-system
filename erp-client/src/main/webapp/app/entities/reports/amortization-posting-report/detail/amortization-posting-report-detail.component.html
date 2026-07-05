@@ -1,0 +1,44 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="amortizationPostingReport">
+      <h2 data-cy="amortizationPostingReportDetailsHeading"><span>Amortization Posting Report</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ amortizationPostingReport.id }}</span>
+        </dd>
+        <dt><span>Catalogue Number</span></dt>
+        <dd>
+          <span>{{ amortizationPostingReport.catalogueNumber }}</span>
+        </dd>
+        <dt><span>Debit Account</span></dt>
+        <dd>
+          <span>{{ amortizationPostingReport.debitAccount }}</span>
+        </dd>
+        <dt><span>Credit Account</span></dt>
+        <dd>
+          <span>{{ amortizationPostingReport.creditAccount }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ amortizationPostingReport.description }}</span>
+        </dd>
+        <dt><span>Amortization Amount</span></dt>
+        <dd>
+          <span>{{ amortizationPostingReport.amortizationAmount }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+    </div>
+  </div>
+</div>

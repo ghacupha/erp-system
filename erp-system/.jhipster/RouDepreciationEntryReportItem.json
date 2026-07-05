@@ -1,0 +1,62 @@
+{
+  "fields": [
+    {
+      "fieldName": "leaseContractNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fiscalPeriodCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fiscalPeriodEndDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": []
+    },
+    {
+      "fieldName": "assetCategoryName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "debitAccountNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "creditAccountNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "shortTitle",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "rouAssetIdentifier",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "sequenceNumber",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "depreciationAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "outstandingAmount",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": true,
+  "pagination": "infinite-scroll",
+  "name": "RouDepreciationEntryReportItem",
+  "changelogDate": "20240313073952",
+  "incrementalChangelog": false
+}

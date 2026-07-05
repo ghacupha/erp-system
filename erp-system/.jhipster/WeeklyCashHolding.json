@@ -1,0 +1,58 @@
+{
+  "clientRootFolder": "gdi-data",
+  "fields": [
+    {
+      "fieldName": "reportingDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fitUnits",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "unfitUnits",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "bankCode",
+      "otherEntityName": "institutionCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "institutionName"
+    },
+    {
+      "relationshipName": "branchId",
+      "otherEntityName": "bankBranchCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "branchCode"
+    },
+    {
+      "relationshipName": "subCountyCode",
+      "otherEntityName": "countySubCountyCode",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "subCountyName"
+    },
+    {
+      "relationshipName": "denomination",
+      "otherEntityName": "kenyanCurrencyDenomination",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "currencyDenominationType"
+    }
+  ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "WeeklyCashHolding",
+  "changelogDate": "20231004061118",
+  "incrementalChangelog": false
+}

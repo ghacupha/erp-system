@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "fieldName": "amountCategoryBandCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "amountCategoryBand",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "amountCategoryBandDetails",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "CrbAmountCategoryBand",
+  "changelogDate": "20230914081359",
+  "incrementalChangelog": false
+}

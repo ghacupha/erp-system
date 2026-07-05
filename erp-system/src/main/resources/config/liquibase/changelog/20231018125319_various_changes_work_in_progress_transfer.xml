@@ -1,0 +1,79 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-5">
+        <addColumn tableName="work_in_progress_transfer">
+            <column name="asset_category_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-6">
+        <addColumn tableName="work_in_progress_transfer">
+            <column name="service_outlet_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-7">
+        <addColumn tableName="work_in_progress_transfer">
+            <column name="settlement_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-8">
+        <addColumn tableName="work_in_progress_transfer">
+            <column name="transfer_amount" type="numeric(21, 2)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-9">
+        <addColumn tableName="work_in_progress_transfer">
+            <column name="transfer_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-10">
+        <addColumn tableName="work_in_progress_transfer">
+            <column name="transfer_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-11">
+        <addColumn tableName="work_in_progress_transfer">
+            <column name="work_in_progress_registration_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-12">
+        <addColumn tableName="work_in_progress_transfer">
+            <column name="work_project_register_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-17">
+        <addUniqueConstraint columnNames="project_title" constraintName="UC_WORK_PROJECT_REGISTERPROJECT_TITLE_COL" tableName="work_project_register"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-20">
+        <addForeignKeyConstraint baseColumnNames="settlement_id" baseTableName="work_in_progress_transfer" constraintName="FK96fp920w3nw5l68389vv33cbq" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="settlement" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-21">
+        <addForeignKeyConstraint baseColumnNames="work_in_progress_registration_id" baseTableName="work_in_progress_transfer" constraintName="FKaed3uiivw2mxj6cfapld5gi4g" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="work_in_progress_registration" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-23">
+        <addForeignKeyConstraint baseColumnNames="asset_category_id" baseTableName="work_in_progress_transfer" constraintName="FKap37u7t6go6qtcahy4id8ujhf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="asset_category" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-25">
+        <addForeignKeyConstraint baseColumnNames="work_project_register_id" baseTableName="work_in_progress_transfer" constraintName="FKjjb7dnt6oydyn7a7jy91aq4yr" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="work_project_register" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-26">
+        <addForeignKeyConstraint baseColumnNames="service_outlet_id" baseTableName="work_in_progress_transfer" constraintName="FKp80wtd84l1fkkw7jegwpj7ipa" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="service_outlet" validate="true"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-27">
+        <dropForeignKeyConstraint baseTableName="rel_work_in_progress_transfer__work_in_progress_registration" constraintName="fk_rel_work_in_progress_transfe__work_in_progress_registr_8e_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-28">
+        <dropForeignKeyConstraint baseTableName="rel_work_in_progress_transfer__work_in_progress_registration" constraintName="fk_rel_work_in_progress_transfe__work_in_progress_transfe_53_id"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-40">
+        <dropTable tableName="rel_work_in_progress_transfer__work_in_progress_registration"/>
+    </changeSet>
+    <changeSet author="edwin.njeru (generated)" id="1697634019824-4">
+        <addNotNullConstraint columnDataType="varchar(255)" columnName="project_title" tableName="work_project_register" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

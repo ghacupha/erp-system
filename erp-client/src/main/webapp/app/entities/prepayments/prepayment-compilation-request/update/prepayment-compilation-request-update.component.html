@@ -1,0 +1,128 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-prepayment-compilation-request-heading" data-cy="PrepaymentCompilationRequestCreateUpdateHeading">
+        Create or edit a Prepayment Compilation Request
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_timeOfRequest">Time Of Request</label>
+          <div class="d-flex">
+            <input
+              id="field_timeOfRequest"
+              data-cy="timeOfRequest"
+              type="datetime-local"
+              class="form-control"
+              name="timeOfRequest"
+              formControlName="timeOfRequest"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_compilationStatus">Compilation Status</label>
+          <select
+            class="form-control"
+            name="compilationStatus"
+            formControlName="compilationStatus"
+            id="field_compilationStatus"
+            data-cy="compilationStatus"
+          >
+            <option [ngValue]="null"></option>
+            <option *ngFor="let compilationStatusTypes of compilationStatusTypesValues" [value]="compilationStatusTypes">
+              compilationStatusTypes
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_itemsProcessed">Items Processed</label>
+          <input
+            type="number"
+            class="form-control"
+            name="itemsProcessed"
+            id="field_itemsProcessed"
+            data-cy="itemsProcessed"
+            formControlName="itemsProcessed"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="compilationToken"
+            id="field_compilationToken"
+            data-cy="compilationToken"
+            formControlName="compilationToken"
+          />
+          <div
+            *ngIf="
+              editForm.get('compilationToken')!.invalid &&
+              (editForm.get('compilationToken')!.dirty || editForm.get('compilationToken')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('compilationToken')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_narration">Narration</label>
+          <input type="text" class="form-control" name="narration" id="field_narration" data-cy="narration" formControlName="narration" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_postedBy">Posted By</label>
+          <input type="text" class="form-control" name="postedBy" id="field_postedBy" data-cy="postedBy" formControlName="postedBy" />
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

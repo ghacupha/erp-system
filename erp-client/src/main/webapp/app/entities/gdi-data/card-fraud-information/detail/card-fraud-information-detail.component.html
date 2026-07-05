@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="cardFraudInformation">
+      <h2 data-cy="cardFraudInformationDetailsHeading"><span>Card Fraud Information</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ cardFraudInformation.id }}</span>
+        </dd>
+        <dt><span>Reporting Date</span></dt>
+        <dd>
+          <span>{{ cardFraudInformation.reportingDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Total Number Of Fraud Incidents</span></dt>
+        <dd>
+          <span>{{ cardFraudInformation.totalNumberOfFraudIncidents }}</span>
+        </dd>
+        <dt><span>Value Of Fraud Incedents In LCY</span></dt>
+        <dd>
+          <span>{{ cardFraudInformation.valueOfFraudIncedentsInLCY }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/card-fraud-information', cardFraudInformation.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

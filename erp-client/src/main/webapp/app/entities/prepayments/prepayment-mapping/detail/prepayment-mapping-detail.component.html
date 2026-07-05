@@ -1,0 +1,47 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="prepaymentMapping">
+      <h2 data-cy="prepaymentMappingDetailsHeading"><span>Prepayment Mapping</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ prepaymentMapping.id }}</span>
+        </dd>
+        <dt><span>Parameter Key</span></dt>
+        <dd>
+          <span>{{ prepaymentMapping.parameterKey }}</span>
+        </dd>
+        <dt><span>Parameter Guid</span></dt>
+        <dd>
+          <span>{{ prepaymentMapping.parameterGuid }}</span>
+        </dd>
+        <dt><span>Parameter</span></dt>
+        <dd>
+          <span>{{ prepaymentMapping.parameter }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of prepaymentMapping.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/prepayment-mapping', prepaymentMapping.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

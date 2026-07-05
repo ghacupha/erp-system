@@ -1,0 +1,44 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="loanAccountCategory">
+      <h2 data-cy="loanAccountCategoryDetailsHeading"><span>Loan Account Category</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ loanAccountCategory.id }}</span>
+        </dd>
+        <dt><span>Loan Account Mutation Code</span></dt>
+        <dd>
+          <span>{{ loanAccountCategory.loanAccountMutationCode }}</span>
+        </dd>
+        <dt><span>Loan Account Mutation Type</span></dt>
+        <dd>
+          <span>{{ loanAccountCategory.loanAccountMutationType }}</span>
+        </dd>
+        <dt><span>Loan Account Mutation Details</span></dt>
+        <dd>
+          <span>{{ loanAccountCategory.loanAccountMutationDetails }}</span>
+        </dd>
+        <dt><span>Loan Account Mutation Description</span></dt>
+        <dd>
+          <span>{{ loanAccountCategory.loanAccountMutationDescription }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/loan-account-category', loanAccountCategory.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

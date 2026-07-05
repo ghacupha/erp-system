@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="1780396310129-1" author="Edwin Njeru">
+        <addColumn tableName="prepayment_account">
+            <column name="created_by_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1780396432345-1" author="Edwin Njeru">
+        <addColumn tableName="prepayment_compilation_request">
+            <column name="created_by_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <!--<changeSet id="1780396624676-1" author="Edwin Njeru">
+        <addColumn tableName="prepayment_compilation_request">
+            <column name="narration" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>-->
+
+    <!--<changeSet id="1780396421477-1" author="Edwin Njeru">
+        <addColumn tableName="prepayment_account">
+            <column name="posting_date" type="date">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>-->
+
+    <changeSet id="20260529100000-1" author="erp-agent">
+        <addForeignKeyConstraint baseColumnNames="created_by_id"
+                                 baseTableName="prepayment_compilation_request"
+                                 constraintName="fk_prepayment_compilation_request__created_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+    </changeSet>
+
+    <!--<changeSet id="1780402799912-1" author="Edwin Njeru">
+        <addForeignKeyConstraint baseTableName="prepayment_account"
+                                 baseColumnNames="created_by_id"
+                                 constraintName="fk_prepayment_account__created_by_id"
+                                 referencedTableName="id"
+                                 referencedColumnNames="application_user"/>
+    </changeSet>
+-->
+
+
+</databaseChangeLog>

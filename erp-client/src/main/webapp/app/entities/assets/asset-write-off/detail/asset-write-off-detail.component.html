@@ -1,0 +1,91 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="assetWriteOff">
+      <h2 data-cy="assetWriteOffDetailsHeading"><span>Asset Write Off</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ assetWriteOff.id }}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+          <span>{{ assetWriteOff.description }}</span>
+        </dd>
+        <dt><span>Write Off Amount</span></dt>
+        <dd>
+          <span>{{ assetWriteOff.writeOffAmount }}</span>
+        </dd>
+        <dt><span>Write Off Date</span></dt>
+        <dd>
+          <span>{{ assetWriteOff.writeOffDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Write Off Reference Id</span></dt>
+        <dd>
+          <span>{{ assetWriteOff.writeOffReferenceId }}</span>
+        </dd>
+        <dt><span>Created By</span></dt>
+        <dd>
+          <div *ngIf="assetWriteOff.createdBy">
+            <a [routerLink]="['/application-user', assetWriteOff.createdBy?.id, 'view']">{{
+              assetWriteOff.createdBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Modified By</span></dt>
+        <dd>
+          <div *ngIf="assetWriteOff.modifiedBy">
+            <a [routerLink]="['/application-user', assetWriteOff.modifiedBy?.id, 'view']">{{
+              assetWriteOff.modifiedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Last Accessed By</span></dt>
+        <dd>
+          <div *ngIf="assetWriteOff.lastAccessedBy">
+            <a [routerLink]="['/application-user', assetWriteOff.lastAccessedBy?.id, 'view']">{{
+              assetWriteOff.lastAccessedBy?.applicationIdentity
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Effective Period</span></dt>
+        <dd>
+          <div *ngIf="assetWriteOff.effectivePeriod">
+            <a [routerLink]="['/depreciation-period', assetWriteOff.effectivePeriod?.id, 'view']">{{
+              assetWriteOff.effectivePeriod?.startDate
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of assetWriteOff.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Asset Written Off</span></dt>
+        <dd>
+          <div *ngIf="assetWriteOff.assetWrittenOff">
+            <a [routerLink]="['/asset-registration', assetWriteOff.assetWrittenOff?.id, 'view']">{{
+              assetWriteOff.assetWrittenOff?.assetNumber
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/asset-write-off', assetWriteOff.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

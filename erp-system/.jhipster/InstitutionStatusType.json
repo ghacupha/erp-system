@@ -1,0 +1,27 @@
+{
+  "fields": [
+    {
+      "fieldName": "institutionStatusCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "institutionStatusType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "insitutionStatusTypeDescription",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "InstitutionStatusType",
+  "changelogDate": "20230912072218",
+  "incrementalChangelog": false
+}

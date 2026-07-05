@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="derivativeUnderlyingAsset">
+      <h2 data-cy="derivativeUnderlyingAssetDetailsHeading"><span>Derivative Underlying Asset</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ derivativeUnderlyingAsset.id }}</span>
+        </dd>
+        <dt><span>Derivative Underlying Asset Type Code</span></dt>
+        <dd>
+          <span>{{ derivativeUnderlyingAsset.derivativeUnderlyingAssetTypeCode }}</span>
+        </dd>
+        <dt><span>Financial Derivative Underlying Asset Type</span></dt>
+        <dd>
+          <span>{{ derivativeUnderlyingAsset.financialDerivativeUnderlyingAssetType }}</span>
+        </dd>
+        <dt><span>Derivative Underlying Asset Type Details</span></dt>
+        <dd>
+          <span>{{ derivativeUnderlyingAsset.derivativeUnderlyingAssetTypeDetails }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/derivative-underlying-asset', derivativeUnderlyingAsset.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>
