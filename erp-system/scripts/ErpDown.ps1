@@ -3,12 +3,12 @@ param()
 $ErrorActionPreference = 'Stop'
 
 $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = Split-Path -Parent (Split-Path -Parent $scriptRoot)
-$composeFile = Join-Path $repoRoot 'erp-deployment\docker-compose-dev.yml'
+$repoRoot = Split-Path -Parent $scriptRoot
+$composeFile = Join-Path $repoRoot 'erp-deployment\docker-compose.yml'
 
 Push-Location $repoRoot
 try {
-    & docker-compose -f $composeFile up -d
+    & docker-compose -f $composeFile down
     exit $LASTEXITCODE
 } finally {
     Pop-Location

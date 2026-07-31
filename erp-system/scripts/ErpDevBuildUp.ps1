@@ -8,7 +8,7 @@ $composeFile = Join-Path $repoRoot 'erp-deployment\docker-compose-dev.yml'
 
 Push-Location $repoRoot
 try {
-    & docker-compose -f $composeFile up -d
+    & docker-compose -f $composeFile up --build -d
     exit $LASTEXITCODE
 } finally {
     Pop-Location

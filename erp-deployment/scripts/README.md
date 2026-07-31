@@ -120,6 +120,20 @@ Prints the current values of the four startup-mode flags in the current session.
 
 ## Notes
 
+### Compose launchers
+
+The preferred entrypoints for the Docker stack live in the repository root `scripts/` directory:
+
+| Script | Purpose |
+|---|---|
+| `ErpDevBuildUp.ps1` | Build and start the dev stack from `erp-deployment/docker-compose-dev.yml` |
+| `ErpDevUp.ps1` | Start the dev stack without rebuilding |
+| `ErpUp.ps1` | Start the production stack from `erp-deployment/docker-compose.yml` |
+| `ErpDevDown.ps1` | Stop the dev stack |
+| `ErpDown.ps1` | Stop the production stack |
+
+Each script has a matching `.cmd` wrapper for Windows shells that prefer CMD launchers.
+
 ### Angular client — charting library
 
 The prepayments dashboard (added in `erp-client/src/main/webapp/app/erp/erp-prepayments/prepayments-dashboard/`) depends on `ng2-charts` and `chart.js`. These are listed in `erp-client/package.json` but must be installed before the client will build:

@@ -1,5 +1,21 @@
-This is the client, system and elasticsearch servers deployment
+This is the client, system and elasticsearch servers deployment.
 
-Simply run
+Production stack:
 
-" docker-compose pull && docker-compose up -d && docker system prune "
+```powershell
+docker-compose -f docker-compose.yml up -d
+```
+
+Development stack:
+
+```powershell
+docker-compose -f docker-compose-dev.yml up --build -d
+```
+
+Prefer the wrapper scripts in the repository root `scripts/` directory for day-to-day use:
+
+```powershell
+.\scripts\ErpUp.ps1
+.\scripts\ErpDevBuildUp.ps1
+.\scripts\ErpDevDown.ps1
+```
