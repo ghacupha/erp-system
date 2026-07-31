@@ -23,8 +23,8 @@ user-pages/       User-facing how-to guides
 | Tool | Minimum version | Notes |
 |---|---|---|
 | Java (JDK) | 11 | Set `JAVA_HOME` |
-| Node.js | 16 | Needed for Angular dev server |
-| npm | 8 | Bundled with Node 16+ |
+| Node.js | 16 | Only needed for local Angular development |
+| npm | 8 | Only needed for local Angular development |
 | Docker Desktop | 4.x | Runs PostgreSQL-adjacent services |
 | docker-compose | 1.29+ | Bundled with Docker Desktop |
 | PostgreSQL client | 13+ | `pg_dump` / `psql` must be on `PATH` |
@@ -43,7 +43,7 @@ user-pages/       User-facing how-to guides
 
    Edit both files and set real values for all credentials (database passwords, JWT secret, Elasticsearch password, etc.).
 
-2. **Install Angular dependencies** (first time only, and after adding new packages)
+2. **Optional: install Angular dependencies for local frontend work**
 
    ```powershell
    cd erp-client
@@ -51,35 +51,31 @@ user-pages/       User-facing how-to guides
    cd ..
    ```
 
-   > `chart.js` and `ng2-charts` are included in `package.json` and will be installed by this command. They are required by the prepayments dashboard.
+   > `chart.js` and `ng2-charts` are included in `package.json` and will be installed by this command. You only need this step if you also plan to run or build the frontend outside Docker.
 
-3. **Start everything**
+3. **Start everything in Docker**
 
    ```powershell
-   cd erp-system
-   .\scripts\ERPDevUp.ps1
+   .\scripts\ErpDevBuildUp.ps1
    ```
 
    This will:
-   - Load `erp-system/.env` into the process environment
-   - Inject Elasticsearch credentials into the Spring connection URIs
-   - Start the dev Docker stack (`erp-deployment/services-dev.yml`): JHipster Registry (port 8771), Elasticsearch (port 8840), Kafka, Zookeeper
-   - Launch the Angular dev server in a separate window (port 4200, HMR enabled)
-   - Start the Spring Boot application via Maven using the `dev` profile
+   - Build the backend image with Maven Jib and the frontend image from its Dockerfile
+   - Start the dev Docker stack defined in `erp-deployment/docker-compose-dev.yml`
+   - Run the dev JHipster Registry, Elasticsearch, Kafka, ZooKeeper, backend, and frontend in containers
 
-   | Flag | Effect |
-   |---|---|
-   | `-SkipDocker` | Skip Docker startup (services already running) |
-   | `-DockerOnly` | Start Docker only, skip Maven and Angular |
-   | `-SkipClient` | Skip Angular client launch |
-   | `-ClientHeapMB <n>` | Node.js heap cap for Angular (default 1024 MB) |
+   If you only need to restart containers after a previous build, use:
+
+   ```powershell
+   .\scripts\ErpDevUp.ps1
+   ```
 
 4. **Access the application**
 
    | Service | URL |
    |---|---|
-   | Angular UI | http://localhost:4200 |
-   | Spring Boot API | http://localhost:8080 |
+   | Angular UI | http://localhost:8983 |
+   | Spring Boot API | http://localhost:8982 |
    | JHipster Registry | http://localhost:8771 |
    | Elasticsearch | http://localhost:8840 |
 
@@ -94,9 +90,7 @@ The production stack is defined in `erp-deployment/docker-compose.yml`.
 2. **Start all services**
 
    ```powershell
-   cd erp-deployment
-   docker-compose pull
-   docker-compose up -d
+   .\scripts\ErpUp.ps1
    ```
 
    The stack includes: JHipster Registry, Elasticsearch, Kafka, Zookeeper, the Spring Boot server (`erp-system-server`), and the Angular client container (`erp-client-web`).  
@@ -192,11 +186,15 @@ Before starting `erp-system-server`, dot-source one of these scripts in the same
 
 ---
 
-## Developer scripts (erp-system/scripts/)
+## Developer scripts
 
 | Script | Purpose |
 |---|---|
-| `ERPDevUp.ps1` | Start the full dev environment (see above) |
+| `scripts/ErpDevBuildUp.ps1` | Build and start the full dev Docker environment |
+| `scripts/ErpDevUp.ps1` | Start the dev Docker environment without rebuilding |
+| `scripts/ErpUp.ps1` | Start the production Docker environment |
+| `scripts/ErpDevDown.ps1` | Stop the dev Docker environment |
+| `scripts/ErpDown.ps1` | Stop the production Docker environment |
 | `generate-entity.ps1` | Scaffold a new JHipster entity |
 | `remove-entity.ps1` | Remove an entity and its generated files |
 | `liquibase-compose.ps1` | Run Liquibase commands against the dev or prod database |

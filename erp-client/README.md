@@ -87,6 +87,14 @@ auto-refreshes when files change on your hard drive.
 npm start
 ```
 
+If you want to avoid the local Node.js toolchain entirely, use the Docker-based dev stack from the repository root:
+
+```powershell
+.\scripts\ErpDevBuildUp.ps1
+```
+
+That path builds the client inside Docker and serves it on the dev frontend port configured by `erp-deployment/docker-compose-dev.yml`.
+
 Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in [package.json](package.json). You can also run `npm update` and `npm install` to manage dependencies.
 Add the `help` flag on any command to see how you can use it. For example, `npm help update`.

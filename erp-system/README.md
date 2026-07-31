@@ -13,6 +13,14 @@ To start your application in the dev profile, run:
 ./mvnw
 ```
 
+To run the Docker-based development stack from the repository root, use:
+
+```powershell
+.\scripts\ErpDevBuildUp.ps1
+```
+
+This starts the backend, frontend, registry, Kafka, ZooKeeper, and Elasticsearch in Docker on the dev ports configured in `erp-deployment/docker-compose-dev.yml`.
+
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
 ## Environment
@@ -139,6 +147,8 @@ Then run:
 ```
 docker-compose -f src/main/docker/app.yml up -d
 ```
+
+For the Docker-based dev stack, use `erp-deployment/docker-compose-dev.yml` instead of `src/main/docker/app.yml`.
 
 For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
 
