@@ -36,6 +36,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,6 +63,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link AssetRegistrationResourceProd} REST controller.
  */
 @IntegrationTest
+@EmbeddedKafka(topics = "asset-registration-index", bootstrapServersProperty = "spring.kafka.bootstrap-servers")
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = {"FIXED_ASSETS_USER"})
@@ -132,6 +134,14 @@ public class AssetRegistrationResourceIT {
      */
     @Autowired
     private AssetRegistrationSearchRepository mockAssetRegistrationSearchRepository;
+
+    /**
+     * This repository is mocked in the io.github.erp.repository.search test package.
+     *
+     * @see io.github.erp.repository.search.AssetRegistrationIndexSearchRepositoryMockConfiguration
+     */
+    @Autowired
+    private io.github.erp.repository.search.AssetRegistrationIndexSearchRepository mockAssetRegistrationIndexSearchRepository;
 
     @Autowired
     private EntityManager em;
@@ -283,8 +293,11 @@ public class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getHistoricalCost()).isEqualByComparingTo(DEFAULT_HISTORICAL_COST);
         assertThat(testAssetRegistration.getRegistrationDate()).isEqualTo(DEFAULT_REGISTRATION_DATE);
 
-        // Validate the AssetRegistration in Elasticsearch
-        verify(mockAssetRegistrationSearchRepository, times(1)).save(testAssetRegistration);
+        // Indexing is now asynchronous (queued via AssetRegistrationIndexProducer, consumed by
+        // AssetRegistrationIndexConsumer into AssetRegistrationIndex) rather than a direct,
+        // in-transaction write to AssetRegistrationSearchRepository - nothing to verify on that
+        // mock here anymore; @EmbeddedKafka on this class just needs a broker for the producer's
+        // send() to succeed against.
     }
 
     @Test
@@ -1845,8 +1858,8 @@ public class AssetRegistrationResourceIT {
         assertThat(testAssetRegistration.getHistoricalCost()).isEqualTo(UPDATED_HISTORICAL_COST);
         assertThat(testAssetRegistration.getRegistrationDate()).isEqualTo(UPDATED_REGISTRATION_DATE);
 
-        // Validate the AssetRegistration in Elasticsearch
-        verify(mockAssetRegistrationSearchRepository).save(testAssetRegistration);
+        // Indexing is now asynchronous (see the note in createAssetRegistration above) -
+        // nothing to verify on mockAssetRegistrationSearchRepository here anymore.
     }
 
     @Test
@@ -2120,8 +2133,9 @@ public class AssetRegistrationResourceIT {
         List<AssetRegistration> assetRegistrationList = assetRegistrationRepository.findAll();
         assertThat(assetRegistrationList).hasSize(databaseSizeBeforeDelete - 1);
 
-        // Validate the AssetRegistration in Elasticsearch
-        verify(mockAssetRegistrationSearchRepository, times(1)).deleteById(assetRegistration.getId());
+        // Index removal is now asynchronous (queued via AssetRegistrationIndexProducer's delete
+        // message) rather than a direct, in-transaction call to
+        // AssetRegistrationSearchRepository - nothing to verify on that mock here anymore.
     }
 
     @Test
@@ -2130,8 +2144,10 @@ public class AssetRegistrationResourceIT {
         // Configure the mock search repository
         // Initialize the database
         assetRegistrationRepository.saveAndFlush(assetRegistration);
-        when(mockAssetRegistrationSearchRepository.search("id:" + assetRegistration.getId(), PageRequest.of(0, 20)))
-            .thenReturn(new PageImpl<>(Collections.singletonList(assetRegistration), PageRequest.of(0, 1), 1));
+        io.github.erp.domain.AssetRegistrationIndex indexDocument = new io.github.erp.domain.AssetRegistrationIndex();
+        indexDocument.setId(assetRegistration.getId());
+        when(mockAssetRegistrationIndexSearchRepository.search("id:" + assetRegistration.getId(), PageRequest.of(0, 20)))
+            .thenReturn(new PageImpl<>(Collections.singletonList(indexDocument), PageRequest.of(0, 1), 1));
 
         // Search the assetRegistration
         restAssetRegistrationMockMvc

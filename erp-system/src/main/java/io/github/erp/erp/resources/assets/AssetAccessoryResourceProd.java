@@ -17,9 +17,9 @@ package io.github.erp.erp.resources.assets;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import io.github.erp.internal.service.assets.InternalAssetAccessoryService;
 import io.github.erp.repository.AssetAccessoryRepository;
 import io.github.erp.service.AssetAccessoryQueryService;
-import io.github.erp.service.AssetAccessoryService;
 import io.github.erp.service.criteria.AssetAccessoryCriteria;
 import io.github.erp.service.dto.AssetAccessoryDTO;
 import io.github.erp.web.rest.errors.BadRequestAlertException;
@@ -58,14 +58,14 @@ public class AssetAccessoryResourceProd {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final AssetAccessoryService assetAccessoryService;
+    private final InternalAssetAccessoryService assetAccessoryService;
 
     private final AssetAccessoryRepository assetAccessoryRepository;
 
     private final AssetAccessoryQueryService assetAccessoryQueryService;
 
     public AssetAccessoryResourceProd(
-        AssetAccessoryService assetAccessoryService,
+        InternalAssetAccessoryService assetAccessoryService,
         AssetAccessoryRepository assetAccessoryRepository,
         AssetAccessoryQueryService assetAccessoryQueryService
     ) {
