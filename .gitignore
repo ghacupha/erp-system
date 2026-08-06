@@ -495,26 +495,8 @@ business-documents/
 /man-pages/GDI-Staging-Proposal.md
 
 ######################
-# .NET / C# (erp-updates-backend)
+# erp-updates now lives in its own repo (github.com/ghacupha/trueUp) as a nested
+# working copy with its own .git - ignore it wholesale so it can never be re-added
+# here (git would otherwise treat it as an untracked dir / stray gitlink on `git add -A`).
 ######################
-erp-updates/erp-updates-backend/**/bin/
-erp-updates/erp-updates-backend/**/obj/
-erp-updates/erp-updates-backend/**/appsettings.local.json
-erp-updates/erp-updates-backend/**/secrets.json
-/erp-updates/erp-updates-backend/publish/
-/erp-updates/erp-updates-infra/.env
-/erp-updates/erp-updates-deployment/erp-updates-files/
-/erp-updates/erp-updates-deployment/erp-updates-elasticsearch-data/
-
-######################
-# Go (erp-updates-user-creation)
-######################
-/erp-updates/erp-updates-user-creation/erp-updates-user-creation
-/erp-updates/erp-updates-user-creation/erp-updates-user-creation.exe
-/erp-updates/erp-updates-user-creation/.env
-
-######################
-# Real scanned business documents used as local test fixtures - real vendor names, amounts,
-# account details. Keep these off the public remote; the repo they'd otherwise go to is public.
-######################
-/erp-updates/samples/
+/erp-updates/
