@@ -20,13 +20,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { errorRoute } from './layouts/error/error.route';
+import { maintenanceRoute } from './layouts/maintenance/maintenance.route';
 import { navbarRoute } from './layouts/navbar/navbar.route';
 import { DEBUG_INFO_ENABLED } from 'app/app.constants';
 import { Authority } from 'app/config/authority.constants';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 
-const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
+const LAYOUT_ROUTES = [navbarRoute, ...maintenanceRoute, ...errorRoute];
 
 @NgModule({
   imports: [
@@ -47,6 +48,12 @@ const LAYOUT_ROUTES = [navbarRoute, ...errorRoute];
         {
           path: 'login',
           loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
+        },
+        {
+          // Home is lazy-loaded so the prepayments dashboard (chart.js / ng2-charts)
+          // stays out of the initial bundle.
+          path: '',
+          loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
         },
         ...LAYOUT_ROUTES,
       ],

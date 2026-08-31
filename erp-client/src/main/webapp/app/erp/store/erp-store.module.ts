@@ -16,49 +16,50 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import {NgModule} from "@angular/core";
-import {EffectsModule} from "@ngrx/effects";
-import {StoreModule} from "@ngrx/store";
-import {StoreDevtoolsModule} from "@ngrx/store-devtools";
-import {DealerPaymentsEffects} from "./effects/dealer-payments.effects";
-import {DealerInvoiceWorkflowEffects} from "./effects/dealer-invoice-workflow.effects";
+import { NgModule } from '@angular/core';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { DEBUG_INFO_ENABLED } from 'app/app.constants';
+import { DealerPaymentsEffects } from './effects/dealer-payments.effects';
+import { DealerInvoiceWorkflowEffects } from './effects/dealer-invoice-workflow.effects';
 import { SettlementUpdatesEffects } from './effects/settlement-updates.effects';
 import { PrepaymentAccountWorkflowEffects } from './effects/prepayment-account-workflow.effects';
 
-import * as fromDealerInvoiceWorkflows from "./reducers/dealer-invoice-workflows-status.reducer";
-import * as fromDealerWorkflows from "./reducers/dealer-workflows-status.reducer";
-import * as fromPaymentUpdates from "./reducers/update-menu-status.reducer";
-import * as fromSettlementUpdates from "./reducers/settlement-update-menu-status.reducer";
-import * as fromAssetRegistrationUpdates from "./reducers/asset-registration-workflow-status.reducer";
-import * as fromAssetAccessoryUpdates from "./reducers/asset-accessory-workflow-status.reducer";
-import * as fromWIPRegistrationUpdates from "./reducers/wip-registration-workflow-status.reducer";
-import * as fromPrepaymentAccountUpdates from "./reducers/prepayment-account-workflow-status.reducer";
-import * as fromPrepaymentMarshallingUpdates from "./reducers/prepayment-marshalling-workflow-status.reducer";
-import * as fromPaymentInvoiceUpdates from "./reducers/payment-invoice-workflow-status.reducer";
-import * as fromReportNavigationProfile from "./reducers/report-navigation-profile-status.reducer";
+import * as fromDealerInvoiceWorkflows from './reducers/dealer-invoice-workflows-status.reducer';
+import * as fromDealerWorkflows from './reducers/dealer-workflows-status.reducer';
+import * as fromPaymentUpdates from './reducers/update-menu-status.reducer';
+import * as fromSettlementUpdates from './reducers/settlement-update-menu-status.reducer';
+import * as fromAssetRegistrationUpdates from './reducers/asset-registration-workflow-status.reducer';
+import * as fromAssetAccessoryUpdates from './reducers/asset-accessory-workflow-status.reducer';
+import * as fromWIPRegistrationUpdates from './reducers/wip-registration-workflow-status.reducer';
+import * as fromPrepaymentAccountUpdates from './reducers/prepayment-account-workflow-status.reducer';
+import * as fromPrepaymentMarshallingUpdates from './reducers/prepayment-marshalling-workflow-status.reducer';
+import * as fromPaymentInvoiceUpdates from './reducers/payment-invoice-workflow-status.reducer';
+import * as fromReportNavigationProfile from './reducers/report-navigation-profile-status.reducer';
 import { Ifrs16LeaseModelWorkflowEffects } from './effects/ifrs16-lease-model-workflow.effects';
 import { RouModelMetadataWorkflowEffects } from './effects/rou-model-metadata-workflow.effects';
 import { RouInitialDirectCostWorkflowEffects } from './effects/rou-initial-direct-cost-workflow.effects';
 import { LeaseTemplateWorkflowEffects } from './effects/lease-template-workflow.effects';
-import * as fromIfrs16LeaseModelUpdates from "./reducers/ifrs16-lease-model-workflow-status.reducer";
-import * as fromTAAmortizationUpdates from "./reducers/ta-amortization-rule-status.reducer";
-import * as fromTAInterestPaidTransferRuleUpdates from "./reducers/ta-interest-paid-transfer-rule-status.reducer";
-import * as fromTALeaseInterestAccrualRuleUpdates from "./reducers/ta-lease-interest-accrual-rule-status.reducer";
-import * as fromTALeaseRecognitionRuleUpdates from "./reducers/ta-lease-recognition-rule-status.reducer";
-import * as fromTALeaseRepaymentRuleUpdates from "./reducers/ta-lease-repayment-rule-status.reducer";
-import * as fromTARecognitionRouRuleUpdates from "./reducers/ta-recognition-rou-rule-status.reducer";
-import * as fromTransactionAccountUpdates from "./reducers/transaction-account-update-status.reducer";
-import * as fromTransactionAccountReportDateUpdates from "./reducers/transaction-account-report-date-selection.reducer";
-import * as fromLeaseAmortizationCalculationState from "./reducers/lease-amortization-calculation.reducer";
-import * as fromLeaseLiabilityState from "./reducers/lease-liability.reducer";
-import * as fromLeasePaymentState from "./reducers/lease-payment.reducer";
-import * as fromRouModelMetadataUpdates from "./reducers/rou-model-metadata-workflow-status.reducer";
-import * as fromRouInitialDirectCostUpdates from "./reducers/rou-initial-direct-cost-workflow-status.reducer";
-import * as fromLeaseTemplateUpdates from "./reducers/lease-template-workflow-status.reducer";
-import * as fromLeasePeriodIdSelectionUpdates from "./reducers/lease-period-selection-workflow-status.reducer";
-import * as fromLeasePeriodReportPathUpdates from "./reducers/lease-period-report-path-selection.reducer";
+import * as fromIfrs16LeaseModelUpdates from './reducers/ifrs16-lease-model-workflow-status.reducer';
+import * as fromTAAmortizationUpdates from './reducers/ta-amortization-rule-status.reducer';
+import * as fromTAInterestPaidTransferRuleUpdates from './reducers/ta-interest-paid-transfer-rule-status.reducer';
+import * as fromTALeaseInterestAccrualRuleUpdates from './reducers/ta-lease-interest-accrual-rule-status.reducer';
+import * as fromTALeaseRecognitionRuleUpdates from './reducers/ta-lease-recognition-rule-status.reducer';
+import * as fromTALeaseRepaymentRuleUpdates from './reducers/ta-lease-repayment-rule-status.reducer';
+import * as fromTARecognitionRouRuleUpdates from './reducers/ta-recognition-rou-rule-status.reducer';
+import * as fromTransactionAccountUpdates from './reducers/transaction-account-update-status.reducer';
+import * as fromTransactionAccountReportDateUpdates from './reducers/transaction-account-report-date-selection.reducer';
+import * as fromLeaseAmortizationCalculationState from './reducers/lease-amortization-calculation.reducer';
+import * as fromLeaseLiabilityState from './reducers/lease-liability.reducer';
+import * as fromLeasePaymentState from './reducers/lease-payment.reducer';
+import * as fromRouModelMetadataUpdates from './reducers/rou-model-metadata-workflow-status.reducer';
+import * as fromRouInitialDirectCostUpdates from './reducers/rou-initial-direct-cost-workflow-status.reducer';
+import * as fromLeaseTemplateUpdates from './reducers/lease-template-workflow-status.reducer';
+import * as fromLeasePeriodIdSelectionUpdates from './reducers/lease-period-selection-workflow-status.reducer';
+import * as fromLeasePeriodReportPathUpdates from './reducers/lease-period-report-path-selection.reducer';
 import { PrepaymentMarshallingWorkflowEffects } from './effects/prepayment-marshalling-workflow.effects';
-import * as fromIfrs16LeaseContractReport from "./reducers/ifrs16-lease-contract-report.reducer";
+import * as fromIfrs16LeaseContractReport from './reducers/ifrs16-lease-contract-report.reducer';
 import { LeasePostingRuleConfigEffects } from './effects/lease-posting-rule-config.effects';
 import * as fromLeasePostingRuleConfig from './reducers/lease-posting-rule-config.reducer';
 import { LeasePostingRuleWorkflowEffects } from './effects/lease-posting-rule-workflow.effects';
@@ -77,20 +78,31 @@ import * as fromLeasePostingRuleUpdates from './reducers/lease-posting-rule-work
       LeaseTemplateWorkflowEffects,
       LeasePostingRuleConfigEffects,
       LeasePostingRuleWorkflowEffects,
-      DealerPaymentsEffects]),
+      DealerPaymentsEffects,
+    ]),
     EffectsModule.forFeature([]),
-    StoreModule.forRoot({}, {runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true,
-        strictStateSerializability: false,
-        strictActionSerializability: false,
-        strictActionWithinNgZone: true,
-        strictActionTypeUniqueness: true,
-      }}),
-    StoreDevtoolsModule.instrument({
-      name: 'ERP App States',
-      maxAge: 100, // Retains last 100 states
-    }),
+    StoreModule.forRoot(
+      {},
+      {
+        runtimeChecks: {
+          strictStateImmutability: true,
+          strictActionImmutability: true,
+          strictStateSerializability: false,
+          strictActionSerializability: false,
+          strictActionWithinNgZone: true,
+          strictActionTypeUniqueness: true,
+        },
+      }
+    ),
+    // Devtools are dev-only: excluded from production bundles.
+    ...(DEBUG_INFO_ENABLED
+      ? [
+          StoreDevtoolsModule.instrument({
+            name: 'ERP App States',
+            maxAge: 100, // Retains last 100 states
+          }),
+        ]
+      : []),
     StoreModule.forFeature('recordDealerInvoiceWorkflows', fromDealerInvoiceWorkflows.dealerInvoiceWorkflowStateReducer),
     StoreModule.forFeature('paymentToDealerWorkflows', fromDealerWorkflows.dealerWorkflowStateReducer),
     StoreModule.forFeature('paymentUpdateForm', fromPaymentUpdates.paymentUpdateStateReducer),
@@ -104,14 +116,26 @@ import * as fromLeasePostingRuleUpdates from './reducers/lease-posting-rule-work
     StoreModule.forFeature('prepaymentMarshallingUpdateForm', fromPrepaymentMarshallingUpdates.prepaymentMarshallingUpdateStateReducer),
     StoreModule.forFeature('ifrs16LeaseModelUpdateForm', fromIfrs16LeaseModelUpdates.ifrs16LeaseModelUpdateStateReducer),
     StoreModule.forFeature('taAmortizationRuleUpdateForm', fromTAAmortizationUpdates.taAmortizationRuleUpdateStateReducer),
-    StoreModule.forFeature('taInterestPaidTransferRuleUpdateForm', fromTAInterestPaidTransferRuleUpdates.taInterestPaidTransferRuleUpdateStateReducer),
-    StoreModule.forFeature('taLeaseInterestAccrualRuleUpdateForm', fromTALeaseInterestAccrualRuleUpdates.taLeaseInterestAccrualRuleUpdateStateReducer),
+    StoreModule.forFeature(
+      'taInterestPaidTransferRuleUpdateForm',
+      fromTAInterestPaidTransferRuleUpdates.taInterestPaidTransferRuleUpdateStateReducer
+    ),
+    StoreModule.forFeature(
+      'taLeaseInterestAccrualRuleUpdateForm',
+      fromTALeaseInterestAccrualRuleUpdates.taLeaseInterestAccrualRuleUpdateStateReducer
+    ),
     StoreModule.forFeature('taLeaseRecognitionRuleUpdateForm', fromTALeaseRecognitionRuleUpdates.taLeaseRecognitionRuleUpdateStateReducer),
     StoreModule.forFeature('taLeaseRepaymentRuleUpdateForm', fromTALeaseRepaymentRuleUpdates.taLeaseRepaymentRuleUpdateStateReducer),
     StoreModule.forFeature('taRecognitionRouRuleUpdateForm', fromTARecognitionRouRuleUpdates.taRecognitionRouRuleUpdateStateReducer),
     StoreModule.forFeature('transactionAccountUpdateForm', fromTransactionAccountUpdates.transactionAccountUpdateStateReducer),
-    StoreModule.forFeature('transactionAccountReportDateSelection', fromTransactionAccountReportDateUpdates.transactionAccountReportPathSelectionStateReducer),
-    StoreModule.forFeature('leaseAmortizationCalculationForm', fromLeaseAmortizationCalculationState.leaseAmortizationCalculationStateReducer),
+    StoreModule.forFeature(
+      'transactionAccountReportDateSelection',
+      fromTransactionAccountReportDateUpdates.transactionAccountReportPathSelectionStateReducer
+    ),
+    StoreModule.forFeature(
+      'leaseAmortizationCalculationForm',
+      fromLeaseAmortizationCalculationState.leaseAmortizationCalculationStateReducer
+    ),
     StoreModule.forFeature('leaseLiabilityForm', fromLeaseLiabilityState.leaseLiabilityStateReducer),
     StoreModule.forFeature('leasePaymentForm', fromLeasePaymentState.leasePaymentStateReducer),
     StoreModule.forFeature('rouModelMetadataUpdateForm', fromRouModelMetadataUpdates.rouModelMetadataUpdateStateReducer),
@@ -120,13 +144,15 @@ import * as fromLeasePostingRuleUpdates from './reducers/lease-posting-rule-work
     StoreModule.forFeature('leasePeriodIdSelection', fromLeasePeriodIdSelectionUpdates.leasePeriodIdSelectionStateReducer),
     StoreModule.forFeature('leasePeriodReportPath', fromLeasePeriodReportPathUpdates.leasePeriodReportPathSelectionStateReducer),
     StoreModule.forFeature('ifrs16LeaseContractReport', fromIfrs16LeaseContractReport.ifrs16LeaseContractReportStateReducer),
-    StoreModule.forFeature(fromLeasePostingRuleConfig.leasePostingRuleConfigFeatureKey, fromLeasePostingRuleConfig.leasePostingRuleConfigReducer),
-    StoreModule.forFeature(fromLeasePostingRuleUpdates.leasePostingRuleUpdateFormStateSelector, fromLeasePostingRuleUpdates.leasePostingRuleUpdateStateReducer),
+    StoreModule.forFeature(
+      fromLeasePostingRuleConfig.leasePostingRuleConfigFeatureKey,
+      fromLeasePostingRuleConfig.leasePostingRuleConfigReducer
+    ),
+    StoreModule.forFeature(
+      fromLeasePostingRuleUpdates.leasePostingRuleUpdateFormStateSelector,
+      fromLeasePostingRuleUpdates.leasePostingRuleUpdateStateReducer
+    ),
   ],
-  exports: [
-    EffectsModule,
-    StoreModule,
-    StoreDevtoolsModule,
-  ]
+  exports: [EffectsModule, StoreModule, ...(DEBUG_INFO_ENABLED ? [StoreDevtoolsModule] : [])],
 })
 export class ErpStoreModule {}
