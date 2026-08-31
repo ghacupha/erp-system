@@ -34,6 +34,7 @@
               "src/main/webapp/favicon.ico",
               "src/main/webapp/manifest.webapp",
               "src/main/webapp/robots.txt",
+              "src/main/webapp/ngsw-worker.js",
               {
                 "glob": "*.{js,css,html,png}",
                 "input": "./node_modules/swagger-ui-dist",
@@ -55,8 +56,7 @@
               "extractLicenses": false,
               "vendorChunk": true,
               "buildOptimizer": true,
-              "serviceWorker": true,
-              "ngswConfigPath": "ngsw-config.json",
+              "serviceWorker": false,
               "budgets": [
                 {
                   "type": "initial",

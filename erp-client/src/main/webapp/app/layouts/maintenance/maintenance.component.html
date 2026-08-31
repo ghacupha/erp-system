@@ -1,0 +1,40 @@
+<!--
+
+    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="maintenance-page">
+  <div class="maintenance-card">
+    <fa-icon icon="wrench" class="maintenance-icon"></fa-icon>
+    <h1>The ERP system is temporarily unavailable</h1>
+    <p class="lead">
+      The application server is not responding right now — it may be restarting or undergoing scheduled maintenance. Your work is not lost;
+      please wait a moment.
+    </p>
+
+    <div class="maintenance-status">
+      <span *ngIf="checking"><fa-icon icon="sync" [spin]="true"></fa-icon>&nbsp;Checking if the server is back…</span>
+      <span *ngIf="!checking">Next automatic check in {{ countdown }}s</span>
+    </div>
+
+    <button type="button" class="btn btn-primary" (click)="retryNow()" [disabled]="checking">
+      <fa-icon icon="sync"></fa-icon>&nbsp;<span>Retry now</span>
+    </button>
+
+    <p class="maintenance-hint">This page will reconnect you automatically as soon as the server is available.</p>
+  </div>
+</div>

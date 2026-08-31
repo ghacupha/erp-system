@@ -35,7 +35,6 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import './config/dayjs';
 import { SharedModule } from 'app/shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
-import { HomeModule } from './home/home.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
 import { fontAwesomeIcons } from './config/font-awesome-icons';
@@ -45,6 +44,7 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
 import { FooterComponent } from './layouts/footer/footer.component';
 import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ErrorComponent } from './layouts/error/error.component';
+import { MaintenanceComponent } from './layouts/maintenance/maintenance.component';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { ErpStoreModule } from './erp/store/erp-store.module';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -59,17 +59,19 @@ import { GlobalErrorHandler } from './erp/erp-globals/global-chuck-error-handler
     BrowserModule,
     BrowserAnimationsModule,
     SharedModule,
-    HomeModule,
     ErpCommonModule,
     ErpSystemModule,
     NgSelectModule,
     ErpStoreModule,
     ErpFormsModule,
-    LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.DEBUG}),
+    LoggerModule.forRoot({ serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.DEBUG }),
     // jhipster-needle-angular-add-module JHipster will add new module here
     AppRoutingModule,
-    // Set this to true to enable service worker (PWA)
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: true }),
+    // PWA/service-worker disabled: it provided no offline value for this always-online ERP
+    // and caused deployed builds to stay hidden behind a stale cached app shell.
+    // src/main/webapp/ngsw-worker.js is a kill-switch that unregisters any previously
+    // installed service worker on existing clients.
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,
     NgxWebstorageModule.forRoot({ prefix: 'jhi', separator: '-', caseSensitive: true }),
   ],
@@ -81,7 +83,7 @@ import { GlobalErrorHandler } from './erp/erp-globals/global-chuck-error-handler
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
     httpInterceptorProviders,
   ],
-  declarations: [MainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],
+  declarations: [MainComponent, NavbarComponent, ErrorComponent, MaintenanceComponent, PageRibbonComponent, FooterComponent],
   bootstrap: [MainComponent],
 })
 export class AppModule {
