@@ -100,15 +100,14 @@ module.exports = async (config, options, targetOptions) => {
     );
   }
 
-  if (config.mode === 'production') {
+  // The bundle analyzer re-parses every emitted chunk and writes target/stats.html.
+  // That is useful when investigating bundle size but adds ~15-30s to a production
+  // build, so it is opt-in via `ANALYZE=true` rather than running on every build.
+  if (config.mode === 'production' && process.env.ANALYZE === 'true') {
     config.plugins.push(
       new BundleAnalyzerPlugin({
         analyzerMode: 'static',
         openAnalyzer: false,
-        // fallback: {
-        //   "child_process": false,
-        //   // and also other packages that are not found
-        // },
         // Webpack statistics in target folder
         reportFilename: '../target/stats.html',
       })
@@ -127,7 +126,10 @@ module.exports = async (config, options, targetOptions) => {
     new webpack.DefinePlugin({
       // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
       __VERSION__: JSON.stringify(environment.__VERSION__),
-      __DEBUG_INFO_ENABLED__: environment.__DEBUG_INFO_ENABLED__ || config.mode === 'development',
+      // Never enable debug info in a production build: it turns on router tracing,
+      // ships @ngrx/store-devtools, and (via bootstrap.ts) skips enableProdMode().
+      // `environment.__DEBUG_INFO_ENABLED__` still lets a dev build force it off.
+      __DEBUG_INFO_ENABLED__: config.mode !== 'production' && (environment.__DEBUG_INFO_ENABLED__ || config.mode === 'development'),
       // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
       // If this URL is left empty (""), then it will be relative to the current context.
       // If you use an API server, in `prod` mode, you will need to enable CORS
