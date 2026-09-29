@@ -64,6 +64,7 @@ import { LeasePostingRuleConfigEffects } from './effects/lease-posting-rule-conf
 import * as fromLeasePostingRuleConfig from './reducers/lease-posting-rule-config.reducer';
 import { LeasePostingRuleWorkflowEffects } from './effects/lease-posting-rule-workflow.effects';
 import * as fromLeasePostingRuleUpdates from './reducers/lease-posting-rule-workflow-status.reducer';
+import * as fromInlineCreateReturn from './reducers/inline-create-return.reducer';
 
 @NgModule({
   imports: [
@@ -152,6 +153,7 @@ import * as fromLeasePostingRuleUpdates from './reducers/lease-posting-rule-work
       fromLeasePostingRuleUpdates.leasePostingRuleUpdateFormStateSelector,
       fromLeasePostingRuleUpdates.leasePostingRuleUpdateStateReducer
     ),
+    StoreModule.forFeature(fromInlineCreateReturn.inlineCreateReturnFeatureKey, fromInlineCreateReturn.inlineCreateReturnReducer),
   ],
   exports: [EffectsModule, StoreModule, ...(DEBUG_INFO_ENABLED ? [StoreDevtoolsModule] : [])],
 })

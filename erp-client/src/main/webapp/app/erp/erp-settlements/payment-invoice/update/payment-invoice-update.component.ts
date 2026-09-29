@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
@@ -61,7 +61,10 @@ import {
   copyingPaymentInvoiceStatus, creatingPaymentInvoiceStatus,
   editingPaymentInvoiceStatus, paymentInvoiceUpdateSelectedInstance
 } from '../../../store/selectors/payment-invoice-workflow-status.selectors';
-import { paymentInvoiceDataHasMutated } from '../../../store/actions/payment-invoice-workflow-status.action';
+import { paymentInvoiceCreationInitiatedEnRoute, paymentInvoiceDataHasMutated } from '../../../store/actions/payment-invoice-workflow-status.action';
+import { inlineCreateCompleted } from '../../../store/actions/inline-create-return.actions';
+import { selectPendingInlineCreate } from '../../../store/selectors/inline-create-return.selectors';
+import { PendingInlineCreate } from '../../../store/reducers/inline-create-return.reducer';
 
 @Component({
   selector: 'jhi-payment-invoice-update',
@@ -133,6 +136,12 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   weAreCreating = false;
   selectedItem = {...new PaymentInvoice()}
 
+  // Set only when this form was reached via a picker's "Create New" (see
+  // M2MPaymentInvoiceFormControlComponent.createNew()) - drives onSaveSuccess() to report the
+  // saved invoice back to the originating form/field instead of a plain history.back().
+  inlineCreateCorrelationId: string | null = null;
+  pendingInlineCreate: PendingInlineCreate | null = null;
+
   constructor(
     protected paymentInvoiceService: PaymentInvoiceService,
     protected purchaseOrderService: PurchaseOrderService,
@@ -155,12 +164,28 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     protected jobSheetService: JobSheetService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected businessDocumentService: BusinessDocumentService,
-    protected store: Store<State>
+    protected store: Store<State>,
+    protected router: Router
   ) {
     this.store.pipe(select(copyingPaymentInvoiceStatus)).subscribe(stat => this.weAreCopying = stat);
     this.store.pipe(select(editingPaymentInvoiceStatus)).subscribe(stat => this.weAreEditing = stat);
     this.store.pipe(select(creatingPaymentInvoiceStatus)).subscribe(stat => this.weAreCreating = stat);
     this.store.pipe(select(paymentInvoiceUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+
+    // The 'new' route has no resolver, so unlike settlement's this form previously relied
+    // entirely on whatever last set weAreCreating in the store - correct only when reached via
+    // the list page's own "Create" button. Reaching this route any other way (including our
+    // inline-create flow below) left weAreCreating false and the Save button hidden.
+    if (!this.activatedRoute.snapshot.paramMap.get('id')) {
+      this.store.dispatch(paymentInvoiceCreationInitiatedEnRoute());
+    }
+
+    this.inlineCreateCorrelationId = this.activatedRoute.snapshot.queryParamMap.get('correlationId');
+    if (this.inlineCreateCorrelationId) {
+      this.store.pipe(select(selectPendingInlineCreate(this.inlineCreateCorrelationId))).subscribe(pending => {
+        this.pendingInlineCreate = pending;
+      });
+    }
   }
 
   ngOnInit(): void {
@@ -531,12 +556,24 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPaymentInvoice>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
+      res => this.onSaveSuccess(res.body),
       () => this.onSaveError()
     );
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess(saved: IPaymentInvoice | null): void {
+    if (this.inlineCreateCorrelationId && saved) {
+      this.store.dispatch(
+        inlineCreateCompleted({
+          correlationId: this.inlineCreateCorrelationId,
+          entityType: 'paymentInvoice',
+          targetField: this.pendingInlineCreate?.targetField ?? '',
+          createdEntity: saved,
+        })
+      );
+      this.router.navigateByUrl(this.pendingInlineCreate?.returnUrl ?? '/');
+      return;
+    }
     this.previousState();
   }
 

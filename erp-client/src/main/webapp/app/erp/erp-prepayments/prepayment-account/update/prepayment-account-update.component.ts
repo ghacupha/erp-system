@@ -59,6 +59,8 @@ import {
 } from '../../../store/selectors/prepayment-account-workflows-status.selector';
 import dayjs from 'dayjs';
 import { DATE_FORMAT } from '../../../../config/input.constants';
+import { inlineCreateConsumed } from '../../../store/actions/inline-create-return.actions';
+import { selectCompletedInlineCreatesForField } from '../../../store/selectors/inline-create-return.selectors';
 
 @Component({
   selector: 'jhi-prepayment-account-update',
@@ -129,6 +131,17 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     this.store.pipe(select(editingPrepaymentAccountStatus)).subscribe(stat => this.weAreEditing = stat);
     this.store.pipe(select(creatingPrepaymentAccountStatus)).subscribe(stat => this.weAreCreating = stat);
     this.store.pipe(select(prepaymentAccountUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+
+    // Picks up a Settlement created inline via the "Create New" option on the Prepayment
+    // Transaction picker (see M21SettlementFormControlComponent.createNew()) once its own
+    // form has saved and navigated back here.
+    this.store.pipe(select(selectCompletedInlineCreatesForField('prepaymentTransaction'))).subscribe(completions => {
+      if (completions.length > 0) {
+        const completion = completions[completions.length - 1];
+        this.updateSettlement(completion.createdEntity as ISettlement);
+        this.store.dispatch(inlineCreateConsumed({ correlationId: completion.correlationId }));
+      }
+    });
   }
 
   ngOnInit(): void {

@@ -20,8 +20,13 @@ import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output }
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { PaymentInvoiceSuggestionService } from '../../suggestion/payment-invoice-suggestion.service';
 import { IPaymentInvoice } from '../../../erp-settlements/payment-invoice/payment-invoice.model';
+import { State } from '../../../store/global-store.definition';
+import { inlineCreateRequested } from '../../../store/actions/inline-create-return.actions';
+import { generateCorrelationId } from '../../../store/util/correlation-id.util';
 
 @Component({
   selector: 'jhi-m2m-payment-invoice-form-control',
@@ -40,6 +45,11 @@ export class M2MPaymentInvoiceFormControlComponent implements OnInit, OnDestroy,
 
   @Input() inputControlLabel = '';
 
+  // The reactive form control name this picker fills on the OWNING form - see
+  // M21SettlementFormControlComponent.targetFormField for why this is separate from
+  // inputControlLabel.
+  @Input() targetFormField = '';
+
   @Output() valueSelected: EventEmitter<IPaymentInvoice[]> = new EventEmitter<IPaymentInvoice[]>();
 
   minAccountLengthTerm = 3;
@@ -48,6 +58,8 @@ export class M2MPaymentInvoiceFormControlComponent implements OnInit, OnDestroy,
   valueLookups$: Observable<IPaymentInvoice[]> = of([]);
 
   constructor(
+    protected router: Router,
+    protected store: Store<State>,
     protected valueSuggestionService: PaymentInvoiceSuggestionService
   ) {}
 
@@ -114,5 +126,20 @@ export class M2MPaymentInvoiceFormControlComponent implements OnInit, OnDestroy,
 
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
+  }
+
+  createNew(): void {
+    const correlationId = generateCorrelationId();
+
+    this.store.dispatch(
+      inlineCreateRequested({
+        correlationId,
+        entityType: 'paymentInvoice',
+        targetField: this.targetFormField,
+        returnUrl: this.router.url,
+      })
+    );
+
+    this.router.navigate(['payment-invoice/new'], { queryParams: { correlationId } });
   }
 }

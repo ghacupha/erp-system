@@ -56,6 +56,9 @@ import {
   copyingSettlementStatus, creatingSettlementStatus, editingSettlementStatus, settlementBrowserRefreshStatus,
   settlementUpdateSelectedPayment
 } from '../../../store/selectors/settlement-update-menu-status.selectors';
+import { inlineCreateCompleted, inlineCreateConsumed } from '../../../store/actions/inline-create-return.actions';
+import { selectCompletedInlineCreatesForField, selectPendingInlineCreate } from '../../../store/selectors/inline-create-return.selectors';
+import { PendingInlineCreate } from '../../../store/reducers/inline-create-return.reducer';
 
 @Component({
   selector: 'jhi-settlement-update',
@@ -82,6 +85,12 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
   selectedSettlement: ISettlement = {...new Settlement()};
 
   browserRefresh = false;
+
+  // Set only when this form was reached via a picker's "Create New" (see
+  // M21SettlementFormControlComponent.createNew()) - drives onSaveSuccess() to report the
+  // saved settlement back to the originating form/field instead of a plain history.back().
+  inlineCreateCorrelationId: string | null = null;
+  pendingInlineCreate: PendingInlineCreate | null = null;
 
   editForm = this.fb.group({
     id: [],
@@ -130,6 +139,26 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
     this.store.pipe(select(creatingSettlementStatus)).subscribe(stat => this.weAreCreatingAPayment = stat);
     this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => this.selectedSettlement = copiedSettlement);
     this.store.pipe(select(settlementBrowserRefreshStatus)).subscribe(refreshed => this.browserHasBeenRefreshed = refreshed);
+
+    this.inlineCreateCorrelationId = this.activatedRoute.snapshot.queryParamMap.get('correlationId');
+    if (this.inlineCreateCorrelationId) {
+      this.store.pipe(select(selectPendingInlineCreate(this.inlineCreateCorrelationId))).subscribe(pending => {
+        this.pendingInlineCreate = pending;
+      });
+    }
+
+    // Picks up an Invoice created inline via the "Create New" option on the Invoices picker
+    // (see M2MPaymentInvoiceFormControlComponent.createNew()) once its own form has saved and
+    // navigated back here - appends it to the existing invoice list rather than replacing it,
+    // since this field is many-to-many.
+    this.store.pipe(select(selectCompletedInlineCreatesForField('paymentInvoices'))).subscribe(completions => {
+      if (completions.length > 0) {
+        const completion = completions[completions.length - 1];
+        const existing: IPaymentInvoice[] = this.editForm.get(['paymentInvoices'])?.value ?? [];
+        this.updatePaymentInvoices([...existing, completion.createdEntity as IPaymentInvoice]);
+        this.store.dispatch(inlineCreateConsumed({ correlationId: completion.correlationId }));
+      }
+    });
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
@@ -413,7 +442,7 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISettlement>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
+      res => this.onSaveSuccess(res.body),
       () => this.onSaveError()
     );
   }
@@ -431,7 +460,19 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess(saved: ISettlement | null): void {
+    if (this.inlineCreateCorrelationId && saved) {
+      this.store.dispatch(
+        inlineCreateCompleted({
+          correlationId: this.inlineCreateCorrelationId,
+          entityType: 'settlement',
+          targetField: this.pendingInlineCreate?.targetField ?? '',
+          createdEntity: saved,
+        })
+      );
+      this.router.navigateByUrl(this.pendingInlineCreate?.returnUrl ?? '/');
+      return;
+    }
     this.previousState();
   }
 

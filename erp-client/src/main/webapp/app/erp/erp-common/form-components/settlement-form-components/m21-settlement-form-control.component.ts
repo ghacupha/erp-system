@@ -23,6 +23,10 @@ import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap 
 import { SettlementSuggestionService } from '../../suggestion/settlement-suggestion.service';
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import { inlineCreateRequested } from '../../../store/actions/inline-create-return.actions';
+import { generateCorrelationId } from '../../../store/util/correlation-id.util';
 
 @Component({
   selector: 'jhi-m21-settlement-form-control',
@@ -42,6 +46,11 @@ export class M21SettlementFormControlComponent implements OnInit, ControlValueAc
 
   @Input() inputControlLabel = '';
 
+  // The reactive form control name this picker fills on the OWNING form - not the same
+  // as inputControlLabel (a display label). Used to route a "Create New" completion back
+  // to the right field; leave unset if this instance never offers "Create New".
+  @Input() targetFormField = '';
+
   @Output() valueSelected: EventEmitter<ISettlement> = new EventEmitter<ISettlement>();
 
   minAccountLengthTerm = 3;
@@ -51,6 +60,7 @@ export class M21SettlementFormControlComponent implements OnInit, ControlValueAc
 
   constructor(
     protected router: Router,
+    protected store: Store<State>,
     protected valueSuggestionService: SettlementSuggestionService
   ) {}
 
@@ -115,7 +125,17 @@ export class M21SettlementFormControlComponent implements OnInit, ControlValueAc
   }
 
   createNew(): void {
+    const correlationId = generateCorrelationId();
 
-    this.router.navigate(['settlement/extension/new']);
+    this.store.dispatch(
+      inlineCreateRequested({
+        correlationId,
+        entityType: 'settlement',
+        targetField: this.targetFormField,
+        returnUrl: this.router.url,
+      })
+    );
+
+    this.router.navigate(['settlement/extension/new'], { queryParams: { correlationId } });
   }
 }

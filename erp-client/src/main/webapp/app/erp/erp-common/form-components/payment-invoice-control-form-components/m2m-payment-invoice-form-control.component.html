@@ -40,6 +40,9 @@
       <!--// TODO Display additional details about the value-->
       <jhi-payment-invoice-option-view [item]='item'></jhi-payment-invoice-option-view>
     </ng-template>
+    <ng-template ng-footer-tmp>
+      <p class="create-new" (click)="createNew()">Create New </p>
+    </ng-template>
   </ng-select>
   <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputValues|json}}</div>
 </div>
