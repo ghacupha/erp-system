@@ -26,7 +26,7 @@ COPY package.json /opt/app
 COPY package-lock.json /opt/app
 
 COPY . /opt/app
-RUN npm install --silent
+RUN npm ci
 
 ENV PATH="./node_modules/.bin:$PATH" \
     NODE_OPTIONS="--max-old-space-size=8192"
