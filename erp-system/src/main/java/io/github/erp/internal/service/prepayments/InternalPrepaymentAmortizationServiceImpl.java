@@ -29,11 +29,14 @@ import io.github.erp.service.mapper.PrepaymentAmortizationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link PrepaymentAmortization}.
@@ -127,7 +130,21 @@ public class InternalPrepaymentAmortizationServiceImpl implements InternalPrepay
     @Transactional(readOnly = true)
     public Page<PrepaymentAmortizationDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of PrepaymentAmortizations for query {}", query);
-        return prepaymentAmortizationSearchRepository.search(query, pageable).map(prepaymentAmortizationMapper::toDto);
+
+        Page<PrepaymentAmortization> hits = prepaymentAmortizationSearchRepository.search(query, pageable);
+
+        // Re-fetch from the database by id rather than trusting the (possibly stale or since-deleted)
+        // search-index copy of the record.
+        List<PrepaymentAmortizationDTO> freshResults = hits
+            .stream()
+            .map(PrepaymentAmortization::getId)
+            .map(prepaymentAmortizationRepository::findOneWithEagerRelationships)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(prepaymentAmortizationMapper::toDto)
+            .collect(Collectors.toList());
+
+        return new PageImpl<>(freshResults, pageable, hits.getTotalElements());
     }
 
     /**

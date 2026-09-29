@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link PrepaymentAccount}.
@@ -164,7 +166,22 @@ public class InternalPrepaymentAccountServiceImpl implements InternalPrepaymentA
     @Transactional(readOnly = true)
     public Page<PrepaymentAccountDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of PrepaymentAccounts for query {}", query);
-        return prepaymentAccountSearchRepository.search(query, pageable).map(prepaymentAccountMapper::toDto);
+
+        Page<PrepaymentAccount> hits = prepaymentAccountSearchRepository.search(query, pageable);
+
+        // The search index can lag or hold stale copies of records that have since been edited or
+        // deleted in Postgres. Use it only to find which ids match, then re-fetch those ids from
+        // the database itself so callers never see stale or since-deleted data.
+        List<PrepaymentAccountDTO> freshResults = hits
+            .stream()
+            .map(PrepaymentAccount::getId)
+            .map(prepaymentAccountRepository::findOneWithEagerRelationships)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(prepaymentAccountMapper::toDto)
+            .collect(Collectors.toList());
+
+        return new PageImpl<>(freshResults, pageable, hits.getTotalElements());
     }
 
     @Override

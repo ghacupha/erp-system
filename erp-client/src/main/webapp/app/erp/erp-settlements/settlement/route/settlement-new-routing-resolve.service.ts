@@ -50,6 +50,7 @@ export class SettlementNewRoutingResolveService implements Resolve<ISettlement> 
         })
       );
     }
+    this.store.dispatch(settlementCreationWorkflowInitiatedEnRoute());
     return of(new Settlement());
   }
 }

@@ -25,11 +25,14 @@ import io.github.erp.service.mapper.SettlementMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Settlement}.
@@ -115,6 +118,20 @@ public class InternalSettlementServiceImpl implements InternalSettlementService 
     @Transactional(readOnly = true)
     public Page<SettlementDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Settlements for query {}", query);
-        return settlementSearchRepository.search(query, pageable).map(settlementMapper::toDto);
+
+        Page<Settlement> hits = settlementSearchRepository.search(query, pageable);
+
+        // Re-fetch from the database by id rather than trusting the (possibly stale or since-deleted)
+        // search-index copy of the record.
+        List<SettlementDTO> freshResults = hits
+            .stream()
+            .map(Settlement::getId)
+            .map(settlementRepository::findOneWithEagerRelationships)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(settlementMapper::toDto)
+            .collect(Collectors.toList());
+
+        return new PageImpl<>(freshResults, pageable, hits.getTotalElements());
     }
 }

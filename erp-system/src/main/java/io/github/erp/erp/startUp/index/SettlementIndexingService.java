@@ -39,17 +39,22 @@ import com.google.common.collect.ImmutableList;
 import io.github.erp.domain.Settlement;
 import io.github.erp.erp.startUp.index.engine_v1.IndexingServiceChainSingleton;
 import io.github.erp.erp.startUp.index.engine_v2.AbstractStartUpBatchedIndexService;
+import io.github.erp.erp.startUp.index.kafka.ReindexMessage;
+import io.github.erp.erp.startUp.index.kafka.ReindexProducer;
 import io.github.erp.internal.IndexProperties;
 import io.github.erp.internal.service.payments.InternalSettlementService;
 import io.github.erp.repository.search.SettlementSearchRepository;
+import io.github.erp.service.dto.SettlementDTO;
 import io.github.erp.service.mapper.SettlementMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -59,15 +64,19 @@ import java.util.concurrent.locks.ReentrantLock;
 public class SettlementIndexingService extends AbstractStartUpBatchedIndexService<Settlement> {
     private static final String TAG = "SettlementIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
+    private static final String TOPIC = "erp-reindex-settlement";
+    private static final int BATCH_SIZE = 400;
     private final InternalSettlementService service;
     private final SettlementMapper mapper;
     private final SettlementSearchRepository searchRepository;
+    private final ReindexProducer reindexProducer;
 
-    public SettlementIndexingService(IndexProperties indexProperties, InternalSettlementService service, SettlementMapper mapper, SettlementSearchRepository searchRepository) {
+    public SettlementIndexingService(IndexProperties indexProperties, InternalSettlementService service, SettlementMapper mapper, SettlementSearchRepository searchRepository, ReindexProducer reindexProducer) {
         super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;
+        this.reindexProducer = reindexProducer;
     }
 
     /**
@@ -88,9 +97,18 @@ public class SettlementIndexingService extends AbstractStartUpBatchedIndexServic
         try {
             reindexLock.lockInterruptibly();
 
-            int batches = indexerSequence();
+            List<Long> ids = service
+                .findAll(Pageable.unpaged())
+                .stream()
+                .map(SettlementDTO::getId)
+                .filter(id -> !searchRepository.existsById(id))
+                .collect(ImmutableList.toImmutableList());
 
-            log.info("{} batches processed", batches);
+            for (int i = 0; i < ids.size(); i += BATCH_SIZE) {
+                reindexProducer.sendReindexMessage(TOPIC, ids.subList(i, Math.min(i + BATCH_SIZE, ids.size())));
+            }
+
+            log.info("Queued {} {} id(s) for reindexing on topic {}", ids.size(), TAG, TOPIC);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -99,13 +117,30 @@ public class SettlementIndexingService extends AbstractStartUpBatchedIndexServic
         }
     }
 
-    private int indexerSequence() {
-        log.info("Initiating {} build sequence", TAG);
-        long startup = System.currentTimeMillis();
+    @KafkaListener(topics = TOPIC, containerFactory = "phasedReindexKafkaListenerContainerFactory")
+    @Transactional(readOnly = true)
+    public void consumeReindexMessage(ReindexMessage message) {
+        if (message.getIds() == null || message.getIds().isEmpty()) {
+            return;
+        }
 
-        log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+        if (message.isDeleted()) {
+            message.getIds().forEach(searchRepository::deleteById);
+            log.debug("Removed {} {} document(s)", message.getIds().size(), TAG);
+            return;
+        }
 
-        return processInBatchesOf(400);
+        List<Settlement> documents = new ArrayList<>();
+        for (Long id : message.getIds()) {
+            // prepareForIndexing strips the (potentially large) calculationFile blob before it
+            // reaches Elasticsearch - see the override below.
+            service.findOne(id).map(mapper::toEntity).map(this::prepareForIndexing).ifPresent(documents::add);
+        }
+
+        if (!documents.isEmpty()) {
+            searchRepository.saveAll(documents);
+            log.debug("Indexed {} {} document(s)", documents.size(), TAG);
+        }
     }
 
     @Override

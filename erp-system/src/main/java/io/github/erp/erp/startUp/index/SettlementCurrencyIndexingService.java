@@ -36,19 +36,26 @@ package io.github.erp.erp.startUp.index;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.google.common.collect.ImmutableList;
+import io.github.erp.domain.SettlementCurrency;
 import io.github.erp.erp.startUp.index.engine_v1.AbstractStartupRegisteredIndexService;
 import io.github.erp.erp.startUp.index.engine_v1.IndexingServiceChainSingleton;
+import io.github.erp.erp.startUp.index.kafka.ReindexMessage;
+import io.github.erp.erp.startUp.index.kafka.ReindexProducer;
 import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.SettlementCurrencySearchRepository;
 import io.github.erp.service.SettlementCurrencyService;
+import io.github.erp.service.dto.SettlementCurrencyDTO;
 import io.github.erp.service.mapper.SettlementCurrencyMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -57,16 +64,20 @@ import java.util.concurrent.locks.ReentrantLock;
 public class SettlementCurrencyIndexingService extends AbstractStartupRegisteredIndexService {
     private static final String TAG = "SettlementCurrencyIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
+    private static final String TOPIC = "erp-reindex-settlement-currency";
+    private static final int BATCH_SIZE = 200;
 
     private final SettlementCurrencyService service;
     private final SettlementCurrencyMapper mapper;
     private final SettlementCurrencySearchRepository searchRepository;
+    private final ReindexProducer reindexProducer;
 
-    public SettlementCurrencyIndexingService(IndexProperties indexProperties, SettlementCurrencyService service, SettlementCurrencyMapper mapper, SettlementCurrencySearchRepository searchRepository) {
+    public SettlementCurrencyIndexingService(IndexProperties indexProperties, SettlementCurrencyService service, SettlementCurrencyMapper mapper, SettlementCurrencySearchRepository searchRepository, ReindexProducer reindexProducer) {
         super(indexProperties, indexProperties.getRebuild());
         this.service = service;
         this.mapper = mapper;
         this.searchRepository = searchRepository;
+        this.reindexProducer = reindexProducer;
     }
 
     /**
@@ -87,7 +98,18 @@ public class SettlementCurrencyIndexingService extends AbstractStartupRegistered
         try {
             reindexLock.lockInterruptibly();
 
-            indexerSequence();
+            List<Long> ids = service
+                .findAll(Pageable.unpaged())
+                .stream()
+                .map(SettlementCurrencyDTO::getId)
+                .filter(id -> !searchRepository.existsById(id))
+                .collect(ImmutableList.toImmutableList());
+
+            for (int i = 0; i < ids.size(); i += BATCH_SIZE) {
+                reindexProducer.sendReindexMessage(TOPIC, ids.subList(i, Math.min(i + BATCH_SIZE, ids.size())));
+            }
+
+            log.info("Queued {} {} id(s) for reindexing on topic {}", ids.size(), TAG, TOPIC);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -96,16 +118,28 @@ public class SettlementCurrencyIndexingService extends AbstractStartupRegistered
         }
     }
 
-    private void indexerSequence() {
-        log.info("Initiating {} build sequence", TAG);
-        long startup = System.currentTimeMillis();
-        this.searchRepository.saveAll(
-            service.findAll(Pageable.unpaged())
-                .stream()
-                .map(mapper::toEntity)
-                .filter(entity -> !searchRepository.existsById(entity.getId()))
-                .collect(ImmutableList.toImmutableList()));
-        log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+    @KafkaListener(topics = TOPIC, containerFactory = "phasedReindexKafkaListenerContainerFactory")
+    @Transactional(readOnly = true)
+    public void consumeReindexMessage(ReindexMessage message) {
+        if (message.getIds() == null || message.getIds().isEmpty()) {
+            return;
+        }
+
+        if (message.isDeleted()) {
+            message.getIds().forEach(searchRepository::deleteById);
+            log.debug("Removed {} {} document(s)", message.getIds().size(), TAG);
+            return;
+        }
+
+        List<SettlementCurrency> documents = new ArrayList<>();
+        for (Long id : message.getIds()) {
+            service.findOne(id).map(mapper::toEntity).ifPresent(documents::add);
+        }
+
+        if (!documents.isEmpty()) {
+            searchRepository.saveAll(documents);
+            log.debug("Indexed {} {} document(s)", documents.size(), TAG);
+        }
     }
 
     @Override

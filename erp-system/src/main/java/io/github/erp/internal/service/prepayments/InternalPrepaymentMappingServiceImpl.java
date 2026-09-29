@@ -17,13 +17,16 @@ package io.github.erp.internal.service.prepayments;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import io.github.erp.internal.service.ConfigurationMappingNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -134,7 +137,21 @@ public class InternalPrepaymentMappingServiceImpl implements InternalPrepaymentM
     @Transactional(readOnly = true)
     public Page<PrepaymentMappingDTO> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of PrepaymentMappings for query {}", query);
-        return prepaymentMappingSearchRepository.search(query, pageable).map(prepaymentMappingMapper::toDto);
+
+        Page<PrepaymentMapping> hits = prepaymentMappingSearchRepository.search(query, pageable);
+
+        // Re-fetch from the database by id rather than trusting the (possibly stale or since-deleted)
+        // search-index copy of the record.
+        List<PrepaymentMappingDTO> freshResults = hits
+            .stream()
+            .map(PrepaymentMapping::getId)
+            .map(internalPrepaymentMappingRepository::findOneWithEagerRelationships)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(prepaymentMappingMapper::toDto)
+            .collect(Collectors.toList());
+
+        return new PageImpl<>(freshResults, pageable, hits.getTotalElements());
     }
 
 }

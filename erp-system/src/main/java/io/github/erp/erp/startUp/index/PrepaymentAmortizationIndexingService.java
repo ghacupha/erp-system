@@ -39,17 +39,22 @@ import com.google.common.collect.ImmutableList;
 import io.github.erp.domain.PrepaymentAmortization;
 import io.github.erp.erp.startUp.index.engine_v1.IndexingServiceChainSingleton;
 import io.github.erp.erp.startUp.index.engine_v2.AbstractStartUpBatchedIndexService;
+import io.github.erp.erp.startUp.index.kafka.ReindexMessage;
+import io.github.erp.erp.startUp.index.kafka.ReindexProducer;
 import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.PrepaymentAmortizationSearchRepository;
 import io.github.erp.service.PrepaymentAmortizationService;
+import io.github.erp.service.dto.PrepaymentAmortizationDTO;
 import io.github.erp.service.mapper.PrepaymentAmortizationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -61,16 +66,20 @@ public class PrepaymentAmortizationIndexingService extends AbstractStartUpBatche
 
     private static final String TAG = "PrepaymentAmortizationIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
+    private static final String TOPIC = "erp-reindex-prepayment-amortization";
+    private static final int BATCH_SIZE = 300;
 
     private final PrepaymentAmortizationMapper mapper;
     private final PrepaymentAmortizationService service;
     private final PrepaymentAmortizationSearchRepository searchRepository;
+    private final ReindexProducer reindexProducer;
 
-    public PrepaymentAmortizationIndexingService(IndexProperties indexProperties, PrepaymentAmortizationMapper mapper, PrepaymentAmortizationService service, PrepaymentAmortizationSearchRepository searchRepository) {
+    public PrepaymentAmortizationIndexingService(IndexProperties indexProperties, PrepaymentAmortizationMapper mapper, PrepaymentAmortizationService service, PrepaymentAmortizationSearchRepository searchRepository, ReindexProducer reindexProducer) {
         super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;
+        this.reindexProducer = reindexProducer;
     }
 
     /**
@@ -91,9 +100,18 @@ public class PrepaymentAmortizationIndexingService extends AbstractStartUpBatche
         try {
             reindexLock.lockInterruptibly();
 
-            int batches = indexerSequence();
+            List<Long> ids = service
+                .findAll(Pageable.unpaged())
+                .stream()
+                .map(PrepaymentAmortizationDTO::getId)
+                .filter(id -> !searchRepository.existsById(id))
+                .collect(ImmutableList.toImmutableList());
 
-            log.info("{} batches processed", batches);
+            for (int i = 0; i < ids.size(); i += BATCH_SIZE) {
+                reindexProducer.sendReindexMessage(TOPIC, ids.subList(i, Math.min(i + BATCH_SIZE, ids.size())));
+            }
+
+            log.info("Queued {} {} id(s) for reindexing on topic {}", ids.size(), TAG, TOPIC);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -102,12 +120,28 @@ public class PrepaymentAmortizationIndexingService extends AbstractStartUpBatche
         }
     }
 
-    private int indexerSequence() {
-        log.info("Initiating {} build sequence", TAG);
-        long startup = System.currentTimeMillis();
-        log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+    @KafkaListener(topics = TOPIC, containerFactory = "phasedReindexKafkaListenerContainerFactory")
+    @Transactional(readOnly = true)
+    public void consumeReindexMessage(ReindexMessage message) {
+        if (message.getIds() == null || message.getIds().isEmpty()) {
+            return;
+        }
 
-        return processInBatchesOf(300);
+        if (message.isDeleted()) {
+            message.getIds().forEach(searchRepository::deleteById);
+            log.debug("Removed {} {} document(s)", message.getIds().size(), TAG);
+            return;
+        }
+
+        List<PrepaymentAmortization> documents = new ArrayList<>();
+        for (Long id : message.getIds()) {
+            service.findOne(id).map(mapper::toEntity).ifPresent(documents::add);
+        }
+
+        if (!documents.isEmpty()) {
+            searchRepository.saveAll(documents);
+            log.debug("Indexed {} {} document(s)", documents.size(), TAG);
+        }
     }
 
     @Override

@@ -39,17 +39,22 @@ import com.google.common.collect.ImmutableList;
 import io.github.erp.domain.PrepaymentMarshalling;
 import io.github.erp.erp.startUp.index.engine_v1.IndexingServiceChainSingleton;
 import io.github.erp.erp.startUp.index.engine_v2.AbstractStartUpBatchedIndexService;
+import io.github.erp.erp.startUp.index.kafka.ReindexMessage;
+import io.github.erp.erp.startUp.index.kafka.ReindexProducer;
 import io.github.erp.internal.IndexProperties;
 import io.github.erp.repository.search.PrepaymentMarshallingSearchRepository;
 import io.github.erp.service.PrepaymentMarshallingService;
+import io.github.erp.service.dto.PrepaymentMarshallingDTO;
 import io.github.erp.service.mapper.PrepaymentMarshallingMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -60,16 +65,20 @@ public class PrepaymentMarshallingIndexingService extends AbstractStartUpBatched
 
     private static final String TAG = "PrepaymentMarshallingIndex";
     private static final Logger log = LoggerFactory.getLogger(TAG);
+    private static final String TOPIC = "erp-reindex-prepayment-marshalling";
+    private static final int BATCH_SIZE = 500;
 
     private final PrepaymentMarshallingMapper mapper;
     private final PrepaymentMarshallingService service;
     private final PrepaymentMarshallingSearchRepository searchRepository;
+    private final ReindexProducer reindexProducer;
 
-    public PrepaymentMarshallingIndexingService(IndexProperties indexProperties, PrepaymentMarshallingMapper mapper, PrepaymentMarshallingService service, PrepaymentMarshallingSearchRepository searchRepository) {
+    public PrepaymentMarshallingIndexingService(IndexProperties indexProperties, PrepaymentMarshallingMapper mapper, PrepaymentMarshallingService service, PrepaymentMarshallingSearchRepository searchRepository, ReindexProducer reindexProducer) {
         super(indexProperties, indexProperties.getRebuild());
         this.mapper = mapper;
         this.service = service;
         this.searchRepository = searchRepository;
+        this.reindexProducer = reindexProducer;
     }
 
     /**
@@ -90,9 +99,18 @@ public class PrepaymentMarshallingIndexingService extends AbstractStartUpBatched
         try {
             reindexLock.lockInterruptibly();
 
-            int batches = indexerSequence();
+            List<Long> ids = service
+                .findAll(Pageable.unpaged())
+                .stream()
+                .map(PrepaymentMarshallingDTO::getId)
+                .filter(id -> !searchRepository.existsById(id))
+                .collect(ImmutableList.toImmutableList());
 
-            log.info("{} batches processed", batches);
+            for (int i = 0; i < ids.size(); i += BATCH_SIZE) {
+                reindexProducer.sendReindexMessage(TOPIC, ids.subList(i, Math.min(i + BATCH_SIZE, ids.size())));
+            }
+
+            log.info("Queued {} {} id(s) for reindexing on topic {}", ids.size(), TAG, TOPIC);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -101,13 +119,28 @@ public class PrepaymentMarshallingIndexingService extends AbstractStartUpBatched
         }
     }
 
-    private int indexerSequence() {
-        log.info("Initiating {} build sequence", TAG);
-        long startup = System.currentTimeMillis();
+    @KafkaListener(topics = TOPIC, containerFactory = "phasedReindexKafkaListenerContainerFactory")
+    @Transactional(readOnly = true)
+    public void consumeReindexMessage(ReindexMessage message) {
+        if (message.getIds() == null || message.getIds().isEmpty()) {
+            return;
+        }
 
-        log.trace("{} initiated and ready for queries. Index build has taken {} milliseconds", TAG, System.currentTimeMillis() - startup);
+        if (message.isDeleted()) {
+            message.getIds().forEach(searchRepository::deleteById);
+            log.debug("Removed {} {} document(s)", message.getIds().size(), TAG);
+            return;
+        }
 
-        return processInBatchesOf(500);
+        List<PrepaymentMarshalling> documents = new ArrayList<>();
+        for (Long id : message.getIds()) {
+            service.findOne(id).map(mapper::toEntity).ifPresent(documents::add);
+        }
+
+        if (!documents.isEmpty()) {
+            searchRepository.saveAll(documents);
+            log.debug("Indexed {} {} document(s)", documents.size(), TAG);
+        }
     }
 
     @Override
