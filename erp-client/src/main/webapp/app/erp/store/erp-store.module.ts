@@ -64,7 +64,8 @@ import { LeasePostingRuleConfigEffects } from './effects/lease-posting-rule-conf
 import * as fromLeasePostingRuleConfig from './reducers/lease-posting-rule-config.reducer';
 import { LeasePostingRuleWorkflowEffects } from './effects/lease-posting-rule-workflow.effects';
 import * as fromLeasePostingRuleUpdates from './reducers/lease-posting-rule-workflow-status.reducer';
-import * as fromInlineCreateReturn from './reducers/inline-create-return.reducer';
+import * as fromSettlementInlineCreate from './reducers/settlement-inline-create.reducer';
+import * as fromPaymentInvoiceInlineCreate from './reducers/payment-invoice-inline-create.reducer';
 
 @NgModule({
   imports: [
@@ -153,7 +154,11 @@ import * as fromInlineCreateReturn from './reducers/inline-create-return.reducer
       fromLeasePostingRuleUpdates.leasePostingRuleUpdateFormStateSelector,
       fromLeasePostingRuleUpdates.leasePostingRuleUpdateStateReducer
     ),
-    StoreModule.forFeature(fromInlineCreateReturn.inlineCreateReturnFeatureKey, fromInlineCreateReturn.inlineCreateReturnReducer),
+    StoreModule.forFeature(fromSettlementInlineCreate.settlementInlineCreateFeatureKey, fromSettlementInlineCreate.settlementInlineCreateReducer),
+    StoreModule.forFeature(
+      fromPaymentInvoiceInlineCreate.paymentInvoiceInlineCreateFeatureKey,
+      fromPaymentInvoiceInlineCreate.paymentInvoiceInlineCreateReducer
+    ),
   ],
   exports: [EffectsModule, StoreModule, ...(DEBUG_INFO_ENABLED ? [StoreDevtoolsModule] : [])],
 })

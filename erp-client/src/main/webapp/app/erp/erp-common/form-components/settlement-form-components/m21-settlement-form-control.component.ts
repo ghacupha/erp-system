@@ -22,11 +22,6 @@ import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { SettlementSuggestionService } from '../../suggestion/settlement-suggestion.service';
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
-import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { State } from '../../../store/global-store.definition';
-import { inlineCreateRequested } from '../../../store/actions/inline-create-return.actions';
-import { generateCorrelationId } from '../../../store/util/correlation-id.util';
 
 @Component({
   selector: 'jhi-m21-settlement-form-control',
@@ -46,12 +41,13 @@ export class M21SettlementFormControlComponent implements OnInit, ControlValueAc
 
   @Input() inputControlLabel = '';
 
-  // The reactive form control name this picker fills on the OWNING form - not the same
-  // as inputControlLabel (a display label). Used to route a "Create New" completion back
-  // to the right field; leave unset if this instance never offers "Create New".
-  @Input() targetFormField = '';
-
   @Output() valueSelected: EventEmitter<ISettlement> = new EventEmitter<ISettlement>();
+
+  // Purely informational to the owning form - this component has no opinion on what "create
+  // new" should do (navigate where, capture what state to come back to, etc). The owning form
+  // handles that itself; see e.g. PrepaymentAccountUpdateComponent's handling of this output and
+  // settlementInlineCreateStarted in store/actions/settlement-inline-create.actions.ts.
+  @Output() createNewRequested: EventEmitter<void> = new EventEmitter<void>();
 
   minAccountLengthTerm = 3;
   valuesLoading = false;
@@ -59,8 +55,6 @@ export class M21SettlementFormControlComponent implements OnInit, ControlValueAc
   valueLookUps$: Observable<ISettlement[]> = of([]);
 
   constructor(
-    protected router: Router,
-    protected store: Store<State>,
     protected valueSuggestionService: SettlementSuggestionService
   ) {}
 
@@ -125,17 +119,6 @@ export class M21SettlementFormControlComponent implements OnInit, ControlValueAc
   }
 
   createNew(): void {
-    const correlationId = generateCorrelationId();
-
-    this.store.dispatch(
-      inlineCreateRequested({
-        correlationId,
-        entityType: 'settlement',
-        targetField: this.targetFormField,
-        returnUrl: this.router.url,
-      })
-    );
-
-    this.router.navigate(['settlement/extension/new'], { queryParams: { correlationId } });
+    this.createNewRequested.emit();
   }
 }

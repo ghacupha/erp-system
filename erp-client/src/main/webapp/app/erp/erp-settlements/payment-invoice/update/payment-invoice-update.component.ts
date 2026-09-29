@@ -21,7 +21,7 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, take, tap } from 'rxjs/operators';
 
 import { IPaymentInvoice, PaymentInvoice } from '../payment-invoice.model';
 import { PaymentInvoiceService } from '../service/payment-invoice.service';
@@ -62,9 +62,11 @@ import {
   editingPaymentInvoiceStatus, paymentInvoiceUpdateSelectedInstance
 } from '../../../store/selectors/payment-invoice-workflow-status.selectors';
 import { paymentInvoiceCreationInitiatedEnRoute, paymentInvoiceDataHasMutated } from '../../../store/actions/payment-invoice-workflow-status.action';
-import { inlineCreateCompleted } from '../../../store/actions/inline-create-return.actions';
-import { selectPendingInlineCreate } from '../../../store/selectors/inline-create-return.selectors';
-import { PendingInlineCreate } from '../../../store/reducers/inline-create-return.reducer';
+import { paymentInvoiceInlineCreateCompleted } from '../../../store/actions/payment-invoice-inline-create.actions';
+import {
+  paymentInvoiceInlineCreateActive,
+  paymentInvoiceInlineCreateParentRoute,
+} from '../../../store/selectors/payment-invoice-inline-create.selectors';
 
 @Component({
   selector: 'jhi-payment-invoice-update',
@@ -136,11 +138,12 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   weAreCreating = false;
   selectedItem = {...new PaymentInvoice()}
 
-  // Set only when this form was reached via a picker's "Create New" (see
-  // M2MPaymentInvoiceFormControlComponent.createNew()) - drives onSaveSuccess() to report the
-  // saved invoice back to the originating form/field instead of a plain history.back().
-  inlineCreateCorrelationId: string | null = null;
-  pendingInlineCreate: PendingInlineCreate | null = null;
+  // True only when this form was reached via a parent form's own inline-create handling (e.g.
+  // SettlementUpdateComponent.createPaymentInvoiceInline()) - drives onSaveSuccess() to report
+  // the saved invoice back via paymentInvoiceInlineCreateCompleted and navigate to the parent's
+  // own route, instead of a plain history.back().
+  weAreInlineCreating = false;
+  inlineParentRoute = '';
 
   constructor(
     protected paymentInvoiceService: PaymentInvoiceService,
@@ -180,12 +183,12 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       this.store.dispatch(paymentInvoiceCreationInitiatedEnRoute());
     }
 
-    this.inlineCreateCorrelationId = this.activatedRoute.snapshot.queryParamMap.get('correlationId');
-    if (this.inlineCreateCorrelationId) {
-      this.store.pipe(select(selectPendingInlineCreate(this.inlineCreateCorrelationId))).subscribe(pending => {
-        this.pendingInlineCreate = pending;
-      });
-    }
+    this.store.pipe(select(paymentInvoiceInlineCreateActive), take(1)).subscribe(active => {
+      this.weAreInlineCreating = active;
+    });
+    this.store.pipe(select(paymentInvoiceInlineCreateParentRoute), take(1)).subscribe(parentRoute => {
+      this.inlineParentRoute = parentRoute;
+    });
   }
 
   ngOnInit(): void {
@@ -562,16 +565,21 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   }
 
   protected onSaveSuccess(saved: IPaymentInvoice | null): void {
-    if (this.inlineCreateCorrelationId && saved) {
-      this.store.dispatch(
-        inlineCreateCompleted({
-          correlationId: this.inlineCreateCorrelationId,
-          entityType: 'paymentInvoice',
-          targetField: this.pendingInlineCreate?.targetField ?? '',
-          createdEntity: saved,
-        })
-      );
-      this.router.navigateByUrl(this.pendingInlineCreate?.returnUrl ?? '/');
+    if (this.weAreInlineCreating && saved) {
+      this.store.dispatch(paymentInvoiceInlineCreateCompleted({ createdPaymentInvoice: saved }));
+      this.router.navigateByUrl(this.inlineParentRoute || '/');
+      return;
+    }
+    if (saved?.id) {
+      // previousState()'s window.history.back() is unreliable here: if this edit form was
+      // reached by a route that isn't itself preceded by an in-app page (a fresh load, a
+      // deep link, the invoice list's own row actions bypassing the list's history entry,
+      // etc.), "back" can leave the app's history stack entirely and land somewhere like the
+      // dashboard instead of anywhere related to the invoice just saved. Navigate to the
+      // invoice's own detail page instead - always correct regardless of how this form was
+      // reached, and consistent with how SettlementUpdateComponent.onCopySuccess() already
+      // behaves for its own save.
+      this.router.navigate(['/payment-invoice', saved.id, 'view']);
       return;
     }
     this.previousState();

@@ -4,93 +4,139 @@
 
 Filling in a Prepayment Account's "Prepayment Transaction" field means picking an existing
 `Settlement` by its payment number (e.g. `DC317`). When that Settlement doesn't exist yet, the
-`jhi-m21-settlement-form-control` picker already offered a "Create New" link
-(`M21SettlementFormControlComponent.createNew()`), but it did nothing more than
-`router.navigate(['settlement/extension/new'])` - a bare navigation with no way back. Two problems
-followed:
+`jhi-m21-settlement-form-control` picker already offered a "Create New" link, but it did nothing
+more than `router.navigate(['settlement/extension/new'])` - a bare navigation with no way back.
+The Settlement form's own Invoices picker had no "Create New" option at all. Two problems needed
+fixing before either was usable:
 
-1. **The destination form was itself broken.** `settlement-new-routing-resolve.service.ts` only
-   dispatched `settlementCreationWorkflowInitiatedEnRoute()` (which sets the NgRx
-   `weAreCreating` flag that the update form's Save button is gated on -
-   `[hidden]='!weAreCreatingAPayment'` in `settlement-update.component.html`) inside its `if (id)`
-   branch. A genuinely new Settlement has no id, so that branch never ran, `weAreCreating` stayed
-   `false`, and the Save button never rendered - the only option was Cancel.
-2. **Nothing carried the newly-created Settlement back.** Even with a working Save button, the
-   user would land back on a blank Settlement list, not the Prepayment Account they were editing,
-   with no way to get the new Settlement into the field that sent them there.
+1. **The destination forms were themselves broken.** `settlement-new-routing-resolve.service.ts`
+   only dispatched the action that sets the Settlement form's `weAreCreating` flag (which its Save
+   button is gated on) inside its `if (id)` branch - a genuinely new Settlement has no id, so the
+   Save button never rendered. `payment-invoice-update.component.ts`'s `new` route has no resolver
+   at all, so it depended entirely on whichever action last happened to set its own
+   `weAreCreating` - correct only when reached via that entity's own list-page "Create" button.
+   Both are fixed directly in each component now, independent of the inline-create mechanism.
+2. **Nothing carried the newly-created record back to the field that asked for it.**
 
-The same two problems existed one level deeper: the Settlement form's own Invoices picker
-(`jhi-m2m-payment-invoice-form-control`) had no "Create New" option at all, and
-`payment-invoice-update.component.ts`'s `new` route has no resolver, so it depended entirely on
-whichever action last happened to set `weAreCreating` - correct only when reached via the invoice
-list page's own "Create" button.
+## First attempt: a generic, entity-agnostic NgRx slice (superseded)
 
-## What changed
+The first implementation used one shared `inlineCreateReturnState` slice keyed by a generated
+`correlationId`, carrying a `returnUrl` string to `router.navigateByUrl()` back to once the child
+form saved. It worked for the Invoice-from-Settlement case in testing, but a live report surfaced
+the same "lands on the dashboard instead of the parent form" failure for the Settlement-from-
+Prepayment-Account case specifically, with the exact mechanism not fully isolated (the
+`correlationId` round-tripped correctly per the visible URL; the most likely explanation was some
+still-unproven timing/subscription-order gap specific to that path). Given a live, hard-to-pin-
+down bug in a shared mechanism, and given this project's own preference for explicit, traceable
+NgRx state over compact-but-opaque generic mechanisms, the whole thing was rebuilt rather than
+patched further.
 
-**A generic, entity-agnostic NgRx slice carries the round trip.** `inlineCreateReturnState`
-(`store/reducers/inline-create-return.reducer.ts`) is a map keyed by `correlationId`, not by
-entity type, specifically so a *nested* inline-create (create an Invoice while creating a
-Settlement while editing a Prepayment Account) doesn't clobber the outer one:
+## Current design: one dedicated slice per child entity type
+
+`settlementInlineCreateState` and `paymentInvoiceInlineCreateState`
+(`store/reducers/settlement-inline-create.reducer.ts`,
+`store/reducers/payment-invoice-inline-create.reducer.ts`) are separate, near-identical slices -
+one per child entity type, not one shared slice keyed by a correlation id. Each holds:
 
 ```ts
-interface InlineCreateReturnState {
-  pending: { [correlationId: string]: PendingInlineCreate };   // { entityType, targetField, returnUrl }
-  completed: { [correlationId: string]: CompletedInlineCreate }; // { entityType, targetField, createdEntity }
+interface XInlineCreateState {
+  active: boolean;
+  targetField: string;
+  parentRoute: string;
+  parentFormSnapshot: unknown;   // the PARENT's own full form draft, not just a URL
+  createdX: IX | null;
 }
 ```
 
-Four actions (`store/actions/inline-create-return.actions.ts`): `inlineCreateRequested`,
-`inlineCreateCompleted`, `inlineCreateConsumed`, `inlineCreateCancelled`. `generateCorrelationId()`
-(`store/util/correlation-id.util.ts`) wraps `crypto.randomUUID()` with a fallback for
-environments without it.
+Storing the parent's own full draft (via its existing `createFromForm()`) rather than just a
+return URL is the key difference from the first attempt: returning to a route only gets Angular to
+mount the right component - it does nothing about whatever the user had already typed into that
+form before navigating away to create the child record. Without capturing and restoring that
+draft, the parent form reconstructs empty (or from whatever the route's own resolver provides),
+regardless of whether the return-navigation itself succeeds.
 
-**Picker side (producer of the request):** `M21SettlementFormControlComponent.createNew()` and the
-newly-added `M2MPaymentInvoiceFormControlComponent.createNew()` both dispatch
-`inlineCreateRequested` with a fresh correlationId, `entityType`, the owning form's
-`targetFormField` (a new `@Input`, distinct from the display `inputControlLabel` - see
-`prepayment-account-update.component.html`'s `targetFormField='prepaymentTransaction'` and
-`settlement-update.component.html`'s `targetFormField='paymentInvoices'`), and `router.url` as the
-`returnUrl`, then navigates to the create route with `?correlationId=...` in the query string (so
-it survives a full page reload, which component-local state wouldn't).
+**The picker components own nothing.** `M21SettlementFormControlComponent` and
+`M2MPaymentInvoiceFormControlComponent` no longer inject `Store` or `Router` at all - `createNew()`
+just emits `@Output() createNewRequested`. They have no way to know what the owning form's other
+fields currently hold, so they cannot meaningfully be the ones to snapshot-and-navigate.
 
-**Create form side (consumer of the request, producer of the completion):**
-`SettlementUpdateComponent` and `PaymentInvoiceUpdateComponent` both read `correlationId` from
-`ActivatedRoute.snapshot.queryParamMap` in their constructor, and if present subscribe to
-`selectPendingInlineCreate(correlationId)` to learn the pending record's `returnUrl`/`targetField`.
-`subscribeToSaveResponse` now passes the saved entity through to `onSaveSuccess`, which - only when
-an inline-create is in progress - dispatches `inlineCreateCompleted` with the saved entity and
-`router.navigateByUrl(returnUrl)` instead of the normal `previousState()` (`window.history.back()`).
+**The owning parent form drives everything.** E.g.
+`PrepaymentAccountUpdateComponent.createSettlementInline()`:
 
-**Originating form side (consumer of the completion):** `PrepaymentAccountUpdateComponent` and
-`SettlementUpdateComponent` (which plays both roles - producer for its own creation, consumer for
-its Invoices field) subscribe to `selectCompletedInlineCreatesForField(targetField)` in their
-constructor. On a completion: patch the field (`updateSettlement` for the single-valued Settlement
-reference; `updatePaymentInvoices([...existing, created])` for the many-valued Invoices array,
-since that field is a `@ManyToMany`), then dispatch `inlineCreateConsumed` to clear the slice
-entry. Since navigating from the create route back to the originating route is a different Angular
-route, the originating component is freshly reconstructed, so this subscription picks up the
-still-in-store completion on its very first tick.
+```ts
+createSettlementInline(): void {
+  this.store.dispatch(settlementInlineCreateStarted({
+    targetField: 'prepaymentTransaction',
+    parentRoute: this.router.url,
+    parentFormSnapshot: this.createFromForm(),
+  }));
+  this.router.navigate(['settlement/extension/new']);
+}
+```
 
-## Two pre-existing bugs fixed as part of this
+**The child create form reports back and navigates to the stored parent route** (not
+`window.history.back()`) on successful save:
 
-- **`settlement-new-routing-resolve.service.ts`**: added the missing
-  `settlementCreationWorkflowInitiatedEnRoute()` dispatch to the no-id branch. This is the actual
-  fix for the reported "no Save button on `/settlement/extension/new`" bug - independent of
-  the inline-create-and-return feature, any direct navigation to a new Settlement had this problem.
-- **`payment-invoice-update.component.ts`**: the `new` route has no resolver at all, so the
-  constructor now dispatches `paymentInvoiceCreationInitiatedEnRoute()` itself whenever there's no
-  `:id` route param. `paymentInvoiceCreationInitiatedEnRoute` already existed in
-  `payment-invoice-workflow-status.action.ts` and was already handled correctly by the reducer -
-  it was simply never dispatched anywhere before this change.
+```ts
+protected onSaveSuccess(saved: ISettlement | null): void {
+  if (this.weAreInlineCreating && saved) {
+    this.store.dispatch(settlementInlineCreateCompleted({ createdSettlement: saved }));
+    this.router.navigateByUrl(this.inlineParentRoute || '/');
+    return;
+  }
+  this.previousState();
+}
+```
+
+**On return, the parent restores its own draft, then patches in the new entity, in that order**:
+
+```ts
+this.store.pipe(select(settlementInlineCreateActive), take(1)).subscribe(active => {
+  if (!active) { return; }
+  combineLatest([
+    this.store.pipe(select(settlementInlineCreateParentFormSnapshot)),
+    this.store.pipe(select(settlementInlineCreateCreatedSettlement)),
+  ]).pipe(take(1)).subscribe(([snapshot, createdSettlement]) => {
+    if (snapshot) { this.updateForm(snapshot as IPrepaymentAccount); }
+    if (createdSettlement) { this.updateSettlement(createdSettlement); }
+    this.store.dispatch(settlementInlineCreateConsumed());
+  });
+});
+```
+
+This restore call is deliberately placed *after* `updateDetailsGivenTransaction()` (the
+`valueChanges` listener that auto-fills dealer/currency/amount from whatever Settlement ends up in
+`prepaymentTransaction`) in `ngOnInit()`, not in the constructor. NgRx selectors emit synchronously
+on subscribe when the store already holds a matching value - exactly the case here, since the
+completion was dispatched moments before this component was reconstructed - so a subscription any
+earlier fires its `patchValue()` before that listener exists, and the resulting auto-fill silently
+never happens. This exact ordering bug was caught (and fixed the same way) in both directions: the
+Prepayment Account side for its Settlement field, and the Settlement side for its own Invoices
+field, which recalculates the payment amount from the sum of its invoices.
+
+**Settlement plays both roles.** It is a *child* of Prepayment Account (created inline, reports
+back via `settlementInlineCreate*`) and, independently, a *parent* of Invoice (drives
+`createPaymentInvoiceInline()`, restores its own draft via `paymentInvoiceInlineCreate*` on
+return). The two slices never interact with each other; nesting works simply because each level
+uses its own dedicated slice.
+
+## Not yet covered
+
+- Purchase Order (from Invoice) and Business Document pickers don't have this treatment yet -
+  same pattern, not yet built.
+- Clicking Cancel on an inline-created child form doesn't restore/return anything - only a
+  successful Save completes the round trip. The `xInlineCreateCancelled` action exists in each
+  reducer for this but nothing dispatches it yet.
 
 ## Verification
 
-`npx tsc -p tsconfig.app.json --noEmit` and `npx eslint` both pass clean on every touched file.
-**Could not run the Jest suite to verify runtime behavior** - confirmed this is a pre-existing,
-unrelated environment problem, not something this change caused: even the original, untouched
-`prepayment-account-update.component.spec.ts` fails with `SyntaxError: Cannot use import statement
-outside a module` (the local `ts-jest` transform isn't engaging), and `npx tsc -p
-tsconfig.spec.json` independently reports dozens of pre-existing type errors across unrelated spec
-files throughout the codebase. The new BDD spec files (see the companion user story) type-check and
-lint clean, and were written to mirror the exact same TestBed/provider patterns as the existing
-(also-currently-unrunnable) specs, but their actual pass/fail status is unverified in this session.
+`npx tsc -p tsconfig.app.json --noEmit` and `npx eslint` pass clean on every touched file. Jest
+still cannot run at all in this local environment (confirmed pre-existing and unrelated - even
+original, untouched spec files fail to parse). The BDD coverage for this redesign
+(`store/reducers/settlement-inline-create.steps.spec.ts`,
+`store/reducers/payment-invoice-inline-create.steps.spec.ts`) tests the reducers directly - pure
+functions, no Angular TestBed/DI involved - specifically because that removes the DI-resolution
+risk that made the previous attempt's component-level TestBed tests unverifiable in this
+environment. The component-level orchestration (capture-snapshot-and-navigate,
+restore-then-patch-in-correct-order) is verified by direct code review of the exact methods shown
+above, not by an executable test.

@@ -80,8 +80,8 @@
           formControlName='invoiceNumber'
           [inputValues]="editForm.get(['paymentInvoices'])!.value"
           (valueSelected)='updatePaymentInvoices($event)'
+          (createNewRequested)='createPaymentInvoiceInline()'
           inputControlLabel='Invoices'
-          targetFormField='paymentInvoices'
         >
         </jhi-m2m-payment-invoice-form-control>
 

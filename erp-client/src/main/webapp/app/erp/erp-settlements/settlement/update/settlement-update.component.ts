@@ -20,8 +20,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map,} from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { finalize, map, take,} from 'rxjs/operators';
 
 import { ISettlement, Settlement } from '../settlement.model';
 import { SettlementService } from '../service/settlement.service';
@@ -56,9 +56,17 @@ import {
   copyingSettlementStatus, creatingSettlementStatus, editingSettlementStatus, settlementBrowserRefreshStatus,
   settlementUpdateSelectedPayment
 } from '../../../store/selectors/settlement-update-menu-status.selectors';
-import { inlineCreateCompleted, inlineCreateConsumed } from '../../../store/actions/inline-create-return.actions';
-import { selectCompletedInlineCreatesForField, selectPendingInlineCreate } from '../../../store/selectors/inline-create-return.selectors';
-import { PendingInlineCreate } from '../../../store/reducers/inline-create-return.reducer';
+import { settlementInlineCreateCompleted } from '../../../store/actions/settlement-inline-create.actions';
+import { settlementInlineCreateActive, settlementInlineCreateParentRoute } from '../../../store/selectors/settlement-inline-create.selectors';
+import {
+  paymentInvoiceInlineCreateConsumed,
+  paymentInvoiceInlineCreateStarted,
+} from '../../../store/actions/payment-invoice-inline-create.actions';
+import {
+  paymentInvoiceInlineCreateActive,
+  paymentInvoiceInlineCreateCreatedPaymentInvoice,
+  paymentInvoiceInlineCreateParentFormSnapshot,
+} from '../../../store/selectors/payment-invoice-inline-create.selectors';
 
 @Component({
   selector: 'jhi-settlement-update',
@@ -86,11 +94,12 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
 
   browserRefresh = false;
 
-  // Set only when this form was reached via a picker's "Create New" (see
-  // M21SettlementFormControlComponent.createNew()) - drives onSaveSuccess() to report the
-  // saved settlement back to the originating form/field instead of a plain history.back().
-  inlineCreateCorrelationId: string | null = null;
-  pendingInlineCreate: PendingInlineCreate | null = null;
+  // True only when this form was reached via a parent form's own inline-create handling (e.g.
+  // PrepaymentAccountUpdateComponent.createSettlementInline()) - drives onSaveSuccess() to
+  // report the saved settlement back via settlementInlineCreateCompleted and navigate to the
+  // parent's own route, instead of a plain history.back().
+  weAreInlineCreating = false;
+  inlineParentRoute = '';
 
   editForm = this.fb.group({
     id: [],
@@ -140,24 +149,11 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
     this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => this.selectedSettlement = copiedSettlement);
     this.store.pipe(select(settlementBrowserRefreshStatus)).subscribe(refreshed => this.browserHasBeenRefreshed = refreshed);
 
-    this.inlineCreateCorrelationId = this.activatedRoute.snapshot.queryParamMap.get('correlationId');
-    if (this.inlineCreateCorrelationId) {
-      this.store.pipe(select(selectPendingInlineCreate(this.inlineCreateCorrelationId))).subscribe(pending => {
-        this.pendingInlineCreate = pending;
-      });
-    }
-
-    // Picks up an Invoice created inline via the "Create New" option on the Invoices picker
-    // (see M2MPaymentInvoiceFormControlComponent.createNew()) once its own form has saved and
-    // navigated back here - appends it to the existing invoice list rather than replacing it,
-    // since this field is many-to-many.
-    this.store.pipe(select(selectCompletedInlineCreatesForField('paymentInvoices'))).subscribe(completions => {
-      if (completions.length > 0) {
-        const completion = completions[completions.length - 1];
-        const existing: IPaymentInvoice[] = this.editForm.get(['paymentInvoices'])?.value ?? [];
-        this.updatePaymentInvoices([...existing, completion.createdEntity as IPaymentInvoice]);
-        this.store.dispatch(inlineCreateConsumed({ correlationId: completion.correlationId }));
-      }
+    this.store.pipe(select(settlementInlineCreateActive), take(1)).subscribe(active => {
+      this.weAreInlineCreating = active;
+    });
+    this.store.pipe(select(settlementInlineCreateParentRoute), take(1)).subscribe(parentRoute => {
+      this.inlineParentRoute = parentRoute;
     });
 
     this.router.events.subscribe(event => {
@@ -208,6 +204,45 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
     this.updatePreferredPaymentLabelsGivenInvoice();
     this.updatePaymentAmountGivenPaymentCategory();
     this.updateDescriptionGivenInvoicePurchaseOrder();
+
+    // Returning from an inline "Create New" on the Invoices picker (see
+    // createPaymentInvoiceInline() below and payment-invoice-inline-create.actions.ts): this
+    // form was reconstructed at the same route, so its own in-progress draft (captured right
+    // before navigating away to the Invoice create form) needs restoring first, then the newly
+    // created Invoice gets appended - in that order, and after the valueChanges subscriptions
+    // above (updatePreferredPaymentAmountGivenInvoice() etc.), so the payment-amount/currency/
+    // biller/labels auto-fill they wire up actually sees this change.
+    this.store.pipe(select(paymentInvoiceInlineCreateActive), take(1)).subscribe(active => {
+      if (!active) {
+        return;
+      }
+      combineLatest([
+        this.store.pipe(select(paymentInvoiceInlineCreateParentFormSnapshot)),
+        this.store.pipe(select(paymentInvoiceInlineCreateCreatedPaymentInvoice)),
+      ])
+        .pipe(take(1))
+        .subscribe(([snapshot, createdPaymentInvoice]) => {
+          if (snapshot) {
+            this.updateForm(snapshot as ISettlement);
+          }
+          if (createdPaymentInvoice) {
+            const existing: IPaymentInvoice[] = this.editForm.get(['paymentInvoices'])?.value ?? [];
+            this.updatePaymentInvoices([...existing, createdPaymentInvoice]);
+          }
+          this.store.dispatch(paymentInvoiceInlineCreateConsumed());
+        });
+    });
+  }
+
+  createPaymentInvoiceInline(): void {
+    this.store.dispatch(
+      paymentInvoiceInlineCreateStarted({
+        targetField: 'paymentInvoices',
+        parentRoute: this.router.url,
+        parentFormSnapshot: this.createFromForm(),
+      })
+    );
+    this.router.navigate(['payment-invoice/new']);
   }
 
   updateTodaysDate(): void {
@@ -461,16 +496,9 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
   }
 
   protected onSaveSuccess(saved: ISettlement | null): void {
-    if (this.inlineCreateCorrelationId && saved) {
-      this.store.dispatch(
-        inlineCreateCompleted({
-          correlationId: this.inlineCreateCorrelationId,
-          entityType: 'settlement',
-          targetField: this.pendingInlineCreate?.targetField ?? '',
-          createdEntity: saved,
-        })
-      );
-      this.router.navigateByUrl(this.pendingInlineCreate?.returnUrl ?? '/');
+    if (this.weAreInlineCreating && saved) {
+      this.store.dispatch(settlementInlineCreateCompleted({ createdSettlement: saved }));
+      this.router.navigateByUrl(this.inlineParentRoute || '/');
       return;
     }
     this.previousState();

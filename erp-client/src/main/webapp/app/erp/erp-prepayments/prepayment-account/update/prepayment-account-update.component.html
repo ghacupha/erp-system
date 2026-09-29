@@ -74,8 +74,8 @@
           formControlName='prepaymentTransaction'
           [inputValue]="editForm.get('prepaymentTransaction')!.value"
           (valueSelected)='updateSettlement($event)'
+          (createNewRequested)='createSettlementInline()'
           inputControlLabel='Prepayment Transaction'
-          targetFormField='prepaymentTransaction'
         >
         </jhi-m21-settlement-form-control>
 

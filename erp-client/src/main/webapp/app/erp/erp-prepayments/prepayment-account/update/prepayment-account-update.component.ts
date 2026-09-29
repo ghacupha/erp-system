@@ -20,8 +20,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { finalize, map, take } from 'rxjs/operators';
 
 import { IPrepaymentAccount, PrepaymentAccount } from '../prepayment-account.model';
 import { PrepaymentAccountService } from '../service/prepayment-account.service';
@@ -59,8 +59,12 @@ import {
 } from '../../../store/selectors/prepayment-account-workflows-status.selector';
 import dayjs from 'dayjs';
 import { DATE_FORMAT } from '../../../../config/input.constants';
-import { inlineCreateConsumed } from '../../../store/actions/inline-create-return.actions';
-import { selectCompletedInlineCreatesForField } from '../../../store/selectors/inline-create-return.selectors';
+import { settlementInlineCreateConsumed, settlementInlineCreateStarted } from '../../../store/actions/settlement-inline-create.actions';
+import {
+  settlementInlineCreateActive,
+  settlementInlineCreateCreatedSettlement,
+  settlementInlineCreateParentFormSnapshot,
+} from '../../../store/selectors/settlement-inline-create.selectors';
 
 @Component({
   selector: 'jhi-prepayment-account-update',
@@ -131,17 +135,6 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     this.store.pipe(select(editingPrepaymentAccountStatus)).subscribe(stat => this.weAreEditing = stat);
     this.store.pipe(select(creatingPrepaymentAccountStatus)).subscribe(stat => this.weAreCreating = stat);
     this.store.pipe(select(prepaymentAccountUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
-
-    // Picks up a Settlement created inline via the "Create New" option on the Prepayment
-    // Transaction picker (see M21SettlementFormControlComponent.createNew()) once its own
-    // form has saved and navigated back here.
-    this.store.pipe(select(selectCompletedInlineCreatesForField('prepaymentTransaction'))).subscribe(completions => {
-      if (completions.length > 0) {
-        const completion = completions[completions.length - 1];
-        this.updateSettlement(completion.createdEntity as ISettlement);
-        this.store.dispatch(inlineCreateConsumed({ correlationId: completion.correlationId }));
-      }
-    });
   }
 
   ngOnInit(): void {
@@ -194,6 +187,43 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
 
       this.updateDetailsGivenTransaction();
     }
+
+    // Returning from an inline "Create New" on the Prepayment Transaction picker (see
+    // createSettlementInline() below and settlement-inline-create.actions.ts): the store holds
+    // both this form's own snapshot (captured right before we navigated away) and the Settlement
+    // that got created. Restore the snapshot first, then patch in the new Settlement - in that
+    // order, and after updateDetailsGivenTransaction() above, so the dealer/currency/amount
+    // auto-fill it wires up on the prepaymentTransaction control actually sees this change.
+    this.store.pipe(select(settlementInlineCreateActive)).pipe(take(1)).subscribe(active => {
+      if (!active) {
+        return;
+      }
+      combineLatest([
+        this.store.pipe(select(settlementInlineCreateParentFormSnapshot)),
+        this.store.pipe(select(settlementInlineCreateCreatedSettlement)),
+      ])
+        .pipe(take(1))
+        .subscribe(([snapshot, createdSettlement]) => {
+          if (snapshot) {
+            this.updateForm(snapshot as IPrepaymentAccount);
+          }
+          if (createdSettlement) {
+            this.updateSettlement(createdSettlement);
+          }
+          this.store.dispatch(settlementInlineCreateConsumed());
+        });
+    });
+  }
+
+  createSettlementInline(): void {
+    this.store.dispatch(
+      settlementInlineCreateStarted({
+        targetField: 'prepaymentTransaction',
+        parentRoute: this.router.url,
+        parentFormSnapshot: this.createFromForm(),
+      })
+    );
+    this.router.navigate(['settlement/extension/new']);
   }
 
   updateDetailsGivenTransaction(): void {

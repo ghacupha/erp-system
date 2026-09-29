@@ -49,7 +49,8 @@ import { TransactionAccountReportDateSelectionState } from './reducers/transacti
 import { IFRS16LeaseContractReportState } from './reducers/ifrs16-lease-contract-report.reducer';
 import { LeasePostingRuleConfigState } from './reducers/lease-posting-rule-config.reducer';
 import { LeasePostingRuleFormState } from './reducers/lease-posting-rule-workflow-status.reducer';
-import { InlineCreateReturnState, initialInlineCreateReturnState } from './reducers/inline-create-return.reducer';
+import { SettlementInlineCreateState, initialSettlementInlineCreateState } from './reducers/settlement-inline-create.reducer';
+import { PaymentInvoiceInlineCreateState, initialPaymentInvoiceInlineCreateState } from './reducers/payment-invoice-inline-create.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -83,7 +84,8 @@ export interface State {
   ifrs16LeaseContractReportState: IFRS16LeaseContractReportState,
   leasePostingRuleConfigState: LeasePostingRuleConfigState,
   leasePostingRuleFormState: LeasePostingRuleFormState,
-  inlineCreateReturnState: InlineCreateReturnState
+  settlementInlineCreateState: SettlementInlineCreateState,
+  paymentInvoiceInlineCreateState: PaymentInvoiceInlineCreateState
 }
 
 export const initialState: State = {
@@ -318,5 +320,6 @@ export const initialState: State = {
     weAreCreating: false,
     weAreDeleting: false,
   },
-  inlineCreateReturnState: initialInlineCreateReturnState,
+  settlementInlineCreateState: initialSettlementInlineCreateState,
+  paymentInvoiceInlineCreateState: initialPaymentInvoiceInlineCreateState,
 }
