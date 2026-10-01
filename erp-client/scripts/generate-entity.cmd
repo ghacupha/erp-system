@@ -1,6 +1,6 @@
 @REM
-@REM Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
-@REM Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+@REM Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+@REM Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 @REM
 @REM This program is free software: you can redistribute it and/or modify
 @REM it under the terms of the GNU General Public License as published by

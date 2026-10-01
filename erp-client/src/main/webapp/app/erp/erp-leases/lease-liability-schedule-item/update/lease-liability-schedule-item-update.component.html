@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+    Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -45,63 +45,48 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_openingBalance">Opening Balance</label>
-          <input
-            type="number"
-            class="form-control"
-            name="openingBalance"
-            id="field_openingBalance"
-            data-cy="openingBalance"
+          <jhi-money-input
             formControlName="openingBalance"
-          />
+            ngDefaultControl
+            inputControlLabel="Opening Balance"
+            data-cy="openingBalance"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_cashPayment">Cash Payment</label>
-          <input
-            type="number"
-            class="form-control"
-            name="cashPayment"
-            id="field_cashPayment"
-            data-cy="cashPayment"
+          <jhi-money-input
             formControlName="cashPayment"
-          />
+            ngDefaultControl
+            inputControlLabel="Cash Payment"
+            data-cy="cashPayment"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_principalPayment">Principal Payment</label>
-          <input
-            type="number"
-            class="form-control"
-            name="principalPayment"
-            id="field_principalPayment"
-            data-cy="principalPayment"
+          <jhi-money-input
             formControlName="principalPayment"
-          />
+            ngDefaultControl
+            inputControlLabel="Principal Payment"
+            data-cy="principalPayment"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_interestPayment">Interest Payment</label>
-          <input
-            type="number"
-            class="form-control"
-            name="interestPayment"
-            id="field_interestPayment"
-            data-cy="interestPayment"
+          <jhi-money-input
             formControlName="interestPayment"
-          />
+            ngDefaultControl
+            inputControlLabel="Interest Payment"
+            data-cy="interestPayment"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_outstandingBalance">Outstanding Balance</label>
-          <input
-            type="number"
-            class="form-control"
-            name="outstandingBalance"
-            id="field_outstandingBalance"
-            data-cy="outstandingBalance"
+          <jhi-money-input
             formControlName="outstandingBalance"
-          />
+            ngDefaultControl
+            inputControlLabel="Outstanding Balance"
+            data-cy="outstandingBalance"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">

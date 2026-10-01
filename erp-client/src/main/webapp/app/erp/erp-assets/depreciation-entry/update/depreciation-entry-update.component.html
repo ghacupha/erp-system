@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+    Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -46,15 +46,12 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_depreciationAmount">Depreciation Amount</label>
-          <input
-            type="number"
-            class="form-control"
-            name="depreciationAmount"
-            id="field_depreciationAmount"
-            data-cy="depreciationAmount"
+          <jhi-money-input
             formControlName="depreciationAmount"
-          />
+            ngDefaultControl
+            inputControlLabel="Depreciation Amount"
+            data-cy="depreciationAmount"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">

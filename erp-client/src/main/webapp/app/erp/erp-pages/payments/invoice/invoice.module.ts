@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -23,9 +23,10 @@ import { InvoiceDetailComponent } from './detail/invoice-detail.component';
 import { InvoiceUpdateComponent } from './update/invoice-update.component';
 import { InvoiceDeleteDialogComponent } from './delete/invoice-delete-dialog.component';
 import { InvoiceRoutingModule } from './route/invoice-routing.module';
+import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, InvoiceRoutingModule],
+  imports: [SharedModule, InvoiceRoutingModule, ErpCommonModule],
   declarations: [InvoiceComponent, InvoiceDetailComponent, InvoiceUpdateComponent, InvoiceDeleteDialogComponent],
   entryComponents: [InvoiceDeleteDialogComponent],
 })

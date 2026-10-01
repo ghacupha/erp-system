@@ -1,8 +1,8 @@
 package io.github.erp.internal.repository;
 
 /*-
- * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
- * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ * Erp System - Mark X No 12 (Kadar Series) Server ver 1.9.0
+ * Copyright © 2021 - 2026 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,4 +31,16 @@ public interface InternalPrepaymentMarshallingRepository extends
     JpaSpecificationExecutor<PrepaymentMarshalling> {
 
     List<PrepaymentMarshalling> findPrepaymentMarshallingsByCompilationTokenEquals(UUID compilationToken);
+
+    /**
+     * Guards against the duplicate-marshalling bug found live on prepaymentAccount id 1947155:
+     * two marshalling rows for the same account and first-amortization-period meant compile()
+     * generated two full (correct, from its own point of view) amortization schedules for the
+     * same account, over-amortizing it. Checked on create in
+     * InternalPrepaymentMarshallingServiceImpl.save() - backed by a DB-level unique constraint
+     * (see changelog 20261001120000_add_unique_constraint_prepayment_marshalling.xml) as the
+     * authoritative guard, since an application-level check alone cannot rule out a race between
+     * two concurrent requests.
+     */
+    boolean existsByPrepaymentAccount_IdAndFirstAmortizationPeriod_Id(Long prepaymentAccountId, Long firstAmortizationPeriodId);
 }

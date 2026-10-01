@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -23,9 +23,10 @@ import { SignedPaymentDetailComponent } from './detail/signed-payment-detail.com
 import { SignedPaymentUpdateComponent } from './update/signed-payment-update.component';
 import { SignedPaymentDeleteDialogComponent } from './delete/signed-payment-delete-dialog.component';
 import { SignedPaymentRoutingModule } from './route/signed-payment-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, SignedPaymentRoutingModule],
+  imports: [SharedModule, SignedPaymentRoutingModule, ErpCommonModule],
   declarations: [SignedPaymentComponent, SignedPaymentDetailComponent, SignedPaymentUpdateComponent, SignedPaymentDeleteDialogComponent],
   entryComponents: [SignedPaymentDeleteDialogComponent],
 })

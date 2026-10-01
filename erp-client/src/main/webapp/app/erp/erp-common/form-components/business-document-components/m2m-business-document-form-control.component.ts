@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -46,6 +46,12 @@ export class M2mBusinessDocumentFormControlComponent implements OnInit, OnDestro
   @Input() inputControlLabel = '';
 
   @Output() selectedValues: EventEmitter<IBusinessDocument[]> = new EventEmitter<IBusinessDocument[]>();
+
+  // Purely informational to the owning form - this component has no opinion on what "create
+  // new" should do (navigate where, capture what state to come back to, etc). The owning form
+  // handles that itself; see e.g. PrepaymentAccountUpdateComponent's handling of this output and
+  // inlineCreateStarted in store/actions/inline-create-stack.actions.ts.
+  @Output() createNewRequested: EventEmitter<void> = new EventEmitter<void>();
 
   minAccountLengthTerm = 3;
   valuesLoading = false;
@@ -121,5 +127,9 @@ export class M2mBusinessDocumentFormControlComponent implements OnInit, OnDestro
 
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
+  }
+
+  createNew(): void {
+    this.createNewRequested.emit();
   }
 }

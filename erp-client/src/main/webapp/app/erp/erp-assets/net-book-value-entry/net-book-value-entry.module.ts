@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -23,9 +23,10 @@ import { NetBookValueEntryDetailComponent } from './detail/net-book-value-entry-
 import { NetBookValueEntryUpdateComponent } from './update/net-book-value-entry-update.component';
 import { NetBookValueEntryDeleteDialogComponent } from './delete/net-book-value-entry-delete-dialog.component';
 import { NetBookValueEntryRoutingModule } from './route/net-book-value-entry-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, NetBookValueEntryRoutingModule],
+  imports: [SharedModule, NetBookValueEntryRoutingModule, ErpCommonModule],
   declarations: [
     NetBookValueEntryComponent,
     NetBookValueEntryDetailComponent,

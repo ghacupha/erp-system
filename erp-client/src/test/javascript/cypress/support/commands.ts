@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -113,11 +113,32 @@ Cypress.Commands.add('login', (username: string, password: string) => {
   cy.get(submitLoginSelector).click();
 });
 
+// The app's custom form-control pickers (Settlement, Invoice, Dealer, Currency, etc.) render an
+// ng-select typeahead, not a native <select> - selecting an option means opening it, typing a
+// search term, waiting for the async lookup, then clicking the matching option in the dropdown
+// panel. `fieldSelector` should target the ng-select host (e.g. by its [formcontrolname] or a
+// wrapping [data-cy]); `searchTerm` must match at least part of the option's bound label.
+Cypress.Commands.add('selectNgOption', (fieldSelector: string, searchTerm: string) => {
+  cy.get(fieldSelector).click();
+  cy.get(fieldSelector).find('input').type(searchTerm);
+  cy.get('.ng-dropdown-panel .ng-option', { timeout: 10000 }).contains(searchTerm).click();
+});
+
+// Clicks the "Create New" footer link inside an ng-select picker's dropdown - used to trigger
+// the inline-create workflow from the Settlement (on Prepayment Account) or Invoices (on
+// Settlement) pickers.
+Cypress.Commands.add('clickNgSelectCreateNew', (fieldSelector: string) => {
+  cy.get(fieldSelector).click();
+  cy.contains('.ng-dropdown-panel', 'Create New').contains('Create New').click();
+});
+
 declare global {
   namespace Cypress {
     interface Chainable {
       login(username: string, password: string): Cypress.Chainable;
       authenticatedRequest(data: any): Cypress.Chainable;
+      selectNgOption(fieldSelector: string, searchTerm: string): Cypress.Chainable;
+      clickNgSelectCreateNew(fieldSelector: string): Cypress.Chainable;
     }
   }
 }

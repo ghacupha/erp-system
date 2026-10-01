@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+    Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -149,8 +149,7 @@
         </jhi-m21-settlement-currency-form-control>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_assetCost">Asset Cost</label>
-          <input type="number" class="form-control" name="assetCost" id="field_assetCost" data-cy="assetCost" formControlName="assetCost" />
+          <jhi-money-input formControlName="assetCost" ngDefaultControl inputControlLabel="Asset Cost" data-cy="assetCost"></jhi-money-input>
           <div *ngIf="editForm.get('assetCost')!.invalid && (editForm.get('assetCost')!.dirty || editForm.get('assetCost')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('assetCost')?.errors?.required"> This field is required. </small>
             <small class="form-text text-danger" [hidden]="!editForm.get('assetCost')?.errors?.number">
@@ -160,15 +159,12 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_historicalCost">Historical Cost</label>
-          <input
-            type="number"
-            class="form-control"
-            name="historicalCost"
-            id="field_historicalCost"
-            data-cy="historicalCost"
+          <jhi-money-input
             formControlName="historicalCost"
-          />
+            ngDefaultControl
+            inputControlLabel="Historical Cost"
+            data-cy="historicalCost"
+          ></jhi-money-input>
           <div
             *ngIf="
               editForm.get('historicalCost')!.invalid && (editForm.get('historicalCost')!.dirty || editForm.get('historicalCost')!.touched)

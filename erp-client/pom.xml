@@ -7,9 +7,9 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-client</artifactId>
-    <version>1.7.9</version>
+    <version>1.8.0</version>
     <name>Erp System</name>
-    <description>Mark X No 11 (Jehoiada Series) Client 1.7.9</description>
+    <description>Mark X No 12 (Kadar Series) Client 1.8.0</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
@@ -32,7 +32,7 @@
         <docker.image.prefix>ghacupha</docker.image.prefix>
         <founder.website>https://github.com/ghacupha</founder.website>
         <owner.email>mailnjeru@gmail.com</owner.email>
-        <project.inceptionYear>2021 - 2024</project.inceptionYear>
+        <project.inceptionYear>2021 - 2026</project.inceptionYear>
         <project.owner>Edwin Njeru</project.owner>
 
     </properties>

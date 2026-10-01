@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+    Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -71,32 +71,25 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_assetCost">Asset Cost</label>
-          <input type="number" class="form-control" name="assetCost" id="field_assetCost" data-cy="assetCost" formControlName="assetCost" />
+          <jhi-money-input formControlName="assetCost" ngDefaultControl inputControlLabel="Asset Cost" data-cy="assetCost"></jhi-money-input>
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_historicalCost">Historical Cost</label>
-          <input
-            type="number"
-            class="form-control"
-            name="historicalCost"
-            id="field_historicalCost"
-            data-cy="historicalCost"
+          <jhi-money-input
             formControlName="historicalCost"
-          />
+            ngDefaultControl
+            inputControlLabel="Historical Cost"
+            data-cy="historicalCost"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_accruedDepreciation">Accrued Depreciation</label>
-          <input
-            type="number"
-            class="form-control"
-            name="accruedDepreciation"
-            id="field_accruedDepreciation"
-            data-cy="accruedDepreciation"
+          <jhi-money-input
             formControlName="accruedDepreciation"
-          />
+            ngDefaultControl
+            inputControlLabel="Accrued Depreciation"
+            data-cy="accruedDepreciation"
+          ></jhi-money-input>
           <div
             *ngIf="
               editForm.get('accruedDepreciation')!.invalid &&
@@ -116,15 +109,12 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_netBookValue">Net Book Value</label>
-          <input
-            type="number"
-            class="form-control"
-            name="netBookValue"
-            id="field_netBookValue"
-            data-cy="netBookValue"
+          <jhi-money-input
             formControlName="netBookValue"
-          />
+            ngDefaultControl
+            inputControlLabel="Net Book Value"
+            data-cy="netBookValue"
+          ></jhi-money-input>
           <div
             *ngIf="editForm.get('netBookValue')!.invalid && (editForm.get('netBookValue')!.dirty || editForm.get('netBookValue')!.touched)"
           >

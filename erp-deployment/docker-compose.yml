@@ -1,5 +1,5 @@
 #
-# Erp System - Jehoiada Series
+# Erp System - Mark X No 12 (Kadar Series) Server ver 1.4.0
 # Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,17 @@ version: '3.3'
 networks:
   erp-system-network:
     driver: bridge
+
+volumes:
+  # Elasticsearch's data directory used to be a host bind-mount (./search-index-directory),
+  # which Docker Desktop serves to Linux containers over a slow CIFS/9p bridge - with 600+
+  # indices on disk, index-creation calls routinely blew past erp-system-server's 30s ES client
+  # timeout and failed the whole Spring Boot startup. A named volume lives in the Docker VM's
+  # native filesystem instead, which is fast. Pre-existing data was copied over 1:1 before this
+  # switch (via a throwaway `alpine` container bind-mounting both the old directory and this
+  # volume), so no reindexing was needed.
+  erp-elasticsearch-data:
+    external: true
 
 services:
   # erpsystem-postgresql:
@@ -110,7 +121,7 @@ services:
   erpsystem-elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.4
     volumes:
-      - ./search-index-directory:/usr/share/elasticsearch/data
+      - erp-elasticsearch-data:/usr/share/elasticsearch/data
     ports:
       #- 127.0.0.1:9200:9200
       - 9200:9200
@@ -129,7 +140,7 @@ services:
       - erp-system-network
 
   erp-system-server:
-    image: ghacupha/erp-system:1.8.3
+    image: ghacupha/erp-system:1.9.0
     volumes:
       - ./logs/:/logs/
       - ./reports-directory/:/reports-directory/

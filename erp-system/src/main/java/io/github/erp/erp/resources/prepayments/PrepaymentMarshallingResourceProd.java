@@ -1,8 +1,8 @@
 package io.github.erp.erp.resources.prepayments;
 
 /*-
- * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
- * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ * Erp System - Mark X No 12 (Kadar Series) Server ver 1.9.0
+ * Copyright © 2021 - 2026 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@ package io.github.erp.erp.resources.prepayments;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.erp.internal.repository.InternalPrepaymentMarshallingRepository;
+import io.github.erp.internal.service.prepayments.DuplicatePrepaymentMarshallingException;
 import io.github.erp.internal.service.prepayments.InternalPrepaymentMarshallingService;
 import io.github.erp.service.PrepaymentMarshallingQueryService;
 import io.github.erp.service.criteria.PrepaymentMarshallingCriteria;
@@ -88,7 +89,12 @@ public class PrepaymentMarshallingResourceProd {
         if (prepaymentMarshallingDTO.getId() != null) {
             throw new BadRequestAlertException("A new prepaymentMarshalling cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        PrepaymentMarshallingDTO result = prepaymentMarshallingService.save(prepaymentMarshallingDTO);
+        PrepaymentMarshallingDTO result;
+        try {
+            result = prepaymentMarshallingService.save(prepaymentMarshallingDTO);
+        } catch (DuplicatePrepaymentMarshallingException e) {
+            throw new BadRequestAlertException(e.getMessage(), ENTITY_NAME, "duplicatemarshalling");
+        }
         return ResponseEntity
             .created(new URI("/api/prepayment-marshallings/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))

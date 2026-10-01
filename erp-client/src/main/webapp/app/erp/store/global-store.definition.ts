@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -49,8 +49,7 @@ import { TransactionAccountReportDateSelectionState } from './reducers/transacti
 import { IFRS16LeaseContractReportState } from './reducers/ifrs16-lease-contract-report.reducer';
 import { LeasePostingRuleConfigState } from './reducers/lease-posting-rule-config.reducer';
 import { LeasePostingRuleFormState } from './reducers/lease-posting-rule-workflow-status.reducer';
-import { SettlementInlineCreateState, initialSettlementInlineCreateState } from './reducers/settlement-inline-create.reducer';
-import { PaymentInvoiceInlineCreateState, initialPaymentInvoiceInlineCreateState } from './reducers/payment-invoice-inline-create.reducer';
+import { InlineCreateStackState, initialInlineCreateStackState } from './reducers/inline-create-stack.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -84,8 +83,7 @@ export interface State {
   ifrs16LeaseContractReportState: IFRS16LeaseContractReportState,
   leasePostingRuleConfigState: LeasePostingRuleConfigState,
   leasePostingRuleFormState: LeasePostingRuleFormState,
-  settlementInlineCreateState: SettlementInlineCreateState,
-  paymentInvoiceInlineCreateState: PaymentInvoiceInlineCreateState
+  inlineCreateStack: InlineCreateStackState
 }
 
 export const initialState: State = {
@@ -320,6 +318,5 @@ export const initialState: State = {
     weAreCreating: false,
     weAreDeleting: false,
   },
-  settlementInlineCreateState: initialSettlementInlineCreateState,
-  paymentInvoiceInlineCreateState: initialPaymentInvoiceInlineCreateState,
+  inlineCreateStack: initialInlineCreateStackState,
 }

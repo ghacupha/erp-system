@@ -620,5 +620,6 @@
     <include file="config/liquibase/changelog/20250207121500_add_has_been_fully_amortised_to_lease_liability.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250207140000_update_lease_amortization_schedule_contract_fk.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260604151600_added_postedBy_and_postingDate_to_PrepaymentWorkflows.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20261001120000_add_unique_constraint_prepayment_marshalling.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -23,9 +23,10 @@ import { RouMonthlyDepreciationReportItemDetailComponent } from './detail/rou-mo
 import { RouMonthlyDepreciationReportItemUpdateComponent } from './update/rou-monthly-depreciation-report-item-update.component';
 import { RouMonthlyDepreciationReportItemDeleteDialogComponent } from './delete/rou-monthly-depreciation-report-item-delete-dialog.component';
 import { RouMonthlyDepreciationReportItemRoutingModule } from './route/rou-monthly-depreciation-report-item-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, RouMonthlyDepreciationReportItemRoutingModule],
+  imports: [SharedModule, RouMonthlyDepreciationReportItemRoutingModule, ErpCommonModule],
   declarations: [
     RouMonthlyDepreciationReportItemComponent,
     RouMonthlyDepreciationReportItemDetailComponent,

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -56,17 +56,12 @@ import {
   copyingSettlementStatus, creatingSettlementStatus, editingSettlementStatus, settlementBrowserRefreshStatus,
   settlementUpdateSelectedPayment
 } from '../../../store/selectors/settlement-update-menu-status.selectors';
-import { settlementInlineCreateCompleted } from '../../../store/actions/settlement-inline-create.actions';
-import { settlementInlineCreateActive, settlementInlineCreateParentRoute } from '../../../store/selectors/settlement-inline-create.selectors';
+import { inlineCreateCancelled, inlineCreateCompleted, inlineCreateConsumed, inlineCreateStarted } from '../../../store/actions/inline-create-stack.actions';
 import {
-  paymentInvoiceInlineCreateConsumed,
-  paymentInvoiceInlineCreateStarted,
-} from '../../../store/actions/payment-invoice-inline-create.actions';
-import {
-  paymentInvoiceInlineCreateActive,
-  paymentInvoiceInlineCreateCreatedPaymentInvoice,
-  paymentInvoiceInlineCreateParentFormSnapshot,
-} from '../../../store/selectors/payment-invoice-inline-create.selectors';
+  createIsPendingChildOfSelector,
+  createSettledFrameOfTypeSelector,
+  selectTopInlineCreateFrame,
+} from '../../../store/selectors/inline-create-stack.selectors';
 
 @Component({
   selector: 'jhi-settlement-update',
@@ -95,9 +90,10 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
   browserRefresh = false;
 
   // True only when this form was reached via a parent form's own inline-create handling (e.g.
-  // PrepaymentAccountUpdateComponent.createSettlementInline()) - drives onSaveSuccess() to
-  // report the saved settlement back via settlementInlineCreateCompleted and navigate to the
-  // parent's own route, instead of a plain history.back().
+  // PrepaymentAccountUpdateComponent.createSettlementInline()) - drives onSaveSuccess()/cancel()
+  // to report back via inlineCreateCompleted/inlineCreateCancelled and navigate to the parent's
+  // own route, instead of this form's own list. Set in ngOnInit(), not the constructor - see the
+  // comment there.
   weAreInlineCreating = false;
   inlineParentRoute = '';
 
@@ -148,13 +144,9 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
     this.store.pipe(select(creatingSettlementStatus)).subscribe(stat => this.weAreCreatingAPayment = stat);
     this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => this.selectedSettlement = copiedSettlement);
     this.store.pipe(select(settlementBrowserRefreshStatus)).subscribe(refreshed => this.browserHasBeenRefreshed = refreshed);
-
-    this.store.pipe(select(settlementInlineCreateActive), take(1)).subscribe(active => {
-      this.weAreInlineCreating = active;
-    });
-    this.store.pipe(select(settlementInlineCreateParentRoute), take(1)).subscribe(parentRoute => {
-      this.inlineParentRoute = parentRoute;
-    });
+    // weAreInlineCreating/inlineParentRoute are determined in ngOnInit, not here - see the
+    // comment there for why (must run after any settled PaymentInvoice child frame is consumed,
+    // since consuming can re-expose a pending Settlement frame further down the stack).
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
@@ -191,10 +183,26 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
       // this.store.dispatch(settlementCreationWorkflowInitiatedFromUpdateFormOnInit({ copiedPartialSettlement: this.createPartialFromForm() }))
 
       this.updateTodaysDate()
-      this.updatePreferredCategory();
-      this.updatePreferredCurrency();
-      this.updatePreferredSignatories();
-      this.updatePreferredPaymentLabels();
+
+      // Peeked synchronously: is this instance being constructed as the RETURN leg of an inline
+      // Create New round trip (Invoice or Business Document), rather than a genuinely fresh "New
+      // Settlement" entry? The four preferred-default lookups below are async (HTTP calls) and
+      // would otherwise resolve AFTER the synchronous snapshot restore in Step 1 above, silently
+      // clobbering settlementCurrency/paymentCategory/signatories/paymentLabels that the restore
+      // (or the user's own prior edits captured in the snapshot) just set - same race fixed for
+      // PrepaymentAccountUpdateComponent's own fresh-record defaults.
+      this.store
+        .pipe(select(selectTopInlineCreateFrame), take(1))
+        .subscribe(frame => {
+          const returningFromInlineCreate = !!frame && frame.status !== 'pending';
+          if (returningFromInlineCreate) {
+            return;
+          }
+          this.updatePreferredCategory();
+          this.updatePreferredCurrency();
+          this.updatePreferredSignatories();
+          this.updatePreferredPaymentLabels();
+        });
     }
 
     // this.loadRelationshipsOptions();
@@ -205,44 +213,91 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
     this.updatePaymentAmountGivenPaymentCategory();
     this.updateDescriptionGivenInvoicePurchaseOrder();
 
-    // Returning from an inline "Create New" on the Invoices picker (see
-    // createPaymentInvoiceInline() below and payment-invoice-inline-create.actions.ts): this
-    // form was reconstructed at the same route, so its own in-progress draft (captured right
-    // before navigating away to the Invoice create form) needs restoring first, then the newly
-    // created Invoice gets appended - in that order, and after the valueChanges subscriptions
-    // above (updatePreferredPaymentAmountGivenInvoice() etc.), so the payment-amount/currency/
-    // biller/labels auto-fill they wire up actually sees this change.
-    this.store.pipe(select(paymentInvoiceInlineCreateActive), take(1)).subscribe(active => {
-      if (!active) {
-        return;
-      }
-      combineLatest([
-        this.store.pipe(select(paymentInvoiceInlineCreateParentFormSnapshot)),
-        this.store.pipe(select(paymentInvoiceInlineCreateCreatedPaymentInvoice)),
-      ])
-        .pipe(take(1))
-        .subscribe(([snapshot, createdPaymentInvoice]) => {
-          if (snapshot) {
-            this.updateForm(snapshot as ISettlement);
-          }
-          if (createdPaymentInvoice) {
-            const existing: IPaymentInvoice[] = this.editForm.get(['paymentInvoices'])?.value ?? [];
-            this.updatePaymentInvoices([...existing, createdPaymentInvoice]);
-          }
-          this.store.dispatch(paymentInvoiceInlineCreateConsumed());
-        });
-    });
+    // Step 1: consume a settled Invoice child frame, if the top of the inline-create stack is
+    // one. Returning from an inline "Create New" on the Invoices picker (see
+    // createPaymentInvoiceInline() below) means this form was reconstructed at the same route,
+    // so its own in-progress draft (captured right before navigating away to the Invoice create
+    // form) needs restoring first, then the newly created Invoice gets appended (skipped on a
+    // cancellation) - in that order, and after the valueChanges subscriptions above
+    // (updatePreferredPaymentAmountGivenInvoice() etc.), so the payment-amount/currency/biller/
+    // labels auto-fill they wire up actually sees this change. This must run BEFORE step 2 below,
+    // because consuming this frame can re-expose a pending Settlement frame beneath it.
+    this.store
+      .pipe(select(createSettledFrameOfTypeSelector('PaymentInvoice')))
+      .pipe(take(1))
+      .subscribe(frame => {
+        if (!frame) {
+          return;
+        }
+        if (frame.parentFormSnapshot) {
+          this.updateForm(frame.parentFormSnapshot as ISettlement);
+        }
+        if (frame.status === 'completed' && frame.createdEntity) {
+          const existing: IPaymentInvoice[] = this.editForm.get(['paymentInvoices'])?.value ?? [];
+          this.updatePaymentInvoices([...existing, frame.createdEntity as IPaymentInvoice]);
+        }
+        this.store.dispatch(inlineCreateConsumed());
+      });
+
+    // Same pattern for a settled Business Document child - see createBusinessDocumentInline()
+    // below. Must also run before step 2, for the same reason as above.
+    this.store
+      .pipe(select(createSettledFrameOfTypeSelector('BusinessDocument')))
+      .pipe(take(1))
+      .subscribe(frame => {
+        if (!frame) {
+          return;
+        }
+        if (frame.parentFormSnapshot) {
+          this.updateForm(frame.parentFormSnapshot as ISettlement);
+        }
+        if (frame.status === 'completed' && frame.createdEntity) {
+          const existing: IBusinessDocument[] = this.editForm.get(['businessDocuments'])?.value ?? [];
+          this.updateBusinessDocument([...existing, frame.createdEntity as IBusinessDocument]);
+        }
+        this.store.dispatch(inlineCreateConsumed());
+      });
+
+    // Step 2: am I myself currently a pending inline-create child of a Prepayment Account? Must
+    // run after step 1 so it sees the stack as it stands once any settled child frame above has
+    // been popped - otherwise a Settlement instance returning from its own Invoice round trip
+    // would wrongly conclude it is no longer inline-created, breaking the outer leg of a nested
+    // round trip.
+    combineLatest([
+      this.store.pipe(select(createIsPendingChildOfSelector('Settlement'))),
+      this.store.pipe(select(selectTopInlineCreateFrame)),
+    ])
+      .pipe(take(1))
+      .subscribe(([isPendingChild, topFrame]) => {
+        if (isPendingChild && topFrame) {
+          this.weAreInlineCreating = true;
+          this.inlineParentRoute = topFrame.parentRoute;
+        }
+      });
   }
 
   createPaymentInvoiceInline(): void {
     this.store.dispatch(
-      paymentInvoiceInlineCreateStarted({
+      inlineCreateStarted({
+        entityType: 'PaymentInvoice',
         targetField: 'paymentInvoices',
         parentRoute: this.router.url,
         parentFormSnapshot: this.createFromForm(),
       })
     );
     this.router.navigate(['payment-invoice/new']);
+  }
+
+  createBusinessDocumentInline(): void {
+    this.store.dispatch(
+      inlineCreateStarted({
+        entityType: 'BusinessDocument',
+        targetField: 'businessDocuments',
+        parentRoute: this.router.url,
+        parentFormSnapshot: this.createFromForm(),
+      })
+    );
+    this.router.navigate(['business-document/new']);
   }
 
   updateTodaysDate(): void {
@@ -450,9 +505,20 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
   }
 
   previousState(): void {
-    // todo create action for previous-state-update
     this.store.dispatch(settlementUpdatePreviousStateMethodCalled());
-    window.history.back();
+    this.router.navigate(['/settlement']);
+  }
+
+  // Symmetric with the inline branch of onSaveSuccess() below: if this form is currently an
+  // inline-create child, Cancel reports the cancellation back (without a created entity) and
+  // returns to the parent's in-progress form; otherwise it behaves like a plain Cancel.
+  cancel(): void {
+    if (this.weAreInlineCreating) {
+      this.store.dispatch(inlineCreateCancelled());
+      this.router.navigateByUrl(this.inlineParentRoute || '/settlement', { replaceUrl: true });
+      return;
+    }
+    this.previousState();
   }
 
   copy(): void {
@@ -497,8 +563,8 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
 
   protected onSaveSuccess(saved: ISettlement | null): void {
     if (this.weAreInlineCreating && saved) {
-      this.store.dispatch(settlementInlineCreateCompleted({ createdSettlement: saved }));
-      this.router.navigateByUrl(this.inlineParentRoute || '/');
+      this.store.dispatch(inlineCreateCompleted({ createdEntity: saved }));
+      this.router.navigateByUrl(this.inlineParentRoute || '/settlement', { replaceUrl: true });
       return;
     }
     this.previousState();

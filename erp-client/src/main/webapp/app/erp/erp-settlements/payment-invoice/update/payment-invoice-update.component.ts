@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { concat, Observable, of, Subject } from 'rxjs';
+import { combineLatest, concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, take, tap } from 'rxjs/operators';
 
 import { IPaymentInvoice, PaymentInvoice } from '../payment-invoice.model';
@@ -62,11 +62,12 @@ import {
   editingPaymentInvoiceStatus, paymentInvoiceUpdateSelectedInstance
 } from '../../../store/selectors/payment-invoice-workflow-status.selectors';
 import { paymentInvoiceCreationInitiatedEnRoute, paymentInvoiceDataHasMutated } from '../../../store/actions/payment-invoice-workflow-status.action';
-import { paymentInvoiceInlineCreateCompleted } from '../../../store/actions/payment-invoice-inline-create.actions';
+import { inlineCreateCancelled, inlineCreateCompleted, inlineCreateConsumed, inlineCreateStarted } from '../../../store/actions/inline-create-stack.actions';
 import {
-  paymentInvoiceInlineCreateActive,
-  paymentInvoiceInlineCreateParentRoute,
-} from '../../../store/selectors/payment-invoice-inline-create.selectors';
+  createIsPendingChildOfSelector,
+  createSettledFrameOfTypeSelector,
+  selectTopInlineCreateFrame,
+} from '../../../store/selectors/inline-create-stack.selectors';
 
 @Component({
   selector: 'jhi-payment-invoice-update',
@@ -139,9 +140,12 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   selectedItem = {...new PaymentInvoice()}
 
   // True only when this form was reached via a parent form's own inline-create handling (e.g.
-  // SettlementUpdateComponent.createPaymentInvoiceInline()) - drives onSaveSuccess() to report
-  // the saved invoice back via paymentInvoiceInlineCreateCompleted and navigate to the parent's
-  // own route, instead of a plain history.back().
+  // SettlementUpdateComponent.createPaymentInvoiceInline()) - drives onSaveSuccess()/cancel() to
+  // report back via inlineCreateCompleted/inlineCreateCancelled and navigate to the parent's own
+  // route, instead of this form's own list/detail route. Set in ngOnInit(), not the constructor,
+  // for consistency with SettlementUpdateComponent (this component has no children of its own
+  // today, but keeping the same placement means it's already correctly shaped if it ever gains
+  // one, e.g. inline-creating a Purchase Order).
   weAreInlineCreating = false;
   inlineParentRoute = '';
 
@@ -182,13 +186,6 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     if (!this.activatedRoute.snapshot.paramMap.get('id')) {
       this.store.dispatch(paymentInvoiceCreationInitiatedEnRoute());
     }
-
-    this.store.pipe(select(paymentInvoiceInlineCreateActive), take(1)).subscribe(active => {
-      this.weAreInlineCreating = active;
-    });
-    this.store.pipe(select(paymentInvoiceInlineCreateParentRoute), take(1)).subscribe(parentRoute => {
-      this.inlineParentRoute = parentRoute;
-    });
   }
 
   ngOnInit(): void {
@@ -213,9 +210,104 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     this.loadPurchaseOrders();
     this.loadDeliveryNotes();
     this.loadJobSheets();
-    this.updatePreferredCurrency();
-    this.updatePreferredPaymentLabels();
     this.updateInputsGivenPurchaseOrder();
+
+    // Peeked synchronously: is this instance being constructed as the RETURN leg of an inline
+    // Create New round trip (Purchase Order or Business Document), rather than a genuinely fresh
+    // "New Invoice" entry? updatePreferredCurrency()/updatePreferredPaymentLabels() below are
+    // async (HTTP calls) and would otherwise resolve AFTER the synchronous snapshot restore
+    // further down, silently clobbering settlementCurrency/paymentLabels that the restore (or the
+    // user's own prior edits captured in the snapshot) just set - same race fixed for
+    // PrepaymentAccountUpdateComponent's and SettlementUpdateComponent's own fresh-record
+    // defaults.
+    this.store
+      .pipe(select(selectTopInlineCreateFrame), take(1))
+      .subscribe(frame => {
+        const returningFromInlineCreate = !!frame && frame.status !== 'pending';
+        if (returningFromInlineCreate) {
+          return;
+        }
+        this.updatePreferredCurrency();
+        this.updatePreferredPaymentLabels();
+      });
+
+    // Consume a settled Purchase Order child frame, if the top of the inline-create stack is
+    // one - see createPurchaseOrderInline() below. Must run before the "am I a pending child"
+    // check further down, same ordering rule as SettlementUpdateComponent.
+    this.store
+      .pipe(select(createSettledFrameOfTypeSelector('PurchaseOrder')))
+      .pipe(take(1))
+      .subscribe(frame => {
+        if (!frame) {
+          return;
+        }
+        if (frame.parentFormSnapshot) {
+          this.updateForm(frame.parentFormSnapshot as IPaymentInvoice);
+        }
+        if (frame.status === 'completed' && frame.createdEntity) {
+          const existing: IPurchaseOrder[] = this.editForm.get(['purchaseOrders'])?.value ?? [];
+          this.editForm.patchValue({ purchaseOrders: [...existing, frame.createdEntity as IPurchaseOrder] });
+        }
+        this.store.dispatch(inlineCreateConsumed());
+      });
+
+    // Same pattern for a settled Business Document child - see createBusinessDocumentInline()
+    // below.
+    this.store
+      .pipe(select(createSettledFrameOfTypeSelector('BusinessDocument')))
+      .pipe(take(1))
+      .subscribe(frame => {
+        if (!frame) {
+          return;
+        }
+        if (frame.parentFormSnapshot) {
+          this.updateForm(frame.parentFormSnapshot as IPaymentInvoice);
+        }
+        if (frame.status === 'completed' && frame.createdEntity) {
+          const existing: IBusinessDocument[] = this.editForm.get(['businessDocuments'])?.value ?? [];
+          this.updateBusinessDocument([...existing, frame.createdEntity as IBusinessDocument]);
+        }
+        this.store.dispatch(inlineCreateConsumed());
+      });
+
+    // Am I currently a pending inline-create child of a Settlement form? Must run after the
+    // consume steps above, so it sees the stack as it stands once any settled child frame has
+    // been popped.
+    combineLatest([
+      this.store.pipe(select(createIsPendingChildOfSelector('PaymentInvoice'))),
+      this.store.pipe(select(selectTopInlineCreateFrame)),
+    ])
+      .pipe(take(1))
+      .subscribe(([isPendingChild, topFrame]) => {
+        if (isPendingChild && topFrame) {
+          this.weAreInlineCreating = true;
+          this.inlineParentRoute = topFrame.parentRoute;
+        }
+      });
+  }
+
+  createPurchaseOrderInline(): void {
+    this.store.dispatch(
+      inlineCreateStarted({
+        entityType: 'PurchaseOrder',
+        targetField: 'purchaseOrders',
+        parentRoute: this.router.url,
+        parentFormSnapshot: this.createFromForm(),
+      })
+    );
+    this.router.navigate(['purchase-order/new']);
+  }
+
+  createBusinessDocumentInline(): void {
+    this.store.dispatch(
+      inlineCreateStarted({
+        entityType: 'BusinessDocument',
+        targetField: 'businessDocuments',
+        parentRoute: this.router.url,
+        parentFormSnapshot: this.createFromForm(),
+      })
+    );
+    this.router.navigate(['business-document/new']);
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -456,7 +548,17 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
 
   previousState(): void {
     this.store.dispatch(paymentInvoiceDataHasMutated());
-    window.history.back();
+    this.router.navigate(['/payment-invoice']);
+  }
+
+  // Symmetric with the inline branch of onSaveSuccess() below.
+  cancel(): void {
+    if (this.weAreInlineCreating) {
+      this.store.dispatch(inlineCreateCancelled());
+      this.router.navigateByUrl(this.inlineParentRoute || '/payment-invoice', { replaceUrl: true });
+      return;
+    }
+    this.previousState();
   }
 
   save(): void {
@@ -566,8 +668,8 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
 
   protected onSaveSuccess(saved: IPaymentInvoice | null): void {
     if (this.weAreInlineCreating && saved) {
-      this.store.dispatch(paymentInvoiceInlineCreateCompleted({ createdPaymentInvoice: saved }));
-      this.router.navigateByUrl(this.inlineParentRoute || '/');
+      this.store.dispatch(inlineCreateCompleted({ createdEntity: saved }));
+      this.router.navigateByUrl(this.inlineParentRoute || '/payment-invoice', { replaceUrl: true });
       return;
     }
     if (saved?.id) {

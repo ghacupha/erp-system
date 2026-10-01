@@ -1,8 +1,8 @@
 package io.github.erp.erp.resources;
 
 /*-
- * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
- * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ * Erp System - Mark X No 12 (Kadar Series) Server ver 1.9.0
+ * Copyright © 2021 - 2026 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -256,6 +256,41 @@ class PrepaymentMarshallingResourceIT {
 
         // Validate the PrepaymentMarshalling in Elasticsearch
         verify(mockPrepaymentMarshallingSearchRepository, times(0)).save(prepaymentMarshalling);
+    }
+
+    @Test
+    @Transactional
+    void createPrepaymentMarshallingDuplicateRejected() throws Exception {
+        // Persist an existing PrepaymentMarshalling for a given (prepaymentAccount,
+        // firstAmortizationPeriod) pair - this is the live bug found on prepaymentAccount id
+        // 1947155: a second marshalling row for the SAME pair meant compile() generated a
+        // duplicate amortization schedule, over-amortizing the account.
+        prepaymentMarshallingRepository.saveAndFlush(prepaymentMarshalling);
+        int databaseSizeBeforeAttempt = prepaymentMarshallingRepository.findAll().size();
+
+        // Attempt to create a second PrepaymentMarshalling for the SAME prepaymentAccount and
+        // firstAmortizationPeriod (everything else about the second one differs, which is the
+        // point - only the (account, period) pair matters)
+        PrepaymentMarshalling duplicate = new PrepaymentMarshalling()
+            .inactive(UPDATED_INACTIVE)
+            .amortizationPeriods(UPDATED_AMORTIZATION_PERIODS)
+            .processed(UPDATED_PROCESSED)
+            .compilationToken(UPDATED_COMPILATION_TOKEN)
+            .prepaymentAccount(prepaymentMarshalling.getPrepaymentAccount())
+            .firstFiscalMonth(prepaymentMarshalling.getFirstFiscalMonth())
+            .lastFiscalMonth(prepaymentMarshalling.getLastFiscalMonth())
+            .firstAmortizationPeriod(prepaymentMarshalling.getFirstAmortizationPeriod());
+        PrepaymentMarshallingDTO duplicateDTO = prepaymentMarshallingMapper.toDto(duplicate);
+
+        restPrepaymentMarshallingMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(duplicateDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        // The duplicate must NOT have been persisted
+        List<PrepaymentMarshalling> prepaymentMarshallingList = prepaymentMarshallingRepository.findAll();
+        assertThat(prepaymentMarshallingList).hasSize(databaseSizeBeforeAttempt);
     }
 
     @Test

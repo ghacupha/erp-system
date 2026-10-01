@@ -20,21 +20,47 @@
         </addColumn>
     </changeSet>
 
-    <!--<changeSet id="1780396624676-1" author="Edwin Njeru">
-        <addColumn tableName="prepayment_compilation_request">
-            <column name="narration" type="varchar(255)">
-                <constraints nullable="true"/>
-            </column>
-        </addColumn>
-    </changeSet>-->
-
-    <!--<changeSet id="1780396421477-1" author="Edwin Njeru">
+    <!--
+        Both changeSets below were accidentally left commented out - the Java entities
+        (PrepaymentAccount.postingDate, PrepaymentCompilationRequest.narration) have had these
+        fields for a while, and production's database apparently has both columns some other way
+        (a manual ALTER, most likely), but any schema built fresh from these changelogs -
+        including every H2 integration test run - was missing them, causing every
+        PrepaymentAccount/PrepaymentCompilationRequest-touching *ResourceIT or *RepositoryIT test
+        to fail at entity-persist time with "Column ... not found". Found investigating an
+        unrelated bug (PrepaymentMarshallingResourceIT, then CompiledPrepaymentAccountReportRepositoryIT);
+        re-enabled since this directly blocked running new tests added there.
+    -->
+    <changeSet id="1780396421477-1" author="Edwin Njeru">
+        <!-- Guarded: production's prepayment_account table apparently already has this column
+             (added out-of-band, not through Liquibase) - without this check, running the
+             changeset there would fail with "column already exists" on next deploy. On a fresh
+             schema (e.g. every integration test's H2 database) the column genuinely doesn't
+             exist yet and this proceeds normally. -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="prepayment_account" columnName="posting_date"/>
+            </not>
+        </preConditions>
         <addColumn tableName="prepayment_account">
             <column name="posting_date" type="date">
                 <constraints nullable="true"/>
             </column>
         </addColumn>
-    </changeSet>-->
+    </changeSet>
+
+    <changeSet id="1780396624676-1" author="Edwin Njeru">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="prepayment_compilation_request" columnName="narration"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="prepayment_compilation_request">
+            <column name="narration" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
 
     <changeSet id="20260529100000-1" author="erp-agent">
         <addForeignKeyConstraint baseColumnNames="created_by_id"

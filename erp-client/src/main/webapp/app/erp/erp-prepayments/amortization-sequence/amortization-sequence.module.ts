@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -23,9 +23,10 @@ import { AmortizationSequenceDetailComponent } from './detail/amortization-seque
 import { AmortizationSequenceUpdateComponent } from './update/amortization-sequence-update.component';
 import { AmortizationSequenceDeleteDialogComponent } from './delete/amortization-sequence-delete-dialog.component';
 import { AmortizationSequenceRoutingModule } from './route/amortization-sequence-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AmortizationSequenceRoutingModule],
+  imports: [SharedModule, AmortizationSequenceRoutingModule, ErpCommonModule],
   declarations: [
     AmortizationSequenceComponent,
     AmortizationSequenceDetailComponent,

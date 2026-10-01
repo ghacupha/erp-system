@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+    Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,219 +49,231 @@
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_catalogueNumber">Catalogue Number</label>
-          <input
-            type="text"
-            class="form-control"
-            name="catalogueNumber"
-            id="field_catalogueNumber"
-            data-cy="catalogueNumber"
-            formControlName="catalogueNumber"
-          />
-          <div
-            *ngIf="
-              editForm.get('catalogueNumber')!.invalid &&
-              (editForm.get('catalogueNumber')!.dirty || editForm.get('catalogueNumber')!.touched)
-            "
-          >
-            <small class="form-text text-danger" *ngIf="editForm.get('catalogueNumber')?.errors?.required"> This field is required. </small>
-          </div>
+        <ul ngbNav #prepaymentAccountTabs="ngbNav" [activeId]="1" class="nav-tabs">
+          <li [ngbNavItem]="1">
+            <a ngbNavLink>Details</a>
+          </li>
+          <li [ngbNavItem]="2">
+            <a ngbNavLink>Accounts</a>
+          </li>
+          <li [ngbNavItem]="3">
+            <a ngbNavLink>Additional</a>
+          </li>
+        </ul>
+
+        <div class="mt-3" [hidden]="prepaymentAccountTabs.activeId !== 1">
+              <jhi-m21-settlement-form-control
+                ngDefaultControl
+                formControlName='prepaymentTransaction'
+                [inputValue]="editForm.get('prepaymentTransaction')!.value"
+                (valueSelected)='updateSettlement($event)'
+                (createNewRequested)='createSettlementInline()'
+                inputControlLabel='Prepayment Transaction'
+              >
+              </jhi-m21-settlement-form-control>
+
+              <div class="form-group">
+                <label class="form-control-label" for="field_catalogueNumber">Catalogue Number</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="catalogueNumber"
+                  id="field_catalogueNumber"
+                  data-cy="catalogueNumber"
+                  formControlName="catalogueNumber"
+                />
+                <div
+                  *ngIf="
+                    editForm.get('catalogueNumber')!.invalid &&
+                    (editForm.get('catalogueNumber')!.dirty || editForm.get('catalogueNumber')!.touched)
+                  "
+                >
+                  <small class="form-text text-danger" *ngIf="editForm.get('catalogueNumber')?.errors?.required"> This field is required. </small>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-control-label" for="field_recognitionDate">Recognition Date</label>
+                <div class="input-group">
+                  <input
+                    id="field_recognitionDate"
+                    data-cy="recognitionDate"
+                    type="text"
+                    class="form-control"
+                    name="recognitionDate"
+                    ngbDatepicker
+                    #recognitionDateDp="ngbDatepicker"
+                    formControlName="recognitionDate"
+                  />
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-secondary" (click)="recognitionDateDp.toggle()">
+                      <fa-icon icon="calendar-alt"></fa-icon>
+                    </button>
+                  </span>
+                </div>
+                <div
+                  *ngIf="
+                    editForm.get('recognitionDate')!.invalid &&
+                    (editForm.get('recognitionDate')!.dirty || editForm.get('recognitionDate')!.touched)
+                  "
+                >
+                  <small class="form-text text-danger" *ngIf="editForm.get('recognitionDate')?.errors?.required"> This field is required. </small>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-control-label" for="field_particulars">Particulars</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="particulars"
+                  id="field_particulars"
+                  data-cy="particulars"
+                  formControlName="particulars"
+                />
+                <div *ngIf="editForm.get('particulars')!.invalid && (editForm.get('particulars')!.dirty || editForm.get('particulars')!.touched)">
+                  <small class="form-text text-danger" *ngIf="editForm.get('particulars')?.errors?.required"> This field is required. </small>
+                </div>
+              </div>
+
+              <jhi-m21-settlement-currency-form-control
+                ngDefaultControl
+                formControlName='settlementCurrency'
+                [inputValue]="editForm.get(['settlementCurrency'])!.value"
+                (valueSelected)='updateCurrencies($event)'
+                inputControlLabel='Currency Code (Required)'
+              >
+                <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
+              </jhi-m21-settlement-currency-form-control>
+
+              <div class="form-group">
+                <jhi-money-input
+                  formControlName="prepaymentAmount"
+                  ngDefaultControl
+                  inputControlLabel="Prepayment Amount"
+                  data-cy="prepaymentAmount"
+                ></jhi-money-input>
+              </div>
+
+              <jhi-m21-dealer-form-control
+                ngDefaultControl
+                formControlName='dealer'
+                [inputValue]="editForm.get('dealer')!.value"
+                (valueSelected)='updateDealer($event)'
+                inputControlLabel="Dealer's Name"
+              >
+                <option [ngValue]="editForm.get('dealer')!.value"></option>
+              </jhi-m21-dealer-form-control>
         </div>
 
-        <jhi-m21-settlement-form-control
-          ngDefaultControl
-          formControlName='prepaymentTransaction'
-          [inputValue]="editForm.get('prepaymentTransaction')!.value"
-          (valueSelected)='updateSettlement($event)'
-          (createNewRequested)='createSettlementInline()'
-          inputControlLabel='Prepayment Transaction'
-        >
-        </jhi-m21-settlement-form-control>
+        <div class="mt-3" [hidden]="prepaymentAccountTabs.activeId !== 2">
+              <jhi-m21-service-outlet-form-control
+                ngDefaultControl
+                formControlName='serviceOutlet'
+                [inputValue]="editForm.get('serviceOutlet')!.value"
+                (valueSelected)='updateServiceOutlet($event)'
+                inputControlLabel="Department"
+              >
+                <option [ngValue]="editForm.get('serviceOutlet')!.value"></option>
+              </jhi-m21-service-outlet-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_recognitionDate">Recognition Date</label>
-          <div class="input-group">
-            <input
-              id="field_recognitionDate"
-              data-cy="recognitionDate"
-              type="text"
-              class="form-control"
-              name="recognitionDate"
-              ngbDatepicker
-              #recognitionDateDp="ngbDatepicker"
-              formControlName="recognitionDate"
-            />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="recognitionDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
-          </div>
-          <div
-            *ngIf="
-              editForm.get('recognitionDate')!.invalid &&
-              (editForm.get('recognitionDate')!.dirty || editForm.get('recognitionDate')!.touched)
-            "
-          >
-            <small class="form-text text-danger" *ngIf="editForm.get('recognitionDate')?.errors?.required"> This field is required. </small>
-          </div>
+              <jhi-m21-transaction-account-form-control
+                ngDefaultControl
+                formControlName='debitAccount'
+                [inputValue]="editForm.get('debitAccount')!.value"
+                (valueSelected)='updateTransactionAccount($event)'
+                inputControlLabel="Account debited (by prepayment transaction)"
+              >
+                <option [ngValue]="editForm.get('debitAccount')!.value"></option>
+              </jhi-m21-transaction-account-form-control>
+
+              <jhi-m21-transaction-account-form-control
+                ngDefaultControl
+                formControlName='transferAccount'
+                [inputValue]="editForm.get('transferAccount')!.value"
+                (valueSelected)='updateTransferAccount($event)'
+                inputControlLabel="Transfer Account (debited by amortization routines)"
+              >
+                <option [ngValue]="editForm.get('transferAccount')!.value"></option>
+              </jhi-m21-transaction-account-form-control>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_particulars">Particulars</label>
-          <input
-            type="text"
-            class="form-control"
-            name="particulars"
-            id="field_particulars"
-            data-cy="particulars"
-            formControlName="particulars"
-          />
-          <div *ngIf="editForm.get('particulars')!.invalid && (editForm.get('particulars')!.dirty || editForm.get('particulars')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('particulars')?.errors?.required"> This field is required. </small>
-          </div>
+        <div class="mt-3" [hidden]="prepaymentAccountTabs.activeId !== 3">
+              <div class="form-group">
+                <label class="form-control-label" for="field_notes">Notes</label>
+                <textarea class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-control-label" for="field_prepaymentGuid">Prepayment Guid</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="prepaymentGuid"
+                  id="field_prepaymentGuid"
+                  data-cy="prepaymentGuid"
+                  formControlName="prepaymentGuid"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-control-label" for="field_postingDate">Posting Date</label>
+                <div class="input-group">
+                  <input
+                    id="field_postingDate"
+                    data-cy="postingDate"
+                    type="text"
+                    class="form-control"
+                    name="postingDate"
+                    ngbDatepicker
+                    #postingDateDp="ngbDatepicker"
+                    formControlName="postingDate"
+                  />
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-secondary" (click)="postingDateDp.toggle()">
+                      <fa-icon icon="calendar-alt"></fa-icon>
+                    </button>
+                  </span>
+                </div>
+              </div>
+
+              <jhi-m2m-business-document-form-control
+                ngDefaultControl
+                formControlName='businessDocuments'
+                [inputValues]="editForm.get(['businessDocuments'])!.value"
+                (selectedValues)='updateBusinessDocument($event)'
+                (createNewRequested)='createBusinessDocumentInline()'
+                inputControlLabel='Business Document Attachments'
+              >
+              </jhi-m2m-business-document-form-control>
+
+              <jhi-m2m-placeholder-form-control
+                ngDefaultControl
+                formControlName='placeholders'
+                [inputValues]="editForm.get(['placeholders'])!.value"
+                (selectedValues)='updatePlaceholders($event)'
+                inputControlLabel='Placeholder Items'
+              >
+              </jhi-m2m-placeholder-form-control>
+
+              <jhi-m2m-universally-unique-mapping-form-control
+                ngDefaultControl
+                formControlName='generalParameters'
+                [inputValues]="editForm.get(['generalParameters'])!.value"
+                (selectedValues)='updateGeneralParameters($event)'
+                inputControlLabel='General Parameters'
+                >
+              </jhi-m2m-universally-unique-mapping-form-control>
+
+              <jhi-m2m-prepayment-mapping-form-control
+                ngDefaultControl
+                formControlName='prepaymentParameters'
+                [inputValues]="editForm.get(['prepaymentParameters'])!.value"
+                (selectedValues)='updatePrepaymentParameters($event)'
+                inputControlLabel='Prepayment Parameters'
+              >
+              </jhi-m2m-prepayment-mapping-form-control>
         </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_notes">Notes</label>
-          <textarea class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_prepaymentAmount">Prepayment Amount</label>
-          <input
-            type="number"
-            class="form-control"
-            name="prepaymentAmount"
-            id="field_prepaymentAmount"
-            data-cy="prepaymentAmount"
-            formControlName="prepaymentAmount"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_prepaymentGuid">Prepayment Guid</label>
-          <input
-            type="text"
-            class="form-control"
-            name="prepaymentGuid"
-            id="field_prepaymentGuid"
-            data-cy="prepaymentGuid"
-            formControlName="prepaymentGuid"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_postingDate">Posting Date</label>
-          <div class="input-group">
-            <input
-              id="field_postingDate"
-              data-cy="postingDate"
-              type="text"
-              class="form-control"
-              name="postingDate"
-              ngbDatepicker
-              #postingDateDp="ngbDatepicker"
-              formControlName="postingDate"
-            />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="postingDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
-          </div>
-        </div>
-
-        <jhi-m21-settlement-currency-form-control
-          ngDefaultControl
-          formControlName='settlementCurrency'
-          [inputValue]="editForm.get(['settlementCurrency'])!.value"
-          (valueSelected)='updateCurrencies($event)'
-          inputControlLabel='Currency Code (Required)'
-        >
-          <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
-        </jhi-m21-settlement-currency-form-control>
-
-        <jhi-m21-service-outlet-form-control
-          ngDefaultControl
-          formControlName='serviceOutlet'
-          [inputValue]="editForm.get('serviceOutlet')!.value"
-          (valueSelected)='updateServiceOutlet($event)'
-          inputControlLabel="Department"
-        >
-          <option [ngValue]="editForm.get('serviceOutlet')!.value"></option>
-        </jhi-m21-service-outlet-form-control>
-
-        <jhi-m21-dealer-form-control
-          ngDefaultControl
-          formControlName='dealer'
-          [inputValue]="editForm.get('dealer')!.value"
-          (valueSelected)='updateDealer($event)'
-          inputControlLabel="Dealer's Name"
-        >
-          <option [ngValue]="editForm.get('dealer')!.value"></option>
-        </jhi-m21-dealer-form-control>
-
-        <jhi-m21-transaction-account-form-control
-          ngDefaultControl
-          formControlName='debitAccount'
-          [inputValue]="editForm.get('debitAccount')!.value"
-          (valueSelected)='updateTransactionAccount($event)'
-          inputControlLabel="Account debited (by prepayment transaction)"
-        >
-          <option [ngValue]="editForm.get('debitAccount')!.value"></option>
-        </jhi-m21-transaction-account-form-control>
-
-        <!--jhi-m21-transaction-account-form-control-->
-        <jhi-m21-transaction-account-form-control
-          ngDefaultControl
-          formControlName='transferAccount'
-          [inputValue]="editForm.get('transferAccount')!.value"
-          (valueSelected)='updateTransferAccount($event)'
-          inputControlLabel="Transfer Account (debited by amortization routines)"
-        >
-          <option [ngValue]="editForm.get('transferAccount')!.value"></option>
-        </jhi-m21-transaction-account-form-control>
-
-        <jhi-m2m-business-document-form-control
-          ngDefaultControl
-          formControlName='businessDocuments'
-          [inputValues]="editForm.get(['businessDocuments'])!.value"
-          (selectedValues)='updateBusinessDocument($event)'
-          inputControlLabel='Business Document Attachments'
-        >
-        </jhi-m2m-business-document-form-control>
-
-        <!--jhi-m2m-placeholder-form-control-->
-        <jhi-m2m-placeholder-form-control
-          ngDefaultControl
-          formControlName='placeholders'
-          [inputValues]="editForm.get(['placeholders'])!.value"
-          (selectedValues)='updatePlaceholders($event)'
-          inputControlLabel='Placeholder Items'
-        >
-        </jhi-m2m-placeholder-form-control>
-
-        <!--jhi-m2m-universally-unique-mapping-form-control-->
-        <jhi-m2m-universally-unique-mapping-form-control
-          ngDefaultControl
-          formControlName='generalParameters'
-          [inputValues]="editForm.get(['generalParameters'])!.value"
-          (selectedValues)='updateGeneralParameters($event)'
-          inputControlLabel='General Parameters'
-          >
-        </jhi-m2m-universally-unique-mapping-form-control>
-
-        <!--jhi-m2m-prepayment-mapping-form-control-->
-        <jhi-m2m-prepayment-mapping-form-control
-          ngDefaultControl
-          formControlName='prepaymentParameters'
-          [inputValues]="editForm.get(['prepaymentParameters'])!.value"
-          (selectedValues)='updatePrepaymentParameters($event)'
-          inputControlLabel='Prepayment Parameters'
-        >
-        </jhi-m2m-prepayment-mapping-form-control>
       </div>
 
       <div>

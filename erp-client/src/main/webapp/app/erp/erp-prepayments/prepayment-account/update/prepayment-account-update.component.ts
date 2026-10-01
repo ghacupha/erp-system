@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { finalize, map, take } from 'rxjs/operators';
 
 import { IPrepaymentAccount, PrepaymentAccount } from '../prepayment-account.model';
@@ -57,14 +57,11 @@ import {
   editingPrepaymentAccountStatus,
   prepaymentAccountUpdateSelectedInstance
 } from '../../../store/selectors/prepayment-account-workflows-status.selector';
+import { prepaymentAccountCreationInitiatedEnRoute } from '../../../store/actions/prepayment-account-update-status.actions';
 import dayjs from 'dayjs';
 import { DATE_FORMAT } from '../../../../config/input.constants';
-import { settlementInlineCreateConsumed, settlementInlineCreateStarted } from '../../../store/actions/settlement-inline-create.actions';
-import {
-  settlementInlineCreateActive,
-  settlementInlineCreateCreatedSettlement,
-  settlementInlineCreateParentFormSnapshot,
-} from '../../../store/selectors/settlement-inline-create.selectors';
+import { inlineCreateConsumed, inlineCreateStarted } from '../../../store/actions/inline-create-stack.actions';
+import { createSettledFrameOfTypeSelector, selectTopInlineCreateFrame } from '../../../store/selectors/inline-create-stack.selectors';
 
 @Component({
   selector: 'jhi-prepayment-account-update',
@@ -135,6 +132,19 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     this.store.pipe(select(editingPrepaymentAccountStatus)).subscribe(stat => this.weAreEditing = stat);
     this.store.pipe(select(creatingPrepaymentAccountStatus)).subscribe(stat => this.weAreCreating = stat);
     this.store.pipe(select(prepaymentAccountUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+
+    // The 'new' route (and the inline-create return trip, which lands back on this same route)
+    // has no resolver dispatching a "creating" action, unlike :id/edit and :id/copy which get
+    // weAreEditing/weAreCopying set via their own resolvers/list-page buttons. Without this,
+    // weAreCreating stayed false on every direct/inline-create-return visit to this route, which
+    // silently skipped the entire `if (this.weAreCreating)` setup block in ngOnInit() below -
+    // postingDate/prepaymentGuid never got defaulted, catalogueNumber never auto-fetched, and
+    // updateDetailsGivenTransaction() (the prepaymentTransaction auto-fill listener) never got
+    // wired up at all. Same root cause and same fix as
+    // PaymentInvoiceUpdateComponent's paymentInvoiceCreationInitiatedEnRoute dispatch.
+    if (!this.activatedRoute.snapshot.paramMap.get('id')) {
+      this.store.dispatch(prepaymentAccountCreationInitiatedEnRoute());
+    }
   }
 
   ngOnInit(): void {
@@ -168,20 +178,36 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
 
     if (this.weAreCreating) {
 
-      this.editForm.patchValue({
-        prepaymentGuid: uuidv4(),
-        postingDate: this.postDate,
-      })
-
-      this.prepaymentAccountService.getNextCatalogueNumber().subscribe(nextValue => {
-        if (nextValue.body) {
+      // Peeked synchronously: is this instance being constructed as the RETURN leg of an inline
+      // Create New round trip (Settlement or Business Document), rather than a genuinely fresh
+      // "New Prepayment Account" entry? If so, the snapshot restored below already carries valid
+      // prepaymentGuid/postingDate/catalogueNumber/settlementCurrency values established the
+      // first time this form was freshly created. Re-running the "brand new record" defaults
+      // again here would kick off async requests (catalogue number fetch, preferred-currency
+      // lookup) that resolve AFTER the synchronous snapshot restore further down and silently
+      // clobber whatever the user had already typed or that the restore just set.
+      this.store
+        .pipe(select(selectTopInlineCreateFrame), take(1))
+        .subscribe(frame => {
+          const returningFromInlineCreate = !!frame && frame.status !== 'pending';
+          if (returningFromInlineCreate) {
+            return;
+          }
           this.editForm.patchValue({
-            catalogueNumber: nextValue.body,
+            prepaymentGuid: uuidv4(),
+            postingDate: this.postDate,
           })
-        }
-      });
 
-      this.updatePreferredCurrency();
+          this.prepaymentAccountService.getNextCatalogueNumber().subscribe(nextValue => {
+            if (nextValue.body) {
+              this.editForm.patchValue({
+                catalogueNumber: nextValue.body,
+              })
+            }
+          });
+
+          this.updatePreferredCurrency();
+        });
 
       this.loadRelationshipsOptions();
 
@@ -189,41 +215,72 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     }
 
     // Returning from an inline "Create New" on the Prepayment Transaction picker (see
-    // createSettlementInline() below and settlement-inline-create.actions.ts): the store holds
-    // both this form's own snapshot (captured right before we navigated away) and the Settlement
-    // that got created. Restore the snapshot first, then patch in the new Settlement - in that
-    // order, and after updateDetailsGivenTransaction() above, so the dealer/currency/amount
-    // auto-fill it wires up on the prepaymentTransaction control actually sees this change.
-    this.store.pipe(select(settlementInlineCreateActive)).pipe(take(1)).subscribe(active => {
-      if (!active) {
-        return;
-      }
-      combineLatest([
-        this.store.pipe(select(settlementInlineCreateParentFormSnapshot)),
-        this.store.pipe(select(settlementInlineCreateCreatedSettlement)),
-      ])
-        .pipe(take(1))
-        .subscribe(([snapshot, createdSettlement]) => {
-          if (snapshot) {
-            this.updateForm(snapshot as IPrepaymentAccount);
-          }
-          if (createdSettlement) {
-            this.updateSettlement(createdSettlement);
-          }
-          this.store.dispatch(settlementInlineCreateConsumed());
-        });
-    });
+    // createSettlementInline() below and store/reducers/inline-create-stack.reducer.ts): the top
+    // of the inline-create stack holds both this form's own snapshot (captured right before we
+    // navigated away) and the Settlement that got created (or a cancellation, with no created
+    // entity). Restore the snapshot first, then patch in the new Settlement if one exists - in
+    // that order, and after updateDetailsGivenTransaction() above, so the dealer/currency/amount
+    // auto-fill it wires up on the prepaymentTransaction control actually sees this change. This
+    // form is never itself created inline (only ever the root of the stack), so it only ever
+    // needs to consume a settled 'Settlement' frame - it has no "am I a pending child" check.
+    this.store
+      .pipe(select(createSettledFrameOfTypeSelector('Settlement')))
+      .pipe(take(1))
+      .subscribe(frame => {
+        if (!frame) {
+          return;
+        }
+        if (frame.parentFormSnapshot) {
+          this.updateForm(frame.parentFormSnapshot as IPrepaymentAccount);
+        }
+        if (frame.status === 'completed' && frame.createdEntity) {
+          this.updateSettlement(frame.createdEntity as ISettlement);
+        }
+        this.store.dispatch(inlineCreateConsumed());
+      });
+
+    // Same pattern for a settled Business Document child - see createBusinessDocumentInline()
+    // below.
+    this.store
+      .pipe(select(createSettledFrameOfTypeSelector('BusinessDocument')))
+      .pipe(take(1))
+      .subscribe(frame => {
+        if (!frame) {
+          return;
+        }
+        if (frame.parentFormSnapshot) {
+          this.updateForm(frame.parentFormSnapshot as IPrepaymentAccount);
+        }
+        if (frame.status === 'completed' && frame.createdEntity) {
+          const existing: IBusinessDocument[] = this.editForm.get(['businessDocuments'])?.value ?? [];
+          this.updateBusinessDocument([...existing, frame.createdEntity as IBusinessDocument]);
+        }
+        this.store.dispatch(inlineCreateConsumed());
+      });
   }
 
   createSettlementInline(): void {
     this.store.dispatch(
-      settlementInlineCreateStarted({
+      inlineCreateStarted({
+        entityType: 'Settlement',
         targetField: 'prepaymentTransaction',
         parentRoute: this.router.url,
         parentFormSnapshot: this.createFromForm(),
       })
     );
     this.router.navigate(['settlement/extension/new']);
+  }
+
+  createBusinessDocumentInline(): void {
+    this.store.dispatch(
+      inlineCreateStarted({
+        entityType: 'BusinessDocument',
+        targetField: 'businessDocuments',
+        parentRoute: this.router.url,
+        parentFormSnapshot: this.createFromForm(),
+      })
+    );
+    this.router.navigate(['business-document/new']);
   }
 
   updateDetailsGivenTransaction(): void {
@@ -334,7 +391,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   }
 
   previousState(): void {
-    window.history.back();
+    this.router.navigate(['/prepayment-account']);
   }
 
   save(): void {

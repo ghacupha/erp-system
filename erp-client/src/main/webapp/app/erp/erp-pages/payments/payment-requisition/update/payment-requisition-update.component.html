@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+    Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -88,39 +88,30 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_invoicedAmount">Invoiced Amount</label>
-          <input
-            type="number"
-            class="form-control"
-            name="invoicedAmount"
-            id="field_invoicedAmount"
-            data-cy="invoicedAmount"
+          <jhi-money-input
             formControlName="invoicedAmount"
-          />
+            ngDefaultControl
+            inputControlLabel="Invoiced Amount"
+            data-cy="invoicedAmount"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_disbursementCost">Disbursement Cost</label>
-          <input
-            type="number"
-            class="form-control"
-            name="disbursementCost"
-            id="field_disbursementCost"
-            data-cy="disbursementCost"
+          <jhi-money-input
             formControlName="disbursementCost"
-          />
+            ngDefaultControl
+            inputControlLabel="Disbursement Cost"
+            data-cy="disbursementCost"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_taxableAmount">Taxable Amount</label>
-          <input
-            type="number"
-            class="form-control"
-            name="taxableAmount"
-            id="field_taxableAmount"
-            data-cy="taxableAmount"
+          <jhi-money-input
             formControlName="taxableAmount"
-          />
+            ngDefaultControl
+            inputControlLabel="Taxable Amount"
+            data-cy="taxableAmount"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">

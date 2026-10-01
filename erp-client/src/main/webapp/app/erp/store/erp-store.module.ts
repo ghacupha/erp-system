@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -64,8 +64,7 @@ import { LeasePostingRuleConfigEffects } from './effects/lease-posting-rule-conf
 import * as fromLeasePostingRuleConfig from './reducers/lease-posting-rule-config.reducer';
 import { LeasePostingRuleWorkflowEffects } from './effects/lease-posting-rule-workflow.effects';
 import * as fromLeasePostingRuleUpdates from './reducers/lease-posting-rule-workflow-status.reducer';
-import * as fromSettlementInlineCreate from './reducers/settlement-inline-create.reducer';
-import * as fromPaymentInvoiceInlineCreate from './reducers/payment-invoice-inline-create.reducer';
+import * as fromInlineCreateStack from './reducers/inline-create-stack.reducer';
 
 @NgModule({
   imports: [
@@ -154,11 +153,7 @@ import * as fromPaymentInvoiceInlineCreate from './reducers/payment-invoice-inli
       fromLeasePostingRuleUpdates.leasePostingRuleUpdateFormStateSelector,
       fromLeasePostingRuleUpdates.leasePostingRuleUpdateStateReducer
     ),
-    StoreModule.forFeature(fromSettlementInlineCreate.settlementInlineCreateFeatureKey, fromSettlementInlineCreate.settlementInlineCreateReducer),
-    StoreModule.forFeature(
-      fromPaymentInvoiceInlineCreate.paymentInvoiceInlineCreateFeatureKey,
-      fromPaymentInvoiceInlineCreate.paymentInvoiceInlineCreateReducer
-    ),
+    StoreModule.forFeature(fromInlineCreateStack.inlineCreateStackFeatureKey, fromInlineCreateStack.inlineCreateStackReducer),
   ],
   exports: [EffectsModule, StoreModule, ...(DEBUG_INFO_ENABLED ? [StoreDevtoolsModule] : [])],
 })

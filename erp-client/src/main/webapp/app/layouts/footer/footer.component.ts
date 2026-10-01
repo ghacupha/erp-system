@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ export class FooterComponent {
   // or a CI/system env var). Falls back to the hash in git-version.json when not set.
   systemBuild = (SYSTEM_BUILD || versionInfo.hash).substring(0, 7);
 
-  clientVersion = '1.7.8';
+  clientVersion = '1.8.0';
 
-  serverVersion = '1.8.1';
+  serverVersion = '1.9.0';
 }

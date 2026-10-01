@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+    Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -225,15 +225,12 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_amortizationAmount">Amortization Amount</label>
-          <input
-            type="number"
-            class="form-control"
-            name="amortizationAmount"
-            id="field_amortizationAmount"
-            data-cy="amortizationAmount"
+          <jhi-money-input
             formControlName="amortizationAmount"
-          />
+            ngDefaultControl
+            inputControlLabel="Amortization Amount"
+            data-cy="amortizationAmount"
+          ></jhi-money-input>
           <div
             *ngIf="
               editForm.get('amortizationAmount')!.invalid &&

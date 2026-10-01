@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -23,9 +23,10 @@ import { FixedAssetAcquisitionDetailComponent } from './detail/fixed-asset-acqui
 import { FixedAssetAcquisitionUpdateComponent } from './update/fixed-asset-acquisition-update.component';
 import { FixedAssetAcquisitionDeleteDialogComponent } from './delete/fixed-asset-acquisition-delete-dialog.component';
 import { FixedAssetAcquisitionRoutingModule } from './route/fixed-asset-acquisition-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, FixedAssetAcquisitionRoutingModule],
+  imports: [SharedModule, FixedAssetAcquisitionRoutingModule, ErpCommonModule],
   declarations: [
     FixedAssetAcquisitionComponent,
     FixedAssetAcquisitionDetailComponent,

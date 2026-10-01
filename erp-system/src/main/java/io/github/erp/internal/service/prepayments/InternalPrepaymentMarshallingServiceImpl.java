@@ -1,8 +1,8 @@
 package io.github.erp.internal.service.prepayments;
 
 /*-
- * Erp System - Mark X No 11 (Jehoiada Series) Server ver 1.8.3
- * Copyright © 2021 - 2024 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
+ * Erp System - Mark X No 12 (Kadar Series) Server ver 1.9.0
+ * Copyright © 2021 - 2026 Edwin Njeru and the ERP System Contributors (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,9 @@ package io.github.erp.internal.service.prepayments;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import io.github.erp.domain.PrepaymentMarshalling;
+import io.github.erp.internal.repository.InternalPrepaymentMarshallingRepository;
 import io.github.erp.internal.service.applicationUser.InternalApplicationUserDetailService;
-import io.github.erp.repository.PrepaymentMarshallingRepository;
 import io.github.erp.repository.search.PrepaymentMarshallingSearchRepository;
 import io.github.erp.service.PrepaymentMarshallingService;
 import io.github.erp.service.dto.PrepaymentMarshallingDTO;
@@ -47,7 +46,7 @@ public class InternalPrepaymentMarshallingServiceImpl implements InternalPrepaym
 
     private final Logger log = LoggerFactory.getLogger(InternalPrepaymentMarshallingServiceImpl.class);
 
-    private final PrepaymentMarshallingRepository prepaymentMarshallingRepository;
+    private final InternalPrepaymentMarshallingRepository prepaymentMarshallingRepository;
 
     private final PrepaymentMarshallingMapper prepaymentMarshallingMapper;
 
@@ -56,7 +55,7 @@ public class InternalPrepaymentMarshallingServiceImpl implements InternalPrepaym
     private final InternalApplicationUserDetailService applicationUserDetailService;
 
     public InternalPrepaymentMarshallingServiceImpl(
-        PrepaymentMarshallingRepository prepaymentMarshallingRepository,
+        InternalPrepaymentMarshallingRepository prepaymentMarshallingRepository,
         PrepaymentMarshallingMapper prepaymentMarshallingMapper,
         PrepaymentMarshallingSearchRepository prepaymentMarshallingSearchRepository,
         InternalApplicationUserDetailService applicationUserDetailService
@@ -70,6 +69,28 @@ public class InternalPrepaymentMarshallingServiceImpl implements InternalPrepaym
     @Override
     public PrepaymentMarshallingDTO save(PrepaymentMarshallingDTO prepaymentMarshallingDTO) {
         log.debug("Request to save PrepaymentMarshalling : {}", prepaymentMarshallingDTO);
+
+        // Only on create (an update legitimately re-saves a record that already matches itself).
+        // Backed by a DB-level unique constraint as the authoritative guard against a race
+        // between two concurrent requests - this check exists to turn that into a clean 400
+        // instead of a raw constraint-violation error reaching the caller.
+        if (
+            prepaymentMarshallingDTO.getId() == null &&
+            prepaymentMarshallingDTO.getPrepaymentAccount() != null &&
+            prepaymentMarshallingDTO.getFirstAmortizationPeriod() != null &&
+            prepaymentMarshallingRepository.existsByPrepaymentAccount_IdAndFirstAmortizationPeriod_Id(
+                prepaymentMarshallingDTO.getPrepaymentAccount().getId(),
+                prepaymentMarshallingDTO.getFirstAmortizationPeriod().getId()
+            )
+        ) {
+            throw new DuplicatePrepaymentMarshallingException(
+                "A PrepaymentMarshalling already exists for prepaymentAccount id " +
+                prepaymentMarshallingDTO.getPrepaymentAccount().getId() +
+                " and firstAmortizationPeriod id " +
+                prepaymentMarshallingDTO.getFirstAmortizationPeriod().getId()
+            );
+        }
+
         applicationUserDetailService.getCurrentApplicationUser().ifPresent(prepaymentMarshallingDTO::setCreatedBy);
         if (prepaymentMarshallingDTO.getPostingDate() == null) {
             prepaymentMarshallingDTO.setPostingDate(LocalDate.now());

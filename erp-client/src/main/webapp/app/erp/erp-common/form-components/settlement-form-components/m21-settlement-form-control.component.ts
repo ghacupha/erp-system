@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { concat, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, merge, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { SettlementSuggestionService } from '../../suggestion/settlement-suggestion.service';
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
@@ -46,13 +46,21 @@ export class M21SettlementFormControlComponent implements OnInit, ControlValueAc
   // Purely informational to the owning form - this component has no opinion on what "create
   // new" should do (navigate where, capture what state to come back to, etc). The owning form
   // handles that itself; see e.g. PrepaymentAccountUpdateComponent's handling of this output and
-  // settlementInlineCreateStarted in store/actions/settlement-inline-create.actions.ts.
+  // inlineCreateStarted in store/actions/inline-create-stack.actions.ts.
   @Output() createNewRequested: EventEmitter<void> = new EventEmitter<void>();
 
   minAccountLengthTerm = 3;
   valuesLoading = false;
   valueControlInput$ = new Subject<string>();
   valueLookUps$: Observable<ISettlement[]> = of([]);
+
+  // ng-select only renders inputValue's bindLabel correctly when that exact object is present in
+  // the bound [items] list. The typeahead-driven valueLookUps$ below only ever contains whatever
+  // the user last searched for, so a value assigned externally via writeValue() (e.g. restoring a
+  // settlement created through the inline-create workflow, well after ngOnInit already ran) was
+  // never actually in [items] - ng-select silently rendered blank despite inputValue being
+  // correct. This subject always re-injects the current value into the merged items stream.
+  private selectedValue$ = new BehaviorSubject<ISettlement[]>([]);
 
   constructor(
     protected valueSuggestionService: SettlementSuggestionService
@@ -77,8 +85,8 @@ export class M21SettlementFormControlComponent implements OnInit, ControlValueAc
   }
 
   loadValues(): void {
-    this.valueLookUps$ = concat(
-      of([]), // default items
+    this.valueLookUps$ = merge(
+      this.selectedValue$,
       this.valueControlInput$.pipe(
         /* filter(res => res.length >= this.minAccountLengthTerm), */
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -103,6 +111,9 @@ export class M21SettlementFormControlComponent implements OnInit, ControlValueAc
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (value) {
       this.inputValue = value;
+      if (value.id) {
+        this.selectedValue$.next([value]);
+      }
     }
   }
 

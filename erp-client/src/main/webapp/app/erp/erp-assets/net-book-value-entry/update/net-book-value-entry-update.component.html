@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+    Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -139,39 +139,30 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_netBookValueAmount">Net Book Value Amount</label>
-          <input
-            type="number"
-            class="form-control"
-            name="netBookValueAmount"
-            id="field_netBookValueAmount"
-            data-cy="netBookValueAmount"
+          <jhi-money-input
             formControlName="netBookValueAmount"
-          />
+            ngDefaultControl
+            inputControlLabel="Net Book Value Amount"
+            data-cy="netBookValueAmount"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_previousNetBookValueAmount">Previous Net Book Value Amount</label>
-          <input
-            type="number"
-            class="form-control"
-            name="previousNetBookValueAmount"
-            id="field_previousNetBookValueAmount"
-            data-cy="previousNetBookValueAmount"
+          <jhi-money-input
             formControlName="previousNetBookValueAmount"
-          />
+            ngDefaultControl
+            inputControlLabel="Previous Net Book Value Amount"
+            data-cy="previousNetBookValueAmount"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_historicalCost">Historical Cost</label>
-          <input
-            type="number"
-            class="form-control"
-            name="historicalCost"
-            id="field_historicalCost"
-            data-cy="historicalCost"
+          <jhi-money-input
             formControlName="historicalCost"
-          />
+            ngDefaultControl
+            inputControlLabel="Historical Cost"
+            data-cy="historicalCost"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">

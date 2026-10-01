@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+    Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -243,15 +243,12 @@
         </jhi-m21-settlement-currency-form-control>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_initialLiabilityAmount">Initial Liability Amount</label>
-          <input
-            type="number"
-            class="form-control"
-            name="initialLiabilityAmount"
-            id="field_initialLiabilityAmount"
-            data-cy="initialLiabilityAmount"
+          <jhi-money-input
             formControlName="initialLiabilityAmount"
-          />
+            ngDefaultControl
+            inputControlLabel="Initial Liability Amount"
+            data-cy="initialLiabilityAmount"
+          ></jhi-money-input>
         </div>
 
         <jhi-m21-settlement-currency-form-control
@@ -265,15 +262,12 @@
         </jhi-m21-settlement-currency-form-control>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_initialROUAmount">Initial ROU Amount</label>
-          <input
-            type="number"
-            class="form-control"
-            name="initialROUAmount"
-            id="field_initialROUAmount"
-            data-cy="initialROUAmount"
+          <jhi-money-input
             formControlName="initialROUAmount"
-          />
+            ngDefaultControl
+            inputControlLabel="Initial ROU Amount"
+            data-cy="initialROUAmount"
+          ></jhi-money-input>
         </div>
 
         <div class="form-group">

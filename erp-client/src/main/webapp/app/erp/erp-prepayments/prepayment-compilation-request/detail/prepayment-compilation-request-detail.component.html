@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+    Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 -->
 <div class="row justify-content-center">
-  <div class="col-8">
+  <div class="col-10">
     <div *ngIf="prepaymentCompilationRequest">
       <h2 data-cy="prepaymentCompilationRequestDetailsHeading"><span>Prepayment Compilation Request</span></h2>
 
@@ -77,6 +77,65 @@
       >
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
       </button>
+
+      <hr />
+
+      <h3>Accounts Compiled Under This Request</h3>
+
+      <div class="alert alert-warning" *ngIf="!compiledAccountsLoading && compiledAccounts.length === 0">
+        <span>No prepayment accounts were compiled under this request.</span>
+      </div>
+
+      <div class="table-responsive" *ngIf="compiledAccounts.length > 0">
+        <table class="table table-striped" aria-describedby="compiled-accounts-heading">
+          <thead>
+            <tr jhiSort [(predicate)]="compiledAccountsPredicate" [(ascending)]="compiledAccountsAscending" (sortChange)="sortCompiledAccounts()">
+              <th scope="col"><span>Account</span></th>
+              <th scope="col" jhiSortBy="recognitionDate"><span>Recognition Date</span> <fa-icon icon="sort"></fa-icon></th>
+              <th scope="col" jhiSortBy="dcNumber"><span>DC</span> <fa-icon icon="sort"></fa-icon></th>
+              <th scope="col" jhiSortBy="debitAccountNumber"><span>Debit Account</span> <fa-icon icon="sort"></fa-icon></th>
+              <th scope="col" jhiSortBy="creditAccountNumber"><span>Credit Account</span> <fa-icon icon="sort"></fa-icon></th>
+              <th scope="col" jhiSortBy="amortizationStartDate"><span>Amortization Start</span> <fa-icon icon="sort"></fa-icon></th>
+              <th scope="col" jhiSortBy="amortizationEndDate"><span>Amortization End</span> <fa-icon icon="sort"></fa-icon></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let compiledAccount of compiledAccounts; trackBy: trackCompiledAccountId">
+              <td>
+                <a [routerLink]="['/prepayment-account', compiledAccount.prepaymentAccountId, 'view']">{{
+                  compiledAccount.catalogueNumber
+                }}</a>
+              </td>
+              <td>{{ compiledAccount.recognitionDate | formatMediumDate }}</td>
+              <td>{{ compiledAccount.dcNumber }}</td>
+              <td>{{ compiledAccount.debitAccountNumber }}</td>
+              <td>{{ compiledAccount.creditAccountNumber }}</td>
+              <td>{{ compiledAccount.amortizationStartDate | formatMediumDate }}</td>
+              <td>{{ compiledAccount.amortizationEndDate | formatMediumDate }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="compiledAccounts.length > 0">
+        <div class="row justify-content-center">
+          <jhi-item-count
+            [params]="{ page: compiledAccountsPage, totalItems: compiledAccountsTotalItems, itemsPerPage: compiledAccountsItemsPerPage }"
+          ></jhi-item-count>
+        </div>
+
+        <div class="row justify-content-center">
+          <ngb-pagination
+            [collectionSize]="compiledAccountsTotalItems"
+            [page]="compiledAccountsPage"
+            [pageSize]="compiledAccountsItemsPerPage"
+            [maxSize]="5"
+            [rotate]="true"
+            [boundaryLinks]="true"
+            (pageChange)="loadCompiledAccountsPage($event)"
+          ></ngb-pagination>
+        </div>
+      </div>
     </div>
   </div>
 </div>

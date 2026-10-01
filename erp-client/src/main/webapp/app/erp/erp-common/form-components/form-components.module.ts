@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -66,6 +66,7 @@ import { M21FiscalYearFormControlComponent } from './fiscal-year-components/m21-
 import { M21DepreciationJobFormControlComponent } from './depreciation-job/m21-depreciation-job-form-control.component';
 import { DepreciationJobOptionViewComponent } from './depreciation-job/depreciation-job-option-view.component';
 import { FormatDepreciationJobPipe } from './depreciation-job/format-depreciation-job.pipe';
+import { MoneyInputComponent } from './money-input/money-input.component';
 import { DepreciationPeriodFormComponentsModule } from './depreciation-period/depreciation-period-form-components.module';
 import { Ifrs16LeaseContractComponentsModule } from './ifrs16-lease-contract-components/ifrs-16-lease-contract-components.module';
 import { AssetRegistrationFormComponentsModule } from './asset-registration-form-components/asset-registration-form-components.module';
@@ -134,6 +135,7 @@ import { LeasePaymentUploadFormComponentsModule } from './lease-payment-upload-c
     M21DepreciationJobFormControlComponent,
     DepreciationJobOptionViewComponent,
     FormatDepreciationJobPipe,
+    MoneyInputComponent,
   ],
   imports: [
     CommonModule,
@@ -188,6 +190,7 @@ import { LeasePaymentUploadFormComponentsModule } from './lease-payment-upload-c
     M21DepreciationJobFormControlComponent,
     DepreciationJobOptionViewComponent,
     FormatDepreciationJobPipe,
+    MoneyInputComponent,
     DepreciationPeriodFormComponentsModule,
     Ifrs16LeaseContractComponentsModule,
     AssetRegistrationFormComponentsModule,

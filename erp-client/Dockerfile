@@ -1,6 +1,6 @@
 #
-# Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-# Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+# Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+# Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,8 +25,12 @@ COPY .npmrc /opt/app
 COPY package.json /opt/app
 COPY package-lock.json /opt/app
 
-COPY . /opt/app
+# npm ci only depends on package.json/package-lock.json - keeping it before the full source COPY
+# means Docker's layer cache reuses this (and its slow Cypress/Puppeteer downloads) whenever only
+# source files change, instead of re-running it on every rebuild.
 RUN npm ci
+
+COPY . /opt/app
 
 ENV PATH="./node_modules/.bin:$PATH" \
     NODE_OPTIONS="--max-old-space-size=8192"

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 11 (Jehoiada Series) Client 1.7.9
-/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 12 (Kadar Series) Client 1.8.0
+/// Copyright © 2021 - 2026 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -19,9 +19,13 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { combineLatest, Observable } from 'rxjs';
+import { finalize, map, take } from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import { inlineCreateCancelled, inlineCreateCompleted } from '../../../store/actions/inline-create-stack.actions';
+import { createIsPendingChildOfSelector, selectTopInlineCreateFrame } from '../../../store/selectors/inline-create-stack.selectors';
 
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
@@ -81,6 +85,15 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     securityClearance: [],
   });
 
+  // True only when this form was reached via a parent form's own inline-create handling (e.g.
+  // PrepaymentAccountUpdateComponent/SettlementUpdateComponent/PaymentInvoiceUpdateComponent's
+  // own createBusinessDocumentInline()) - drives onSaveSuccess()/cancel() to report back via
+  // inlineCreateCompleted/inlineCreateCancelled and navigate to the parent's own route, instead
+  // of this form's own list. Set in ngOnInit(), not the constructor - see the ordering rule
+  // established for SettlementUpdateComponent.
+  weAreInlineCreating = false;
+  inlineParentRoute = '';
+
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -93,7 +106,9 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     protected securityClearanceService: SecurityClearanceService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected fileUploadChecksumService: FileUploadChecksumService
+    protected fileUploadChecksumService: FileUploadChecksumService,
+    protected store: Store<State>,
+    protected router: Router
   ) {}
 
   ngOnInit(): void {
@@ -114,6 +129,20 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     this.updatePreferredFileChecksumAlgorithm();
     this.runFileChecksums();
 
+    // Am I currently a pending inline-create child of a Prepayment Account, Settlement, or
+    // Payment Invoice? (This component has no children of its own, so no "consume a settled
+    // child frame" step is needed first.)
+    combineLatest([
+      this.store.pipe(select(createIsPendingChildOfSelector('BusinessDocument'))),
+      this.store.pipe(select(selectTopInlineCreateFrame)),
+    ])
+      .pipe(take(1))
+      .subscribe(([isPendingChild, topFrame]) => {
+        if (isPendingChild && topFrame) {
+          this.weAreInlineCreating = true;
+          this.inlineParentRoute = topFrame.parentRoute;
+        }
+      });
   }
 
   updatePreferredBusinessDocumentFilePath(): void {
@@ -217,7 +246,17 @@ export class BusinessDocumentUpdateComponent implements OnInit {
   }
 
   previousState(): void {
-    window.history.back();
+    this.router.navigate(['/business-document']);
+  }
+
+  // Symmetric with the inline branch of onSaveSuccess() below.
+  cancel(): void {
+    if (this.weAreInlineCreating) {
+      this.store.dispatch(inlineCreateCancelled());
+      this.router.navigateByUrl(this.inlineParentRoute || '/business-document', { replaceUrl: true });
+      return;
+    }
+    this.previousState();
   }
 
   save(): void {
@@ -281,12 +320,17 @@ export class BusinessDocumentUpdateComponent implements OnInit {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IBusinessDocument>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
+      res => this.onSaveSuccess(res.body),
       () => this.onSaveError()
     );
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess(saved?: IBusinessDocument | null): void {
+    if (this.weAreInlineCreating && saved) {
+      this.store.dispatch(inlineCreateCompleted({ createdEntity: saved }));
+      this.router.navigateByUrl(this.inlineParentRoute || '/business-document', { replaceUrl: true });
+      return;
+    }
     this.previousState();
   }
 
